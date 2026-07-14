@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Secrets / local config
+user_data/config.json
+*.env
+.env
+
+# Freqtrade runtime data (regenerable / large / local-only)
+user_data/data/
+user_data/logs/
+user_data/backtest_results/
+user_data/hyperopt_results/
+user_data/freqaimodels/
+user_data/notebooks/.ipynb_checkpoints/
+user_data/plot/
+
+# Generated research artifacts
+research/*.png
+
+# OS
+.DS_Store
