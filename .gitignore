@@ -15,7 +15,8 @@ user_data/config.json
 .env
 
 # Freqtrade runtime data (regenerable / large / local-only)
-user_data/data/
+# user_data/data/ is tracked: it's the OKX 30m feather price data the
+# visualizer app and research pipeline read from (2.8MB, small enough to bundle).
 user_data/logs/
 user_data/backtest_results/
 user_data/hyperopt_results/
