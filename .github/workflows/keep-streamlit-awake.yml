@@ -1,0 +1,26 @@
+name: Keep Streamlit App Awake
+
+on:
+  schedule:
+    # Streamlit Community Cloud hibernates apps after 12h without traffic.
+    # Running at hours 0/11/22 UTC keeps every gap at or below 11h.
+    - cron: '0 */11 * * *'
+  workflow_dispatch: {}
+
+jobs:
+  wake:
+    runs-on: ubuntu-latest
+    env:
+      APP_URL: https://elvispairtrading.streamlit.app
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Playwright
+        run: |
+          pip install playwright
+          playwright install --with-deps chromium
+
+      - name: Visit app and wake it if asleep
+        run: python .github/scripts/wake_streamlit.py
