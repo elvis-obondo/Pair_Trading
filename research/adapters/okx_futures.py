@@ -64,7 +64,7 @@ def sync_normalized_store(normalized_dir: Path, timeframe: str = "30m") -> list[
         if df_raw.empty:
             continue
         df_raw[["date", "close"]].to_feather(normalized_dir / f"{ticker}.feather")
-        manifest[ticker] = {"source": "okx_futures", "quote": "USDT"}
+        manifest[ticker] = {"source": "okx_futures", "quote": "USDT", "instrument_type": "futures"}
         tickers.append(ticker)
 
     with open(manifest_path, "w") as f:

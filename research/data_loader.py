@@ -7,6 +7,7 @@ import pandas as pd
 from pathlib import Path
 
 from adapters.okx_futures import sync_normalized_store as _sync_okx_futures
+from adapters.okx_spot import sync_normalized_store as _sync_okx_spot
 from adapters.lst_tokens import sync_normalized_store as _sync_lst_tokens
 
 NORMALIZED_DIR = Path(__file__).parent.parent / "user_data" / "normalized"
@@ -123,9 +124,13 @@ def get_price_levels(
         is identical to the whole frame's length (already gap-free), so it
         can no longer distinguish a thin pair from a well-covered one.
     """
+    # Order matters: futures syncs first so the spot adapter's ticker-collision
+    # check (see adapters/okx_spot.py) sees the futures manifest entries before
+    # deciding whether a spot ticker needs disambiguating.
     okx_tickers = _sync_okx_futures(NORMALIZED_DIR, timeframe=timeframe)
+    spot_tickers = _sync_okx_spot(NORMALIZED_DIR, timeframe=timeframe)
     lst_tickers = _sync_lst_tokens(NORMALIZED_DIR, timeframe=timeframe)
-    tickers = okx_tickers + lst_tickers
+    tickers = okx_tickers + spot_tickers + lst_tickers
     bar_minutes = _parse_timeframe_minutes(timeframe)
 
     series = {}
