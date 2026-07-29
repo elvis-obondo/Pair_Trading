@@ -27,5 +27,9 @@ user_data/plot/
 # Generated research artifacts
 research/*.png
 
+# Normalized data store: regenerated from source adapters on every
+# get_price_levels() call, not source data itself.
+user_data/normalized/
+
 # OS
 .DS_Store

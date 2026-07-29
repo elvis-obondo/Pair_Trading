@@ -1,27 +1,29 @@
+import sys
+import os
+sys.path.insert(0, os.path.dirname(__file__))
+
 import numpy as np
 import pandas as pd
 from pathlib import Path
 
-DATA_DIR = Path(__file__).parent.parent / "user_data" / "data" / "okx" / "futures"
+from adapters.okx_futures import sync_normalized_store
+
+NORMALIZED_DIR = Path(__file__).parent.parent / "user_data" / "normalized"
 
 
 def get_price_levels(start_date: str = None, end_date: str = None, timeframe: str = "30m") -> pd.DataFrame:
     """Returns DataFrame of log prices: datetime index, ticker columns (e.g. BTC, SOL), values are ln(close).
 
-    Reads all futures feather files for the given timeframe from user_data/data/okx/futures/.
-    Futures files are named BTC_USDT_USDT-30m-futures.feather (BTC/USDT:USDT encoding).
+    Source-blind: syncs the normalized per-instrument store (user_data/normalized/)
+    from the active data-source adapter, then builds the frame from it. All
+    source-specific knowledge (paths, filenames, ticker encoding) lives in the
+    adapter, not here.
     """
-    files = sorted(DATA_DIR.glob(f"*_USDT_USDT-{timeframe}-futures.feather"))
-    if not files:
-        raise FileNotFoundError(
-            f"No futures {timeframe} data files found in {DATA_DIR}. "
-            f"Download data first with: freqtrade download-data --trading-mode futures --timeframes {timeframe}"
-        )
+    tickers = sync_normalized_store(NORMALIZED_DIR, timeframe=timeframe)
 
     series = {}
-    for path in files:
-        ticker = path.name.split("_")[0]
-        df_raw = pd.read_feather(path)
+    for ticker in tickers:
+        df_raw = pd.read_feather(NORMALIZED_DIR / f"{ticker}.feather")
         if df_raw.empty:
             continue
         df_raw = df_raw.sort_values("date")
