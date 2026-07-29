@@ -73,7 +73,11 @@ def get_tradeable_pairs(summary: pd.DataFrame) -> pd.DataFrame:
 
 def analyze_top_pairs(top_n: int = 10, window: int = 7 * BARS_PER_DAY, days: int = 30):
     print("Fetching price data...")
-    df = get_price_levels()
+    # align=False: keep each instrument's own gaps intact so the per-pair
+    # `dropna()` + `min_bars` check below reflects genuine joint coverage
+    # for THAT pair, not the frame-wide worst case across every loaded
+    # instrument (see get_price_levels' align docstring).
+    df = get_price_levels(align=False)
 
     cutoff = df.index.max() - pd.Timedelta(days=days)
     df = df[df.index >= cutoff]
