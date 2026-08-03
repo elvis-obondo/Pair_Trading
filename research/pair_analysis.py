@@ -12,7 +12,25 @@ BAR_LENGTH = 30  # minutes per bar
 BARS_PER_DAY = (24 * 60) // BAR_LENGTH  # 48 at 30-min
 
 
+def _base_symbol(ticker: str) -> str:
+    """Maps a ticker to its underlying symbol, e.g. "ARB_SPOT" -> "ARB".
+
+    Mirrors the collision-disambiguation convention in adapters/okx_spot.py:
+    a spot ticker only gets the "_SPOT" suffix when it collides with a
+    futures ticker for the same underlying asset.
+    """
+    return ticker.removesuffix("_SPOT")
+
+
 def compute_spread(price_a: np.ndarray, price_b: np.ndarray):
+    """OLS spread of price_a on price_b: spread = price_a - alpha - beta*price_b.
+
+    price_a, price_b are expected to already be log prices (this is what
+    get_price_levels() in data_loader.py returns), so beta is a log-log
+    elasticity / approximate dollar-notional hedge ratio, not a raw share-count
+    ratio, and alpha is the log-space intercept that lines up the two series'
+    levels.
+    """
     beta, alpha = np.polyfit(price_b, price_a, 1)
     spread = price_a - alpha - beta * price_b
     return spread, beta, alpha
@@ -62,10 +80,10 @@ def rolling_hedge_ratio(price_a: np.ndarray, price_b: np.ndarray, window: int = 
 
 def get_tradeable_pairs(summary: pd.DataFrame) -> pd.DataFrame:
     mask = (
-          summary["half_life_hours"].between(0.1 * 24, 2 * 24) &
-        (summary["hurst"] < 0.48) &
-        (summary["coint_stability"] >= 0.5) &
-        (summary["beta_cv"] < 0.4)
+          summary["half_life_hours"].between(1, 120) &
+        (summary["hurst"] < 0.5) &
+        (summary["coint_stability"] >= 0.3) &
+        (summary["beta_cv"] < 0.6)
     )
     return summary[mask].reset_index(drop=True)
 
@@ -94,15 +112,22 @@ def analyze_top_pairs(top_n: int = 10, window: int = 7 * BARS_PER_DAY, days: int
     tickers = df.columns.tolist()
     min_bars = days * BARS_PER_DAY // 2  # require at least half the expected bars
 
-    pairs = list(itertools.combinations(tickers, 2))
-    print(f"Running cointegration scan on {len(pairs)} pairs (min {min_bars} bars required)...")
+    pairs = [
+        (a, b) for a, b in itertools.combinations(tickers, 2)
+        if _base_symbol(a) != _base_symbol(b)
+    ]
+    n_pairs = len(pairs)
+    print(f"Running cointegration scan on {n_pairs} pairs (min {min_bars} bars required)...")
+    progress_step = max(1, n_pairs // 20)  # ~20 updates regardless of ticker count
     coint_results = []
-    for a, b in pairs:
+    for i, (a, b) in enumerate(pairs):
         pair = df[[a,b]].dropna()
         if len(pair) < min_bars:
             continue
         _, pval, _ = coint(pair[a].values, pair[b].values)
         coint_results.append((a, b, pval))
+        if (i + 1) % progress_step == 0 or (i + 1) == n_pairs:
+            print(f"  scanned {i + 1}/{n_pairs} pairs ({(i + 1) / n_pairs:.0%})")
 
     coint_df = (
         pd.DataFrame(coint_results, columns=["ticker_a", "ticker_b", "p_value"])
@@ -151,7 +176,7 @@ def analyze_top_pairs(top_n: int = 10, window: int = 7 * BARS_PER_DAY, days: int
     tradeable = get_tradeable_pairs(summary)
     print()
     if not tradeable.empty:
-        print("Tradeable candidates (0.1-2d half-life, H<0.48, stable coint, β_cv<0.4):")
+        print("Tradeable candidates (1-120h half-life, H<0.5, coint_stability>=0.3, β_cv<0.6):")
         print(tradeable[["ticker_a", "ticker_b", "half_life_hours", "hurst", "coint_stability", "beta_cv"]].to_string(index=False))
     else:
         print("No pairs pass all tradeable filters.")

@@ -8,6 +8,9 @@ from data_loader import get_price_levels
 from ou_model import fit_ou, ou_residual_diagnostics
 
 # --- Part 1: Synthetic OU regression test ---
+# Deliberately raw/additive (price_a = price_b + S), not log prices: this
+# tests fit_ou's AR(1) parameter recovery in isolation, independent of the
+# log-price convention used by the real data path in Part 2 below.
 
 theta_true = 0.05
 mu_true    = 0.0
