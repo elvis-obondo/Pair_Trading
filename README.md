@@ -27,7 +27,9 @@ what works, what's tested, and what's currently broken.
    `stop_sigma`-unit adverse move costs exactly a fixed fraction of capital, using the
    OU stationary distribution as the risk unit.
 5. **Backtest** — `nautilus/pairs_strategy.py` wires the above into a Nautilus Trader
-   `Strategy`, and `nautilus/run_backtest.py` drives it against historical OHLCV bars.
+   `Strategy`, and `nautilus/run_backtest.py` auto-selects the top-ranked tradeable
+   futures/futures pair (via `pair_analysis.py`) and drives it against historical
+   30m OHLCV bars.
 6. **Diagnose** — `diagnostics/*.py` are forensic, read-only scripts written to test
    specific hypotheses against backtest output (e.g. confirming a Nautilus Trader
    order-routing bug, checking spread-path reconstruction fidelity, and probing whether
@@ -78,20 +80,32 @@ python research/validate_position_sizer.py
 python nautilus/run_backtest.py
 ```
 
-Note: `nautilus/run_backtest.py` currently expects 1h feather files that aren't
-present in this repo's data layout, and `research/run_all.py` is out of sync with
-`pair_analysis.py`'s current API — both are tracked as known issues in
-[CODEBASE_AUDIT.md](CODEBASE_AUDIT.md).
+Note: `research/run_all.py` is out of sync with `pair_analysis.py`'s current API —
+tracked as a known issue in [CODEBASE_AUDIT.md](CODEBASE_AUDIT.md).
+`nautilus/run_backtest.py` was also broken (hardcoded to a pair and a timeframe no
+longer on disk) but was fixed in Step 7 — see below.
 
 ## Status
 
-The strategy has been backtested on a single pair (AVAX/LINK) over a single 30-day
-window: 6 completed trades, net -8.46 USDT. See
-[research/markdowns/STEP6_SUMMARY.md](research/markdowns/STEP6_SUMMARY.md) for the
-full run and the diagnostic fixes (minimum-deviation gate, reversion-time correction)
-that produced it. Results are directional only — not enough trades to draw statistical
-conclusions, and the current take-profit/stop configuration has a structural
-reward:risk asymmetry that hasn't been addressed yet.
+The Nautilus backtest was revived in Step 7: it now auto-selects a pair instead of
+hardcoding AVAX/LINK, runs on 30m bars (matching the current data pipeline) instead
+of missing 1h files, and fixes a unit bug where the OU model's mean-reversion speed
+was silently off by ~2x at non-hourly bar sizes. Position sizing supports two modes
+— a fixed risk-budget-per-trade mode (Step 5's original design) and a
+leverage-target mode added in Step 7, where a per-trade capital budget is scaled by
+an explicit leverage multiple and split across both legs by the hedge ratio. See
+[research/markdowns/STEP7_SUMMARY.md](research/markdowns/STEP7_SUMMARY.md) for the
+full account of what changed and why.
+
+The strategy has now been backtested on multiple pairs/configurations, most recently
+SNX/WLD over a single 30-day window (7 completed trades). Results remain directional
+only — not enough trades to draw statistical conclusions, the current take-profit/stop
+configuration has a structural reward:risk asymmetry that hasn't been addressed yet,
+and the backtest still does not model forced liquidation, so results at higher
+leverage are optimistic relative to what a real exchange would allow (see
+STEP7_SUMMARY.md's "Known open gap"). The original AVAX/LINK run (6 trades, net -8.46
+USDT) is preserved in
+[research/markdowns/STEP6_SUMMARY.md](research/markdowns/STEP6_SUMMARY.md).
 
 ## License
 

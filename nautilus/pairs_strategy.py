@@ -20,6 +20,11 @@ class PairsStrategyConfig(StrategyConfig, frozen=True):
     bar_type_a: str
     bar_type_b: str
     min_bars: int = 720
+    bar_hours: float = 1.0
+    capital: float = 1000.0
+    risk_budget_pct: float = 0.01
+    target_leverage: float | None = None
+    enable_coint_gate: bool = True
 
 
 class PairsStrategy(Strategy):
@@ -108,16 +113,21 @@ class PairsStrategy(Strategy):
 
             self.signal_eval_count += 1
 
-            signal = generate_entry_signal(log_prices_a, log_prices_b)
+            signal = generate_entry_signal(
+                log_prices_a, log_prices_b,
+                bar_hours=self.config.bar_hours,
+                enable_coint_gate=self.config.enable_coint_gate,
+            )
 
             if signal is not None:
                 self.signal_fire_count += 1
 
                 position_size = compute_position_size(
                     entry_signal=signal,
-                    capital=1000.0,
-                    risk_budget_pct=0.01,
+                    capital=self.config.capital,
+                    risk_budget_pct=self.config.risk_budget_pct,
                     stop_sigma=2.5,
+                    target_leverage=self.config.target_leverage,
                 )
                 if position_size is None:
                     self.log.warning("Position sizer returned None — skipping signal")

@@ -1,5 +1,10 @@
 # Pair_Trading Codebase Audit
 
+> **This audit is a point-in-time snapshot.** Several findings below (notably
+> Finding 1 and Finding 6) have since been fixed — see **§9. Update —
+> 2026-08-03** at the end of this document for what changed and what's still
+> accurate.
+
 ## 1. Executive Summary
 
 This is a **cryptocurrency statistical-arbitrage (pairs trading) research project**, not a deployed production system. Its core is a from-scratch Ornstein-Uhlenbeck (OU) mean-reversion model applied to log-price spreads between correlated crypto perpetual futures (OKX), with a gated entry/exit signal generator, an OU-based position sizer, and a Nautilus Trader backtesting integration. A parallel `user_data/` directory holds an unmodified Freqtrade scaffold (Docker, config, sample strategy) that is only loosely connected to the actual research — it currently exists mainly as a data-download vehicle.
@@ -127,3 +132,44 @@ It injects noise across the *entire* price series ([validate_signal_generator.py
 5. **Address the reward:risk asymmetry** (Finding 4) before running more capital through this — either widen the take-profit fraction, tighten the stop, or explicitly accept a lower win-rate requirement isn't being met.
 6. **Either wire `docker-compose.yml`/`user_data/strategies` into the actual pairs strategy or delete the unused Freqtrade scaffold** to remove the risk of someone running `docker compose up` and unknowingly deploying `SampleStrategy`.
 7. **Expand beyond the single AVAX/LINK, single-30-day-window backtest** before drawing any conclusions — `analyze_top_pairs`/`get_tradeable_pairs` already exist to find other candidate pairs; multi-pair, multi-period backtesting is the natural next step and is exactly what the small-sample caveats in `spread_path_rolling_params.py` are asking for.
+
+## 9. Update — 2026-08-03
+
+A follow-up session (documented in full in
+[research/markdowns/STEP7_SUMMARY.md](research/markdowns/STEP7_SUMMARY.md))
+fixed several findings from this audit. What changed, mapped to the sections
+above:
+
+- **Finding 1 (Critical, `run_backtest.py` cannot run) — fixed.** The harness
+  no longer hardcodes 1h feather paths or the AVAX/LINK pair. It now loads
+  30m bars (matching what's actually on disk) and auto-selects the top-ranked
+  cointegrated futures/futures pair via `analyze_top_pairs()` +
+  `get_tradeable_pairs()`. Flow B in the architecture diagram (§2) and the
+  `run_backtest.py` row in the module table (§3) describe the old, now-fixed
+  behavior.
+- **A bug this audit did not catch: theta/sigma were silently ~2x off at
+  non-hourly bar sizes.** `ou_model.py`'s `fit_ou()` computed theta from raw
+  consecutive-bar differences with no time-scaling, so every reversion-time
+  and holding-horizon calculation was implicitly per-bar while every
+  docstring called it per-hour. Harmless at Step 6's 1h bars; wrong once the
+  data pipeline's default became 30m. Fixed by adding a `bar_hours`
+  parameter that rescales theta and sigma after fitting.
+- **Finding 6 (Medium, hardcoded `capital=1000.0`) — fixed, and extended.**
+  Capital, bar length, risk-budget percentage, and a new leverage-target
+  sizing mode are now all `PairsStrategyConfig` fields, set once in
+  `run_backtest.py`. `position_sizer.py` gained a second sizing mode
+  (`target_leverage`) alongside the original risk-budget mode; see
+  STEP7_SUMMARY.md for why a naive first version of this caused the
+  simulated account to go deeply negative, and how it was corrected.
+- **Finding 2 (`research/run_all.py` broken) — still accurate, not
+  addressed.** Out of scope for the Step 7 session.
+- **Finding 7 (single-leg partial fills unhandled) — still accurate, not
+  addressed.**
+- **New, not in the original audit: no liquidation modeling.** The Nautilus
+  backtest does not force-close a position or reject an order when a loss
+  would breach maintenance margin — it lets the balance go negative and keeps
+  trading. Discovered while testing higher-leverage sizing; explicitly
+  deferred (not fixed) by decision during the Step 7 session. See
+  STEP7_SUMMARY.md's "Known open gap."
+- Recommendation §8 item 1 ("fix or remove the two broken entry points") is
+  now half-done: `run_backtest.py` is fixed, `run_all.py` is not.

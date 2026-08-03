@@ -13,8 +13,8 @@ from pair_analysis import compute_spread
 
 class OUParams(NamedTuple):
     theta: float  # mean reversion speed (per hour)
-    mu: float     # long-run mean of the spread
-    sigma: float  # volatility of the spread
+    mu: float     # long-run mean of the spread (log-price units, per compute_spread)
+    sigma: float  # volatility of the spread (log-price units, per compute_spread)
 
 
 class OUResidualDiagnostics(NamedTuple):
@@ -45,7 +45,7 @@ def _fit_ou_internals(S: np.ndarray) -> dict | None:
     return {"lam": float(lam), "c": float(c), "residuals": residuals, "lam_se": lam_se}
 
 
-def fit_ou(price_a: np.ndarray, price_b: np.ndarray) -> OUParams:
+def fit_ou(price_a: np.ndarray, price_b: np.ndarray, bar_hours: float = 1.0) -> OUParams:
     """Fit an Ornstein-Uhlenbeck model to the spread implied by price_a and price_b.
 
     Computes the spread via OLS (price_a - alpha - beta * price_b), then estimates
@@ -55,13 +55,21 @@ def fit_ou(price_a: np.ndarray, price_b: np.ndarray) -> OUParams:
     Parameters
     ----------
     price_a, price_b:
-        1-D float arrays of hourly prices, equal length.
+        1-D float arrays of log-prices sampled every `bar_hours` hours, equal length.
+    bar_hours : float, default 1.0
+        Real time, in hours, between consecutive samples in price_a/price_b. The
+        raw AR(1) regression is fit in bar units (dt=1 bar); theta and sigma are
+        then rescaled by bar_hours so they're genuinely per-hour/per-sqrt-hour
+        regardless of the sampling frequency. Default 1.0 preserves prior
+        behavior for callers passing hourly bars.
 
     Returns
     -------
     OUParams with:
         theta -- mean-reversion speed (per hour); larger values mean faster pull toward mu.
         mu    -- long-run mean of the spread (spread units: price_a - beta * price_b).
+                 In practice price_a/price_b are log prices (see compute_spread),
+                 so mu/sigma read as log-ratio units, not raw price differences.
         sigma -- spread volatility (spread units per sqrt(hour)).
 
     Returns OUParams(nan, nan, nan) if:
@@ -81,12 +89,15 @@ def fit_ou(price_a: np.ndarray, price_b: np.ndarray) -> OUParams:
 
     lam, c = internals["lam"], internals["c"]
 
-    theta = -lam
-    if theta <= 0:
+    theta_raw = -lam
+    if theta_raw <= 0:
         return OUParams(np.nan, np.nan, np.nan)
 
-    mu    = c / theta
-    sigma = float(np.std(internals["residuals"]))
+    mu        = c / theta_raw  # time-unit invariant, computed before rescaling
+    sigma_raw = float(np.std(internals["residuals"]))
+
+    theta = theta_raw / bar_hours
+    sigma = sigma_raw / np.sqrt(bar_hours)
 
     return OUParams(theta=theta, mu=mu, sigma=sigma)
 

@@ -25,6 +25,8 @@ def generate_entry_signal(
     take_profit_pct: float = 0.80,
     f: float = 0.20,
     min_deviation_sigma: float = 1.0,
+    bar_hours: float = 1.0,
+    enable_coint_gate: bool = True,
 ) -> dict | None:
     """
     Run a gated OU-model entry check and return a signal dict if all gates pass.
@@ -36,9 +38,9 @@ def generate_entry_signal(
     Parameters
     ----------
     price_a : np.ndarray
-        1-D float array of hourly log-prices for asset A.
+        1-D float array of log-prices for asset A, sampled every bar_hours hours.
     price_b : np.ndarray
-        1-D float array of hourly log-prices for asset B, equal length to price_a.
+        1-D float array of log-prices for asset B, equal length to price_a.
     coint_p_threshold : float, default 0.10
         Gate 1 — maximum acceptable Engle-Granger cointegration p-value on the
         last 168 bars. Higher p-value means cointegration is not supported.
@@ -67,6 +69,22 @@ def generate_entry_signal(
         than this are rejected. Default 1.0 (one stationary std dev) chosen
         as the natural unit; flagged for empirical sweep. Set to 0.0 to
         disable the gate.
+    bar_hours : float, default 1.0
+        Real time, in hours, between consecutive samples in price_a/price_b.
+        Passed to fit_ou so theta/sigma come back genuinely per-hour, and
+        used to rescale the Gate 1/Gate 5 lookback windows (see below) so
+        they cover a fixed amount of real time regardless of bar frequency.
+        Default 1.0 assumes hourly bars, preserving prior behavior.
+    enable_coint_gate : bool, default True
+        If False, skips Gate 1 (cointegration check) entirely — the pair is
+        assumed cointegrated (e.g. because it was already screened once at
+        pair-selection time) without re-testing on the live rolling window.
+        Default True preserves existing behavior. Note this does not mean
+        pair-selection-time cointegration and this gate test the same thing:
+        selection tests the whole backtest window once; this gate re-tests a
+        short rolling window at every bar, and can catch temporary breakdowns
+        selection wouldn't see. Disabling it is a deliberate experiment, not
+        a no-op.
 
     Returns
     -------
@@ -89,6 +107,7 @@ def generate_entry_signal(
     Gate order (execution order)
     ----------
     Gate 1 : Cointegration — pre_entry_coint_check p-value <= coint_p_threshold
+             (skipped entirely if enable_coint_gate=False)
     Gate 2 : OU fit — fit_ou must return finite theta (theta > 0)
     Gate 3 : Minimum deviation — abs(S0 - mu) >= min_deviation_sigma * sigma_stationary
     Gate 4 : Theta significance — ou_residual_diagnostics theta_p <= theta_p_threshold
@@ -103,13 +122,19 @@ def generate_entry_signal(
         return None
     S0 = float(S[-1])
 
+    # Gate 1/Gate 5 lookback window, rescaled to cover a fixed 7 days of real
+    # time regardless of bar_hours (both default to 168 bars = 7 days at
+    # hourly bars).
+    window_bars = int(round(7 * 24 / bar_hours))
+
     # Step 2 — Gate 1: cointegration check
-    coint_p = pre_entry_coint_check(price_a, price_b)
-    if np.isnan(coint_p) or coint_p > coint_p_threshold:
-        return None
+    if enable_coint_gate:
+        coint_p = pre_entry_coint_check(price_a, price_b, window=window_bars)
+        if np.isnan(coint_p) or coint_p > coint_p_threshold:
+            return None
 
     # Step 3 — Gate 2: fit OU parameters
-    params = fit_ou(price_a, price_b)
+    params = fit_ou(price_a, price_b, bar_hours=bar_hours)
     if np.isnan(params.theta):
         return None
 
@@ -129,7 +154,7 @@ def generate_entry_signal(
         return None
 
     # Step 5 — Gate 4: volatility regime
-    regime = spread_volatility_regime(S, params.sigma)
+    regime = spread_volatility_regime(S, params.sigma, window=window_bars)
     if np.isnan(regime) or regime > regime_threshold:
         return None
 
