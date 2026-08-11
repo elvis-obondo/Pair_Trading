@@ -89,7 +89,36 @@ def get_tradeable_pairs(summary: pd.DataFrame) -> pd.DataFrame:
 
 
 
-def analyze_top_pairs(top_n: int = 10, window: int = 7 * BARS_PER_DAY, days: int = 30):
+def analyze_top_pairs(top_n: int = 10, candidate_pool: int = 150, window: int = 7 * BARS_PER_DAY, days: int = 40):
+    """Two-stage funnel: cheap p_value pre-filter, then rank by coint_stability.
+
+    Stage 1 (cheap): every pair gets one full-sample Engle-Granger test;
+    the `candidate_pool` lowest p-values move on to stage 2. This is a
+    pre-filter only, not the final ranking -- a raw p_value is easily
+    dominated by whichever single asset had the biggest trending move over
+    the window (it "cointegrates" with almost everything, spuriously), so
+    sorting the FINAL list by p_value crowds out genuinely mean-reverting
+    pairs that just don't happen to involve that week's trending asset.
+    `candidate_pool` needs to be wide enough that those genuine pairs are
+    still in the pool -- 150 was picked empirically after a real pair
+    (SNX/WLD, tradeable on every diagnostic) ranked #29 by raw p_value
+    while a single trending asset (DYDX that week, MORPHO the week before)
+    occupied the entire top 10.
+
+    Stage 2 (expensive): full diagnostics -- half-life, Hurst,
+    rolling-window coint_stability, beta stability -- computed for every
+    pair in the pool, which is then re-sorted by coint_stability
+    descending. This is the metric that actually reflects a stable,
+    tradeable relationship (a fraction of rolling windows that stayed
+    cointegrated), unlike the single full-sample p_value, so it drives
+    both the printed ranking and the tradeable-candidate filter.
+
+    The tradeable filter (get_tradeable_pairs) is applied to the WHOLE
+    diagnosed pool, not just the printed top `top_n` rows -- a pair that
+    passes every threshold but isn't in the top `top_n` by coint_stability
+    should still show up as tradeable, not get silently dropped by the
+    display truncation.
+    """
     print("Fetching price data...")
     # align=False: keep each instrument's own gaps intact so the per-pair
     # `dropna()` + `min_bars` check below reflects genuine joint coverage
@@ -132,15 +161,19 @@ def analyze_top_pairs(top_n: int = 10, window: int = 7 * BARS_PER_DAY, days: int
     coint_df = (
         pd.DataFrame(coint_results, columns=["ticker_a", "ticker_b", "p_value"])
         .sort_values("p_value")
-        .head(top_n)
+        .head(candidate_pool)
         .reset_index(drop=True)
     )
+    n_candidates = len(coint_df)
 
-    print(f"\nRunning diagnostics on top {top_n} pairs (rolling window = {window} bars = {window // BARS_PER_DAY}d)...")
+    print(f"\nRunning diagnostics on {n_candidates} p_value-prefiltered candidates "
+          f"(rolling window = {window} bars = {window // BARS_PER_DAY}d)...")
+    diag_progress_step = max(1, n_candidates // 20)  # ~20 updates, same convention as the scan step above
     rows = []
     for i, row in coint_df.iterrows():
         a, b, pval = row.ticker_a, row.ticker_b, row.p_value
-        print(f"  [{i + 1}/{top_n}] {a}/{b}")
+        if (i + 1) % diag_progress_step == 0 or (i + 1) == n_candidates:
+            print(f"  diagnosed {i + 1}/{n_candidates} candidates ({(i + 1) / n_candidates:.0%})")
         pair_clean = df[[a, b]].dropna()
         pa, pb = pair_clean[a].values, pair_clean[b].values
 
@@ -167,16 +200,24 @@ def analyze_top_pairs(top_n: int = 10, window: int = 7 * BARS_PER_DAY, days: int
             "beta_cv": round(beta_cv, 3),
         })
 
-    summary = pd.DataFrame(rows)
+    # Rank the whole diagnosed pool by coint_stability, not the p_value order
+    # it arrived in -- see the module docstring for why p_value is only a
+    # pre-filter here, not the metric that should decide "top".
+    summary = pd.DataFrame(rows).sort_values(
+        "coint_stability", ascending=False, kind="stable"
+    ).reset_index(drop=True)
 
-    print("\n--- Pair Diagnostics ---")
-    print(summary.to_string(index=False))
+    print(f"\n--- Pair Diagnostics (top {top_n} of {n_candidates}, ranked by coint_stability) ---")
+    print(summary.head(top_n).to_string(index=False))
 
-
+    # Filtered against the FULL diagnosed pool, not just the printed
+    # top `top_n` -- a pair passing every threshold shouldn't disappear
+    # just because coint_stability ranking put it 11th.
     tradeable = get_tradeable_pairs(summary)
     print()
     if not tradeable.empty:
-        print("Tradeable candidates (1-120h half-life, H<0.5, coint_stability>=0.3, β_cv<0.6):")
+        print(f"Tradeable candidates (1-120h half-life, H<0.5, coint_stability>=0.3, β_cv<0.6), "
+              f"{len(tradeable)} of {n_candidates} diagnosed:")
         print(tradeable[["ticker_a", "ticker_b", "half_life_hours", "hurst", "coint_stability", "beta_cv"]].to_string(index=False))
     else:
         print("No pairs pass all tradeable filters.")
