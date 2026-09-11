@@ -150,7 +150,7 @@ def outcome(sub, F, S, H, cost=MEASURED_COST):
 
 
 def simulate(cand, max_concurrent, sizing="fixed", risk_frac=0.02,
-             risk_dollars=6.0, n_sims=400, seed=0):
+             risk_dollars=6.0, n_sims=400, seed=0, rank_by=None):
     """Walk the test window day by day holding simultaneous positions.
 
     Returns (final equity multiples, max drawdowns, ruin rate, median realised
@@ -190,7 +190,30 @@ def simulate(cand, max_concurrent, sizing="fixed", risk_frac=0.02,
                 continue
             g = by_day[dt]
             k = min(free, len(g))
-            pick = g.sample(k, random_state=int(rng.integers(1_000_000_000)))
+            if rank_by is None:
+                pick = g.sample(k, random_state=int(rng.integers(1_000_000_000)))
+            else:
+                # Deliberate selection instead of random. Ranking by a feature
+                # that scales the payoff (spread volatility above all) inflates
+                # the per-trade percent without improving the bet, so the only
+                # honest test of a ranking rule is what it does to the account,
+                # ruin included -- which is why this lives in the simulator and
+                # not in a per-trade average.
+                col, asc, pool_mult = rank_by
+                gg = g[np.isfinite(g[col])]
+                if len(gg) < k:
+                    gg = g
+                # Shortlist then sample, rather than taking the top k outright.
+                # Deterministic top-k makes every simulation identical, which
+                # collapses the distribution: p5, median and p95 all land on the
+                # same number and "P(ruin) 0%" means one path survived, not that
+                # ruin is unlikely. Sampling k from a shortlist of pool_mult*k
+                # keeps the selection effect while leaving the run stochastic,
+                # and is closer to reality anyway -- the exact top pick is not
+                # always fillable.
+                pool = gg.sort_values(col, ascending=asc).head(max(k, int(pool_mult * k)))
+                pick = pool.sample(min(k, len(pool)),
+                                   random_state=int(rng.integers(1_000_000_000)))
 
             for net_pct, xb, stop_pct in zip(pick.net_pct.to_numpy(),
                                              pick.exit_bar.to_numpy(),
