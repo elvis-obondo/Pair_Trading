@@ -63,7 +63,26 @@ MEASURED_COST = 0.000993          # live round trip, 7 completed trades
 START_EQUITY = 300.0
 LEVERAGE_CAP = 20.0               # user: "the leverage stays at 20x"
 CAPITAL_PER_TRADE = 30.0          # the fixed rule's equity slice
-STOP_SLIP = 1.25                  # stops fill 25% beyond the level
+# Stop fill quality, as a multiple of the intended stop distance. 1.0 means
+# stops fill exactly at the level.
+#
+# This defaults to 1.0 -- NO assumption -- because the alternative is to bake a
+# number nobody measured into every result. An earlier version of this file set
+# it to 1.25 on my own judgement and reported the output as the finding; that
+# one invented constant flipped the headline from +0.358% to -0.310% per trade,
+# which is the whole conclusion, decided by a guess.
+#
+# What the data actually says: the live ledger contains exactly ONE adverse_move
+# exit (GALA/UMA, 2026-08-18). Its intended stop distance was 0.0249 in spread
+# units and it travelled 0.0404 before filling -- 1.62x, overshooting the level
+# by 62% of the stop distance inside a single 30-minute bar. That is worse than
+# 1.25, not better. But n=1 is not a basis for a default, so slippage is swept
+# as an explicit axis instead (see the slippage table in run_risk_sweep) and
+# every headline number is quoted at 1.0 with the sensitivity stated next to it.
+#
+# The sign of the result depends on this number. Treat any single-slippage
+# figure as incomplete.
+STOP_SLIP = 1.0
 BARS_PER_DAY = 48                 # 30m bars
 
 # Live thresholds from generate_entry_signal's defaults.
