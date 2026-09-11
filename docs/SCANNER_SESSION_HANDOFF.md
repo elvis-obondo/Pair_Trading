@@ -174,10 +174,45 @@ positive test return with the CI excluding zero), and the ruin relationship
 What does not: any specific return figure, and arguably the exact parameter
 values.
 
-**A two-year backfill was started on 2026-09-11 and should be complete.** Check
-with `python3 scripts/history_coverage.py`. Before trusting any parameter, re-run
-`research/param_stability.py` on the longer history and see whether train and
-test agree once they span more than one regime. Expect a ragged panel — many of
-the 212 tokens did not exist two years ago, and cointegration needs both legs
-present on the same bars, so the number that matters is how many tickers share
-a start date, not the deepest one.
+**The two-year backfill completed on 2026-09-11 at 20:24.** State now:
+
+| | before | after |
+|---|---|---|
+| span | 89 days | 730 days |
+| range | 2026-06-14 to 09-11 | 2024-09-11 to 2026-09-11 |
+| bars | 893,746 | 5,322,215 |
+| median bars/ticker | 4,201 | 30,404 |
+
+Coverage is ragged, as expected — both legs must exist on the same bars:
+
+| history | tickers | usable pairs |
+|---|---|---|
+| 90+ days | 204 of 212 | 20,706 |
+| 180+ days | 188 | 17,578 |
+| 1 year | 141 | 9,870 |
+| 1.5 years | 118 | 6,903 |
+| 2 years | 91 | 4,095 |
+
+No cutoff needs choosing. `reversion_dataset.build_pair_rows` already does
+`dropna()` per pair, so each pair uses its own overlap and short-history tokens
+simply contribute fewer days. At 4,095 pairs the 3-sigma pool is still roughly
+59 candidates a day against ~9 slots.
+
+### Immediate next step
+
+1. Rebuild `research/exit_sweep_paths.parquet` on the new history.
+   **It does not need the cointegration p-value table.**
+   `exit_sweep.attach_relationship_age` returns early when the file is absent
+   (`if not pvalues_path.exists(): return`), and it only attaches
+   `age_days`/`passing`/`p_value` — none of which the settled spec uses. The
+   existing table covers only 2026-06-20 to 09-09, and regenerating it would
+   mean re-running `coint_survival.py`, which took 54 minutes on 89 days and
+   would take 8+ hours on 730. Skip it.
+2. Re-run `research/param_stability.py`. Replace the single 60/40 split with
+   proper walk-forward folds — 730 days supports roughly a dozen 60-day folds,
+   which is what actually answers whether the parameters hold across regimes.
+   The -0.03 rank correlation on one split is the thing being re-tested.
+3. Re-run `research/signal_ranking.py` to check the theta ranking survives.
+
+Memory: 72 days of candidate rows was 96MB, so 730 days will be ~1GB. Shard it
+or run it somewhere with more RAM.
