@@ -40,3 +40,5 @@ logs/
 
 # OS
 .DS_Store
+research/entry_gates_parts/
+research/entry_gates_build.log
