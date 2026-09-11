@@ -40,6 +40,7 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(__file__))
 
+import gc
 import itertools
 import time
 from pathlib import Path
@@ -65,6 +66,8 @@ MAX_HORIZON_BARS = int(MAX_HORIZON_HOURS * 60 / 30)
 TP_GRID = [0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1.0]
 STOP_GRID = [0.5, 0.75, 1.0, 1.5, 2.0, 2.5, 3.0]
 HORIZON_GRID_HOURS = [4, 8, 12, 24, 48, 72]
+
+SHARD_PAIRS = 300          # checkpoint size; a crash costs one shard, not the run
 
 # Round-trip cost across both legs: taker fees plus slippage. Deliberately on
 # the pessimistic side of the 0.2% used in the APE/DOGE note, because that
@@ -191,18 +194,48 @@ def run(max_pairs: int | None = None, output_path: Path = OUTPUT_PATH) -> pd.Dat
         pairs = pairs[:max_pairs]
     print(f"[INFO] {len(pairs)} pairs, horizon window {MAX_HORIZON_BARS} bars")
 
-    parts, t0 = [], time.time()
-    step = max(1, len(pairs) // 10)
-    for i, (a, b) in enumerate(pairs):
-        pd_ = df[[a, b]].dropna()
-        if len(pd_) < MIN_JOINT_BARS:
-            continue
-        r = build_pair_paths(a, b, pd_)
-        if r is not None:
-            parts.append(r)
-        if (i + 1) % step == 0:
-            print(f"  [{i+1}/{len(pairs)}] {time.time()-t0:.0f}s")
-    out = pd.concat(parts, ignore_index=True)
+    # Sharded, because the 2-year panel is ~8x the calendar this was written
+    # for. Accumulating every pair's frame and concatenating at the end held
+    # roughly 500MB for 89 days; at 730 days it is several GB, and this laptop
+    # has 8GB. Each shard is written and dropped, and a rerun skips shards
+    # already on disk -- the same pattern entry_gates_dataset.py uses after
+    # three crashes cost a full run each.
+    parts_dir = Path(str(output_path) + "_parts")
+    parts_dir.mkdir(exist_ok=True)
+    shards = [(i, pairs[s:s + SHARD_PAIRS])
+              for i, s in enumerate(range(0, len(pairs), SHARD_PAIRS))]
+    todo = [(i, ps) for i, ps in shards
+            if not (parts_dir / f"part_{i:05d}.parquet").exists()]
+    print(f"[INFO] {len(shards)} shards, {len(shards)-len(todo)} already done, "
+          f"{len(todo)} to run")
+
+    t0 = time.time()
+    for k, (sid, ps) in enumerate(todo, 1):
+        rows = []
+        for a, b in ps:
+            pd_ = df[[a, b]].dropna()
+            if len(pd_) < MIN_JOINT_BARS:
+                continue
+            r = build_pair_paths(a, b, pd_)
+            if r is not None:
+                rows.append(r)
+        part = parts_dir / f"part_{sid:05d}.parquet"
+        if rows:
+            pd.concat(rows, ignore_index=True).to_parquet(part, index=False)
+        else:
+            pd.DataFrame().to_parquet(part, index=False)
+        del rows
+        gc.collect()
+        el = time.time() - t0
+        print(f"  shard {sid} ({k}/{len(todo)}) {el:.0f}s "
+              f"eta {el/k*(len(todo)-k):.0f}s", flush=True)
+
+    print("[INFO] merging shards...")
+    frames = [f for f in (pd.read_parquet(p) for p in sorted(parts_dir.glob("part_*.parquet")))
+              if len(f)]
+    out = pd.concat(frames, ignore_index=True)
+    del frames
+    gc.collect()
     print(f"[INFO] {len(out)} candidate trades")
     out = attach_relationship_age(out)
     out.to_parquet(output_path, index=False)

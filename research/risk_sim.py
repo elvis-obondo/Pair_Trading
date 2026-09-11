@@ -101,6 +101,11 @@ def load(require_gates=True):
     elif require_gates:
         raise FileNotFoundError(
             GATES + " -- run research/entry_gates_dataset.py first")
+    # The gate columns describe the 89-day window this project started with.
+    # After the 2-year backfill that table is archived as entry_gates_89day
+    # rather than merged, because a left join would attach gate values to the
+    # 2026 rows and NaN to everything before, and nothing downstream would
+    # notice. The settled configuration applies no gates, so nothing needs it.
     else:
         for c in ["theta", "theta_p", "regime", "rev_prob",
                   "dev_sigma", "sigma_stationary"]:
