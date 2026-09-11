@@ -158,10 +158,44 @@ shards on rerun. It survives being killed.
 
 ---
 
+## 6b. Walk-forward validation — run 2026-09-11, supersedes section 7's pessimism
+
+`research/param_walkforward.py`, nine rolling-origin folds of 60 days across
+714 days (3,646,435 candidate rows).
+
+| dimension | mean rho | folds rho>0 | train's pick | cost vs hindsight |
+|---|---|---|---|---|
+| entry | +0.75 | 89% | 3.5 in 9/9 folds | +0.124 |
+| take-profit | +0.84 | 89% | 1.0 in 9/9 | **+0.011** |
+| stop | +0.71 | 89% | 0.5 in 9/9 | **+0.021** |
+| horizon | -0.39 | 33% | 72 in 7/9 | +0.092 |
+
+**Take-profit 1.0 and stop 0.5 are settled.** Picked unanimously in every fold,
+and choosing them from training data rather than hindsight costs 0.011 and
+0.021 percent per trade. That is free.
+
+**Two open items:**
+
+- Entry picks 3.5, not the 3.0 in section 2 — and 3.5 is the edge of the grid,
+  so it is a boundary, not a located optimum. The 3.0 recommendation came from
+  total edge (per-trade x trade count); this walk-forward optimises per-trade
+  alone. Extend ENTRY_GRID past 3.5 and decide on total edge.
+- Horizon is genuinely unstable (train's ranking anti-predicts test in two
+  thirds of folds) and 72 is also a grid edge. Extend HOR_GRID past 72.
+
+Both grids live at the top of `research/param_walkforward.py`.
+
 ## 7. The caveat that governs everything above
 
 Every number here comes from **43 training days and 29 test days of a single
 quiet quarter** — 2026-06-14 to 2026-09-11, no crash, no sustained bear market.
+
+**This section is superseded by 6b and is kept for the reasoning only.** The
+-0.03 rank correlation quoted below was a sample-size artifact: with 714 days
+and nine folds the same dimensions come out learnable. Read 6b for the current
+position; the lesson worth keeping is that a single split of a short window
+cannot distinguish "this parameter is unlearnable" from "this window is too
+short to learn anything", and those have opposite implications.
 
 Selection at that sample size is close to guessing, and this is measured rather
 than assumed: ranking the six stop levels on train and on test gives a rank
