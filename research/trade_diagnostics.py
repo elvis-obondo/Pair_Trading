@@ -111,7 +111,31 @@ def pre_entry_coint_check(
 
     Outputs:
         p-value (float in [0, 1]), or np.nan if either array is shorter than
-        window or contains non-finite values in the window.
+        window, contains non-finite values, is degenerate (see below), or if
+        the underlying test fails numerically.
+
+    Degenerate input, and why NaN rather than an exception:
+
+    Sub-penny instruments quantise hard. SHIB prints at ~$0.000005 and NEIRO at
+    ~$0.000083, so within a single 336-bar window the tick size can leave the
+    log-price series with too few distinct values -- sometimes exactly one.
+    statsmodels' coint() then calls adfuller() on a zero-variance residual and
+    raises ValueError("Invalid input, x is constant"), or the least-squares
+    step fails to converge and raises LinAlgError. Both propagate all the way
+    out of Strategy.on_bar and kill the entire backtest run for that pair.
+
+    Measured impact before this guard: 2 of 6 pairs selected by a live batch
+    (MANA/SHIB, NEIRO/PNUT) crashed outright and produced no result at all,
+    which is silent survivorship bias -- a third of the candidate population
+    never got the chance to lose money, so every pooled statistic from that
+    batch was computed on the subset that happened not to crash.
+
+    NaN is the correct return because the caller already treats it as a failed
+    gate (generate_entry_signal: `if np.isnan(coint_p) ... return None`). A
+    window with no price variation genuinely offers no evidence of
+    cointegration, so declining to trade it is the honest answer, not a
+    workaround -- and the run continues, so the pair's other bars still get
+    evaluated instead of the whole backtest dying on one bad window.
 
     Units: p-value is dimensionless.
     """
@@ -127,8 +151,18 @@ def pre_entry_coint_check(
     if not (np.isfinite(chunk_a).all() and np.isfinite(chunk_b).all()):
         return np.nan
 
-    _, pval, _ = coint(chunk_a, chunk_b)
-    return float(pval)
+    # Cheap pre-check: a constant (or near-constant) leg cannot support the
+    # regression coint() runs internally. Caught here rather than relying on
+    # the except below so the common case is explicit rather than incidental.
+    if np.ptp(chunk_a) == 0.0 or np.ptp(chunk_b) == 0.0:
+        return np.nan
+
+    try:
+        _, pval, _ = coint(chunk_a, chunk_b)
+    except (ValueError, np.linalg.LinAlgError):
+        # Residual degenerate, or the least-squares step did not converge.
+        return np.nan
+    return float(pval) if np.isfinite(pval) else np.nan
 
 
 def spread_volatility_regime(

@@ -4,7 +4,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 
 import numpy as np
 from ou_model import (
-    fit_ou,
+    fit_ou_ewma,
     ou_residual_diagnostics,
     ou_reversion_probability,
 )
@@ -14,19 +14,38 @@ from trade_diagnostics import (
 )
 from pair_analysis import compute_spread
 
+# Hard ceiling on the time stop, applied on top of the OU-model-derived
+# expected_reversion_time (see generate_entry_signal's 1.5x-correction
+# comment) -- added 2026-08-18 after a GALA/UMA trade got hit by a fast
+# adverse move within its first hour. Doesn't replace the per-trade
+# model estimate, just bounds it: a trade still exits early if the model
+# expects faster reversion than this, but never holds past this many hours
+# regardless of what the model predicted.
+#
+# Raised 5.0 -> 24.0 on 2026-08-19: the 5h cap was routinely cutting trades
+# off well before the model's own expected_reversion_time (e.g. a live
+# IOST/UMA trade capped at 5h despite a ~23h model estimate), giving most
+# trades essentially no runway to actually revert -- trade #2 closed
+# time_stop with only ~15% progress toward mu. Note the original GALA/UMA
+# concern (a fast adverse move) isn't reintroduced by this change: that's
+# caught by the separate adverse_move stop, which is checked every bar
+# regardless of elapsed time, not bounded by this constant.
+MAX_TIME_STOP_HOURS = 24.0
+
 
 def generate_entry_signal(
     price_a: np.ndarray,
     price_b: np.ndarray,
     coint_p_threshold: float = 0.10,
     regime_threshold: float = 1.1,
-    prob_threshold: float = 0.67,
+    prob_threshold: float = 0.60,
     theta_p_threshold: float = 0.05,
     take_profit_pct: float = 0.80,
     f: float = 0.20,
     min_deviation_sigma: float = 1.0,
     bar_hours: float = 1.0,
     enable_coint_gate: bool = True,
+    rng: np.random.Generator | None = None,
 ) -> dict | None:
     """
     Run a gated OU-model entry check and return a signal dict if all gates pass.
@@ -48,11 +67,15 @@ def generate_entry_signal(
         Gate 4 — maximum acceptable log volatility ratio log(recent_std / sigma).
         Default 1.1 corresponds to roughly 3x sigma in recent spread std; above
         this the model assumptions are strained.
-    prob_threshold : float, default 0.67
-        Gate 5 — minimum analytical reversion probability to generate a signal.
-        Default 0.67 targets a true probability of ~0.60 after accounting for the
-        ~6-7% overestimate introduced by the reflection-principle approximation on
-        hourly-discrete paths.
+    prob_threshold : float, default 0.60
+        Gate 5 — minimum reversion probability to generate a signal. As of the
+        Monte Carlo rewrite of ou_reversion_probability (residual-bootstrap
+        simulation, not the closed-form reflection-principle formula) this
+        probability is no longer subject to the reflection principle's known
+        Gaussian-tails overestimate, so 0.60 is the true target probability
+        directly -- it replaces the old 0.67 value, which existed only to
+        compensate for that bias (0.67-for-0.60 fudge factor, now removed at
+        the source instead of patched here).
     theta_p_threshold : float, default 0.05
         Gate 3 — maximum acceptable p-value for the theta significance test.
         If exceeded, mean reversion is not statistically reliable enough to trade.
@@ -71,7 +94,7 @@ def generate_entry_signal(
         disable the gate.
     bar_hours : float, default 1.0
         Real time, in hours, between consecutive samples in price_a/price_b.
-        Passed to fit_ou so theta/sigma come back genuinely per-hour, and
+        Passed to fit_ou_ewma so theta/sigma come back genuinely per-hour, and
         used to rescale the Gate 1/Gate 5 lookback windows (see below) so
         they cover a fixed amount of real time regardless of bar frequency.
         Default 1.0 assumes hourly bars, preserving prior behavior.
@@ -85,14 +108,21 @@ def generate_entry_signal(
         short rolling window at every bar, and can catch temporary breakdowns
         selection wouldn't see. Disabling it is a deliberate experiment, not
         a no-op.
-
+    rng : np.random.Generator, optional
+        Generator used for the Monte Carlo draws inside Gate 6's reversion-
+        probability simulation. None (default) creates a fresh unseeded
+        Generator per call, so repeated calls on identical inputs are not
+        bit-for-bit reproducible. Callers that need reproducible backtests
+        (e.g. a Strategy running many bars) should construct one seeded
+        Generator once and pass it through on every call.
     Returns
     -------
     dict or None
         None if any gate fails. Otherwise a dict with keys:
 
         entry_spread            -- spread value at signal time (float, spread units)
-        reversion_probability   -- analytical P(cross mu within tau) (float, [0,1])
+        reversion_probability   -- Monte Carlo P(cross mu within tau), estimated by
+                                 residual-bootstrap simulation (float, [0,1])
         expected_reversion_time -- 1.5 * ln(1/f) / theta in hours (float);
                                  1.5x empirical correction applied so the
                                  time-stop horizon matches observed reversion
@@ -108,9 +138,18 @@ def generate_entry_signal(
     ----------
     Gate 1 : Cointegration — pre_entry_coint_check p-value <= coint_p_threshold
              (skipped entirely if enable_coint_gate=False)
-    Gate 2 : OU fit — fit_ou must return finite theta (theta > 0)
+    Gate 2 : OU fit — fit_ou_ewma must return finite theta (theta > 0)
     Gate 3 : Minimum deviation — abs(S0 - mu) >= min_deviation_sigma * sigma_stationary
     Gate 4 : Theta significance — ou_residual_diagnostics theta_p <= theta_p_threshold
+             (this is the STATIC full-window fit's significance test, not
+             fit_ou_ewma's -- a real prerequisite check on whether this window
+             has mean-reversion signal at all, but it's testing a different
+             theta than the one Gate 2 actually uses for the trade decision.
+             Building a proper significance test for the EWMA estimator needs
+             a different standard-error formula for a weighted/recursive fit,
+             not just swapping the function call -- flagged as a known gap,
+             not silently glossed over, when EWMA became the only estimator
+             on 2026-08-20.)
     Gate 5 : Volatility regime — spread_volatility_regime <= regime_threshold
     Gate 6 : Reversion probability — ou_reversion_probability >= prob_threshold
     """
@@ -134,7 +173,16 @@ def generate_entry_signal(
             return None
 
     # Step 3 — Gate 2: fit OU parameters
-    params = fit_ou(price_a, price_b, bar_hours=bar_hours)
+    # EWMA-only as of 2026-08-20 -- was an A/B toggle against fit_ou (static
+    # full-window OLS); backtested across 7 pairs, 3 time windows, and a
+    # 1.0-5.0x half-life-multiplier sweep (research/ab_sweep*_results.csv)
+    # and EWMA won on pooled exit quality (higher take-profit rate, lower
+    # adverse-move rate) consistently, and on aggregate P&L in 2 of 3
+    # windows. See ou_model.py's EWMA_HALFLIFE_MULTIPLIER for the multiplier
+    # choice. fit_ou (static) is still used elsewhere (diagnostics,
+    # visualizer, validation scripts) -- this only removes it from the live
+    # entry-signal path.
+    params = fit_ou_ewma(price_a, price_b, bar_hours=bar_hours)
     if np.isnan(params.theta):
         return None
 
@@ -161,7 +209,8 @@ def generate_entry_signal(
     # Step 6 — Gate 5: reversion probability
     tau  = np.log(1.0 / f) / params.theta
     prob = ou_reversion_probability(
-        S0, params.theta, params.mu, params.sigma, tau
+        S0, params.theta, params.mu, params.sigma, tau,
+        residuals=params.residuals, bar_hours=bar_hours, rng=rng,
     )
     if np.isnan(prob) or prob < prob_threshold:
         return None
@@ -198,6 +247,7 @@ def generate_exit_signal(
     entry_signal: dict,
     hours_elapsed: float,
     stop_sigma: float = 2.5,
+    max_hours_override: float | None = None,
 ) -> dict | None:
     """
     Evaluate exit conditions for an open pairs trade and return an exit dict or None.
@@ -283,7 +333,16 @@ def generate_exit_signal(
     entry_spread = entry_signal["entry_spread"]
     mu           = entry_signal["mu_at_entry"]
     take_profit  = entry_signal["take_profit_level"]
-    max_hours    = entry_signal["expected_reversion_time"]
+    # Default: hold for the model's own expected reversion time, bounded by the
+    # hard ceiling. max_hours_override replaces that whole expression rather
+    # than raising the ceiling, because the min() means the model estimate
+    # binds first -- a typical expected_reversion_time of ~32h makes raising
+    # MAX_TIME_STOP_HOURS to 72 a no-op, so a sweep result calling for a 72h
+    # hold cannot be expressed by changing the ceiling alone.
+    max_hours = (
+        float(max_hours_override) if max_hours_override is not None
+        else min(entry_signal["expected_reversion_time"], MAX_TIME_STOP_HOURS)
+    )
 
     # Step 3 — compute pnl_pct
     pnl_pct = abs(current_spread - entry_spread) / abs(entry_spread - mu)
