@@ -277,6 +277,33 @@ if __name__ == "__main__":
         print("[INFO] No tradeable pairs for this window -- nothing to backtest.")
         sys.exit(0)
 
+    # Say plainly whether these results are in-sample. The same-window default
+    # is deliberate (see module docstring -- discovery needs a fixed window),
+    # but the consequence is easy to forget when reading the metrics block at
+    # the end: with GAP_DAYS unset the backtest window [end-LOOKBACK, end] sits
+    # ENTIRELY INSIDE the discovery window [end-DISCOVERY_DAYS, end], so the
+    # pairs were chosen using the same bars they are then scored on. A batch
+    # was read as evidence of edge on exactly this confusion -- 90% win rate,
+    # +41% on one pair -- before anyone re-checked which window was which.
+    if GAP_DAYS is None:
+        print("=" * 78)
+        print(f"[WINDOW] IN-SAMPLE. Discovery window [{end_date} -{DISCOVERY_DAYS}d, "
+              f"{end_date}] contains")
+        print(f"[WINDOW] the backtest window, which also ends {end_date}. "
+              "Pairs were selected")
+        print("[WINDOW] using the bars they are scored on. Returns here are NOT evidence")
+        print("[WINDOW] of out-of-sample edge. For a holdout, set an earlier")
+        print("[WINDOW] DISCOVERY_END_DATE and GAP_DAYS=1.")
+        print("=" * 78)
+    else:
+        start = pd.Timestamp(end_date) + pd.Timedelta(days=GAP_DAYS)
+        print("=" * 78)
+        print(f"[WINDOW] HOLDOUT. Discovery ends {end_date}; evaluation starts "
+              f"{start.date()}")
+        print(f"[WINDOW] ({GAP_DAYS}d gap) on data selection never saw. These returns "
+              "are out-of-sample.")
+        print("=" * 78)
+
     print(f"[INFO] Running {len(pairs)} backtests (CAPITAL={CAPITAL}, sequential, "
           f"same window end_date={end_date})...")
 
