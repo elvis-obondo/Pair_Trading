@@ -76,6 +76,22 @@ THETA_P_THRESHOLD = 0.05
 REGIME_THRESHOLD = 1.1
 PROB_THRESHOLD = 0.60
 
+# Monte Carlo paths for gate 6. Live uses ou_reversion_probability's default of
+# 5000; this dataset uses 1000 deliberately.
+#
+# Measured on 622 real gate inputs, 1000 vs 5000 paths: mean absolute error in
+# the probability 0.0073, max 0.0362, and 0.15% of rows land on the other side
+# of the 0.60 threshold. So roughly 1 gate decision in 700 differs from what
+# live would have done -- immaterial against the portfolio effects this dataset
+# exists to measure.
+#
+# The reason to take that trade is not speed in the abstract. On this 8GB
+# machine the 5000-path array is large enough to hit swap, which made it ~10x
+# slower than 2000 paths rather than the 2.5x the path ratio implies, and the
+# build could not survive long enough to finish. A dataset that exists at 1000
+# paths beats an exact one that never completes.
+MC_PATHS = 1000
+
 SHARD_PAIRS = 50           # pairs per checkpoint; small so a crash costs ~30s
 
 _PRICES = None             # per-worker cache
@@ -140,7 +156,10 @@ def _gates_for_pair(a, b, wanted):
             continue
 
         try:
-            p = fit_ou_ewma(wa, wb, bar_hours=BAR_HOURS)
+            # fit_df=False skips the Student-t tail fit, which is ~95% of this
+            # call and is not read by any gate: theta, mu, sigma and the
+            # residual series come back bit-identical either way.
+            p = fit_ou_ewma(wa, wb, bar_hours=BAR_HOURS, fit_df=False)
         except (ValueError, np.linalg.LinAlgError):
             out.append(row)
             continue
@@ -174,7 +193,8 @@ def _gates_for_pair(a, b, wanted):
             tau = float(np.log(1.0 / F_FRAC) / p.theta)
             row["rev_prob"] = float(ou_reversion_probability(
                 s0, p.theta, p.mu, p.sigma, tau,
-                residuals=p.residuals, bar_hours=BAR_HOURS, rng=rng))
+                residuals=p.residuals, bar_hours=BAR_HOURS,
+                n_paths=MC_PATHS, rng=rng))
         except (ValueError, np.linalg.LinAlgError, ZeroDivisionError):
             pass
 
@@ -255,7 +275,9 @@ def run(workers=None, max_pairs=None, min_absz=None, shard_pairs=SHARD_PAIRS):
     gc.collect()
 
     if workers is None:
-        workers = max(1, (os.cpu_count() or 4) // 2)
+        # Memory, not cores, is what kills this job: each worker carries its
+        # own pandas/statsmodels image. Two fit; four do not.
+        workers = max(1, min(2, (os.cpu_count() or 4) // 2))
 
     print("%d shards of <=%d pairs | %d already done | %d to run | %d workers"
           % (total, shard_pairs, done_already, len(todo), workers))

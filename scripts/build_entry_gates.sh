@@ -14,7 +14,7 @@
 set -u
 cd "$(dirname "$0")/.."
 
-WORKERS="${WORKERS:-3}"
+WORKERS="${WORKERS:-2}"
 MAX_ATTEMPTS="${MAX_ATTEMPTS:-40}"
 LOG="research/entry_gates_build.log"
 
