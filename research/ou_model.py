@@ -463,6 +463,16 @@ def ou_confidence_interval(
 _MC_MIN_RESIDUALS = 24
 
 
+# Bounds for _mc_reversion_probability's forward simulation. See the comment
+# inside that function: tau is unbounded when theta approaches zero, and the
+# old full-array allocation turned one pathological pair into a 26 GB request.
+# _MC_CHUNK_STEPS is chosen so that any fit needing fewer steps than this draws
+# its innovations in exactly one chunk, preserving the previous draw order and
+# therefore the previous result exactly.
+_MC_CHUNK_STEPS = 4096
+_MC_MAX_STEPS   = 200_000
+
+
 def _mc_reversion_probability(
     S0: float, theta: float, mu: float, tau: float, residuals: np.ndarray,
     *, bar_hours: float, n_paths: int, block_hours: float,
@@ -493,24 +503,55 @@ def _mc_reversion_probability(
 
     residuals = np.asarray(residuals, dtype=float)
     n_res      = len(residuals)
-    n_steps    = max(1, int(np.ceil(tau / bar_hours)))
     block_bars = max(1, min(n_res, int(round(block_hours / bar_hours))))
+
+    # tau = ln(1/f)/theta, so a near-zero theta asks for an unbounded horizon.
+    # The innovation array used to be allocated in full as n_paths x n_steps:
+    # a spread that fits theta=1e-6 requests 1.6 million hours, 3.2 million
+    # bars, and a 26 GB allocation. On an 8GB machine that is not a slow path,
+    # it is a hard kill -- it took this laptop down three times before the
+    # cause was found, because the pair that triggers it is roughly 1 in
+    # 100,000 and never the same one twice.
+    #
+    # Two bounds, neither of which changes a normal result:
+    #   _MC_CHUNK_STEPS  innovations are drawn a chunk at a time instead of all
+    #                    at once, so peak memory is n_paths x chunk regardless
+    #                    of tau. For n_steps <= _MC_CHUNK_STEPS (tau <= 2048h
+    #                    at 30m bars, which is over 99% of real fits) the draw
+    #                    order is unchanged and the result is bit-identical.
+    #   _MC_MAX_STEPS    a ceiling on simulated bars. Reaching it returns the
+    #                    fraction crossed SO FAR, which is a lower bound on the
+    #                    true probability -- more time can only add crossings.
+    #                    Gate 6 is a minimum-probability test, so a lower bound
+    #                    can only make it stricter, never let a trade through
+    #                    that should have been blocked.
+    n_steps_full = max(1, int(np.ceil(tau / bar_hours)))
+    n_steps      = min(n_steps_full, _MC_MAX_STEPS)
 
     phi   = 1.0 - theta * bar_hours
     c_raw = mu * theta * bar_hours
 
-    n_blocks = int(np.ceil(n_steps / block_bars))
-    starts   = rng.integers(0, n_res, size=(n_paths, n_blocks))
-    offsets  = np.arange(block_bars)
-    idx      = (starts[:, :, None] + offsets[None, None, :]) % n_res
-    eps      = residuals[idx].reshape(n_paths, n_blocks * block_bars)[:, :n_steps]
-
+    offsets = np.arange(block_bars)
     S       = np.full(n_paths, S0, dtype=float)
     sign0   = np.sign(S0 - mu)
     crossed = np.zeros(n_paths, dtype=bool)
-    for k in range(n_steps):
-        S = c_raw + phi * S + eps[:, k]
-        crossed |= (np.sign(S - mu) != sign0) | (S == mu)
+
+    done = 0
+    while done < n_steps:
+        m        = min(_MC_CHUNK_STEPS, n_steps - done)
+        n_blocks = int(np.ceil(m / block_bars))
+        starts   = rng.integers(0, n_res, size=(n_paths, n_blocks))
+        idx      = (starts[:, :, None] + offsets[None, None, :]) % n_res
+        eps      = residuals[idx].reshape(n_paths, n_blocks * block_bars)[:, :m]
+        for k in range(m):
+            S = c_raw + phi * S + eps[:, k]
+            crossed |= (np.sign(S - mu) != sign0) | (S == mu)
+        done += m
+        # Once every path has crossed the answer is 1.0 and cannot change;
+        # continuing is the difference between 0.1s and an hour on a spread
+        # that is effectively a random walk.
+        if crossed.all():
+            break
 
     return float(np.mean(crossed))
 
