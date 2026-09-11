@@ -200,11 +200,22 @@ def simulate(cand, max_concurrent, sizing="fixed", risk_frac=0.02,
                 else:
                     if not np.isfinite(stop_pct) or stop_pct <= 0:
                         continue
-                    budget = (risk_frac * equity if sizing == "vol_frac"
+                    budget = (risk_frac * equity
+                              if sizing in ("vol_frac", "vol_20x")
                               else risk_dollars)
                     notional = budget / (stop_pct / 100.0)
-                    notional = min(notional,
-                                   LEVERAGE_CAP * equity / max_concurrent)
+                    if sizing != "vol_20x":
+                        # vol_frac/vol_fixed also refuse to let one position
+                        # take more than its even share of the 20x budget.
+                        notional = min(notional,
+                                       LEVERAGE_CAP * equity / max_concurrent)
+                    # vol_20x drops that per-position ceiling. Every position
+                    # still runs at exactly LEVERAGE_CAP (margin below is
+                    # notional/20 by construction, so leverage is 20x on all
+                    # three vol rules -- the ceiling was never about leverage,
+                    # it was about concentration). The only thing left holding
+                    # size back is the margin check: total posted margin cannot
+                    # exceed equity, which caps the whole book at 20x gross.
                 margin = notional / LEVERAGE_CAP
                 if used_margin + margin > equity:
                     continue
