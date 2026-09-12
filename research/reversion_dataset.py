@@ -76,6 +76,9 @@ import pandas as pd
 
 from data_loader import get_price_levels
 from pair_analysis import _base_symbol, BARS_PER_DAY
+# Re-exported: exit_sweep.py imports rolling_beta_alpha from this module, and the
+# live entry path needs the same fit. One definition, in rolling_spread.py.
+from rolling_spread import rolling_beta_alpha  # noqa: F401
 
 PROJECT_ROOT = Path(__file__).parent.parent
 PVALUES_PATH = PROJECT_ROOT / "research" / "coint_survival_pvalues.parquet"
@@ -104,27 +107,6 @@ HORIZON_HOURS = 24.0       # MAX_TIME_STOP_HOURS
 HORIZON_BARS = int(HORIZON_HOURS * 60 / 30)
 
 MIN_JOINT_BARS = ENTRY_WINDOW_BARS + HORIZON_BARS + BARS_PER_DAY
-
-
-def rolling_beta_alpha(a: np.ndarray, b: np.ndarray, window: int):
-    """Rolling OLS of a on b over `window` bars, vectorised.
-
-    beta = cov(a,b)/var(b), alpha = mean(a) - beta*mean(b), both computed from
-    the window ENDING at each index -- so index i uses bars (i-window, i], and
-    never anything after i. Positions before the first full window are NaN
-    rather than fitted on partial data: a hedge ratio from three bars is not a
-    hedge ratio, and letting those through would put fake rows at the start of
-    every pair's history.
-    """
-    sa = pd.Series(a)
-    sb = pd.Series(b)
-    mean_a = sa.rolling(window).mean()
-    mean_b = sb.rolling(window).mean()
-    cov = sa.rolling(window).cov(sb)
-    var_b = sb.rolling(window).var()
-    beta = cov / var_b
-    alpha = mean_a - beta * mean_b
-    return beta.to_numpy(), alpha.to_numpy()
 
 
 def _forward_outcome(spread_fwd: np.ndarray, s0: float, mu: float, sigma: float):

@@ -422,7 +422,7 @@ def format_download_command(
     symbols: list[str],
     timeframe: str = "30m",
     days: int = 60,
-    trading_mode: str = "spot",
+    trading_mode: str = "futures",
     exchange: str = "okx",
     config_path: str = "user_data/config.json",
 ) -> str:

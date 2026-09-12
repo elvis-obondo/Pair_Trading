@@ -170,6 +170,7 @@ def fit_ou_ewma(
     halflife_multiplier: float = EWMA_HALFLIFE_MULTIPLIER,
     min_bars: int = 20,
     fit_df: bool = True,
+    spread: np.ndarray | None = None,
 ) -> OUParams:
     """Exponentially-weighted alternative to fit_ou(): re-estimates the AR(1)
     coefficients (c, lam) bar-by-bar, weighting recent observations more than
@@ -220,7 +221,14 @@ def fit_ou_ewma(
     the decay by), or the EWMA state never becomes finite (e.g. a
     degenerate/near-constant spread).
     """
-    spread, _beta, _alpha = compute_spread(price_a, price_b)
+    # `spread` lets the caller supply the series to fit rather than having one
+    # derived here. The live entry path builds its spread from a ROLLING 7-day
+    # hedge ratio and freezes that beta for the trade's life, so fitting theta on
+    # compute_spread's static full-window OLS would describe a different series
+    # than the one being traded. None preserves the original behaviour for every
+    # other caller.
+    if spread is None:
+        spread, _beta, _alpha = compute_spread(price_a, price_b)
     S = np.asarray(spread, dtype=float)
     S = S[np.isfinite(S)]
     if len(S) < max(3, 2 * min_bars):

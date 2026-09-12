@@ -155,7 +155,8 @@ def outcome(sub, F, S, H, cost=MEASURED_COST):
 
 
 def simulate(cand, max_concurrent, sizing="fixed", risk_frac=0.02,
-             risk_dollars=6.0, n_sims=400, seed=0, rank_by=None):
+             risk_dollars=6.0, n_sims=400, seed=0, rank_by=None,
+             max_notional=None, track_equity=False):
     """Walk the test window day by day holding simultaneous positions.
 
     Returns (final equity multiples, max drawdowns, ruin rate, median realised
@@ -165,11 +166,13 @@ def simulate(cand, max_concurrent, sizing="fixed", risk_frac=0.02,
     days = sorted(by_day)
     rng = np.random.default_rng(seed)
     finals, dds, levs = [], [], []
+    paths = []                      # per-sim daily equity, only when asked for
     ruins = 0
 
     for _ in range(n_sims):
         equity = peak = START_EQUITY
         maxdd = 0.0
+        path = []
         open_slots = []                    # (free_day_idx, pnl_dollars, margin)
         used_margin = 0.0
 
@@ -189,6 +192,8 @@ def simulate(cand, max_concurrent, sizing="fixed", risk_frac=0.02,
                 break
             peak = max(peak, equity)
             maxdd = max(maxdd, (peak - equity) / peak)
+            if track_equity:
+                path.append(equity)
 
             free = max_concurrent - len(open_slots)
             if free <= 0:
@@ -225,6 +230,14 @@ def simulate(cand, max_concurrent, sizing="fixed", risk_frac=0.02,
                                              pick.stop_pct.to_numpy()):
                 if sizing == "fixed":
                     notional = CAPITAL_PER_TRADE * LEVERAGE_CAP
+                elif sizing == "pct_equity":
+                    # Margin is a percentage of CURRENT equity, so the position
+                    # grows as the account does and shrinks after a drawdown.
+                    # Unlike the vol rules this ignores the stop distance, so
+                    # the dollar risk still varies pair to pair -- it is the
+                    # user's fixed-margin rule with the margin made
+                    # proportional, not a risk-parity rule.
+                    notional = risk_frac * equity * LEVERAGE_CAP
                 else:
                     if not np.isfinite(stop_pct) or stop_pct <= 0:
                         continue
@@ -244,6 +257,15 @@ def simulate(cand, max_concurrent, sizing="fixed", risk_frac=0.02,
                     # it was about concentration). The only thing left holding
                     # size back is the margin check: total posted margin cannot
                     # exceed equity, which caps the whole book at 20x gross.
+                if max_notional is not None:
+                    # Liquidity ceiling. Without one, any percentage-of-equity
+                    # rule compounds without bound and the simulation returns
+                    # figures in the trillions -- arithmetically correct and
+                    # physically impossible, since a position eventually
+                    # exceeds the depth of the pair it is trading. The live
+                    # ledger's one recorded fill had roughly $6,900 of visible
+                    # depth on its thinner leg.
+                    notional = min(notional, max_notional)
                 margin = notional / LEVERAGE_CAP
                 if used_margin + margin > equity:
                     continue
@@ -257,9 +279,18 @@ def simulate(cand, max_concurrent, sizing="fixed", risk_frac=0.02,
             equity += pnl
         finals.append(max(equity, 0.0) / START_EQUITY)
         dds.append(maxdd)
+        if track_equity:
+            # pad a run that ended early so every path is the same length and
+            # the per-day median below is taken over the same population
+            while len(path) < len(days):
+                path.append(equity)
+            paths.append(path)
 
-    return (np.array(finals), np.array(dds), ruins / n_sims,
-            float(np.median(levs)) if levs else float("nan"))
+    out = (np.array(finals), np.array(dds), ruins / n_sims,
+           float(np.median(levs)) if levs else float("nan"))
+    if track_equity:
+        return out + (np.array(paths), np.array(days))
+    return out
 
 
 def prep(d, split, mask_fn, F, S, H, min_rows=100):
