@@ -169,18 +169,25 @@ print(p['n_candidates'], 'candidates,', len(p['candidates']), 'published, bar', 
 }
 
 step_7_cron() {
-    bold "STEP 7 — schedule the scanner every 30 minutes"
-    if ssh_vm "crontab -l 2>/dev/null | grep -q vm_scan_cycle"; then
-        ok "already scheduled"
-        ssh_vm "crontab -l | grep vm_scan_cycle"
-        return 0
-    fi
+    bold "STEP 7 — schedule the scanner and the daily housekeeping"
     # The monitor is NOT in cron. It is a long-lived service under
     # docker-compose.trading.yml with restart: unless-stopped, which is the
     # whole point of the split.
-    ssh_vm "(crontab -l 2>/dev/null; echo '*/30 * * * * $REMOTE/scripts/vm_scan_cycle.sh >> $REMOTE/logs/cron.log 2>&1') | crontab -" \
-        && ok "installed"
-    ssh_vm "crontab -l | grep vm_scan_cycle"
+    if ! ssh_vm "crontab -l 2>/dev/null | grep -q vm_scan_cycle"; then
+        ssh_vm "(crontab -l 2>/dev/null; echo '*/30 * * * * $REMOTE/scripts/vm_scan_cycle.sh >> $REMOTE/logs/cron.log 2>&1') | crontab -" \
+            && ok "scanner scheduled every 30 min"
+    else
+        ok "scanner already scheduled"
+    fi
+    # Tick capture is ~20-25MB/day and Docker leaves dangling layers on every
+    # rebuild. Those are the only two things here that can fill an 11GB margin.
+    if ! ssh_vm "crontab -l 2>/dev/null | grep -q vm_housekeeping"; then
+        ssh_vm "(crontab -l 2>/dev/null; echo '15 4 * * * $REMOTE/scripts/vm_housekeeping.sh >> $REMOTE/logs/cron.log 2>&1') | crontab -" \
+            && ok "housekeeping scheduled daily at 04:15 UTC"
+    else
+        ok "housekeeping already scheduled"
+    fi
+    ssh_vm "crontab -l"
 }
 
 step_8_verify() {
@@ -188,6 +195,9 @@ step_8_verify() {
     echo
     echo "-- machine type (want $MACHINE) --"
     machine_type
+    echo
+    echo "-- disk (ticks retain 14d, scan history 90d, logs rotate at 32MB) --"
+    ssh_vm "df -h / | tail -1; du -sh $REMOTE/trading_data 2>/dev/null || true"
     echo
     echo "-- memory under load --"
     ssh_vm "free -m | head -2; echo; docker stats --no-stream --format 'table {{.Name}}\t{{.MemUsage}}\t{{.CPUPerc}}'"

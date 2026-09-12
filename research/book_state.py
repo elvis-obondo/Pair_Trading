@@ -75,6 +75,65 @@ MAX_NOTIONAL = 5000.0
 CANDIDATES_MAX_AGE_MIN = 60.0
 
 # ---------------------------------------------------------------------------
+# RETENTION. Everything this system writes on a schedule grows without bound
+# unless something deletes it, and the VM has an 11GB margin, not 11TB.
+#
+# Measured rates: tick capture is ~20 instruments at 1 Hz, roughly 20-25MB/day,
+# which is 7-9GB/year -- the only one big enough to fill the disk on its own.
+# Scan history is ~4,800 rows/day and the logs are ~1MB/day.
+#
+# The ledger is NEVER pruned. It is the record of what the account did, it is
+# small, and equity is re-summed from it on every start.
+# ---------------------------------------------------------------------------
+
+RETAIN_TICK_DAYS = 14          # enough to re-walk any trade still in memory
+RETAIN_SCAN_HISTORY_DAYS = 90  # a quarter of "what was dislocated, and when"
+LOG_MAX_BYTES = 32 * 1024 * 1024
+
+
+def prune_dated(directory: str, keep_days: int) -> list:
+    """Delete YYYY-MM-DD-named files and directories older than keep_days.
+
+    Named by date rather than checked by mtime on purpose: a file's mtime moves
+    when it is rewritten, so an mtime rule would keep re-dating the same day and
+    never expire it. The name is what the data actually is.
+    """
+    import datetime as _dt
+    import re
+    import shutil
+
+    if not os.path.isdir(directory):
+        return []
+    cutoff = _dt.date.today() - _dt.timedelta(days=keep_days)
+    removed = []
+    for name in os.listdir(directory):
+        m = re.match(r"^(\d{4}-\d{2}-\d{2})(\.parquet)?$", name)
+        if not m:
+            continue
+        try:
+            day = _dt.date.fromisoformat(m.group(1))
+        except ValueError:
+            continue
+        if day >= cutoff:
+            continue
+        path = os.path.join(directory, name)
+        shutil.rmtree(path, ignore_errors=True) if os.path.isdir(path) else os.remove(path)
+        removed.append(name)
+    return removed
+
+
+def rotate_log(path: str, max_bytes: int = LOG_MAX_BYTES) -> bool:
+    """Keep one previous generation. Crude on purpose -- no dependency, and a
+    log that rotates is better than one that quietly eats the disk."""
+    try:
+        if os.path.getsize(path) < max_bytes:
+            return False
+    except OSError:
+        return False
+    os.replace(path, path + ".1")
+    return True
+
+# ---------------------------------------------------------------------------
 # FIXED ledger schema. Open rows and close rows conform to the SAME columns, and
 # every row is reindexed onto them before writing. See the module docstring.
 # ---------------------------------------------------------------------------

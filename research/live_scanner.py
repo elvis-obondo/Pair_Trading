@@ -189,6 +189,16 @@ def append_scan_history(cands: pd.DataFrame, bar_time) -> None:
         d = pd.concat([pd.read_parquet(path), d], ignore_index=True)
     d.to_parquet(path, index=False)
 
+    # ~4,800 rows a day, forever, unless something deletes it. Cheap, but the VM
+    # has an 11GB margin and nothing else is going to do this. Pruning here
+    # rather than on a separate schedule keeps the rule next to the write.
+    gone = cfg.prune_dated(cfg.SCAN_HISTORY_DIR, cfg.RETAIN_SCAN_HISTORY_DAYS)
+    if gone:
+        log(f"pruned {len(gone)} scan-history day(s) older than "
+            f"{cfg.RETAIN_SCAN_HISTORY_DAYS}d")
+    if cfg.rotate_log(cfg.SCANNER_LOG):
+        log(f"rotated scanner.log at {cfg.LOG_MAX_BYTES // 1024 // 1024}MB")
+
 
 def cycle(refresh: bool = True, dry_run: bool = False) -> pd.DataFrame:
     t0 = time.time()

@@ -80,6 +80,7 @@ REST_FALLBACK_AFTER_FAILURES = 4
 REST_POLL_SECONDS = 5.0
 HEARTBEAT_SECONDS = 10.0
 SLOW_TIMER_SECONDS = 60.0
+HOUSEKEEPING_SECONDS = 3600.0
 TICK_RECORD_HZ = 1.0
 
 
@@ -502,16 +503,42 @@ class StopMonitor:
         cfg.save_portfolio(self.pf)
 
     def flush_ticks(self) -> None:
+        """Append one part file per flush. Never rewrite what is already down.
+
+        The obvious version -- read the day's parquet, concat, write it back --
+        is quadratic: by late afternoon it re-reads and re-writes ~20MB every
+        sixty seconds, on a shared vCPU. Part files make each flush cost only
+        what it actually adds. Read them back with
+        pd.read_parquet(TICKS_DIR/'<day>') -- pandas globs a directory of parts.
+        """
         if self.dry_run or not self._tick_buffer:
             return
-        os.makedirs(cfg.TICKS_DIR, exist_ok=True)
         day = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-        path = os.path.join(cfg.TICKS_DIR, f"{day}.parquet")
+        day_dir = os.path.join(cfg.TICKS_DIR, day)
+        os.makedirs(day_dir, exist_ok=True)
         d = pd.DataFrame(self._tick_buffer)
         self._tick_buffer = []
-        if os.path.exists(path):
-            d = pd.concat([pd.read_parquet(path), d], ignore_index=True)
-        d.to_parquet(path, index=False)
+        d.to_parquet(os.path.join(day_dir, f"part-{int(time.time())}.parquet"),
+                     index=False)
+
+    def housekeeping(self) -> None:
+        """Drop expired tick days and rotate the logs.
+
+        Tick capture is ~20 instruments at 1 Hz, roughly 20-25MB/day, which is
+        7-9GB/year against 11GB free on the VM. It is the one thing this system
+        writes that can fill the disk on its own. The ledger is never touched:
+        it is small, and equity is re-summed from it on every start.
+        """
+        if self.dry_run:
+            return
+        gone = cfg.prune_dated(cfg.TICKS_DIR, cfg.RETAIN_TICK_DAYS)
+        if gone:
+            log(f"pruned {len(gone)} tick day(s) older than "
+                f"{cfg.RETAIN_TICK_DAYS}d: {', '.join(sorted(gone))}")
+        for path in (cfg.MONITOR_LOG, cfg.HEARTBEAT_PATH):
+            if cfg.rotate_log(path):
+                log(f"rotated {os.path.basename(path)} at "
+                    f"{cfg.LOG_MAX_BYTES // 1024 // 1024}MB")
 
     def heartbeat(self) -> str:
         now = time.time()
@@ -649,6 +676,9 @@ async def timer_loop(mon: StopMonitor, stop_event: asyncio.Event) -> None:
     last_slow = 0.0
     last_beat = 0.0
     last_entry_check = 0.0
+    # Starts at now, not 0, so the first pass does not prune before the process
+    # has even connected.
+    last_housekeeping = time.time()
     while not stop_event.is_set():
         await asyncio.sleep(1.0)
         now = time.time()
@@ -659,6 +689,10 @@ async def timer_loop(mon: StopMonitor, stop_event: asyncio.Event) -> None:
             if closed:
                 mon.persist([], closed)
             mon.flush_ticks()
+
+        if now - last_housekeeping >= HOUSEKEEPING_SECONDS:
+            last_housekeeping = now
+            mon.housekeeping()
 
         if now - last_beat >= HEARTBEAT_SECONDS:
             last_beat = now
