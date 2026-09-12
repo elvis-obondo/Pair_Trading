@@ -108,35 +108,3 @@ def screening_scatter(summary: pd.DataFrame, tradeable: pd.Series) -> go.Figure:
     fig.update_yaxes(type="log")
     return fig
 
-
-def equity_curve_chart(trades: pd.DataFrame) -> go.Figure:
-    marker_colors = [EXIT_COLORS.get(r, MUTED) for r in trades["exit_reason"]]
-    fig = go.Figure()
-    fig.add_trace(go.Scatter(
-        x=trades["exit_time"], y=trades["cumulative_pnl"], mode="lines+markers",
-        name="Cumulative P&L", line=dict(color=BLUE, width=2),
-        marker=dict(color=marker_colors, size=11, line=dict(width=1, color="rgba(11,11,11,0.10)")),
-        text=trades["exit_reason"], hovertemplate="%{x}<br>Cum. P&L=%{y:.2f}<br>Exit: %{text}<extra></extra>",
-        showlegend=False,
-    ))
-    fig.add_hline(y=0, line=dict(color=MUTED, width=1, dash="dot"))
-    return _layout(fig, "Cumulative realized P&L", "USDT", "Exit time")
-
-
-def exit_reason_bar(trades: pd.DataFrame) -> go.Figure:
-    counts = trades["exit_reason"].value_counts()
-    fig = go.Figure()
-    for reason in ["time_stop", "adverse_move", "take_profit"]:
-        if reason in counts.index:
-            fig.add_trace(go.Bar(
-                x=[reason], y=[int(counts[reason])], marker_color=EXIT_COLORS[reason],
-                showlegend=False, text=[int(counts[reason])], textposition="outside",
-            ))
-    return _layout(fig, "Exit reason breakdown", "Number of trades", "Exit reason")
-
-
-def pnl_distribution_chart(trades: pd.DataFrame) -> go.Figure:
-    fig = go.Figure()
-    fig.add_trace(go.Histogram(x=trades["pnl_pct"], marker_color=BLUE, nbinsx=10, showlegend=False))
-    fig.add_vline(x=0, line=dict(color=MUTED, width=1, dash="dot"))
-    return _layout(fig, "Distribution of pnl_pct across closed trades", "Count", "pnl_pct")

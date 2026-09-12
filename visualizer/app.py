@@ -13,7 +13,6 @@ from visualizer.data import (
     get_tradeable_pairs,
     compute_pair_diagnostics,
     evaluate_gates,
-    load_trade_log,
 )
 from visualizer.charts import (
     price_chart,
@@ -21,9 +20,6 @@ from visualizer.charts import (
     rolling_beta_chart,
     rolling_coint_chart,
     screening_scatter,
-    equity_curve_chart,
-    exit_reason_bar,
-    pnl_distribution_chart,
 )
 from research.signal_generator import generate_entry_signal
 from research.position_sizer import compute_position_size
@@ -59,8 +55,8 @@ def pair_picker(key_prefix: str):
     return ticker_a, ticker_b
 
 
-tab_screen, tab_spread, tab_signal, tab_size, tab_trades = st.tabs(
-    ["Screening", "Spread & OU", "Signal Gates", "Position Sizing", "Trade Log"]
+tab_screen, tab_spread, tab_signal, tab_size = st.tabs(
+    ["Screening", "Spread & OU", "Signal Gates", "Position Sizing"]
 )
 
 with tab_screen:
@@ -159,44 +155,61 @@ with tab_signal:
     as_of = st.slider("As-of bar (time-travel through history)", min_bars, n_bars, n_bars, key="as_of")
     st.caption(f"As-of timestamp: {diag['index'][as_of - 1]}")
 
-    with st.expander("Gate thresholds", expanded=False):
-        t1, t2, t3 = st.columns(3)
-        coint_p_threshold = t1.number_input("coint_p_threshold", 0.0, 1.0, 0.10, step=0.01)
-        theta_p_threshold = t2.number_input("theta_p_threshold", 0.0, 1.0, 0.05, step=0.01)
-        prob_threshold = t3.number_input("prob_threshold", 0.0, 1.0, 0.67, step=0.01)
-        t4, t5, t6 = st.columns(3)
-        regime_threshold = t4.number_input("regime_threshold", 0.0, 5.0, 1.1, step=0.1)
-        min_deviation_sigma = t5.number_input("min_deviation_sigma", 0.0, 5.0, 1.0, step=0.1)
-        f_param = t6.number_input("f (decay fraction)", 0.01, 1.0, 0.20, step=0.01)
-
     pa_slice = diag["price_a"][:as_of]
     pb_slice = diag["price_b"][:as_of]
 
-    gates = evaluate_gates(
-        pa_slice, pb_slice,
-        coint_p_threshold=coint_p_threshold, regime_threshold=regime_threshold,
-        prob_threshold=prob_threshold, theta_p_threshold=theta_p_threshold,
-        f=f_param, min_deviation_sigma=min_deviation_sigma,
+    st.markdown("#### Entry")
+    st.caption(
+        "The entry has ONE condition: how far the spread sits from its 7-day "
+        "rolling mean, in 7-day rolling standard deviations. Testing all 31 "
+        "combinations of the old five gates at a 3-sigma entry found that none "
+        "beats no gates, so they no longer run in the trading path."
     )
-    for gate in gates:
-        if gate["passed"]:
-            st.success(f"✓ {gate['name']} — {gate['detail']}")
-        else:
-            st.error(f"✗ {gate['name']} — {gate['detail']}")
+    e1, e2 = st.columns(2)
+    min_deviation_sigma = e1.number_input(
+        "min_deviation_sigma (rolling σ)", 0.0, 8.0, 3.0, step=0.1)
+    take_profit_pct = e2.number_input(
+        "take_profit_pct (1.0 = full reversion to μ)", 0.1, 1.0, 1.0, step=0.05)
 
     entry_signal = generate_entry_signal(
         pa_slice, pb_slice,
-        coint_p_threshold=coint_p_threshold, regime_threshold=regime_threshold,
-        prob_threshold=prob_threshold, theta_p_threshold=theta_p_threshold,
-        f=f_param, min_deviation_sigma=min_deviation_sigma,
+        min_deviation_sigma=min_deviation_sigma,
+        take_profit_pct=take_profit_pct,
+        bar_hours=0.5,
     )
     st.session_state.entry_signal = entry_signal
 
     if entry_signal is None:
-        st.info("No entry signal at this bar — at least one gate above failed.")
+        st.info(
+            "No entry signal at this bar — the spread is inside the threshold, "
+            "the OU fit gave no usable theta, or there is less than the required "
+            "history (two 7-day windows)."
+        )
     else:
-        st.success("All gates passed — entry signal generated.")
+        st.success(f"Entry signal — z = {entry_signal['z_at_entry']:+.2f} rolling σ")
         st.json(entry_signal)
+
+    st.markdown("#### Retired gates (diagnostic only)")
+    st.caption(
+        "Kept as a research view of what the old gates would have said. These do "
+        "NOT gate the entry above and have no effect on trading."
+    )
+    with st.expander("Evaluate the retired gates at this bar", expanded=False):
+        t1, t2, t3 = st.columns(3)
+        coint_p_threshold = t1.number_input("coint_p_threshold", 0.0, 1.0, 0.10, step=0.01)
+        theta_p_threshold = t2.number_input("theta_p_threshold", 0.0, 1.0, 0.05, step=0.01)
+        prob_threshold = t3.number_input("prob_threshold", 0.0, 1.0, 0.60, step=0.01)
+        t4, t5 = st.columns(2)
+        regime_threshold = t4.number_input("regime_threshold", 0.0, 5.0, 1.1, step=0.1)
+        f_param = t5.number_input("f (decay fraction)", 0.01, 1.0, 0.20, step=0.01)
+        for gate in evaluate_gates(
+            pa_slice, pb_slice,
+            coint_p_threshold=coint_p_threshold, regime_threshold=regime_threshold,
+            prob_threshold=prob_threshold, theta_p_threshold=theta_p_threshold,
+            f=f_param, min_deviation_sigma=min_deviation_sigma,
+        ):
+            (st.success if gate["passed"] else st.error)(
+                f"{'PASS' if gate['passed'] else 'FAIL'} — {gate['name']} — {gate['detail']}")
 
     zscore_slice = diag["zscore"][:as_of]
     ou = diag["ou"]
@@ -228,47 +241,24 @@ with tab_size:
         a, b = st.session_state.active_pair
         st.caption(f"Sizing an entry signal for {a}/{b} carried over from the Signal Gates tab.")
         c1, c2, c3 = st.columns(3)
-        capital = c1.number_input("Capital (USDT)", min_value=1.0, value=1000.0, step=100.0)
-        risk_budget_pct = c2.number_input("Risk budget per trade", min_value=0.001, max_value=1.0, value=0.01, step=0.001, format="%.3f")
-        stop_sigma = c3.number_input("Stop distance (σ_stationary)", min_value=0.1, value=2.5, step=0.1)
+        equity = c1.number_input("Account equity (USDT)", min_value=1.0, value=300.0, step=50.0)
+        capital_frac = c2.number_input("Margin per position", min_value=0.001, max_value=1.0, value=0.05, step=0.01, format="%.3f")
+        leverage = c3.number_input("Leverage", min_value=1.0, value=20.0, step=1.0)
 
-        sizing = compute_position_size(entry_signal, capital, risk_budget_pct, stop_sigma)
+        sizing = compute_position_size(entry_signal, equity,
+                                       capital_frac=capital_frac, leverage=leverage)
         if sizing is None:
-            st.error("compute_position_size returned None — check inputs (capital/risk/stop must be finite and positive).")
+            st.error("compute_position_size returned None — equity, margin fraction and leverage must be finite and positive, and beta must be finite.")
         else:
             m1, m2, m3 = st.columns(3)
             m1.metric("Leg A notional", f"${sizing['leg_a_notional']:.2f}")
             m2.metric("Leg B notional", f"${sizing['leg_b_notional']:.2f}")
-            m3.metric("Total deployed", f"${sizing['total_deployed']:.2f}")
+            m3.metric("Gross notional", f"${sizing['gross_notional']:.2f}")
             st.caption(
-                f"Fraction of capital on leg A: {sizing['fraction']:.4f} · "
-                f"σ_stationary: {sizing['sigma_stationary']:.5f} spread units"
+                f"Margin: ${sizing['margin']:.2f} ({sizing['margin'] / equity * 100:.1f}% of equity) "
+                f"at {sizing['leverage']:.0f}x · gross notional = leverage x margin"
             )
+            if sizing["rejected"]:
+                st.error(f"Position would be rejected ({sizing['reject_reason']}): margin ${sizing['margin']:.2f} exceeds available.")
             if sizing["leg_b_notional"] < 0:
                 st.caption("Leg B notional is negative — that leg is short while leg A is long (β < 0). This is expected, not an error.")
-
-with tab_trades:
-    st.subheader("Trade log (existing backtest run)")
-    st.caption(
-        "Reads research/trade_log_dump.json directly — a single AVAX/LINK, 30-day "
-        "backtest with 6 completed trades. Not re-run here (nautilus/run_backtest.py "
-        "currently can't run against the 30m data on disk; see README). "
-        "Directional only — not enough trades for statistical conclusions."
-    )
-    trades = load_trade_log()
-    if trades.empty:
-        st.warning("research/trade_log_dump.json not found or empty.")
-    else:
-        m1, m2, m3, m4 = st.columns(4)
-        m1.metric("Trades", len(trades))
-        m2.metric("Net realized P&L", f"{trades['realized_pnl_net'].sum():.2f} USDT")
-        m3.metric("Win rate", f"{(trades['realized_pnl_net'] > 0).mean():.0%}")
-        m4.metric("Avg hours held", f"{trades['hours_held'].mean():.1f}")
-
-        st.plotly_chart(equity_curve_chart(trades), use_container_width=True, key="chart_trades_equity")
-        c1, c2 = st.columns(2)
-        with c1:
-            st.plotly_chart(exit_reason_bar(trades), use_container_width=True, key="chart_trades_exit_reason")
-        with c2:
-            st.plotly_chart(pnl_distribution_chart(trades), use_container_width=True, key="chart_trades_pnl_dist")
-        st.dataframe(trades, use_container_width=True)

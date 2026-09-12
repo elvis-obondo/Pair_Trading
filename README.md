@@ -1,111 +1,135 @@
 # Pair Trading
 
-Statistical-arbitrage research for crypto perpetual futures (OKX), built around an
-Ornstein-Uhlenbeck (OU) model fitted to the log-price spread between two cointegrated
-assets. Includes a cointegration screener, a gated entry/exit signal generator, an
-OU-based position sizer, and a [Nautilus Trader](https://nautilustrader.io/) backtest
-integration.
+Statistical arbitrage on OKX perpetual futures. The system watches 22,366 pairs drawn
+from 212 instruments, takes positions when a spread stretches three standard deviations
+from its seven-day mean, and holds up to ten at once.
 
-This is an active research project, not a production trading system. See
-[CODEBASE_AUDIT.md](CODEBASE_AUDIT.md) for a detailed, evidence-based breakdown of
-what works, what's tested, and what's currently broken.
+It is a paper system. **No orders are submitted anywhere in this repository.**
 
-## How it works
+## The strategy, in full
 
-1. **Screen for pairs** — `research/pair_analysis.py` runs Engle-Granger cointegration
-   tests across all pairwise combinations of a ticker universe, then ranks candidates
-   by half-life, Hurst exponent, cointegration stability, and hedge-ratio stability.
-2. **Fit the spread** — `research/ou_model.py` fits an OU process
-   (`dS = -theta*(S - mu)*dt + sigma*dW`) to the spread of a candidate pair via OLS,
-   with residual diagnostics (Jarque-Bera, Ljung-Box, theta significance) to validate
-   the fit.
-3. **Generate signals** — `research/signal_generator.py` applies six sequential gates
-   (cointegration, OU-fit validity, minimum deviation, theta significance, volatility
-   regime, reversion probability) before firing an entry signal, and three ordered exit
-   gates (time stop, adverse move, take profit).
-4. **Size the position** — `research/position_sizer.py` sizes both legs so a
-   `stop_sigma`-unit adverse move costs exactly a fixed fraction of capital, using the
-   OU stationary distribution as the risk unit.
-5. **Backtest** — `nautilus/pairs_strategy.py` wires the above into a Nautilus Trader
-   `Strategy`, and `nautilus/run_backtest.py` auto-selects the top-ranked tradeable
-   futures/futures pair (via `pair_analysis.py`) and drives it against historical
-   30m OHLCV bars.
-6. **Diagnose** — `diagnostics/*.py` are forensic, read-only scripts written to test
-   specific hypotheses against backtest output (e.g. confirming a Nautilus Trader
-   order-routing bug, checking spread-path reconstruction fidelity, and probing whether
-   rolling OU parameters could serve as an early-exit signal).
+Everything below is settled and measured. Nothing here is a placeholder.
+
+| | |
+|---|---|
+| spread | `log(A) − β·log(B) − α`, β and α from a **7-day rolling** OLS, frozen at entry |
+| entry | \|z\| ≥ **3.0** rolling sigma from the rolling mean |
+| stop | **0.5 sigma beyond the entry spread** — a distance travelled, not a fixed level |
+| take profit | full reversion to mu |
+| time stop | 72 hours |
+| ranking | OU theta, fastest reverter first; unranked candidates sort last but are kept |
+| sizing | `gross = 20x leverage × 5% of equity`, capped at $5,000 notional |
+| book | 10 concurrent positions, one per pair, margin ≤ equity |
+
+**There are no entry gates.** There used to be six. All 31 combinations of the five
+boolean ones were scored at a 3-sigma entry: no combination beats no gates, and 25 of
+the 31 collapse the account to 6–14% of starting equity. They raise the win rate from
+15.7% to 21.6% and lose money anyway, by filtering out the rare large winners the edge
+depends on. The cointegration gate is among the ones that hurt.
+
+**Theta ranks, it does not filter.** On the two-year panel only 40.8% of 3-sigma
+candidates fit a positive theta, so declining the rest would silently discard nearly
+six candidates in ten.
+
+## The finding that shapes the whole system
+
+Across 12,597 trades in three independent six-month windows, **0 of 9,704 stop-outs
+filled at or inside the stop**. Median overshoot 1.53x, mean 2.07x, p90 3.26x. That
+costs 0.83R per trade and turns a +0.74R edge into −0.083R.
+
+It is not the stop width — sweeping 0.5σ to 2.5σ moves mean R from −0.201 to −0.024 and
+converges on zero without crossing it. It is how often the stop is checked. The spread
+moves a median 0.11σ per 30-minute bar and 5.3% of single bars clear the whole stop
+distance alone.
+
+No exchange can fix it: the stop is on a synthetic across two instruments, and no venue
+has an order type that watches one. Per-leg stops are worse, because one firing leaves
+the other naked. So it is a monitoring problem, and `research/stop_monitor.py` is the
+answer to it.
+
+## How it runs
+
+Two processes, and the split is deliberate.
+
+**`research/live_scanner.py`** — single-shot, every 30 minutes. Refreshes 30m candles,
+screens 22,366 pairs, writes `scanner_candidates.json` and appends `scan_history/`.
+It holds no positions and never writes the book. A process that starts, does one cycle
+and exits cannot leak.
+
+**`research/stop_monitor.py`** — long-lived. Subscribes to the OKX tickers websocket for
+the instruments it cares about and re-checks every open position's stop on every quote.
+Owns the book: opening, closing, sizing, the state file and the ledger. It is the only
+writer of `scanner_trades.csv`, which is what keeps two processes from corrupting one
+ledger.
+
+Checking the stop is cheap because the level is fully determined at entry — two logs, a
+multiply, a subtract, a compare. No panel, no rolling window, no OU fit.
+
+```bash
+scripts/run_scanner.sh                    # one scan cycle
+scripts/run_stop_monitor.sh --dry-run     # watch the book, book nothing
+scripts/check_vm.sh status                # what the cloud VM is doing
+scripts/check_vm.sh overshoot             # the number this is all about
+```
 
 ## Repository layout
 
 ```
-research/          Core model: data loading, cointegration screening, OU fitting,
-                    signal generation, position sizing, and manual validation scripts.
-nautilus/           Nautilus Trader strategy + backtest harness.
-diagnostics/        Forensic, read-only scripts investigating specific backtest findings.
-user_data/          Freqtrade scaffold, used mainly to download OHLCV data via
-                    `freqtrade download-data`. Not wired to the OU strategy.
+research/            Everything. Model, scanner, book, monitor, and the
+                     hand-run validators.
+  rolling_spread.py    the one definition of the 7-day geometry
+  scanner.py           z-screen across the universe, theta-ranked
+  portfolio.py         ten slots, margin bounded by equity
+  position_sizer.py    gross = leverage x capital_frac x equity
+  signal_generator.py  entry and exit, measured in rolling sigma
+  book_state.py        the settled config, and the only state IO
+  live_scanner.py      one scan cycle
+  stop_monitor.py      the tick-speed stop
+  validate_*.py        PASS/FAIL scripts, run by hand (not pytest)
+visualizer/          Streamlit app for inspecting a single pair.
+user_data/           Freqtrade scaffold, used only to download OHLCV.
+scripts/             Runners, the LaunchAgents, and the VM helpers.
+docs/                Handoffs and the cloud deployment record.
 ```
 
 ## Setup
 
-No dependency manifest is checked in yet. The known runtime dependencies are:
-
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install numpy pandas scipy statsmodels ccxt nautilus_trader
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
 ```
 
-Freqtrade itself runs via the Docker image referenced in `docker-compose.yml` — it is
-only used to pull market data into `user_data/data/`, not to run the OU strategy.
+Freqtrade runs via `docker-compose.yml` and is used only to pull market data into
+`user_data/data/`. Copy `user_data/config.json` from your own Freqtrade setup; it is
+gitignored and never committed.
 
-Copy `user_data/config.json` from your own Freqtrade setup (or generate one with
-`freqtrade new-config`) and fill in exchange credentials; this file is gitignored and
-never committed.
+## Validating
 
-## Usage
+Repo convention is hand-run PASS/FAIL scripts, not pytest.
 
 ```bash
-# Screen the configured ticker universe for cointegrated, tradeable pairs
-python research/pair_analysis.py
-
-# Fit and sanity-check the OU model / signal gates / position sizer
-python research/validate_ou_analytics.py
-python research/validate_ou_diagnostics.py
-python research/validate_signal_generator.py
-python research/validate_exit_signal.py
-python research/validate_position_sizer.py
-
-# Backtest a specific pair via Nautilus Trader
-python nautilus/run_backtest.py
+for v in rolling_spread position_sizer signal_generator exit_signal \
+         portfolio scanner universe_panel backtest_screen \
+         live_scanner stop_monitor; do
+  python research/validate_$v.py
+done
 ```
 
-Note: `research/run_all.py` is out of sync with `pair_analysis.py`'s current API —
-tracked as a known issue in [CODEBASE_AUDIT.md](CODEBASE_AUDIT.md).
-`nautilus/run_backtest.py` was also broken (hardcoded to a pair and a timeframe no
-longer on disk) but was fixed in Step 7 — see below.
+`research/validate_stop_monitor.py` section 5 is the one that matters: it asserts that
+an exact-touch price path books an overshoot of ~1.0x against the 1.53x median the
+30-minute check produced.
 
-## Status
+## What this is not
 
-The Nautilus backtest was revived in Step 7: it now auto-selects a pair instead of
-hardcoding AVAX/LINK, runs on 30m bars (matching the current data pipeline) instead
-of missing 1h files, and fixes a unit bug where the OU model's mean-reversion speed
-was silently off by ~2x at non-hourly bar sizes. Position sizing supports two modes
-— a fixed risk-budget-per-trade mode (Step 5's original design) and a
-leverage-target mode added in Step 7, where a per-trade capital budget is scaled by
-an explicit leverage multiple and split across both legs by the hedge ratio. See
-[research/markdowns/STEP7_SUMMARY.md](research/markdowns/STEP7_SUMMARY.md) for the
-full account of what changed and why.
+It does not submit orders. `StopMonitor._submit_close` is a stub, and wiring it needs
+API keys, a kill switch, and an answer to one leg filling while the other does not.
 
-The strategy has now been backtested on multiple pairs/configurations, most recently
-SNX/WLD over a single 30-day window (7 completed trades). Results remain directional
-only — not enough trades to draw statistical conclusions, the current take-profit/stop
-configuration has a structural reward:risk asymmetry that hasn't been addressed yet,
-and the backtest still does not model forced liquidation, so results at higher
-leverage are optimistic relative to what a real exchange would allow (see
-STEP7_SUMMARY.md's "Known open gap"). The original AVAX/LINK run (6 trades, net -8.46
-USDT) is preserved in
-[research/markdowns/STEP6_SUMMARY.md](research/markdowns/STEP6_SUMMARY.md).
+It does not model forced liquidation.
+
+The equity curves it produces compound, and the compounded multiple is **not** a result
+worth quoting — percentage-of-equity sizing grows notional until a position exceeds the
+depth of the pair it trades. Report per-trade `net_pct` and `R`; both are immune to
+compounding.
 
 ## License
 

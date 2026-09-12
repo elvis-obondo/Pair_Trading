@@ -1,6 +1,5 @@
 import sys
 import os
-import json
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -22,8 +21,6 @@ from research.pair_analysis import (
 from research.ou_model import fit_ou, ou_residual_diagnostics, ou_reversion_probability
 from research.trade_diagnostics import pre_entry_coint_check, spread_volatility_regime
 from research.signal_generator import generate_entry_signal
-
-TRADE_LOG_PATH = Path(__file__).resolve().parent.parent / "research" / "trade_log_dump.json"
 
 GATE_NAMES = [
     "Gate 1: Cointegration",
@@ -102,7 +99,7 @@ def evaluate_gates(
     price_b: np.ndarray,
     coint_p_threshold: float = 0.10,
     regime_threshold: float = 1.1,
-    prob_threshold: float = 0.67,
+    prob_threshold: float = 0.60,
     theta_p_threshold: float = 0.05,
     f: float = 0.20,
     min_deviation_sigma: float = 1.0,
@@ -159,7 +156,10 @@ def evaluate_gates(
     })
 
     tau = np.log(1.0 / f) / params.theta
-    prob = ou_reversion_probability(S0, params.theta, params.mu, params.sigma, tau)
+    prob = ou_reversion_probability(
+        S0, params.theta, params.mu, params.sigma, tau,
+        residuals=params.residuals,
+    )
     g6 = not np.isnan(prob) and prob >= prob_threshold
     gates.append({
         "name": GATE_NAMES[5], "passed": g6,
@@ -167,18 +167,3 @@ def evaluate_gates(
     })
 
     return gates
-
-
-@st.cache_data(show_spinner=False)
-def load_trade_log() -> pd.DataFrame:
-    if not TRADE_LOG_PATH.exists():
-        return pd.DataFrame()
-    with open(TRADE_LOG_PATH) as f:
-        trades = json.load(f)
-    df = pd.DataFrame(trades)
-    if df.empty:
-        return df
-    df["entry_time"] = pd.to_datetime(df["entry_time"])
-    df["exit_time"] = pd.to_datetime(df["exit_time"])
-    df["cumulative_pnl"] = df["realized_pnl_net"].cumsum()
-    return df
