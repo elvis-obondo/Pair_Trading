@@ -66,16 +66,27 @@ case "$cmd" in
     ;;
 
   ledger)
-    run "head -1 $REMOTE/trading_data/scanner_trades.csv; tail -${1:-5} $REMOTE/trading_data/scanner_trades.csv"
+    # The ledger is empty until the first position opens, and an empty file
+    # printed silently looks identical to a broken command.
+    run "f=$REMOTE/trading_data/scanner_trades.csv
+         if [ ! -s \$f ]; then
+           echo '  ledger is empty — no positions have opened yet'
+           echo '  the monitor opens on the first candidates file it sees'
+         else
+           head -1 \$f; tail -${1:-5} \$f
+         fi"
     ;;
 
   overshoot)
     # The whole reason the monitor exists. Baseline from 9,704 backtested
     # stop-outs at 30-minute bar close: median 1.53x, mean 2.07x, NONE inside
     # the level. Rows with a feed outage are excluded -- they were not watched.
-    run "cd $REMOTE && python3 -c \"
-import pandas as pd
-d = pd.read_csv('trading_data/scanner_trades.csv')
+    run "docker exec pairs-stop-monitor python3 -c \"
+import pandas as pd, os
+p = '/app/trading_data/scanner_trades.csv'
+if not os.path.exists(p) or os.path.getsize(p) == 0:
+    raise SystemExit('  ledger is empty — no positions have closed yet')
+d = pd.read_csv(p)
 c = d[(d.event=='close') & (d.exit_reason=='adverse_move')]
 c = c[c.blind_gap_seconds.fillna(0) == 0]
 if not len(c):
