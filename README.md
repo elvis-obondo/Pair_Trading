@@ -123,7 +123,6 @@ research/            Everything. Model, scanner, book, monitor, and the
   live_scanner.py      one scan cycle
   stop_monitor.py      the tick-speed stop
   validate_*.py        PASS/FAIL scripts, run by hand (not pytest)
-visualizer/          Streamlit app for inspecting a single pair.
 user_data/           Freqtrade scaffold, used only to download OHLCV.
 scripts/             Runners, the LaunchAgents, and the VM helpers.
 docs/                Handoffs and the cloud deployment record.

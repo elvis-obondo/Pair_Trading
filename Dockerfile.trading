@@ -17,11 +17,7 @@ FROM python:3.12-slim
 WORKDIR /app
 
 COPY requirements.txt .
-# ccxt is the REST fallback the stop monitor degrades to when the websocket is
-# down; websockets is the primary feed. Both are runtime dependencies here even
-# though requirements.txt keeps ccxt optional for the laptop's lighter installs.
-RUN pip install --no-cache-dir -r requirements.txt \
-    && pip install --no-cache-dir websockets ccxt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # After the pip layer, so adding it does not bust the cache. Without it Python
 # fully buffers stdout when it is not a TTY — true for `docker logs` — and a
