@@ -1,111 +1,157 @@
+"""Validate compute_position_size: equity-fraction sizing at fixed leverage.
+
+Run: python research/validate_position_sizer.py
+"""
 import sys
 import os
-sys.path.insert(0, os.path.dirname(__file__))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import numpy as np
+
 from position_sizer import compute_position_size
 
-
-entry_signal = {
-    "sigma_at_entry": 0.002722,
-    "theta_at_entry": 0.0474,
-    "beta_at_entry":  1.2,
-    "entry_spread":   0.010,
-    "mu_at_entry":   -0.001,
-}
+n_pass = n_fail = 0
 
 
-# =============================================================================
-# Test 1 — Normal case: verify all five output fields
-# =============================================================================
-
-capital         = 1000.0
-risk_budget_pct = 0.01
-stop_sigma      = 2.5
-
-# sigma_stationary = 0.002722 / sqrt(2 * 0.0474)
-#                  = 0.002722 / sqrt(0.0948)
-#                  = 0.002722 / 0.307923...
-#                  ≈ 0.008840
-#
-# risk_unit        = 2.5 * 0.008840 ≈ 0.022099
-#
-# fraction         = 0.01 / 0.022099 ≈ 0.452527
-#
-# leg_a_notional   = 0.452527 * 100_000 ≈ 45_252.70
-# leg_b_notional   = 1.2 * 0.452527 * 100_000 ≈ 54_303.24
-# total_deployed   = 45_252.70 + 54_303.24 ≈ 99_555.94
-
-result = compute_position_size(
-    entry_signal    = entry_signal,
-    capital         = capital,
-    risk_budget_pct = risk_budget_pct,
-    stop_sigma      = stop_sigma,
-)
-
-expected_sigma_stationary = 0.002722 / np.sqrt(2.0 * 0.0474)
-expected_fraction         = 0.01 / (2.5 * expected_sigma_stationary)
-expected_leg_a            = expected_fraction * capital
-expected_leg_b            = 1.2 * expected_fraction * capital
-expected_total            = expected_leg_a + expected_leg_b
-
-print("=== Test 1: Normal case ===")
-for field, exp, tol, fmt in [
-    ("sigma_stationary", expected_sigma_stationary, 1e-6,  "X.XXXXXX"),
-    ("fraction",         expected_fraction,         1e-6,  "X.XXXXXX"),
-    ("leg_a_notional",   expected_leg_a,            0.01,  "XXXXX.XX"),
-    ("leg_b_notional",   expected_leg_b,            0.01,  "XXXXX.XX"),
-    ("total_deployed",   expected_total,            0.01,  "XXXXX.XX"),
-]:
-    res_val = result[field]
-    status  = "PASS" if abs(res_val - exp) < tol else "FAIL"
-    print(f"{field + ':':20s} result={res_val:.6f}  expected={exp:.6f}  {status}")
+def check(name, got, exp, tol=1e-9):
+    global n_pass, n_fail
+    if isinstance(exp, (bool, str, type(None))):
+        ok = got == exp
+        detail = f"got={got!r} expected={exp!r}"
+    else:
+        ok = got is not None and abs(got - exp) <= tol
+        detail = f"got={got!r} expected={exp!r}"
+    n_pass, n_fail = n_pass + ok, n_fail + (not ok)
+    print(f"{name + ':':44s} {detail:44s} {'PASS' if ok else 'FAIL'}")
 
 
-# =============================================================================
-# Test 2 — Degenerate inputs return None
-# =============================================================================
+EQUITY = 300.0
+FRAC = 0.05
+LEV = 20.0
 
-print("\n=== Test 2: Degenerate inputs ===")
+# --------------------------------------------------------------------------
+print("=" * 96)
+print("1. The rule: gross = leverage * capital_frac * equity, margin = capital_frac * equity")
+print("=" * 96)
+r = compute_position_size({"beta_at_entry": 1.0}, equity=EQUITY,
+                          capital_frac=FRAC, leverage=LEV)
+check("gross_notional == 20 * 0.05 * 300", r["gross_notional"], 300.0)
+check("margin == 5% of equity", r["margin"], 15.0)
+check("margin == gross / leverage", r["margin"], r["gross_notional"] / LEV)
+check("leverage echoed", r["leverage"], LEV)
+check("not rejected", r["rejected"], False)
+check("reject_reason None", r["reject_reason"], None)
 
-bad_signal_a = dict(entry_signal)
-bad_signal_a["theta_at_entry"] = 0.0
-result_a = compute_position_size(bad_signal_a, capital=capital)
-print(f"Sub-case A (theta=0.0):         result={result_a}  {'PASS' if result_a is None else 'FAIL'}")
+# --------------------------------------------------------------------------
+print()
+print("=" * 96)
+print("2. Leg split by |beta| -- leg_a + abs(leg_b) == gross for either sign")
+print("=" * 96)
+check("beta=1  -> leg_a", r["leg_a_notional"], 150.0)
+check("beta=1  -> leg_b", r["leg_b_notional"], 150.0)
 
-bad_signal_b = dict(entry_signal)
-bad_signal_b["sigma_at_entry"] = np.nan
-result_b = compute_position_size(bad_signal_b, capital=capital)
-print(f"Sub-case B (sigma=nan):         result={result_b}  {'PASS' if result_b is None else 'FAIL'}")
+r2 = compute_position_size({"beta_at_entry": -2.0}, equity=EQUITY,
+                           capital_frac=FRAC, leverage=LEV)
+check("beta=-2 -> leg_a", r2["leg_a_notional"], 100.0)
+check("beta=-2 -> leg_b (signed)", r2["leg_b_notional"], -200.0)
+check("beta=-2 -> gross unchanged", r2["leg_a_notional"] + abs(r2["leg_b_notional"]), 300.0)
+check("beta=-2 -> margin unchanged", r2["margin"], 15.0)
 
-result_c = compute_position_size(entry_signal, capital=-50_000.0)
-print(f"Sub-case C (capital=-50000):    result={result_c}  {'PASS' if result_c is None else 'FAIL'}")
+r3 = compute_position_size({"beta_at_entry": 0.0}, equity=EQUITY,
+                           capital_frac=FRAC, leverage=LEV)
+check("beta=0  -> whole notional on leg A", r3["leg_a_notional"], 300.0)
+check("beta=0  -> leg_b zero", r3["leg_b_notional"], 0.0)
 
+# --------------------------------------------------------------------------
+print()
+print("=" * 96)
+print("3. Sizing compounds with equity, and is blind to the pair")
+print("=" * 96)
+r_up = compute_position_size({"beta_at_entry": 1.0}, equity=600.0,
+                             capital_frac=FRAC, leverage=LEV)
+check("equity doubles -> gross doubles", r_up["gross_notional"], 600.0)
+check("equity doubles -> margin doubles", r_up["margin"], 30.0)
+r_dn = compute_position_size({"beta_at_entry": 1.0}, equity=150.0,
+                             capital_frac=FRAC, leverage=LEV)
+check("equity halves -> gross halves", r_dn["gross_notional"], 150.0)
 
-# =============================================================================
-# Test 3 — stop_sigma sensitivity: wider stop → smaller fraction
-# =============================================================================
+# A ten-slot book at 5% posts half the account as margin.
+check("10 slots post 50% of equity", 10 * r["margin"] / EQUITY, 0.5)
 
-result_tight = compute_position_size(
-    entry_signal    = entry_signal,
-    capital         = capital,
-    risk_budget_pct = 0.01,
-    stop_sigma      = 2.0,
-)
-result_wide = compute_position_size(
-    entry_signal    = entry_signal,
-    capital         = capital,
-    risk_budget_pct = 0.01,
-    stop_sigma      = 3.0,
-)
+# --------------------------------------------------------------------------
+print()
+print("=" * 96)
+print("4. Margin rejection returns the dict, not None")
+print("=" * 96)
+r_rej = compute_position_size({"beta_at_entry": 1.0}, equity=EQUITY,
+                              capital_frac=FRAC, leverage=LEV,
+                              available_margin=10.0)
+check("available 10 < margin 15 -> rejected", r_rej["rejected"], True)
+check("reject_reason == 'margin'", r_rej["reject_reason"], "margin")
+check("is a dict, not None", r_rej is not None, True)
+check("numbers still reported for logging", r_rej["margin"], 15.0)
 
-# Wider stop → larger risk_unit → smaller fraction needed to keep dollar risk fixed.
-# A trade sized to a 3-sigma stop risks the same dollar amount as one sized to a
-# 2-sigma stop, but the position is smaller because the stop is further away.
+r_ok = compute_position_size({"beta_at_entry": 1.0}, equity=EQUITY,
+                             capital_frac=FRAC, leverage=LEV,
+                             available_margin=15.0)
+check("available exactly equals margin -> allowed", r_ok["rejected"], False)
 
-direction_ok = result_tight["fraction"] > result_wide["fraction"]
+# --------------------------------------------------------------------------
+print()
+print("=" * 96)
+print("5. max_notional caps gross AND the margin it posts")
+print("=" * 96)
+# Below the cap: no effect at all.
+small = compute_position_size({"beta_at_entry": 1.0}, equity=EQUITY,
+                              capital_frac=FRAC, leverage=LEV, max_notional=5000.0)
+check("uncapped while equity is small", small["gross_notional"], 300.0)
+check("not flagged as capped", small["notional_capped"], False)
 
-print("\n=== Test 3: stop_sigma sensitivity ===")
-print(f"fraction at stop_sigma=2.0: {result_tight['fraction']:.6f}")
-print(f"fraction at stop_sigma=3.0: {result_wide['fraction']:.6f}")
-print(f"Direction correct (tight > wide): {'PASS' if direction_ok else 'FAIL'}")
+# The cap binds at equity = max_notional / (leverage * capital_frac) = 5000.
+big = compute_position_size({"beta_at_entry": 1.0}, equity=50_000.0,
+                            capital_frac=FRAC, leverage=LEV, max_notional=5000.0)
+check("gross clamped to the ceiling", big["gross_notional"], 5000.0)
+check("flagged as capped", big["notional_capped"], True)
+check("margin follows the CAPPED notional", big["margin"], 250.0)
+check("legs still sum to the capped gross",
+      big["leg_a_notional"] + abs(big["leg_b_notional"]), 5000.0)
+check("binds exactly at equity = cap/(lev*frac)",
+      compute_position_size({"beta_at_entry": 1.0}, equity=5000.0,
+                            capital_frac=FRAC, leverage=LEV,
+                            max_notional=5000.0)["gross_notional"], 5000.0)
+check("just below that it does not bind",
+      compute_position_size({"beta_at_entry": 1.0}, equity=4999.0,
+                            capital_frac=FRAC, leverage=LEV,
+                            max_notional=5000.0)["notional_capped"], False)
+check("a capped position leaves margin free for others",
+      big["margin"] < FRAC * 50_000.0, True)
+
+print()
+print("=" * 96)
+print("6. Unusable inputs return None")
+print("=" * 96)
+cases = [
+    ("beta NaN",          {"beta_at_entry": np.nan}, dict(equity=EQUITY)),
+    ("beta inf",          {"beta_at_entry": np.inf}, dict(equity=EQUITY)),
+    ("equity zero",       {"beta_at_entry": 1.0},    dict(equity=0.0)),
+    ("equity negative",   {"beta_at_entry": 1.0},    dict(equity=-300.0)),
+    ("equity NaN",        {"beta_at_entry": 1.0},    dict(equity=np.nan)),
+    ("capital_frac zero", {"beta_at_entry": 1.0},    dict(equity=EQUITY, capital_frac=0.0)),
+    ("capital_frac neg",  {"beta_at_entry": 1.0},    dict(equity=EQUITY, capital_frac=-0.05)),
+    ("leverage zero",     {"beta_at_entry": 1.0},    dict(equity=EQUITY, leverage=0.0)),
+    ("available NaN",     {"beta_at_entry": 1.0},    dict(equity=EQUITY, available_margin=np.nan)),
+    ("max_notional zero",  {"beta_at_entry": 1.0},    dict(equity=EQUITY, max_notional=0.0)),
+    ("max_notional neg",   {"beta_at_entry": 1.0},    dict(equity=EQUITY, max_notional=-100.0)),
+    ("max_notional NaN",   {"beta_at_entry": 1.0},    dict(equity=EQUITY, max_notional=np.nan)),
+]
+for label, sig, kw in cases:
+    out = compute_position_size(sig, **kw)
+    ok = out is None
+    n_pass, n_fail = n_pass + ok, n_fail + (not ok)
+    print(f"{label + ':':44s} {'got ' + repr(out)[:38]:44s} {'PASS' if ok else 'FAIL'}")
+
+print()
+print("=" * 96)
+print(f"{n_pass}/{n_pass + n_fail} assertions PASS")
+print("=" * 96)
+sys.exit(1 if n_fail else 0)
