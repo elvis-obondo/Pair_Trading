@@ -6,8 +6,13 @@ statsmodels==0.14.6
 streamlit>=1.38
 plotly>=5.24
 
-# Only needed for the (currently broken, see CODEBASE_AUDIT.md) Nautilus
-# backtest path and the standalone get_data.py explorer — not installed here
-# to keep the visualizer's deploy build light. Install separately for local
-# full-pipeline work:
-#   pip install ccxt nautilus_trader==1.228.0
+# Change-point detection (docs/kalman_changepoint_experiment_spec.md,
+# Experiment 1) -- scratchpad/prototype use only as of 2026-08-19, not yet
+# wired into the live pipeline.
+ruptures==1.1.10
+
+# The live feed for research/stop_monitor.py. websockets carries the OKX
+# tickers channel; ccxt is the REST fallback it degrades to when the socket is
+# down, so a stop is never left completely unwatched.
+websockets>=13.0
+ccxt>=4.5

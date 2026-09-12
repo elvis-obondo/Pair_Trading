@@ -1,0 +1,44 @@
+# The universe scanner and the stop monitor. One image, two commands.
+#
+# Replaces the single-pair nautilus paper process that ran here until
+# 2026-09-12. That process checked its stop once every 30 minutes at bar close;
+# see research/stop_monitor.py for why that was the thing costing the edge, and
+# research/retired_nautilus_paper/ for what it finished with.
+#
+# nautilus_trader is deliberately GONE. Nothing in this image imports it, and it
+# was the largest and most fragile install in the build (a source build on
+# aarch64 was the documented biggest risk point on first deploy).
+#
+# Build:  docker build -f Dockerfile.trading -t pairs-trading:latest .
+# Run:    see docker-compose.trading.yml — it sets the two services, the
+#         restart policies, and the bind mounts that keep the book on disk.
+FROM python:3.12-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+# ccxt is the REST fallback the stop monitor degrades to when the websocket is
+# down; websockets is the primary feed. Both are runtime dependencies here even
+# though requirements.txt keeps ccxt optional for the laptop's lighter installs.
+RUN pip install --no-cache-dir -r requirements.txt \
+    && pip install --no-cache-dir websockets ccxt
+
+# After the pip layer, so adding it does not bust the cache. Without it Python
+# fully buffers stdout when it is not a TTY — true for `docker logs` — and a
+# healthy container appears silent for minutes. Found the hard way on the first
+# GCP deploy.
+ENV PYTHONUNBUFFERED=1
+
+# The book, the ledger, the scan history and the tick recordings all live under
+# PAIRS_DATA_DIR, which docker-compose binds to trading_data/ on the host so
+# they survive a rebuild instead of vanishing with the container.
+ENV PAIRS_DATA_DIR=/app/trading_data
+ENV PAIRS_LOG_DIR=/app/logs
+
+# Source only — no data, no .env.
+COPY research/ research/
+COPY user_data/normalized/manifest.json user_data/normalized/manifest.json
+
+# Overridden per service in docker-compose.trading.yml. The monitor is the
+# long-lived one; the scanner is single-shot and driven by cron.
+CMD ["python", "research/stop_monitor.py"]

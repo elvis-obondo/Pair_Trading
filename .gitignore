@@ -45,3 +45,14 @@ research/entry_gates_build.log
 backups/
 research/exit_sweep_paths.parquet_parts/
 research/candidate_theta_parts/
+
+# Live paper system runtime state. The book is data, not source -- and on the VM
+# it lives in trading_data/, bind-mounted, so a rebuild cannot lose it.
+research/scanner_state.json
+research/scanner_candidates.json
+research/scanner_trades.csv
+research/stop_monitor.lock
+research/scan_history/
+research/monitor_ticks/
+research/from_vm/
+trading_data/

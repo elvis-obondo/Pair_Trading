@@ -1,0 +1,62 @@
+# The live paper system: a scanner that finds dislocations every 30 minutes and
+# a monitor that watches their stops tick by tick.
+#
+# Separate from docker-compose.yml, which is freqtrade and does data download
+# only. Both are needed on the VM: the scanner's cron cycle calls the freqtrade
+# service to refresh candles, then runs the scanner here.
+#
+# ONE-TIME SETUP before the first `up`:
+#   mkdir -p trading_data/scan_history trading_data/monitor_ticks logs
+#   touch trading_data/scanner_trades.csv
+# Docker bind-mounts a missing FILE path as an empty directory rather than
+# erroring, so pre-creating the CSV as a real file avoids that footgun. The
+# directories are mounted as directories and need no such care.
+#
+# WHY THE BOOK IS BIND-MOUNTED: equity is re-summed from scanner_trades.csv on
+# every start. Lose the ledger and every subsequent position is mis-sized.
+services:
+  # Long-lived. Owns the book: opens, closes, sizing, state file, ledger.
+  # It is the ONLY writer of scanner_trades.csv and scanner_state.json, and it
+  # takes an exclusive lock to make sure a second copy cannot start.
+  stop-monitor:
+    build:
+      context: .
+      dockerfile: Dockerfile.trading
+    image: pairs-trading:latest
+    container_name: pairs-stop-monitor
+    restart: unless-stopped
+    command: ["python", "research/stop_monitor.py"]
+    volumes:
+      - ./trading_data:/app/trading_data
+      - ./logs:/app/logs
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  # Single-shot. Run by scripts/vm_scan_cycle.sh from cron every 30 minutes,
+  # never left running — hence no restart policy and `profiles`, which keeps
+  # `docker compose up -d` from starting it as a daemon.
+  #
+  # It writes candidates and scan history. It never touches the book.
+  scanner:
+    build:
+      context: .
+      dockerfile: Dockerfile.trading
+    image: pairs-trading:latest
+    container_name: pairs-scanner
+    profiles: ["oneshot"]
+    command: ["python", "research/live_scanner.py", "--no-refresh"]
+    volumes:
+      - ./trading_data:/app/trading_data
+      - ./logs:/app/logs
+      # The panel the scanner reads. Refreshed by the freqtrade service in
+      # docker-compose.yml before this container runs — see vm_scan_cycle.sh.
+      - ./user_data/data:/app/user_data/data
+      - ./user_data/normalized:/app/user_data/normalized
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

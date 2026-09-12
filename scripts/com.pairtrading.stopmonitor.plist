@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Keeps the stop monitor running. KeepAlive, not StartInterval: unlike the
+  scanner this process is meant to stay up, and every second it is down is a
+  second no stop is being watched.
+
+  NOT installed automatically. To install:
+    cp scripts/com.pairtrading.stopmonitor.plist ~/Library/LaunchAgents/
+    launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.pairtrading.stopmonitor.plist
+
+  To check / restart / remove:
+    launchctl list | grep pairtrading
+    launchctl kickstart -k gui/$(id -u)/com.pairtrading.stopmonitor
+    launchctl bootout gui/$(id -u)/com.pairtrading.stopmonitor
+
+  READ THIS BEFORE TRUSTING IT ON A LAPTOP. KeepAlive restarts the process; it
+  does not keep the Mac awake. While the laptop sleeps nothing watches the book,
+  and a stop monitor that is blind is worse than none because it invites
+  confidence it has not earned. The monitor records the outage as
+  blind_gap_seconds on any exit booked afterwards, so the ledger stays honest —
+  but the VM is the right home for this process. See docs/CLOUD_DEPLOY.md.
+
+  EDIT THE PATHS BELOW if the repo does not live at /Users/elvisobondo/Pair_Trading.
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.pairtrading.stopmonitor</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/elvisobondo/Pair_Trading/scripts/run_stop_monitor.sh</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/elvisobondo/Pair_Trading</string>
+
+    <key>KeepAlive</key>
+    <true/>
+
+    <!-- Don't fire on load; run it by hand with --dry-run first. -->
+    <key>RunAtLoad</key>
+    <false/>
+
+    <key>StandardOutPath</key>
+    <string>/Users/elvisobondo/Pair_Trading/logs/stop_monitor.out.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/elvisobondo/Pair_Trading/logs/stop_monitor.err.log</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    </dict>
+</dict>
+</plist>

@@ -1,182 +1,122 @@
 #!/bin/bash
-# Quick status checks against the pairs-trading cloud VM (see
-# docs/CLOUD_DEPLOY.md for the full deployment record). Wraps the repetitive
+# Status checks against the pairs-trading cloud VM. Wraps the repetitive
 # gcloud --project/--zone flags into short subcommands.
 #
+# WHAT RUNS THERE NOW. Two things, and the split is the point:
+#   stop-monitor   long-lived. Watches every open position's stop over a
+#                  websocket and closes it within about a second of the level
+#                  being crossed. Owns the book -- it is the only writer of
+#                  scanner_trades.csv and scanner_state.json.
+#   scanner        single-shot, cron every 30 minutes via vm_scan_cycle.sh.
+#                  Screens 22,366 pairs and publishes candidates. Touches no
+#                  state.
+#
+# This replaced a single-pair nautilus process on 2026-09-12. That one checked
+# its stop at 30-minute bar closes, which is the thing that was costing the
+# edge -- see research/stop_monitor.py.
 #
 # Usage:
-#   scripts/check_vm.sh status      # is it running, last 20 log lines
-#   scripts/check_vm.sh logs [N]    # last N log lines (default 50)
-#   scripts/check_vm.sh follow      # live-tail the logs (Ctrl-C to stop)
-#   scripts/check_vm.sh ledger [N]  # last N ledger rows (default 5)
-#   scripts/check_vm.sh heartbeat [N]  # last N heartbeat lines (default 10)
-#   scripts/check_vm.sh pull        # copy the live ledger CSV to
-#                                    #   research/paper_trades_from_vm.csv
-#   scripts/check_vm.sh ssh         # open an interactive shell on the VM
-#   scripts/check_vm.sh switch TICKER_A TICKER_B [stats string...]
-#                                    # rotate the live pair: checks for an
-#                                    # open position first (asks before
-#                                    # abandoning one), validates both
-#                                    # tickers are futures in manifest.json,
-#                                    # edits nautilus/run_trading.py locally,
-#                                    # seeds the VM with full local bar
-#                                    # history for the new pair (see
-#                                    # docs/CLOUD_DEPLOY.md "MIN_BARS cold
-#                                    # start gap" -- without this a fresh
-#                                    # pair sits ~8 days before it has enough
-#                                    # history to evaluate a signal), pushes
-#                                    # the code, rebuilds+restarts the
-#                                    # container, prints the startup log so
-#                                    # you can confirm it came up clean.
-#                                    # e.g.: scripts/check_vm.sh switch QTUM SUSHI \
-#                                    #   "walk-forward selected as-of 2026-08-15, coint_stability=0.50"
+#   scripts/check_vm.sh status         # instance, containers, resources
+#   scripts/check_vm.sh logs [N]       # last N stop-monitor log lines (50)
+#   scripts/check_vm.sh follow         # live-tail the monitor (Ctrl-C to stop)
+#   scripts/check_vm.sh scanner [N]    # last N scanner cycle lines (50)
+#   scripts/check_vm.sh heartbeat [N]  # feed state, tick ages, blind positions
+#   scripts/check_vm.sh ledger [N]     # last N ledger rows (5)
+#   scripts/check_vm.sh overshoot      # THE number: how far past the stop fills land
+#   scripts/check_vm.sh pull           # copy ledger + scan history down
+#   scripts/check_vm.sh deploy         # push code, rebuild, restart the monitor
+#   scripts/check_vm.sh ssh            # interactive shell
 
 set -euo pipefail
 
 PROJECT="project-0671be06-e22a-44d8-83c"
 ZONE="us-central1-a"
 INSTANCE="pairs-trading"
-REMOTE_DIR="~/Pair_Trading/trading_data"
+REMOTE="~/Pair_Trading"
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-gssh() {
-  gcloud compute ssh "$INSTANCE" --project="$PROJECT" --zone="$ZONE" --command="$1"
-}
+run() { gcloud compute ssh "$INSTANCE" --project="$PROJECT" --zone="$ZONE" --command="$1"; }
 
 cmd="${1:-status}"
 shift || true
 
 case "$cmd" in
   status)
-    gssh "docker ps && echo --- && docker logs --tail 20 pairs-trading"
+    gcloud compute instances list --project="$PROJECT" --filter="name=$INSTANCE"
+    echo
+    run "free -m; echo; df -h / | tail -1; echo; docker ps --format 'table {{.Names}}\t{{.Status}}'; echo; docker stats --no-stream --format 'table {{.Name}}\t{{.MemUsage}}\t{{.CPUPerc}}'"
     ;;
+
   logs)
-    n="${1:-50}"
-    gssh "docker logs --tail $n pairs-trading"
+    run "tail -${1:-50} $REMOTE/logs/stop_monitor.log"
     ;;
+
   follow)
-    echo "Live-tailing pairs-trading logs — Ctrl-C to stop."
-    gcloud compute ssh "$INSTANCE" --project="$PROJECT" --zone="$ZONE" \
-      --command="docker logs -f --tail 20 pairs-trading"
+    run "tail -f $REMOTE/logs/stop_monitor.log"
     ;;
-  ledger)
-    n="${1:-5}"
-    gssh "tail -n $n $REMOTE_DIR/paper_trades.csv"
+
+  scanner)
+    run "tail -${1:-50} $REMOTE/logs/scanner.log"
     ;;
+
   heartbeat)
-    n="${1:-10}"
-    gssh "tail -n $n $REMOTE_DIR/paper_trade_heartbeat.log"
+    # feed=live is what you want. rest_fallback means the socket is down and the
+    # stop is degraded; a non-empty blind=[] means positions are unwatched.
+    run "tail -${1:-10} $REMOTE/logs/stop_monitor_heartbeat.log"
     ;;
+
+  ledger)
+    run "head -1 $REMOTE/trading_data/scanner_trades.csv; tail -${1:-5} $REMOTE/trading_data/scanner_trades.csv"
+    ;;
+
+  overshoot)
+    # The whole reason the monitor exists. Baseline from 9,704 backtested
+    # stop-outs at 30-minute bar close: median 1.53x, mean 2.07x, NONE inside
+    # the level. Rows with a feed outage are excluded -- they were not watched.
+    run "cd $REMOTE && python3 -c \"
+import pandas as pd
+d = pd.read_csv('trading_data/scanner_trades.csv')
+c = d[(d.event=='close') & (d.exit_reason=='adverse_move')]
+c = c[c.blind_gap_seconds.fillna(0) == 0]
+if not len(c):
+    print('no watched stop-outs yet')
+else:
+    o = c.overshoot_ratio
+    print(f'{len(c)} watched stop-outs')
+    print(f'  median {o.median():.3f}x   mean {o.mean():.3f}x   p90 {o.quantile(0.9):.3f}x')
+    print(f'  inside the level: {(o <= 1.0).sum()} of {len(c)}')
+    print(f'  baseline at 30-min bar close: median 1.53x, mean 2.07x, 0 inside')
+\""
+    ;;
+
   pull)
-    dest="$PROJECT_ROOT/research/paper_trades_from_vm.csv"
-    gcloud compute scp "$INSTANCE:$REMOTE_DIR/paper_trades.csv" "$dest" \
-      --project="$PROJECT" --zone="$ZONE"
-    echo "Saved to $dest"
+    mkdir -p "$PROJECT_ROOT/research/from_vm"
+    gcloud compute scp "$INSTANCE:$REMOTE/trading_data/scanner_trades.csv" \
+      "$PROJECT_ROOT/research/from_vm/" --project="$PROJECT" --zone="$ZONE"
+    gcloud compute scp --recurse "$INSTANCE:$REMOTE/trading_data/scan_history" \
+      "$PROJECT_ROOT/research/from_vm/" --project="$PROJECT" --zone="$ZONE" || true
+    echo "-> research/from_vm/"
     ;;
+
+  deploy)
+    # Source only. The book lives in trading_data/ and is never overwritten.
+    gcloud compute scp --recurse "$PROJECT_ROOT/research" \
+      "$INSTANCE:$REMOTE/" --project="$PROJECT" --zone="$ZONE"
+    for f in Dockerfile.trading docker-compose.trading.yml docker-compose.yml requirements.txt; do
+      gcloud compute scp "$PROJECT_ROOT/$f" "$INSTANCE:$REMOTE/$f" \
+        --project="$PROJECT" --zone="$ZONE"
+    done
+    gcloud compute scp --recurse "$PROJECT_ROOT/scripts" \
+      "$INSTANCE:$REMOTE/" --project="$PROJECT" --zone="$ZONE"
+    run "cd $REMOTE && docker compose -f docker-compose.trading.yml up -d --build stop-monitor && sleep 5 && docker logs --tail 20 pairs-stop-monitor"
+    ;;
+
   ssh)
     gcloud compute ssh "$INSTANCE" --project="$PROJECT" --zone="$ZONE"
     ;;
-  switch)
-    new_a="${1:-}"
-    new_b="${2:-}"
-    shift 2 || true
-    stats="${*:-no stats recorded — edit LAST_SELECTED_STATS in nautilus/run_trading.py manually}"
 
-    if [[ -z "$new_a" || -z "$new_b" ]]; then
-      echo "Usage: $0 switch TICKER_A TICKER_B [stats string...]" >&2
-      exit 1
-    fi
-
-    run_trading_file="$PROJECT_ROOT/nautilus/run_trading.py"
-
-    echo "== 1/6: checking manifest.json for $new_a / $new_b =="
-    python3 -c "
-import json, sys
-m = json.load(open('$PROJECT_ROOT/user_data/normalized/manifest.json'))
-bad = [t for t in ('$new_a', '$new_b') if m.get(t, {}).get('instrument_type') != 'futures']
-if bad:
-    print(f'ERROR: not a futures instrument in manifest.json: {bad}', file=sys.stderr)
-    sys.exit(1)
-print('OK — both are futures instruments')
-"
-
-    echo "== 2/6: checking for an open position on the current pair =="
-    # Must filter to the CURRENTLY-configured pair's rows specifically, not
-    # just the ledger's last line -- if the current pair never opened a
-    # trade, the file's last line is stale history from whatever pair was
-    # live before it (bit us on the first real run: RLS/ZK never opened,
-    # so the last line was still the old abandoned GALA/SAND row).
-    cur_a="$(grep -m1 '^TICKER_A = ' "$run_trading_file" | sed -E 's/^TICKER_A = "(.*)"/\1/')"
-    cur_b="$(grep -m1 '^TICKER_B = ' "$run_trading_file" | sed -E 's/^TICKER_B = "(.*)"/\1/')"
-    cur_inst_a="${cur_a}-USDT-SWAP.OKX"
-    last_row="$(gssh "grep ',${cur_inst_a},' $REMOTE_DIR/paper_trades.csv | tail -1 || true")"
-    if [[ -z "$last_row" ]]; then
-      echo "OK — current pair ($cur_a/$cur_b) has no trades in the ledger yet."
-    else
-      echo "$last_row"
-      if [[ "$(echo "$last_row" | cut -d',' -f2)" == "open" ]]; then
-        echo
-        echo "WARNING: the row above is an 'open' with no matching close for the" \
-             "CURRENT pair ($cur_a/$cur_b) — there is a live position. Switching" \
-             "abandons it (frozen, never resolves)."
-        read -r -p "Continue anyway? [y/N] " confirm
-        if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
-          echo "Aborted — no changes made."
-          exit 1
-        fi
-      else
-        echo "OK — current pair's last row is a 'close', nothing open."
-      fi
-    fi
-
-    echo "== 3/6: editing nautilus/run_trading.py locally =="
-    today="$(date +%F)"
-    sed -i '' \
-      -e "s/^TICKER_A = .*/TICKER_A = \"$new_a\"/" \
-      -e "s/^TICKER_B = .*/TICKER_B = \"$new_b\"/" \
-      -e "s/^LAST_SELECTED_DATE = .*/LAST_SELECTED_DATE = \"$today\"/" \
-      "$run_trading_file"
-    sed -i '' \
-      -e "s|^LAST_SELECTED_STATS = .*|LAST_SELECTED_STATS = \"$stats\"|" \
-      "$run_trading_file"
-    grep -n "^TICKER_A\|^TICKER_B\|^LAST_SELECTED" "$run_trading_file"
-
-    echo "== 4/6: seeding full local bar history for $new_a / $new_b on the VM =="
-    # Without this, DataObserver falls back to an OKX historical backfill
-    # that caps at 300 candles (no pagination), leaving the new pair ~420
-    # bars short of MIN_BARS=720 -- it would then sit for ~8 days
-    # accumulating the rest one bar at a time before evaluating any signal.
-    # See docs/CLOUD_DEPLOY.md "MIN_BARS cold start gap" for the full story.
-    merge_tmpdir="$(mktemp -d)"
-    for t in "$new_a" "$new_b"; do
-      canonical="$PROJECT_ROOT/user_data/data/okx/futures/${t}_USDT_USDT-30m-futures.feather"
-      vm_pulled="$merge_tmpdir/${t}_vm_existing.feather"
-      gcloud compute scp "$INSTANCE:$REMOTE_DIR/paper_live/${t}_USDT_USDT-30m-paper.feather" \
-        "$vm_pulled" --project="$PROJECT" --zone="$ZONE" 2>/dev/null || true
-      [[ -f "$vm_pulled" ]] || vm_pulled=""
-
-      merged="$merge_tmpdir/${t}_merged.feather"
-      if python3 "$PROJECT_ROOT/scripts/merge_bar_history.py" "$t" "$canonical" "$vm_pulled" "$merged"; then
-        gcloud compute scp "$merged" "$INSTANCE:~/${t}_merged.feather" \
-          --project="$PROJECT" --zone="$ZONE"
-        gssh "sudo mv ~/${t}_merged.feather $REMOTE_DIR/paper_live/${t}_USDT_USDT-30m-paper.feather && \
-              sudo chown \$(id -u):\$(id -g) $REMOTE_DIR/paper_live/${t}_USDT_USDT-30m-paper.feather"
-      fi
-    done
-    rm -rf "$merge_tmpdir"
-
-    echo "== 5/6: pushing code to the VM and rebuilding =="
-    gcloud compute scp "$run_trading_file" "$INSTANCE:~/Pair_Trading/nautilus/run_trading.py" \
-      --project="$PROJECT" --zone="$ZONE"
-    gssh "cd ~/Pair_Trading && docker compose -f docker-compose.trading.yml up -d --build"
-
-    echo "== 6/6: startup log — confirm 'no unresolved open position' and a bar count near/above 720 =="
-    sleep 5
-    gssh "docker logs --tail 30 pairs-trading" | grep -i "Seeded\|PairsTradingActor\|ERROR\|Traceback" || true
-    ;;
   *)
-    echo "Unknown subcommand: $cmd" >&2
-    echo "Usage: $0 {status|logs [N]|follow|ledger [N]|heartbeat [N]|pull|ssh|switch TICKER_A TICKER_B [stats...]}" >&2
+    sed -n '19,30p' "${BASH_SOURCE[0]}"
     exit 1
     ;;
 esac

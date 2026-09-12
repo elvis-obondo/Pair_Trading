@@ -1,155 +1,237 @@
-"""Validate the live scanner's persistence: ledger schema, state, equity.
-
-The ledger check is the point. docs/HANDOFF.md records a ledger corruption
-incident whose root cause was never identified; pandas' to_csv(mode="a") writing
-a close row under an open row's header is exactly how you produce one.
+"""Validate the scanner as a stateless candidate producer, and book_state's IO.
 
 Run: python research/validate_live_scanner.py
+
+The scanner used to hold the book. It does not any more -- stop_monitor.py owns
+opening, closing and the ledger, because a stop has to be watched between bars.
+So the tests here changed shape: what the scanner PUBLISHES, and what it must
+never touch. The exit-side ledger tests live in validate_stop_monitor.py.
 """
-import sys, os, json, shutil, tempfile
+import sys, os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from datetime import datetime, timedelta
+import json
+import shutil
+import tempfile
+from datetime import datetime, timezone, timedelta
 
 import numpy as np
 import pandas as pd
 
-import live_scanner as ls
-from portfolio import Portfolio
+import book_state as cfg
 
 n_pass = n_fail = 0
-T0 = datetime(2026, 9, 1, 0, 0)
 
 
 def check(name, ok, detail=""):
     global n_pass, n_fail
     ok = bool(ok)
     n_pass, n_fail = n_pass + ok, n_fail + (not ok)
-    print(f"{name + ':':60s} {str(detail)[:26]:28s} {'PASS' if ok else 'FAIL'}")
+    print(f"{name + ':':64s} {str(detail)[:24]:26s} {'PASS' if ok else 'FAIL'}")
 
 
-def cand(a, b, theta, z=3.5, sigma=0.02):
-    return {"ticker_a": a, "ticker_b": b, "entry_spread": z * sigma,
-            "mu_at_entry": 0.0, "sigma_at_entry": sigma, "z_at_entry": z,
-            "beta_at_entry": 1.0, "alpha_at_entry": 0.0,
-            "theta_at_entry": theta, "take_profit_level": 0.0}
+def cands_frame(n=105):
+    """What scan() returns: ranked theta descending, NaN last.
+
+    n=105 with the last 10 unranked, so five NaN-theta rows land INSIDE the
+    published top 100. A fixture where every unranked row falls off the end
+    silently stops testing that they survive publication.
+    """
+    rows = []
+    for i in range(n):
+        theta = np.nan if i >= n - 10 else 0.5 - i * 0.001
+        rows.append({
+            "ticker_a": f"A{i}", "ticker_b": f"B{i}",
+            "entry_spread": 0.0612345678901234 + i * 1e-9,
+            "mu_at_entry": -0.0012345678901234,
+            "sigma_at_entry": 0.0203456789012345,
+            "z_at_entry": 3.0 + i * 0.0001,
+            "beta_at_entry": 1.2345678901234567,
+            "alpha_at_entry": -4.9876543210987654,
+            "theta_at_entry": theta,
+            "take_profit_level": -0.0012345678901234,
+        })
+    return pd.DataFrame(rows)
 
 
-tmp = tempfile.mkdtemp()
-ls.LEDGER_PATH = os.path.join(tmp, "trades.csv")
-ls.STATE_PATH = os.path.join(tmp, "state.json")
-ls.CANDIDATES_PATH = os.path.join(tmp, "candidates.json")
+# Redirect every path into a scratch dir BEFORE importing live_scanner, so a
+# validation run can never write the real book or the real scan history.
+TMP = tempfile.mkdtemp(prefix="validate_scanner_")
+cfg.DATA_DIR = TMP
+cfg.LOG_DIR = os.path.join(TMP, "logs")
+cfg.STATE_PATH = os.path.join(TMP, "scanner_state.json")
+cfg.LEDGER_PATH = os.path.join(TMP, "scanner_trades.csv")
+cfg.CANDIDATES_PATH = os.path.join(TMP, "scanner_candidates.json")
+cfg.SCAN_HISTORY_DIR = os.path.join(TMP, "scan_history")
+cfg.SCANNER_LOG = os.path.join(cfg.LOG_DIR, "scanner.log")
 
-print("=" * 104)
-print("1. Ledger: open rows then close rows land on the SAME fixed schema")
-print("=" * 104)
-pf = Portfolio(equity=300.0, max_slots=3)
-frame = pd.DataFrame([cand("A", "B", 0.2), cand("C", "D", 0.1), cand("E", "F", 0.05)])
-opened = pf.fill_slots(frame, T0)
+import live_scanner as ls          # noqa: E402 — must follow the redirect above
+from portfolio import Portfolio, Position   # noqa: E402
 
-ls.append_ledger([{"event": "open", "trade_num": p.trade_num,
-                   "ticker_a": p.ticker_a, "ticker_b": p.ticker_b,
-                   "time": T0, **p.signal, **p.sizing} for p in opened])
-after_open = pd.read_csv(ls.LEDGER_PATH)
-check("open batch written", len(after_open) == 3, f"{len(after_open)} rows")
-check("header is the full fixed schema",
-      list(after_open.columns) == ls.LEDGER_COLUMNS, f"{len(after_open.columns)} cols")
+BAR = pd.Timestamp("2026-09-12 01:00:00")
 
-closed = pf.evaluate_exits({"A": 0.0, "B": 0.0, "C": 0.07, "D": 0.0,
-                            "E": 0.07, "F": 0.0}, T0 + timedelta(hours=2))
-ls.append_ledger([{"event": "close", "time": c["closed_at"], **c} for c in closed])
-d = pd.read_csv(ls.LEDGER_PATH)
-check("close batch appended", len(d) == 3 + len(closed), f"{len(d)} rows")
-check("schema unchanged after appending a close",
-      list(d.columns) == ls.LEDGER_COLUMNS, f"{len(d.columns)} cols")
+try:
+    # ----------------------------------------------------------------------
+    print("=" * 118)
+    print("1. Candidates are published at FULL precision — the monitor stops off these")
+    print("=" * 118)
+    cands = cands_frame()
+    ls.write_candidates(cands, BAR)
+    payload = json.load(open(cfg.CANDIDATES_PATH))
 
-# The corruption tell: values filed under the wrong column name.
-op, cl = d[d.event == "open"], d[d.event == "close"]
-check("open rows carry entry fields, not exit ones",
-      bool(op.z_at_entry.notna().all() and op.exit_reason.isna().all()))
-check("close rows carry exit fields AND entry fields",
-      bool(cl.exit_reason.notna().all() and cl.realized_pnl_net.notna().all()
-           and cl.z_at_entry.notna().all()))
-check("no unnamed/overflow columns",
-      not any(str(c).startswith("Unnamed") for c in d.columns))
-check("trade_num is a clean integer throughout",
-      bool(pd.to_numeric(d.trade_num, errors="coerce").notna().all()))
+    check("machine block is present and separate from the display block",
+          "candidates" in payload and "top_candidates" in payload,
+          f"{len(payload.get('candidates', []))} / {len(payload.get('top_candidates', []))}")
+    check("publishes TOP_N_PUBLISHED rows", len(payload["candidates"]) == ls.TOP_N_PUBLISHED,
+          len(payload["candidates"]))
+    check("display block is the shorter one",
+          len(payload["top_candidates"]) == ls.TOP_N_DISPLAYED,
+          len(payload["top_candidates"]))
 
-print()
-print("=" * 104)
-print("2. A row with extra keys cannot widen or shift the schema")
-print("=" * 104)
-ls.append_ledger([{"event": "close", "time": T0, "trade_num": 99,
-                   "ticker_a": "Z", "ticker_b": "Y", "realized_pnl_net": 1.0,
-                   "some_new_field": "should be dropped", "another": 123}])
-d2 = pd.read_csv(ls.LEDGER_PATH)
-check("unknown keys dropped", "some_new_field" not in d2.columns)
-check("schema still exactly the fixed list",
-      list(d2.columns) == ls.LEDGER_COLUMNS, f"{len(d2.columns)} cols")
-check("the row still landed", int(d2.trade_num.max()) == 99)
+    first = payload["candidates"][0]
+    src = cands.iloc[0]
+    for f in ("entry_spread", "mu_at_entry", "sigma_at_entry", "beta_at_entry",
+              "alpha_at_entry", "take_profit_level"):
+        check(f"  {f} round-trips bit-exact", first[f] == float(src[f]),
+              f"{first[f]!r}")
+    check("the display block IS rounded (so it is never mistaken for the other)",
+          payload["top_candidates"][0]["sigma"] != float(src.sigma_at_entry),
+          payload["top_candidates"][0]["sigma"])
 
-print()
-print("=" * 104)
-print("3. State round-trips: positions resume identically")
-print("=" * 104)
-pf2 = Portfolio(equity=300.0, max_slots=3)
-pf2.fill_slots(frame, T0)
-ls.save_portfolio(pf2)
-check("state file written", os.path.exists(ls.STATE_PATH))
-check("written atomically (no .tmp left behind)",
-      not os.path.exists(ls.STATE_PATH + ".tmp"))
+    check("every field the monitor needs is present",
+          all(k in first for k in ("ticker_a", "ticker_b", "entry_spread",
+                                   "mu_at_entry", "sigma_at_entry", "z_at_entry",
+                                   "beta_at_entry", "alpha_at_entry",
+                                   "theta_at_entry", "take_profit_level")),
+          f"{len(first)} keys")
+    check("NaN theta serialises as null, not NaN (JSON has no NaN)",
+          payload["candidates"][-1]["theta_at_entry"] is None,
+          payload["candidates"][-1]["theta_at_entry"])
+    check("written atomically — no .tmp left behind",
+          not os.path.exists(cfg.CANDIDATES_PATH + ".tmp"), "clean")
+    check("generated_at is timezone-aware, so staleness is computable",
+          datetime.fromisoformat(payload["generated_at"]).tzinfo is not None,
+          payload["generated_at"][-6:])
 
-restored = ls.load_portfolio()
-check("same number of open positions",
-      len(restored.open_positions) == len(pf2.open_positions),
-      f"{len(restored.open_positions)}")
-check("same pairs, same order",
-      [p.pair for p in restored.open_positions] == [p.pair for p in pf2.open_positions])
-check("next_trade_num carried", restored.next_trade_num == pf2.next_trade_num,
-      f"{restored.next_trade_num}")
-a, b = restored.open_positions[0], pf2.open_positions[0]
-check("frozen entry signal identical",
-      all(np.isclose(a.signal[k], b.signal[k]) for k in a.signal
-          if isinstance(b.signal[k], float)))
-check("sizing identical", np.isclose(a.sizing["gross_notional"], b.sizing["gross_notional"]))
-check("direction preserved", a.direction == b.direction, f"{a.direction}")
-check("opened_at preserved", a.opened_at == b.opened_at, str(a.opened_at))
+    # ----------------------------------------------------------------------
+    print()
+    print("=" * 118)
+    print("2. Ranking order survives publication")
+    print("=" * 118)
+    thetas = [c["theta_at_entry"] for c in payload["candidates"]]
+    ranked = [t for t in thetas if t is not None]
+    check("ranked candidates are theta descending",
+          ranked == sorted(ranked, reverse=True), f"{len(ranked)} ranked")
+    check("unranked ones sort last, and are KEPT not dropped",
+          all(t is None for t in thetas[len(ranked):]) and len(ranked) < len(thetas),
+          f"{len(thetas) - len(ranked)} unranked")
 
-print()
-print("=" * 104)
-print("4. Equity is re-summed from the ledger, never trusted from state")
-print("=" * 104)
-realized = float(pd.to_numeric(pd.read_csv(ls.LEDGER_PATH)
-                               .query("event == 'close'")["realized_pnl_net"],
-                               errors="coerce").fillna(0).sum())
-check("equity == ACCOUNT_EQUITY + sum(realized)",
-      abs(restored.equity - (ls.ACCOUNT_EQUITY + realized)) < 1e-9,
-      f"{restored.equity:.4f}")
-# Corrupt the state file's equity; the ledger must still win.
-st = json.load(open(ls.STATE_PATH)); st["equity"] = 999999.0
-json.dump(st, open(ls.STATE_PATH, "w"), default=str)
-check("a wrong equity in the state file is ignored",
-      abs(ls.load_portfolio().equity - (ls.ACCOUNT_EQUITY + realized)) < 1e-9,
-      "ledger wins")
+    # ----------------------------------------------------------------------
+    print()
+    print("=" * 118)
+    print("3. Scan history accumulates — what the scanner saw outlives the cycle")
+    print("=" * 118)
+    ls.append_scan_history(cands, BAR)
+    day = BAR.strftime("%Y-%m-%d")
+    path = os.path.join(cfg.SCAN_HISTORY_DIR, f"{day}.parquet")
+    check("a day file is written", os.path.exists(path), day)
+    h1 = pd.read_parquet(path)
+    check("one row per published candidate", len(h1) == ls.TOP_N_PUBLISHED, len(h1))
+    check("bar_time and rank are recorded",
+          "bar_time" in h1.columns and "rank" in h1.columns and h1["rank"].iloc[0] == 1,
+          "present")
 
-print()
-print("=" * 104)
-print("5. Missing / empty files start clean rather than crashing")
-print("=" * 104)
-os.remove(ls.LEDGER_PATH); os.remove(ls.STATE_PATH)
-fresh = ls.load_portfolio()
-check("no state, no ledger -> flat book at starting equity",
-      len(fresh.open_positions) == 0 and fresh.equity == ls.ACCOUNT_EQUITY,
-      f"equity {fresh.equity}")
-# A ledger holding only open rows has no realized_pnl_net values at all.
-ls.append_ledger([{"event": "open", "trade_num": 1, "ticker_a": "A",
-                   "ticker_b": "B", "time": T0, **cand("A", "B", 0.2)}])
-check("a ledger with only open rows does not crash equity recompute",
-      ls.load_portfolio().equity == ls.ACCOUNT_EQUITY, "300.0")
+    ls.append_scan_history(cands, BAR + timedelta(minutes=30))
+    h2 = pd.read_parquet(path)
+    check("a second cycle APPENDS, never overwrites",
+          len(h2) == 2 * ls.TOP_N_PUBLISHED, len(h2))
+    check("both cycles are distinguishable by bar_time",
+          h2["bar_time"].nunique() == 2, h2["bar_time"].nunique())
 
-shutil.rmtree(tmp, ignore_errors=True)
-print()
-print("=" * 104)
-print(f"{n_pass}/{n_pass + n_fail} assertions PASS")
-print("=" * 104)
+    ls.append_scan_history(cands, BAR + timedelta(days=1))
+    check("a new day starts a new file",
+          os.path.exists(os.path.join(cfg.SCAN_HISTORY_DIR,
+                                      f"{(BAR + timedelta(days=1)).strftime('%Y-%m-%d')}.parquet")),
+          "partitioned")
+    check("an empty scan writes nothing rather than an empty file",
+          (ls.append_scan_history(pd.DataFrame(), BAR) is None
+           and len(pd.read_parquet(path)) == 2 * ls.TOP_N_PUBLISHED), "no-op")
+
+    # ----------------------------------------------------------------------
+    print()
+    print("=" * 118)
+    print("4. SINGLE WRITER — the scanner never touches the book")
+    print("=" * 118)
+    check("no state file was created", not os.path.exists(cfg.STATE_PATH), "absent")
+    check("no ledger was created", not os.path.exists(cfg.LEDGER_PATH), "absent")
+
+    # Now plant a book and confirm publishing still does not disturb it.
+    pf = Portfolio(equity=300.0, max_slots=10)
+    sig = {"entry_spread": 0.06, "mu_at_entry": 0.0, "sigma_at_entry": 0.02,
+           "z_at_entry": 3.0, "beta_at_entry": 1.0, "alpha_at_entry": 0.0,
+           "theta_at_entry": 0.2, "take_profit_level": 0.0}
+    szg = {"leg_a_notional": 150.0, "leg_b_notional": 150.0,
+           "gross_notional": 300.0, "margin": 15.0, "leverage": 20.0,
+           "rejected": False, "reject_reason": None, "notional_capped": False}
+    pf.open_positions.append(Position(1, "A0", "B0", sig, szg,
+                                      datetime(2026, 9, 12, 1, 0), 0.5))
+    cfg.save_portfolio(pf)
+    before = os.path.getmtime(cfg.STATE_PATH)
+    ls.write_candidates(cands, BAR)
+    ls.append_scan_history(cands, BAR)
+    check("state file untouched by a publish",
+          os.path.getmtime(cfg.STATE_PATH) == before, "unchanged")
+    check("still no ledger", not os.path.exists(cfg.LEDGER_PATH), "absent")
+    payload = json.load(open(cfg.CANDIDATES_PATH))
+    check("the scanner CAN read state for display only",
+          payload["top_candidates"][0]["already_open"] is True, "annotated")
+
+    # ----------------------------------------------------------------------
+    print()
+    print("=" * 118)
+    print("5. book_state round-trips a position exactly")
+    print("=" * 118)
+    restored = cfg.load_portfolio()
+    check("written atomically — no .tmp left behind",
+          not os.path.exists(cfg.STATE_PATH + ".tmp"), "clean")
+    check("same number of open positions",
+          len(restored.open_positions) == len(pf.open_positions),
+          len(restored.open_positions))
+    a, b = restored.open_positions[0], pf.open_positions[0]
+    check("same pair", a.pair == b.pair, f"{a.pair}")
+    check("frozen entry signal identical",
+          all(np.isclose(a.signal[k], b.signal[k]) for k in b.signal), "identical")
+    check("sizing identical",
+          np.isclose(a.sizing["gross_notional"], b.sizing["gross_notional"]), "identical")
+    check("direction recomputed correctly on load", a.direction == b.direction,
+          a.direction)
+    check("equity comes from the ledger, not the state file",
+          restored.equity == cfg.ACCOUNT_EQUITY,
+          f"{restored.equity:.2f} (no ledger yet)")
+
+    # A ledger with realised PnL must override whatever the state file claimed.
+    cfg.append_ledger([{"event": "close", "trade_num": 1, "realized_pnl_net": -12.5}])
+    check("a realised close moves equity off the starting value",
+          np.isclose(cfg.load_portfolio().equity, cfg.ACCOUNT_EQUITY - 12.5),
+          f"{cfg.load_portfolio().equity:.2f}")
+
+    # ----------------------------------------------------------------------
+    print()
+    print("=" * 118)
+    print("6. The cycle imports its parameters, it does not redefine them")
+    print("=" * 118)
+    src = open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                            "live_scanner.py")).read()
+    for const in ("STOP_SIGMA", "MAX_SLOTS", "CAPITAL_FRAC", "LEVERAGE",
+                  "ACCOUNT_EQUITY", "MIN_DEVIATION_SIGMA"):
+        check(f"{const} is not redefined locally", f"\n{const} = " not in src,
+              "imported")
+
+    print()
+    print("=" * 118)
+    print(f"{n_pass}/{n_pass + n_fail} assertions PASS")
+    print("=" * 118)
+finally:
+    shutil.rmtree(TMP, ignore_errors=True)
+
 sys.exit(1 if n_fail else 0)
