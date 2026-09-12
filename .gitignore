@@ -44,3 +44,4 @@ research/entry_gates_parts/
 research/entry_gates_build.log
 backups/
 research/exit_sweep_paths.parquet_parts/
+research/candidate_theta_parts/

@@ -44,7 +44,7 @@ Do not re-derive these. They come from a full grid scored on both splits
 | max hold | 72h | 24h |
 | entry gates | none | six |
 | day / volume filter | none | n/a |
-| candidate ranking | highest mean-reversion speed (theta) | n/a |
+| candidate ranking | **none — take candidates as they come** (see 6c) | n/a |
 | concurrent positions | 10 | 1 |
 | sizing | risk a fixed % of equity; size so the stop costs exactly that | fixed $30 x 20x |
 | leverage | 20x, an **output** of sizing | 20x, an input |
@@ -184,6 +184,43 @@ and choosing them from training data rather than hindsight costs 0.011 and
   thirds of folds) and 72 is also a grid edge. Extend HOR_GRID past 72.
 
 Both grids live at the top of `research/param_walkforward.py`.
+
+## 6c. Full-spec walk-forward — run 2026-09-11, REJECTS the ranking rule
+
+`research/spec_walkforward.py` applied the whole configuration fold by fold on
+the two-year panel rather than sweeping a grid: ranking, risk-based sizing and
+the 10-position cap included. Two results, one of them a retraction.
+
+**Ranking by mean-reversion speed is rejected.** Measured per trade across 12
+folds, with the same slots on the same days:
+
+| selection rule | mean per-trade | folds beating random |
+|---|---|---|
+| random among 3-sigma candidates | **+0.917%** | — |
+| top-9 by theta | +0.637% | 4 of 12 |
+| random among candidates that HAVE a theta | +0.711% | 3 of 12 |
+
+Ranking costs 0.28% per trade and wins in a third of folds. The filter version
+loses too. This rule came from `signal_ranking.py` on the 89-day window, where
+theta beat random on both halves; it does not survive two years. Note also that
+only 40.8% of 3-sigma candidates fit a positive theta at all, against 93.6% in
+the old window — at 3 sigma many spreads are trending rather than stretched.
+
+**The edge itself is stronger than the short window suggested**: +0.917% per
+trade averaged over 12 folds, positive in 11 of 12, versus +0.806% measured on
+29 days.
+
+**The portfolio figures from that run are unusable and should not be quoted.**
+Compounding 2%-risk bets with a 6:1 payoff over ~540 trades a fold, with no
+ceiling on position size relative to market liquidity, produced a compounded
+figure of 1.1e11 x. `simulate()` grows notional with equity indefinitely. Before
+any return number is believable the sizer needs a liquidity cap — an absolute
+dollar ceiling per position, or sizing against available depth. Until then use
+per-trade net, which is immune to compounding.
+
+**Pattern worth carrying:** the 89-day window produced two confident false
+positives that two years overturned — ranking by spread volatility, and ranking
+by theta. Treat any selection rule validated on a short window as unproven.
 
 ## 7. The caveat that governs everything above
 
