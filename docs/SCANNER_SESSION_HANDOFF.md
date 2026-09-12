@@ -44,7 +44,7 @@ Do not re-derive these. They come from a full grid scored on both splits
 | max hold | 72h | 24h |
 | entry gates | none | six |
 | day / volume filter | none | n/a |
-| candidate ranking | **none — take candidates as they come** (see 6c) | n/a |
+| candidate ranking | **optional, unproven** — see 6c | n/a |
 | concurrent positions | 10 | 1 |
 | sizing | risk a fixed % of equity; size so the stop costs exactly that | fixed $30 x 20x |
 | leverage | 20x, an **output** of sizing | 20x, an input |
@@ -191,8 +191,11 @@ Both grids live at the top of `research/param_walkforward.py`.
 the two-year panel rather than sweeping a grid: ranking, risk-based sizing and
 the 10-position cap included. Two results, one of them a retraction.
 
-**Ranking by mean-reversion speed is rejected.** Measured per trade across 12
-folds, with the same slots on the same days:
+**Ranking by mean-reversion speed is UNPROVEN, not rejected.** The first table
+below used mean net % of notional, which is the wrong metric under risk-based
+sizing -- position size is set inversely to the stop distance, so a percentage
+move understates a tight-stop pair. Read it alongside the corrected table that
+follows.
 
 | selection rule | mean per-trade | folds beating random |
 |---|---|---|
@@ -205,6 +208,31 @@ loses too. This rule came from `signal_ranking.py` on the 89-day window, where
 theta beat random on both halves; it does not survive two years. Note also that
 only 40.8% of 3-sigma candidates fit a positive theta at all, against 93.6% in
 the old window — at 3 sigma many spreads are trending rather than stretched.
+
+**Corrected, on R = net_pct / stop_pct** (profit per unit risked, size-neutral
+and the quantity an account actually compounds):
+
+| weighting | random | top-9 by theta | verdict |
+|---|---|---|---|
+| each fold equally | +0.420 | +0.417 | dead even, 4 of 12 folds |
+| every trade pooled | +0.374 | +0.426 | theta ahead by +0.052 R |
+
+The two disagree because daily candidate volume grew from ~100 in 2024 to
+300-500 by 2026, so pooling weights the recent period far more heavily. Nine
+positions are taken per day regardless of pool size, which makes the
+equal-weighted row the representative one. So: **no demonstrated edge, and no
+demonstrated harm.**
+
+Theta does raise the win rate in 11 of 12 folds (e.g. 14.7% to 19.5%), but the
+wins shrink proportionally and expectancy is unchanged. It does not buy lower
+variance either -- std of R is 3.001 ranked against 2.952 random, 1.7% *higher*.
+
+The one measurable cost is opportunity: only 40.8% of 3-sigma candidates fit a
+positive theta, so using it as a filter discards nearly six candidates in ten.
+**Worth testing before settling:** theta as a tiebreaker *within* the day's
+candidates rather than a hard filter -- rank those that have one, keep those
+that do not. That separates the ordering effect from the filtering effect,
+which this test conflated.
 
 **The edge itself is stronger than the short window suggested**: +0.917% per
 trade averaged over 12 folds, positive in 11 of 12, versus +0.806% measured on
