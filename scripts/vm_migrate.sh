@@ -49,7 +49,10 @@ ok()   { printf "  \033[32mok\033[0m   %s\n" "$*"; }
 warn() { printf "  \033[33mwarn\033[0m %s\n" "$*"; }
 die()  { printf "  \033[31mfail\033[0m %s\n" "$*"; exit 1; }
 
-ssh_vm() { gcloud compute ssh "$INSTANCE" $G --command="$1"; }
+# stdin from /dev/null: gcloud compute ssh reads stdin, so an ssh call sitting
+# just before a confirm() would swallow the answer the user already typed -- and
+# silently "skip" a step they meant to run.
+ssh_vm() { gcloud compute ssh "$INSTANCE" $G --command="$1" < /dev/null; }
 scp_vm() { gcloud compute scp $G "$@"; }
 
 confirm() {
@@ -134,10 +137,18 @@ step_push() {
     # Source only. trading_data/ on the VM is the book and is never overwritten.
     ssh_vm "mkdir -p $REMOTE/user_data" || die "mkdir failed"
 
-    echo "  research/ ..."
-    scp_vm --recurse "$ROOT/research" "$INSTANCE:$REMOTE/" || die "research push failed"
+    # SOURCE ONLY. `scp --recurse research/` would ship exit_sweep_paths.parquet
+    # (342MB) and the rest of the research artifacts -- 442MB the VM has no use
+    # for, over scp, onto an 11GB margin. Tar just the .py files instead: one
+    # stream, a few hundred KB, and no chance of dragging data along.
+    echo "  research/*.py ..."
+    tar -C "$ROOT" -czf - research/*.py research/adapters/*.py \
+        | gcloud compute ssh "$INSTANCE" $G --command="rm -f $REMOTE/research/*.py && tar -C $REMOTE -xzf -" \
+        || die "research push failed"
     echo "  scripts/ ..."
-    scp_vm --recurse "$ROOT/scripts"  "$INSTANCE:$REMOTE/" || die "scripts push failed"
+    tar -C "$ROOT" -czf - scripts \
+        | gcloud compute ssh "$INSTANCE" $G --command="tar -C $REMOTE -xzf - && chmod +x $REMOTE/scripts/*.sh" \
+        || die "scripts push failed"
     for f in Dockerfile.trading docker-compose.trading.yml docker-compose.yml requirements.txt README.md; do
         echo "  $f ..."
         scp_vm "$ROOT/$f" "$INSTANCE:$REMOTE/$f" || die "$f push failed"
