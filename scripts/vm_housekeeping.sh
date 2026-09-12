@@ -43,9 +43,8 @@ for d, days in ((cfg.TICKS_DIR, cfg.RETAIN_TICK_DAYS),
                 (cfg.SCAN_HISTORY_DIR, cfg.RETAIN_SCAN_HISTORY_DAYS)):
     gone = cfg.prune_dated(d, days)
     print(f"  {os.path.basename(d)}: pruned {len(gone)} day(s) older than {days}d")
-for p in (cfg.MONITOR_LOG, cfg.HEARTBEAT_PATH, cfg.SCANNER_LOG):
-    if cfg.rotate_log(p):
-        print(f"  rotated {os.path.basename(p)}")
+for name in cfg.rotate_logs_in():
+    print(f"  rotated {name}")
 PY
 
 # cron.log has no rotation of its own and is append-only from two jobs.

@@ -196,8 +196,9 @@ def append_scan_history(cands: pd.DataFrame, bar_time) -> None:
     if gone:
         log(f"pruned {len(gone)} scan-history day(s) older than "
             f"{cfg.RETAIN_SCAN_HISTORY_DAYS}d")
-    if cfg.rotate_log(cfg.SCANNER_LOG):
-        log(f"rotated scanner.log at {cfg.LOG_MAX_BYTES // 1024 // 1024}MB")
+    rotated = cfg.rotate_logs_in()
+    if rotated:
+        log(f"rotated at {cfg.LOG_MAX_BYTES // 1024 // 1024}MB: {', '.join(rotated)}")
 
 
 def cycle(refresh: bool = True, dry_run: bool = False) -> pd.DataFrame:

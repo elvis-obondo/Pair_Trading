@@ -56,3 +56,6 @@ research/scan_history/
 research/monitor_ticks/
 research/from_vm/
 trading_data/
+
+# Sentinel: enables the laptop -> VM candidate push. Per-machine, not source.
+.push_to_vm

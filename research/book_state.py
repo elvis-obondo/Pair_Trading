@@ -124,7 +124,11 @@ def prune_dated(directory: str, keep_days: int) -> list:
 
 def rotate_log(path: str, max_bytes: int = LOG_MAX_BYTES) -> bool:
     """Keep one previous generation. Crude on purpose -- no dependency, and a
-    log that rotates is better than one that quietly eats the disk."""
+    log that rotates is better than one that quietly eats the disk.
+
+    os.replace overwrites the existing .1, so a log is bounded at 2 * max_bytes
+    rather than growing a numbered tail forever.
+    """
     try:
         if os.path.getsize(path) < max_bytes:
             return False
@@ -132,6 +136,23 @@ def rotate_log(path: str, max_bytes: int = LOG_MAX_BYTES) -> bool:
         return False
     os.replace(path, path + ".1")
     return True
+
+
+def rotate_logs_in(directory: str = None, max_bytes: int = LOG_MAX_BYTES) -> list:
+    """Rotate EVERY *.log in a directory, not a hand-maintained list.
+
+    The hand-maintained list missed the ones that matter most. Both LaunchAgents
+    and both cron jobs redirect stdout and stderr into this directory --
+    scanner.out.log, stop_monitor.out.log and their .err siblings -- and the
+    monitor prints every line it logs, so stop_monitor.out.log is a full
+    duplicate of stop_monitor.log that nothing was capping. Anything added later
+    is covered by construction.
+    """
+    directory = LOG_DIR if directory is None else directory
+    if not os.path.isdir(directory):
+        return []
+    return [f for f in sorted(os.listdir(directory))
+            if f.endswith(".log") and rotate_log(os.path.join(directory, f), max_bytes)]
 
 # ---------------------------------------------------------------------------
 # FIXED ledger schema. Open rows and close rows conform to the SAME columns, and

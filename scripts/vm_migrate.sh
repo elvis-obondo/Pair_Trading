@@ -6,18 +6,33 @@
 # step asks first, and every step is idempotent, so a Ctrl-C and a re-run costs
 # nothing.
 #
-#   scripts/vm_migrate.sh            # all steps, with prompts
-#   scripts/vm_migrate.sh 3          # just step 3
-#   scripts/vm_migrate.sh 3 4 5      # a range
-#   scripts/vm_migrate.sh status     # what is true right now
+#   scripts/vm_migrate.sh              # MICRO mode (default) — free tier
+#   scripts/vm_migrate.sh full         # FULL mode — resize, everything on the VM
+#   scripts/vm_migrate.sh status       # what is true right now
+#   scripts/vm_migrate.sh micro build  # one named step
 #
-# WHAT CHANGES
-#   e2-micro (1GB, free)  ->  e2-medium (4GB, ~$25/month)
-#   nautilus single-pair  ->  stop-monitor service + 30-min scanner cron
+# TWO MODES.
 #
-# WHY THE RESIZE. Measured 2026-09-12: scanner peak RSS 531MB, stop monitor
-# 174MB, VM OS+docker 258MB. The download and the scan run sequentially so they
-# never stack, putting peak near 1GB. e2-micro has 958MB total and 297MB free.
+#   MICRO (default, free). The stop monitor runs on the existing e2-micro; the
+#   scanner stays on the laptop and ships its candidates over. Costs nothing and
+#   tests the thing that actually needs testing -- the monitor runs 24/7 and
+#   every open position's stop is watched whether the laptop is up or not.
+#   The trade: while the laptop sleeps no new candidates arrive, so nothing new
+#   OPENS. Positions already open keep being watched. The monitor's 60-minute
+#   staleness guard handles it with no configuration.
+#
+#   FULL (~$25/month). Resizes to e2-medium and runs both halves on the VM, so
+#   entries continue with the laptop closed. Do this once micro has shown the
+#   strategy and the code hold up.
+#
+# WHY MICRO FITS. Measured 2026-09-12: the monitor is 174MB RSS. The VM has
+# 958MB, of which the retired nautilus container was holding 255MB -- removing
+# it (step `retire`) frees more than the monitor needs. What does NOT fit is the
+# scanner: 531MB peak plus a freqtrade download. That is why it stays local.
+#
+# Step `swap` adds 2GB of swap regardless of mode. On a 1GB box the pip install
+# of pandas/scipy/statsmodels during the image build is the tightest moment, and
+# swap is the difference between a slow build and an OOM-killed one.
 set -uo pipefail
 
 PROJECT="project-0671be06-e22a-44d8-83c"
@@ -58,8 +73,24 @@ step_status() {
     ssh_vm "free -m | head -2; echo; df -h / | tail -1; echo; docker ps --format 'table {{.Names}}\t{{.Status}}'; echo; echo 'cron:'; crontab -l 2>/dev/null | grep vm_scan_cycle || echo '  (none)'"
 }
 
-step_1_resize() {
-    bold "STEP 1 — resize to $MACHINE"
+step_swap() {
+    bold "STEP swap — 2GB swapfile"
+    if ssh_vm "swapon --show | grep -q /swapfile" 2>/dev/null; then
+        ok "already present"
+        ssh_vm "free -m | tail -1"
+        return 0
+    fi
+    # A 1GB instance with no swap OOM-kills the image build partway through pip.
+    # Worth having on e2-medium too: it turns a transient spike into slowness
+    # rather than a dead monitor, and an unwatched stop is the failure this whole
+    # system exists to prevent.
+    ssh_vm "sudo fallocate -l 2G /swapfile && sudo chmod 600 /swapfile && sudo mkswap /swapfile >/dev/null && sudo swapon /swapfile && grep -q /swapfile /etc/fstab || echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab >/dev/null" \
+        && ok "2GB swap on, and persisted in /etc/fstab"
+    ssh_vm "free -m"
+}
+
+step_resize() {
+    bold "STEP resize — resize to $MACHINE"
     local cur; cur="$(machine_type)"
     if [ "$cur" = "$MACHINE" ]; then ok "already $MACHINE"; return 0; fi
     echo "  currently: $cur"
@@ -83,8 +114,8 @@ step_1_resize() {
     ssh_vm "free -m | head -2"
 }
 
-step_2_retire() {
-    bold "STEP 2 — retire the old container"
+step_retire() {
+    bold "STEP retire — retire the old container"
     if ! ssh_vm "docker ps -a --format '{{.Names}}' | grep -qx pairs-trading" 2>/dev/null; then
         ok "already gone"
         return 0
@@ -98,8 +129,8 @@ step_2_retire() {
     ssh_vm "docker image rm -f pairs-trading:latest 2>/dev/null || true"
 }
 
-step_3_push() {
-    bold "STEP 3 — push source"
+step_push() {
+    bold "STEP push — push source"
     # Source only. trading_data/ on the VM is the book and is never overwritten.
     ssh_vm "mkdir -p $REMOTE/user_data" || die "mkdir failed"
 
@@ -127,8 +158,8 @@ step_3_push() {
     ok "pushed"
 }
 
-step_4_dirs() {
-    bold "STEP 4 — one-time runtime directories"
+step_dirs() {
+    bold "STEP dirs — one-time runtime directories"
     # Docker bind-mounts a missing FILE path as an empty DIRECTORY rather than
     # erroring. Pre-creating the ledger as a real file avoids that footgun; the
     # rest are genuinely directories.
@@ -136,8 +167,8 @@ step_4_dirs() {
         && ok "created"
 }
 
-step_5_build() {
-    bold "STEP 5 — build the image and start the monitor"
+step_build() {
+    bold "STEP build — build the image and start the monitor"
     echo "  First build pulls python:3.12-slim and installs pandas/numpy/scipy/"
     echo "  statsmodels/websockets/ccxt. Expect a few minutes."
     ssh_vm "cd $REMOTE && docker compose -f docker-compose.trading.yml up -d --build stop-monitor" \
@@ -151,8 +182,8 @@ step_5_build() {
     echo "  produces the first candidates."
 }
 
-step_6_firstscan() {
-    bold "STEP 6 — first data download and scan"
+step_firstscan() {
+    bold "STEP firstscan — first data download and scan"
     echo "  Pulls the freqtrade image (~1.4GB) and 30 days of 30m candles for"
     echo "  212 tickers, then runs one scan. Several minutes."
     echo
@@ -168,19 +199,29 @@ print(p['n_candidates'], 'candidates,', len(p['candidates']), 'published, bar', 
 \"" || warn "no candidates file — the scan did not complete"
 }
 
-step_7_cron() {
-    bold "STEP 7 — schedule the scanner and the daily housekeeping"
+step_cron() {
+    bold "STEP cron — schedule what runs on the VM"
     # The monitor is NOT in cron. It is a long-lived service under
     # docker-compose.trading.yml with restart: unless-stopped, which is the
     # whole point of the split.
-    if ! ssh_vm "crontab -l 2>/dev/null | grep -q vm_scan_cycle"; then
-        ssh_vm "(crontab -l 2>/dev/null; echo '*/30 * * * * $REMOTE/scripts/vm_scan_cycle.sh >> $REMOTE/logs/cron.log 2>&1') | crontab -" \
-            && ok "scanner scheduled every 30 min"
+    if [ "$MODE" = "full" ]; then
+        if ! ssh_vm "crontab -l 2>/dev/null | grep -q vm_scan_cycle"; then
+            ssh_vm "(crontab -l 2>/dev/null; echo '*/30 * * * * $REMOTE/scripts/vm_scan_cycle.sh >> $REMOTE/logs/cron.log 2>&1') | crontab -" \
+                && ok "scanner scheduled every 30 min"
+        else
+            ok "scanner already scheduled"
+        fi
     else
-        ok "scanner already scheduled"
+        # In micro mode the scanner runs on the laptop; scheduling it here would
+        # try a 531MB scan plus a freqtrade download on a 1GB box.
+        if ssh_vm "crontab -l 2>/dev/null | grep -q vm_scan_cycle"; then
+            warn "a scanner cron exists but this is MICRO mode — removing it"
+            ssh_vm "crontab -l | grep -v vm_scan_cycle | crontab -"
+        fi
+        ok "scanner stays on the laptop (micro mode)"
     fi
-    # Tick capture is ~20-25MB/day and Docker leaves dangling layers on every
-    # rebuild. Those are the only two things here that can fill an 11GB margin.
+    # Tick capture is ~18.5MB/day measured, and Docker leaves dangling layers on
+    # every rebuild. Those are the only two things here that can fill the disk.
     if ! ssh_vm "crontab -l 2>/dev/null | grep -q vm_housekeeping"; then
         ssh_vm "(crontab -l 2>/dev/null; echo '15 4 * * * $REMOTE/scripts/vm_housekeeping.sh >> $REMOTE/logs/cron.log 2>&1') | crontab -" \
             && ok "housekeeping scheduled daily at 04:15 UTC"
@@ -190,17 +231,37 @@ step_7_cron() {
     ssh_vm "crontab -l"
 }
 
-step_8_verify() {
-    bold "STEP 8 — verify"
+step_laptop() {
+    bold "STEP laptop — turn on the candidate push from here"
+    # Opt-in by sentinel rather than an env var, because the LaunchAgent would
+    # otherwise need a plist edit to carry one.
+    if [ -f "$ROOT/.push_to_vm" ]; then
+        ok ".push_to_vm already present"
+    else
+        touch "$ROOT/.push_to_vm" && ok "created .push_to_vm — run_scanner.sh now ships candidates"
+    fi
     echo
-    echo "-- machine type (want $MACHINE) --"
+    echo "  Test it now:"
+    echo "    scripts/push_candidates.sh"
+    echo
+    echo "  Schedule the scanner here if it is not already:"
+    echo "    cp scripts/com.pairtrading.scanner.plist ~/Library/LaunchAgents/"
+    echo "    launchctl bootstrap gui/\$(id -u) ~/Library/LaunchAgents/com.pairtrading.scanner.plist"
+    echo
+    echo "  To stop pushing:  rm .push_to_vm"
+}
+
+step_verify() {
+    bold "STEP verify"
+    echo
+    echo "-- machine type --"
     machine_type
     echo
     echo "-- disk (ticks retain 14d, scan history 90d, logs rotate at 32MB) --"
     ssh_vm "df -h / | tail -1; du -sh $REMOTE/trading_data 2>/dev/null || true"
     echo
-    echo "-- memory under load --"
-    ssh_vm "free -m | head -2; echo; docker stats --no-stream --format 'table {{.Name}}\t{{.MemUsage}}\t{{.CPUPerc}}'"
+    echo "-- memory (monitor measured at 174MB) --"
+    ssh_vm "free -m | head -3; echo; docker stats --no-stream --format 'table {{.Name}}\t{{.MemUsage}}\t{{.CPUPerc}}'"
     echo
     echo "-- heartbeat: want feed=live, blind=[], max_tick_age under a second --"
     ssh_vm "tail -3 $REMOTE/logs/stop_monitor_heartbeat.log 2>/dev/null || echo '  none yet'"
@@ -213,41 +274,67 @@ step_8_verify() {
   scripts/check_vm.sh status       instance, containers, resources
   scripts/check_vm.sh heartbeat    feed state, tick ages, blind positions
   scripts/check_vm.sh logs         the monitor
-  scripts/check_vm.sh scanner      the 30-minute cycles
   scripts/check_vm.sh overshoot    THE number, once stop-outs accumulate
 
   Baseline to beat: median overshoot 1.53x at 30-minute bar close, 0 of 9,704
   inside the level. Rows with blind_gap_seconds > 0 are excluded — those exits
   were not watched.
-
-  Then close the laptop. That was the point.
 TXT
+    if [ "$MODE" = "micro" ]; then
+        cat <<'TXT'
+
+  MICRO mode, so be clear about what is and is not being tested:
+    tested      the stop, 24/7, on every position that is open
+    not tested  entries while the laptop is asleep — none happen then
+    costs       nothing
+
+  Move to full when the monitor has been stable for a week or two and the
+  overshoot number says whether it worked:  scripts/vm_migrate.sh full
+TXT
+    fi
 }
 
 # ---------------------------------------------------------------------------
 
-case "${1:-all}" in
+MODE="micro"
+case "${1:-}" in
   status) step_status; exit 0 ;;
+  micro)  MODE="micro"; shift ;;
+  full)   MODE="full";  shift ;;
 esac
 
 # Written out rather than clever: macOS ships bash 3.2, where an empty array
 # under `set -u` is an unbound-variable error.
-if [ $# -eq 0 ] || [ "${1:-}" = "all" ]; then
-  STEPS="1 2 3 4 5 6 7 8"
+if [ $# -eq 0 ]; then
+  if [ "$MODE" = "full" ]; then
+    STEPS="swap resize retire push dirs build firstscan cron verify"
+  else
+    STEPS="swap retire push dirs build cron laptop verify"
+  fi
 else
   STEPS="$*"
 fi
 
+bold "MODE: $MODE"
+if [ "$MODE" = "micro" ]; then
+  echo "  monitor on the e2-micro (free), scanner stays on this laptop"
+else
+  echo "  both halves on the VM, resized to $MACHINE (~\$25/month)"
+fi
+echo "  steps: $STEPS"
+
 for s in $STEPS; do
   case "$s" in
-    1) step_1_resize ;;
-    2) step_2_retire ;;
-    3) step_3_push ;;
-    4) step_4_dirs ;;
-    5) step_5_build ;;
-    6) step_6_firstscan ;;
-    7) step_7_cron ;;
-    8) step_8_verify ;;
-    *) die "unknown step: $s (use 1-8, or 'status')" ;;
+    swap)      step_swap ;;
+    resize)    step_resize ;;
+    retire)    step_retire ;;
+    push)      step_push ;;
+    dirs)      step_dirs ;;
+    build)     step_build ;;
+    firstscan) step_firstscan ;;
+    cron)      step_cron ;;
+    laptop)    step_laptop ;;
+    verify)    step_verify ;;
+    *) die "unknown step: $s (swap resize retire push dirs build firstscan cron laptop verify, or 'status')" ;;
   esac
 done

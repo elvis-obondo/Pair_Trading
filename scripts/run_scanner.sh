@@ -27,4 +27,8 @@
 #   scripts/run_scanner.sh --no-refresh     # scan without downloading
 set -euo pipefail
 cd "$(dirname "$0")/.."
-exec python3 research/live_scanner.py "$@"
+python3 research/live_scanner.py "$@"
+
+# Split deployment: the monitor runs on the VM and reads candidates from a file.
+# No-ops unless .push_to_vm exists, and never fails the cycle.
+scripts/push_candidates.sh

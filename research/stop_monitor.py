@@ -535,10 +535,10 @@ class StopMonitor:
         if gone:
             log(f"pruned {len(gone)} tick day(s) older than "
                 f"{cfg.RETAIN_TICK_DAYS}d: {', '.join(sorted(gone))}")
-        for path in (cfg.MONITOR_LOG, cfg.HEARTBEAT_PATH):
-            if cfg.rotate_log(path):
-                log(f"rotated {os.path.basename(path)} at "
-                    f"{cfg.LOG_MAX_BYTES // 1024 // 1024}MB")
+        rotated = cfg.rotate_logs_in()
+        if rotated:
+            log(f"rotated at {cfg.LOG_MAX_BYTES // 1024 // 1024}MB: "
+                f"{', '.join(rotated)}")
 
     def heartbeat(self) -> str:
         now = time.time()

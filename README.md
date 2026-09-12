@@ -72,6 +72,43 @@ scripts/check_vm.sh status                # what the cloud VM is doing
 scripts/check_vm.sh overshoot             # the number this is all about
 ```
 
+### Where each half runs
+
+Because the monitor is the sole writer of the book, the scanner can live on a
+different machine — it only produces a file.
+
+**Micro (default, free).** The monitor runs on a 1GB GCP e2-micro; the scanner
+stays on the laptop and ships `scanner_candidates.json` over after each cycle.
+The stop is watched 24/7 whether the laptop is up or not. While the laptop
+sleeps no new candidates arrive, so nothing new *opens* — positions already open
+keep being watched, and the monitor's 60-minute staleness guard handles it with
+no configuration.
+
+**Full.** Both halves on an e2-medium, so entries continue with the laptop
+closed. The scanner needs 531MB peak plus a freqtrade download and does not fit
+on the micro.
+
+```bash
+scripts/vm_migrate.sh          # micro
+scripts/vm_migrate.sh full     # resize and move both halves
+scripts/vm_migrate.sh status   # read-only
+```
+
+Measured 2026-09-12: scanner 531MB peak RSS, monitor 174MB, VM OS+docker 258MB.
+
+### What grows, and what deletes it
+
+| | rate | retention |
+|---|---|---|
+| `monitor_ticks/` | 18.5 MB/day | 14 days → 259 MB |
+| `scan_history/` | ~1-2 MB/day | 90 days |
+| logs | ~1 MB/day | rotate at 32 MB |
+| 30m candle data | 63 MB/year | left alone |
+| Docker layers | GBs per rebuild | `vm_housekeeping.sh`, daily |
+
+The ledger is never pruned. It is the record of what the account did, equity is
+re-summed from it on every start, and it is small.
+
 ## Repository layout
 
 ```
