@@ -10,6 +10,7 @@ import pandas as pd
 
 from universe_panel import (
     load_panel, tradeable_pairs, usable_tickers, price_precision, panel_precisions,
+    drop_forming_bars,
 )
 from rolling_spread import min_bars_required
 
@@ -26,7 +27,12 @@ def check(name, ok, detail=""):
 print("=" * 104)
 print("1. align=False keeps the history; align=True would destroy it")
 print("=" * 104)
-panel = load_panel()
+# drop_forming_bars, not load_panel() raw: the newest bar is only present for
+# whichever instruments have ticked into it since it opened, and leaving it in
+# takes the universe from 22,366 pairs to 2,775. The section at the bottom tests
+# that behaviour directly; every section above it needs a closed panel to assert
+# against at all.
+panel = drop_forming_bars(load_panel())
 check("unaligned panel loaded", len(panel) > 0, f"{panel.shape[0]}x{panel.shape[1]}")
 check("212 tickers", panel.shape[1] == 212, f"{panel.shape[1]}")
 check("spans well over a year", len(panel) > 500 * 48, f"{len(panel)/48:.0f} days")
@@ -94,6 +100,50 @@ check("precision is clamped to a sane range",
       f"{min(p for p,_ in prec.values())}..{max(p for p,_ in prec.values())}")
 check("degenerate price falls back safely", price_precision(0.0) == (8, 1e-8))
 check("NaN price falls back safely", price_precision(float('nan')) == (8, 1e-8))
+
+print()
+print("=" * 104)
+print("5. Forming bars are dropped before the tail is taken")
+print("=" * 104)
+
+# A 30-minute bar stamped 14:00 closes at 14:30. Download at 14:27 and the
+# exchange returns that bar only for instruments that have ticked into it so far
+# -- 75 of 212, measured on 2026-09-12. Two failures at once: the other 137 lose
+# their complete 671-bar tail and drop out (22,366 pairs -> 2,775), and the 75
+# that survive are screened on a close price that is not a close. The first is
+# loud once you look at the pair count; the second is invisible.
+idx = pd.date_range("2026-09-01", periods=40, freq="30min")
+full = pd.DataFrame(np.random.randn(40, 20).cumsum(axis=0), index=idx,
+                    columns=[f"T{i}" for i in range(20)])
+partial = full.copy()
+partial.iloc[-1, 5:] = np.nan          # only 5 of 20 ticked into the last bar
+
+trimmed = drop_forming_bars(partial)
+check("the forming bar is dropped", len(trimmed) == 39, f"{len(trimmed)} rows")
+check("the last kept bar is the closed one", trimmed.index[-1] == idx[-2],
+      str(trimmed.index[-1])[-8:])
+check("every ticker is restored", trimmed.iloc[-1].notna().all(), "20/20")
+check("a fully populated panel is untouched", len(drop_forming_bars(full)) == 40,
+      f"{len(drop_forming_bars(full))} rows")
+
+two = partial.copy()
+two.iloc[-2, 5:] = np.nan
+check("two consecutive partial bars both go", len(drop_forming_bars(two)) == 38,
+      f"{len(drop_forming_bars(two))} rows")
+
+# A delisting removes a column outright rather than punching a hole in one bar,
+# so coverage compared against recent neighbours must not read it as partial.
+delisted = full.copy()
+delisted.iloc[:, 19] = np.nan
+check("a delisted instrument does not trigger trimming",
+      len(drop_forming_bars(delisted)) == 40, f"{len(drop_forming_bars(delisted))} rows")
+check("a one-row panel is returned as-is",
+      len(drop_forming_bars(full.iloc[:1])) == 1, "1 row")
+
+# The live panel, which is what actually broke.
+check("the live panel yields the full universe once trimmed",
+      len(tradeable_pairs(usable_tickers(panel.tail(min_bars_required(0.5))))) == 22366,
+      f"{len(tradeable_pairs(usable_tickers(panel.tail(min_bars_required(0.5))))):,} pairs")
 
 print()
 print("=" * 104)

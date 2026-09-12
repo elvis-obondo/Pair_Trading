@@ -53,6 +53,45 @@ def load_panel(tail_bars: int | None = None, force: bool = False) -> pd.DataFram
     return _PANEL if tail_bars is None else _PANEL.tail(tail_bars)
 
 
+def drop_forming_bars(panel: pd.DataFrame, lookback: int = 20,
+                      min_coverage: float = 0.95) -> pd.DataFrame:
+    """Drop trailing bars that have not closed yet.
+
+    THIS IS NOT COSMETIC. A 30-minute bar stamped 14:00 closes at 14:30. Download
+    at 14:27 and the exchange returns that bar for whichever instruments have
+    ticked into it so far -- 75 of 212, measured -- and omits it for the rest.
+    Two things then go wrong at once:
+
+      1. `usable_tickers` requires a complete 671-bar tail, so the 137 tickers
+         without the partial bar are dropped. The universe fell from 22,366
+         pairs to 2,775 that way, silently, and the scan still reported success.
+      2. Worse, the 75 that survived were screened on a CLOSE PRICE THAT IS NOT
+         THE CLOSE. Every rolling statistic and every z-score for those pairs was
+         computed off a few minutes of a half-hour bar.
+
+    The first symptom is loud once you look at the pair count. The second is not
+    visible at all.
+
+    A row counts as closed when its coverage is within min_coverage of the recent
+    norm. Comparing against neighbours rather than against the column count is
+    deliberate: instruments legitimately come and go from the universe, and a
+    fixed threshold would start trimming real bars the moment one delisted.
+    """
+    if len(panel) < 2:
+        return panel
+    counts = panel.notna().sum(axis=1)
+    window = counts.iloc[-(lookback + 1):-1]
+    if not len(window):
+        return panel
+    norm = float(window.max())
+    if norm <= 0:
+        return panel
+    keep = len(panel)
+    while keep > 1 and counts.iloc[keep - 1] < min_coverage * norm:
+        keep -= 1
+    return panel.iloc[:keep]
+
+
 def refresh() -> pd.DataFrame:
     """Drop the cache and reload. Call after a data download, not per scan."""
     return load_panel(force=True)

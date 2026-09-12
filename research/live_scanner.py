@@ -44,7 +44,8 @@ import numpy as np
 import pandas as pd
 
 import book_state as cfg
-from universe_panel import load_panel, usable_tickers, tradeable_pairs
+from universe_panel import (load_panel, usable_tickers, tradeable_pairs,
+                            drop_forming_bars)
 from rolling_spread import min_bars_required
 from scanner import scan, scan_summary
 
@@ -208,7 +209,12 @@ def cycle(refresh: bool = True, dry_run: bool = False) -> pd.DataFrame:
         refresh_data()
 
     need = min_bars_required(cfg.BAR_HOURS)
-    panel = load_panel(force=refresh).tail(need)
+    # Trim the still-forming bar BEFORE taking the tail. The newest bar is only
+    # present for whichever instruments have ticked into it since it opened, and
+    # using it both guts the universe and screens the survivors on a price that
+    # is not a close. See universe_panel.drop_forming_bars.
+    full = drop_forming_bars(load_panel(force=refresh))
+    panel = full.tail(need)
     bar_time = panel.index[-1]
     age_min = (pd.Timestamp.utcnow().tz_localize(None) - bar_time).total_seconds() / 60
     log(f"panel {panel.shape[0]}x{panel.shape[1]} | last bar {bar_time} "
