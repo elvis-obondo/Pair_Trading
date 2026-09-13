@@ -49,7 +49,9 @@ if [ "$MODE" = "all" ] || [ "$MODE" = "--deploy" ]; then
     bold "Deploy to $INSTANCE"
     # Source that lives outside the image: the compose file and the host scripts.
     gcloud compute scp docker-compose.trading.yml "$INSTANCE:$REMOTE/" $G --quiet
-    tar -czf - scripts | gcloud compute ssh "$INSTANCE" $G \
+    # COPYFILE_DISABLE: macOS tars an xattr per file, and GNU tar on the VM
+    # prints a warning for each one -- 18 lines of noise per deploy.
+    COPYFILE_DISABLE=1 tar -czf - scripts | gcloud compute ssh "$INSTANCE" $G \
         --command="tar -C $REMOTE -xzf - && chmod +x $REMOTE/scripts/*.sh"
 
     # Idempotent, and cheap. Without it the pull fails with a bare 401 that
