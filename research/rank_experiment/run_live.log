@@ -84,3 +84,45 @@ PER-TRADE RESULTS  (the compounded multiple is deliberately not quoted)
 
 ################ ARM: both | 180d | 1.04x | LIVE CONFIG ################
 08:10:37Z
+[INFO] 171 tickers, 14,535 pairs
+[INFO] 8,640 bars to evaluate (2025-12-15 00:30:00 -> 2026-06-13 00:00:00), stride 1
+[INFO] entry 3.0 sigma | tp 1.0 | stop 0.5 | hold 72.0h | 10 slots | 5% margin at 20x | rank by both
+
+[INFO] screening the whole window, once per pair...
+[INFO] 2,617,660 candidate rows across 8,639 bars in 30s
+
+[INFO] adverse exits booked at 1.04x the stop distance, not at the bar-close spread.
+[INFO] that is the MEASURED live figure (tick-watched monitor, median 1.042x).
+
+[INFO] opened 2584, closed 2574, still open 10 in 243s
+
+====================================================================================================
+PER-TRADE RESULTS  (the compounded multiple is deliberately not quoted)
+====================================================================================================
+  trades closed        : 2574
+  mean net_pct         : +0.5084%  (median -1.1174%)
+  mean R               : +0.3680   (median -1.1085)
+  win rate             : 20.3%
+  mean hours held      : 16.7  (max 72.0)
+
+  by exit reason:
+    adverse_move    2036 ( 79.1%)  mean R -1.135  mean hrs    8.4
+    take_profit      285 ( 11.1%)  mean R +8.237  mean hrs   26.7
+    time_stop        253 (  9.8%)  mean R +3.600  mean hrs   72.0
+
+  ranked (had a theta) :    10  mean R +0.3749
+  unranked (no theta)  :  2564  mean R +0.3680
+
+  invariants:
+    max concurrent open  : 10 (cap 10)
+    duplicate pair open  : none
+    all |z| >= entry     : True
+    all holds <= cap     : True
+
+  most-traded tickers  : MEME(57), SNX(54), ZK(54), S(51), DASH(51)
+
+[INFO] ledger written to research/rank_experiment/live_both.csv
+====================================================================================================
+
+ALL DONE
+08:15:15Z

@@ -1,5 +1,5 @@
 {
- "as_of": "2026-09-13T08:13:49+00:00",
+ "as_of": "2026-09-13T08:55:34+00:00",
  "equity": 300.0,
  "used_margin": 15.0,
  "available_margin": 285.0,
@@ -17,12 +17,12 @@
    "ticker_b": "BBB",
    "side": "short spread",
    "opened_at": "2026-09-01T00:00:00",
-   "hours_held": 296.23054437361105,
+   "hours_held": 296.92612291722224,
    "beta": 1.0,
    "r2": null,
    "z_at_entry": 3.5,
    "entry_spread": 0.07,
-   "stop_level": 0.08,
+   "stop_level": 0.09000000000000001,
    "take_profit_level": 0.0,
    "gross_notional": 300.0,
    "margin": 15.0,
@@ -31,13 +31,13 @@
    "net_exposure": 0.0,
    "net_exposure_frac": 0.0,
    "blind": false,
-   "tick_age_s": 0.0002219676971435547,
+   "tick_age_s": 0.00019598007202148438,
    "spread": 0.07000000000000028,
    "z_now": 3.500000000000014,
    "unrealized_pnl": -0.29790000000004163,
    "unrealized_pct": -0.09930000000002775,
-   "unrealized_r": -0.09930000000002775,
-   "progress_to_stop": 2.7755575615628914e-14
+   "unrealized_r": -0.04965000000001388,
+   "progress_to_stop": 1.3877787807814457e-14
   }
  ]
 }

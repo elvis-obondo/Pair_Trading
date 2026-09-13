@@ -67,7 +67,33 @@ LEVERAGE = 20.0
 MAX_SLOTS = 10
 MIN_DEVIATION_SIGMA = 3.0
 TAKE_PROFIT_PCT = 1.0
-STOP_SIGMA = 0.5
+# Widened from 0.5 on 2026-09-13, LIVE EXPERIMENT.
+#
+# THE HYPOTHESIS. The backtest checks its stop at 30-minute bar closes, so a
+# position that pokes past the level intrabar and recovers before the close is
+# never stopped there -- it survives and can go on to take profit. The live
+# monitor sees that poke in ~100ms and kills it. If that is what is happening,
+# some of the backtest's 20% take-profit rate is intrabar stop-outs in disguise,
+# and the live book converts them to losses.
+#
+# Supporting evidence: the backtest's FIRST closed trade of 4,438 was a take
+# profit at 2.5h, with six more inside 21 hours. The first live book went 19 for
+# 19 on stops over 5.5 hours -- about 1% likely if the true stop rate is 76%.
+# Backtest median stop hold is 2.0h with a 0.5h floor it cannot go under; the
+# live book's was 0.27h, mostly inside a single bar.
+#
+# WHAT THIS IS NOT. research/ swept stop width 0.5 -> 2.5 sigma already and found
+# mean R moving -0.201 -> -0.024, converging on zero without crossing it. That
+# sweep ran at BAR CLOSE, where intrabar pokes are invisible by construction, so
+# it could not test this. Widening the stop under tick-speed checking is a
+# different experiment.
+#
+# READ THE RESULTS CAREFULLY. R is normalised by stop distance, so at 1.0 sigma
+# one R is TWICE the dollars it was. A -1R stop now costs about -$6 on a $300
+# book rather than -$3. And MEASURED_STOP_OVERSHOOT = 1.04 was measured against
+# a 0.5 sigma distance; the same absolute overshoot is half the ratio here, so
+# that constant needs re-deriving before it is quoted again.
+STOP_SIGMA = 1.0
 MAX_HOLD_HOURS = 72.0
 BAR_HOURS = 0.5
 # No limit on how many open positions may share a leg -- the settled spec, and
