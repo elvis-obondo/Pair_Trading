@@ -262,6 +262,13 @@ def load_portfolio(equity: float = ACCOUNT_EQUITY):
     # monitor on the VM the first time it started with no trades.
     try:
         if os.path.getsize(LEDGER_PATH) > 0:
+            # Self-heal a ledger written under an older LEDGER_COLUMNS before
+            # trying to parse it. Without this, adding a column makes every
+            # restart crash-loop on a ParserError and the book cannot be loaded
+            # at all -- see migrate_ledger_schema. A residual parse error is
+            # deliberately NOT swallowed: crash-looping loudly beats resuming
+            # with equity silently reset to ACCOUNT_EQUITY.
+            migrate_ledger_schema()
             d = pd.read_csv(LEDGER_PATH)
             realized = 0.0
             if "event" in d.columns and "realized_pnl_net" in d.columns:
@@ -326,4 +333,57 @@ def append_ledger(rows: list) -> None:
         need_header = os.path.getsize(LEDGER_PATH) == 0
     except OSError:
         need_header = True
+
+    # The header on disk was written once, by the first append this file ever
+    # saw. Reindexing every row onto the CURRENT LEDGER_COLUMNS keeps opens and
+    # closes aligned with each other -- but says nothing about whether they are
+    # aligned with that header. Add a column to LEDGER_COLUMNS and every
+    # subsequent row is silently wider than the header above it, which is not a
+    # warning, it is a file pandas refuses to parse at all:
+    #
+    #     ParserError: Expected 36 fields in line 26, saw 39
+    #
+    # and the monitor crash-loops on its next restart, unable to load the book.
+    # That happened live on 2026-09-13 when r2_at_entry, net_exposure and
+    # net_exposure_frac were added. Migrate instead: widen the existing rows to
+    # the current schema and rewrite the file once.
+    if not need_header:
+        migrate_ledger_schema()
+
     d.to_csv(LEDGER_PATH, mode="a", header=need_header, index=False)
+
+
+def migrate_ledger_schema() -> bool:
+    """Rewrite the ledger onto the current LEDGER_COLUMNS if it is behind.
+
+    Returns True if it rewrote. Cheap: reads the header line only unless a
+    migration is actually needed, so the common path costs one small read.
+
+    Columns present on disk but gone from LEDGER_COLUMNS are KEPT, appended
+    after the known ones. A ledger is the record of what the account did, and
+    dropping a column because the code moved on destroys history that cannot be
+    recovered.
+    """
+    import csv
+
+    try:
+        with open(LEDGER_PATH, newline="") as fh:
+            header = next(csv.reader(fh), None)
+    except (OSError, StopIteration):
+        return False
+    if header is None or header == LEDGER_COLUMNS:
+        return False
+
+    target = LEDGER_COLUMNS + [c for c in header if c not in LEDGER_COLUMNS]
+    if header == target:
+        return False
+
+    with open(LEDGER_PATH, newline="") as fh:
+        d = pd.read_csv(fh, names=header, skiprows=1, dtype=str,
+                        keep_default_na=False)
+    # Written to a temp file and moved into place: a kill partway through a
+    # rewrite of the account's only ledger must not leave a truncated one.
+    tmp = LEDGER_PATH + ".migrating"
+    d.reindex(columns=target).to_csv(tmp, index=False)
+    os.replace(tmp, LEDGER_PATH)
+    return True

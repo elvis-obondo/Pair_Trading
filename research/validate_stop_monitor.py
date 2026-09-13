@@ -483,6 +483,67 @@ check("writing the snapshot does not touch ledger or state", before == after, "u
 check("snapshot file is valid json", isinstance(
     json.load(open(cfg.POSITIONS_PATH)), dict), "ok")
 
+# --------------------------------------------------------------------------
+print()
+print("=" * 118)
+print("15. Adding a ledger column must not corrupt the existing file")
+print("=" * 118)
+# What happened live on 2026-09-13: three columns were added to LEDGER_COLUMNS,
+# append_ledger kept appending under the header written before that, and the
+# ledger became rows of 39 fields under a 36-field header. pandas refuses to
+# parse it -- "Expected 36 fields in line 26, saw 39" -- so the monitor
+# crash-looped on restart and could not load the book at all.
+import csv as _csv2
+
+real_cols = cfg.LEDGER_COLUMNS
+try:
+    # A ledger written under an older, narrower schema.
+    old_cols = [c for c in real_cols if c not in
+                ("r2_at_entry", "net_exposure", "net_exposure_frac")]
+    with open(cfg.LEDGER_PATH, "w", newline="") as fh:
+        w = _csv2.DictWriter(fh, fieldnames=old_cols)
+        w.writeheader()
+        w.writerow({"event": "close", "trade_num": 1, "realized_pnl_net": -5.0})
+        w.writerow({"event": "close", "trade_num": 2, "realized_pnl_net": -3.0})
+
+    # Now append under the CURRENT, wider schema.
+    cfg.append_ledger([{"event": "close", "trade_num": 3,
+                        "realized_pnl_net": -2.0, "net_exposure": -120.0}])
+
+    d = pd.read_csv(cfg.LEDGER_PATH)          # this is what used to raise
+    check("a widened ledger still parses", len(d) == 3, f"{len(d)} rows")
+    check("  ... header matches LEDGER_COLUMNS",
+          list(d.columns) == real_cols, f"{len(d.columns)} cols")
+    check("  ... pre-migration rows are preserved",
+          abs(d.realized_pnl_net.sum() + 10.0) < 1e-9, f"{d.realized_pnl_net.sum():.1f}")
+    check("  ... and the new column is populated on the new row",
+          abs(d[d.trade_num == 3].net_exposure.iloc[0] + 120.0) < 1e-9, "-120")
+    check("  ... old rows get the new column as NaN",
+          pd.isna(d[d.trade_num == 1].net_exposure.iloc[0]), "NaN")
+    check("equity still re-sums correctly after a migration",
+          abs(cfg.load_portfolio(equity=300.0).equity - 290.0) < 1e-9, "290.00")
+
+    # A column that LEFT the schema must not be deleted -- it is history.
+    with open(cfg.LEDGER_PATH, "w", newline="") as fh:
+        w = _csv2.DictWriter(fh, fieldnames=real_cols + ["retired_field"])
+        w.writeheader()
+        w.writerow({"event": "close", "trade_num": 9, "realized_pnl_net": -1.0,
+                    "retired_field": "keepme"})
+    cfg.append_ledger([{"event": "close", "trade_num": 10, "realized_pnl_net": -1.0}])
+    d = pd.read_csv(cfg.LEDGER_PATH)
+    check("a column dropped from the schema is KEPT, not destroyed",
+          "retired_field" in d.columns and
+          d[d.trade_num == 9].retired_field.iloc[0] == "keepme", "kept")
+
+    # Idempotent: a ledger already on the current schema is left alone.
+    before = open(cfg.LEDGER_PATH).read()
+    cfg.migrate_ledger_schema()
+    check("migrating an up-to-date ledger changes nothing",
+          open(cfg.LEDGER_PATH).read() == before, "unchanged")
+finally:
+    if os.path.exists(cfg.LEDGER_PATH):
+        os.remove(cfg.LEDGER_PATH)
+
 import shutil
 shutil.rmtree(TMP, ignore_errors=True)
 
