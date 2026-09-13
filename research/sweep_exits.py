@@ -5,10 +5,18 @@ WHY R IS NOT THE METRIC HERE
 R is P&L divided by the stop distance, and the stop distance is one of the things
 being swept. Double the stop and every R in the book halves, with no change to a
 single dollar earned. So R cannot compare settings of different width -- it is
-measuring them in different units. This ranks on net_pct (the spread move, net of
-costs, as a percent of notional), which is the same quantity at every width, and
-reports R alongside only at a fixed 0.5-sigma reference so the numbers stay
-readable next to the existing results.
+measuring them in different units. This ranks on ret_gross -- realised dollars
+over the gross notional at risk -- which is the same quantity at every width and
+at every account size, and reports R alongside only at a fixed 0.5-sigma
+reference so the numbers stay readable next to the existing results.
+
+A SECOND REASON NOT TO RANK ON net_pct. Position.pnl charges
+ROUND_TRIP_COST_FRAC against the spread move, which scales with leg A's
+notional, while the constant is defined as a fraction of GROSS notional --
+about twice as large. Measured on this ledger it charges 0.0993% where 0.1852%
+was paid, so net_pct and every R built on it flatter each trade by roughly 0.09%
+of notional. net_pct is still reported, unchanged, because every settled number
+in this project uses it and they have to remain comparable.
 
 THE THREE KNOBS, AND WHY GRACE IS NOT A DEBOUNCE
 
@@ -118,14 +126,29 @@ def score(spreads, meta, stop_sigma, debounce, grace, horizon):
             p, ent[i], mu[i], dr[i], stop_sigma * sg[i], debounce, grace, horizon)
 
     move = dr * (ex_s - ent)
+    leg_a = meta.leg_a_notional.to_numpy(float)
+    gross = meta.gross_notional.to_numpy(float)
+    dollars = move * leg_a - ROUND_TRIP_COST_FRAC * gross
+
+    # TWO RETURN MEASURES, because the project's own two disagree.
+    #
+    # net_pct is Position.pnl's definition, reproduced exactly so these numbers
+    # sit beside every existing result. It charges ROUND_TRIP_COST_FRAC against
+    # the MOVE, which scales with leg A's notional -- but the constant is defined
+    # as a fraction of GROSS notional, roughly twice as large. Measured on this
+    # ledger: it charges 0.0993% where 0.1852% was actually paid. So net_pct, and
+    # every R derived from it, flatters each trade by about 0.09% of notional.
+    #
+    # ret_gross is the honest one: realised dollars over the gross notional at
+    # risk. Size independent, so it compares trades opened at $300 and $5,000,
+    # and it charges the cost that was actually paid. Rank on this.
     net_pct = (move - ROUND_TRIP_COST_FRAC) * 100.0
-    dollars = move * meta.leg_a_notional.to_numpy(float) - \
-        ROUND_TRIP_COST_FRAC * meta.gross_notional.to_numpy(float)
+    ret_gross = dollars / gross * 100.0
     return pd.DataFrame({
         "trade_num": meta.trade_num.to_numpy(),
         "exit_min": ex_t, "exit_spread": ex_s,
         "reason": [REASON[c] for c in ex_r],
-        "net_pct": net_pct, "dollars": dollars,
+        "ret_gross": ret_gross, "net_pct": net_pct, "dollars": dollars,
         # R at a FIXED 0.5-sigma reference, so it is comparable across widths.
         "r_ref": net_pct / (100.0 * sg * 0.5),
         "truncated": ln < horizon + 1,
@@ -152,7 +175,7 @@ def main() -> None:
         tp = (t.reason == "take_profit").mean()
         rows.append({
             "stop": sw, "debounce": db, "grace": gr,
-            "net_pct": t.net_pct.mean(), "dollars": t.dollars.mean(),
+            "ret_gross": t.ret_gross.mean(), "net_pct": t.net_pct.mean(),
             "r_ref": t.r_ref.mean(), "tp_rate": tp,
             "stop_rate": (t.reason == "adverse_move").mean(),
             "open_at_end": (t.reason == "open_at_end").mean(),
@@ -162,10 +185,11 @@ def main() -> None:
         if k % 40 == 0:
             print(f"  {k}/{len(STOP_WIDTHS)*len(DEBOUNCES)*len(GRACES)}")
 
-    res = pd.DataFrame(rows).sort_values("net_pct", ascending=False)
+    res = pd.DataFrame(rows).sort_values("ret_gross", ascending=False)
     print()
     print("=" * 110)
-    print(f"TOP {a.top} BY MEAN net_pct  (width-independent; R shown at a fixed 0.5-sigma reference)")
+    print(f"TOP {a.top} BY MEAN ret_gross — realised dollars over gross notional, the honest measure.")
+    print("net_pct is Position.pnl's definition, kept for comparability; it undercharges cost ~2x.")
     print("=" * 110)
     print(res.head(a.top).to_string(index=False, float_format=lambda v: f"{v:.4f}"))
     print()

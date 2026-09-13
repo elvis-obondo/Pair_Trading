@@ -113,6 +113,11 @@ def load_panel(tickers=None, start=None, end=None,
     if not cols:
         raise SystemExit(f"no {timeframe} rows in {start} .. {end}")
     panel = pd.DataFrame(cols).sort_index()
+    # Force nanosecond resolution. The feathers carry datetime64[ms] and the 30m
+    # panel is datetime64[ns]; pandas 2.x refuses to compare a ms-unit index
+    # against an ns Timestamp, so the intrabar window slice raises rather than
+    # silently doing the wrong thing. Normalise here, once.
+    panel.index = pd.DatetimeIndex(panel.index).as_unit("ns")
     panel.index.name = "date"
     return panel
 

@@ -70,6 +70,9 @@ class Position:
         self.opened_at = opened_at
         # Short the spread when it sits above its mean, long it when below.
         self.direction = -1.0 if signal["entry_spread"] > signal["mu_at_entry"] else 1.0
+        # When the stop was FIRST seen breached, or None if it is not currently
+        # breached. Only read when the book runs a debounce; see evaluate_exits.
+        self.breach_since = None
 
     @property
     def margin(self) -> float:
@@ -148,7 +151,9 @@ class Portfolio:
                  stop_sigma: float = 0.5, max_hold_hours: float = 72.0,
                  max_per_ticker: int | None = None,
                  stop_fill_overshoot: float | None = None,
-                 max_notional: float | None = None):
+                 max_notional: float | None = None,
+                 debounce_minutes: float = 0.0,
+                 grace_minutes: float = 0.0):
         self.starting_equity = float(equity)
         self.equity = float(equity)
         self.max_slots = max_slots
@@ -176,6 +181,31 @@ class Portfolio:
         # always be None: the monitor books real fills and an assumed one here
         # would silently invent P&L. Backtests pass a measured multiple.
         self.stop_fill_overshoot = stop_fill_overshoot
+        # TWO WAYS TO GIVE A TRADE ROOM, and they are not the same thing.
+        #
+        # debounce_minutes -- a breach must STILL hold this many minutes later
+        # before it fires; the clock resets the moment the spread comes back
+        # inside. Loosens the stop for the whole life of the position.
+        #
+        # grace_minutes -- the stop cannot fire at all this soon after ENTRY.
+        # Loosens it only where the damage is, and leaves it at full strength
+        # afterwards.
+        #
+        # Measured over 1,041 trades at 1-minute resolution: grace is the lever
+        # and debounce is nearly irrelevant. Grace 0 -> 30 takes the book from
+        # -0.108% to +0.110% per trade at every stop width, with no debounce at
+        # all; adding debounce on top of grace changes little and hurts past 20
+        # minutes. The mechanism is small -- 43 of 1,041 outcomes change, 42 of
+        # them from adverse_move to take_profit -- and the payoff asymmetry
+        # (a stop costs -2.5R, a take-profit pays +7.9R) does the rest.
+        #
+        # Grace 30 is also what the 30-minute bar-close backtest did by
+        # accident: it cannot look inside a bar, so its minimum hold is exactly
+        # 30 minutes. Tick-watching deleted that, and nothing replaced it.
+        #
+        # Neither knob touches take profit or the time stop.
+        self.debounce_minutes = float(debounce_minutes)
+        self.grace_minutes = float(grace_minutes)
         self.max_notional = max_notional
         self.open_positions: list[Position] = []
         self.closed: list[dict] = []
@@ -226,8 +256,33 @@ class Portfolio:
                 stop_sigma=self.stop_sigma, max_hold_hours=self.max_hold_hours,
             )
             if ex is None:
+                # Back inside every level: the breach, if any, did not persist.
+                pos.breach_since = None
                 still_open.append(pos)
                 continue
+            if ex["exit_reason"] == "adverse_move" and (
+                    self.grace_minutes > 0 or self.debounce_minutes > 0):
+                if hours * 60.0 < self.grace_minutes:
+                    # Inside the grace window the stop does not exist, so there
+                    # is no breach to start a debounce clock on either.
+                    pos.breach_since = None
+                    still_open.append(pos)
+                    continue
+                if self.debounce_minutes > 0:
+                    if pos.breach_since is None:
+                        pos.breach_since = now
+                    waited = (now - pos.breach_since).total_seconds() / 60.0
+                    if waited < self.debounce_minutes:
+                        still_open.append(pos)
+                        continue
+                # Book the spread that is ACTUALLY there. A modelled overshoot
+                # off the stop level would be fiction: the whole point of
+                # waiting is that the price moved while we waited.
+                closed.append(self._close(pos, ex, now, hours, float("nan")))
+                continue
+            # take_profit and time_stop are never graced or debounced: a
+            # reversion to mu is the outcome the trade exists for.
+            pos.breach_since = None
             overshoot = float("nan")
             if (self.stop_fill_overshoot is not None
                     and ex["exit_reason"] == "adverse_move"):

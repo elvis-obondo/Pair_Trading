@@ -61,7 +61,8 @@ def run(days=30, stride=1, bar_hours=0.5, equity=300.0, slots=10, end_date=None,
         min_deviation_sigma=3.0, take_profit_pct=1.0, stop_sigma=0.5,
         max_hold_hours=72.0, capital_frac=0.05, leverage=20.0,
         max_per_ticker=None, stop_fill_overshoot=None, max_notional=None,
-        rank_by="theta", exit_check_minutes=None, out_path=OUT):
+        rank_by="theta", exit_check_minutes=None, debounce_minutes=0.0,
+        grace_minutes=0.0, out_path=OUT):
     need = min_bars_required(bar_hours)
     bars_per_day = int(round(24 / bar_hours))
 
@@ -82,6 +83,16 @@ def run(days=30, stride=1, bar_hours=0.5, equity=300.0, slots=10, end_date=None,
         raise SystemExit(f"need > {need} bars of history, have {len(panel)}")
 
     tickers = usable_tickers(panel, bar_hours)
+    # A SINGLE partial trailing bar guts the universe. usable_tickers demands a
+    # complete history, so every ticker that has not yet printed the forming bar
+    # is dropped -- measured once at 17 tickers out of 212, with the run carrying
+    # on and reporting numbers as though nothing were wrong.
+    if len(tickers) < 0.5 * panel.shape[1]:
+        raise SystemExit(
+            f"[FAIL] only {len(tickers)} of {panel.shape[1]} tickers have a complete "
+            f"history here. The last bar ({panel.index[-1]}) is missing "
+            f"{panel.tail(1).isna().sum(axis=1).iloc[0]} tickers — it is probably still "
+            f"forming. Re-run with --end-date '{panel.index[-2]}'")
     pairs = tradeable_pairs(tickers)
     eval_idx = list(range(need, len(panel), stride))
     print(f"[INFO] {len(tickers)} tickers, {len(pairs):,} pairs")
@@ -114,6 +125,11 @@ def run(days=30, stride=1, bar_hours=0.5, equity=300.0, slots=10, end_date=None,
         print(f"[INFO] loading {exit_check_minutes}m prices for intrabar exit checks...")
         fine = intrabar.load_panel(tickers, start=panel.index[need], end=panel.index[-1],
                                    timeframe=f"{exit_check_minutes}m")
+        # The 30m panel is tz-naive UTC; intrabar returns tz-aware UTC. Both are
+        # UTC — only the label differs — so reconcile once, here, at the boundary.
+        if panel.index.tz is None and fine.index.tz is not None:
+            fine.index = fine.index.tz_convert("UTC").tz_localize(None)
+        fine.index = fine.index.as_unit(panel.index.unit)
         missing = [t for t in tickers if t not in fine.columns]
         if missing:
             # Silently checking only SOME positions intrabar would make the
@@ -136,7 +152,8 @@ def run(days=30, stride=1, bar_hours=0.5, equity=300.0, slots=10, end_date=None,
     pf = Portfolio(equity=equity, max_slots=slots, capital_frac=capital_frac,
                    leverage=leverage, stop_sigma=stop_sigma,
                    max_hold_hours=max_hold_hours, max_per_ticker=max_per_ticker,
-                   stop_fill_overshoot=stop_fill_overshoot, max_notional=max_notional)
+                   stop_fill_overshoot=stop_fill_overshoot, max_notional=max_notional,
+                   debounce_minutes=debounce_minutes, grace_minutes=grace_minutes)
     if stop_fill_overshoot is not None:
         print(f"[INFO] adverse exits booked at {stop_fill_overshoot:.2f}x the stop "
               f"distance, not at the bar-close spread.")
@@ -296,6 +313,10 @@ if __name__ == "__main__":
     ap.add_argument("--max-notional", type=float, default=cfg.MAX_NOTIONAL,
                     help="hard dollar ceiling on gross notional per position; "
                          f"defaults to the live setting ({cfg.MAX_NOTIONAL:,.0f})")
+    ap.add_argument("--grace-minutes", type=float, default=0.0,
+                    help="the stop cannot fire this soon after ENTRY (the lever)")
+    ap.add_argument("--debounce-minutes", type=float, default=0.0,
+                    help="a breach must STILL hold this many minutes later to fire")
     ap.add_argument("--exit-check-minutes", type=int, default=None,
                     help="how often to check the stop and take-profit, in "
                          "minutes. Default is the bar length (30), which checks "
@@ -316,4 +337,5 @@ if __name__ == "__main__":
         stop_fill_overshoot=_overshoot(a.stop_fill_overshoot),
         max_notional=a.max_notional,
         rank_by=a.rank_by, exit_check_minutes=a.exit_check_minutes,
+        debounce_minutes=a.debounce_minutes, grace_minutes=a.grace_minutes,
         out_path=a.out)
