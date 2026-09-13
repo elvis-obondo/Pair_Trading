@@ -33,6 +33,7 @@ cfg.LOG_DIR          = os.path.join(TMP, "logs")
 cfg.STATE_PATH       = os.path.join(TMP, "scanner_state.json")
 cfg.LEDGER_PATH      = os.path.join(TMP, "scanner_trades.csv")
 cfg.EQUITY_PATH      = os.path.join(TMP, "equity_curve.csv")
+cfg.CONSUMED_PATH    = os.path.join(TMP, "candidates_consumed")
 cfg.CANDIDATES_PATH  = os.path.join(TMP, "scanner_candidates.json")
 cfg.SCAN_HISTORY_DIR = os.path.join(TMP, "scan_history")
 cfg.TICKS_DIR        = os.path.join(TMP, "monitor_ticks")
@@ -599,6 +600,55 @@ after = (os.path.getmtime(cfg.LEDGER_PATH) if os.path.exists(cfg.LEDGER_PATH) el
          os.path.getmtime(cfg.STATE_PATH) if os.path.exists(cfg.STATE_PATH) else 0)
 check("recording equity does not touch ledger or state", before == after, "untouched")
 os.remove(cfg.EQUITY_PATH)
+
+# --------------------------------------------------------------------------
+print()
+print("=" * 118)
+print("17. A restart must not re-open from a candidates file already consumed")
+print("=" * 118)
+# The bug: _candidates_mtime lived in memory, so every restart saw the existing
+# file as new and opened from it within seconds. On 2026-09-13 eleven deploys
+# produced eleven unasked-for entry bursts, including API3/XLM re-entered four
+# seconds after a restart and four minutes after it had stopped out. It lost.
+if os.path.exists(cfg.CONSUMED_PATH):
+    os.remove(cfg.CONSUMED_PATH)
+
+check("nothing consumed yet reads as 0.0", cfg.candidates_consumed_mtime() == 0.0,
+      cfg.candidates_consumed_mtime())
+
+cfg.mark_candidates_consumed(1789_000_000.5)
+check("the marker round-trips exactly",
+      cfg.candidates_consumed_mtime() == 1789_000_000.5, cfg.candidates_consumed_mtime())
+
+# The gate itself: same file -> skip, newer file -> act.
+seen = cfg.candidates_consumed_mtime()
+check("an unchanged file is skipped", not (1789_000_000.5 > seen), "skipped")
+check("a newer file is acted on", 1789_000_060.0 > seen, "opens")
+
+# Survives a "restart": nothing in memory, re-read from disk.
+import importlib
+mtime_before = cfg.candidates_consumed_mtime()
+importlib.reload(cfg)
+cfg.STATE_PATH = os.path.join(TMP, "scanner_state.json")
+cfg.LEDGER_PATH = os.path.join(TMP, "scanner_trades.csv")
+cfg.EQUITY_PATH = os.path.join(TMP, "equity_curve.csv")
+cfg.CONSUMED_PATH = os.path.join(TMP, "candidates_consumed")
+check("the marker survives a process restart",
+      cfg.candidates_consumed_mtime() == mtime_before, cfg.candidates_consumed_mtime())
+
+# Atomic: a kill mid-write must not leave a truncated marker.
+cfg.mark_candidates_consumed(1789_000_999.25)
+check("no .tmp left behind", not os.path.exists(cfg.CONSUMED_PATH + ".tmp"), "clean")
+check("and the new value is readable",
+      cfg.candidates_consumed_mtime() == 1789_000_999.25, cfg.candidates_consumed_mtime())
+
+# A corrupt or empty marker fails SAFE -- 0.0 means "open on the next file",
+# which is the pre-existing behaviour, not a crash.
+with open(cfg.CONSUMED_PATH, "w") as fh:
+    fh.write("not a number\n")
+check("a corrupt marker reads as 0.0 rather than raising",
+      cfg.candidates_consumed_mtime() == 0.0, "safe")
+os.remove(cfg.CONSUMED_PATH)
 
 import shutil
 shutil.rmtree(TMP, ignore_errors=True)

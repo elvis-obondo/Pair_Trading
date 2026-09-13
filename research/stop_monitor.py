@@ -830,9 +830,12 @@ async def timer_loop(mon: StopMonitor, stop_event: asyncio.Event) -> None:
                 mtime = os.path.getmtime(cfg.CANDIDATES_PATH)
             except OSError:
                 continue
-            if mtime <= getattr(mon, "_candidates_mtime", 0.0):
+            # Persisted, not in-memory: a restart must not re-consume a file
+            # the monitor has already opened from. See
+            # book_state.mark_candidates_consumed.
+            if mtime <= cfg.candidates_consumed_mtime():
                 continue
-            mon._candidates_mtime = mtime
+            cfg.mark_candidates_consumed(mtime)
             cands = mon.load_candidates()
             if not cands:
                 continue

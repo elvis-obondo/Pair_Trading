@@ -48,6 +48,10 @@ POSITIONS_PATH  = os.path.join(DATA_DIR, "open_positions.json")
 # replaced every heartbeat, so it can never produce a curve. This can.
 # Append-only, never pruned -- same standing as the ledger.
 EQUITY_PATH     = os.path.join(DATA_DIR, "equity_curve.csv")
+# The mtime of the last candidates file the monitor actually opened from.
+# On disk, not in memory: see mark_candidates_consumed for what happens when it
+# is not persisted.
+CONSUMED_PATH   = os.path.join(DATA_DIR, "candidates_consumed")
 
 SCANNER_LOG   = os.path.join(LOG_DIR, "scanner.log")
 MONITOR_LOG   = os.path.join(LOG_DIR, "stop_monitor.log")
@@ -132,6 +136,40 @@ EQUITY_COLUMNS = [
 RETAIN_TICK_DAYS = 14          # enough to re-walk any trade still in memory
 RETAIN_SCAN_HISTORY_DAYS = 90  # a quarter of "what was dislocated, and when"
 LOG_MAX_BYTES = 32 * 1024 * 1024
+
+
+def candidates_consumed_mtime() -> float:
+    """mtime of the last candidates file that was opened from, 0.0 if none."""
+    try:
+        with open(CONSUMED_PATH) as fh:
+            return float(fh.read().strip())
+    except (OSError, ValueError):
+        return 0.0
+
+
+def mark_candidates_consumed(mtime: float) -> None:
+    """Record that this candidates file has been acted on.
+
+    WHY THIS IS ON DISK
+
+    Entries fire when the candidates file is NEWER than the last one consumed,
+    which correctly ties entries to scanner cycles. Held in memory, that marker
+    resets to 0 on every restart -- so the monitor comes back up, sees the
+    existing file as new, and opens from it again within seconds.
+
+    Measured on 2026-09-13: eleven restarts that day produced eleven extra entry
+    bursts from files up to 60 minutes old, including API3/XLM re-entered four
+    seconds after a restart, four minutes after it had stopped out. Every one of
+    those re-entries lost. The strategy never asked for them; a deploy did.
+
+    Restarts are not rare -- the VM reboots, containers restart on their own,
+    and every release cycles this process.
+    """
+    _ensure_dirs()
+    tmp = CONSUMED_PATH + ".tmp"
+    with open(tmp, "w") as fh:
+        fh.write(f"{mtime:.6f}\n")
+    os.replace(tmp, CONSUMED_PATH)
 
 
 def append_equity(row: dict) -> None:

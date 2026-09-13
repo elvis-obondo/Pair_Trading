@@ -1,0 +1,168 @@
+################ ARM: theta | 180d | 1.04x | capped ################
+07:01:34Z
+[INFO] 171 tickers, 14,535 pairs
+[INFO] 8,640 bars to evaluate (2025-12-15 00:30:00 -> 2026-06-13 00:00:00), stride 1
+[INFO] entry 3.0 sigma | tp 1.0 | stop 0.5 | hold 72.0h | 10 slots | 5% margin at 20x | rank by theta
+
+[INFO] screening the whole window, once per pair...
+[INFO] 2,617,660 candidate rows across 8,639 bars in 33s
+
+[INFO] adverse exits booked at 1.04x the stop distance, not at the bar-close spread.
+[INFO] that is the MEASURED live figure (tick-watched monitor, median 1.042x).
+
+[INFO] opened 4448, closed 4438, still open 10 in 375s
+
+====================================================================================================
+PER-TRADE RESULTS  (the compounded multiple is deliberately not quoted)
+====================================================================================================
+  trades closed        : 4438
+  mean net_pct         : +0.8103%  (median -0.8095%)
+  mean R               : +0.7395   (median -1.1349)
+  win rate             : 22.4%
+  mean hours held      : 9.7  (max 72.0)
+
+  by exit reason:
+    adverse_move    3439 ( 77.5%)  mean R -1.173  mean hrs    6.2
+    take_profit      897 ( 20.2%)  mean R +7.837  mean hrs   15.9
+    time_stop        102 (  2.3%)  mean R +2.821  mean hrs   72.0
+
+  ranked (had a theta) :  4438  mean R +0.7395
+
+  invariants:
+    max concurrent open  : 10 (cap 10)
+    duplicate pair open  : none
+    all |z| >= entry     : True
+    all holds <= cap     : True
+
+  most-traded tickers  : OL(126), LUNA(98), ME(96), MEME(95), RVN(95)
+
+[INFO] ledger written to research/rank_experiment/d180_theta.csv
+====================================================================================================
+
+################ ARM: neutrality | 180d | 1.04x | capped ################
+07:08:26Z
+[INFO] 171 tickers, 14,535 pairs
+[INFO] 8,640 bars to evaluate (2025-12-15 00:30:00 -> 2026-06-13 00:00:00), stride 1
+[INFO] entry 3.0 sigma | tp 1.0 | stop 0.5 | hold 72.0h | 10 slots | 5% margin at 20x | rank by neutrality
+
+[INFO] screening the whole window, once per pair...
+[INFO] 2,617,660 candidate rows across 8,639 bars in 29s
+
+[INFO] adverse exits booked at 1.04x the stop distance, not at the bar-close spread.
+[INFO] that is the MEASURED live figure (tick-watched monitor, median 1.042x).
+
+[INFO] opened 2590, closed 2580, still open 10 in 253s
+
+====================================================================================================
+PER-TRADE RESULTS  (the compounded multiple is deliberately not quoted)
+====================================================================================================
+  trades closed        : 2580
+  mean net_pct         : +0.7299%  (median -1.0441%)
+  mean R               : +0.4252   (median -1.1135)
+  win rate             : 20.8%
+  mean hours held      : 16.6  (max 72.0)
+
+  by exit reason:
+    adverse_move    2030 ( 78.7%)  mean R -1.141  mean hrs    8.6
+    take_profit      316 ( 12.2%)  mean R +8.149  mean hrs   27.4
+    time_stop        234 (  9.1%)  mean R +3.585  mean hrs   72.0
+
+  ranked (had a theta) :   939  mean R +0.3421
+  unranked (no theta)  :  1641  mean R +0.4727
+
+  invariants:
+    max concurrent open  : 10 (cap 10)
+    duplicate pair open  : none
+    all |z| >= entry     : True
+    all holds <= cap     : True
+
+  most-traded tickers  : MEME(59), RVN(52), AIXBT(52), AVNT(51), PENGU(49)
+
+[INFO] ledger written to research/rank_experiment/d180_neutrality.csv
+====================================================================================================
+
+################ ARM: both | 180d | 1.04x | capped ################
+07:13:13Z
+[INFO] 171 tickers, 14,535 pairs
+[INFO] 8,640 bars to evaluate (2025-12-15 00:30:00 -> 2026-06-13 00:00:00), stride 1
+[INFO] entry 3.0 sigma | tp 1.0 | stop 0.5 | hold 72.0h | 10 slots | 5% margin at 20x | rank by both
+
+[INFO] screening the whole window, once per pair...
+[INFO] 2,617,660 candidate rows across 8,639 bars in 31s
+
+[INFO] adverse exits booked at 1.04x the stop distance, not at the bar-close spread.
+[INFO] that is the MEASURED live figure (tick-watched monitor, median 1.042x).
+
+[INFO] opened 2584, closed 2574, still open 10 in 236s
+
+====================================================================================================
+PER-TRADE RESULTS  (the compounded multiple is deliberately not quoted)
+====================================================================================================
+  trades closed        : 2574
+  mean net_pct         : +0.5084%  (median -1.1174%)
+  mean R               : +0.3680   (median -1.1085)
+  win rate             : 20.3%
+  mean hours held      : 16.7  (max 72.0)
+
+  by exit reason:
+    adverse_move    2036 ( 79.1%)  mean R -1.135  mean hrs    8.4
+    take_profit      285 ( 11.1%)  mean R +8.237  mean hrs   26.7
+    time_stop        253 (  9.8%)  mean R +3.600  mean hrs   72.0
+
+  ranked (had a theta) :    10  mean R +0.3749
+  unranked (no theta)  :  2564  mean R +0.3680
+
+  invariants:
+    max concurrent open  : 10 (cap 10)
+    duplicate pair open  : none
+    all |z| >= entry     : True
+    all holds <= cap     : True
+
+  most-traded tickers  : MEME(57), SNX(54), ZK(54), S(51), DASH(51)
+
+[INFO] ledger written to research/rank_experiment/d180_both.csv
+====================================================================================================
+
+################ ARM: theta | 700d | 1.04x | capped ################
+07:17:43Z
+[INFO] 91 tickers, 4,095 pairs
+[INFO] 30,050 bars to evaluate (2024-09-24 23:30:00 -> 2026-06-13 00:00:00), stride 1
+[INFO] entry 3.0 sigma | tp 1.0 | stop 0.5 | hold 72.0h | 10 slots | 5% margin at 20x | rank by theta
+
+[INFO] screening the whole window, once per pair...
+[INFO] 2,346,581 candidate rows across 29,330 bars in 21s
+
+[INFO] adverse exits booked at 1.04x the stop distance, not at the bar-close spread.
+[INFO] that is the MEASURED live figure (tick-watched monitor, median 1.042x).
+
+[INFO] opened 12825, closed 12815, still open 10 in 353s
+
+====================================================================================================
+PER-TRADE RESULTS  (the compounded multiple is deliberately not quoted)
+====================================================================================================
+  trades closed        : 12815
+  mean net_pct         : +0.6519%  (median -0.6883%)
+  mean R               : +0.7514   (median -1.1554)
+  win rate             : 23.8%
+  mean hours held      : 11.7  (max 72.0)
+
+  by exit reason:
+    adverse_move    9737 ( 76.0%)  mean R -1.197  mean hrs    7.0
+    take_profit     2678 ( 20.9%)  mean R +7.493  mean hrs   19.9
+    time_stop        400 (  3.1%)  mean R +3.042  mean hrs   72.0
+
+  ranked (had a theta) : 12655  mean R +0.7531
+  unranked (no theta)  :   160  mean R +0.6164
+
+  invariants:
+    max concurrent open  : 10 (cap 10)
+    duplicate pair open  : none
+    all |z| >= entry     : True
+    all holds <= cap     : True
+
+  most-traded tickers  : LUNA(581), LPT(425), RVN(393), ENS(373), MEME(372)
+
+[INFO] ledger written to research/rank_experiment/d700_theta_capped.csv
+====================================================================================================
+ALL DONE
+07:24:01Z
