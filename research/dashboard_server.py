@@ -32,6 +32,11 @@ disables the check for that case only.
 Usage:
     python research/dashboard_server.py --port 8080
 """
+# Annotations as strings: macOS ships Python 3.9 as /usr/bin/python3, which
+# cannot evaluate `str | None` at import time. `--hash` has to run under
+# whatever interpreter the user happens to have.
+from __future__ import annotations
+
 import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -44,7 +49,20 @@ import http.server
 import socketserver
 from datetime import datetime, timezone
 
-import book_state as cfg
+
+# book_state pulls in pandas. Deferred so `--hash` -- which needs nothing but
+# hashlib -- works in any interpreter, including one without the project's
+# dependencies installed. Hashing a password should not require a dataframe
+# library, and it failed in exactly that way the first time it was run.
+_cfg = None
+
+
+def cfg():
+    global _cfg
+    if _cfg is None:
+        import book_state
+        _cfg = book_state
+    return _cfg
 
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -79,9 +97,9 @@ def routes() -> dict:
     return {
         "/": (os.path.join(DASHBOARD_DIR, "index.html"), "text/html; charset=utf-8", None),
         "/index.html": (os.path.join(DASHBOARD_DIR, "index.html"), "text/html; charset=utf-8", None),
-        "/open_positions.json": (cfg.POSITIONS_PATH, "application/json", None),
-        "/equity_curve.csv": (cfg.EQUITY_PATH, "text/csv", "equity_curve.csv"),
-        "/ledger.csv": (cfg.LEDGER_PATH, "text/csv", "scanner_trades.csv"),
+        "/open_positions.json": (cfg().POSITIONS_PATH, "application/json", None),
+        "/equity_curve.csv": (cfg().EQUITY_PATH, "text/csv", "equity_curve.csv"),
+        "/ledger.csv": (cfg().LEDGER_PATH, "text/csv", "scanner_trades.csv"),
         "/healthz": (None, "text/plain", None),
     }
 
@@ -136,7 +154,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
 
         if path == "/healthz":
             now = datetime.now(timezone.utc).isoformat(timespec="seconds")
-            ok = os.path.exists(cfg.POSITIONS_PATH)
+            ok = os.path.exists(cfg().POSITIONS_PATH)
             self._send(200 if ok else 503,
                        f"{'ok' if ok else 'no snapshot'} {now}\n".encode(), "text/plain")
             return
@@ -188,9 +206,9 @@ def main():
         print("NO PASSWORD SET — serving 503 until PAIRS_DASH_SHA256 is provided",
               flush=True)
     print(f"dashboard on http://{a.host}:{a.port}  serving {DASHBOARD_DIR}", flush=True)
-    print(f"  positions {cfg.POSITIONS_PATH}", flush=True)
-    print(f"  equity    {cfg.EQUITY_PATH}", flush=True)
-    print(f"  ledger    {cfg.LEDGER_PATH}", flush=True)
+    print(f"  positions {cfg().POSITIONS_PATH}", flush=True)
+    print(f"  equity    {cfg().EQUITY_PATH}", flush=True)
+    print(f"  ledger    {cfg().LEDGER_PATH}", flush=True)
     with Server((a.host, a.port), Handler) as srv:
         srv.serve_forever()
 
