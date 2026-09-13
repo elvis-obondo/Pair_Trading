@@ -229,6 +229,116 @@ files missed the cron/LaunchAgent stdout duplicates. **The ledger is never prune
 
 VM after migration: 9.3GB of 20GB used, 397MB of 3,913MB RAM. No pressure.
 
+## IN FLIGHT as of 2026-09-13 09:20 UTC
+
+**1-minute download running on the LAPTOP.** 212 pairs x 35 days, started 09:13.
+OKX throttles hard -- roughly 1 pair/minute, so expect ~3-9 hours. `caffeinate`
+is holding the laptop awake until it exits; closing the lid is fine, sleeping is
+not. Progress: `grep -c "Downloaded data.*1m" /tmp/dl1m.log`.
+
+It is only needed for the intrabar experiment. Nothing about the live book
+depends on it -- that runs on the VM and is unaffected if the download dies.
+
+### The intrabar experiment, and why
+
+The backtest checks its stop at 30-minute bar closes. A position that crosses the
+level intrabar and recovers before the close is NEVER stopped there -- it stays
+open and can go on to take profit. The live monitor sees that crossing in ~100ms
+and kills it.
+
+So the backtest's 20% take-profit rate may be partly intrabar stop-outs in
+disguise, and +0.740R may be optimistic. Evidence:
+
+  - the backtest's FIRST closed trade of 4,438 was a take profit at 2.5h, with
+    six more inside 21 hours
+  - the first live book went 19 for 19 on stops in 5.5h -- about 1% likely if the
+    true stop rate is 76%
+  - backtest median stop hold 2.0h with a 0.5h FLOOR it cannot cross; the live
+    book's was 0.27h, mostly inside a single bar
+
+**The 1.04x runs are a blend that cannot exist**: bar-close TRIGGER with
+tick-speed FILL. You cannot have both -- the leniency comes from not looking and
+the good fill comes from looking. Three configurations:
+
+| trigger | fill | mean R |
+|---|---|---|
+| bar close | bar close | +0.006 measured |
+| tick | tick | UNKNOWN -- this is live |
+| bar close | 1.04x | +0.740 measured, not achievable |
+
+### What is already built for it
+
+- `research/intrabar.py` -- 1m log prices straight from the OKX feathers.
+  Deliberately NOT via data_loader: the normalized cache is one file per ticker
+  with no timeframe in the name, so a 1m sync overwrites the 30m store.
+- `run_portfolio_backtest --exit-check-minutes N` -- default is the bar length
+  (reproduces today's behaviour exactly); smaller walks the minutes between bar
+  closes checking the frozen levels. Entries untouched, so both arms open
+  identical trades. REFUSES to run if any traded ticker lacks fine data.
+- `research/validate_intrabar.py` -- 18/18, including one constructed trade that
+  survives at 30m and dies at 1m.
+
+### To run it once the download finishes
+
+```
+python research/intrabar.py                      # confirm coverage
+python research/run_portfolio_backtest.py --days 30 --rank-by theta \
+    --out research/rank_experiment/ib_30m.csv
+python research/run_portfolio_backtest.py --days 30 --rank-by theta \
+    --exit-check-minutes 1 --out research/rank_experiment/ib_1m.csv
+```
+
+Same window, same entries. The difference in take-profit rate IS the hypothesis.
+Also gives overshoot vs checking frequency: 30m = 1.53x measured, 1m = ?,
+~100ms = 1.04x measured live at 0.5 sigma.
+
+## LIVE EXPERIMENT: stop at 1.0 sigma
+
+`STOP_SIGMA = 1.0` since 2026-09-13 08:56, testing the same hypothesis from the
+other end -- give positions room and see whether winners appear. The backtest
+stays at 0.5 (its CLI default is a literal), and every run now prints
+
+    [WARN] stop_sigma=0.5 but the LIVE book runs 1.0
+
+**Read results carefully.** R is normalised by stop distance, so one R is now
+TWICE the dollars -- a -1R stop costs ~$6 on a $300 book, not $3. And
+MEASURED_STOP_OVERSHOOT = 1.04 was derived against 0.5 sigma; the same absolute
+overshoot is half the ratio at 1.0, so it must be re-derived before being quoted.
+
+This is NOT the existing 0.5->2.5 sigma sweep. That ran at bar close, where
+intrabar pokes are invisible by construction.
+
+Next dial position discussed but NOT built: keep the stop at 0.5 and require the
+breach to PERSIST for ~15 minutes before acting. Bar-close checking is just the
+far end of that dial, with the added defect that its tolerance is aligned to
+wall-clock half-hours -- a position opened at 03:01 gets 29 minutes of leniency,
+one opened at 03:29 gets one minute.
+
+## Book resets
+
+Three on 2026-09-13, all archived under `trading_data/archive/<timestamp>/`,
+nothing deleted. `scripts/reset_book.sh`. The last one (082908Z) is the true
+start: uncapped per-ticker, $5,000 notional, all of the day's fixes in.
+
+Open positions are booked `exit_reason="book_reset"` so they stay complete rows
+but can never be mistaken for take-profits. Overshoot POOLS across a reset -- it
+is exit-side and independent of entry rules.
+
+## Settled by measurement on 2026-09-13
+
+| | |
+|---|---|
+| ranking | **theta**. +0.740R vs neutrality +0.425 vs both +0.368 (180d, 171 tickers) |
+| per-ticker cap | **None**. +0.740 uncapped vs +0.620 capped; and every prior result was uncapped |
+| max notional | **$5,000**. Inert below $5k equity |
+
+Neutrality ranking looked best at bar-close fills and worst at realistic ones --
+it was compensating for bad execution, not generating alpha. It takes 2,580
+trades to theta's 4,438 and skips the good ones: take-profit rate 12.2% vs 20.2%.
+
+Both live and backtest read these from `book_state`; the backtest WARNS on any
+divergence.
+
 ## Next session should
 
 1. Read `logs/cron.log` — confirm cron cycles are firing every 30 min and measure
