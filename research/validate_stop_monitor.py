@@ -668,6 +668,63 @@ check("a corrupt marker reads as 0 rather than raising",
 os.remove(cfg.CONSUMED_PATH)
 os.remove(cfg.CANDIDATES_PATH)
 
+print()
+print("=" * 118)
+print("SHADOW WINDOW — a closed position's legs keep recording, and nothing else")
+print("=" * 118)
+# The question every stop-out raises is "did the spread come back?". Before this,
+# recording stopped at the exit and 8 of 12 live stops had no post-close ticks at
+# all, so the question could not be asked of the trade that raised it.
+m = make_monitor(z=3.5, sigma=0.02, confirm_ticks=1)
+m.record_ticks = True
+IA, IB = instrument_id("AAA"), instrument_id("BBB")
+t = time.time()
+
+check("no shadow before anything closes", m.shadow_instruments(t) == set(), "empty")
+check("recording set is just the open legs",
+      m.recording_instruments(t) == {IA, IB}, "2 legs")
+
+# Stop it out: 3.5 sigma entry, short the spread, stop 0.5 sigma above.
+booked = push(m, 0.02 * (3.5 + cfg.STOP_SIGMA + 0.2), t)
+check("the position stopped out", len(booked) == 1 and not m.pf.open_positions,
+      booked[0]["exit_reason"] if booked else "none")
+check("both legs are now shadowed", m.shadow_instruments(t) == {IA, IB},
+      f"{len(m.shadow_instruments(t))} legs")
+check("  ... though nothing is held", m.held_instruments() == set(), "0 held")
+check("  ... and they are still RECORDED",
+      m.recording_instruments(t) == {IA, IB}, "2 legs")
+check("  ... and still SUBSCRIBED, or no ticks would arrive",
+      {IA, IB} <= m.desired_instruments(), "subscribed")
+
+# THE POINT: a tick after the close lands in the buffer.
+n_before = len(m._tick_buffer)
+m._tick_last_recorded.clear()
+m.on_tick(IA, 100.0, 100.1, 100.05, t + 60.0)
+check("a tick 60s AFTER the close is recorded", len(m._tick_buffer) > n_before,
+      f"{len(m._tick_buffer) - n_before} rows")
+
+# It must not resurrect anything.
+check("recording a shadow tick opens no position", not m.pf.open_positions, "0 open")
+check("  ... and books no exit",
+      m.evaluate_positions(t + 60.0) == [], "nothing booked")
+
+# The window expires on its own.
+after = t + cfg.SHADOW_WINDOW_MINUTES * 60.0 + 1.0
+check("the window expires after SHADOW_WINDOW_MINUTES",
+      m.shadow_instruments(after) == set(), f"{cfg.SHADOW_WINDOW_MINUTES:.0f} min")
+n_before = len(m._tick_buffer)
+m._tick_last_recorded.clear()
+m.on_tick(IA, 100.0, 100.1, 100.05, after)
+check("  ... and recording stops with it", len(m._tick_buffer) == n_before,
+      "not recorded")
+
+# A leg shared with a still-open position must not lose its window early.
+m2 = make_monitor(z=3.5, sigma=0.02, confirm_ticks=1)
+m2._shadow_until[IA] = t + 10.0
+m2._shadow_until[IA] = max(m2._shadow_until[IA], t + 5000.0)
+check("a second close EXTENDS the window, never shortens it",
+      m2._shadow_until[IA] == t + 5000.0, "max, not overwrite")
+
 import shutil
 shutil.rmtree(TMP, ignore_errors=True)
 

@@ -165,6 +165,22 @@ EQUITY_COLUMNS = [
 ]
 
 RETAIN_TICK_DAYS = 14          # enough to re-walk any trade still in memory
+
+# SHADOW WINDOW. Minutes to keep recording a position's legs AFTER it closes.
+#
+# Without this the tick store stops at the exit, and the single most important
+# question about a stop -- did the spread come back? -- is unanswerable for the
+# trade that just asked it. Measured on the live book: of 12 stop-outs, only 4
+# had ANY post-close ticks, and those only because another open position
+# happened to share a leg. The evidence was being destroyed as it was generated.
+#
+# 90 minutes covers every debounce worth testing (the dial tops out at 30, where
+# it becomes 30-minute bar-close checking) with room to see what happened next.
+# Cost is negligible: the whole store is ~12MB/day at 1Hz across ~20 legs.
+#
+# This changes NO trading logic. Shadowed instruments are recorded and stay
+# subscribed; they hold no position and can trigger nothing.
+SHADOW_WINDOW_MINUTES = 90.0
 RETAIN_SCAN_HISTORY_DAYS = 90  # a quarter of "what was dislocated, and when"
 LOG_MAX_BYTES = 32 * 1024 * 1024
 

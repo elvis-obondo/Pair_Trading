@@ -147,6 +147,10 @@ class StopMonitor:
 
         self._tick_buffer: list[dict] = []
         self._tick_last_recorded: dict[str, float] = {}
+        # SHADOW WINDOW: {inst_id: unix ts to keep recording until}. Populated
+        # when a position closes so the spread's behaviour AFTER the exit is
+        # still captured. See book_state.SHADOW_WINDOW_MINUTES for why.
+        self._shadow_until: dict[str, float] = {}
         self.closed_this_session: list[dict] = []
         self.opened_this_session: list[Position] = []
 
@@ -163,7 +167,7 @@ class StopMonitor:
         for p in self.pf.open_positions:
             want.add(instrument_id(p.ticker_a))
             want.add(instrument_id(p.ticker_b))
-        return want | self.candidate_instruments
+        return want | self.candidate_instruments | self.shadow_instruments()
 
     def held_instruments(self) -> set[str]:
         want = set()
@@ -171,6 +175,22 @@ class StopMonitor:
             want.add(instrument_id(p.ticker_a))
             want.add(instrument_id(p.ticker_b))
         return want
+
+    def shadow_instruments(self, now: float | None = None) -> set[str]:
+        """Legs of recently-closed positions, still inside the shadow window.
+
+        Expired entries are dropped here rather than on a timer, so the set is
+        always correct at the moment it is asked for. A shadowed instrument is
+        recorded and stays subscribed; it holds no position, so nothing in the
+        exit path can ever see it.
+        """
+        now = time.time() if now is None else now
+        self._shadow_until = {i: t for i, t in self._shadow_until.items() if t > now}
+        return set(self._shadow_until)
+
+    def recording_instruments(self, now: float | None = None) -> set[str]:
+        """Everything whose ticks we want on disk: open legs plus shadowed ones."""
+        return self.held_instruments() | self.shadow_instruments(now)
 
     # -- prices in ------------------------------------------------------- #
 
@@ -187,8 +207,12 @@ class StopMonitor:
         This is the intraday data the backtest could not have. After a few weeks
         it is enough to replay our own book at one-second resolution and measure
         directly what 30-minute checking was costing.
+
+        Covers the shadow window too -- a closed position's legs keep recording
+        for SHADOW_WINDOW_MINUTES, which is what makes "did the spread come back
+        after we were stopped" a countable question instead of a guess.
         """
-        if not self.record_ticks or inst_id not in self.held_instruments():
+        if not self.record_ticks or inst_id not in self.recording_instruments(now):
             return
         prev = self._tick_last_recorded.get(inst_id, 0.0)
         if now - prev < 1.0 / TICK_RECORD_HZ:
@@ -352,6 +376,12 @@ class StopMonitor:
             "exec_spread_at_exit": self._exec_spread(pos),
         })
         self.closed_this_session.append(rec)
+        # Keep watching both legs. Recording only -- the position is already out
+        # of pf.open_positions above, so nothing here can re-enter the exit path.
+        until = now + cfg.SHADOW_WINDOW_MINUTES * 60.0
+        for t in pos.pair:
+            inst = instrument_id(t)
+            self._shadow_until[inst] = max(self._shadow_until.get(inst, 0.0), until)
         log(f"CLOSE #{rec['trade_num']} {rec['ticker_a']}/{rec['ticker_b']} "
             f"{rec['exit_reason']} after {hours:.1f}h "
             f"pnl {rec['realized_pnl_net']:+.2f} R {rec['r']:+.2f} "

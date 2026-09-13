@@ -1,0 +1,12 @@
+{
+  "exchange": {
+    "ccxt_config": {
+      "enableRateLimit": true,
+      "rateLimit": 350
+    },
+    "ccxt_async_config": {
+      "enableRateLimit": true,
+      "rateLimit": 350
+    }
+  }
+}
