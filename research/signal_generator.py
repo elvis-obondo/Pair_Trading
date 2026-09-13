@@ -99,6 +99,8 @@ def generate_entry_signal(
         theta_at_entry    -- OU mean-reversion speed, per hour. The RANKING key,
                              and NaN when the fit fails. Not a gate -- see Step 3.
         take_profit_level -- entry_spread - take_profit_pct * (entry_spread - mu)
+        r2_at_entry       -- fit quality of the hedge over the same window.
+                             Recorded, never a gate; see Step 4.
     """
     a = np.asarray(price_a, dtype=float)
     b = np.asarray(price_b, dtype=float)
@@ -148,6 +150,14 @@ def generate_entry_signal(
         "alpha_at_entry":    float(pt.alpha),
         "theta_at_entry":    theta,
         "take_profit_level": float(take_profit_level),
+        # Fit quality of the hedge over the same window. RECORDED, NOT A GATE.
+        # beta says how much B to hold; r2 says whether holding it hedges
+        # anything. A beta near 0 (10% of candidates) means the regression found
+        # no relationship and the spread is really just log(A) minus a constant
+        # -- a single-coin bet wearing a pair trade's clothes. Kept out of the
+        # entry condition on purpose: adding a filter here would change which
+        # trades the strategy takes, and nothing has measured that yet.
+        "r2_at_entry":       float(pt.r2),
     }
 
 

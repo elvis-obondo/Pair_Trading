@@ -261,6 +261,66 @@ check("max_per_ticker=2 caps it", len(p10b.open_positions) == 2,
 
 print()
 print("=" * 104)
+print("12. Net exposure — how market-neutral a 'market-neutral' position is")
+print("=" * 104)
+from position_sizer import compute_position_size
+
+
+def pos_with(beta, z=3.5, sigma=0.02, mu=0.0):
+    sig = cand("A", "B", 0.1, z=z, sigma=sigma, mu=mu, beta=beta)
+    szg = compute_position_size(sig, equity=300.0, capital_frac=0.05, leverage=20.0)
+    return Position(1, "A", "B", sig, szg, T0, 0.5)
+
+
+# beta == 1 is the only value that is actually dollar-neutral.
+p1 = pos_with(beta=1.0)
+check("beta=1 is dollar-neutral", abs(p1.net_exposure) < 1e-9, f"{p1.net_exposure:+.2f}")
+ea, eb = p1.exposure
+check("  ... and the legs are on opposite sides", ea * eb < 0, f"{ea:+.1f} / {eb:+.1f}")
+
+# beta == 0: leg B is nothing. This is a naked single-coin bet.
+p0 = pos_with(beta=0.0)
+check("beta=0 is fully directional",
+      abs(abs(p0.net_exposure_frac) - 1.0) < 1e-9, f"{p0.net_exposure_frac:+.2f}")
+check("  ... net exposure is the whole leg-A notional",
+      abs(abs(p0.net_exposure) - p0.sizing["leg_a_notional"]) < 1e-9,
+      f"{p0.net_exposure:+.2f}")
+
+# beta < 0: both legs the SAME way, so net exceeds either leg. This is the case
+# that reads as a hedge and is a doubling.
+pn = pos_with(beta=-1.0)
+ea, eb = pn.exposure
+check("beta=-1 puts both legs on the same side", ea * eb > 0, f"{ea:+.1f} / {eb:+.1f}")
+check("  ... net exposure exceeds either leg",
+      abs(pn.net_exposure) > max(abs(ea), abs(eb)) + 1e-9, f"{pn.net_exposure:+.2f}")
+
+# Direction flips every sign, and nothing else.
+short = pos_with(beta=0.5, z=+3.5)
+long_ = pos_with(beta=0.5, z=-3.5)
+check("shorting the spread reverses both legs",
+      all(abs(x + y) < 1e-9 for x, y in zip(short.exposure, long_.exposure)),
+      f"{short.net_exposure:+.1f} vs {long_.net_exposure:+.1f}")
+
+# THE invariant: exposure must be what pnl() actually implies, or the two drift
+# apart and the ledger's exposure column becomes decoration.
+for beta in (1.0, 0.5, 0.0, -0.8, 1.7):
+    q = pos_with(beta=beta)
+    d_log_a, d_log_b = 0.011, -0.004          # independent moves in each leg
+    entry = q.signal["entry_spread"]
+    exit_spread = entry + (d_log_a - beta * d_log_b)
+    gross_pnl = q.pnl(exit_spread)[0] + ROUND_TRIP_COST_FRAC * q.sizing["gross_notional"]
+    ea, eb = q.exposure
+    implied = ea * d_log_a + eb * d_log_b
+    check(f"exposure reproduces pnl at beta={beta:+.1f}",
+          abs(gross_pnl - implied) < 1e-9, f"{gross_pnl:+.4f} vs {implied:+.4f}")
+
+# And the ledger carries it, so this is answerable after the fact.
+import book_state as _cfg
+for col in ("r2_at_entry", "net_exposure", "net_exposure_frac"):
+    check(f"ledger records {col}", col in _cfg.LEDGER_COLUMNS, "present")
+
+print()
+print("=" * 104)
 print(f"{n_pass}/{n_pass + n_fail} assertions PASS")
 print("=" * 104)
 sys.exit(1 if n_fail else 0)

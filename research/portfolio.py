@@ -88,6 +88,42 @@ class Position:
         return (price_a - self.signal["alpha_at_entry"]
                 - self.signal["beta_at_entry"] * price_b)
 
+    @property
+    def exposure(self) -> tuple[float, float]:
+        """Signed dollar exposure to each leg. Positive is long.
+
+        Derived from pnl(), not asserted alongside it. P&L is
+        direction * d(spread) * leg_a_notional, and spread is
+        log(A) - beta*log(B) - alpha, so
+
+            dPnL = (direction * N_a) * dlogA  +  (-direction * N_b) * dlogB
+
+        because N_b == beta * N_a. Leg B's side is therefore the OPPOSITE of leg
+        A's, scaled by beta. Two consequences worth naming:
+
+          beta == 0   leg B is nothing, and the position is a naked bet on A
+          beta  < 0   both legs point the SAME way, and net exposure exceeds
+                      either leg -- this is not a hedge, it is a doubling
+        """
+        d = self.direction
+        return d * self.sizing["leg_a_notional"], -d * self.sizing["leg_b_notional"]
+
+    @property
+    def net_exposure(self) -> float:
+        """Dollars of one-way market exposure a 'market-neutral' position carries.
+
+        Equals direction * leg_a_notional * (1 - beta). Zero ONLY at beta == 1.
+        """
+        ea, eb = self.exposure
+        return ea + eb
+
+    @property
+    def net_exposure_frac(self) -> float:
+        """net_exposure over gross. 0 is dollar-neutral, +/-1 fully directional."""
+        ea, eb = self.exposure
+        gross = abs(ea) + abs(eb)
+        return (ea + eb) / gross if gross > 0 else float("nan")
+
     def pnl(self, exit_spread: float) -> tuple[float, float, float]:
         """(net dollars, net percent of notional, R) for closing here.
 
@@ -231,6 +267,11 @@ class Portfolio:
             "margin": pos.margin,
             "notional_capped": pos.sizing.get("notional_capped", False),
             "realized_pnl_net": net, "net_pct": net_pct, "r": r,
+            # Hedge quality, carried onto every row so "was this actually a pair
+            # trade" is answerable from the ledger alone.
+            "r2_at_entry": pos.signal.get("r2_at_entry", float("nan")),
+            "net_exposure": pos.net_exposure,
+            "net_exposure_frac": pos.net_exposure_frac,
             # Marked per row so a ledger can never be read later as measured
             # when the fill was assumed.
             "assumed_stop_fill": assumed_fill,

@@ -21,6 +21,7 @@
 #   scripts/check_vm.sh follow         # live-tail the monitor (Ctrl-C to stop)
 #   scripts/check_vm.sh scanner [N]    # last N scanner cycle lines (50)
 #   scripts/check_vm.sh heartbeat [N]  # feed state, tick ages, blind positions
+#   scripts/check_vm.sh positions      # open positions, marked live, P&L and exposure
 #   scripts/check_vm.sh ledger [N]     # last N ledger rows (5)
 #   scripts/check_vm.sh overshoot      # THE number: how far past the stop fills land
 #   scripts/check_vm.sh pull           # copy ledger + scan history down
@@ -98,6 +99,15 @@ else:
     print(f'  inside the level: {(o <= 1.0).sum()} of {len(c)}')
     print(f'  baseline at 30-min bar close: median 1.53x, mean 2.07x, 0 inside')
 \""
+    ;;
+
+  positions)
+    # Marked to the monitor's OWN quotes, not a fresh fetch -- a status view
+    # that prices itself can disagree with the process holding the book.
+    gcloud compute scp "$PROJECT_ROOT/scripts/render_positions.py" \
+      "$INSTANCE:/tmp/render_positions.py" --project="$PROJECT" --zone="$ZONE" -q >/dev/null
+    run "docker cp /tmp/render_positions.py pairs-stop-monitor:/tmp/ >/dev/null && \
+         docker exec pairs-stop-monitor python /tmp/render_positions.py"
     ;;
 
   pull)

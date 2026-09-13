@@ -1,0 +1,43 @@
+{
+ "as_of": "2026-09-13T02:43:04+00:00",
+ "equity": 300.0,
+ "used_margin": 15.0,
+ "available_margin": 285.0,
+ "feed_state": "live",
+ "open": 1,
+ "max_slots": 10,
+ "unrealized_total": -0.29790000000004163,
+ "book_net_exposure": 0.0,
+ "book_gross_exposure": 300.0,
+ "book_net_frac": 0.0,
+ "positions": [
+  {
+   "trade_num": 1,
+   "ticker_a": "AAA",
+   "ticker_b": "BBB",
+   "side": "short spread",
+   "opened_at": "2026-09-01T00:00:00",
+   "hours_held": 290.71801506083335,
+   "beta": 1.0,
+   "r2": null,
+   "z_at_entry": 3.5,
+   "entry_spread": 0.07,
+   "stop_level": 0.08,
+   "take_profit_level": 0.0,
+   "gross_notional": 300.0,
+   "margin": 15.0,
+   "exposure_a": -150.0,
+   "exposure_b": 150.0,
+   "net_exposure": 0.0,
+   "net_exposure_frac": 0.0,
+   "blind": true,
+   "tick_age_s": 1046583.8542180061,
+   "spread": 0.07000000000000028,
+   "z_now": 3.500000000000014,
+   "unrealized_pnl": -0.29790000000004163,
+   "unrealized_pct": -0.09930000000002775,
+   "unrealized_r": -0.09930000000002775,
+   "progress_to_stop": 2.7755575615628914e-14
+  }
+ ]
+}

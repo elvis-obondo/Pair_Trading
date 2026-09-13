@@ -95,6 +95,31 @@ def rolling_beta_alpha(a: np.ndarray, b: np.ndarray, window: int):
     return beta.to_numpy(), alpha.to_numpy()
 
 
+def rolling_r2(a: np.ndarray, b: np.ndarray, window: int) -> np.ndarray:
+    """Rolling R-squared of the same OLS rolling_beta_alpha fits.
+
+    For a single-regressor OLS this is just corr(a,b)**2, which is why it is
+    computed that way rather than from residuals -- same number, one pass.
+
+    WHY IT IS RECORDED
+
+    beta alone does not say whether B hedges A. A beta near zero means the
+    regression found no relationship, so `log(A) - beta*log(B) - alpha` collapses
+    to `log(A) - constant` and the "pair" trade is a bet on one coin reverting to
+    its own 7-day mean. A beta near 1 with an R-squared near 0 is the same
+    problem wearing a better disguise. Recorded, not gated -- see
+    generate_entry_signal Step 4.
+    """
+    sa = pd.Series(a)
+    sb = pd.Series(b)
+    cov = sa.rolling(window).cov(sb)
+    var_a = sa.rolling(window).var()
+    var_b = sb.rolling(window).var()
+    with np.errstate(divide="ignore", invalid="ignore"):
+        r2 = (cov ** 2) / (var_a * var_b)
+    return r2.to_numpy()
+
+
 class RollingSpread(NamedTuple):
     """Per-bar rolling spread geometry. All arrays share the input's length."""
     spread: np.ndarray   # a - beta*b - alpha, under that bar's own fit
@@ -103,6 +128,7 @@ class RollingSpread(NamedTuple):
     mu:     np.ndarray   # rolling mean of the spread
     sigma:  np.ndarray   # rolling std of the spread -- THE unit for entry/stop/sizing
     z:      np.ndarray   # (spread - mu) / sigma
+    r2:     np.ndarray   # fit quality of the hedge; recorded, never a gate
 
 
 class SpreadPoint(NamedTuple):
@@ -113,6 +139,7 @@ class SpreadPoint(NamedTuple):
     mu:     float
     sigma:  float
     z:      float
+    r2:     float
 
 
 def rolling_spread_stats(price_a: np.ndarray,
@@ -136,7 +163,8 @@ def rolling_spread_stats(price_a: np.ndarray,
     b = np.asarray(price_b, dtype=float)
     n = len(a)
     nan = np.full(n, np.nan)
-    blank = RollingSpread(nan, nan.copy(), nan.copy(), nan.copy(), nan.copy(), nan.copy())
+    blank = RollingSpread(nan, nan.copy(), nan.copy(), nan.copy(), nan.copy(),
+                          nan.copy(), nan.copy())
 
     window = entry_window_bars(bar_hours)
     if n != len(b) or n < min_bars_required(bar_hours):
@@ -156,7 +184,9 @@ def rolling_spread_stats(price_a: np.ndarray,
     with np.errstate(divide="ignore", invalid="ignore"):
         z = np.where(sigma > 0, (spread - mu) / sigma, np.nan)
 
-    return RollingSpread(spread, beta, alpha, mu, sigma, z)
+    r2 = rolling_r2(a, b, window)
+
+    return RollingSpread(spread, beta, alpha, mu, sigma, z, r2)
 
 
 def last_bar(price_a: np.ndarray,
@@ -174,4 +204,7 @@ def last_bar(price_a: np.ndarray,
         return None
     if r.sigma[-1] <= 0:
         return None
-    return SpreadPoint(*(float(v) for v in vals))
+    # r2 is deliberately OUTSIDE the finite check above. It is a diagnostic, not
+    # a gate, and letting a NaN R-squared decline an otherwise well-determined
+    # bar would silently change which trades the strategy takes.
+    return SpreadPoint(*(float(v) for v in vals), float(r.r2[-1]))

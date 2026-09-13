@@ -419,6 +419,70 @@ pf.equity = pf.starting_equity + sum(c["realized_pnl_net"] for c in pf.closed)
 check("a close after the restart subtracts from the restored equity",
       abs(pf.equity - 286.48) < 0.01, f"{pf.equity:.2f} (bug gave 297.73)")
 
+# --------------------------------------------------------------------------
+print()
+print("=" * 118)
+print("14. Live position snapshot — marked to the monitor's own quotes")
+print("=" * 118)
+m = make_monitor(z=3.5, sigma=0.02, beta=1.0)
+pos = m.pf.open_positions[0]
+entry = pos.signal["entry_spread"]
+dist = cfg.STOP_SIGMA * pos.signal["sigma_at_entry"]
+
+# Halfway to the stop.
+push(m, entry + dist * 0.5, T0_EPOCH + 1)
+snap = m.positions_snapshot()
+r = snap["positions"][0]
+check("one position reported", snap["open"] == 1, snap["open"])
+check("progress_to_stop is 0.5 halfway there",
+      abs(r["progress_to_stop"] - 0.5) < 1e-6, f"{r['progress_to_stop']:.3f}")
+check("a short spread moving up is losing", r["unrealized_pnl"] < 0,
+      f"{r['unrealized_pnl']:+.2f}")
+check("unrealized R is about -0.5 at half the stop",
+      -0.65 < r["unrealized_r"] < -0.45, f"{r['unrealized_r']:+.2f}")
+
+# Moving toward mu is a gain, and progress runs negative.
+push(m, entry - dist * 0.5, T0_EPOCH + 2)
+r = m.positions_snapshot()["positions"][0]
+check("moving toward mu shows a gain", r["unrealized_pnl"] > 0, f"{r['unrealized_pnl']:+.2f}")
+check("  ... and progress_to_stop goes negative", r["progress_to_stop"] < 0,
+      f"{r['progress_to_stop']:.2f}")
+
+# The mark must agree with what the stop itself computes -- one geometry.
+r = m.positions_snapshot()["positions"][0]
+la, lb = m._log_prices(pos)
+check("snapshot spread == Position.current_spread",
+      abs(r["spread"] - pos.current_spread(la, lb)) < 1e-12, "exact")
+
+# A stale leg is reported as blind with NO mark, never a stale number.
+m2 = make_monitor(z=3.5, sigma=0.02, stale=30.0)
+r2 = m2.positions_snapshot()["positions"][0]
+check("no quotes yet -> blind, and no mark at all",
+      r2["blind"] and r2["unrealized_pnl"] is None, "blank")
+
+# Book-level exposure aggregates.
+m3 = make_monitor(z=3.5, sigma=0.02, beta=1.0)
+push(m3, entry, T0_EPOCH + 1)
+s3 = m3.positions_snapshot()
+check("beta=1 book reports zero net exposure",
+      abs(s3["book_net_exposure"]) < 1e-9, f"{s3['book_net_exposure']:+.2f}")
+check("margin accounting: used + free == equity",
+      abs(s3["used_margin"] + s3["available_margin"] - s3["equity"]) < 1e-9,
+      f"{s3['used_margin']:.2f} + {s3['available_margin']:.2f}")
+
+# It is a read-only view: writing it must not touch the book.
+m4 = make_monitor(z=3.5, sigma=0.02)
+m4.dry_run = False
+push(m4, entry, T0_EPOCH + 1)
+before = (os.path.exists(cfg.LEDGER_PATH) and os.path.getmtime(cfg.LEDGER_PATH),
+          os.path.exists(cfg.STATE_PATH) and os.path.getmtime(cfg.STATE_PATH))
+m4.write_positions_snapshot()
+after = (os.path.exists(cfg.LEDGER_PATH) and os.path.getmtime(cfg.LEDGER_PATH),
+         os.path.exists(cfg.STATE_PATH) and os.path.getmtime(cfg.STATE_PATH))
+check("writing the snapshot does not touch ledger or state", before == after, "untouched")
+check("snapshot file is valid json", isinstance(
+    json.load(open(cfg.POSITIONS_PATH)), dict), "ok")
+
 import shutil
 shutil.rmtree(TMP, ignore_errors=True)
 

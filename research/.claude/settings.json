@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 validate_ou_analytics.py)",
+      "Bash(cd /Users/elvisobondo/Pair_Trading && echo \"=== PARENT DIR ===\" && ls -la)",
+      "Read(//Users/elvisobondo/Pair_Trading/**)"
+    ]
+  }
+}

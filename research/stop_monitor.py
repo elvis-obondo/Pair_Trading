@@ -223,8 +223,10 @@ class StopMonitor:
         qb = self.quotes.get(instrument_id(pos.ticker_b))
         if qa is None or qb is None:
             return float("nan")
-        pos_a = pos.direction * pos.sizing["leg_a_notional"]
-        pos_b = pos.direction * pos.sizing["leg_b_notional"]
+        # Leg B's sign is the OPPOSITE of leg A's -- see Position.exposure. This
+        # read +direction until 2026-09-13, which picked the wrong side of book
+        # for leg B on every exit. Diagnostic column only; no fill used it.
+        pos_a, pos_b = pos.exposure
         # Closing a short means buying: cross the ask. Closing a long: the bid.
         px_a = (qa.ask if pos_a < 0 else qa.bid) or qa.last
         px_b = (qb.ask if pos_b < 0 else qb.bid) or qb.last
@@ -496,6 +498,8 @@ class StopMonitor:
                          "ticker_a": p.ticker_a, "ticker_b": p.ticker_b,
                          "time": p.opened_at, "entry_bar_z": getattr(p, "entry_bar_z", None),
                          "entry_fill_z": p.signal["z_at_entry"],
+                         "net_exposure": p.net_exposure,
+                         "net_exposure_frac": p.net_exposure_frac,
                          **p.signal, **p.sizing})
         for c in closed:
             rows.append({"event": "close", "time": c["closed_at"], **c})
@@ -540,6 +544,92 @@ class StopMonitor:
             log(f"rotated at {cfg.LOG_MAX_BYTES // 1024 // 1024}MB: "
                 f"{', '.join(rotated)}")
 
+    def positions_snapshot(self) -> dict:
+        """Every open position marked to the SAME quotes the stop is watching.
+
+        Deliberately not a fresh REST call. A status view that fetches its own
+        prices can disagree with the process that owns the book, and then a
+        position reads green on the dashboard while the monitor is closing it.
+        This reports exactly what the stop sees, including staleness.
+        """
+        now = time.time()
+        rows = []
+        for pos in self.pf.open_positions:
+            sig = pos.signal
+            entry, sigma = sig["entry_spread"], sig["sigma_at_entry"]
+            stop_dist = self.pf.stop_sigma * sigma
+            level = entry - pos.direction * stop_dist
+            ea, eb = pos.exposure
+            row = {
+                "trade_num": pos.trade_num,
+                "ticker_a": pos.ticker_a, "ticker_b": pos.ticker_b,
+                "side": "short spread" if pos.direction < 0 else "long spread",
+                "opened_at": pos.opened_at.isoformat(),
+                "hours_held": (datetime.now(timezone.utc).replace(tzinfo=None)
+                               - pos.opened_at).total_seconds() / 3600.0,
+                "beta": sig["beta_at_entry"],
+                "r2": sig.get("r2_at_entry"),
+                "z_at_entry": sig["z_at_entry"],
+                "entry_spread": entry,
+                "stop_level": level,
+                "take_profit_level": sig["take_profit_level"],
+                "gross_notional": pos.sizing["gross_notional"],
+                "margin": pos.margin,
+                "exposure_a": ea, "exposure_b": eb,
+                "net_exposure": pos.net_exposure,
+                "net_exposure_frac": pos.net_exposure_frac,
+                "blind": self.is_blind(pos, now),
+                "tick_age_s": max(
+                    (now - q.ts) for q in
+                    (self.quotes.get(instrument_id(t)) for t in pos.pair)
+                    if q is not None) if all(
+                        self.quotes.get(instrument_id(t)) for t in pos.pair) else None,
+            }
+            prices = self._log_prices(pos)
+            if prices is None:
+                # No mark rather than a stale one. A blank is honest; a number
+                # from ten minutes ago reads as current and is not.
+                row.update(spread=None, z_now=None, unrealized_pnl=None,
+                           unrealized_r=None, progress_to_stop=None)
+            else:
+                spread = pos.current_spread(*prices)
+                net, net_pct, r = pos.pnl(spread)
+                row.update(
+                    spread=spread,
+                    z_now=(spread - sig["mu_at_entry"]) / sigma if sigma else None,
+                    unrealized_pnl=net, unrealized_pct=net_pct, unrealized_r=r,
+                    # How far of the way to the stop this has travelled. 1.0 is
+                    # the level; the monitor fires at the first tick past it.
+                    progress_to_stop=(pos.direction * (entry - spread)) / stop_dist
+                    if stop_dist else None,
+                )
+            rows.append(row)
+        rows.sort(key=lambda x: (x["unrealized_r"] is None, x["unrealized_r"] or 0))
+        open_net = sum(r["net_exposure"] for r in rows)
+        open_gross = sum(abs(r["exposure_a"]) + abs(r["exposure_b"]) for r in rows)
+        return {
+            "as_of": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "equity": self.pf.equity,
+            "used_margin": self.pf.used_margin,
+            "available_margin": self.pf.available_margin,
+            "feed_state": self.feed_state,
+            "open": len(rows), "max_slots": self.pf.max_slots,
+            "unrealized_total": sum(r["unrealized_pnl"] or 0.0 for r in rows),
+            "book_net_exposure": open_net,
+            "book_gross_exposure": open_gross,
+            "book_net_frac": open_net / open_gross if open_gross else 0.0,
+            "positions": rows,
+        }
+
+    def write_positions_snapshot(self) -> None:
+        if self.dry_run:
+            return
+        os.makedirs(os.path.dirname(cfg.POSITIONS_PATH), exist_ok=True)
+        tmp = cfg.POSITIONS_PATH + ".tmp"
+        with open(tmp, "w") as fh:
+            json.dump(self.positions_snapshot(), fh, indent=1, default=str)
+        os.replace(tmp, cfg.POSITIONS_PATH)
+
     def heartbeat(self) -> str:
         now = time.time()
         ages = [now - q.ts for q in self.quotes.values()]
@@ -554,6 +644,7 @@ class StopMonitor:
             os.makedirs(os.path.dirname(cfg.HEARTBEAT_PATH), exist_ok=True)
             with open(cfg.HEARTBEAT_PATH, "a") as fh:
                 fh.write(line + "\n")
+            self.write_positions_snapshot()
         return line
 
 

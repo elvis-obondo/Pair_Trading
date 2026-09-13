@@ -46,6 +46,7 @@ from universe_panel import tradeable_pairs, usable_tickers
 SIGNAL_FIELDS = [
     "entry_spread", "mu_at_entry", "sigma_at_entry", "z_at_entry",
     "beta_at_entry", "alpha_at_entry", "theta_at_entry", "take_profit_level",
+    "r2_at_entry",
 ]
 
 

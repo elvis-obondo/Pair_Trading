@@ -41,6 +41,9 @@ CANDIDATES_PATH = os.path.join(DATA_DIR, "scanner_candidates.json")
 SCAN_HISTORY_DIR = os.path.join(DATA_DIR, "scan_history")
 TICKS_DIR       = os.path.join(DATA_DIR, "monitor_ticks")
 LOCK_PATH       = os.path.join(DATA_DIR, "stop_monitor.lock")
+# Open positions marked to the monitor's own live quotes, rewritten every
+# heartbeat. A read-only view: nothing reads it back into the book.
+POSITIONS_PATH  = os.path.join(DATA_DIR, "open_positions.json")
 
 SCANNER_LOG   = os.path.join(LOG_DIR, "scanner.log")
 MONITOR_LOG   = os.path.join(LOG_DIR, "stop_monitor.log")
@@ -192,6 +195,17 @@ LEDGER_COLUMNS = [
     "entry_bar_z",          # z at the bar close that produced the candidate
     "entry_fill_z",         # z at the actual fill -- the two differ, on purpose
     "exec_spread_at_exit",  # executable-side spread, diagnostic only
+
+    # -- is it actually a pair trade? -----------------------------------------
+    # The screen is |z| >= 3 and nothing else: no cointegration test, no bound
+    # on beta, no fit quality. Measured over 3.6M candidate observations, only
+    # 18.4% have beta in [0.8, 1.2] and 17.4% have beta < 0, which puts BOTH
+    # legs on the same side. The median position carries 34.6% of its gross as
+    # one-way market exposure. These columns record that per trade so the cost
+    # can be measured before any filter is chosen.
+    "r2_at_entry",          # fit quality of the hedge over the entry window
+    "net_exposure",         # signed dollars of one-way exposure, leg A + leg B
+    "net_exposure_frac",    # the same over gross: 0 neutral, +/-1 directional
 ]
 
 # Rows carrying any of these mean the exit was not observed live and must be
