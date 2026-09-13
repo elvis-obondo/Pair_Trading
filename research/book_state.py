@@ -143,16 +143,34 @@ RETAIN_SCAN_HISTORY_DAYS = 90  # a quarter of "what was dislocated, and when"
 LOG_MAX_BYTES = 32 * 1024 * 1024
 
 
-def candidates_consumed_mtime() -> float:
-    """mtime of the last candidates file that was opened from, 0.0 if none."""
+def candidates_consumed_ns() -> int:
+    """mtime, in integer nanoseconds, of the last candidates file opened from.
+
+    NANOSECONDS, NOT A FLOAT. The first version stored os.path.getmtime() through
+    an f"{mtime:.6f}" format, which truncates. The stored value was therefore
+    always a hair BELOW the real mtime, `mtime <= consumed` was never true, and
+    the monitor re-opened from the same file every 20 seconds forever -- API3/ME
+    entered three times in 78 seconds on 2026-09-13, each one stopping out.
+
+    st_mtime_ns is an int. It round-trips through text exactly, and there is no
+    precision left to lose.
+    """
     try:
         with open(CONSUMED_PATH) as fh:
-            return float(fh.read().strip())
+            return int(fh.read().strip())
     except (OSError, ValueError):
-        return 0.0
+        return 0
 
 
-def mark_candidates_consumed(mtime: float) -> None:
+def candidates_mtime_ns(path: str = None) -> int:
+    """The candidates file's mtime in the same units. 0 if it is not there."""
+    try:
+        return os.stat(CANDIDATES_PATH if path is None else path).st_mtime_ns
+    except OSError:
+        return 0
+
+
+def mark_candidates_consumed(mtime_ns: int) -> None:
     """Record that this candidates file has been acted on.
 
     WHY THIS IS ON DISK
@@ -173,7 +191,7 @@ def mark_candidates_consumed(mtime: float) -> None:
     _ensure_dirs()
     tmp = CONSUMED_PATH + ".tmp"
     with open(tmp, "w") as fh:
-        fh.write(f"{mtime:.6f}\n")
+        fh.write(f"{int(mtime_ns)}\n")
     os.replace(tmp, CONSUMED_PATH)
 
 

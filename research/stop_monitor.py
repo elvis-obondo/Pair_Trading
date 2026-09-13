@@ -826,16 +826,14 @@ async def timer_loop(mon: StopMonitor, stop_event: asyncio.Event) -> None:
         # late or early scanner cycle is picked up when it actually lands.
         if now - last_entry_check >= 20.0:
             last_entry_check = now
-            try:
-                mtime = os.path.getmtime(cfg.CANDIDATES_PATH)
-            except OSError:
+            # Integer nanoseconds, persisted to disk. A float mtime through a
+            # 6-decimal format truncates, which made this comparison never match
+            # and re-opened the same file every 20 seconds. See
+            # book_state.candidates_consumed_ns.
+            mtime_ns = cfg.candidates_mtime_ns()
+            if mtime_ns == 0 or mtime_ns <= cfg.candidates_consumed_ns():
                 continue
-            # Persisted, not in-memory: a restart must not re-consume a file
-            # the monitor has already opened from. See
-            # book_state.mark_candidates_consumed.
-            if mtime <= cfg.candidates_consumed_mtime():
-                continue
-            cfg.mark_candidates_consumed(mtime)
+            cfg.mark_candidates_consumed(mtime_ns)
             cands = mon.load_candidates()
             if not cands:
                 continue

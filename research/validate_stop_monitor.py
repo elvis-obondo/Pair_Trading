@@ -606,49 +606,67 @@ print()
 print("=" * 118)
 print("17. A restart must not re-open from a candidates file already consumed")
 print("=" * 118)
-# The bug: _candidates_mtime lived in memory, so every restart saw the existing
-# file as new and opened from it within seconds. On 2026-09-13 eleven deploys
-# produced eleven unasked-for entry bursts, including API3/XLM re-entered four
-# seconds after a restart and four minutes after it had stopped out. It lost.
-if os.path.exists(cfg.CONSUMED_PATH):
-    os.remove(cfg.CONSUMED_PATH)
+# Two bugs, both live, both here:
+#   (a) the marker lived in memory, so every restart re-opened from the existing
+#       file within seconds. Eleven deploys on 2026-09-13 = eleven entry bursts.
+#   (b) it was then stored via f"{mtime:.6f}", which TRUNCATES. The stored value
+#       sat a hair below the real mtime, the comparison never matched, and the
+#       monitor re-opened every 20 seconds forever -- API3/ME three times in 78
+#       seconds, each one stopping out.
+cfg.CANDIDATES_PATH = os.path.join(TMP, "scanner_candidates.json")
+for p_ in (cfg.CONSUMED_PATH, cfg.CANDIDATES_PATH):
+    if os.path.exists(p_):
+        os.remove(p_)
 
-check("nothing consumed yet reads as 0.0", cfg.candidates_consumed_mtime() == 0.0,
-      cfg.candidates_consumed_mtime())
+check("no marker yet reads as 0", cfg.candidates_consumed_ns() == 0,
+      cfg.candidates_consumed_ns())
+check("a missing candidates file reads as 0", cfg.candidates_mtime_ns() == 0,
+      cfg.candidates_mtime_ns())
 
-cfg.mark_candidates_consumed(1789_000_000.5)
-check("the marker round-trips exactly",
-      cfg.candidates_consumed_mtime() == 1789_000_000.5, cfg.candidates_consumed_mtime())
+with open(cfg.CANDIDATES_PATH, "w") as fh:
+    fh.write("{}")
+ns = cfg.candidates_mtime_ns()
+check("a real mtime is a positive integer", isinstance(ns, int) and ns > 0, ns)
 
-# The gate itself: same file -> skip, newer file -> act.
-seen = cfg.candidates_consumed_mtime()
-check("an unchanged file is skipped", not (1789_000_000.5 > seen), "skipped")
-check("a newer file is acted on", 1789_000_060.0 > seen, "opens")
+cfg.mark_candidates_consumed(ns)
+# THE REGRESSION: the stored value must equal the real one EXACTLY. A float
+# round-trip loses sub-microsecond digits and the gate silently stops working.
+check("the marker round-trips with no precision loss",
+      cfg.candidates_consumed_ns() == ns, cfg.candidates_consumed_ns())
+check("  ... so an unchanged file does NOT re-open",
+      not (ns > cfg.candidates_consumed_ns()), "skipped")
 
-# Survives a "restart": nothing in memory, re-read from disk.
+# Repeated checks must stay stable -- this is the every-20-seconds loop.
+for _ in range(5):
+    check_ns = cfg.candidates_mtime_ns()
+    if check_ns > cfg.candidates_consumed_ns():
+        cfg.mark_candidates_consumed(check_ns)
+check("five more polls of the same file still do not re-open",
+      not (cfg.candidates_mtime_ns() > cfg.candidates_consumed_ns()), "stable")
+
+# A genuinely new file does open.
+os.utime(cfg.CANDIDATES_PATH, ns=(ns + 10**9, ns + 10**9))
+check("a newer file opens", cfg.candidates_mtime_ns() > cfg.candidates_consumed_ns(),
+      "opens")
+
+# Survives a restart: nothing in memory, re-read from disk.
+before = cfg.candidates_consumed_ns()
 import importlib
-mtime_before = cfg.candidates_consumed_mtime()
 importlib.reload(cfg)
-cfg.STATE_PATH = os.path.join(TMP, "scanner_state.json")
-cfg.LEDGER_PATH = os.path.join(TMP, "scanner_trades.csv")
-cfg.EQUITY_PATH = os.path.join(TMP, "equity_curve.csv")
 cfg.CONSUMED_PATH = os.path.join(TMP, "candidates_consumed")
+cfg.CANDIDATES_PATH = os.path.join(TMP, "scanner_candidates.json")
 check("the marker survives a process restart",
-      cfg.candidates_consumed_mtime() == mtime_before, cfg.candidates_consumed_mtime())
+      cfg.candidates_consumed_ns() == before, cfg.candidates_consumed_ns())
 
-# Atomic: a kill mid-write must not leave a truncated marker.
-cfg.mark_candidates_consumed(1789_000_999.25)
+# Atomic, and a corrupt marker fails SAFE (0 = open on the next file).
+cfg.mark_candidates_consumed(123456789)
 check("no .tmp left behind", not os.path.exists(cfg.CONSUMED_PATH + ".tmp"), "clean")
-check("and the new value is readable",
-      cfg.candidates_consumed_mtime() == 1789_000_999.25, cfg.candidates_consumed_mtime())
-
-# A corrupt or empty marker fails SAFE -- 0.0 means "open on the next file",
-# which is the pre-existing behaviour, not a crash.
 with open(cfg.CONSUMED_PATH, "w") as fh:
     fh.write("not a number\n")
-check("a corrupt marker reads as 0.0 rather than raising",
-      cfg.candidates_consumed_mtime() == 0.0, "safe")
+check("a corrupt marker reads as 0 rather than raising",
+      cfg.candidates_consumed_ns() == 0, "safe")
 os.remove(cfg.CONSUMED_PATH)
+os.remove(cfg.CANDIDATES_PATH)
 
 import shutil
 shutil.rmtree(TMP, ignore_errors=True)

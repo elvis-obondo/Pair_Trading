@@ -1,2 +1,86 @@
 ################ ARM: theta | 180d | 1.04x | LIVE CONFIG ################
 07:58:30Z
+[INFO] 171 tickers, 14,535 pairs
+[INFO] 8,640 bars to evaluate (2025-12-15 00:30:00 -> 2026-06-13 00:00:00), stride 1
+[INFO] entry 3.0 sigma | tp 1.0 | stop 0.5 | hold 72.0h | 10 slots | 5% margin at 20x | max 1/ticker | rank by theta
+
+[INFO] screening the whole window, once per pair...
+[INFO] 2,617,660 candidate rows across 8,639 bars in 31s
+
+[INFO] adverse exits booked at 1.04x the stop distance, not at the bar-close spread.
+[INFO] that is the MEASURED live figure (tick-watched monitor, median 1.042x).
+
+[INFO] opened 4287, closed 4277, still open 10 in 402s
+
+====================================================================================================
+PER-TRADE RESULTS  (the compounded multiple is deliberately not quoted)
+====================================================================================================
+  trades closed        : 4277
+  mean net_pct         : +0.6169%  (median -0.7968%)
+  mean R               : +0.6197   (median -1.1360)
+  win rate             : 22.0%
+  mean hours held      : 10.1  (max 72.0)
+
+  by exit reason:
+    adverse_move    3331 ( 77.9%)  mean R -1.176  mean hrs    6.5
+    take_profit      852 ( 19.9%)  mean R +7.404  mean hrs   17.4
+    time_stop         94 (  2.2%)  mean R +2.764  mean hrs   72.0
+
+  ranked (had a theta) :  4271  mean R +0.6205
+  unranked (no theta)  :     6  mean R +0.0875
+
+  invariants:
+    max concurrent open  : 10 (cap 10)
+    duplicate pair open  : none
+    all |z| >= entry     : True
+    all holds <= cap     : True
+
+  most-traded tickers  : OL(87), ME(77), RVN(74), SOPH(72), PEPE(72)
+
+[INFO] ledger written to research/rank_experiment/live_theta.csv
+====================================================================================================
+
+################ ARM: neutrality | 180d | 1.04x | LIVE CONFIG ################
+08:05:47Z
+[INFO] 171 tickers, 14,535 pairs
+[INFO] 8,640 bars to evaluate (2025-12-15 00:30:00 -> 2026-06-13 00:00:00), stride 1
+[INFO] entry 3.0 sigma | tp 1.0 | stop 0.5 | hold 72.0h | 10 slots | 5% margin at 20x | rank by neutrality
+
+[INFO] screening the whole window, once per pair...
+[INFO] 2,617,660 candidate rows across 8,639 bars in 31s
+
+[INFO] adverse exits booked at 1.04x the stop distance, not at the bar-close spread.
+[INFO] that is the MEASURED live figure (tick-watched monitor, median 1.042x).
+
+[INFO] opened 2590, closed 2580, still open 10 in 255s
+
+====================================================================================================
+PER-TRADE RESULTS  (the compounded multiple is deliberately not quoted)
+====================================================================================================
+  trades closed        : 2580
+  mean net_pct         : +0.7299%  (median -1.0441%)
+  mean R               : +0.4252   (median -1.1135)
+  win rate             : 20.8%
+  mean hours held      : 16.6  (max 72.0)
+
+  by exit reason:
+    adverse_move    2030 ( 78.7%)  mean R -1.141  mean hrs    8.6
+    take_profit      316 ( 12.2%)  mean R +8.149  mean hrs   27.4
+    time_stop        234 (  9.1%)  mean R +3.585  mean hrs   72.0
+
+  ranked (had a theta) :   939  mean R +0.3421
+  unranked (no theta)  :  1641  mean R +0.4727
+
+  invariants:
+    max concurrent open  : 10 (cap 10)
+    duplicate pair open  : none
+    all |z| >= entry     : True
+    all holds <= cap     : True
+
+  most-traded tickers  : MEME(59), RVN(52), AIXBT(52), AVNT(51), PENGU(49)
+
+[INFO] ledger written to research/rank_experiment/live_neutrality.csv
+====================================================================================================
+
+################ ARM: both | 180d | 1.04x | LIVE CONFIG ################
+08:10:37Z
