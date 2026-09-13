@@ -51,13 +51,21 @@ if [ "$MODE" = "all" ] || [ "$MODE" = "--deploy" ]; then
     gcloud compute scp docker-compose.trading.yml "$INSTANCE:$REMOTE/" $G --quiet
     # COPYFILE_DISABLE: macOS tars an xattr per file, and GNU tar on the VM
     # prints a warning for each one -- 18 lines of noise per deploy.
-    COPYFILE_DISABLE=1 tar -czf - scripts | gcloud compute ssh "$INSTANCE" $G \
+    # dashboard/ rides along: it is bind-mounted read-only, not baked into the
+    # image, so an HTML change ships without a rebuild.
+    COPYFILE_DISABLE=1 tar -czf - scripts dashboard | gcloud compute ssh "$INSTANCE" $G \
         --command="tar -C $REMOTE -xzf - && chmod +x $REMOTE/scripts/*.sh"
 
     # Idempotent, and cheap. Without it the pull fails with a bare 401 that
     # reads like a missing image rather than a missing credential helper.
     ssh_vm "gcloud auth configure-docker us-central1-docker.pkg.dev --quiet"
-    ssh_vm "cd $REMOTE && docker compose -f docker-compose.trading.yml pull stop-monitor && docker compose -f docker-compose.trading.yml up -d stop-monitor"
+    # The dashboard runs the same image, so one pull covers both. cloudflared is
+    # only started if a TUNNEL_TOKEN exists -- see scripts/setup_tunnel.sh.
+    ssh_vm "cd $REMOTE && docker compose -f docker-compose.trading.yml pull stop-monitor \
+        && docker compose -f docker-compose.trading.yml up -d stop-monitor dashboard \
+        && if grep -qs TUNNEL_TOKEN .env; then \
+             docker compose -f docker-compose.trading.yml up -d cloudflared; \
+           else echo '  (no TUNNEL_TOKEN yet — tunnel not started)'; fi"
     sleep 6
     bold "Running"
     ssh_vm "docker ps --format '{{.Names}} | {{.Image}} | {{.Status}}'; echo; tail -12 $REMOTE/logs/stop_monitor.log 2>/dev/null || echo '  no log yet'"

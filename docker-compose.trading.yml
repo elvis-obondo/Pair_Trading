@@ -10,7 +10,7 @@
 #
 # ONE-TIME SETUP before the first `up`:
 #   mkdir -p trading_data/scan_history trading_data/monitor_ticks logs
-#   touch trading_data/scanner_trades.csv
+#   touch trading_data/scanner_trades.csv trading_data/equity_curve.csv
 # Docker bind-mounts a missing FILE path as an empty directory rather than
 # erroring, so pre-creating the CSV as a real file avoids that footgun.
 #
@@ -33,6 +33,45 @@ services:
       options:
         max-size: "10m"
         max-file: "5"
+
+  # Read-only view of the book. Its own process on purpose: the monitor's
+  # latency is the thing that matters, and serving HTTP from its event loop
+  # would put request handling next to tick evaluation.
+  #
+  # BINDS TO LOCALHOST ONLY. Cloudflare Tunnel connects outbound from this same
+  # host, so nothing listens on a public interface and the VM's firewall stays
+  # closed. Publishing this port instead would put an UNAUTHENTICATED dashboard
+  # on the internet -- there is no login in dashboard_server.py, by design.
+  dashboard:
+    image: us-central1-docker.pkg.dev/project-0671be06-e22a-44d8-83c/pairs-trading/stop-monitor:latest
+    container_name: pairs-dashboard
+    restart: unless-stopped
+    network_mode: host
+    command: ["python", "research/dashboard_server.py", "--host", "127.0.0.1", "--port", "8080"]
+    volumes:
+      - ./trading_data:/app/trading_data:ro
+      - ./dashboard:/app/dashboard:ro
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # The tunnel. No inbound ports, no static IP to go stale, real HTTPS, and
+  # Cloudflare Access in front so an unauthenticated request never arrives.
+  # Needs TUNNEL_TOKEN in .env -- see scripts/setup_tunnel.sh.
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: pairs-tunnel
+    restart: unless-stopped
+    network_mode: host
+    command: ["tunnel", "--no-autoupdate", "run", "--token", "${TUNNEL_TOKEN}"]
+    depends_on: [dashboard]
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   # Single-shot, and only used in FULL mode where the scanner also runs on the
   # VM. In micro mode the scanner runs on the laptop and ships its candidates

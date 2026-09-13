@@ -27,6 +27,8 @@
 #   scripts/check_vm.sh pull           # copy ledger + scan history down
 #   scripts/check_vm.sh deploy         # build here, push to the registry, VM pulls
 #   scripts/check_vm.sh ssh            # interactive shell
+#   scripts/check_vm.sh positions      # check the live positions
+
 
 set -euo pipefail
 

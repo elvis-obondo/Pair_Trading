@@ -1,0 +1,73 @@
+################ ARM: theta (assumed fills) ################
+05:21:39Z
+[INFO] 91 tickers, 4,095 pairs
+[INFO] 30,050 bars to evaluate (2024-09-24 23:30:00 -> 2026-06-13 00:00:00), stride 1
+[INFO] entry 3.0 sigma | tp 1.0 | stop 0.5 | hold 72.0h | 10 slots | 5% margin at 20x | rank by theta
+
+[INFO] screening the whole window, once per pair...
+[INFO] 2,346,581 candidate rows across 29,330 bars in 23s
+
+[WARN] assume_stop_fills=True — adverse exits are booked AT the stop
+[WARN] level, not where the spread actually was. Measured: 0 of 9,704
+[WARN] real stop-outs filled at or inside the level. This run measures
+[WARN] the edge with execution removed, NOT what the account would do.
+
+
+[INFO] opened 12825, closed 12815, still open 10 in 359s
+
+====================================================================================================
+PER-TRADE RESULTS  (the compounded multiple is deliberately not quoted)
+====================================================================================================
+  trades closed        : 12815
+  mean net_pct         : +0.6775%  (median -0.6657%)
+  mean R               : +0.7818   (median -1.1154)
+  win rate             : 23.8%
+  mean hours held      : 11.7  (max 72.0)
+
+  by exit reason:
+    adverse_move    9737 ( 76.0%)  mean R -1.157  mean hrs    7.0
+    take_profit     2678 ( 20.9%)  mean R +7.493  mean hrs   19.9
+    time_stop        400 (  3.1%)  mean R +3.042  mean hrs   72.0
+
+  ranked (had a theta) : 12655  mean R +0.7835
+  unranked (no theta)  :   160  mean R +0.6456
+
+  invariants:
+    max concurrent open  : 10 (cap 10)
+    duplicate pair open  : none
+    all |z| >= entry     : True
+    all holds <= cap     : True
+
+  most-traded tickers  : LUNA(581), LPT(425), RVN(393), ENS(373), MEME(372)
+
+[INFO] ledger written to research/rank_experiment/af_trades_theta.csv
+====================================================================================================
+
+################ ARM: neutrality (assumed fills) ################
+05:28:05Z
+usage: run_portfolio_backtest.py [-h] [--days DAYS] [--stride STRIDE]
+                                 [--slots SLOTS] [--equity EQUITY]
+                                 [--entry ENTRY] [--stop STOP] [--hold HOLD]
+                                 [--max-per-ticker MAX_PER_TICKER]
+                                 [--end-date END_DATE]
+                                 [--stop-fill-overshoot STOP_FILL_OVERSHOOT]
+                                 [--max-notional MAX_NOTIONAL]
+                                 [--rank-by {theta,neutrality,both}]
+                                 [--out OUT]
+run_portfolio_backtest.py: error: unrecognized arguments: --assume-stop-fills
+
+################ ARM: both (assumed fills) ################
+05:28:06Z
+usage: run_portfolio_backtest.py [-h] [--days DAYS] [--stride STRIDE]
+                                 [--slots SLOTS] [--equity EQUITY]
+                                 [--entry ENTRY] [--stop STOP] [--hold HOLD]
+                                 [--max-per-ticker MAX_PER_TICKER]
+                                 [--end-date END_DATE]
+                                 [--stop-fill-overshoot STOP_FILL_OVERSHOOT]
+                                 [--max-notional MAX_NOTIONAL]
+                                 [--rank-by {theta,neutrality,both}]
+                                 [--out OUT]
+run_portfolio_backtest.py: error: unrecognized arguments: --assume-stop-fills
+
+ALL ASSUMED-FILL ARMS DONE
+05:28:07Z
