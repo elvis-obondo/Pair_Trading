@@ -231,14 +231,24 @@ def load_portfolio(equity: float = ACCOUNT_EQUITY):
             pf.open_positions.append(pos)
         pf.next_trade_num = st.get("next_trade_num", 1)
 
-    if os.path.exists(LEDGER_PATH):
-        d = pd.read_csv(LEDGER_PATH)
-        realized = 0.0
-        if "event" in d.columns and "realized_pnl_net" in d.columns:
-            closes = d[d["event"] == "close"]
-            realized = float(pd.to_numeric(closes["realized_pnl_net"],
-                                           errors="coerce").fillna(0.0).sum())
-        pf.equity = equity + realized
+    # getsize, not just exists. docker-compose.trading.yml's setup deliberately
+    # pre-creates this as an EMPTY file, because Docker bind-mounts a missing
+    # file path as a directory instead of erroring -- so on a fresh deployment
+    # the ledger exists and is zero bytes, and pd.read_csv raises
+    # EmptyDataError("No columns to parse from file"). That crash-looped the
+    # monitor on the VM the first time it started with no trades.
+    try:
+        if os.path.getsize(LEDGER_PATH) > 0:
+            d = pd.read_csv(LEDGER_PATH)
+            realized = 0.0
+            if "event" in d.columns and "realized_pnl_net" in d.columns:
+                closes = d[d["event"] == "close"]
+                realized = float(pd.to_numeric(closes["realized_pnl_net"],
+                                               errors="coerce").fillna(0.0).sum())
+            pf.equity = equity + realized
+    except (OSError, pd.errors.EmptyDataError):
+        # No ledger yet, or a header-only one. Starting equity is correct.
+        pass
     return pf
 
 

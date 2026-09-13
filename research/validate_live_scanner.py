@@ -215,6 +215,25 @@ try:
           np.isclose(cfg.load_portfolio().equity, cfg.ACCOUNT_EQUITY - 12.5),
           f"{cfg.load_portfolio().equity:.2f}")
 
+    # A FRESH DEPLOYMENT has a zero-byte ledger, on purpose: Docker bind-mounts a
+    # missing file path as a directory instead of erroring, so the compose setup
+    # pre-creates it empty. pd.read_csv raises EmptyDataError on that, which
+    # crash-looped the monitor on the VM the first time it started with no trades.
+    import os as _os
+    _os.remove(cfg.LEDGER_PATH)
+    open(cfg.LEDGER_PATH, "w").close()
+    check("a zero-byte ledger loads at starting equity",
+          cfg.load_portfolio().equity == cfg.ACCOUNT_EQUITY,
+          f"{cfg.load_portfolio().equity:.2f}")
+    open(cfg.LEDGER_PATH, "w").write(",".join(cfg.LEDGER_COLUMNS) + "\n")
+    check("a header-only ledger loads at starting equity",
+          cfg.load_portfolio().equity == cfg.ACCOUNT_EQUITY,
+          f"{cfg.load_portfolio().equity:.2f}")
+    _os.remove(cfg.LEDGER_PATH)
+    check("a missing ledger loads at starting equity",
+          cfg.load_portfolio().equity == cfg.ACCOUNT_EQUITY,
+          f"{cfg.load_portfolio().equity:.2f}")
+
     # ----------------------------------------------------------------------
     print()
     print("=" * 118)
