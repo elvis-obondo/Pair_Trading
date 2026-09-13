@@ -52,6 +52,9 @@ if [ "$MODE" = "all" ] || [ "$MODE" = "--deploy" ]; then
     tar -czf - scripts | gcloud compute ssh "$INSTANCE" $G \
         --command="tar -C $REMOTE -xzf - && chmod +x $REMOTE/scripts/*.sh"
 
+    # Idempotent, and cheap. Without it the pull fails with a bare 401 that
+    # reads like a missing image rather than a missing credential helper.
+    ssh_vm "gcloud auth configure-docker us-central1-docker.pkg.dev --quiet"
     ssh_vm "cd $REMOTE && docker compose -f docker-compose.trading.yml pull stop-monitor && docker compose -f docker-compose.trading.yml up -d stop-monitor"
     sleep 6
     bold "Running"
