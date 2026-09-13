@@ -30,9 +30,10 @@
 # it (step `retire`) frees more than the monitor needs. What does NOT fit is the
 # scanner: 531MB peak plus a freqtrade download. That is why it stays local.
 #
-# Step `swap` adds 2GB of swap regardless of mode. On a 1GB box the pip install
-# of pandas/scipy/statsmodels during the image build is the tightest moment, and
-# swap is the difference between a slow build and an OOM-killed one.
+# Step `swap` adds 2GB of swap regardless of mode. It no longer protects a build
+# -- the VM does not build anything, see step `build` -- but it turns a transient
+# memory spike into slowness rather than a dead monitor, and an unwatched stop is
+# the failure this whole system exists to prevent.
 set -uo pipefail
 
 PROJECT="project-0671be06-e22a-44d8-83c"
@@ -179,18 +180,22 @@ step_dirs() {
 }
 
 step_build() {
-    bold "STEP build — build the image and start the monitor"
-    echo "  First build pulls python:3.12-slim and installs pandas/numpy/scipy/"
-    echo "  statsmodels/websockets/ccxt. Expect a few minutes."
-    ssh_vm "cd $REMOTE && docker compose -f docker-compose.trading.yml up -d --build stop-monitor" \
-        || die "build/start failed"
+    bold "STEP build — authorise the registry and pull the image"
+    # The VM does not build. Images are built on the laptop for linux/amd64 and
+    # pushed to Artifact Registry; building here cost 4.6GB of build cache
+    # against 8GB free, seven minutes of pip on 2 shared vCPU, and OOM risk on
+    # the one machine whose job is to never miss a stop.
+    #
+    # Run scripts/release.sh --build first if the image is not in the registry.
+    ssh_vm "gcloud auth configure-docker us-central1-docker.pkg.dev --quiet" \
+        && ok "registry authorised"
+    ssh_vm "cd $REMOTE && docker compose -f docker-compose.trading.yml pull stop-monitor && docker compose -f docker-compose.trading.yml up -d stop-monitor" \
+        || die "pull/start failed — is the image pushed? scripts/release.sh --build"
     echo "  waiting for first log lines..."
     sleep 8
-    ssh_vm "docker logs --tail 20 pairs-stop-monitor"
+    ssh_vm "docker ps --format '{{.Names}} | {{.Image}} | {{.Status}}'; echo; tail -15 $REMOTE/logs/stop_monitor.log 2>/dev/null || echo '  no log yet'"
     echo
     echo "  Expect: 'resumed: 0 open' then 'websocket connected'."
-    echo "  'candidates ... old — the scanner is down' is CORRECT here; step 6"
-    echo "  produces the first candidates."
 }
 
 step_firstscan() {

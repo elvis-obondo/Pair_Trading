@@ -24,7 +24,7 @@
 #   scripts/check_vm.sh ledger [N]     # last N ledger rows (5)
 #   scripts/check_vm.sh overshoot      # THE number: how far past the stop fills land
 #   scripts/check_vm.sh pull           # copy ledger + scan history down
-#   scripts/check_vm.sh deploy         # push code, rebuild, restart the monitor
+#   scripts/check_vm.sh deploy         # build here, push to the registry, VM pulls
 #   scripts/check_vm.sh ssh            # interactive shell
 
 set -euo pipefail
@@ -110,16 +110,9 @@ else:
     ;;
 
   deploy)
-    # Source only. The book lives in trading_data/ and is never overwritten.
-    gcloud compute scp --recurse "$PROJECT_ROOT/research" \
-      "$INSTANCE:$REMOTE/" --project="$PROJECT" --zone="$ZONE"
-    for f in Dockerfile.trading docker-compose.trading.yml docker-compose.yml requirements.txt; do
-      gcloud compute scp "$PROJECT_ROOT/$f" "$INSTANCE:$REMOTE/$f" \
-        --project="$PROJECT" --zone="$ZONE"
-    done
-    gcloud compute scp --recurse "$PROJECT_ROOT/scripts" \
-      "$INSTANCE:$REMOTE/" --project="$PROJECT" --zone="$ZONE"
-    run "cd $REMOTE && docker compose -f docker-compose.trading.yml up -d --build stop-monitor && sleep 5 && docker logs --tail 20 pairs-stop-monitor"
+    # Deploying means building on the laptop and pushing to Artifact Registry.
+    # The VM never builds. See scripts/release.sh.
+    exec "$PROJECT_ROOT/scripts/release.sh"
     ;;
 
   ssh)
