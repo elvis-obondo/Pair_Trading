@@ -147,7 +147,7 @@ class Portfolio:
                  capital_frac: float = 0.05, leverage: float = 20.0,
                  stop_sigma: float = 0.5, max_hold_hours: float = 72.0,
                  max_per_ticker: int | None = None,
-                 assume_stop_fills: bool = False,
+                 stop_fill_overshoot: float | None = None,
                  max_notional: float | None = None):
         self.starting_equity = float(equity)
         self.equity = float(equity)
@@ -172,7 +172,10 @@ class Portfolio:
         # So a run with this on does not estimate what the account would do. It
         # measures the edge with execution removed, which is a different and
         # still useful quantity: the gap between the two IS the execution cost.
-        self.assume_stop_fills = assume_stop_fills
+        # None == book the spread that actually occurred. The LIVE path must
+        # always be None: the monitor books real fills and an assumed one here
+        # would silently invent P&L. Backtests pass a measured multiple.
+        self.stop_fill_overshoot = stop_fill_overshoot
         self.max_notional = max_notional
         self.open_positions: list[Position] = []
         self.closed: list[dict] = []
@@ -225,22 +228,28 @@ class Portfolio:
             if ex is None:
                 still_open.append(pos)
                 continue
-            assumed = False
-            if self.assume_stop_fills and ex["exit_reason"] == "adverse_move":
-                # Book it at the level the stop was placed at. direction is -1
-                # when short the spread (adverse = spread rises), so the stop
-                # sits at entry - direction*distance in both cases.
+            overshoot = float("nan")
+            if (self.stop_fill_overshoot is not None
+                    and ex["exit_reason"] == "adverse_move"):
+                # Book it `overshoot` stop-distances past entry, in the adverse
+                # direction. direction is -1 when short the spread (adverse =
+                # spread rises), so the level sits at entry - direction*distance
+                # in both cases and overshoot scales that distance.
+                #
+                # overshoot = 1.00  perfect fill, never observed
+                # overshoot = 1.04  MEASURED live, tick-watched (book_state)
+                # overshoot = 1.53  what 30-minute bar-close checking produced
+                overshoot = float(self.stop_fill_overshoot)
                 stop_distance = self.stop_sigma * pos.signal["sigma_at_entry"]
                 ex = dict(ex)
                 ex["current_spread"] = (pos.signal["entry_spread"]
-                                        - pos.direction * stop_distance)
-                assumed = True
-            closed.append(self._close(pos, ex, now, hours, assumed))
+                                        - pos.direction * stop_distance * overshoot)
+            closed.append(self._close(pos, ex, now, hours, overshoot))
         self.open_positions = still_open
         return closed
 
     def _close(self, pos: Position, ex: dict, now, hours: float,
-               assumed_fill: bool = False) -> dict:
+               fill_overshoot: float = float("nan")) -> dict:
         net, net_pct, r = pos.pnl(ex["current_spread"])
         # Recomputed from the realized total, never `equity += pnl` -- the same
         # discipline PairsTradingActor._recompute_equity uses, so a rounding
@@ -273,8 +282,9 @@ class Portfolio:
             "net_exposure": pos.net_exposure,
             "net_exposure_frac": pos.net_exposure_frac,
             # Marked per row so a ledger can never be read later as measured
-            # when the fill was assumed.
-            "assumed_stop_fill": assumed_fill,
+            # when the fill was modelled. NaN means the spread that actually
+            # occurred was used; a number is the multiple that was assumed.
+            "stop_fill_overshoot": fill_overshoot,
         })
         self.equity = self.starting_equity + sum(c["realized_pnl_net"] for c in self.closed)
         return self.closed[-1]

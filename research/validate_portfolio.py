@@ -210,40 +210,66 @@ check("equity == start + sum(realized), not an accumulator",
 
 print()
 print("=" * 104)
-print("10. assume_stop_fills: the counterfactual books the stop AT its level")
+print("10. stop_fill_overshoot: adverse exits book at a MEASURED multiple")
 print("=" * 104)
+import book_state as _bs
 SG, SS = 0.02, 0.5
+MEAS = _bs.MEASURED_STOP_OVERSHOOT
 for label, z in (("entered ABOVE mu (short spread)", 3.5),
                  ("entered BELOW mu (long spread)", -3.5)):
     real = Portfolio(equity=300.0, max_slots=1, stop_sigma=SS)
-    fake = Portfolio(equity=300.0, max_slots=1, stop_sigma=SS, assume_stop_fills=True)
+    meas = Portfolio(equity=300.0, max_slots=1, stop_sigma=SS,
+                     stop_fill_overshoot=MEAS)
+    perf = Portfolio(equity=300.0, max_slots=1, stop_sigma=SS,
+                     stop_fill_overshoot=1.0)
     c = frame([cand("A", "B", 0.2, z=z, sigma=SG)])
-    real.fill_slots(c, T0); fake.fill_slots(c, T0)
+    for pf_ in (real, meas, perf):
+        pf_.fill_slots(c, T0)
     entry = z * SG
-    # Blow well past the stop so the real book fills far out.
+    # Blow well past the stop so the unmodelled book fills far out.
     far = entry + (3.0 * SS * SG if z > 0 else -3.0 * SS * SG)
-    r_out = real.evaluate_exits({"A": far, "B": 0.0}, T0 + timedelta(hours=1))[0]
-    f_out = fake.evaluate_exits({"A": far, "B": 0.0}, T0 + timedelta(hours=1))[0]
+    when = T0 + timedelta(hours=1)
+    r_out = real.evaluate_exits({"A": far, "B": 0.0}, when)[0]
+    m_out = meas.evaluate_exits({"A": far, "B": 0.0}, when)[0]
+    p_out = perf.evaluate_exits({"A": far, "B": 0.0}, when)[0]
     print(f"  {label}")
-    check("   both stop out", r_out["exit_reason"] == f_out["exit_reason"] == "adverse_move")
-    check("   real books where the spread WAS", abs(r_out["r"]) > 2.5, f"R={r_out['r']:.2f}")
-    check("   assumed books at the stop (R ~ -1)", -1.2 < f_out["r"] < -1.0,
-          f"R={f_out['r']:.3f}")
-    check("   assumed loss is smaller", f_out["realized_pnl_net"] > r_out["realized_pnl_net"],
-          f"{r_out['realized_pnl_net']:+.2f} -> {f_out['realized_pnl_net']:+.2f}")
-    check("   row is flagged as assumed",
-          f_out["assumed_stop_fill"] is True and r_out["assumed_stop_fill"] is False)
+    check("   all three stop out",
+          r_out["exit_reason"] == m_out["exit_reason"] == p_out["exit_reason"] == "adverse_move")
+    check("   None books where the spread WAS", abs(r_out["r"]) > 2.5, f"R={r_out['r']:.2f}")
+    check("   1.00x books at the level (R ~ -1)", -1.2 < p_out["r"] < -1.0,
+          f"R={p_out['r']:.3f}")
+    check(f"   {MEAS}x is slightly worse than 1.00x",
+          m_out["r"] < p_out["r"], f"{m_out['r']:.3f} < {p_out['r']:.3f}")
+    check("   ... and much better than the unmodelled fill",
+          m_out["r"] > r_out["r"], f"{r_out['r']:.2f} -> {m_out['r']:.2f}")
+    # The fill must land exactly `overshoot` stop-distances past entry.
+    want = entry - (-1.0 if z > 0 else 1.0) * SS * SG * MEAS
+    check("   fill lands exactly overshoot*distance past entry",
+          abs(m_out["exit_spread"] - want) < 1e-12, f"{m_out['exit_spread']:.6f}")
+    check("   the row records the multiple it used",
+          abs(m_out["stop_fill_overshoot"] - MEAS) < 1e-12
+          and np.isnan(r_out["stop_fill_overshoot"]), f"{m_out['stop_fill_overshoot']}")
 
-# Non-stop exits must be untouched by the flag.
+# Non-stop exits must be untouched.
 real = Portfolio(equity=300.0, max_slots=1, stop_sigma=SS)
-fake = Portfolio(equity=300.0, max_slots=1, stop_sigma=SS, assume_stop_fills=True)
+meas = Portfolio(equity=300.0, max_slots=1, stop_sigma=SS, stop_fill_overshoot=MEAS)
 c = frame([cand("A", "B", 0.2, z=3.5, sigma=SG)])
-real.fill_slots(c, T0); fake.fill_slots(c, T0)
+real.fill_slots(c, T0); meas.fill_slots(c, T0)
 rt = real.evaluate_exits({"A": 0.0, "B": 0.0}, T0 + timedelta(hours=2))[0]
-ft = fake.evaluate_exits({"A": 0.0, "B": 0.0}, T0 + timedelta(hours=2))[0]
-check("take_profit is identical under the flag",
+ft = meas.evaluate_exits({"A": 0.0, "B": 0.0}, T0 + timedelta(hours=2))[0]
+check("take_profit is identical under the setting",
       abs(rt["realized_pnl_net"] - ft["realized_pnl_net"]) < 1e-12, "unchanged")
-check("take_profit is not flagged as assumed", ft["assumed_stop_fill"] is False)
+check("take_profit records no overshoot", np.isnan(ft["stop_fill_overshoot"]))
+
+# THE LIVE FOOTGUN: a Portfolio built with no argument must book real fills.
+check("default Portfolio books ACTUAL fills (live safety)",
+      Portfolio(equity=300.0).stop_fill_overshoot is None, "None")
+import book_state as _bs2
+check("load_portfolio does not model fills either",
+      "stop_fill_overshoot" not in open(
+          os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                       "book_state.py")).read().split("def load_portfolio")[1]
+      .split("def save_portfolio")[0], "not passed")
 
 print()
 print("=" * 104)

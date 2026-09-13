@@ -86,6 +86,23 @@ MAX_NOTIONAL = 5000.0
 # has moved on.
 CANDIDATES_MAX_AGE_MIN = 60.0
 
+# How far past its level an adverse exit actually fills, as a multiple of the
+# stop distance. THE BACKTEST BOOKS STOPS HERE.
+#
+# 1.00 would be perfect execution and has never once happened. 1.53 is what a
+# 30-minute bar-close check produced across 9,704 backtested stop-outs, and was
+# the default for exactly as long as bar-close checking was the only mechanism.
+# Neither is what the system does now.
+#
+# 1.04 is MEASURED, from the live tick-watching monitor:
+#     13 stop-outs, median 1.042x, mean 1.075x, confirm delays 100-255ms
+#
+# It is a small sample and it should be re-derived as the ledger grows --
+# scripts/check_vm.sh overshoot prints the current figure. Raise this the day
+# the live median disagrees with it; a backtest booking fills better than the
+# live system achieves is a backtest that lies.
+MEASURED_STOP_OVERSHOOT = 1.04
+
 # ---------------------------------------------------------------------------
 # RETENTION. Everything this system writes on a schedule grows without bound
 # unless something deletes it, and the VM has an 11GB margin, not 11TB.

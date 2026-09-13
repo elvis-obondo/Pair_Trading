@@ -109,13 +109,51 @@ def theta_at(arrays: dict, a: str, b: str, bar: int, beta: float, alpha: float,
     return float(p.theta) if np.isfinite(p.theta) and p.theta > 0 else float("nan")
 
 
+RANK_MODES = ("theta", "neutrality", "both")
+
+
+def neutrality_score(beta) -> np.ndarray:
+    """|net exposure| as a fraction of gross. LOWER is more market neutral.
+
+    Identical algebra to Position.net_exposure_frac, in bulk:
+
+        |net| / gross = |1 - beta| / (1 + |beta|)
+
+    beta = +1 gives 0 (dollar neutral). beta = 0 gives 1 (a naked bet on leg A).
+    beta = -1 gives 1 with BOTH LEGS ON THE SAME SIDE, which is not a hedge --
+    the score cannot tell those last two apart, and does not need to: both are
+    fully directional and both rank last.
+    """
+    b = np.asarray(beta, dtype=float)
+    with np.errstate(invalid="ignore"):
+        return np.abs(1.0 - b) / (1.0 + np.abs(b))
+
+
 def rank_bar(rows: pd.DataFrame, arrays: dict, take_profit_pct: float = 1.0,
-             bar_hours: float = 0.5) -> pd.DataFrame:
-    """Fit theta for one bar's candidates and rank them, NaN last.
+             bar_hours: float = 0.5, rank_by: str = "theta") -> pd.DataFrame:
+    """Fit theta for one bar's candidates and rank them.
 
     Mirrors scanner.scan()'s output contract so Portfolio.fill_slots cannot tell
-    the two apart.
+    the two apart. Only the ORDER changes between modes -- the candidate set, the
+    geometry and the sizing are identical, so a difference in results is a
+    difference in which candidates got the ten slots and nothing else.
+
+    rank_by:
+      "theta"       settled spec. Reversion speed descending, NaN last.
+      "neutrality"  |1-beta|/(1+|beta|) ascending. Most dollar-neutral first.
+      "both"        mean of the two PERCENTILE ranks. Percentiles rather than the
+                    raw values because theta and neutrality share no units and
+                    theta's scale would otherwise decide the ranking on its own.
+                    A NaN theta takes the worst theta percentile instead of
+                    dropping out, so such a candidate is still ranked on its
+                    neutrality half -- theta ranks, it never gates.
+
+    theta is fitted in every mode, including "neutrality" where it does not order
+    anything, because it is recorded on the trade and the arms must be comparable
+    row for row.
     """
+    if rank_by not in RANK_MODES:
+        raise ValueError(f"rank_by must be one of {RANK_MODES}, got {rank_by!r}")
     if not len(rows):
         return rows
     d = rows.copy()
@@ -125,5 +163,19 @@ def rank_bar(rows: pd.DataFrame, arrays: dict, take_profit_pct: float = 1.0,
         for r in d.itertuples(index=False)]
     d["take_profit_level"] = (d.entry_spread
                               - take_profit_pct * (d.entry_spread - d.mu_at_entry))
-    return d.sort_values("theta_at_entry", ascending=False,
+    d["neutrality"] = neutrality_score(d.beta_at_entry)
+
+    if rank_by == "theta":
+        return d.sort_values("theta_at_entry", ascending=False,
+                             na_position="last").reset_index(drop=True)
+    if rank_by == "neutrality":
+        return d.sort_values("neutrality", ascending=True,
+                             na_position="last").reset_index(drop=True)
+
+    # "both". pct=True puts each rank on [0,1] so a bar with 12 candidates and a
+    # bar with 900 contribute on the same scale.
+    theta_pct = d.theta_at_entry.rank(pct=True, ascending=True, na_option="bottom")
+    neut_pct = d.neutrality.rank(pct=True, ascending=False, na_option="bottom")
+    d["rank_score"] = 0.5 * theta_pct + 0.5 * neut_pct
+    return d.sort_values("rank_score", ascending=False,
                          na_position="last").reset_index(drop=True)

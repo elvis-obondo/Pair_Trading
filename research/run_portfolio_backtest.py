@@ -51,6 +51,7 @@ from universe_panel import load_panel, usable_tickers, tradeable_pairs
 from rolling_spread import min_bars_required
 from backtest_screen import build_screen, rank_bar
 from portfolio import Portfolio
+import book_state as cfg
 
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(PROJECT_ROOT, "research", "portfolio_backtest_trades.csv")
@@ -59,8 +60,8 @@ OUT = os.path.join(PROJECT_ROOT, "research", "portfolio_backtest_trades.csv")
 def run(days=30, stride=1, bar_hours=0.5, equity=300.0, slots=10, end_date=None,
         min_deviation_sigma=3.0, take_profit_pct=1.0, stop_sigma=0.5,
         max_hold_hours=72.0, capital_frac=0.05, leverage=20.0,
-        max_per_ticker=None, assume_stop_fills=False, max_notional=None,
-        out_path=OUT):
+        max_per_ticker=None, stop_fill_overshoot=None, max_notional=None,
+        rank_by="theta", out_path=OUT):
     need = min_bars_required(bar_hours)
     bars_per_day = int(round(24 / bar_hours))
 
@@ -89,7 +90,8 @@ def run(days=30, stride=1, bar_hours=0.5, equity=300.0, slots=10, end_date=None,
     print(f"[INFO] entry {min_deviation_sigma} sigma | tp {take_profit_pct} | "
           f"stop {stop_sigma} | hold {max_hold_hours}h | {slots} slots | "
           f"{capital_frac*100:.0f}% margin at {leverage:.0f}x"
-          + (f" | max {max_per_ticker}/ticker" if max_per_ticker else "") + "\n")
+          + (f" | max {max_per_ticker}/ticker" if max_per_ticker else "")
+          + f" | rank by {rank_by}" + "\n")
 
     print("[INFO] screening the whole window, once per pair...")
     ts = time.time()
@@ -102,12 +104,24 @@ def run(days=30, stride=1, bar_hours=0.5, equity=300.0, slots=10, end_date=None,
     pf = Portfolio(equity=equity, max_slots=slots, capital_frac=capital_frac,
                    leverage=leverage, stop_sigma=stop_sigma,
                    max_hold_hours=max_hold_hours, max_per_ticker=max_per_ticker,
-                   assume_stop_fills=assume_stop_fills, max_notional=max_notional)
-    if assume_stop_fills:
-        print("[WARN] assume_stop_fills=True — adverse exits are booked AT the stop")
-        print("[WARN] level, not where the spread actually was. Measured: 0 of 9,704")
-        print("[WARN] real stop-outs filled at or inside the level. This run measures")
-        print("[WARN] the edge with execution removed, NOT what the account would do.\n")
+                   stop_fill_overshoot=stop_fill_overshoot, max_notional=max_notional)
+    if stop_fill_overshoot is not None:
+        print(f"[INFO] adverse exits booked at {stop_fill_overshoot:.2f}x the stop "
+              f"distance, not at the bar-close spread.")
+        if abs(stop_fill_overshoot - cfg.MEASURED_STOP_OVERSHOOT) < 1e-9:
+            print("[INFO] that is the MEASURED live figure (tick-watched monitor, "
+                  "median 1.042x).")
+        elif stop_fill_overshoot <= 1.0:
+            print("[WARN] 1.00x is perfect execution and has NEVER been observed. "
+                  "This is an upper bound on the edge, not a result.\n")
+        else:
+            print(f"[WARN] {stop_fill_overshoot:.2f}x is not the measured figure "
+                  f"({cfg.MEASURED_STOP_OVERSHOOT:.2f}x). Say why when quoting it.\n")
+    else:
+        print("[WARN] booking adverse exits at the BAR-CLOSE spread. That is the "
+              "30-minute checking this system replaced;")
+        print("[WARN] it measured 1.53x median overshoot. Pass --stop-fill-overshoot "
+              f"{cfg.MEASURED_STOP_OVERSHOOT} for the live figure.\n")
 
     t0 = time.time()
     n_open = 0
@@ -120,7 +134,8 @@ def run(days=30, stride=1, bar_hours=0.5, equity=300.0, slots=10, end_date=None,
         # what the live loop does.
         pf.evaluate_exits(prices, now)
         if pf.free_slots > 0 and i in by_bar:
-            cands = rank_bar(by_bar[i], arrays, take_profit_pct, bar_hours)
+            cands = rank_bar(by_bar[i], arrays, take_profit_pct, bar_hours,
+                             rank_by=rank_by)
             n_open += len(pf.fill_slots(cands, now))
 
         if k % 200 == 0 or k == len(eval_idx):
@@ -197,6 +212,11 @@ def no_overlap(d: pd.DataFrame) -> bool:
     return True
 
 
+def _overshoot(v):
+    """'none' books the actual bar-close spread; anything else is a multiple."""
+    return None if str(v).strip().lower() in ("none", "off", "") else float(v)
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--days", type=int, default=180)
@@ -210,15 +230,24 @@ if __name__ == "__main__":
     ap.add_argument("--end-date", type=str, default=None,
                     help="anchor the window, e.g. 2026-06-13. Omit for the most "
                          "recent `days`, which is IN SAMPLE for this project.")
-    ap.add_argument("--assume-stop-fills", action="store_true",
-                    help="COUNTERFACTUAL: book adverse exits at the stop level. "
-                         "Measured false on every one of 9,704 real stop-outs.")
+    ap.add_argument("--stop-fill-overshoot", default=str(cfg.MEASURED_STOP_OVERSHOOT),
+                    help="how far past its level an adverse exit fills, as a "
+                         "multiple of the stop distance. Default is the MEASURED "
+                         f"live figure ({cfg.MEASURED_STOP_OVERSHOOT}). Pass 'none' "
+                         "to book the bar-close spread instead, which is the "
+                         "30-minute checking this system replaced (1.53x).")
     ap.add_argument("--max-notional", type=float, default=None,
                     help="hard dollar ceiling on gross notional per position")
+    ap.add_argument("--rank-by", type=str, default="theta",
+                    choices=("theta", "neutrality", "both"),
+                    help="which key orders candidates for the ten slots. "
+                         "Only the ORDER changes; the candidate set and the "
+                         "geometry are identical across modes.")
     ap.add_argument("--out", type=str, default=OUT)
     a = ap.parse_args()
     run(days=a.days, stride=a.stride, slots=a.slots, equity=a.equity,
         min_deviation_sigma=a.entry, stop_sigma=a.stop, max_hold_hours=a.hold,
         max_per_ticker=a.max_per_ticker, end_date=a.end_date,
-        assume_stop_fills=a.assume_stop_fills, max_notional=a.max_notional,
-        out_path=a.out)
+        stop_fill_overshoot=_overshoot(a.stop_fill_overshoot),
+        max_notional=a.max_notional,
+        rank_by=a.rank_by, out_path=a.out)
