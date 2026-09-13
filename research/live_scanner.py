@@ -137,6 +137,14 @@ def write_candidates(cands: pd.DataFrame, bar_time) -> None:
             "theta_at_entry": (None if pd.isna(r.theta_at_entry)
                                else float(r.theta_at_entry)),
             "take_profit_level": float(r.take_profit_level),
+            # Hedge quality. Recorded, never a gate -- but it has to travel with
+            # the candidate or the monitor cannot put it on the ledger row, and
+            # then "was this actually a pair trade" is unanswerable after the
+            # fact. It was added to the signal and to the ledger schema on
+            # 2026-09-13 and missed HERE, so the first positions under the new
+            # schema carried a blank column.
+            "r2_at_entry": (None if pd.isna(getattr(r, "r2_at_entry", float("nan")))
+                            else float(r.r2_at_entry)),
         })
 
     display = []

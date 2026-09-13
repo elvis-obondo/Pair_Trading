@@ -105,6 +105,21 @@ tbody tr:hover{background:#192029}
 .bar.blind{opacity:.3}
 .pct{display:inline-block; min-width:42px; margin-left:8px; color:var(--ink-2); font-size:11.5px}
 
+/* Closed-trade summary. The overshoot figure is the reason this whole system
+   exists -- 1.53x median at 30-minute bar close, 0 of 9,704 inside the level --
+   so it gets a slot of its own rather than living in a log. */
+.closed{display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line)}
+.cstat{background:var(--panel); padding:11px 14px}
+.cstat .lab{font-family:var(--mono); font-size:10px; letter-spacing:.09em;
+            text-transform:uppercase; color:var(--ink-3); margin-bottom:4px}
+.cstat .v{font-family:var(--mono); font-size:18px; font-variant-numeric:tabular-nums}
+.cstat .s{font-family:var(--mono); font-size:10.5px; color:var(--ink-3); margin-top:2px}
+.breakdown{grid-column:1/-1; background:var(--panel); padding:9px 14px;
+           font-family:var(--mono); font-size:11.5px; color:var(--ink-2);
+           display:flex; gap:20px; flex-wrap:wrap}
+.breakdown b{font-weight:500; color:var(--ink)}
+@media (max-width:640px){ .closed{grid-template-columns:repeat(2,1fr)} }
+
 .foot{display:flex; align-items:center; gap:14px; flex-wrap:wrap;
       padding-block:4px 26px; color:var(--ink-3); font-family:var(--mono); font-size:11px}
 a.dl{display:inline-block; padding:7px 13px; border:1px solid var(--amber-dim);
@@ -169,6 +184,11 @@ select{background:var(--panel-2); color:var(--ink-2); border:1px solid var(--lin
       <span><i style="background:#e0a04a"></i>mark to market</span>
       <span class="muted">gaps = book was blind</span>
     </div>
+  </div>
+
+  <div class="panel">
+    <div class="head"><h2>Closed</h2><span id="closednote" class="note">&nbsp;</span></div>
+    <div id="closed" class="closed"><div class="muted" style="padding:12px 14px">loading…</div></div>
   </div>
 
   <div class="panel">
@@ -432,6 +452,96 @@ async function loadCurve(){
   }catch(e){ /* curve is optional; the book is not */ }
 }
 
+/* ── closed trades ──────────────────────────────────────────────────────────
+   Parsed from ledger.csv in the browser rather than summarised server-side:
+   the snapshot is written every ten seconds and re-reading the whole ledger on
+   each heartbeat would put pandas on the monitor's timer for a number nobody is
+   watching that often.
+   ─────────────────────────────────────────────────────────────────────────── */
+function splitCsv(line){
+  const out = []; let cur = "", q = false;
+  for (const ch of line){
+    if (ch === '"') q = !q;
+    else if (ch === "," && !q){ out.push(cur); cur = ""; }
+    else cur += ch;
+  }
+  out.push(cur); return out;
+}
+const median = a => { if (!a.length) return NaN;
+  const s = [...a].sort((x, y) => x - y), m = s.length >> 1;
+  return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
+
+async function loadClosed(){
+  const el = $("closed");
+  try{
+    const txt = await (await fetch("ledger.csv", {cache: "no-store"})).text();
+    const lines = txt.trim().split("\n");
+    if (lines.length < 2){
+      el.innerHTML = '<div class="muted" style="padding:12px 14px">no closed trades yet</div>';
+      $("closednote").textContent = "";
+      return;
+    }
+    const h = splitCsv(lines[0]);
+    const ix = n => h.indexOf(n);
+    const rows = [];
+    for (let i = 1; i < lines.length; i++){
+      const c = splitCsv(lines[i]);
+      if (c[ix("event")] !== "close") continue;
+      rows.push({
+        reason: c[ix("exit_reason")],
+        pnl: parseFloat(c[ix("realized_pnl_net")]),
+        r: parseFloat(c[ix("r")]),
+        hrs: parseFloat(c[ix("hours_held")]),
+        over: parseFloat(c[ix("overshoot_ratio")]),
+        blind: parseFloat(c[ix("blind_gap_seconds")]) || 0,
+      });
+    }
+    // book_reset rows are an administrative close, not a strategy outcome.
+    // Counting them as wins would flatter the win rate for nothing.
+    const t = rows.filter(x => x.reason !== "book_reset");
+    if (!t.length){
+      el.innerHTML = '<div class="muted" style="padding:12px 14px">no closed trades yet</div>';
+      $("closednote").textContent = rows.length ? `${rows.length} reset row(s) excluded` : "";
+      return;
+    }
+    const wins = t.filter(x => x.pnl > 0).length;
+    const meanR = t.reduce((a, x) => a + (x.r || 0), 0) / t.length;
+    const net = t.reduce((a, x) => a + (x.pnl || 0), 0);
+    const watched = t.filter(x => x.reason === "adverse_move"
+                              && Number.isFinite(x.over) && x.blind === 0);
+    const med = median(watched.map(x => x.over));
+
+    const stat = (lab, v, sub, k = "") =>
+      `<div class="cstat"><div class="lab">${lab}</div>`
+      + `<div class="v ${k}">${v}</div><div class="s">${sub}</div></div>`;
+
+    const by = {};
+    for (const x of t) (by[x.reason] = by[x.reason] || []).push(x);
+    const order = ["take_profit", "adverse_move", "time_stop"];
+    const names = {take_profit: "take profit", adverse_move: "stop", time_stop: "time stop"};
+    const parts = Object.keys(by).sort((a, b) => order.indexOf(a) - order.indexOf(b)).map(k => {
+      const g = by[k], mr = g.reduce((a, x) => a + (x.r || 0), 0) / g.length;
+      return `<span><b>${names[k] || k}</b> ${g.length} `
+           + `(${(g.length / t.length * 100).toFixed(0)}%) `
+           + `<span class="${mr >= 0 ? "up" : "down"}">${mr >= 0 ? "+" : "−"}${Math.abs(mr).toFixed(2)}R</span></span>`;
+    }).join("");
+
+    el.innerHTML =
+        stat("Closed", t.length, `${money(net)} net`, cls(net))
+      + stat("Win rate", (wins / t.length * 100).toFixed(0) + "%",
+             `${wins} of ${t.length}`)
+      + stat("Mean R", (meanR >= 0 ? "+" : "−") + Math.abs(meanR).toFixed(2),
+             "per trade", cls(meanR))
+      + stat("Overshoot", Number.isFinite(med) ? med.toFixed(3) + "x" : "—",
+             watched.length ? `${watched.length} watched · 1.53x baseline` : "no stops yet",
+             Number.isFinite(med) && med < 1.2 ? "up" : "")
+      + `<div class="breakdown">${parts}</div>`;
+    $("closednote").textContent = "this book";
+  }catch(e){
+    el.innerHTML = '<div class="muted" style="padding:12px 14px">ledger unavailable</div>';
+  }
+}
+
 async function refresh(){
   try{
     const s = await (await fetch("open_positions.json", {cache: "no-store"})).json();
@@ -441,6 +551,7 @@ async function refresh(){
     $("feed").textContent = "unreachable";
   }
   loadCurve();
+  loadClosed();
 }
 
 let timer = null;

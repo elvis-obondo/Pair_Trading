@@ -87,6 +87,14 @@ def run(days=30, stride=1, bar_hours=0.5, equity=300.0, slots=10, end_date=None,
     print(f"[INFO] {len(tickers)} tickers, {len(pairs):,} pairs")
     print(f"[INFO] {len(eval_idx):,} bars to evaluate "
           f"({panel.index[need]} -> {panel.index[-1]}), stride {stride}")
+    for name, live, used in (("max_per_ticker", cfg.MAX_PER_TICKER, max_per_ticker),
+                             ("max_notional", cfg.MAX_NOTIONAL, max_notional),
+                             ("stop_sigma", cfg.STOP_SIGMA, stop_sigma),
+                             ("max_hold_hours", cfg.MAX_HOLD_HOURS, max_hold_hours),
+                             ("min_deviation_sigma", cfg.MIN_DEVIATION_SIGMA, min_deviation_sigma)):
+        if live != used:
+            print(f"[WARN] {name}={used} but the LIVE book runs {live} — "
+                  f"this run does not describe the live strategy")
     print(f"[INFO] entry {min_deviation_sigma} sigma | tp {take_profit_pct} | "
           f"stop {stop_sigma} | hold {max_hold_hours}h | {slots} slots | "
           f"{capital_frac*100:.0f}% margin at {leverage:.0f}x"
@@ -226,7 +234,12 @@ if __name__ == "__main__":
     ap.add_argument("--entry", type=float, default=3.0)
     ap.add_argument("--stop", type=float, default=0.5)
     ap.add_argument("--hold", type=float, default=72.0)
-    ap.add_argument("--max-per-ticker", type=int, default=None)
+    # Defaults come from book_state, NOT from a literal here. These were None
+    # while the live book ran with MAX_PER_TICKER=1 and MAX_NOTIONAL=5000, so
+    # every result the backtest produced described a more concentrated,
+    # unbounded strategy than the one actually running. A backtest whose
+    # defaults can drift from the live config is measuring the wrong thing.
+    ap.add_argument("--max-per-ticker", type=int, default=cfg.MAX_PER_TICKER)
     ap.add_argument("--end-date", type=str, default=None,
                     help="anchor the window, e.g. 2026-06-13. Omit for the most "
                          "recent `days`, which is IN SAMPLE for this project.")
@@ -236,8 +249,9 @@ if __name__ == "__main__":
                          f"live figure ({cfg.MEASURED_STOP_OVERSHOOT}). Pass 'none' "
                          "to book the bar-close spread instead, which is the "
                          "30-minute checking this system replaced (1.53x).")
-    ap.add_argument("--max-notional", type=float, default=None,
-                    help="hard dollar ceiling on gross notional per position")
+    ap.add_argument("--max-notional", type=float, default=cfg.MAX_NOTIONAL,
+                    help="hard dollar ceiling on gross notional per position; "
+                         f"defaults to the live setting ({cfg.MAX_NOTIONAL:,.0f})")
     ap.add_argument("--rank-by", type=str, default="theta",
                     choices=("theta", "neutrality", "both"),
                     help="which key orders candidates for the ten slots. "

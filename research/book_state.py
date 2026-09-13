@@ -70,16 +70,21 @@ TAKE_PROFIT_PCT = 1.0
 STOP_SIGMA = 0.5
 MAX_HOLD_HOURS = 72.0
 BAR_HOURS = 0.5
-# One open position per ticker. portfolio.py calls None "the settled spec", but
-# every measured result was produced with 1: the 12,597-trade study, the +0.74R
-# assumed-fill edge, the stop-width sweep, all of it. Running None live would be
-# testing a configuration nothing was measured under.
+# No limit on how many open positions may share a leg -- the settled spec, and
+# what EVERY measured result was produced under: the 12,597-trade study, the
+# +0.74R edge, the stop-width sweep, the ranking arms. run_portfolio_backtest
+# defaulted to None throughout.
 #
-# It is not a theoretical concern. The first live book filled with BERA in 4 of
-# 10 positions, AGLD in 2, ATOM in 2, DOT in 2 -- ten trades, about five
-# independent bets, and four stops that would fire together if BERA kept
-# trending. See the 01:42 block in logs/stop_monitor.log.
-MAX_PER_TICKER = 1
+# This briefly read 1 on 2026-09-13, on my reasoning that the first live book
+# filled with BERA in 4 of 10 slots -- about five independent bets wearing ten
+# slots' clothing. That concern is real, but capping live while every number
+# quoted came from an uncapped backtest means running a configuration nothing
+# was measured under, which is the worse error. Concentration is a risk question
+# and belongs in a measured limit, not a silent default.
+#
+# Changing this changes the BACKTEST too: run_portfolio_backtest reads its
+# default from here, so the two can never drift apart again.
+MAX_PER_TICKER = None
 
 # Inert below $5,000 of equity, because gross notional is
 # leverage * capital_frac * equity = 1.0 * equity under the settled parameters.

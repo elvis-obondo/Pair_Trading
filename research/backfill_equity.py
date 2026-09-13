@@ -81,10 +81,22 @@ def build(step: float, max_age: float) -> pd.DataFrame:
     led = pd.read_csv(cfg.LEDGER_PATH)
     opens = led[led.event.eq("open")].set_index("trade_num")
     closes = led[led.event.eq("close")].set_index("trade_num")
+    if not len(opens):
+        raise SystemExit("  ledger has no open rows — nothing to reconstruct")
 
     ticks = load_ticks()
     series = mid_series(ticks)
-    t0, t1 = float(ticks.ts.min()), float(ticks.ts.max())
+    t1 = float(ticks.ts.max())
+    # Start at the book's FIRST POSITION, not at the first recorded tick. The
+    # tick store outlives a book reset by design (raw prices are regime
+    # independent), so after a reset it reaches back hours before the new book
+    # existed -- and padding that with a flat line asserts the account was open
+    # and doing nothing, which is not what happened.
+    if len(opens):
+        first = pd.Timestamp(opens.time.min(), tz="UTC").timestamp()
+        t0 = max(float(ticks.ts.min()), first)
+    else:
+        t0 = float(ticks.ts.min())
 
     # One Position per trade, so current_spread and pnl are the real ones.
     live = {}
