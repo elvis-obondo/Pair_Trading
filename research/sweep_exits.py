@@ -73,7 +73,8 @@ GRACES = (0, 15, 30, 45, 60)
 REASON = {0: "open_at_end", 1: "adverse_move", 2: "take_profit", 3: "time_stop"}
 
 
-def walk(path, entry, mu, direction, stop_dist, debounce, grace, horizon):
+def walk(path, entry, mu, direction, stop_dist, debounce, grace, horizon,
+         check_every=1):
     """First exit along one path. Returns (minute, spread, reason code).
 
     Minute 0 is entry and is never an exit: the position is opened there.
@@ -81,6 +82,14 @@ def walk(path, entry, mu, direction, stop_dist, debounce, grace, horizon):
     n = len(path)
     breach_at = -1
     for t in range(1, n):
+        # OBSERVATION FREQUENCY. check_every=1 looks at every minute, which is
+        # what a tick-watching monitor approximates. check_every=30 looks only at
+        # 30-minute bar closes -- the behaviour the engine has always had, and
+        # the one the trades being analysed were actually generated under. A
+        # sweep that cannot express it cannot reproduce its own input, which is
+        # the first thing any of these numbers has to do.
+        if check_every > 1 and t % check_every:
+            continue
         sp = path[t]
         if sp != sp:                      # NaN: a leg did not trade this minute
             continue                      # never decide on a price nobody made
@@ -109,7 +118,7 @@ def walk(path, entry, mu, direction, stop_dist, debounce, grace, horizon):
     return n - 1, path[n - 1], 0
 
 
-def score(spreads, meta, stop_sigma, debounce, grace, horizon):
+def score(spreads, meta, stop_sigma, debounce, grace, horizon, check_every=1):
     n = len(meta)
     ex_t = np.empty(n); ex_s = np.empty(n); ex_r = np.empty(n, int)
     ent = meta.entry_spread.to_numpy(float)
@@ -123,7 +132,8 @@ def score(spreads, meta, stop_sigma, debounce, grace, horizon):
     for i in range(n):
         p = spreads[st[i]:st[i] + ln[i]]
         ex_t[i], ex_s[i], ex_r[i] = walk(
-            p, ent[i], mu[i], dr[i], stop_sigma * sg[i], debounce, grace, horizon)
+            p, ent[i], mu[i], dr[i], stop_sigma * sg[i], debounce, grace, horizon,
+            check_every)
 
     move = dr * (ex_s - ent)
     leg_a = meta.leg_a_notional.to_numpy(float)

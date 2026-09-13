@@ -49,7 +49,8 @@ PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(PROJECT_ROOT, "research", "exit_study", "paths.npz")
 
 
-def extract(trades_path: str, max_hold_hours: float, timeframe: str = "1m"):
+def extract(trades_path: str, max_hold_hours: float, timeframe: str = "1m",
+            bar_hours: float = 0.5):
     d = pd.read_csv(trades_path)
     d["opened"] = pd.to_datetime(d.opened_at)
     d = d.sort_values("opened").reset_index(drop=True)
@@ -65,7 +66,7 @@ def extract(trades_path: str, max_hold_hours: float, timeframe: str = "1m"):
             f"({', '.join(missing[:8])}...). Finish the download first.")
 
     lo = d.opened.min()
-    hi = d.opened.max() + pd.Timedelta(hours=max_hold_hours)
+    hi = d.opened.max() + pd.Timedelta(hours=max_hold_hours + bar_hours)
     print(f"[INFO] loading {timeframe} panel for {len(need)} tickers, {lo} .. {hi}")
     fine = intrabar.load_panel(need, start=lo, end=hi, timeframe=timeframe)
     if fine.index.tz is not None:
@@ -81,13 +82,29 @@ def extract(trades_path: str, max_hold_hours: float, timeframe: str = "1m"):
     t0 = grid[0]
     horizon = int(round(max_hold_hours * 60))
 
+    # THE BAR IS LABELLED BY ITS OPEN, AND THE TRADE FILLS AT ITS CLOSE.
+    #
+    # A 30-minute bar stamped 14:30 spans 14:30..14:59 and its close is the last
+    # minute in it, 14:59. The engine trades that close, but the ledger records
+    # the trade at the bar's label, 14:30. So a path started at the label begins
+    # 29 minutes BEFORE the position existed, and those 29 minutes of price
+    # action get scored as if the trade had been open through them.
+    #
+    # Verified rather than assumed: the 1m spread matches the ledger's
+    # entry_spread to a median of 0.0000 sigma at offset 29, against 0.88 sigma
+    # at offset 0. Without this the autopsy counts pre-entry stop crossings and
+    # reports negative lags -- the bar close appearing to precede the breach it
+    # reacted to.
+    bar_minutes = int(round(bar_hours * 60))
+    fill_offset = bar_minutes - 1
+
     flat, starts, lens, keep = [], [], [], []
     total = 0
     truncated = 0
     for i, r in d.iterrows():
         a = fine[r.ticker_a].to_numpy(float)
         b = fine[r.ticker_b].to_numpy(float)
-        i0 = int((r.opened - t0).total_seconds() // 60)
+        i0 = int((r.opened - t0).total_seconds() // 60) + fill_offset
         i1 = min(i0 + horizon + 1, len(grid))
         if i0 < 0 or i1 - i0 < 2:
             continue
@@ -121,11 +138,25 @@ def main() -> None:
     ap.add_argument("--trades", required=True,
                     help="a backtest ledger; use the ACTUAL-fill run, not a modelled one")
     ap.add_argument("--hold", type=float, default=cfg.MAX_HOLD_HOURS)
+    ap.add_argument("--bar-hours", type=float, default=cfg.BAR_HOURS)
     ap.add_argument("--timeframe", default="1m")
     ap.add_argument("--out", default=OUT)
     a = ap.parse_args()
 
-    spreads, meta = extract(a.trades, a.hold, a.timeframe)
+    spreads, meta = extract(a.trades, a.hold, a.timeframe, a.bar_hours)
+
+    # Assert the alignment rather than trust it: if the fill offset is wrong the
+    # paths silently describe a different trade and every number downstream is
+    # quietly, plausibly false.
+    st = meta.path_start.to_numpy(int)
+    ent = meta.entry_spread.to_numpy(float)
+    sg = meta.sigma_at_entry.to_numpy(float)
+    err = np.array([abs(spreads[st[i]] - ent[i]) / sg[i] for i in range(len(meta))])
+    err = err[np.isfinite(err)]
+    print(f"[INFO] path[0] vs ledger entry_spread: median {np.median(err):.4f} sigma, "
+          f"p95 {np.quantile(err, .95):.4f}")
+    if np.median(err) > 0.01:
+        raise SystemExit("[FAIL] paths are not aligned to the fill — check the bar offset")
     os.makedirs(os.path.dirname(a.out), exist_ok=True)
     np.savez_compressed(a.out, spreads=spreads)
     meta.to_parquet(a.out.replace(".npz", "_meta.parquet"))
