@@ -61,11 +61,11 @@ if [ "$MODE" = "all" ] || [ "$MODE" = "--deploy" ]; then
     ssh_vm "gcloud auth configure-docker us-central1-docker.pkg.dev --quiet"
     # The dashboard runs the same image, so one pull covers both. cloudflared is
     # only started if a TUNNEL_TOKEN exists -- see scripts/setup_tunnel.sh.
+    # The dashboard runs the same image, so one pull covers both.
     ssh_vm "cd $REMOTE && docker compose -f docker-compose.trading.yml pull stop-monitor \
         && docker compose -f docker-compose.trading.yml up -d stop-monitor dashboard \
-        && if grep -qs TUNNEL_TOKEN .env; then \
-             docker compose -f docker-compose.trading.yml up -d cloudflared; \
-           else echo '  (no TUNNEL_TOKEN yet — tunnel not started)'; fi"
+        && grep -qs PAIRS_DASH_SHA256 .env \
+           || echo '  (dashboard has NO PASSWORD — run scripts/setup_funnel.sh)'"
     sleep 6
     bold "Running"
     ssh_vm "docker ps --format '{{.Names}} | {{.Image}} | {{.Status}}'; echo; tail -12 $REMOTE/logs/stop_monitor.log 2>/dev/null || echo '  no log yet'"

@@ -13,12 +13,21 @@ An explicit allowlist, nothing else. No directory listing, no path traversal, no
 writes, no query parameters that reach the filesystem. The page and three data
 files, all of which the monitor produces anyway.
 
-AUTH IS NOT HERE, DELIBERATELY
+AUTH
 
-There is no login in this file and there must not be one. Access is Cloudflare
-Access in front of the tunnel: the VM exposes no port to the internet at all, and
-an unauthenticated request never reaches this process. A second, weaker check
-here would only invite someone to expose the port directly and rely on it.
+Basic auth over TLS, and ONLY because the chosen transport is Tailscale Funnel,
+which publishes to the whole internet and does not authenticate anyone itself.
+Funnel terminates real HTTPS, so the credential is encrypted in transit -- that
+is the whole reason basic auth is acceptable here and would not have been over
+plain HTTP.
+
+The password is never stored. PAIRS_DASH_SHA256 holds a salted SHA-256 of it and
+comparison is constant-time. If that variable is unset the server REFUSES to
+serve anything except /healthz, rather than falling open -- a dashboard that
+silently drops its own auth is worse than one that will not start.
+
+Behind an SSH tunnel there is nothing to authenticate, so PAIRS_DASH_OPEN=1
+disables the check for that case only.
 
 Usage:
     python research/dashboard_server.py --port 8080
@@ -28,6 +37,9 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import argparse
+import base64
+import hashlib
+import hmac
 import http.server
 import socketserver
 from datetime import datetime, timezone
@@ -35,8 +47,32 @@ from datetime import datetime, timezone
 import book_state as cfg
 
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 DASHBOARD_DIR = os.environ.get(
     "PAIRS_DASHBOARD_DIR", os.path.join(PROJECT_ROOT, "dashboard"))
+
+# Salted so the stored digest is useless against a rainbow table, and so the
+# same password on two deployments does not produce the same hash.
+SALT = os.environ.get("PAIRS_DASH_SALT", "pairs-dashboard-v1")
+EXPECT = os.environ.get("PAIRS_DASH_SHA256", "").strip().lower()
+OPEN = os.environ.get("PAIRS_DASH_OPEN", "") == "1"
+
+
+def password_digest(password: str, salt: str = SALT) -> str:
+    return hashlib.sha256((salt + ":" + password).encode()).hexdigest()
+
+
+def check_auth(header: str | None) -> bool:
+    """Constant-time compare. Any username is accepted; only the password counts."""
+    if not header or not header.startswith("Basic "):
+        return False
+    try:
+        raw = base64.b64decode(header[6:]).decode("utf-8", "replace")
+    except Exception:                                   # noqa: BLE001
+        return False
+    _, _, password = raw.partition(":")
+    return hmac.compare_digest(password_digest(password), EXPECT)
+
 
 # url path -> (file on disk, content type, download filename or None)
 def routes() -> dict:
@@ -76,6 +112,22 @@ class Handler(http.server.BaseHTTPRequestHandler):
 
     def do_GET(self):
         path = self.path.split("?", 1)[0].split("#", 1)[0]
+
+        # /healthz stays open: the funnel and any uptime check need to see the
+        # process is alive without holding a credential, and it reveals nothing.
+        if path != "/healthz" and not OPEN:
+            if not EXPECT:
+                # Fail CLOSED. An unset password must never mean "no password".
+                self._send(503, b"dashboard has no password configured\n", "text/plain")
+                return
+            if not check_auth(self.headers.get("Authorization")):
+                self.send_response(401)
+                self.send_header("WWW-Authenticate", 'Basic realm="book", charset="UTF-8"')
+                self.send_header("Content-Length", "0")
+                self.send_header("Cache-Control", "no-store")
+                self.end_headers()
+                return
+
         route = routes().get(path)
         if route is None:
             self._send(404, b"not found\n", "text/plain")
@@ -122,7 +174,19 @@ def main():
     # host, so nothing needs to listen on a public interface. Overriding this to
     # 0.0.0.0 puts an UNAUTHENTICATED dashboard on the internet.
     ap.add_argument("--host", default="127.0.0.1")
+    ap.add_argument("--hash", metavar="PASSWORD",
+                    help="print the salted digest for a password and exit; the "
+                         "password itself is never stored anywhere")
     a = ap.parse_args()
+    if a.hash:
+        print(password_digest(a.hash))
+        return
+    if OPEN:
+        print("AUTH DISABLED (PAIRS_DASH_OPEN=1) — only safe behind an SSH tunnel",
+              flush=True)
+    elif not EXPECT:
+        print("NO PASSWORD SET — serving 503 until PAIRS_DASH_SHA256 is provided",
+              flush=True)
     print(f"dashboard on http://{a.host}:{a.port}  serving {DASHBOARD_DIR}", flush=True)
     print(f"  positions {cfg.POSITIONS_PATH}", flush=True)
     print(f"  equity    {cfg.EQUITY_PATH}", flush=True)

@@ -189,6 +189,18 @@ select{background:var(--panel-2); color:var(--ink-2); border:1px solid var(--lin
     <a class="dl" href="equity_curve.csv" download>Equity series</a>
     <span id="exposure"></span>
   </div>
+  <div class="foot" style="padding-block:0 26px; display:block; line-height:1.7; max-width:70ch">
+    <b style="color:var(--ink-2);font-weight:400">R</b> — profit in units of what the
+    trade risked. The stop distance is one R, so a clean stop-out lands near −1.00
+    and anything past −1.5 means the stop is not working.<br>
+    <b style="color:var(--ink-2);font-weight:400">net exp</b> — dollars of one-way
+    market exposure left after the hedge, <span class="num">(1−β)/(1+|β|)</span> of
+    gross. Zero only at β=1. At β&lt;0 both legs point the same way and net exceeds
+    either leg.<br>
+    <b style="color:var(--ink-2);font-weight:400">→ stop</b> — right of centre is
+    distance travelled toward the stop; left is distance toward take-profit. The two
+    halves are scaled separately because they are not the same distance away.
+  </div>
 </div>
 
 <script>

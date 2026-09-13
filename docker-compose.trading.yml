@@ -48,25 +48,14 @@ services:
     restart: unless-stopped
     network_mode: host
     command: ["python", "research/dashboard_server.py", "--host", "127.0.0.1", "--port", "8080"]
+    environment:
+      # Salted SHA-256 of the dashboard password, set by scripts/setup_funnel.sh.
+      # The plaintext never leaves the terminal it was typed in. If this is unset
+      # the server serves 503 rather than falling open.
+      PAIRS_DASH_SHA256: "${PAIRS_DASH_SHA256:-}"
     volumes:
       - ./trading_data:/app/trading_data:ro
       - ./dashboard:/app/dashboard:ro
-    logging:
-      driver: json-file
-      options:
-        max-size: "10m"
-        max-file: "3"
-
-  # The tunnel. No inbound ports, no static IP to go stale, real HTTPS, and
-  # Cloudflare Access in front so an unauthenticated request never arrives.
-  # Needs TUNNEL_TOKEN in .env -- see scripts/setup_tunnel.sh.
-  cloudflared:
-    image: cloudflare/cloudflared:latest
-    container_name: pairs-tunnel
-    restart: unless-stopped
-    network_mode: host
-    command: ["tunnel", "--no-autoupdate", "run", "--token", "${TUNNEL_TOKEN}"]
-    depends_on: [dashboard]
     logging:
       driver: json-file
       options:
