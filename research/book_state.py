@@ -44,6 +44,10 @@ LOCK_PATH       = os.path.join(DATA_DIR, "stop_monitor.lock")
 # Open positions marked to the monitor's own live quotes, rewritten every
 # heartbeat. A read-only view: nothing reads it back into the book.
 POSITIONS_PATH  = os.path.join(DATA_DIR, "open_positions.json")
+# The equity time series. open_positions.json is ONE instant, atomically
+# replaced every heartbeat, so it can never produce a curve. This can.
+# Append-only, never pruned -- same standing as the ledger.
+EQUITY_PATH     = os.path.join(DATA_DIR, "equity_curve.csv")
 
 SCANNER_LOG   = os.path.join(LOG_DIR, "scanner.log")
 MONITOR_LOG   = os.path.join(LOG_DIR, "stop_monitor.log")
@@ -112,12 +116,44 @@ MEASURED_STOP_OVERSHOOT = 1.04
 # Scan history is ~4,800 rows/day and the logs are ~1MB/day.
 #
 # The ledger is NEVER pruned. It is the record of what the account did, it is
-# small, and equity is re-summed from it on every start.
+# small, and equity is re-summed from it on every start. Neither is
+# equity_curve.csv: at one row per heartbeat it is ~190MB/year against 10GB
+# free, and a curve you pruned is a curve you cannot draw.
 # ---------------------------------------------------------------------------
+
+EQUITY_COLUMNS = [
+    "ts",            # ISO8601 UTC
+    "realized",      # equity from closed trades only -- pf.equity
+    "unrealized",    # mark-to-market of open positions, NaN if any is blind
+    "total",         # realized + unrealized, NaN if unrealized is NaN
+    "open_n", "blind_n", "feed_state",
+]
 
 RETAIN_TICK_DAYS = 14          # enough to re-walk any trade still in memory
 RETAIN_SCAN_HISTORY_DAYS = 90  # a quarter of "what was dislocated, and when"
 LOG_MAX_BYTES = 32 * 1024 * 1024
+
+
+def append_equity(row: dict) -> None:
+    """One row of the equity curve. Append-only, header written once.
+
+    Deliberately NOT reindexed through pandas like the ledger is -- this runs on
+    every heartbeat and a DataFrame per row would be absurd. The column list is
+    fixed here instead, and a missing key writes empty rather than shifting the
+    row, which is the failure mode that actually matters.
+    """
+    import csv
+
+    _ensure_dirs()
+    try:
+        need_header = os.path.getsize(EQUITY_PATH) == 0
+    except OSError:
+        need_header = True
+    with open(EQUITY_PATH, "a", newline="") as fh:
+        w = csv.DictWriter(fh, fieldnames=EQUITY_COLUMNS, extrasaction="ignore")
+        if need_header:
+            w.writeheader()
+        w.writerow({k: row.get(k, "") for k in EQUITY_COLUMNS})
 
 
 def prune_dated(directory: str, keep_days: int) -> list:

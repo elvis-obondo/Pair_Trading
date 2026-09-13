@@ -585,7 +585,13 @@ class StopMonitor:
                     if q is not None) if all(
                         self.quotes.get(instrument_id(t)) for t in pos.pair) else None,
             }
-            prices = self._log_prices(pos)
+            # BLIND MEANS NO MARK. _log_prices only asks whether quotes exist,
+            # not whether they are recent -- so without the row["blind"] test a
+            # position whose legs stopped ticking ten minutes ago would be
+            # marked at ten-minute-old prices and read as current. That is the
+            # same stale-price mistake evaluate_positions refuses to make when
+            # it decides whether to EXIT; the view must not make it either.
+            prices = None if row["blind"] else self._log_prices(pos)
             if prices is None:
                 # No mark rather than a stale one. A blank is honest; a number
                 # from ten minutes ago reads as current and is not.
@@ -621,6 +627,32 @@ class StopMonitor:
             "positions": rows,
         }
 
+    def record_equity(self) -> dict:
+        """One row of the equity curve, from the snapshot's own numbers.
+
+        BLIND POSITIONS MAKE unrealized NaN, for the whole book, deliberately.
+        A blind leg cannot be marked; carrying its last known value forward
+        draws a flat line through an outage, which reads as "nothing happened"
+        when the truth is "we could not see". A gap in the chart is a prompt to
+        go and look. That is the same reasoning that stops the monitor exiting
+        on a stale price.
+        """
+        snap = self.positions_snapshot()
+        blind_n = sum(1 for p in snap["positions"] if p["blind"])
+        unmarked = any(p["unrealized_pnl"] is None for p in snap["positions"])
+        unreal = float("nan") if unmarked else snap["unrealized_total"]
+        row = {
+            "ts": snap["as_of"],
+            "realized": round(snap["equity"], 6),
+            "unrealized": "" if unmarked else round(unreal, 6),
+            "total": "" if unmarked else round(snap["equity"] + unreal, 6),
+            "open_n": snap["open"], "blind_n": blind_n,
+            "feed_state": snap["feed_state"],
+        }
+        if not self.dry_run:
+            cfg.append_equity(row)
+        return row
+
     def write_positions_snapshot(self) -> None:
         if self.dry_run:
             return
@@ -645,6 +677,7 @@ class StopMonitor:
             with open(cfg.HEARTBEAT_PATH, "a") as fh:
                 fh.write(line + "\n")
             self.write_positions_snapshot()
+            self.record_equity()
         return line
 
 

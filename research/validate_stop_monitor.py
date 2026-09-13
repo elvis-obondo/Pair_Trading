@@ -14,6 +14,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import json
 import math
 import tempfile
+import time
 from datetime import datetime, timezone
 
 import numpy as np
@@ -31,6 +32,7 @@ cfg.DATA_DIR         = TMP
 cfg.LOG_DIR          = os.path.join(TMP, "logs")
 cfg.STATE_PATH       = os.path.join(TMP, "scanner_state.json")
 cfg.LEDGER_PATH      = os.path.join(TMP, "scanner_trades.csv")
+cfg.EQUITY_PATH      = os.path.join(TMP, "equity_curve.csv")
 cfg.CANDIDATES_PATH  = os.path.join(TMP, "scanner_candidates.json")
 cfg.SCAN_HISTORY_DIR = os.path.join(TMP, "scan_history")
 cfg.TICKS_DIR        = os.path.join(TMP, "monitor_ticks")
@@ -424,13 +426,16 @@ print()
 print("=" * 118)
 print("14. Live position snapshot — marked to the monitor's own quotes")
 print("=" * 118)
+# NOW, not T0_EPOCH: positions_snapshot measures staleness against wall clock,
+# so quotes stamped at a fixed fake epoch are correctly treated as blind.
+NOW = time.time()
 m = make_monitor(z=3.5, sigma=0.02, beta=1.0)
 pos = m.pf.open_positions[0]
 entry = pos.signal["entry_spread"]
 dist = cfg.STOP_SIGMA * pos.signal["sigma_at_entry"]
 
 # Halfway to the stop.
-push(m, entry + dist * 0.5, T0_EPOCH + 1)
+push(m, entry + dist * 0.5, NOW)
 snap = m.positions_snapshot()
 r = snap["positions"][0]
 check("one position reported", snap["open"] == 1, snap["open"])
@@ -442,7 +447,7 @@ check("unrealized R is about -0.5 at half the stop",
       -0.65 < r["unrealized_r"] < -0.45, f"{r['unrealized_r']:+.2f}")
 
 # Moving toward mu is a gain, and progress runs negative.
-push(m, entry - dist * 0.5, T0_EPOCH + 2)
+push(m, entry - dist * 0.5, NOW)
 r = m.positions_snapshot()["positions"][0]
 check("moving toward mu shows a gain", r["unrealized_pnl"] > 0, f"{r['unrealized_pnl']:+.2f}")
 check("  ... and progress_to_stop goes negative", r["progress_to_stop"] < 0,
@@ -462,7 +467,7 @@ check("no quotes yet -> blind, and no mark at all",
 
 # Book-level exposure aggregates.
 m3 = make_monitor(z=3.5, sigma=0.02, beta=1.0)
-push(m3, entry, T0_EPOCH + 1)
+push(m3, entry, NOW)
 s3 = m3.positions_snapshot()
 check("beta=1 book reports zero net exposure",
       abs(s3["book_net_exposure"]) < 1e-9, f"{s3['book_net_exposure']:+.2f}")
@@ -473,7 +478,7 @@ check("margin accounting: used + free == equity",
 # It is a read-only view: writing it must not touch the book.
 m4 = make_monitor(z=3.5, sigma=0.02)
 m4.dry_run = False
-push(m4, entry, T0_EPOCH + 1)
+push(m4, entry, NOW)
 before = (os.path.exists(cfg.LEDGER_PATH) and os.path.getmtime(cfg.LEDGER_PATH),
           os.path.exists(cfg.STATE_PATH) and os.path.getmtime(cfg.STATE_PATH))
 m4.write_positions_snapshot()
@@ -543,6 +548,57 @@ try:
 finally:
     if os.path.exists(cfg.LEDGER_PATH):
         os.remove(cfg.LEDGER_PATH)
+
+# --------------------------------------------------------------------------
+print()
+print("=" * 118)
+print("16. Equity curve — a blind book writes NaN, never a stale number")
+print("=" * 118)
+if os.path.exists(cfg.EQUITY_PATH):
+    os.remove(cfg.EQUITY_PATH)
+
+m = make_monitor(z=3.5, sigma=0.02, beta=1.0)
+m.dry_run = False
+pos = m.pf.open_positions[0]
+entry = pos.signal["entry_spread"]
+dist = cfg.STOP_SIGMA * pos.signal["sigma_at_entry"]
+
+# Blind first: no quotes have arrived at all.
+r = m.record_equity()
+check("blind book records NaN unrealized", r["unrealized"] == "", repr(r["unrealized"]))
+check("  ... and NaN total too", r["total"] == "", repr(r["total"]))
+check("  ... but realized is still a number", isinstance(r["realized"], float),
+      r["realized"])
+check("  ... and blind_n counts it", r["blind_n"] == 1, r["blind_n"])
+
+# Now marked, halfway to the stop.
+push(m, entry + dist * 0.5, time.time())
+r = m.record_equity()
+check("a marked book records a number", isinstance(r["unrealized"], float),
+      f"{r['unrealized']:+.3f}")
+check("  ... losing, since the spread moved against us", r["unrealized"] < 0,
+      f"{r['unrealized']:+.3f}")
+check("  ... and total == realized + unrealized",
+      abs(r["total"] - (r["realized"] + r["unrealized"])) < 1e-6, "consistent")
+check("  ... blind_n back to zero", r["blind_n"] == 0, r["blind_n"])
+
+d = pd.read_csv(cfg.EQUITY_PATH)
+check("header matches EQUITY_COLUMNS", list(d.columns) == cfg.EQUITY_COLUMNS,
+      f"{len(d.columns)} cols")
+check("two rows appended, header written once", len(d) == 2, f"{len(d)} rows")
+check("the blind row reads back as NaN, not 0", pd.isna(d.unrealized.iloc[0]),
+      "NaN")
+check("the marked row reads back as a number", np.isfinite(d.unrealized.iloc[1]),
+      f"{d.unrealized.iloc[1]:+.3f}")
+
+# It must not touch the book.
+before = (os.path.getmtime(cfg.LEDGER_PATH) if os.path.exists(cfg.LEDGER_PATH) else 0,
+          os.path.getmtime(cfg.STATE_PATH) if os.path.exists(cfg.STATE_PATH) else 0)
+m.record_equity()
+after = (os.path.getmtime(cfg.LEDGER_PATH) if os.path.exists(cfg.LEDGER_PATH) else 0,
+         os.path.getmtime(cfg.STATE_PATH) if os.path.exists(cfg.STATE_PATH) else 0)
+check("recording equity does not touch ledger or state", before == after, "untouched")
+os.remove(cfg.EQUITY_PATH)
 
 import shutil
 shutil.rmtree(TMP, ignore_errors=True)
