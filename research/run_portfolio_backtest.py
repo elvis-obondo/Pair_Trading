@@ -61,7 +61,7 @@ def run(days=30, stride=1, bar_hours=0.5, equity=300.0, slots=10, end_date=None,
         min_deviation_sigma=3.0, take_profit_pct=1.0, stop_sigma=0.5,
         max_hold_hours=72.0, capital_frac=0.05, leverage=20.0,
         max_per_ticker=None, stop_fill_overshoot=None, max_notional=None,
-        rank_by="theta", out_path=OUT):
+        rank_by="theta", exit_check_minutes=None, out_path=OUT):
     need = min_bars_required(bar_hours)
     bars_per_day = int(round(24 / bar_hours))
 
@@ -100,6 +100,30 @@ def run(days=30, stride=1, bar_hours=0.5, equity=300.0, slots=10, end_date=None,
           f"{capital_frac*100:.0f}% margin at {leverage:.0f}x"
           + (f" | max {max_per_ticker}/ticker" if max_per_ticker else "")
           + f" | rank by {rank_by}" + "\n")
+
+    # Fine-grained exit checking. bar_hours*60 (the default) means "check only
+    # at bar closes", which is what this engine has always done. Anything smaller
+    # loads a finer price grid and checks the FROZEN stop and take-profit levels
+    # between bar closes as well -- no rolling statistic is recomputed, because
+    # none of them change once a position is open.
+    bar_minutes = int(round(bar_hours * 60))
+    exit_check_minutes = bar_minutes if exit_check_minutes is None else int(exit_check_minutes)
+    fine = None
+    if exit_check_minutes < bar_minutes:
+        import intrabar
+        print(f"[INFO] loading {exit_check_minutes}m prices for intrabar exit checks...")
+        fine = intrabar.load_panel(tickers, start=panel.index[need], end=panel.index[-1],
+                                   timeframe=f"{exit_check_minutes}m")
+        missing = [t for t in tickers if t not in fine.columns]
+        if missing:
+            # Silently checking only SOME positions intrabar would make the
+            # comparison meaningless in a way nothing downstream could detect.
+            raise SystemExit(
+                f"[FAIL] {len(missing)} of {len(tickers)} tickers have no "
+                f"{exit_check_minutes}m data ({', '.join(missing[:6])}...). "
+                f"Download it before running, or the two arms are not comparable.")
+        print(f"[INFO] {len(fine):,} {exit_check_minutes}m bars x {len(fine.columns)} tickers "
+              f"({fine.index[0]} -> {fine.index[-1]})\n")
 
     print("[INFO] screening the whole window, once per pair...")
     ts = time.time()
@@ -145,6 +169,26 @@ def run(days=30, stride=1, bar_hours=0.5, equity=300.0, slots=10, end_date=None,
             cands = rank_bar(by_bar[i], arrays, take_profit_pct, bar_hours,
                              rank_by=rank_by)
             n_open += len(pf.fill_slots(cands, now))
+
+        # Walk the minutes BETWEEN this bar close and the next, checking exits
+        # against the frozen levels. Entries are untouched: they still happen
+        # only at bar closes, from that bar's candidates, so the two arms open
+        # exactly the same trades and any difference in results is the exit
+        # timing alone. validate_intrabar asserts that equality.
+        if fine is not None and i + 1 < len(panel):
+            lo, hi = panel.index[i], panel.index[i + 1]
+            window = fine.loc[(fine.index > lo) & (fine.index < hi)]
+            for ts, frow in window.iterrows():
+                if not pf.open_positions:
+                    break
+                held = {t for p_ in pf.open_positions for t in p_.pair}
+                fp = {t: frow[t] for t in held if t in frow.index}
+                # A NaN price is a minute the instrument did not trade. Skip the
+                # position rather than mark it -- same rule the live monitor
+                # applies when a leg goes stale.
+                fp = {t: v for t, v in fp.items() if np.isfinite(v)}
+                if fp:
+                    pf.evaluate_exits(fp, ts)
 
         if k % 200 == 0 or k == len(eval_idx):
             el = time.time() - t0
@@ -252,6 +296,13 @@ if __name__ == "__main__":
     ap.add_argument("--max-notional", type=float, default=cfg.MAX_NOTIONAL,
                     help="hard dollar ceiling on gross notional per position; "
                          f"defaults to the live setting ({cfg.MAX_NOTIONAL:,.0f})")
+    ap.add_argument("--exit-check-minutes", type=int, default=None,
+                    help="how often to check the stop and take-profit, in "
+                         "minutes. Default is the bar length (30), which checks "
+                         "only at bar closes -- what this engine has always done. "
+                         "1 checks every minute, which is far closer to what the "
+                         "live tick monitor does. Entries are unaffected either "
+                         "way; only exits move.")
     ap.add_argument("--rank-by", type=str, default="theta",
                     choices=("theta", "neutrality", "both"),
                     help="which key orders candidates for the ten slots. "
@@ -264,4 +315,5 @@ if __name__ == "__main__":
         max_per_ticker=a.max_per_ticker, end_date=a.end_date,
         stop_fill_overshoot=_overshoot(a.stop_fill_overshoot),
         max_notional=a.max_notional,
-        rank_by=a.rank_by, out_path=a.out)
+        rank_by=a.rank_by, exit_check_minutes=a.exit_check_minutes,
+        out_path=a.out)
