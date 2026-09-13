@@ -386,6 +386,39 @@ check("stop_monitor.py never writes scan_history",
       "SCAN_HISTORY_DIR" not in mon_src, "absent")
 check("the monitor holds an exclusive lock path", "LOCK_PATH" in mon_src, "present")
 
+# --------------------------------------------------------------------------
+print()
+print("=" * 118)
+print("13. Equity survives a restart — losses booked before it are not erased")
+print("=" * 118)
+# The bug this guards: load_portfolio set pf.equity from the ledger but left
+# pf.starting_equity at ACCOUNT_EQUITY and pf.closed empty. _close() recomputes
+# equity as starting_equity + sum(closed), so the FIRST close after any restart
+# dropped every earlier loss. Live on the VM: 7 closes totalling -20.31 reported
+# equity 290.93 instead of 279.69. Equity drifted UP across restarts, and
+# position size is a function of equity.
+import csv as _csv
+
+with open(cfg.LEDGER_PATH, "w", newline="") as fh:
+    w = _csv.DictWriter(fh, fieldnames=cfg.LEDGER_COLUMNS)
+    w.writeheader()
+    for i, pnl in enumerate([-2.36, -2.18, -3.33, -3.38], start=1):
+        w.writerow({"event": "close", "trade_num": i, "realized_pnl_net": pnl})
+if os.path.exists(cfg.STATE_PATH):
+    os.remove(cfg.STATE_PATH)
+
+pf = cfg.load_portfolio(equity=300.0)
+check("equity re-summed from the ledger on load", abs(pf.equity - 288.75) < 0.01,
+      f"{pf.equity:.2f}")
+check("starting_equity re-based to match", abs(pf.starting_equity - pf.equity) < 1e-9,
+      f"{pf.starting_equity:.2f}")
+
+# Book one more loss the way _close does and confirm it compounds, not replaces.
+pf.closed.append({"realized_pnl_net": -2.27})
+pf.equity = pf.starting_equity + sum(c["realized_pnl_net"] for c in pf.closed)
+check("a close after the restart subtracts from the restored equity",
+      abs(pf.equity - 286.48) < 0.01, f"{pf.equity:.2f} (bug gave 297.73)")
+
 import shutil
 shutil.rmtree(TMP, ignore_errors=True)
 

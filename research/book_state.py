@@ -255,6 +255,15 @@ def load_portfolio(equity: float = ACCOUNT_EQUITY):
                 realized = float(pd.to_numeric(closes["realized_pnl_net"],
                                                errors="coerce").fillna(0.0).sum())
             pf.equity = equity + realized
+            # Re-base starting_equity too. _close() recomputes equity as
+            # `starting_equity + sum(self.closed)`, and self.closed is empty
+            # after a restart -- so leaving starting_equity at the original
+            # ACCOUNT_EQUITY makes the FIRST close after any restart silently
+            # erase every loss booked before it. Caught live on the VM: seven
+            # closes totalling -20.31 showed equity 290.93 instead of 279.69,
+            # because a restart landed between close 4 and close 5. Equity
+            # drifts UP across restarts, and size is a function of equity.
+            pf.starting_equity = pf.equity
     except (OSError, pd.errors.EmptyDataError):
         # No ledger yet, or a header-only one. Starting equity is correct.
         pass
