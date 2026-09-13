@@ -234,6 +234,23 @@ try:
           cfg.load_portfolio().equity == cfg.ACCOUNT_EQUITY,
           f"{cfg.load_portfolio().equity:.2f}")
 
+    # Writing into a PRE-CREATED EMPTY ledger must still write the header. It did
+    # not: `header=not exists` was False for the zero-byte file the deploy
+    # creates, so the first ten live positions landed with no column names and
+    # pandas could not read the file back at all.
+    open(cfg.LEDGER_PATH, "w").close()
+    cfg.append_ledger([{"event": "open", "trade_num": 1, "ticker_a": "A",
+                        "ticker_b": "B", "gross_notional": 300.0}])
+    back = pd.read_csv(cfg.LEDGER_PATH)
+    check("appending to a zero-byte ledger writes the header",
+          list(back.columns) == cfg.LEDGER_COLUMNS, f"{len(back.columns)} cols")
+    check("  ... and the row is readable by name",
+          back.event.iloc[0] == "open" and back.ticker_a.iloc[0] == "A", "readable")
+    cfg.append_ledger([{"event": "close", "trade_num": 1, "realized_pnl_net": -5.0}])
+    back = pd.read_csv(cfg.LEDGER_PATH)
+    check("  ... and a second append does NOT repeat it",
+          len(back) == 2 and list(back.columns) == cfg.LEDGER_COLUMNS, f"{len(back)} rows")
+
     # ----------------------------------------------------------------------
     print()
     print("=" * 118)

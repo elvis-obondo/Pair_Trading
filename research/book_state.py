@@ -284,5 +284,14 @@ def append_ledger(rows: list) -> None:
         return
     _ensure_dirs()
     d = pd.DataFrame(rows).reindex(columns=LEDGER_COLUMNS)
-    d.to_csv(LEDGER_PATH, mode="a", header=not os.path.exists(LEDGER_PATH),
-             index=False)
+    # getsize, not exists. docker-compose.trading.yml's setup pre-creates the
+    # ledger as an EMPTY file on purpose -- Docker bind-mounts a missing file
+    # path as a directory rather than erroring -- so `exists` is True on a fresh
+    # deployment and the header was never written. The result is a ledger full
+    # of rows that pandas cannot parse: every column name is wrong, equity
+    # re-sums to garbage on restart, and nothing complains.
+    try:
+        need_header = os.path.getsize(LEDGER_PATH) == 0
+    except OSError:
+        need_header = True
+    d.to_csv(LEDGER_PATH, mode="a", header=need_header, index=False)
