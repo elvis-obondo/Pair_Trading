@@ -163,6 +163,53 @@ check("time_stop fires at the horizon", c == 3 and t == 100, f"{REASON[c]} min {
 
 print()
 print("=" * 118)
+print("7. MARGIN SURVIVAL — the column that says whether the position lived to earn it")
+print("=" * 118)
+
+import pandas as pd
+from sweep_exits import score
+
+# Two trades from one entry. #1 dips 0.4 sigma against and reverts to mu.
+# #2 RAMPS to 3 sigma at 0.05 sigma a minute, so a stop set at 0.5 sigma has a
+# minute it can actually fire on. A path that jumps straight to 3 sigma would
+# gap through every level at once and the stop would book the full loss -- real,
+# and the reason overshoot exists, but it tests nothing about the drawdown
+# column. leg A is the whole gross, so 1 sigma is exactly 0.02 * 300 = $6.
+N = 600
+p1 = np.full(N, ENTRY_SHORT + 0.4 * SG); p1[0] = ENTRY_SHORT; p1[200:] = MU - 0.01 * SG
+p2 = ENTRY_SHORT + np.minimum(np.arange(N) * 0.05, 3.0) * SG
+spreads = np.concatenate([p1, p2])
+sm = pd.DataFrame({
+    "trade_num": [1, 2],
+    "entry_spread": [ENTRY_SHORT, ENTRY_SHORT], "mu_at_entry": [MU, MU],
+    "sigma_at_entry": [SG, SG],
+    "leg_a_notional": [300.0, 300.0], "leg_b_notional": [0.0, 0.0],
+    "gross_notional": [300.0, 300.0],
+    "margin": [15.0, 15.0],                       # 20x: liquidation at $15
+    "path_start": [0, N], "path_len": [N, N],
+})
+
+# No stop. #1 peaks at 0.4 sigma = $2.40, safe. #2 sits at 3 sigma = $18, past $15.
+r = score(spreads, sm, float("inf"), 0, 0, HORIZON, check_every=1)
+check("drawdown is dollars, not sigma", abs(r.worst_drawdown[0] - 2.40) < 1e-6,
+      f"${r.worst_drawdown[0]:.2f}")
+check("the safe trade is not liquidated", not r.liquidated[0], r.worst_drawdown[0])
+check("the runaway IS liquidated", r.liquidated[1], f"${r.worst_drawdown[1]:.2f}")
+check("liquidated is exactly drawdown > margin",
+      bool((r.worst_drawdown > sm.margin).equals(r.liquidated)), "consistent")
+
+# THE POINT OF MEASURING TO THE EXIT. A 0.5-sigma stop closes #2 at minute 1,
+# at $3 of loss -- the position no longer exists to be liquidated at minute 2.
+r2 = score(spreads, sm, 0.5, 0, 0, HORIZON, check_every=1)
+check("a stop that fires early caps the drawdown", r2.worst_drawdown[1] < 15.0,
+      f"${r2.worst_drawdown[1]:.2f}")
+check("  ... so it is NOT counted as liquidated", not r2.liquidated[1], "survived")
+check("a tight stop never liquidates more than a wide one",
+      r2.liquidated.sum() <= r.liquidated.sum(),
+      f"{r2.liquidated.sum()} <= {r.liquidated.sum()}")
+
+print()
+print("=" * 118)
 print(f"{n_pass}/{n_pass + n_fail} assertions PASS")
 print("=" * 118)
 sys.exit(1 if n_fail else 0)

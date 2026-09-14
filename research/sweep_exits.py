@@ -66,9 +66,17 @@ from portfolio import ROUND_TRIP_COST_FRAC
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PATHS = os.path.join(PROJECT_ROOT, "research", "exit_study", "paths.npz")
 
-STOP_WIDTHS = (0.5, 0.75, 1.0, 1.5)
-DEBOUNCES = (0, 5, 10, 15, 20, 25, 30)
-GRACES = (0, 15, 30, 45, 60)
+# WIDTHS run to 5 sigma because the margin, not the strategy, is what caps them.
+# At 20x on 5% equity the position is liquidated near 5.7 sigma on the median
+# trade, so anything past that is unreachable no matter what the P&L says. An
+# earlier grid stopped at 1.5 and left the whole affordable band untested.
+STOP_WIDTHS = (0.5, 0.75, 1.0, 1.5, 2.0, 2.5, 3.0, 4.0, 5.0)
+# DEBOUNCE is fine below 15 minutes because that is where the recovery mass is:
+# of the trades that cross 0.5 sigma and still reach mu, the median is back
+# inside the level in THREE minutes and the p75 in fourteen. A grid whose first
+# step is 5 minutes steps over the answer.
+DEBOUNCES = (0, 1, 2, 3, 5, 7, 10, 15, 20, 30)
+GRACES = (0, 15, 30, 60, 120)
 
 REASON = {0: "open_at_end", 1: "adverse_move", 2: "take_profit", 3: "time_stop"}
 
@@ -140,6 +148,22 @@ def score(spreads, meta, stop_sigma, debounce, grace, horizon, check_every=1):
     gross = meta.gross_notional.to_numpy(float)
     dollars = move * leg_a - ROUND_TRIP_COST_FRAC * gross
 
+    # MARGIN SURVIVAL. A mean return says nothing about whether the position was
+    # still alive to earn it. At 20x leverage the exchange posts ~5% of gross as
+    # margin and liquidates when unrealised loss reaches it -- so the venue holds
+    # a stop of its own, whatever this rule decides. A configuration that returns
+    # well on paper while liquidating a tenth of the book is not a configuration,
+    # and without this column the sweep cannot tell the two apart.
+    #
+    # The excursion is measured to the EXIT MINUTE, not to the horizon: once the
+    # rule closes the trade there is no position left to liquidate.
+    margin = meta.margin.to_numpy(float)
+    worst = np.empty(n)
+    for i in range(n):
+        p = spreads[st[i]:st[i] + ln[i]][:int(ex_t[i]) + 1]
+        worst[i] = np.nanmax(dr[i] * (ent[i] - p)) * abs(leg_a[i])
+    liquidated = worst > margin
+
     # TWO RETURN MEASURES, because the project's own two disagree.
     #
     # net_pct is Position.pnl's definition, reproduced exactly so these numbers
@@ -162,6 +186,7 @@ def score(spreads, meta, stop_sigma, debounce, grace, horizon, check_every=1):
         # R at a FIXED 0.5-sigma reference, so it is comparable across widths.
         "r_ref": net_pct / (100.0 * sg * 0.5),
         "truncated": ln < horizon + 1,
+        "worst_drawdown": worst, "liquidated": liquidated,
     })
 
 
@@ -191,6 +216,8 @@ def main() -> None:
             "open_at_end": (t.reason == "open_at_end").mean(),
             "median_hold_h": t.exit_min.median() / 60.0,
             "win_rate": (t.net_pct > 0).mean(),
+            "liq_rate": t.liquidated.mean(),
+            "max_dd": t.worst_drawdown.max(),
         })
         if k % 40 == 0:
             print(f"  {k}/{len(STOP_WIDTHS)*len(DEBOUNCES)*len(GRACES)}")
