@@ -56,6 +56,11 @@ from signal_generator import generate_exit_signal
 ROUND_TRIP_COST_FRAC = 0.000993
 
 
+def cooldown_key(ticker_a: str, ticker_b: str) -> tuple:
+    """The identity a cooldown is keyed on: the two coins, order removed."""
+    return tuple(sorted((ticker_a, ticker_b)))
+
+
 class Position:
     """One open pair trade. Everything needed to close it and to score it."""
 
@@ -153,7 +158,8 @@ class Portfolio:
                  stop_fill_overshoot: float | None = None,
                  max_notional: float | None = None,
                  debounce_minutes: float = 0.0,
-                 grace_minutes: float = 0.0):
+                 grace_minutes: float = 0.0,
+                 cooldown_hours: float | None = None):
         self.starting_equity = float(equity)
         self.equity = float(equity)
         self.max_slots = max_slots
@@ -207,8 +213,19 @@ class Portfolio:
         self.debounce_minutes = float(debounce_minutes)
         self.grace_minutes = float(grace_minutes)
         self.max_notional = max_notional
+        # RE-ENTRY COOLDOWN. None disables it and the book behaves exactly as
+        # before -- no candidate is ever skipped and `recent_losses` stays empty.
+        self.cooldown_hours = cooldown_hours
         self.open_positions: list[Position] = []
         self.closed: list[dict] = []
+        # DELIBERATELY SEPARATE FROM `closed`, and it must stay that way.
+        # `_close` recomputes equity as starting_equity + sum(self.closed), and
+        # `book_state.load_portfolio` re-bases starting_equity on the assumption
+        # that `closed` is EMPTY after a restart. Restoring history into `closed`
+        # would double-count every prior trade -- that is bug e54e2ef, which
+        # silently erased losses live. This list carries the pair and the time
+        # only, is never summed, and cannot touch equity.
+        self.recent_losses: list[tuple] = []
         self.next_trade_num = 1
 
     # -- state ------------------------------------------------------------ #
@@ -224,6 +241,29 @@ class Portfolio:
     @property
     def available_margin(self) -> float:
         return self.equity - self.used_margin
+
+    def cooling_pairs(self, now) -> set:
+        """Pairs still inside their re-entry cooldown at `now`.
+
+        Keyed on the SORTED pair, so a ban on (A, B) also blocks (B, A). Those
+        are the same two coins and the same spread inverted; banning one and not
+        the other would let the book re-enter the trade it just lost by reading
+        the legs the other way round.
+        """
+        if not self.cooldown_hours:
+            return set()
+        out = set()
+        for key, when in self.recent_losses:
+            try:
+                age_h = (now - when).total_seconds() / 3600.0
+            except (TypeError, AttributeError):
+                # A timestamp that will not subtract cannot be aged, and
+                # guessing would either ban forever or not at all. Skip it: the
+                # cooldown fails OPEN, which is the pre-existing behaviour.
+                continue
+            if 0.0 <= age_h < self.cooldown_hours:
+                out.add(key)
+        return out
 
     def _ticker_counts(self) -> dict[str, int]:
         counts: dict[str, int] = {}
@@ -306,6 +346,11 @@ class Portfolio:
     def _close(self, pos: Position, ex: dict, now, hours: float,
                fill_overshoot: float = float("nan")) -> dict:
         net, net_pct, r = pos.pnl(ex["current_spread"])
+        # Only an adverse_move starts a cooldown. A take-profit or a time stop
+        # says nothing bad about the pair, and a book_reset is bookkeeping.
+        if ex["exit_reason"] == "adverse_move":
+            self.recent_losses.append((cooldown_key(pos.ticker_a, pos.ticker_b),
+                                       now))
         # Recomputed from the realized total, never `equity += pnl` -- the same
         # discipline PairsTradingActor._recompute_equity uses, so a rounding
         # drift cannot accumulate silently across hundreds of trades.
@@ -358,12 +403,15 @@ class Portfolio:
             return opened
         held = {p.pair for p in self.open_positions}
         counts = self._ticker_counts()
+        cooling = self.cooling_pairs(now)
 
         for row in candidates.itertuples(index=False):
             if self.free_slots <= 0:
                 break
             pair = (row.ticker_a, row.ticker_b)
             if pair in held:
+                continue
+            if cooling and cooldown_key(row.ticker_a, row.ticker_b) in cooling:
                 continue
             if self.max_per_ticker is not None and (
                     counts.get(row.ticker_a, 0) >= self.max_per_ticker

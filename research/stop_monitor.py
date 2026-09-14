@@ -57,7 +57,7 @@ import numpy as np
 import pandas as pd
 
 import book_state as cfg
-from portfolio import Position
+from portfolio import Position, cooldown_key
 from position_sizer import compute_position_size
 from signal_generator import generate_exit_signal
 
@@ -445,12 +445,17 @@ class StopMonitor:
         held = {p.pair for p in self.pf.open_positions}
         counts = self.pf._ticker_counts()
         wall_now = datetime.fromtimestamp(now, tz=timezone.utc).replace(tzinfo=None)
+        # Same wall clock the ledger's closed_at is written in, so the ages come
+        # out right. Computed once: the set cannot change inside one cycle.
+        cooling = self.pf.cooling_pairs(wall_now)
 
         for row in candidates:
             if self.pf.free_slots <= 0:
                 break
             pair = (row["ticker_a"], row["ticker_b"])
             if pair in held:
+                continue
+            if cooling and cooldown_key(row["ticker_a"], row["ticker_b"]) in cooling:
                 continue
             if self.pf.max_per_ticker is not None and (
                     counts.get(row["ticker_a"], 0) >= self.pf.max_per_ticker

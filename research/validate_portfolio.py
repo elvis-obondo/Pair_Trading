@@ -347,6 +347,88 @@ for col in ("r2_at_entry", "net_exposure", "net_exposure_frac"):
 
 print()
 print("=" * 104)
+print("13. Re-entry cooldown — a pair that stopped out cannot come straight back")
+print("=" * 104)
+from portfolio import cooldown_key
+
+TC = datetime(2026, 9, 13, 12, 0)
+
+
+def _lost(pf, a="API3", b="MANA", when=TC, reason="adverse_move"):
+    """Open a real position through fill_slots, then close it for `reason`."""
+    pf.fill_slots(frame([cand(a, b, 0.2)]), when)
+    pos = pf.open_positions[-1]
+    pf._close(pos, {"exit_reason": reason,
+                    "current_spread": pos.signal["entry_spread"]}, when, 1.0)
+    pf.open_positions = [q for q in pf.open_positions if q is not pos]
+    return pf
+
+
+check("cooldown_key is order-free",
+      cooldown_key("API3", "MANA") == cooldown_key("MANA", "API3"),
+      cooldown_key("MANA", "API3"))
+
+pf = _lost(Portfolio(equity=300.0, cooldown_hours=72.0))
+K = cooldown_key("API3", "MANA")
+check("the pair is cooling one hour later", K in pf.cooling_pairs(TC + timedelta(hours=1)), "blocked")
+check("  ... still cooling at 71h", K in pf.cooling_pairs(TC + timedelta(hours=71)), "blocked")
+check("  ... free again at 73h", K not in pf.cooling_pairs(TC + timedelta(hours=73)), "released")
+
+# THE BEHAVIOUR, END TO END: the same candidate must be refused while cooling
+# and accepted once the ban expires.
+pf2 = _lost(Portfolio(equity=300.0, cooldown_hours=72.0))
+got = pf2.fill_slots(frame([cand("API3", "MANA", 0.2)]), TC + timedelta(hours=1))
+check("fill_slots refuses a cooling pair", len(got) == 0, f"opened {len(got)}")
+got = pf2.fill_slots(frame([cand("API3", "MANA", 0.2)]), TC + timedelta(hours=73))
+check("  ... and takes it once released", len(got) == 1, f"opened {len(got)}")
+
+# Reversed legs are the same spread and must be refused too.
+pf3 = _lost(Portfolio(equity=300.0, cooldown_hours=72.0))
+got = pf3.fill_slots(frame([cand("MANA", "API3", 0.2)]), TC + timedelta(hours=1))
+check("reversed legs are the same ban", len(got) == 0, f"opened {len(got)}")
+
+# An unrelated pair is untouched.
+pf4 = _lost(Portfolio(equity=300.0, cooldown_hours=72.0))
+got = pf4.fill_slots(frame([cand("CRV", "LINK", 0.2)]), TC + timedelta(hours=1))
+check("an unrelated pair still trades", len(got) == 1, f"opened {len(got)}")
+
+# OFF BY DEFAULT. Every measured result in this project predates the cooldown,
+# so the default must reproduce them exactly.
+pf5 = _lost(Portfolio(equity=300.0))
+check("cooldown is OFF unless asked", pf5.cooldown_hours is None, "None")
+got = pf5.fill_slots(frame([cand("API3", "MANA", 0.2)]), TC + timedelta(hours=1))
+check("  ... and bans nothing when off", len(got) == 1, f"opened {len(got)}")
+
+# ONLY A LOSS STARTS A COOLDOWN.
+for reason, should in (("adverse_move", True), ("take_profit", False),
+                       ("time_stop", False), ("book_reset", False)):
+    q = _lost(Portfolio(equity=300.0, cooldown_hours=72.0), reason=reason)
+    banned = bool(q.cooling_pairs(TC + timedelta(hours=1)))
+    check(f"{reason} " + ("starts a cooldown" if should else "starts NO cooldown"),
+          banned == should, f"banned={banned}")
+
+# THE INVARIANT THAT MATTERS. recent_losses must never reach equity. _close
+# recomputes equity from self.closed, and load_portfolio re-bases
+# starting_equity assuming closed is empty after a restart -- filling closed
+# with history is bug e54e2ef, which silently erased live losses.
+q = _lost(Portfolio(equity=300.0, cooldown_hours=72.0))
+eq = q.equity
+q.recent_losses.extend([(cooldown_key("X", "Y"), TC)] * 50)
+check("recent_losses never moves equity", q.equity == eq, f"{q.equity:.4f}")
+check("  ... and is a different list from closed", q.recent_losses is not q.closed, "separate")
+check("  ... one loss recorded, not two", len(q.recent_losses) == 51, len(q.recent_losses))
+
+# A TIMESTAMP THAT WILL NOT SUBTRACT MUST FAIL OPEN, never ban forever.
+q2 = Portfolio(equity=300.0, cooldown_hours=72.0)
+q2.recent_losses.append((cooldown_key("API3", "MANA"), "not-a-datetime"))
+check("an unparseable timestamp bans nothing", q2.cooling_pairs(TC) == set(), "fails open")
+
+# LIVE AND BACKTEST READ ONE CONSTANT.
+check("book_state defines COOLDOWN_HOURS", isinstance(_cfg.COOLDOWN_HOURS, (int, float)),
+      _cfg.COOLDOWN_HOURS)
+
+print()
+print("=" * 104)
 print(f"{n_pass}/{n_pass + n_fail} assertions PASS")
 print("=" * 104)
 sys.exit(1 if n_fail else 0)

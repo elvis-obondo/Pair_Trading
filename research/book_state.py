@@ -142,6 +142,33 @@ CANDIDATES_MAX_AGE_MIN = 60.0
 # live system achieves is a backtest that lies.
 MEASURED_STOP_OVERSHOOT = 1.04
 
+# RE-ENTRY COOLDOWN. A pair that stopped out cannot be re-entered for this many
+# hours after that loss closed. None disables it entirely.
+#
+# WHY. The |z| >= 3 signal does not disappear when a stop fires -- the spread has
+# moved FURTHER from mu, so z is higher than it was at entry and the pair screens
+# again on the very next scan. Live, the book re-entered API3/MANA four separate
+# times in one morning and lost every time. Measured over the 35-day window at
+# 1-minute resolution: a pair that has already lost averages -0.13% per trade and
+# stays negative at every horizon past 24 hours, while pairs with no prior loss
+# average +0.217%. Blocking them removes 18% of entries worth -$56.
+#
+# 72 HOURS, and the length barely matters: 12h, 24h, 48h, 72h and permanent all
+# land within $35 of each other on that window. That is a plateau, not a peak --
+# a choice on a flat surface rather than a fitted parameter. 72 matches
+# MAX_HOLD_HOURS, the longest a position can live, so the ban is one trade's
+# worth of time.
+#
+# ROLLING, NOT A PERIODIC RESET. Each ban expires 72 hours after that pair's own
+# losing close. A global list-reset on a fixed clock was considered and rejected:
+# it would make the ban a pair serves depend on where the wall clock sat when it
+# lost, which is the defect that already cost this project a stop rule -- a
+# position opened at 03:01 got 29 minutes of leniency, one opened at 03:29 got
+# one minute. It is not going into the entry rule. Nothing needs resetting: a
+# rolling ban self-expires, and the list runs a median of 45 pairs against 22,155
+# possible, so it cannot starve the pool.
+COOLDOWN_HOURS = 72.0
+
 # ---------------------------------------------------------------------------
 # RETENTION. Everything this system writes on a schedule grows without bound
 # unless something deletes it, and the VM has an 11GB margin, not 11TB.
@@ -397,7 +424,8 @@ def load_portfolio(equity: float = ACCOUNT_EQUITY):
     pf = Portfolio(equity=equity, max_slots=MAX_SLOTS,
                    capital_frac=CAPITAL_FRAC, leverage=LEVERAGE,
                    stop_sigma=STOP_SIGMA, max_hold_hours=MAX_HOLD_HOURS,
-                   max_per_ticker=MAX_PER_TICKER, max_notional=MAX_NOTIONAL)
+                   max_per_ticker=MAX_PER_TICKER, max_notional=MAX_NOTIONAL,
+                   cooldown_hours=COOLDOWN_HOURS)
 
     if os.path.exists(STATE_PATH):
         with open(STATE_PATH) as fh:
@@ -441,6 +469,25 @@ def load_portfolio(equity: float = ACCOUNT_EQUITY):
             # because a restart landed between close 4 and close 5. Equity
             # drifts UP across restarts, and size is a function of equity.
             pf.starting_equity = pf.equity
+
+            # RESTORE THE COOLDOWN. Without this the ban list empties on every
+            # restart -- and a deploy IS a restart, so the rule would be wiped
+            # by the act of shipping it. Rebuilt from the ledger, which is the
+            # record of what actually happened.
+            #
+            # This does NOT touch pf.closed. See Portfolio.recent_losses for
+            # why filling that would double-count equity.
+            if COOLDOWN_HOURS:
+                from portfolio import cooldown_key
+                cutoff = (pd.Timestamp.utcnow().tz_localize(None)
+                          - pd.Timedelta(hours=COOLDOWN_HOURS))
+                lost = closes[closes["exit_reason"] == "adverse_move"]
+                when = pd.to_datetime(lost["closed_at"], errors="coerce")
+                live = lost[when.notna() & (when >= cutoff)]
+                for row, t in zip(live.itertuples(index=False),
+                                  when[when.notna() & (when >= cutoff)]):
+                    pf.recent_losses.append(
+                        (cooldown_key(row.ticker_a, row.ticker_b), t.to_pydatetime()))
     except (OSError, pd.errors.EmptyDataError):
         # No ledger yet, or a header-only one. Starting equity is correct.
         pass

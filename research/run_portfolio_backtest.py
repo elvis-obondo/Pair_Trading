@@ -62,7 +62,8 @@ def run(days=30, stride=1, bar_hours=0.5, equity=300.0, slots=10, end_date=None,
         max_hold_hours=72.0, capital_frac=0.05, leverage=20.0,
         max_per_ticker=None, stop_fill_overshoot=None, max_notional=None,
         rank_by="theta", exit_check_minutes=None, debounce_minutes=0.0,
-        grace_minutes=0.0, out_path=OUT):
+        grace_minutes=0.0, out_path=OUT,
+        cooldown_hours=None):
     need = min_bars_required(bar_hours)
     bars_per_day = int(round(24 / bar_hours))
 
@@ -102,7 +103,8 @@ def run(days=30, stride=1, bar_hours=0.5, equity=300.0, slots=10, end_date=None,
                              ("max_notional", cfg.MAX_NOTIONAL, max_notional),
                              ("stop_sigma", cfg.STOP_SIGMA, stop_sigma),
                              ("max_hold_hours", cfg.MAX_HOLD_HOURS, max_hold_hours),
-                             ("min_deviation_sigma", cfg.MIN_DEVIATION_SIGMA, min_deviation_sigma)):
+                             ("min_deviation_sigma", cfg.MIN_DEVIATION_SIGMA, min_deviation_sigma),
+                             ("cooldown_hours", cfg.COOLDOWN_HOURS, cooldown_hours)):
         if live != used:
             print(f"[WARN] {name}={used} but the LIVE book runs {live} — "
                   f"this run does not describe the live strategy")
@@ -153,7 +155,8 @@ def run(days=30, stride=1, bar_hours=0.5, equity=300.0, slots=10, end_date=None,
                    leverage=leverage, stop_sigma=stop_sigma,
                    max_hold_hours=max_hold_hours, max_per_ticker=max_per_ticker,
                    stop_fill_overshoot=stop_fill_overshoot, max_notional=max_notional,
-                   debounce_minutes=debounce_minutes, grace_minutes=grace_minutes)
+                   debounce_minutes=debounce_minutes, grace_minutes=grace_minutes,
+                   cooldown_hours=cooldown_hours)
     if stop_fill_overshoot is not None:
         print(f"[INFO] adverse exits booked at {stop_fill_overshoot:.2f}x the stop "
               f"distance, not at the bar-close spread.")
@@ -301,6 +304,9 @@ if __name__ == "__main__":
     # unbounded strategy than the one actually running. A backtest whose
     # defaults can drift from the live config is measuring the wrong thing.
     ap.add_argument("--max-per-ticker", type=int, default=cfg.MAX_PER_TICKER)
+    ap.add_argument("--cooldown-hours", type=float, default=cfg.COOLDOWN_HOURS,
+                    help="a pair that stopped out cannot be re-entered for this "
+                         f"many hours (live: {cfg.COOLDOWN_HOURS}). 0 disables it.")
     ap.add_argument("--end-date", type=str, default=None,
                     help="anchor the window, e.g. 2026-06-13. Omit for the most "
                          "recent `days`, which is IN SAMPLE for this project.")
@@ -331,7 +337,7 @@ if __name__ == "__main__":
                          "geometry are identical across modes.")
     ap.add_argument("--out", type=str, default=OUT)
     a = ap.parse_args()
-    run(days=a.days, stride=a.stride, slots=a.slots, equity=a.equity,
+    run(cooldown_hours=(a.cooldown_hours or None), days=a.days, stride=a.stride, slots=a.slots, equity=a.equity,
         min_deviation_sigma=a.entry, stop_sigma=a.stop, max_hold_hours=a.hold,
         max_per_ticker=a.max_per_ticker, end_date=a.end_date,
         stop_fill_overshoot=_overshoot(a.stop_fill_overshoot),
