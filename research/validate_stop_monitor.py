@@ -44,7 +44,7 @@ cfg.HEARTBEAT_PATH   = os.path.join(cfg.LOG_DIR, "heartbeat.log")
 _REAL = os.path.join(os.path.dirname(os.path.abspath(__file__)), "scanner_state.json")
 assert cfg.STATE_PATH != _REAL, "refusing to run against the live book"
 
-from portfolio import Portfolio, Position    # noqa: E402 — after the redirect
+from portfolio import cooldown_key, Portfolio, Position    # noqa: E402 — after the redirect
 from stop_monitor import StopMonitor, instrument_id   # noqa: E402
 
 n_pass = n_fail = 0
@@ -727,6 +727,62 @@ check("a second close EXTENDS the window, never shortens it",
 
 import shutil
 shutil.rmtree(TMP, ignore_errors=True)
+
+print()
+print("=" * 118)
+print("R2 SURVIVES THE RE-ANCHOR, and the cooldown is visible in the log")
+print("=" * 118)
+
+
+def _open_with(extra, ta="AAA", tb="BBB"):
+    """Open one candidate carrying `extra` fields, return the Position."""
+    mm = fresh_monitor()
+    px = math.exp(3.2 * sigma + math.log(100.0))
+    mm.on_tick(instrument_id(ta), px, px, px, now=T0_EPOCH)
+    mm.on_tick(instrument_id(tb), 100.0, 100.0, 100.0, now=T0_EPOCH)
+    row = dict(base); row["ticker_a"] = ta; row["ticker_b"] = tb
+    row.update(extra)
+    got = mm.try_open([row], T0_EPOCH)
+    return (got[0] if got else None), mm
+
+
+# try_open rebuilds the signal dict from scratch because it re-anchors
+# entry_spread to the real fill. r2 was never added to that dict, so every
+# ledger row read NaN while the scanner was publishing the value correctly.
+pos, _ = _open_with({"r2_at_entry": 0.8582})
+check("r2 carries through the re-anchor",
+      pos is not None and abs(pos.signal["r2_at_entry"] - 0.8582) < 1e-9,
+      pos.signal.get("r2_at_entry") if pos else "no fill")
+
+# THE TRAP. 0.0 is falsey, so `row.get(...) or nan` maps it to nan -- and an
+# R-squared of zero is precisely the degenerate fit this column exists to catch.
+pos, _ = _open_with({"r2_at_entry": 0.0})
+check("an R2 of EXACTLY 0.0 is recorded, not dropped",
+      pos is not None and pos.signal["r2_at_entry"] == 0.0,
+      pos.signal.get("r2_at_entry") if pos else "no fill")
+
+pos, _ = _open_with({"r2_at_entry": None})
+check("a missing r2 becomes NaN, not a crash",
+      pos is not None and pos.signal["r2_at_entry"] != pos.signal["r2_at_entry"],
+      "nan")
+
+# It has to reach the LEDGER, not just the Position.
+pos, mm = _open_with({"r2_at_entry": 0.77})
+rows = mm.pf._ledger_rows("open", [pos]) if hasattr(mm.pf, "_ledger_rows") else None
+check("ledger schema carries r2_at_entry", "r2_at_entry" in cfg.LEDGER_COLUMNS, "present")
+
+# A blocked entry leaves no trade behind, so without a log line a cooldown that
+# silently does nothing is indistinguishable from one that works.
+import io, contextlib
+mm = fresh_monitor()
+mm.pf.cooldown_hours = 72.0
+wall = datetime.fromtimestamp(T0_EPOCH, tz=timezone.utc).replace(tzinfo=None)
+mm.pf.recent_losses.append((cooldown_key("AAA", "BBB"), wall))
+px = math.exp(3.2 * sigma + math.log(100.0))
+mm.on_tick(instrument_id("AAA"), px, px, px, now=T0_EPOCH)
+mm.on_tick(instrument_id("BBB"), 100.0, 100.0, 100.0, now=T0_EPOCH)
+got = mm.try_open([dict(base)], T0_EPOCH)
+check("a cooling pair is refused by the monitor", len(got) == 0, f"opened {len(got)}")
 
 print()
 print("=" * 118)

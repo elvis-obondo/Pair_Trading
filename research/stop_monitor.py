@@ -448,6 +448,7 @@ class StopMonitor:
         # Same wall clock the ledger's closed_at is written in, so the ages come
         # out right. Computed once: the set cannot change inside one cycle.
         cooling = self.pf.cooling_pairs(wall_now)
+        skipped_cooling: list[str] = []
 
         for row in candidates:
             if self.pf.free_slots <= 0:
@@ -456,6 +457,13 @@ class StopMonitor:
             if pair in held:
                 continue
             if cooling and cooldown_key(row["ticker_a"], row["ticker_b"]) in cooling:
+                # COUNTED, not logged per candidate. A blocked entry otherwise
+                # leaves no trace at all -- the trade simply never happens -- so
+                # a rule that is silently doing nothing looks identical to one
+                # that is working. One summary line per cycle; a hundred
+                # candidates against a 45-pair ban list would otherwise bury the
+                # log in the noise it is meant to make legible.
+                skipped_cooling.append(f"{row['ticker_a']}/{row['ticker_b']}")
                 continue
             if self.pf.max_per_ticker is not None and (
                     counts.get(row["ticker_a"], 0) >= self.pf.max_per_ticker
@@ -496,6 +504,19 @@ class StopMonitor:
                 "beta_at_entry": beta,
                 "alpha_at_entry": alpha,
                 "theta_at_entry": float(row.get("theta_at_entry") or float("nan")),
+                # `is None`, NOT `or`. An R-squared of exactly 0.0 is falsey, and
+                # `0.0 or nan` is nan -- so the `or` idiom used for theta above
+                # would silently record the DEGENERATE fits, the ones this column
+                # exists to find, as missing data. theta keeps `or` because a
+                # theta of 0.0 is not a case worth distinguishing from no fit.
+                #
+                # This dict is rebuilt from scratch because try_open re-anchors
+                # entry_spread to the real fill, and r2 was simply never added to
+                # it: the scanner published it, the candidates file carried it,
+                # and the monitor dropped it at the door. Every ledger row since
+                # the column was introduced reads NaN.
+                "r2_at_entry": (float("nan") if row.get("r2_at_entry") is None
+                                else float(row["r2_at_entry"])),
                 "take_profit_level": entry_spread - cfg.TAKE_PROFIT_PCT * (entry_spread - mu),
             }
             sizing = compute_position_size(
@@ -520,6 +541,11 @@ class StopMonitor:
             log(f"OPEN  #{pos.trade_num} {pos.ticker_a}/{pos.ticker_b} "
                 f"bar z {bar_z:+.2f} -> fill z {fill_z:+.2f} "
                 f"gross {sizing['gross_notional']:.2f} margin {sizing['margin']:.2f}")
+        if skipped_cooling:
+            log(f"COOLDOWN skipped {len(skipped_cooling)} of {len(candidates)} "
+                f"candidates ({len(cooling)} pairs banned): "
+                + ", ".join(skipped_cooling[:8])
+                + ("..." if len(skipped_cooling) > 8 else ""))
         return opened
 
     # -- persistence ------------------------------------------------------ #
