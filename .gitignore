@@ -59,3 +59,8 @@ trading_data/
 
 # Sentinel: enables the laptop -> VM candidate push. Per-machine, not source.
 .push_to_vm
+
+# Dislocation study datasets: 55MB, rebuild in ~30s from
+# research/dislocation_study.py. Committing them would be committing a cache.
+research/dislocations.parquet
+research/dislocations_1m.parquet

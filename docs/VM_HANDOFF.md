@@ -229,6 +229,150 @@ files missed the cron/LaunchAgent stdout duplicates. **The ledger is never prune
 
 VM after migration: 9.3GB of 20GB used, 397MB of 3,913MB RAM. No pressure.
 
+## SESSION 2026-09-21: the dislocation study
+
+`research/dislocation_study.py` builds one row per DISLOCATION EPISODE -- the
+first bar a pair crosses |z| >= 3, geometry frozen there, walked forward under
+`generate_exit_signal`'s exact rules. 35 days to 2026-09-21, **206,935 episodes
+over 22,333 pairs**. `research/dislocation_report.py` reads it. 12/12 in
+`validate_dislocation_study.py`, including a bar-by-bar replay against
+`generate_exit_signal` itself. Rebuilds in ~30s; the parquets are not committed.
+
+The unit matters: the backtest screen's 917,856 rows over the same window are
+(bar, pair) rows, so a dislocation lasting twenty bars appears twenty times.
+Any statistic over the screen is really weighted by episode LENGTH, which is
+itself an outcome.
+
+### THE POPULATION LOSES, and honest resolution matters
+
+               30m bar close      1m
+    mean R        -0.358        -0.259
+    reversion     12.35%         9.76%
+    stop R        -1.812        -1.219
+
+28% of the 30m take-profits are stops at 1m. The positive R the strategy shows
+is theta ranking and slot scarcity selecting a subset, not a property of
+dislocations. All figures below are the 1m arm.
+
+**A 30m take-profit is flattered twice over.** It books at a bar CLOSE, past
+mu, worth a median **+0.35R** of favourable overshoot on top of the intrabar
+stops it hides.
+
+### WHAT SEPARATES A REVERSION FROM A STOP: hedge quality, and nothing else
+
+Day-demeaned top-minus-bottom decile gap, bootstrapped by DAY (35 blocks).
+Removing each day's mean is what makes it a cross-sectional claim rather than a
+regime marker.
+
+    r2             +0.309  [+0.037, +0.602]   rank rho  0.98   SEPARATES
+    |beta|         +0.341  [+0.093, +0.582]   rank rho  0.93   SEPARATES
+    neutrality     -0.355  [-0.589, -0.098]   rank rho -0.98   SEPARATES
+    |z|            +0.039  [-0.216, +0.311]                    nothing
+    breadth        -0.214  [-0.508, +0.160]   rank rho -0.04   nothing
+    universe count -0.112  [-0.246, +0.193]                    nothing
+    spread sigma   -0.009  [-0.237, +0.249]                    nothing
+
+The three that survive are one signal (Spearman 0.72, -0.66 between them):
+**whether leg B actually hedges leg A.** Combined as a mean percentile rank it
+is monotone across all ten deciles and stable out of sample in time:
+
+    hedge-quality decile   0      1      2      3      4      5      6      7      8      9
+    mean R              -0.645 -0.600 -0.524 -0.454 -0.301 -0.162 -0.061 +0.009 +0.064 +0.087
+    reversion %           5.66   6.14   6.92   7.82   9.02  10.57  11.61  12.66  13.34  13.89
+
+    gap, first 17 days +0.745   |   gap, last 18 days +0.749
+
+Nothing else adds anything once hedge quality is held fixed. `|z|` is the
+cleanest null in the whole study: median 3.185 for reverters, 3.191 for
+stop-outs. **Dislocation SIZE carries no information at all.**
+
+### AND IT IS STILL NOT ENOUGH
+
+    whole population   n 206,935  rev  9.76%  R -0.259  [-0.452, -0.061]
+    top 50% by hq      n 103,469  rev 12.41%  R -0.013  [-0.117, +0.118]
+    top 20% by hq      n  41,387  rev 13.62%  R +0.075  [-0.026, +0.208]
+    top  5% by hq      n  10,347  rev 13.95%  R +0.088  [-0.062, +0.249]
+
+Every interval from the top half up includes zero, and the gain saturates by the
+top 20%. The finding is **exclusion, not selection**: the bottom half is
+reliably bad (-0.5 to -0.65R), the top is merely not bad.
+
+This is NOT the `e5f494e` gate family (cointegration p, OU fit, theta
+significance, volatility regime, reversion probability). Hedge quality was never
+among them. But it has the same shape as every gate that failed, so it is an
+ENGINE question -- matched-pair, 3+ seeds -- and the population study can only
+rule out.
+
+### FILTERING ON r2 DOES NOT FIX THE LABELLING NOISE FLOOR
+
+`beta(A|B) x beta(B|A) = r2` exactly, so high-r2 pairs should behave alike under
+either labelling. Measured on 3,000 pairs, share of dislocated bars the two
+labellings agree on, by median-r2 decile:
+
+    bottom 0.054 ... top 0.191    Spearman(r2, agreement) 0.355
+
+The direction is right and the magnitude is not nearly enough. **Even the best
+decile disagrees on 81% of its dislocations.** The arbitrary A/B choice is
+structural; it cannot be filtered away.
+
+### WHAT SEP 16 WAS NOT
+
+Against the population of dislocations that day, 2026-09-16 was **better than
+average**: 2,162 episodes, **13.6% reversion against 9.76%**, mean R -0.084
+against -0.259. And the universe was QUIET -- mean 178 dislocated pairs against
+a 338 median, third-lowest of the 35 days.
+
+So the -$117 was not a target-rich scan and not an unusually bad dislocation
+population. **36 of the 44 trades OPENED that day**: stops freed slots that
+immediately refilled. The book churned. Whatever Sep 16 was, it was selection
+and slot recycling, not the dislocations.
+
+The dislocation-count circuit breaker is **not worth building on this window**.
+The count did not spike on Sep 16, so it would not have fired. The busy-bar
+penalty that does exist comes from 3 days (Aug 19, Aug 20, Sep 9) and vanishes
+once the day mean is removed -- it is a regime marker with ~6 effective
+observations, the same n=1 trap as fitting to Sep 16 itself. Note also that
+`e5f494e`'s "busy days are good" came from a Monte Carlo that RESAMPLES trades
+independently, so it could never draw 44 correlated simultaneous losers; it is
+not evidence either way.
+
+### THE LIVE BOOK CANNOT MEASURE ANY OF THIS
+
+The scan-history join now backfills r2 on **195 of 195** closes (join on
+ticker_a, ticker_b and exact beta). With that in hand, at n=195 over 9 days:
+
+    feature       bottom tercile R      top tercile R     day-block CI
+    r2                  +0.047              -0.166        every one overlaps
+    |z|                 -0.424              +0.351        every one overlaps
+    |beta|              -0.315              -0.121        every one overlaps
+    neutrality          +0.138              -0.254        every one overlaps
+
+Whole book -0.081R, CI [-0.469, +0.321]. The r2 ordering runs BACKWARDS live,
+and a permutation null says that gap is exceeded by **53.8% of random
+shuffles**. Nothing here is a measurement. Do not read the live book for feature
+effects until it is several hundred trades larger.
+
+Correcting the cost trap while we were in there: `net_pct` charges the round trip
+on leg A's notional while the dollar cost is levied on gross, which is 1.8x
+larger. The live book's logged R is flattered by **+0.036 R per trade** --
+-0.045 logged becomes **-0.081** honest.
+
+### THE MECHANISM, in two numbers
+
+    median time to a stop        1.73h   (39.4% inside one hour)
+    median time to a reversion  17.52h   (62.8% take longer than 12h)
+
+    median worst adverse excursion, eventual WINNERS   0.176 sigma = 0.35 stop-widths
+    median worst adverse excursion, eventual LOSERS    0.546 sigma
+
+A winner's typical worst dip is 35% of the way to the stop, so the 0.5-sigma stop
+sits just past the shoulder of the winners' distribution. That is an independent
+derivation of the closed exit study's result: the stop cannot be widened to
+catch the rest without collecting far more losers, because losers reach the same
+level ten times faster.
+
+---
+
 ## SESSION 2026-09-13 -> 09-21: what was settled, and the number that governs it
 
 ### THE NOISE FLOOR. Read this before trusting any comparison below.
