@@ -1,4 +1,4 @@
-# The paper system on the VM — state as of 2026-09-13 04:30 UTC
+# The paper system on the VM — state as of 2026-09-21
 
 Everything runs on GCP. The laptop is not required and can stay off.
 
@@ -228,6 +228,169 @@ Ticks 14 days (~18.5MB/day measured). Scan history 90 days. Logs rotate at 32MB 
 files missed the cron/LaunchAgent stdout duplicates. **The ledger is never pruned.**
 
 VM after migration: 9.3GB of 20GB used, 397MB of 3,913MB RAM. No pressure.
+
+## SESSION 2026-09-13 -> 09-21: what was settled, and the number that governs it
+
+### THE NOISE FLOOR. Read this before trusting any comparison below.
+
+`tradeable_pairs` returns `itertools.combinations`, so **which coin is called A
+is arbitrary**, and everything downstream regresses the first on the second.
+Randomise that choice and re-run: six books, identical data, rules and window.
+
+    end equity   307  394  471  495  628  933     spread $626, sd $221
+    alphabetical (what we run)  676      fully reversed  164
+
+Only **56 of ~1000 trades** are common to the alphabetical and reversed arms.
+Flipping does not re-scale a hedge on the same positions; it selects a different
+strategy. `beta(A on B) x beta(B on A) = R^2` exactly, so the two directions
+diverge as far as the fit is bad -- and they ALWAYS share a sign. **Flipping
+cannot fix negative beta.**
+
+**Anything under ~$626 on this window is a coin flip.** That retroactively voids
+most single-parameter comparisons, including two this session reported as
+measurements (cooldown $129, time stop $56).
+
+**Matched-pair or nothing.** Comparing a config against a POOLED noise band is
+not the same as comparing it against ITSELF under the same labelling.
+`max_per_ticker=1` looked like the one winner at +$926 pooled; matched-pair it
+goes +926, -39, +645, -444 across four seeds. Two of four. It is noise.
+
+### The exit rule is closed by exhaustion
+
+450 combinations of stop width (0.5-5.0 sigma), debounce (0-30 min, fine below
+15) and grace (0-120 min), at 1-minute resolution, honest fills. **Zero
+profitable.** Best is 5 sigma at -0.031% -- and it liquidates 21.9% of the book.
+Enforce margin and 51 of 450 survive, all 0.5 sigma, best -0.060%.
+
+The mechanism, measured: winners breach the stop for a **median 4 minutes** and
+recover; losers breach and keep going. You cannot tell them apart at the
+crossing, and there are ~30 losers per winner rescued. No debounce length fixes
+that ratio.
+
+### THE $5,018 BACKTEST WAS COMPOUNDING, NOT EXECUTION
+
+Both arms take the **identical 1,041 trades**, same 235 take-profits. Breakdown
+of the $5,038 gap: stops **-$8,169**, take-profits **+$12,799**. The 1.04x arm
+does WORSE on stops. It wins because a couple of dollars saved per early stop
+keeps equity alive, and `gross = 20x * 5% * equity` compounds it: mean position
+$161 vs $1,818, and **97.9x** by the last trade. The 235 take-profits earn
++9.208% in BOTH arms -- identical -- and $5.51 vs $59.98 in dollars.
+
+Of 795 stop-outs, only **39** actually filled inside 1.04x. Median 1.63x, mean
+2.40x, max 50x.
+
+### The intrabar experiment: hypothesis CONFIRMED
+
+Take-profit rate **22.5% -> 15.6%** at 1-minute checking. Median stop hold
+collapses 2.00h -> 0.58h. **75 of the 235 take-profits (32%) crossed the 0.5
+sigma stop while open** -- a tick monitor kills all of them. The +0.740R was
+optimistic by roughly a third of its winners.
+
+Note the design assumed "same entries, both arms". Wrong: 1,044 vs 1,977 trades.
+Ten slots couple exits to entries. The take-profit RATE is the valid comparison;
+their P&L is not.
+
+### Fill quality vs how often you look (measured on 1m paths, 0.5 sigma)
+
+    1 min 1.149x | 5 min 1.316x | 15 min 1.492x | 30 min 1.651x
+    live tick monitor ~100ms: 1.005x median, 1.011x mean (14 stop-outs)
+
+**Sub-minute watching is what buys the fill.** 1-minute checking with honest
+fills LOSES (-$298) -- it pays the slow-fill penalty without the slow-trigger
+leniency.
+
+### What the live config measures at
+
+    30m trigger + 1.04x fill   $5,018   <- impossible blend
+    30m trigger + actual fill  $   51
+    1m trigger + actual 1m     $    2
+    1m trigger + 1.005x fill, stop 1.0  $805 (no cooldown) / $676 (cooldown 72h)
+
+### SHIPPED THIS SESSION
+
+**Re-entry cooldown, 72h, rolling** (`79766d5`). A pair that stopped out cannot
+re-enter for 72h from its own losing close. Keyed on the SORTED pair. Restored
+from the ledger on load -- without that a deploy would erase it, since a deploy
+IS a restart. `recent_losses` is deliberately NOT `pf.closed`: filling `closed`
+double-counts equity, which is bug `e54e2ef`.
+
+**The engine measured it WORSE** ($676 vs $805) and the user shipped it anyway
+knowing that. Both numbers are inside the noise band, so neither is meaningful.
+
+**r2_at_entry was never reaching the ledger** (`1a6660d`). `try_open` rebuilds
+the signal dict to re-anchor entry to the real fill, and r2 was never added to
+it. The scanner computed it correctly all along. 28 of 28 opens read NaN. Fixed
+with an explicit `is None` check -- NOT `or`, because `0.0 or nan` is nan and an
+R^2 of exactly zero is the degenerate case the column exists to find. Now
+populating: 162 of 205 opens.
+
+**Cooldown skips now log one summary line per cycle.** A blocked entry leaves no
+trade behind, so a rule doing nothing looked identical to one working.
+
+### THE LIVE BOOK: -32%, and one day did it
+
+    start 300  peak 329.57  trough 167.04  now 202.98  (+26.15 unrealised)
+    195 closes, 8.6 days, mean R -0.045 vs backtest +0.221
+
+    Sep 16  -117.48 on 44 trades   <- the CLARITY Act
+    every other day between -31.86 and +25.34, seven of nine positive
+
+**2026-09-16 is the US Senate rejecting the CLARITY Act 49-50 on cloture (Sep
+15), plus a Fed rate hike.** Not a mechanism failure: mean R on that day's losers
+was **-1.081** (normal), overshoot median **1.013x** (perfect), losses spread
+across 17 hours. It was **44 trades instead of ~19 at a normal loss each**.
+
+The book was net SHORT (-0.176 mean) and still lost. This was not directional --
+it was **correlation breakdown**. One macro headline moves everything at once,
+beta fitted on seven normal days stops applying, and spreads trend instead of
+reverting. Three ARB pairs and two DASH pairs among the eight worst.
+
+Against the backtest's own 195-close windows, -32.3% is the **3rd percentile**.
+Bad tail, not impossible.
+
+### THE NEXT THING TO TEST, and why
+
+**A dislocation-count circuit breaker.** The vulnerability is that dislocation
+COUNT spikes exactly when dislocations are least likely to revert -- the scanner
+sees a target-rich environment and fills the book at the worst moment. No exit
+parameter helps when 44 spreads trend at once.
+
+There is prior work: commit `e5f494e` tested universe-wide dislocation count as a
+trade/do-not-trade switch and found **trading only busy days takes ruin from 11%
+to 4%, the lowest measured**, at 1.37x instead of 3.73x.
+
+Test it matched-pair across seeds, on a window that INCLUDES Sep 16.
+
+### Also open
+
+- **Liquidation is not modelled.** 18 of 1,041 backtested trades lose more than
+  the margin posted; worst **-$54.14 on $18.20**. ~$180 of a -$249 run. Needs a
+  decision: isolated or cross margin. And the backtest margins the PAIR as one
+  unit while OKX sees two positions with two liquidation prices.
+- **r2 backfill is available and exact.** `scan_history/*.parquet` has
+  `r2_at_entry` on all 8,743 rows; join to the ledger on (ticker_a, ticker_b,
+  exact beta) matched **44 of 44**, and reproduced trade 44's value to the last
+  digit. Decide: write it into the ledger (needs the monitor stopped, given the
+  `a1a3e38` corruption history) or merge at analysis time.
+- **1m data top-up running.** `download_1m.sh` keys on file EXISTENCE so it is a
+  no-op once every ticker has a feather -- useless for topping up. Driven
+  directly instead. Batches take 1-3 HOURS each under `config_slow.json`, not
+  minutes. 30m is current.
+
+### Entry gates: already tested, do not re-litigate
+
+Commit `e5f494e`, all 31 combinations at 3 sigma: **no combination beats no
+gates.** "Gates do raise the win rate -- 15.7% to 21.6% -- and lose money anyway,
+which is the signature of filtering out the rare large winners the edge depends
+on." The six gates in `entry_gates_dataset.py`'s docstring are STALE; current
+`generate_entry_signal` takes only `min_deviation_sigma`, `take_profit_pct`,
+`bar_hours`.
+
+Every intervention tested this session has that same signature: wider stops took
+the win rate to 58% and lost money; a debounce took take-profits 170 -> 309 and
+lost money. **Raising the win rate by removing trades has failed every time.**
+
+---
 
 ## IN FLIGHT as of 2026-09-13 09:20 UTC
 
