@@ -229,6 +229,120 @@ files missed the cron/LaunchAgent stdout duplicates. **The ledger is never prune
 
 VM after migration: 9.3GB of 20GB used, 397MB of 3,913MB RAM. No pressure.
 
+## SESSION 2026-09-22: THE MODEL IS WRONG
+
+Not the parameters. The specification. Four independent measurements, all on the
+FROZEN geometry an open position actually holds -- mu and sigma held at entry.
+Freezing matters: z measured against ROLLING mu and sigma decays even under a
+pure random walk, because the window chases the price. That confound has to go
+before any of this means anything.
+
+### 1. theta predicts the WRONG SIGN, and the book is ranked on it
+
+Fitted at the crossing bar by `theta_at`, the same call the scanner makes. 5,840
+episodes with a successful OU fit. Actual mean frozen z, by fitted-theta
+quintile, against what that quintile's own theta predicts:
+
+    quintile  half-life    13h actual   13h OU predicts
+    slowest      299h         3.279          3.128
+       ...        69h         3.483          2.833
+       ...        28h         3.495          2.338
+       ...        13h         3.605          1.648
+    fastest      4.6h         4.025          0.491
+
+    Spearman(theta, frozen z at 13h) = +0.064     the model needs a strong NEGATIVE
+
+The quintile claiming a **4.6-hour half-life** sits at **4.03 sigma after 13
+hours** instead of the predicted 0.49. Every quintile drifts AWAY from mu, and it
+drifts away MONOTONICALLY IN THETA -- a higher fitted reversion speed means more
+divergence. theta is not weakly informative. It is mildly anti-predictive.
+
+**And theta is what the ten slots are ranked on.** The settled-spec entry that
+chose it (+0.740R vs neutrality +0.425) was measured under the 1.04x invented
+fill, so the ranking rests on a discredited fill AND a parameter with no forward
+validity.
+
+### 2. the spread does not revert at all
+
+32,511 episodes, unconditional on exits -- the process, not the rules:
+
+    hours       0     1     3     6    13    26    48    72
+    mean     3.350 3.335 3.319 3.441 3.612 4.013 4.639 4.579
+    median   3.188 3.168 3.141 3.191 3.362 3.365 3.391 3.383
+    OU pred  3.350 3.176 2.854 2.432 1.673 0.836 0.258 0.072
+
+The median goes NOWHERE over three days. The mean rises, dragged by a fat right
+tail of spreads that run away. The OU column uses the live scanner's own median
+theta. Neither statistic is anywhere near it.
+
+### 3. the reversion rate is a driftless random walk
+
+Two absorbing barriers, target mu at |z| sigma, stop at 0.5 sigma, no drift:
+P(target first) = 0.5/(|z|+0.5). Observed **9.76%**, formula **13.15%**, and
+time stops are 4.32% -- 9.76 + 4.32 = 14.08, so the 72h cap accounts for the gap.
+
+The formula also explains the flat |z| profile exactly. For a martingale
+
+    E[R] = P*(|z|/0.5) - (1-P)*1  with P = 0.5/(|z|+0.5)  =  0  identically
+
+**Zero expected R at every level.** That IS the measured |z| profile: +0.039 gap
+across ten deciles, CI [-0.216, +0.311]. And the observed -0.259R is zero minus
+frictions. The strategy is a coin flip on barriers, paying costs and overshoot.
+
+### 4. the ruler is stale at exactly the bars we select
+
+sigma_0 is a 7-day rolling sd of the spread LEVEL, and it denominates BOTH the
+signal (3 sigma) and the risk (0.5 sigma stop). Realised forward 30-minute
+volatility of the frozen spread, in units of sigma_0:
+
+    at dislocated bars   0.354        at typical bars   0.188      ratio 1.88x
+
+Selecting |z| >= 3 preferentially finds pairs whose sigma_0 is too SMALL, because
+a small denominator is the cheap way to clear the threshold. So "3 sigma" is
+often an ordinary move measured with a stale ruler, the stop is narrower than
+intended, and **that is why |z| carries no information** -- ranking on |z| is
+partly ranking sigma_0 estimation error. Spearman(|z|, staleness) = 0.384.
+
+### THE STRUCTURAL REASON: the screen is not wired in
+
+`pair_analysis.get_tradeable_pairs` applies exactly the gates the model needs --
+half-life in 1..120h, Hurst < 0.5, coint_stability >= 0.5, beta_cv < 0.6, plus a
+recency gate on all of them.
+
+**Neither the scanner nor the backtest calls it.** `research/scanner.py:84` and
+`research/live_scanner.py:234` both call `universe_panel.tradeable_pairs`, which
+is `itertools.combinations` -- all 22,366 pairs, no screen at all. The strategy
+assumes mean-reverting spreads and then trades every pair in the universe,
+filtered only by |z| against a stale sigma.
+
+That is consistent with everything else already known: median r2 0.309, 25% of
+episodes with beta < 0 (both legs the SAME side, not a hedge), and A-on-B vs
+B-on-A agreeing on only 9.9% of dislocated bars. A real cointegrating vector is
+identified from either direction. This one is not identified at all.
+
+### WHAT DOES NOT FOLLOW
+
+That filtering fixes it. Everything tried still fails the same way:
+
+    vol staleness gate (causal, trailing)   -0.231R  [-1.240, +0.611]
+    hedge quality, top 5%                   +0.088R  [-0.062, +0.249]
+    all 31 gate combinations (e5f494e)      none beats no gates
+    450 exit combinations                   zero profitable
+
+Higher trailing vol raises the reversion rate 7.7% -> 18.5% and worsens R. They
+cancel, which is the signature every filter on this system has shown.
+
+### THE TEST THAT WOULD BE DIFFERENT
+
+Wire `get_tradeable_pairs` into the scanner path and re-run matched-pair across
+3+ seeds. **NOT BUILT -- it changes what a pair IS and that is the user's call.**
+It would be the first thing tested that changes the specification rather than
+when to exit. Expect the universe to collapse from 22,366 pairs to a small
+fraction; measure how small before reading anything into the result, and
+remember the $626 labelling band applies to it like everything else.
+
+---
+
 ## SESSION 2026-09-21: the dislocation study
 
 `research/dislocation_study.py` builds one row per DISLOCATION EPISODE -- the
