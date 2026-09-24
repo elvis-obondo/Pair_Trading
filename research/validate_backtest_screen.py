@@ -62,6 +62,36 @@ geom = ["entry_spread", "mu_at_entry", "sigma_at_entry", "z_at_entry",
 # entry decision. An absolute tolerance cannot express this -- alpha runs to
 # magnitude 10 while mu sits near 0.03.
 GEOM_RTOL = 1e-9
+
+# BUT A PURE RELATIVE TOLERANCE IS WRONG FOR THE SPREAD-SCALE FIELDS, and it
+# took the 2026-09-24 estimator switch to expose it. entry_spread, mu and alpha
+# are spread LEVELS in log units, and a level can pass through zero: after the
+# switch HMSTR/KAITO's mu landed at 8.83e-08, where an absolute disagreement of
+# 1.8e-14 -- pure float noise -- is a 2.0e-07 RELATIVE error. Nothing was wrong;
+# the denominator had just vanished.
+#
+# So those three are compared in the unit every consumer actually reads them in.
+# mu is only ever used as (spread - mu)/sigma and the stop is a multiple of
+# sigma, so a disagreement in a spread level matters only relative to SIGMA.
+#
+# Measured worst disagreement, in sigma units, over 2,031 candidates:
+#
+#     entry_spread   1.17e-11 sigma
+#     mu_at_entry    4.33e-12 sigma
+#     alpha_at_entry 1.45e-09 sigma   <- alpha runs to magnitude 10, hence the
+#                                        largest absolute round-off
+#     z_at_entry     1.81e-11 absolute, against a 3.0 threshold
+#
+# 1e-6 sigma is ~692x the worst observed, so it will not flag round-off, and it
+# would take ~2e11 times the worst z error to flip a single entry decision. Note
+# a naive 1e-9 sigma is TOO TIGHT: alpha's own magnitude makes its round-off
+# larger than mu's even though it matters less.
+#
+# sigma, z and beta keep the relative test: none of them goes near zero (sigma>0
+# is enforced, |z|>=3 by construction, and the symmetric beta cannot reach zero
+# except at exactly zero covariance).
+SPREAD_SCALE_FIELDS = ("entry_spread", "mu_at_entry", "alpha_at_entry")
+SIGMA_ATOL = 1e-6
 total_live = total_bulk = mismatches = geom_errors = 0
 for i in range(NEED, len(panel)):
     live = scan(panel.iloc[:i + 1].tail(NEED), pairs,
@@ -80,8 +110,12 @@ for i in range(NEED, len(panel)):
         if row is None:
             continue
         for f in geom:
-            if not np.isclose(getattr(r, f), getattr(row, f),
-                              rtol=GEOM_RTOL, atol=1e-15):
+            x, y = getattr(r, f), getattr(row, f)
+            if f in SPREAD_SCALE_FIELDS:
+                # a fraction of a sigma, not a fraction of the level itself
+                if abs(x - y) > SIGMA_ATOL * abs(getattr(row, "sigma_at_entry")):
+                    geom_errors += 1
+            elif not np.isclose(x, y, rtol=GEOM_RTOL, atol=1e-15):
                 geom_errors += 1
 
 check("same candidate SET at every bar", mismatches == 0,

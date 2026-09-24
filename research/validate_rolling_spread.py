@@ -22,7 +22,8 @@ import pandas as pd
 from rolling_spread import (
     rolling_spread_stats, last_bar, entry_window_bars, ENTRY_WINDOW_DAYS,
 )
-from reversion_dataset import rolling_beta_alpha, ENTRY_WINDOW_BARS
+from reversion_dataset import ENTRY_WINDOW_BARS
+import hedge_estimators as he
 
 TOL = 1e-12
 n_pass = n_fail = 0
@@ -71,23 +72,59 @@ pair = df[[a, b]].dropna()
 pa, pb = pair[a].to_numpy(), pair[b].to_numpy()
 print(f"pair = {a}/{b}, {len(pair)} joint bars\n")
 
-# exit_sweep.py:101-105, verbatim.
-beta_exp, alpha_exp = rolling_beta_alpha(pa, pb, ENTRY_WINDOW_BARS)
-spread_exp = pa - beta_exp * pb - alpha_exp
+# THE HEDGE RATIO DIVERGED FROM exit_sweep ON 2026-09-24, DELIBERATELY.
+#
+# exit_sweep fitted OLS of A on B, and 3.0/0.5 were scored on that geometry. The
+# shipped estimator is now the symmetric vol-matched ratio, because the OLS
+# left-hand side was chosen alphabetically by itertools.combinations and that
+# arbitrary choice moved end equity across a $626 band. So the old equality
+# CANNOT hold any more, and asserting it would mean reverting the change.
+#
+# What is checked instead, in order of what would actually go wrong:
+#   1. everything downstream of beta is still built from the shipped beta the
+#      same way exit_sweep built it from its own -- same alpha, same spread,
+#      same rolling mean, same ddof=1 std, same z. Only the ratio changed.
+#   2. the new invariant that replaces the old identity: the estimator is
+#      exactly symmetric, so the pair is unordered.
+#   3. the divergence from the calibration geometry is REPORTED, not hidden, so
+#      nobody reads a threshold as calibrated when it is not.
+r = rolling_spread_stats(pa, pb, bar_hours=0.5)
+
+# 1. the pipeline around beta, rebuilt from the SHIPPED beta using exit_sweep's
+#    own inline steps (exit_sweep.py:101-105, 118).
+spread_exp = pa - r.beta * pb - r.alpha
 s_roll = pd.Series(spread_exp)
 mu_exp = s_roll.rolling(ENTRY_WINDOW_BARS).mean().to_numpy()
 sg_exp = s_roll.rolling(ENTRY_WINDOW_BARS).std().to_numpy()
-
-r = rolling_spread_stats(pa, pb, bar_hours=0.5)
-check("beta", r.beta, beta_exp)
-check("alpha", r.alpha, alpha_exp)
-check("spread", r.spread, spread_exp)
-check("mu (rolling mean)", r.mu, mu_exp)
-check("sigma (rolling std, ddof=1)", r.sigma, sg_exp)
-
-# exit_sweep.py:118 -- the entry z it screens on.
 z_exp = np.where(sg_exp > 0, (spread_exp - mu_exp) / sg_exp, np.nan)
+check("alpha == mean(a) - beta*mean(b)", r.alpha,
+      pd.Series(pa).rolling(ENTRY_WINDOW_BARS).mean().to_numpy()
+      - r.beta * pd.Series(pb).rolling(ENTRY_WINDOW_BARS).mean().to_numpy())
+check("spread == a - beta*b - alpha", r.spread, spread_exp)
+check("mu (rolling mean, exit_sweep's step)", r.mu, mu_exp)
+check("sigma (rolling std, ddof=1)", r.sigma, sg_exp)
 check("z == (spread - mu) / sigma", r.z, z_exp)
+
+# 2. the invariant that replaces beta(A|B)*beta(B|A) = r2.
+rev = rolling_spread_stats(pb, pa, bar_hours=0.5)
+m = np.isfinite(r.beta) & np.isfinite(rev.beta)
+check("beta(a,b) * beta(b,a) == 1 (the labelling cannot matter)",
+      r.beta[m] * rev.beta[m], np.ones(int(m.sum())), tol=1e-9)
+check("r2 is unchanged by swapping the legs", r.r2[m], rev.r2[m])
+
+# 3. report the divergence from the geometry 3.0 and 0.5 were calibrated on.
+#    The reference MUST be hedge_estimators' explicit "ols", not
+#    reversion_dataset.rolling_beta_alpha -- that name is re-exported FROM this
+#    module (reversion_dataset.py:81), so using it compares the shipped
+#    estimator against itself and reports x1.000 no matter what changed.
+beta_ols = he.rolling_beta(pa, pb, ENTRY_WINDOW_BARS, "ols")
+mo = np.isfinite(beta_ols) & np.isfinite(r.beta)
+ratio = np.abs(r.beta[mo]) / np.abs(beta_ols[mo])
+print(f"\n  [INFO] shipped |beta| vs exit_sweep's OLS |beta|: median x{np.median(ratio):.3f}")
+print(f"  [INFO] shipped sigma vs the same on OLS beta: "
+      f"median x{np.nanmedian(r.sigma[mo] / pd.Series(pa - beta_ols*pb - (pd.Series(pa).rolling(ENTRY_WINDOW_BARS).mean().to_numpy() - beta_ols*pd.Series(pb).rolling(ENTRY_WINDOW_BARS).mean().to_numpy())).rolling(ENTRY_WINDOW_BARS).std().to_numpy()[mo]):.3f}")
+print("  [INFO] 3.0 and 0.5 were scored on the OLS geometry. They have NOT been")
+print("  [INFO] re-derived; the switch was justified PAIRED at each stop width.")
 
 # --------------------------------------------------------------------------
 # 3. No look-ahead: truncating the history must not change earlier bars

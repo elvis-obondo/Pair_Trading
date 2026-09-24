@@ -13,6 +13,7 @@ from universe_panel import load_panel, usable_tickers, tradeable_pairs
 from rolling_spread import (rolling_beta_alpha as rs_beta_alpha,
                             rolling_r2, min_bars_required)
 import hedge_estimators as he
+import rolling_spread as rsp
 
 W = 336
 checks = []
@@ -29,25 +30,48 @@ pairs = tradeable_pairs(tk)[:40]
 arr = {t: panel[t].to_numpy(dtype=float) for t in tk}
 print(f"{len(tk)} tickers, {len(pairs)} pairs sampled\n")
 
-# ---- 1. ols reproduces the shipped rolling_spread implementation exactly ----
-# If this drifts, the comparison is against a straw man rather than the live rule.
+# ---- 1. the SHIPPED estimator is this module's `ratio`, exactly ----
+# This is the wiring check. rolling_spread.rolling_beta_alpha is the single
+# definition every caller reads through -- scanner, live_scanner,
+# backtest_screen, signal_generator, dislocation_study -- and reversion_dataset
+# re-exports it to exit_sweep. If this drifts, the live path and this module's
+# measured results describe different strategies.
+#
+# It used to assert that `ols` matched, because OLS was shipped. It is not any
+# more (2026-09-24), and asserting the old equality would mean reverting.
 worst = 0.0
 for a, b in pairs:
-    got = he.rolling_beta(arr[a], arr[b], W, "ols")
+    got = he.rolling_beta(arr[a], arr[b], W, rsp.HEDGE_ESTIMATOR)
     want, _ = rs_beta_alpha(arr[a], arr[b], W)
     m = np.isfinite(got) & np.isfinite(want)
     worst = max(worst, float(np.abs(got[m] - want[m]).max()))
-check("ols matches rolling_spread.rolling_beta_alpha", worst < 1e-12,
+check(f"rolling_spread ships {rsp.HEDGE_ESTIMATOR!r}", worst < 1e-12,
       f"max abs diff {worst:.2e}")
+check("the shipped estimator is a symmetric one",
+      rsp.HEDGE_ESTIMATOR in he.SYMMETRIC,
+      f"{rsp.HEDGE_ESTIMATOR!r} in {he.SYMMETRIC}")
 
 # ---- 2. alpha matches too ----
 worst = 0.0
 for a, b in pairs:
-    _, ga = he.rolling_beta_alpha(arr[a], arr[b], W, "ols")
+    _, ga = he.rolling_beta_alpha(arr[a], arr[b], W, rsp.HEDGE_ESTIMATOR)
     _, wa = rs_beta_alpha(arr[a], arr[b], W)
     m = np.isfinite(ga) & np.isfinite(wa)
     worst = max(worst, float(np.abs(ga[m] - wa[m]).max()))
-check("ols alpha matches rolling_spread", worst < 1e-12, f"max abs diff {worst:.2e}")
+check("shipped alpha matches rolling_spread", worst < 1e-12, f"max abs diff {worst:.2e}")
+
+# ---- 2b. `ols` still reproduces what the thresholds were calibrated on ----
+# Kept so the old geometry stays reproducible for a baseline comparison, and so
+# the divergence can be quoted rather than guessed at.
+rat = []
+for a, b in pairs:
+    o = he.rolling_beta(arr[a], arr[b], W, "ols")
+    r = he.rolling_beta(arr[a], arr[b], W, rsp.HEDGE_ESTIMATOR)
+    m = np.isfinite(o) & np.isfinite(r) & (np.abs(o) > 0)
+    rat.append(float(np.median(np.abs(r[m]) / np.abs(o[m]))))
+check("ols is still available for the pre-switch baseline",
+      np.isfinite(np.median(rat)),
+      f"shipped |beta| is x{np.median(rat):.3f} the OLS |beta|, median over pairs")
 
 # ---- 3. THE HEADLINE: symmetry is exact for tls and ratio ----
 # beta(a,b)*beta(b,a) == 1 means the pair is genuinely unordered, which is what

@@ -127,15 +127,22 @@ r2 = d.r2.dropna()
 check("r2 lies on [0,1]", bool(((r2 >= 0) & (r2 <= 1)).all()),
       f"range {r2.min():.4f}..{r2.max():.4f}, median {r2.median():.4f}")
 
-# ---- 9. beta(A|B)*beta(B|A) == r2, the identity the noise floor rests on ----
-errs = []
+# ---- 9. the labelling cannot matter any more ----
+# This check used to assert beta(A|B)*beta(B|A) == r2, the OLS identity that the
+# $626 noise floor rested on. The shipped estimator is symmetric as of
+# 2026-09-24, so the product is 1 and the arbitrary A/B choice is gone. Keeping
+# the old assertion would have meant keeping OLS.
+errs, r2errs = [], []
 for a, b in pairs[:12]:
     ra = rolling_spread_stats(arrays[a], arrays[b], BAR_HOURS)
     rb = rolling_spread_stats(arrays[b], arrays[a], BAR_HOURS)
-    m = np.isfinite(ra.beta) & np.isfinite(rb.beta) & np.isfinite(ra.r2)
-    errs.append(np.nanmax(np.abs(ra.beta[m] * rb.beta[m] - ra.r2[m])))
-check("beta(A|B) x beta(B|A) == r2", max(errs) < 1e-9,
-      f"max abs error {max(errs):.2e} over 12 pairs")
+    m = np.isfinite(ra.beta) & np.isfinite(rb.beta)
+    errs.append(np.nanmax(np.abs(ra.beta[m] * rb.beta[m] - 1.0)))
+    r2errs.append(np.nanmax(np.abs(ra.r2[m] - rb.r2[m])))
+check("beta(A|B) x beta(B|A) == 1 (pair is unordered)", max(errs) < 1e-9,
+      f"max abs deviation {max(errs):.2e} over 12 pairs")
+check("r2 is unchanged by swapping the legs", max(r2errs) < 1e-12,
+      f"max abs diff {max(r2errs):.2e}")
 
 # ---- 9b. mu drift is recomputed independently, sign convention included ----
 # The sign convention is the part worth checking: POSITIVE must mean the target
