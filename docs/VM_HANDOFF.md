@@ -229,6 +229,128 @@ files missed the cron/LaunchAgent stdout duplicates. **The ledger is never prune
 
 VM after migration: 9.3GB of 20GB used, 397MB of 3,913MB RAM. No pressure.
 
+## SHIPPED 2026-09-24: the hedge ratio is symmetric (`0bb61a9`)
+
+`rolling_spread.rolling_beta_alpha` now returns the vol-matched ratio,
+`beta = sd(a)/sd(b)` signed by the covariance. It is the single definition every
+caller reads through -- scanner, live_scanner, backtest_screen,
+signal_generator, dislocation_study -- and `reversion_dataset` re-exports it to
+`exit_sweep`, so one line changed everything. No flag and no parallel path.
+
+**Why, and this part is algebra rather than a measurement.** OLS has a
+left-hand side and `itertools.combinations` picked it alphabetically.
+`beta(A|B)*beta(B|A) = r2` exactly, median r2 0.31, so the two labellings
+selected different strategies -- the $626 band. The ratio estimator satisfies
+`beta(A|B)*beta(B|A) = 1`, verified to 2.22e-16. **The band is gone by
+construction, not filtered down.** That claim needs no confidence interval.
+
+Chosen over TLS on cost. The round trip is charged on GROSS, so in spread units
+it is `frac*(1+|beta|)`; TLS beta is ~6x OLS and pays 0.349 R per trade against
+ratio's 0.166. Paired on the population, ratio separates at every stop width and
+TLS at none.
+
+### THE ENGINE COULD NOT CONFIRM THE MAGNITUDE. Read this before quoting it.
+
+Matched arms, 35 days to 2026-09-21, stop 1.0 sigma, 1m exit checks, overshoot
+1.005, theta ranking, 10 slots, cooldown 72h. **Estimator is the only
+difference** -- the OLS arm was produced by temporarily flipping
+`HEDGE_ESTIMATOR`, and the file was reverted and re-validated after.
+
+    arm     trades  logged R  honest R  med |beta|  med sigma
+    ratio     1126   +0.3508   +0.2723      1.244    0.01883
+    ols        970   +0.2418   +0.1863      0.828    0.01659
+
+    ratio - ols, day-clustered over 35 days
+      on the logged R  +0.1091  [-0.0802, +0.3179]  includes zero
+      on the HONEST R  +0.0860  [-0.1024, +0.2932]  includes zero
+
+The point estimate agrees with the population study (+0.112 at stop 1.0) and
+**the interval does not exclude zero.** Ten slots cut the effective sample from
+208,647 episodes to ~1,000 trades, and 35 days cannot resolve 0.09 R.
+
+**How this differs from the two prior false positives.** Grace and cooldown
+REVERSED SIGN when they reached the engine. This one keeps its sign and its
+magnitude and is merely underpowered. That is consistency without confirmation,
+which is weaker than a result and stronger than the earlier failures.
+
+**`honest R` charges the cost on gross**, which `Position.pnl` does not. The bug
+flatters the higher-beta estimator more -- 0.0785 R hidden for ratio against
+0.0554 for OLS -- so the logged gap overstates the real one. Rank on the honest
+figure.
+
+**BOTH ARMS ARE POSITIVE ONLY BECAUSE OF THE FILL.** Overshoot 1.005 is
+near-perfect execution; `MEASURED_STOP_OVERSHOOT` is 1.04 and was derived on OLS
+geometry at 0.5 sigma. Sigma is now ~30% wider and the live stop is 1.0 sigma,
+so the same absolute overshoot is a smaller ratio and 1.005 may well be right --
+but it has not been re-derived. Do not quote +0.27 R as achievable until it is.
+
+### FRESH POPULATION BASELINE. No stored R survives the switch.
+
+208,647 episodes, 1-minute exits:
+
+                          symmetric          OLS era
+    mean R                -0.1232            -0.2587
+      day-block CI        [-0.284, +0.052]   [-0.451, -0.070]
+    excess over a walk    -1.32 pp           -3.70 pp
+      day-block CI        [-2.92, +0.34]     [-5.43, -1.69]
+    median |beta|          1.223              0.413
+    median sigma           0.0322             0.0248
+    median neutrality      0.345              0.583
+    reversion              11.75%             9.76%
+
++0.135 R on the population. The CI now includes zero where OLS's excluded it:
+**the book went from significantly worse than a coin flip to indistinguishable
+from one.** It is not an edge and it is still negative.
+
+### WHAT MOVED WITH NO CODE OF ITS OWN
+
+Sizing: `leg_a = gross/(1+|beta|)` goes from ~71% of gross to ~44%. Sigma widens
+~30%, so the same `stop_sigma` is a wider dollar stop and liquidation sits
+further away (median headroom 2.96 -> 3.65 sigma). Dollar-neutrality improves
+because vol-matching lands beta near 1.
+
+**beta < 0 went UP, 24.9% -> 28.2%.** The sign comes from the covariance, so a
+pair whose legs move together still puts both on the same side. Symmetry does
+not rescue that and nothing shipped here does.
+
+### VALIDATORS: 13 suites, 471 assertions, all pass
+
+Three needed real work rather than a loosened tolerance:
+
+- **`validate_rolling_spread`** asserted beta against `exit_sweep`'s inline OLS
+  -- the calibration anchor for 3.0 and 0.5. That equality cannot hold any more,
+  so it now checks that everything downstream of beta is still built exactly as
+  exit_sweep built it, asserts the new invariant, and **REPORTS** the divergence
+  (|beta| x1.228, sigma x1.077 on its pair) instead of hiding it. Its OLS
+  reference also had to move to `hedge_estimators`: the name it imported from
+  `reversion_dataset` is re-exported FROM `rolling_spread`, so the comparison
+  was circular and reported x1.000 whatever changed.
+- **`validate_backtest_screen`** flagged one geometry field, and it was not the
+  estimator: mu for HMSTR/KAITO now lands at 8.83e-08, where 1.8e-14 of float
+  noise is a 2.0e-07 RELATIVE error. A relative tolerance is meaningless for a
+  level that crosses zero, so entry_spread/mu/alpha are now compared in the unit
+  every consumer reads them in -- fractions of SIGMA. Worst observed is alpha at
+  1.45e-09 sigma against a 1e-6 threshold, and it would take ~2e11 times the
+  worst z error to flip an entry.
+- **`validate_dislocation_study`** check 9 asserted the OLS identity; replaced
+  with the symmetric one plus a check that r2 survives swapping the legs.
+
+### STILL OPEN, and deliberately untouched
+
+- **3.0 and 0.5 were NOT re-derived.** This reverses the advice in the section
+  below: the comparison is PAIRED at each stop width and ratio wins at 0.5 and
+  1.0 as well as wide, so the switch does not depend on it. Still worth doing.
+- **`MEASURED_STOP_OVERSHOOT = 1.04`** must be re-derived from the live ledger
+  on the new geometry.
+- **Sigma is unchanged and still the biggest known defect.** It still rises
+  x1.03/x1.13/x1.30/x1.51 at 1/6/24/72h, so the stop still tightens as the
+  position ages. Splitting sigma's two jobs is the next candidate and is the
+  only one that leaves beta, the spread and the candidate set alone.
+- **The live book is still running the OLD geometry** until the VM picks up this
+  commit. Open positions carry their entry beta and are unaffected either way.
+
+---
+
 ## SESSION 2026-09-24: the estimator, the ruler, and the target
 
 Three measurements, in the order they were run. Each is a prerequisite for the
