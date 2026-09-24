@@ -229,6 +229,150 @@ files missed the cron/LaunchAgent stdout duplicates. **The ledger is never prune
 
 VM after migration: 9.3GB of 20GB used, 397MB of 3,913MB RAM. No pressure.
 
+## SESSION 2026-09-24: the estimator, the ruler, and the target
+
+Three measurements, in the order they were run. Each is a prerequisite for the
+next, and the third one is the first change on this project whose confidence
+interval excludes zero.
+
+### 1. mu is NOT the problem. sigma is.
+
+`dislocation_study.py` now records where the TARGET went: mu and sigma at 1, 6,
+24 and 72 hours, signed so positive means mu moved TOWARDS the spread. Same
+206,935 episodes as before -- NaN past the data end rather than dropping any, so
+every number already measured on this dataset is unchanged.
+
+**mu barely moves at the horizons where trades resolve.** At the bar each trade
+actually closed:
+
+    take_profit   median mu drift +0.138 sigma   =  4.2% of the |z| journey
+    adverse_move  median mu drift +0.039 sigma   =  1.2%
+    time_stop     median mu drift +0.572 sigma   = 17.5%
+
+Winners genuinely reverted; they were not the rolling window catching up. mu
+only becomes material at 72h (27% of the gap, and 44.5% of episodes past 1
+sigma), which is where the time stops live. **So the frozen target is
+defensible and re-checking mu every few bars would change little.** That closes
+the question.
+
+**sigma is the opposite story.** It rises after a dislocation in 96-99% of
+episodes:
+
+    horizon      1h      6h     24h     72h
+    sigma_k/sigma_0   1.026   1.129   1.340   1.541
+    share above 1.0   98.6%   97.9%   96.3%   94.1%
+
+The entry rule mechanically guarantees this: "the spread is far from mu" is an
+observation that then enters sigma's own 336-bar window. So **the 0.5-sigma stop
+becomes an effective 0.37-sigma stop within a day** -- it tightens the longer
+you hold, exactly backwards, while winners need a median 17.5 hours against
+stops that resolve in 1.7.
+
+### 2. the ruler: it is the wrong QUANTITY more than the wrong window
+
+Forecasting what the stop actually faces -- realised sd of 30-minute spread
+changes over the next 6 hours -- from trailing estimators. 597,500
+bar-observations.
+
+    predictor   rho (all)  rho (disloc)  calibration drift  instability
+    lvl_7d  <-- current     0.481   0.591        +88.0%         0.075
+    lvl_24h                 0.546   0.543        -23.5%         0.238
+    chg_7d                  0.522   0.622        +82.8%         0.064
+    chg_24h <-- best        0.641   0.650        +13.1%         0.152
+    chg_6h                  0.611   0.624        -11.7%         0.408
+
+**The current estimator is the worst discriminator AND has the worst bias
+drift.** Switching the quantity (level -> changes) matters more than the window,
+and both together is the fix. 6h is too jittery, 7d too stale; 24h is the sweet
+spot for a change-based estimator.
+
+Restated as the defect: **at the bars we trade, the spread travels 2.26x the
+stop distance in 6 hours, against 1.20x at random bars.** The stop is inside the
+noise, and nearly twice as wrongly placed where it is used.
+
+### 3. THE ESTIMATOR. `research/hedge_estimators.py`, 12/12.
+
+OLS has a left-hand side and `itertools.combinations` picks it alphabetically.
+Two symmetric alternatives remove the choice instead of filtering for pairs
+where it happens not to matter:
+
+    ols    cov/var_b               beta(a,b)*beta(b,a) = r2      = 0.275 median
+    tls    principal eigenvector   beta(a,b)*beta(b,a) = 1       EXACT
+    ratio  sd_a/sd_b, signed       beta(a,b)*beta(b,a) = 1       EXACT
+
+Both verified to 2.22e-16. **The $626 labelling band collapses by
+construction** -- there is no labelling left to randomise.
+
+TLS needed a numerically stable branch to get there. `(d+disc)/(2*vab)` cancels
+catastrophically when var_a < var_b and |cov| is small, breaking the exact
+symmetry by ~3e-06; the conjugate form `2*vab/(disc-d)` is used on that branch.
+
+**The cascade, measured.** median |beta|: OLS 0.413, ratio 1.262, TLS 2.631.
+That flows straight into sizing (`leg_a = gross/(1+|beta|)`: 71% of gross under
+OLS, 28% under TLS), into sigma (0.0245 / 0.0326 / 0.0385), and into the
+dislocation rate (2.41% / 2.28% / 3.46% of bars).
+
+Two things I predicted wrong in the cascade write-up and the data corrected:
+**TLS makes the book LESS dollar-neutral** (neutrality 0.751 vs OLS's 0.583),
+not more. `ratio` is the one that improves it, to **0.368**, because
+vol-matching naturally lands beta near 1. And TLS beta is ~6x OLS, not the ~3x
+I estimated from medians.
+
+**RESULT.** 1-minute exits, costs charged per episode as FRAC*(1+|beta|),
+liquidation at (1+|beta|)/leverage ENFORCED, paired against OLS at the same stop
+width, day-clustered 95% CI over 35 day-blocks:
+
+    stop 0.5   ratio +0.133 [+0.023, +0.228]   tls +0.023 [-0.110, +0.128]
+    stop 1.0   ratio +0.112 [+0.017, +0.183]   tls +0.082 [-0.027, +0.155]
+    stop 2.0   ratio +0.075 [+0.004, +0.130]   tls +0.065 [-0.029, +0.136]
+    stop 3.0   ratio +0.060 [+0.008, +0.104]   tls +0.059 [-0.019, +0.119]
+
+**`ratio` separates at every width. `tls` at none.** TLS wins on gross barrier
+odds and hands it all back in fees: cost scales with (1+|beta|), so it pays
+**0.349 R per trade** against ratio's 0.166 and OLS's 0.138.
+
+And OLS is not merely neutral. Against the driftless two-barrier rate for its
+own entry |z|, OLS reverts **3.70pp BELOW** a coin flip [-5.43, -1.69], where
+TLS sits on it (+0.44pp) and ratio is -1.13pp. **The current estimator is
+actively harmful.**
+
+### BUT NOTHING IS PROFITABLE
+
+    est    stop      n   liq binds  revert%   R net          95% CI
+    OLS     0.5   11001      0.1%     9.59   -0.4101  [-0.605, -0.187]
+    OLS     1.0   11001      2.2%    15.35   -0.2892  [-0.480, -0.071]
+    RATIO   0.5   11241      0.0%    11.80   -0.2769  [-0.456, -0.088]
+    RATIO   1.0   11241      0.4%    18.79   -0.1775  [-0.345, -0.008]
+    RATIO   2.0   11241     11.0%    27.23   -0.1090  [-0.268, +0.054]
+    RATIO   3.0   11241     35.3%    31.27   -0.0829  [-0.229, +0.059]
+    TLS     3.0   13602     20.8%    35.88   -0.0848  [-0.212, +0.032]
+
+Every cell of 24 is negative. The best is `ratio` at a 3.0-sigma stop, -0.083 R,
+and **liquidation binds on 35% of those episodes** -- the wide-stop gain is
+partly unreachable at 20x, which is the trap the exit study already documented
+("enforce margin and 51 of 450 survive, all 0.5 sigma"). At the live-relevant
+1.0 sigma, ratio is **-0.178 R [-0.345, -0.008]**: better than OLS, still losing.
+
+Liquidation distance in entry sigma, median: OLS 2.96, ratio 3.65, TLS 4.91. A
+larger |beta| shrinks leg A, so a given spread move costs less against gross --
+the symmetric estimators buy back some of the stop width they cost in fees.
+
+### READ THIS BEFORE ACTING ON IT
+
+This is a population study over stored paths: no slots, no ranking, no cooldown.
+**That device has twice ruled a change IN falsely** (grace, cooldown). It is the
+strongest candidate the project has produced and it is not yet a result.
+
+`hedge_estimators.py` is deliberately **NOT wired into the trading path.**
+Switching changes beta, hence the spread, hence sigma, hence which pairs clear
+the threshold -- and it decalibrates 3.0 and 0.5, which came from a rolling
+7-day OLS fit in `exit_sweep.py`. `rolling_spread.py` exists because those
+numbers were once applied to a ruler 2.17x away. Re-derive, then wire, then run
+the engine against a FRESH baseline: no stored R is comparable, because both R's
+denominator and the candidate set move.
+
+---
+
 ## SESSION 2026-09-22: THE MODEL IS WRONG
 
 Not the parameters. The specification. Four independent measurements, all on the

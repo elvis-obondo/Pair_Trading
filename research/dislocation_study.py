@@ -59,6 +59,22 @@ OUT = os.path.join(PROJECT_ROOT, "research", "dislocations.parquet")
 # the dislocation, short enough not to average it away.
 ATTRIB_BARS = 6
 
+# Horizons, in hours, at which to record where the TARGET has moved to.
+#
+# WHY THIS IS MEASURED AT ALL
+#
+# The take-profit is mu as measured AT ENTRY, and the spread has to travel |z|
+# sigma to reach it. But mu is a trailing rolling mean, so it drifts on its own
+# as the window absorbs the dislocation. If mu drifts a full sigma over a 72-hour
+# hold, the target has moved a third of the distance by itself -- and "reversion
+# to mu" starts to mean "the window caught up", which is not something a position
+# can capture. If it drifts 3 sigma there is no target at all.
+#
+# Recorded as NaN past the end of the data rather than dropping the episode: the
+# outcome columns must describe exactly the same episode set as before, or every
+# number already measured on this dataset silently changes.
+MU_HORIZONS_H = (1.0, 6.0, 24.0, 72.0)
+
 
 def episodes_for_pair(a: str, b: str, pa: np.ndarray, pb: np.ndarray,
                       first_eval: int, entry: float, stop_sigma: float,
@@ -188,8 +204,41 @@ def episodes_for_pair(a: str, b: str, pa: np.ndarray, pb: np.ndarray,
         run = end - i + 1
         zseg = z[i:end + 1]
 
+        # WHERE THE TARGET WENT. mu_k is the rolling mean at bar i+k -- exactly
+        # the mu a fresh entry at that bar would see, which is what a "re-check
+        # mu every few bars" rule would adopt.
+        #
+        # SIGN CONVENTION: positive means mu moved TOWARDS the spread, i.e. the
+        # target came to the position. Entered above mu, a rising mu is
+        # favourable; entered below, a falling mu is. Expressed in entry sigma,
+        # so it is directly comparable to the |z| the spread must travel.
+        drift = {}
+        for hh in MU_HORIZONS_H:
+            k = int(round(hh / bar_hours))
+            j = i + k
+            if j >= n or not np.isfinite(mu[j]):
+                drift[f"mu_drift_{hh:g}h"] = np.nan
+                drift[f"sigma_ratio_{hh:g}h"] = np.nan
+                continue
+            dmu = (mu[j] - m) if above else (m - mu[j])
+            drift[f"mu_drift_{hh:g}h"] = float(dmu / sg)
+            drift[f"sigma_ratio_{hh:g}h"] = (float(sigma[j] / sg)
+                                             if np.isfinite(sigma[j]) else np.nan)
+
+        # mu at the bar the trade actually resolved, so the gap that closed can
+        # be split into "the spread moved" and "the target moved". At 1-minute
+        # resolution the exit lands inside a 30-minute bar; mu only exists on the
+        # coarse grid, so take the bar containing it.
+        jx = min(i + int(np.ceil((jj + 1) * bars_per_step)), n - 1)
+        if np.isfinite(mu[jx]):
+            dmu_x = (mu[jx] - m) if above else (m - mu[jx])
+            mu_drift_at_exit = float(dmu_x / sg)
+        else:
+            mu_drift_at_exit = np.nan
+
         out.append(dict(
             ticker_a=a, ticker_b=b, bar=int(i),
+            mu_drift_at_exit=mu_drift_at_exit, **drift,
             z=float(z[i]), absz=float(abs(z[i])),
             entry_spread=float(es), mu=float(m), sigma=float(sg),
             beta=float(beta), alpha=float(alpha), r2=float(r.r2[i]),

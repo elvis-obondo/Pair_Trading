@@ -137,6 +137,41 @@ for a, b in pairs[:12]:
 check("beta(A|B) x beta(B|A) == r2", max(errs) < 1e-9,
       f"max abs error {max(errs):.2e} over 12 pairs")
 
+# ---- 9b. mu drift is recomputed independently, sign convention included ----
+# The sign convention is the part worth checking: POSITIVE must mean the target
+# moved TOWARDS the spread. Get it backwards and the headline reads exactly
+# inverted, with nothing downstream to catch it.
+bad_val, bad_sign, checked = 0, 0, 0
+for a, b in pairs:
+    r = rolling_spread_stats(arrays[a], arrays[b], BAR_HOURS)
+    for e in d[(d.ticker_a == a) & (d.ticker_b == b)].itertuples(index=False):
+        i = e.bar
+        k = int(round(24.0 / BAR_HOURS))
+        j = i + k
+        if j >= len(r.mu) or not np.isfinite(r.mu[j]):
+            continue
+        above = r.spread[i] > r.mu[i]
+        want = ((r.mu[j] - r.mu[i]) if above else (r.mu[i] - r.mu[j])) / r.sigma[i]
+        got = e.mu_drift_24h
+        checked += 1
+        if not np.isfinite(got) or abs(got - want) > 1e-9:
+            bad_val += 1
+        # independent restatement of "towards": the absolute gap between mu and
+        # the ENTRY spread must shrink exactly when the drift is positive
+        gap0 = abs(r.spread[i] - r.mu[i])
+        gap1 = abs(r.spread[i] - r.mu[j])
+        if got > 1e-12 and gap1 >= gap0 - 1e-12:
+            bad_sign += 1
+        if got < -1e-12 and gap1 <= gap0 + 1e-12:
+            bad_sign += 1
+check("mu_drift_24h matches an independent recomputation", bad_val == 0,
+      f"{checked:,} episodes checked, {bad_val} mismatches")
+check("positive mu_drift means the target moved TOWARDS the entry spread",
+      bad_sign == 0, f"{bad_sign} sign violations")
+sr = d[[c for c in d.columns if c.startswith("sigma_ratio")]].stack().dropna()
+check("sigma_ratio is strictly positive", bool((sr > 0).all()),
+      f"{len(sr):,} values, range {sr.min():.3f}..{sr.max():.3f}")
+
 # ---- 10. fine-resolution alignment: 1m resolves no LATER than 30m ----
 # THE CHECK THAT CATCHES THE 29-MINUTE MISALIGNMENT (ac3ac48). Bars are
 # labelled by open time, so the 30m bar labelled T closes when the 1m bar
