@@ -100,9 +100,40 @@ import pandas as pd
 
 import hedge_estimators as he
 
-# 7 days matches rolling_coint's default and the window every research dataset
-# was built on. Expressed in days, not bars, so it survives a timeframe change.
-ENTRY_WINDOW_DAYS = 7
+# THE ENTRY WINDOW, and it governs beta, alpha, mu and sigma together.
+#
+# 2 days since 2026-09-27, from 7. Crypto relationships form and die inside days,
+# and the trades themselves resolve in hours -- a median 1.7h when they stop and
+# 17.5h when they revert. Judging "is this unusual" against a WEEK of history
+# while holding for hours was a mismatch of timescales.
+#
+# WHAT SHORTENING IT DOES NOT DO, and the intuition here is wrong in a way worth
+# recording. It does NOT flood the screen with triggers. z is (spread-mu)/sigma
+# and BOTH come from this window, so shortening it shrinks the numerator and the
+# denominator together and z is very nearly scale-invariant:
+#
+#     window   med sigma   triggers/bar   med |z|   p99 |z|   warm-up
+#     7 days     0.0411        2.28%        0.79      3.55    671 bars
+#     2 days     0.0200        1.81%        0.78      3.36    191 bars
+#     1 day      0.0137        1.42%        0.78      3.18     95 bars
+#
+# Triggers go DOWN, ~21% fewer, because a shorter window has a thinner tail in z
+# and mu tracks the spread more closely. The 3.0 threshold therefore keeps its
+# distributional meaning and did not need re-deriving.
+#
+# (That invariance holds ONLY because mu moves with sigma. Shortening sigma alone
+# would leave "distance from the WEEKLY mean in DAILY wobbles", which explodes
+# for a spread that has drifted calmly all week -- precisely the quiet-trend case
+# that never reverts. Keep them on one window.)
+#
+# WHAT IT DOES DO, and it is the whole cost of this change: sigma halves, so at
+# an unchanged stop_sigma the STOP HALVES in absolute terms, and the fixed
+# round-trip cost becomes twice the share of what is risked. The stop was already
+# inside the noise before this. Re-denominating the stop is the next change and
+# this one makes it more urgent, not less.
+#
+# Expressed in days, not bars, so it survives a timeframe change.
+ENTRY_WINDOW_DAYS = 2
 
 
 def entry_window_bars(bar_hours: float) -> int:

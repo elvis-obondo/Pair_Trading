@@ -13,7 +13,7 @@ import numpy as np
 import pandas as pd
 
 from universe_panel import load_panel, usable_tickers, tradeable_pairs
-from rolling_spread import min_bars_required
+from rolling_spread import min_bars_required, ENTRY_WINDOW_DAYS
 from signal_generator import generate_entry_signal
 from scanner import scan, SIGNAL_FIELDS
 
@@ -101,7 +101,7 @@ print()
 print("=" * 104)
 print("5. Short and gappy legs are skipped, not silently returned")
 print("=" * 104)
-check("a panel shorter than 671 bars returns empty",
+check(f"a panel shorter than {W} bars returns empty",
       len(scan(panel.tail(W - 1), pairs, bar_hours=BH)) == 0, "empty")
 gappy = panel.copy()
 victim = tickers[0]
@@ -142,9 +142,25 @@ else:
         union = len(common) or 1
         print(f"    bar {idx[-1]}   parquet flagged {len(ref_set)}, "
               f"scanner flagged {len(my_set)}, agreed on {agree}")
-        check("scanner and the settled dataset overlap substantially",
-              agree / max(1, min(len(ref_set), len(my_set))) > 0.5,
-              f"{agree}/{min(len(ref_set), len(my_set))} overlap")
+        # THIS ANCHOR IS BROKEN ON PURPOSE, TWICE OVER, AND IT CANNOT BE
+        # ASSERTED AGAIN UNTIL exit_sweep IS RE-RUN.
+        #
+        # exit_sweep_paths.parquet was built with an OLS hedge on a 7-day window.
+        # The scanner now uses a symmetric vol-matched hedge (2026-09-24) on a
+        # 2-day window (2026-09-27). Those select genuinely different pairs --
+        # measured 3 of 70 in common -- so demanding >50% overlap would mean
+        # demanding both changes be reverted.
+        #
+        # It is left in, REPORTING rather than asserting, because the overlap is
+        # the cheapest available signal that the geometry moved and the stored
+        # research datasets are stale. Restoring it as a check means re-running
+        # exit_sweep on the current geometry, at which point the settled 3.0 and
+        # stop constants can be re-derived at the same time.
+        ov = agree / max(1, min(len(ref_set), len(my_set)))
+        print(f"    [INFO] overlap {ov:.1%} — NOT asserted. The parquet is on the "
+              f"pre-2026-09-24 OLS hedge and the 7-day window;")
+        print(f"    [INFO] the scanner is on the symmetric hedge and "
+              f"{ENTRY_WINDOW_DAYS}-day window. Re-run exit_sweep to restore it.")
 
 print()
 print("=" * 104)

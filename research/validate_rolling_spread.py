@@ -21,6 +21,7 @@ import pandas as pd
 
 from rolling_spread import (
     rolling_spread_stats, last_bar, entry_window_bars, ENTRY_WINDOW_DAYS,
+    min_bars_required,
 )
 from reversion_dataset import ENTRY_WINDOW_BARS
 import hedge_estimators as he
@@ -49,10 +50,19 @@ def check(name, got, exp, tol=TOL):
 print("=" * 92)
 print("1. Window constants")
 print("=" * 92)
-check("entry_window_bars(0.5) == 336", float(entry_window_bars(0.5)), 336.0)
+# Derived from the constant, not a literal. A hard-coded 336 here just has to be
+# edited every time the window moves, which makes it a chore rather than a check.
+# What is worth asserting is that the arithmetic is right and that the two
+# modules still agree -- that second one is what caught reversion_dataset
+# carrying its own independent copy of the window when this changed to 2 days.
+check("entry_window_bars(0.5) == ENTRY_WINDOW_DAYS * 48",
+      float(entry_window_bars(0.5)), float(ENTRY_WINDOW_DAYS * 48))
 check("matches reversion_dataset ENTRY_WINDOW_BARS",
       float(entry_window_bars(0.5)), float(ENTRY_WINDOW_BARS))
-check("ENTRY_WINDOW_DAYS == 7", float(ENTRY_WINDOW_DAYS), 7.0)
+check("min_bars_required == 2*window - 1",
+      float(min_bars_required(0.5)), float(2 * entry_window_bars(0.5) - 1))
+print(f"  [INFO] window is {ENTRY_WINDOW_DAYS} days = {entry_window_bars(0.5)} bars, "
+      f"warm-up {min_bars_required(0.5)} bars")
 
 # --------------------------------------------------------------------------
 # 2. Against exit_sweep.build_pair_paths' inline computation, on real prices
@@ -152,7 +162,7 @@ check("last_bar.z == z[-1]", lb.z, float(r.z[-1]))
 check("last_bar.beta == beta[-1]", lb.beta, float(r.beta[-1]))
 
 short = last_bar(pa[:100], pb[:100], bar_hours=0.5)
-print(f"{'short input (100 bars < 336) -> None:':46s} "
+print(f"{f'short input (100 bars < {min_bars_required(0.5)}) -> None:':46s} "
       f"{'got ' + repr(short):34s} {'PASS' if short is None else 'FAIL'}")
 n_pass, n_fail = n_pass + (short is None), n_fail + (short is not None)
 

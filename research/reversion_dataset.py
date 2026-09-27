@@ -87,7 +87,15 @@ OUTPUT_PATH = PROJECT_ROOT / "research" / "reversion_dataset.parquet"
 # Entry-side window. 7 days matches rolling_coint's default and the live
 # entry gate's lookback, so the hedge ratio and z-score a row sees are the
 # same vintage the live system would have had at that moment.
-ENTRY_WINDOW_DAYS = 7
+# ONE DEFINITION, imported. This module used to carry its own literal 7, and
+# rolling_spread carried another -- two constants for one concept, with nothing
+# but a validator check standing between them and a silent drift. When the
+# trading window moved to 2 days on 2026-09-27 that check is what caught it.
+#
+# Note what this means for the datasets already on disk: they were built at 7
+# days AND on the old OLS hedge, so they no longer match what this code would
+# produce. They need re-running before anything is read off them again.
+from rolling_spread import ENTRY_WINDOW_DAYS  # noqa: E402
 ENTRY_WINDOW_BARS = ENTRY_WINDOW_DAYS * BARS_PER_DAY
 
 # Trade rules, mirroring signal_generator.py / pairs_strategy.py.
