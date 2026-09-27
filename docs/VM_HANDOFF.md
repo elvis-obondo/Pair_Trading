@@ -229,6 +229,84 @@ files missed the cron/LaunchAgent stdout duplicates. **The ledger is never prune
 
 VM after migration: 9.3GB of 20GB used, 397MB of 3,913MB RAM. No pressure.
 
+## CORRECTION 2026-09-27: the engine had a 29-minute misalignment (`103a9c0`)
+
+**EVERY IN-SAMPLE 1-MINUTE ENGINE NUMBER BELOW AND ABOVE THIS LINE IS VOID.**
+
+`run_portfolio_backtest`'s intrabar loop walked the 1-minute bars labelled
+T+1..T+29 straight after opening a position at bar T -- and bar T's CLOSE is the
+price at T+30, so every one of those minutes predates the position.
+
+Not harmless. A position opens BECAUSE the spread just hit |z| >= 3 at the close,
+so earlier in that half hour it sat NEARER mu, which is the take-profit
+direction. The engine booked phantom wins: **25% of all take-profits fired at
+exactly 1 minute held, 47% inside 5 minutes**, and the take-profit rate read
+39.1% against a true 27.6%.
+
+Found by matching engine trades to an independent walk on the SAME (pair, entry
+bar): z agreed to 8.9e-16 and the outcomes disagreed on 16% of trades, 380 of
+them take-profit-versus-stop, every one in the engine's favour.
+
+`validate_intrabar` passed 18/18 through this. It only ever asserted that
+entries match across resolutions, never that an exit check happens AFTER its own
+entry. Section 7 now asserts it, and asserts the pre-fix window would fail. 22/22.
+
+**Third time this exact misalignment has bitten** -- `ac3ac48`, the first cut of
+`dislocation_study`, now the engine. Bar labels are OPEN times; a position lives
+from the CLOSE.
+
+The out-of-sample runs were always clean: they used 30-minute checking with no
+intrabar loop. That explains what looked like overfitting -- +16.53 pp in-sample
+against +9.31 pp out of sample was mostly this bug.
+
+### THE CORRECTED STOP SWEEP: there is no optimum, and no profit at real costs
+
+2-day window, symmetric hedge, 1m exits, liquidation enforced, fills repriced at
+fixed ABSOLUTE slippage (a fixed ratio flatters tight stops):
+
+    stop  trades  revert%  fee/stop   net% @0.000993        net% @0.0025
+    0.5     3860    19.48    43.0%   +0.162 [+0.03,+0.31]  -0.289 [-0.42,-0.15]
+    1.0     2528    27.57    21.7%   +0.065 [-0.11,+0.25]  -0.378 [-0.55,-0.20]
+    1.5     1901    35.03    14.7%   +0.110 [-0.10,+0.33]  -0.327 [-0.53,-0.11]
+    2.0     1500    41.93    11.0%   +0.254 [-0.02,+0.54]  -0.188 [-0.46,+0.10]
+    3.0     1125    50.84     7.6%   +0.067 [-0.33,+0.46]  -0.380 [-0.78,+0.02]
+    5.0      752    58.11     4.5%   -0.181 [-0.77,+0.42]  -0.630 [-1.23,-0.02]
+
+The pre-fix sweep peaked cleanly at 1.5 sigma. **That optimum does not exist.**
+The corrected values bounce inside wide intervals, and at the conservative cost
+EVERY width loses money, several significantly.
+
+### AND THE 2-DAY WINDOW IS NOT JUSTIFIED. Read this before trusting `92c69d9`.
+
+Both arms re-run at 1m with the fix, stop 1.0, estimator and everything else held:
+
+    arm      trades  revert%  excess pp over a coin flip   net% @1x   net% @2.5x
+    2-day      2528    27.57   +5.05 [+2.91, +7.32]         +0.077     -0.365
+    7-day      1061    25.82   +3.02 [-0.19, +6.69]         +0.406     -0.037
+
+    2-day minus 7-day excess: +2.03 pp [-1.15, +5.12]  INCLUDES ZERO
+    (pre-fix it read +11.15 pp [+7.50, +14.59] and separated)
+
+One point for 2 days: it beats a coin flip and the 7-day arm cannot be
+distinguished from one. **Everything else points the other way.** The 7-day arm
+makes more money per trade at BOTH cost levels, and on the window total too
+(2.4x the trades does not close the gap: +195 vs +431 at the optimistic cost,
+-924 vs -39 at the conservative one).
+
+The mechanism is the one flagged out of sample and now confirmed in sample: a
+2-day sigma halves the distance to the target, so the arm wins more often and
+wins LESS per win, while the fee is fixed.
+
+**Out of sample and in sample now agree that 7 days makes more money per trade**
+(OOS: +0.31 vs +0.47 at the conservative cost; IN: -0.365 vs -0.037). That is a
+consistent result across two windows, which is more than most findings here have.
+
+**RECOMMENDATION: revert to 7 days**, or hold 2 days only if the win-rate excess
+is judged to matter more than money per trade. The change was committed on
+contaminated evidence and this section is the correction.
+
+---
+
 ## SHIPPED 2026-09-24: the hedge ratio is symmetric (`0bb61a9`)
 
 `rolling_spread.rolling_beta_alpha` now returns the vol-matched ratio,
