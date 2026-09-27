@@ -196,8 +196,27 @@ def run(days=30, stride=1, bar_hours=0.5, equity=300.0, slots=10, end_date=None,
         # exactly the same trades and any difference in results is the exit
         # timing alone. validate_intrabar asserts that equality.
         if fine is not None and i + 1 < len(panel):
-            lo, hi = panel.index[i], panel.index[i + 1]
-            window = fine.loc[(fine.index > lo) & (fine.index < hi)]
+            # ALIGNMENT. Bars are labelled by OPEN time, so the 30-minute bar
+            # labelled T covers T..T+30 and its close is the price AT T+30. A
+            # position opened "at bar i" is therefore opened at T+30, and the
+            # 1-minute bars labelled T+1..T+29 all happened BEFORE it existed.
+            #
+            # This used to walk exactly those minutes, and it was not harmless
+            # noise: the position opens BECAUSE the spread just reached |z|>=3 at
+            # the close, so earlier in that same half hour the spread was nearer
+            # mu -- which is the take-profit direction. The result was a
+            # systematic phantom win. Measured before the fix: 25% of all
+            # take-profits fired at exactly 1 minute held, 47% inside 5 minutes,
+            # and the take-profit rate read 39.1% against a true 28.5%.
+            #
+            # The minutes that belong to a position opened at bar i are those
+            # from its own entry up to the next bar close: labels
+            # panel.index[i+1] .. panel.index[i+2]-1min, i.e. offset by one
+            # bar length. Same 29-minute misalignment as ac3ac48 and as the
+            # first cut of dislocation_study.
+            step = pd.Timedelta(hours=bar_hours)
+            lo, hi = panel.index[i] + step, panel.index[i + 1] + step
+            window = fine.loc[(fine.index >= lo) & (fine.index < hi)]
             for ts, frow in window.iterrows():
                 if not pf.open_positions:
                     break

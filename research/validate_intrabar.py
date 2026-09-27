@@ -155,8 +155,66 @@ empty = Portfolio(equity=300.0, max_slots=10, stop_sigma=0.5)
 empty.evaluate_exits({"A": 0.0, "B": 0.0}, T0 + timedelta(minutes=7))
 check("an intrabar step opens nothing", len(empty.open_positions) == 0, "0 opened")
 
+
+print()
+print("=" * 118)
+print("7. THE INTRABAR WINDOW MUST NOT CONTAIN PRE-ENTRY MINUTES")
+print("=" * 118)
+# THE CHECK THAT WAS MISSING, AND WHAT IT COST.
+#
+# Bars are labelled by OPEN time, so the 30-minute bar labelled T covers T..T+30
+# and its close is the price AT T+30. A position opened "at bar i" is opened at
+# T+30. run_portfolio_backtest used to walk the 1-minute bars labelled T+1..T+29
+# straight after opening it -- every one of them from BEFORE the position existed.
+#
+# Not harmless noise. The position opens BECAUSE the spread just reached |z|>=3
+# at the close, so earlier in that same half hour it sat nearer mu, which is the
+# take-profit direction. The engine booked phantom wins: 25% of all take-profits
+# fired at exactly 1 minute held, 47% inside 5 minutes, and the take-profit rate
+# read 39.1% against a true 28.5%. Every in-sample engine number was inflated.
+#
+# Same 29-minute misalignment as ac3ac48 and as the first cut of
+# dislocation_study. Three times now, so it gets an assertion.
+BH = 0.5
+step = pd.Timedelta(hours=BH)
+bars = pd.date_range("2026-09-01", periods=6, freq="30min")
+fineix = pd.date_range(bars[0], bars[-1] + step, freq="1min", inclusive="left")
+
+bad_pre = bad_gap = 0
+covered = set()
+for i in range(len(bars) - 1):
+    entry_time = bars[i] + step                  # when the position actually opens
+    lo, hi = bars[i] + step, bars[i + 1] + step  # the window the engine now uses
+    w = fineix[(fineix >= lo) & (fineix < hi)]
+    # every minute walked must be at or after the entry
+    bad_pre += int((w < entry_time).sum())
+    covered.update(w)
+    if len(w) != int(step / pd.Timedelta(minutes=1)):
+        bad_gap += 1
+check("no minute in the window predates the position's entry", bad_pre == 0,
+      f"{bad_pre} pre-entry minutes")
+check("each window is exactly one bar long", bad_gap == 0, f"{bad_gap} wrong-length")
+
+# and the OLD window, to prove the check has teeth
+old_pre = 0
+for i in range(len(bars) - 1):
+    entry_time = bars[i] + step
+    w = fineix[(fineix > bars[i]) & (fineix < bars[i + 1])]
+    old_pre += int((w < entry_time).sum())
+check("  (the pre-fix window WOULD fail this)", old_pre > 0,
+      f"{old_pre} pre-entry minutes")
+
+# no minute between consecutive bar closes is skipped
+span = fineix[(fineix >= bars[0] + step) & (fineix < bars[-1] + step)]
+check("consecutive windows tile the minutes with no gaps",
+      len(covered) == len(span), f"{len(covered)} of {len(span)}")
+
+print()
+
 print()
 print("=" * 118)
 print(f"{n_pass}/{n_pass + n_fail} assertions PASS")
 print("=" * 118)
 sys.exit(1 if n_fail else 0)
+
+
