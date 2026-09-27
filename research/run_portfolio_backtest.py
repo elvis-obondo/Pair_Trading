@@ -48,6 +48,7 @@ import numpy as np
 import pandas as pd
 
 from universe_panel import load_panel, usable_tickers, tradeable_pairs
+import rolling_spread as rs
 from rolling_spread import min_bars_required
 from backtest_screen import build_screen, rank_bar
 from portfolio import Portfolio
@@ -63,7 +64,33 @@ def run(days=30, stride=1, bar_hours=0.5, equity=300.0, slots=10, end_date=None,
         max_per_ticker=None, stop_fill_overshoot=None, max_notional=None,
         rank_by="theta", exit_check_minutes=None, debounce_minutes=0.0,
         grace_minutes=0.0, out_path=OUT,
-        cooldown_hours=None):
+        cooldown_hours=None, entry_window_days=None):
+    # THE ENTRY WINDOW is a module constant in rolling_spread, deliberately: it is
+    # THE definition, and both research and the live path read it so they cannot
+    # drift. This overrides it FOR THIS PROCESS ONLY, so a window sweep does not
+    # require editing that file between runs -- which is how two runs get mixed
+    # up. Everything on the engine path reaches the window through
+    # entry_window_bars() / min_bars_required(), which read the global at CALL
+    # time, so setting it here propagates. The one import-time copy in the repo,
+    # reversion_dataset.ENTRY_WINDOW_BARS, is not on this path.
+    #
+    # The override is asserted to have taken effect rather than assumed, and the
+    # value used is written into every row of the ledger (see `stamp` below), so
+    # no ledger can be misattributed to the wrong window.
+    if entry_window_days is not None:
+        shipped = rs.ENTRY_WINDOW_DAYS
+        rs.ENTRY_WINDOW_DAYS = float(entry_window_days)
+        got = rs.entry_window_bars(bar_hours)
+        want = int(round(float(entry_window_days) * 24 / bar_hours))
+        assert got == want, f"window override did not take effect: {got} != {want}"
+        if abs(float(entry_window_days) - shipped) > 1e-9:
+            print(f"[WARN] entry window OVERRIDDEN to {entry_window_days} days for "
+                  f"this run; rolling_spread ships {shipped}. The live path is "
+                  f"unaffected and still uses {shipped}.")
+    print(f"[INFO] entry window {rs.ENTRY_WINDOW_DAYS} days = "
+          f"{rs.entry_window_bars(bar_hours)} bars, warm-up "
+          f"{min_bars_required(bar_hours)} bars | hedge estimator "
+          f"{rs.HEDGE_ESTIMATOR}")
     need = min_bars_required(bar_hours)
     bars_per_day = int(round(24 / bar_hours))
 
@@ -177,8 +204,32 @@ def run(days=30, stride=1, bar_hours=0.5, equity=300.0, slots=10, end_date=None,
 
     t0 = time.time()
     n_open = 0
+    step = pd.Timedelta(hours=bar_hours)
     for k, i in enumerate(eval_idx, 1):
-        now = panel.index[i]
+        # WALL CLOCK, and this was wrong until 2026-09-27. Bars are labelled by
+        # OPEN time, so the close price this block acts on -- `panel.iloc[i]` --
+        # is the price AT panel.index[i] + one bar. Recording entries at the
+        # LABEL put opened_at one bar early. Consequences, all real:
+        #
+        #   - every hours_held was overstated by exactly 0.5h (the floor read
+        #     0.5000 where the true minimum is ~0)
+        #   - the 72h hold cap fired half an hour early
+        #   - the ledger's trades appeared to OVERLAP, because closed_at came
+        #     from the intrabar walk and was already correct in wall clock
+        #
+        # That last one is why this surfaced only after 103a9c0. Before the
+        # intrabar fix the walk covered panel.index[i]..[i+1], so opens and
+        # closes were both a bar early and the error cancelled in the ledger.
+        # Afterwards the walk covered [i]+step..[i+1]+step -- correct -- and the
+        # mismatch became visible: every post-103a9c0 run printed
+        # "max concurrent open : 19 (cap 10)" and "duplicate pair open : FOUND".
+        #
+        # The SLOT ACCOUNTING WAS NEVER WRONG. pf.open_positions never exceeded
+        # ten at any instant of its own sequential processing, and the trade set
+        # those runs produced is valid. Shifting opened_at by +step alone makes
+        # both invariants pass exactly (max 10, 0 duplicates), which is what
+        # identifies this as a labelling error and not a portfolio bug.
+        now = panel.index[i] + step
         row = panel.iloc[i]
         prices = {t: row[t] for t in tickers}
 
@@ -214,8 +265,9 @@ def run(days=30, stride=1, bar_hours=0.5, equity=300.0, slots=10, end_date=None,
             # panel.index[i+1] .. panel.index[i+2]-1min, i.e. offset by one
             # bar length. Same 29-minute misalignment as ac3ac48 and as the
             # first cut of dislocation_study.
-            step = pd.Timedelta(hours=bar_hours)
-            lo, hi = panel.index[i] + step, panel.index[i + 1] + step
+            # `now` is already panel.index[i] + step, i.e. the entry instant,
+            # so this walk runs from the entry up to the next bar's entry.
+            lo, hi = now, panel.index[i + 1] + step
             window = fine.loc[(fine.index >= lo) & (fine.index < hi)]
             for ts, frow in window.iterrows():
                 if not pf.open_positions:
@@ -237,15 +289,40 @@ def run(days=30, stride=1, bar_hours=0.5, equity=300.0, slots=10, end_date=None,
 
     print(f"\n[INFO] opened {n_open}, closed {len(pf.closed)}, "
           f"still open {len(pf.open_positions)} in {time.time()-t0:.0f}s")
-    report(pf, out_path)
+    # THE CONFIG STAMP. Every row carries the settings that produced it, so a
+    # ledger is self-describing and analysis never has to infer the config from
+    # the FILENAME. Parsing filenames has already cost us once: a glob matched
+    # w2d_stop10.csv while looking for w2d_stop1.0.csv and a 1-sigma ledger was
+    # scored as a 10-sigma one. Read cfg_stop_sigma, not the name.
+    stamp = {
+        "cfg_entry_window_days":  rs.ENTRY_WINDOW_DAYS,
+        "cfg_hedge_estimator":    rs.HEDGE_ESTIMATOR,
+        "cfg_entry_sigma":        min_deviation_sigma,
+        "cfg_stop_sigma":         stop_sigma,
+        "cfg_take_profit_pct":    take_profit_pct,
+        "cfg_max_hold_hours":     max_hold_hours,
+        "cfg_slots":              slots,
+        "cfg_bar_hours":          bar_hours,
+        "cfg_exit_check_minutes": exit_check_minutes,
+        "cfg_stop_fill_overshoot": stop_fill_overshoot,
+        "cfg_cooldown_hours":     cooldown_hours,
+        "cfg_rank_by":            rank_by,
+        "cfg_leverage":           leverage,
+        "cfg_capital_frac":       capital_frac,
+        "cfg_days":               days,
+        "cfg_end_date":           str(end_date) if end_date else None,
+    }
+    report(pf, out_path, stamp)
     return pf
 
 
-def report(pf: Portfolio, out_path: str = OUT) -> None:
+def report(pf: Portfolio, out_path: str = OUT, stamp: dict | None = None) -> None:
     if not pf.closed:
         print("\nNo completed trades.")
         return
     d = pd.DataFrame(pf.closed)
+    for k, v in (stamp or {}).items():
+        d[k] = v
     d.to_csv(out_path, index=False)
 
     print("\n" + "=" * 100)
@@ -270,17 +347,44 @@ def report(pf: Portfolio, out_path: str = OUT) -> None:
     if len(unranked):
         print(f"  unranked (no theta)  : {len(unranked):5d}  mean R {unranked.r.mean():+.4f}")
 
-    print("\n  invariants:")
-    print(f"    max concurrent open  : {int(max_concurrent(d))} (cap {pf.max_slots})")
-    print(f"    duplicate pair open  : {'none' if no_overlap(d) else 'FOUND — BUG'}")
-    print(f"    all |z| >= entry     : {bool((d.z_at_entry.abs() >= 3.0 - 1e-9).all())}")
-    print(f"    all holds <= cap     : {bool((d.hours_held <= pf.max_hold_hours + 1e-9).all())}")
-
     conc = pd.concat([d.ticker_a, d.ticker_b]).value_counts()
     print(f"\n  most-traded tickers  : "
           + ", ".join(f"{t}({n})" for t, n in conc.head(5).items()))
+
+    # INVARIANTS, and they RAISE. They used to print and let the run exit 0.
+    # That is not a style preference: every one of the seven runs between 103a9c0
+    # and this change printed "max concurrent open : 19 (cap 10)" and "duplicate
+    # pair open : FOUND — BUG", the ledgers were written anyway, and a whole stop
+    # sweep, a window comparison and two follow-on studies were built on them
+    # before anyone read the line. A printed warning in a 200-line log is not a
+    # guard. Anything that makes the ledger untrustworthy must stop the run.
+    #
+    # The ledger is still WRITTEN before the raise, deliberately: a 3-minute run
+    # should not have to be repeated to inspect what it got wrong.
+    print("\n  invariants:")
+    peak, dup = int(max_concurrent(d)), not no_overlap(d)
+    zbad = int((d.z_at_entry.abs() < 3.0 - 1e-9).sum())
+    hbad = int((d.hours_held > pf.max_hold_hours + 1e-9).sum())
+    print(f"    max concurrent open  : {peak} (cap {pf.max_slots})")
+    print(f"    duplicate pair open  : {'FOUND' if dup else 'none'}")
+    print(f"    all |z| >= entry     : {zbad == 0}")
+    print(f"    all holds <= cap     : {hbad == 0}")
     print(f"\n[INFO] ledger written to {out_path}")
     print("=" * 100)
+
+    broken = []
+    if peak > pf.max_slots:
+        broken.append(f"{peak} concurrent positions against a {pf.max_slots}-slot cap")
+    if dup:
+        broken.append("the same pair open twice at once")
+    if zbad:
+        broken.append(f"{zbad} trades opened below the entry threshold")
+    if hbad:
+        broken.append(f"{hbad} trades held past the {pf.max_hold_hours}h cap")
+    if broken:
+        raise AssertionError(
+            f"the ledger at {out_path} is NOT a valid portfolio and must not be "
+            "used: " + "; ".join(broken))
 
 
 def max_concurrent(d: pd.DataFrame) -> int:
@@ -313,6 +417,11 @@ if __name__ == "__main__":
     ap.add_argument("--days", type=int, default=180)
     ap.add_argument("--stride", type=int, default=1)
     ap.add_argument("--slots", type=int, default=10)
+    ap.add_argument("--entry-window-days", type=float, default=None,
+                    help="override rolling_spread.ENTRY_WINDOW_DAYS for THIS run "
+                         "only, so a window sweep needs no code edit. The value "
+                         "used is written to every ledger row as "
+                         "cfg_entry_window_days. Omit to use the shipped value.")
     ap.add_argument("--equity", type=float, default=300.0)
     ap.add_argument("--entry", type=float, default=3.0)
     ap.add_argument("--stop", type=float, default=0.5)
@@ -356,7 +465,8 @@ if __name__ == "__main__":
                          "geometry are identical across modes.")
     ap.add_argument("--out", type=str, default=OUT)
     a = ap.parse_args()
-    run(cooldown_hours=(a.cooldown_hours or None), days=a.days, stride=a.stride, slots=a.slots, equity=a.equity,
+    run(entry_window_days=a.entry_window_days,
+        cooldown_hours=(a.cooldown_hours or None), days=a.days, stride=a.stride, slots=a.slots, equity=a.equity,
         min_deviation_sigma=a.entry, stop_sigma=a.stop, max_hold_hours=a.hold,
         max_per_ticker=a.max_per_ticker, end_date=a.end_date,
         stop_fill_overshoot=_overshoot(a.stop_fill_overshoot),
