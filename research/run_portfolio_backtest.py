@@ -53,6 +53,9 @@ from rolling_spread import min_bars_required
 from backtest_screen import build_screen, rank_bar
 from portfolio import Portfolio
 import book_state as cfg
+from portfolio import ROUND_TRIP_COST_FRAC
+
+ROUND_TRIP_COST_FRAC_STR = f"{ROUND_TRIP_COST_FRAC:.6f}"
 
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(PROJECT_ROOT, "research", "portfolio_backtest_trades.csv")
@@ -64,7 +67,7 @@ def run(days=30, stride=1, bar_hours=0.5, equity=300.0, slots=10, end_date=None,
         max_per_ticker=None, stop_fill_overshoot=None, max_notional=None,
         rank_by="theta", exit_check_minutes=None, debounce_minutes=0.0,
         grace_minutes=0.0, out_path=OUT,
-        cooldown_hours=None, entry_window_days=None):
+        cooldown_hours=None, entry_window_days=None, pool_mult=1.0, seed=0):
     # THE ENTRY WINDOW is a module constant in rolling_spread, deliberately: it is
     # THE definition, and both research and the live path read it so they cannot
     # drift. This overrides it FOR THIS PROCESS ONLY, so a window sweep does not
@@ -204,6 +207,15 @@ def run(days=30, stride=1, bar_hours=0.5, equity=300.0, slots=10, end_date=None,
 
     t0 = time.time()
     n_open = 0
+    rng = np.random.default_rng(seed)
+    if pool_mult and pool_mult > 1.0:
+        print(f"[INFO] slots drawn at random from the best {pool_mult:.0f}x, "
+              f"seed {seed}. Repeat with other seeds -- one run is one path.")
+    else:
+        print("[WARN] deterministic top-k selection: every run with these "
+              "settings is identical, so the result has no distribution and "
+              "no ruin rate. Pass --pool-mult 3 to make it stochastic.")
+    busted_at = None
     step = pd.Timedelta(hours=bar_hours)
     for k, i in enumerate(eval_idx, 1):
         # WALL CLOCK, and this was wrong until 2026-09-27. Bars are labelled by
@@ -239,6 +251,24 @@ def run(days=30, stride=1, bar_hours=0.5, equity=300.0, slots=10, end_date=None,
         if pf.free_slots > 0 and i in by_bar:
             cands = rank_bar(by_bar[i], arrays, take_profit_pct, bar_hours,
                              rank_by=rank_by)
+            # SHORTLIST THEN SAMPLE, so a run is not a single fixed path.
+            # Deterministic top-k makes every run byte-identical: p5, median and
+            # p95 all land on the same number, and an end equity of $1,107 cannot
+            # be told apart from one lucky week. risk_sim.py has done it this way
+            # from the start -- take the best pool_mult*k, then draw k from them.
+            # The selection effect survives, the run becomes stochastic, and it
+            # is closer to reality anyway since the exact top pick is not always
+            # fillable. pool_mult=1 restores the old deterministic behaviour.
+            #
+            # Shuffling the whole shortlist and letting fill_slots walk it in
+            # order is equivalent to drawing k, and it handles the cooldown,
+            # per-ticker and margin rejections fill_slots applies afterwards.
+            if pool_mult and pool_mult > 1.0 and len(cands):
+                k = pf.free_slots
+                pool = cands.head(max(k, int(pool_mult * k)))
+                cands = pool.sample(frac=1.0,
+                                    random_state=int(rng.integers(1 << 31))
+                                    ).reset_index(drop=True)
             n_open += len(pf.fill_slots(cands, now))
 
         # Walk the minutes BETWEEN this bar close and the next, checking exits
@@ -281,6 +311,16 @@ def run(days=30, stride=1, bar_hours=0.5, equity=300.0, slots=10, end_date=None,
                 if fp:
                     pf.evaluate_exits(fp, ts)
 
+        # BUST. Equity is starting_equity + realized P&L, so it can go to zero
+        # and the sizer would then ask for a zero-notional position. A real
+        # account stops here; carrying on would report a recovery that could not
+        # have been funded.
+        if pf.equity <= 0.0:
+            busted_at = now
+            print(f"\n[WARN] BUST at {now}: equity {pf.equity:.2f} after "
+                  f"{len(pf.closed)} closed trades. Halting the run.")
+            break
+
         if k % 200 == 0 or k == len(eval_idx):
             el = time.time() - t0
             print(f"  bar {k}/{len(eval_idx)}  {now}  "
@@ -310,10 +350,19 @@ def run(days=30, stride=1, bar_hours=0.5, equity=300.0, slots=10, end_date=None,
         "cfg_leverage":           leverage,
         "cfg_capital_frac":       capital_frac,
         "cfg_days":               days,
+        "cfg_pool_mult":          pool_mult,
+        "cfg_seed":               seed,
+        "cfg_max_notional":       max_notional,
+        "cfg_busted":             busted_at is not None,
         "cfg_end_date":           str(end_date) if end_date else None,
     }
     report(pf, out_path, stamp)
     return pf
+
+
+def capital_frac_of(pf) -> float:
+    """capital_frac is not stored on Portfolio; recover it from the sizer rule."""
+    return getattr(pf, "capital_frac", 0.05)
 
 
 def report(pf: Portfolio, out_path: str = OUT, stamp: dict | None = None) -> None:
@@ -334,6 +383,45 @@ def report(pf: Portfolio, out_path: str = OUT, stamp: dict | None = None) -> Non
     print(f"  mean R               : {d.r.mean():+.4f}   (median {d.r.median():+.4f})")
     print(f"  win rate             : {(d.realized_pnl_net > 0).mean()*100:.1f}%")
     print(f"  mean hours held      : {d.hours_held.mean():.1f}  (max {d.hours_held.max():.1f})")
+
+    # THE ACCOUNT. This was suppressed for years behind "the compounded multiple
+    # is deliberately not quoted", on the grounds that percentage-of-equity
+    # sizing with no liquidity ceiling once produced 1.1e11x. That reason no
+    # longer holds: --max-notional caps gross per position and defaults to the
+    # live 5000. Suppressing it had a cost of its own -- per-trade net_pct was
+    # reported instead, and a cell reading "+0.393% per trade" turns $300 into
+    # $326 while another reading "+0.170%" turns it into $1,107. The percentage
+    # equal-weights trades and so hides turnover, which is most of the answer.
+    #
+    # gross = leverage * capital_frac * equity, so at the settled 5%/20x gross
+    # notional IS the equity at fill time and the curve below is what the sizer
+    # actually used, not a reconstruction.
+    #
+    # Drawdown is on realized equity only. Open positions are not marked to
+    # market, so an intra-trade excursion deeper than the close-to-close path is
+    # not visible here. The trough is therefore an UPPER bound on the account.
+    e = d.sort_values("closed_at")
+    curve = pf.starting_equity + e.realized_pnl_net.cumsum()
+    peak = curve.cummax()
+    dd = float((curve / peak - 1.0).min())
+    span_h = (pd.to_datetime(e.closed_at).max()
+              - pd.to_datetime(e.opened_at).min()).total_seconds() / 3600.0
+    days = span_h / 24.0
+    print(f"\n  THE ACCOUNT  (${pf.starting_equity:.0f} start, "
+          f"{capital_frac_of(pf)*100:.0f}% margin at {pf.leverage:.0f}x, "
+          f"cost {ROUND_TRIP_COST_FRAC_STR} of gross)")
+    print(f"    end equity           : ${curve.iloc[-1]:,.2f}   "
+          f"({curve.iloc[-1]/pf.starting_equity - 1.0:+.1%})")
+    print(f"    peak / trough        : ${curve.max():,.2f} / ${curve.min():,.2f}")
+    print(f"    max drawdown         : {dd:.1%}")
+    print(f"    still open, unmarked : {len(pf.open_positions)} positions")
+    print(f"\n  THE TIMELINE")
+    print(f"    span                 : {days:.1f} days ({days/7:.1f} weeks)")
+    print(f"    trades per day       : {len(d)/days:.1f}   "
+          f"({len(d)/days/max(pf.max_slots,1):.1f} per slot per day)")
+    print(f"    median hold          : {d.hours_held.median():.2f}h")
+    print(f"    fills per day        : {4*len(d)/days:.0f}   "
+          f"(4 per round trip, two legs in and out)")
 
     print("\n  by exit reason:")
     for reason, g in d.groupby("exit_reason"):
@@ -417,6 +505,15 @@ if __name__ == "__main__":
     ap.add_argument("--days", type=int, default=180)
     ap.add_argument("--stride", type=int, default=1)
     ap.add_argument("--slots", type=int, default=10)
+    ap.add_argument("--pool-mult", type=float, default=1.0,
+                    help="draw the free slots at random from the best "
+                         "pool_mult x k candidates instead of taking the top k. "
+                         ">1 makes the run stochastic so a config has a "
+                         "DISTRIBUTION of outcomes rather than one path. "
+                         "Use with --seed.")
+    ap.add_argument("--seed", type=int, default=0,
+                    help="seed for --pool-mult sampling. Vary it across runs of "
+                         "the same config to get p5/median/p95 and a ruin rate.")
     ap.add_argument("--entry-window-days", type=float, default=None,
                     help="override rolling_spread.ENTRY_WINDOW_DAYS for THIS run "
                          "only, so a window sweep needs no code edit. The value "
@@ -465,7 +562,8 @@ if __name__ == "__main__":
                          "geometry are identical across modes.")
     ap.add_argument("--out", type=str, default=OUT)
     a = ap.parse_args()
-    run(entry_window_days=a.entry_window_days,
+    run(entry_window_days=a.entry_window_days, pool_mult=a.pool_mult,
+        seed=a.seed,
         cooldown_hours=(a.cooldown_hours or None), days=a.days, stride=a.stride, slots=a.slots, equity=a.equity,
         min_deviation_sigma=a.entry, stop_sigma=a.stop, max_hold_hours=a.hold,
         max_per_ticker=a.max_per_ticker, end_date=a.end_date,

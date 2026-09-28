@@ -290,6 +290,38 @@ class Portfolio:
                 still_open.append(pos)
                 continue
             hours = (now - pos.opened_at).total_seconds() / 3600.0
+
+            # LIQUIDATION, checked before any other exit because it is physics
+            # rather than policy. Margin is gross/leverage and the P&L rides
+            # leg A = gross/(1+|beta|), so the adverse spread move that consumes
+            # the whole margin is exactly (1+|beta|)/leverage -- what
+            # hedge_estimators.liquidation_distance() returns. Past that point
+            # the position does not exist, whatever the stop says.
+            #
+            # This engine had no such check until 2026-09-27. It could not bind
+            # at the live 1.0-sigma stop (a 0.0115 stop against 0.11 of headroom,
+            # 0.0% of trades) but at 5.0 sigma 36% of stops sat BEYOND the
+            # margin, and the cell read +1.11% per trade on positions that would
+            # have been wiped. Booking those correctly turned it into -4.44%.
+            #
+            # The fill is placed exactly at the liquidation level, so the gross
+            # loss equals the margin to the cent. `pnl` then also subtracts the
+            # round-trip cost, making the booked loss slightly larger than the
+            # margin; a real venue takes the fee out of the margin instead. The
+            # difference is one fee on a total loss and is not worth modelling.
+            if self.leverage and np.isfinite(self.leverage) and self.leverage > 0:
+                beta = pos.signal["beta_at_entry"]
+                liq = (1.0 + abs(float(beta))) / float(self.leverage)
+                cur = pos.current_spread(float(pa), float(pb))
+                move = pos.direction * (cur - pos.signal["entry_spread"])
+                if move <= -liq:
+                    ex = {"exit_reason": "liquidated",
+                          "current_spread": (pos.signal["entry_spread"]
+                                             - pos.direction * liq)}
+                    pos.breach_since = None
+                    closed.append(self._close(pos, ex, now, hours, float("nan")))
+                    continue
+
             ex = generate_exit_signal(
                 current_price_a=float(pa), current_price_b=float(pb),
                 entry_signal=pos.signal, hours_elapsed=hours,
@@ -346,9 +378,12 @@ class Portfolio:
     def _close(self, pos: Position, ex: dict, now, hours: float,
                fill_overshoot: float = float("nan")) -> dict:
         net, net_pct, r = pos.pnl(ex["current_spread"])
-        # Only an adverse_move starts a cooldown. A take-profit or a time stop
-        # says nothing bad about the pair, and a book_reset is bookkeeping.
-        if ex["exit_reason"] == "adverse_move":
+        # An adverse_move or a LIQUIDATION starts a cooldown. A take-profit or a
+        # time stop says nothing bad about the pair, and a book_reset is
+        # bookkeeping. A liquidation is strictly worse news than a stop-out, so
+        # it would be perverse for it to be the one exit that permits immediate
+        # re-entry.
+        if ex["exit_reason"] in ("adverse_move", "liquidated"):
             self.recent_losses.append((cooldown_key(pos.ticker_a, pos.ticker_b),
                                        now))
         # Recomputed from the realized total, never `equity += pnl` -- the same
