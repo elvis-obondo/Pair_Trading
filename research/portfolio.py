@@ -457,6 +457,12 @@ class Portfolio:
                 "entry_spread", "mu_at_entry", "sigma_at_entry", "z_at_entry",
                 "beta_at_entry", "alpha_at_entry", "theta_at_entry",
                 "take_profit_level")}
+            # r2 is optional so a caller with an older candidate frame still
+            # works; this list is the reason r2_at_entry reached the ledger as
+            # NaN on every run before 2026-09-27 even after the column existed
+            # upstream. Anything not named here is silently dropped.
+            if hasattr(row, "r2_at_entry"):
+                signal["r2_at_entry"] = getattr(row, "r2_at_entry")
             sizing = compute_position_size(
                 entry_signal=signal, equity=self.equity,
                 capital_frac=self.capital_frac, leverage=self.leverage,

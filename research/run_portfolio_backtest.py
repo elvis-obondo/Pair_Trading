@@ -50,7 +50,7 @@ import pandas as pd
 from universe_panel import load_panel, usable_tickers, tradeable_pairs
 import rolling_spread as rs
 from rolling_spread import min_bars_required
-from backtest_screen import build_screen, rank_bar
+from backtest_screen import build_screen, rank_bar, RANK_MODES
 from portfolio import Portfolio
 import book_state as cfg
 from portfolio import ROUND_TRIP_COST_FRAC
@@ -555,11 +555,14 @@ if __name__ == "__main__":
                          "1 checks every minute, which is far closer to what the "
                          "live tick monitor does. Entries are unaffected either "
                          "way; only exits move.")
-    ap.add_argument("--rank-by", type=str, default="theta",
-                    choices=("theta", "neutrality", "both"),
+    ap.add_argument("--rank-by", default="theta", choices=RANK_MODES,
                     help="which key orders candidates for the ten slots. "
-                         "Only the ORDER changes; the candidate set and the "
-                         "geometry are identical across modes.")
+                         "Choices come from backtest_screen.RANK_MODES so the "
+                         "CLI cannot drift from the implementation -- it did, "
+                         "and 'r2' was unreachable from the command line after "
+                         "being added. theta is the settled spec and measured "
+                         "ANTI-predictive; r2 is the only entry-time feature "
+                         "measured to separate reverters.")
     ap.add_argument("--out", type=str, default=OUT)
     a = ap.parse_args()
     run(entry_window_days=a.entry_window_days, pool_mult=a.pool_mult,

@@ -49,8 +49,14 @@ screen = build_screen(panel, pairs, NEED, MIN_DEV, BH, progress_every=0)
 by_bar = {b: g for b, g in screen.groupby("bar", sort=False)}
 print(f"   bulk screen: {len(screen)} candidate rows over {len(by_bar)} bars\n")
 
+# r2_at_entry is in this list since 2026-09-27. build_screen COMPUTED r2 and
+# then dropped it before emitting candidates, so r2_at_entry reached every
+# ledger ever written as NaN -- and nothing here noticed, because a field absent
+# from `geom` is a field this validator does not look at. An uncovered column is
+# how that survived. Adding a column to build_screen means adding it here.
 geom = ["entry_spread", "mu_at_entry", "sigma_at_entry", "z_at_entry",
-        "beta_at_entry", "alpha_at_entry"]
+        "beta_at_entry", "alpha_at_entry",
+        "r2_at_entry"]
 
 # Relative, not absolute. pandas' rolling uses a streaming update, so a
 # 671-element window and a longer series that CONTAINS that window accumulate
@@ -91,6 +97,18 @@ GEOM_RTOL = 1e-9
 # is enforced, |z|>=3 by construction, and the symmetric beta cannot reach zero
 # except at exactly zero covariance).
 SPREAD_SCALE_FIELDS = ("entry_spread", "mu_at_entry", "alpha_at_entry")
+# BOUNDED, DIMENSIONLESS fields get an ABSOLUTE tolerance. r2 is corr^2 on [0,1]
+# and legitimately sits at 1e-09 for an unrelated pair, where float noise of
+# 2e-16 reads as a 2.6e-08 RELATIVE error and fails a relative test that is
+# measuring nothing. Same class of mistake as comparing mu relatively when mu
+# passes through zero, which is why SPREAD_SCALE_FIELDS exists above.
+#
+# Measured over 1,006 live-vs-bulk comparisons: worst relative error 2.6e-08 on
+# an r2 of 8.3e-09 (ALLO/LUNA, agreeing to 2.2e-16 absolute), worst ABSOLUTE
+# error 9.4e-11, and nothing at all above 1e-09 absolute. 1e-09 is ~10x the
+# measured worst.
+BOUNDED_FIELDS = ("r2_at_entry",)
+BOUNDED_ATOL = 1e-9
 SIGMA_ATOL = 1e-6
 total_live = total_bulk = mismatches = geom_errors = 0
 for i in range(NEED, len(panel)):
@@ -115,6 +133,9 @@ for i in range(NEED, len(panel)):
                 # a fraction of a sigma, not a fraction of the level itself
                 if abs(x - y) > SIGMA_ATOL * abs(getattr(row, "sigma_at_entry")):
                     geom_errors += 1
+            elif f in BOUNDED_FIELDS:
+                if abs(x - y) > BOUNDED_ATOL:
+                    geom_errors += 1
             elif not np.isclose(x, y, rtol=GEOM_RTOL, atol=1e-15):
                 geom_errors += 1
 
@@ -122,7 +143,7 @@ check("same candidate SET at every bar", mismatches == 0,
       f"{mismatches} differing of {total_live}")
 check("live and bulk found the same count", total_live == total_bulk,
       f"live {total_live} / bulk {total_bulk}")
-check(f"every geometry field matches to {GEOM_RTOL:g} relative", geom_errors == 0,
+check(f"geometry matches: {GEOM_RTOL:g} relative, bounded fields {BOUNDED_ATOL:g} absolute", geom_errors == 0,
       f"{geom_errors} field mismatches")
 check("the test actually exercised candidates", total_live > 0, f"{total_live}")
 

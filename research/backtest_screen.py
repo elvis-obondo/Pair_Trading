@@ -72,6 +72,12 @@ def build_screen(panel: pd.DataFrame, pairs, first_eval_bar: int,
             "entry_spread": r.spread[idx], "mu_at_entry": r.mu[idx],
             "sigma_at_entry": r.sigma[idx], "z_at_entry": r.z[idx],
             "beta_at_entry": r.beta[idx], "alpha_at_entry": r.alpha[idx],
+            # r2 was computed by rolling_spread_stats all along and dropped
+            # here, which is why r2_at_entry was blank in every ledger ever
+            # written (1a6660d named the symptom, not this cause). It is the
+            # ONLY entry-time feature measured to separate reverters, so it has
+            # to reach both the ranker and the ledger.
+            "r2_at_entry": r.r2[idx],
         }))
         if progress_every and k % progress_every == 0:
             el = time.time() - t0
@@ -109,7 +115,7 @@ def theta_at(arrays: dict, a: str, b: str, bar: int, beta: float, alpha: float,
     return float(p.theta) if np.isfinite(p.theta) and p.theta > 0 else float("nan")
 
 
-RANK_MODES = ("theta", "neutrality", "both")
+RANK_MODES = ("theta", "neutrality", "both", "r2")
 
 
 def neutrality_score(beta) -> np.ndarray:
@@ -141,6 +147,17 @@ def rank_bar(rows: pd.DataFrame, arrays: dict, take_profit_pct: float = 1.0,
     rank_by:
       "theta"       settled spec. Reversion speed descending, NaN last.
       "neutrality"  |1-beta|/(1+|beta|) ascending. Most dollar-neutral first.
+      "r2"          hedge fit quality descending. The dislocation study found
+                    r2 the only entry-time feature that separates pairs which
+                    revert from pairs which do not, monotonically across all ten
+                    deciles and holding out of sample in time. theta, which this
+                    engine ranks by in its settled spec, measured ANTI-predictive
+                    -- Spearman +0.064 against eventual reversion where a strong
+                    negative is required, and the quintile claiming a 4.6h
+                    half-life sat at 4.03 sigma after 13 hours against a
+                    predicted 0.49. So the settled ranking sorts on a feature
+                    that does not work while the one that does was never wired
+                    up. NaN last.
       "both"        mean of the two PERCENTILE ranks. Percentiles rather than the
                     raw values because theta and neutrality share no units and
                     theta's scale would otherwise decide the ranking on its own.
@@ -170,6 +187,9 @@ def rank_bar(rows: pd.DataFrame, arrays: dict, take_profit_pct: float = 1.0,
                              na_position="last").reset_index(drop=True)
     if rank_by == "neutrality":
         return d.sort_values("neutrality", ascending=True,
+                             na_position="last").reset_index(drop=True)
+    if rank_by == "r2":
+        return d.sort_values("r2_at_entry", ascending=False,
                              na_position="last").reset_index(drop=True)
 
     # "both". pct=True puts each rank on [0,1] so a bar with 12 candidates and a
