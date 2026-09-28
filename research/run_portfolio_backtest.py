@@ -67,7 +67,8 @@ def run(days=30, stride=1, bar_hours=0.5, equity=300.0, slots=10, end_date=None,
         max_per_ticker=None, stop_fill_overshoot=None, max_notional=None,
         rank_by="theta", exit_check_minutes=None, debounce_minutes=0.0,
         grace_minutes=0.0, out_path=OUT,
-        cooldown_hours=None, entry_window_days=None, pool_mult=1.0, seed=0):
+        cooldown_hours=None, entry_window_days=None, pool_mult=1.0, seed=0,
+        pairs_file=None, pairs_min_stability=None):
     # THE ENTRY WINDOW is a module constant in rolling_spread, deliberately: it is
     # THE definition, and both research and the live path read it so they cannot
     # drift. This overrides it FOR THIS PROCESS ONLY, so a window sweep does not
@@ -124,7 +125,32 @@ def run(days=30, stride=1, bar_hours=0.5, equity=300.0, slots=10, end_date=None,
             f"history here. The last bar ({panel.index[-1]}) is missing "
             f"{panel.tail(1).isna().sum(axis=1).iloc[0]} tickers — it is probably still "
             f"forming. Re-run with --end-date '{panel.index[-2]}'")
+    # THE UNIVERSE. tradeable_pairs is itertools.combinations -- every pair,
+    # screened for nothing. That is what every result this project has produced
+    # was measured on, because pair_analysis.get_tradeable_pairs is called only
+    # from inside pair_analysis.py and has never gated a trade.
+    #
+    # --pairs-file restricts the run to an allow-list, so the screened universe
+    # can be tested against the unscreened one with nothing else changed. The
+    # file is coint_screen.py's output; pass --pairs-min-stability to cut it, or
+    # pre-filter the CSV yourself.
     pairs = tradeable_pairs(tickers)
+    if pairs_file:
+        want = pd.read_csv(pairs_file)
+        if pairs_min_stability is not None:
+            want = want[want.coint_stability >= pairs_min_stability]
+        allow = {tuple(sorted((str(a), str(b))))
+                 for a, b in zip(want.ticker_a, want.ticker_b)}
+        before = len(pairs)
+        pairs = [p for p in pairs if tuple(sorted(p)) in allow]
+        print(f"[INFO] universe restricted by {os.path.basename(pairs_file)}"
+              + (f" at coint_stability >= {pairs_min_stability}"
+                 if pairs_min_stability is not None else "")
+              + f": {len(pairs):,} of {before:,} pairs "
+                f"({len(allow):,} in the allow-list, "
+                f"{len(allow) - len(pairs):,} not in this ticker universe)")
+        if not pairs:
+            raise SystemExit("[FAIL] the allow-list left no tradeable pairs")
     eval_idx = list(range(need, len(panel), stride))
     print(f"[INFO] {len(tickers)} tickers, {len(pairs):,} pairs")
     print(f"[INFO] {len(eval_idx):,} bars to evaluate "
@@ -350,6 +376,9 @@ def run(days=30, stride=1, bar_hours=0.5, equity=300.0, slots=10, end_date=None,
         "cfg_leverage":           leverage,
         "cfg_capital_frac":       capital_frac,
         "cfg_days":               days,
+        "cfg_pairs_file":         os.path.basename(pairs_file) if pairs_file else None,
+        "cfg_pairs_min_stability": pairs_min_stability,
+        "cfg_n_pairs":            len(pairs),
         "cfg_pool_mult":          pool_mult,
         "cfg_seed":               seed,
         "cfg_max_notional":       max_notional,
@@ -505,6 +534,14 @@ if __name__ == "__main__":
     ap.add_argument("--days", type=int, default=180)
     ap.add_argument("--stride", type=int, default=1)
     ap.add_argument("--slots", type=int, default=10)
+    ap.add_argument("--pairs-file", type=str, default=None,
+                    help="restrict the universe to this allow-list (coint_screen.py "
+                         "output). Without it the run trades all 22,366 pairs, "
+                         "screened for nothing.")
+    ap.add_argument("--pairs-min-stability", type=float, default=None,
+                    help="with --pairs-file, keep only rows at or above this "
+                         "coint_stability. At 2-day chunks the max observed is "
+                         "0.21 (4 of 19), so 0.5 passes nothing.")
     ap.add_argument("--pool-mult", type=float, default=1.0,
                     help="draw the free slots at random from the best "
                          "pool_mult x k candidates instead of taking the top k. "
@@ -565,7 +602,8 @@ if __name__ == "__main__":
                          "measured to separate reverters.")
     ap.add_argument("--out", type=str, default=OUT)
     a = ap.parse_args()
-    run(entry_window_days=a.entry_window_days, pool_mult=a.pool_mult,
+    run(pairs_file=a.pairs_file, pairs_min_stability=a.pairs_min_stability,
+        entry_window_days=a.entry_window_days, pool_mult=a.pool_mult,
         seed=a.seed,
         cooldown_hours=(a.cooldown_hours or None), days=a.days, stride=a.stride, slots=a.slots, equity=a.equity,
         min_deviation_sigma=a.entry, stop_sigma=a.stop, max_hold_hours=a.hold,

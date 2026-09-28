@@ -64,3 +64,4 @@ trading_data/
 # research/dislocation_study.py. Committing them would be committing a cache.
 research/dislocations.parquet
 research/dislocations_1m.parquet
+research/screen_*.csv
