@@ -427,6 +427,105 @@ check("an unparseable timestamp bans nothing", q2.cooling_pairs(TC) == set(), "f
 check("book_state defines COOLDOWN_HOURS", isinstance(_cfg.COOLDOWN_HOURS, (int, float)),
       _cfg.COOLDOWN_HOURS)
 
+# ---------------------------------------------------------------------------
+# LIQUIDATION. Added 2026-09-27 because the engine had no such check at all:
+# margin gated slot admission and nothing ever wiped a position, so a trade
+# whose stop sat beyond its margin headroom booked an outcome that could not
+# have happened. It could not bind at the live 1.0-sigma stop, which is exactly
+# why it survived -- so it gets assertions rather than a comment.
+#
+# Headroom in spread units is (1+|beta|)/leverage. The fill is placed AT that
+# level, so the gross loss equals the margin and `pnl` then also deducts the
+# round-trip cost, making the booked loss margin*(1+cost*(1+|beta|)/...) -- just
+# over 1.0x. A real venue takes the fee out of the margin instead; the
+# difference is one fee on a total loss.
+print()
+print("-" * 104)
+
+def _liq_book(beta=1.0, sigma=0.02, z=3.5, stop=10.0, lev=20.0):
+    """A book with one position and a stop deliberately past liquidation."""
+    pf = Portfolio(equity=300.0, max_slots=1, stop_sigma=stop, leverage=lev)
+    pf.fill_slots(pd.DataFrame([cand("AAA", "BBB", 1.0, z=z, sigma=sigma, beta=beta)]), T0)
+    return pf
+
+pf = _liq_book()
+pos = pf.open_positions[0]
+liq = (1.0 + abs(pos.signal["beta_at_entry"])) / 20.0
+check("liquidation distance is (1+|beta|)/leverage", abs(liq - 0.1) < 1e-12, f"{liq:.6f}")
+
+# Move the spread just SHORT of the liquidation level: nothing should fire,
+# because the stop is at 10 sigma and is far further out still.
+pa = pos.signal["entry_spread"] - pos.direction * liq * 0.99 + pos.signal["alpha_at_entry"]
+closed = pf.evaluate_exits({"AAA": pa, "BBB": 0.0}, T0 + timedelta(hours=1))
+check("just inside the margin does NOT liquidate", closed == [], f"{len(pf.open_positions)} open")
+
+# Now past it.
+pa = pos.signal["entry_spread"] - pos.direction * liq * 1.01 + pos.signal["alpha_at_entry"]
+closed = pf.evaluate_exits({"AAA": pa, "BBB": 0.0}, T0 + timedelta(hours=2))
+check("past the margin DOES liquidate", len(closed) == 1 and
+      closed[0]["exit_reason"] == "liquidated",
+      closed[0]["exit_reason"] if closed else "none")
+check("  ... it takes the margin, not more", closed and
+      1.0 <= -closed[0]["realized_pnl_net"] / closed[0]["margin"] < 1.10,
+      f"{-closed[0]['realized_pnl_net']/closed[0]['margin']:.4f}x" if closed else "-")
+check("  ... the book is empty afterwards", not pf.open_positions,
+      f"{len(pf.open_positions)} open")
+
+# A liquidation must start the cooldown. It is strictly worse news than a stop.
+pf2 = Portfolio(equity=300.0, max_slots=1, stop_sigma=10.0, leverage=20.0,
+                cooldown_hours=72.0)
+pf2.fill_slots(pd.DataFrame([cand("AAA", "BBB", 1.0)]), T0)
+p2 = pf2.open_positions[0]
+l2 = (1.0 + abs(p2.signal["beta_at_entry"])) / 20.0
+pf2.evaluate_exits({"AAA": p2.signal["entry_spread"] - p2.direction * l2 * 1.01
+                           + p2.signal["alpha_at_entry"], "BBB": 0.0},
+                   T0 + timedelta(hours=1))
+check("a liquidation starts the cooldown",
+      cooldown_key("AAA", "BBB") in pf2.cooling_pairs(T0 + timedelta(hours=2)),
+      "cooling")
+
+# WHICH WINS WHEN BOTH ARE BREACHED, and the answer is liquidation.
+#
+# At the live stop the stop sits far INSIDE the margin (0.02 against 0.10), so
+# walking the minutes normally trips the stop first and liquidation never binds
+# -- measured at 0.0% of trades across a 35-day run. That is the production case.
+#
+# But if BOTH levels are breached at the same observation, the price gapped past
+# the collateral, and no stop fill saves a position whose margin is already gone.
+# So liquidation outranks the stop. The engine's stop_fill_overshoot (1.04x
+# MEASURED) would otherwise book such a gap as a loss of 1.04 stop-distances --
+# 0.0208 here, against a margin of 0.10 -- which is a fill that could not have
+# happened. An earlier version of this test asserted adverse_move and was wrong.
+pf3 = _liq_book(stop=1.0)
+p3 = pf3.open_positions[0]
+stop_dist = 1.0 * p3.signal["sigma_at_entry"]
+l3 = (1.0 + abs(p3.signal["beta_at_entry"])) / 20.0
+check("at the live stop the stop is INSIDE the margin", stop_dist < l3,
+      f"{stop_dist:.4f} < {l3:.4f}")
+
+# A move past the stop but INSIDE the margin: the ordinary case, stop wins.
+c3 = pf3.evaluate_exits({"AAA": p3.signal["entry_spread"] - p3.direction * stop_dist * 1.5
+                                + p3.signal["alpha_at_entry"], "BBB": 0.0},
+                        T0 + timedelta(hours=1))
+check("  ... past the stop, inside the margin -> adverse_move",
+      len(c3) == 1 and c3[0]["exit_reason"] == "adverse_move",
+      c3[0]["exit_reason"] if c3 else "none")
+
+# A gap past BOTH: liquidation wins, and the loss is the margin, not 1.04 stops.
+pf4 = _liq_book(stop=1.0)
+p4 = pf4.open_positions[0]
+l4 = (1.0 + abs(p4.signal["beta_at_entry"])) / 20.0
+c4 = pf4.evaluate_exits({"AAA": p4.signal["entry_spread"] - p4.direction * l4 * 1.01
+                                + p4.signal["alpha_at_entry"], "BBB": 0.0},
+                        T0 + timedelta(hours=1))
+check("  ... a gap past BOTH -> liquidated, not adverse_move",
+      len(c4) == 1 and c4[0]["exit_reason"] == "liquidated",
+      c4[0]["exit_reason"] if c4 else "none")
+check("  ... and it costs the margin, not 1.04 stop distances",
+      c4 and -c4[0]["realized_pnl_net"] > 4.0 * 1.0 * p4.signal["sigma_at_entry"]
+      * c4[0]["leg_a_notional"],
+      f"${-c4[0]['realized_pnl_net']:.2f} vs margin ${c4[0]['margin']:.2f}" if c4 else "-")
+
 print()
 print("=" * 104)
 print(f"{n_pass}/{n_pass + n_fail} assertions PASS")
