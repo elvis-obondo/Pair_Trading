@@ -1,3 +1,63 @@
+# SESSION 2026-09-29 — the model switched live, and the book restarted
+
+The VM ran the **pre-0bb61a9 OLS build on a 7-day window** until now, confirmed by
+reading the constants out of the running container. Every live result before this
+line was produced by geometry the backtests had already abandoned.
+
+## What is live now
+
+    ENTRY_WINDOW_DAYS    7    -> 2
+    HEDGE_ESTIMATOR      OLS  -> ratio (symmetric)
+
+Verified in the container after deploy: `ENTRY_WINDOW_DAYS 2`, `HEDGE_ESTIMATOR
+ratio`, `entry_window_bars(0.5) 96`, `min_bars_required(0.5) 191`. Everything else
+unchanged: 3.0 entry, 1.0 stop, 72h hold, 72h cooldown, 5% at 20x, $5,000 cap.
+
+## The book that was archived
+
+403 closed trades, 2026-09-13 -> 09-29, **$300 -> $135.03**. Two copies: the VM at
+`trading_data/archive/20260929T035550Z/` and this repo at
+`research/live_archive/scanner_trades_ols7d_20260913_20260929.csv` (commit
+6885e35). The ten open positions were booked `book_reset` at the mark, all
+positive, totalling +14.34. New book: equity 300.00, flat, numbering from 1.
+
+## What that book said, and it is the only live evidence there is
+
+    win rate               21.59%
+    driftless 1/(1+|z|)    22.54%
+    excess                 -0.96 pp   CI [-6.15, +4.76]
+
+    gross   -0.0663 sigma  CI [-0.2945, +0.1966]
+    NET     -0.1714 sigma  CI [-0.4005, +0.0916]
+
+against the backtest's gross **+0.2826** CI [+0.2059, +0.3628]. The intervals
+barely touch. **No edge appeared live.** Weak evidence -- 403 trades, 16 days, a
+wide interval, and a DIFFERENT system -- but it points the wrong way, and the
+fresh book is the first time the measured geometry faces live data.
+
+## Two things this closed
+
+**MEASURED_STOP_OVERSHOOT = 1.04 is confirmed, slightly conservative.** It came
+from 13 stop-outs. On 316: p50 1.015x, p75 1.034x, p90 1.074x, p95 1.104x, p99
+1.212x, mean 1.031x, max 1.432x, only 6.3% past 1.10x. The tick-watched monitor
+works and every backtest run at 1.04 was fair. Execution is not the problem.
+
+**Liquidation does NOT reach the live book.** The check added in 440d658 lives in
+`Portfolio.evaluate_exits`; `stop_monitor` calls `generate_exit_signal` then
+`pf._close` directly and never touches `evaluate_exits`. It provably cannot fire
+at a 1.0-sigma stop (0.11 of margin headroom against a 0.0115 stop, 0.0% of
+backtested trades), so it was not bundled into a geometry switch -- but it is a
+real backtest/live divergence and `rolling_spread` exists to prevent exactly this.
+
+## What the fresh book can and cannot settle
+
+It can tell you whether the +0.2826 sigma edge is real live. It cannot make the
+strategy profitable: the OKX taker round trip is 0.2260 sigma, so a taker-fee book
+runs at breakeven by construction. Only maker execution changes that -- keeping
+44% of the edge posting one side, 68% posting both, against 20% now.
+
+---
+
 # The paper system on the VM — state as of 2026-09-21
 
 Everything runs on GCP. The laptop is not required and can stay off.
