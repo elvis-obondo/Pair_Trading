@@ -6,13 +6,26 @@ Paste this into a new session. Everything below is measured, not assumed.
 
 ## 1. The state, in one line
 
-**The edge is real and the fee is the same size as it.**
+**The edge is real and the fee takes a third to a half of it, not 80%.**
 
     gross edge per trade   +0.2826 sigma   95% CI [+0.2059, +0.3628]   REAL
-    OKX taker round trip    0.2260 sigma
-    NET                    +0.0566 sigma   95% CI [-0.0246, +0.1413]   includes zero
+    OKX taker round trip    0.143 sigma    MEASURED, fresh book, ratio/2d, n=14
+                            0.105 sigma    MEASURED, archive,   OLS/7d,  n=403
+    NET at 0.143           +0.140 sigma    [+0.063, +0.220]  (gross CI shifted)
+    NET at 0.105           +0.178 sigma    [+0.101, +0.258]
 
-On a median $136 leg: edge $0.47, fee $0.38. **The fee takes 80% of the edge.**
+The fee takes **37% of the edge on 403 trades, 51% on the fresh 14.** Use the
+fresh-book figure for the current geometry and the archive figure for sample size;
+they bracket the truth. Either way the net CI excludes zero.
+
+**THE 0.2260 FIGURE THAT USED TO SIT HERE WAS ABOUT DOUBLE AND IS WITHDRAWN.** It
+has no derivation anywhere in the repo and no population reproduces it: 3.6M
+backtest episodes give 0.066, the 403-trade archive 0.105 (two independent
+methods, 0.103 and 0.105), the fresh book 0.143. This document's OWN archive
+arithmetic used 0.105 -- its gross -0.0663 and net -0.1714 differ by exactly
+0.1051. Two ways to land near 0.226: apply the `(1+|beta|)` factor twice (0.209),
+or use exit_sweep's pessimistic 0.0025 instead of the real 0.000993 (0.263).
+The CONSTANT 0.000993 is correct; only the conversion to sigma was wrong.
 
 The mechanism: the spread reverts more often than a driftless walk. Win rate
 **28.17%** against a **22.60%** benchmark of `1/(1+|z|)` — excess **+5.57pp**,
@@ -123,7 +136,14 @@ Decide before then; do not let it lapse with a book open.
                                       mean 1.031x, p95 1.104x, only 6.3% past 1.10x.
                                       Slightly conservative. Execution is NOT the problem.
     ROUND_TRIP_COST_FRAC = 0.000993   this is the OKX TAKER SCHEDULE to three decimals
-                                      (4.965bp x 4 fills). It contains NO bid-ask.
+                                      (4.965bp on each leg, in and out; gross already
+                                      counts both legs). It contains NO bid-ask.
+    cost in SIGMA units               = frac*(1+|beta|)/sigma, per trade. It is NOT a
+                                      constant: p5 0.063 to p95 0.233 on the live book,
+                                      nearly 4x. BOTH INPUTS ARE KNOWN AT ENTRY, so it
+                                      can be ranked on. Never quote a single number
+                                      without saying which population it came from.
+                                      Applying (1+|beta|) twice is how 0.226 happened.
     funding                            0.2% of the fee; cancels between legs. Irrelevant.
 
 **The live book is PAPER.** It fills at the recorded price, so it is structurally
@@ -132,33 +152,50 @@ improve the cost number. Only real orders will.
 
 ---
 
-## 7. The only lever left
+## 7. Two levers, and the fee one is less urgent than it looked
 
-The edge is fixed at +0.2826 sigma. Only the fee moves:
+The edge is fixed at +0.2826 sigma. Rebuilt on the measured taker fee of 0.143
+(fresh book, current geometry), maker rows scaled by OKX's own maker/taker ratio:
 
-    taker both legs, in and out    fee 0.226   net +0.057   keeps 20%
-    maker in, taker out            fee 0.159   net +0.123   keeps 44%
-    maker both ways                fee 0.091   net +0.192   keeps 68%
-    taker + a 7.5bp bid-ask        fee 0.569   net -0.286   INVERTED
+    taker both legs, in and out    fee 0.143   net +0.140   keeps 50%
+    maker in, taker out            fee 0.101   net +0.182   keeps 64%
+    maker both ways                fee 0.058   net +0.225   keeps 80%
+    taker + a 7.5bp bid-ask        UNVERIFIED -- the old 0.569 was built on the
+                                   withdrawn 0.226 and must be re-derived before use
 
+**Taker is NOT breakeven by construction.** That claim came from the doubled fee.
+Maker execution still helps; it is no longer the only thing that can work.
+
+**The second lever is new: the fee is selectable.** Cost in sigma is
+frac*(1+|beta|)/sigma, known before you enter, and it varies ~4x across the book.
+Theta ranking currently picks the EXPENSIVE end -- median cost climbs 0.056 to
+0.081 monotonically across nine of ten theta deciles, so the ranker that provably
+does not improve the win rate reliably raises the fee by ~45%. Ranking on cost is
+untested and, unlike everything in section 3, it does not have to predict
+anything. Caveat: the cheapest decile is cheap because sigma is large, and it
+reverts worse (39% vs ~50% on stored paths), so the cheap extreme is a trap.
+
+**The bid-ask is still the thing that can invert this and it is still unmeasured.**
 A 7.5bp spread is ordinary for thin names like WET and SHELL — which this book
-trades most, and which fail `pair_analysis`' own $450k/day turnover floor. At that
-cost the edge does not shrink, it flips sign.
-
-**Posting as maker addresses the fee and the bid-ask at once.** It is the only
-change measured across an entire session that moves the number that matters. It is
-an execution problem, not a research problem.
+trades most, and which fail `pair_analysis`' own $450k/day turnover floor. In the
+withdrawn units that cost flipped the sign. Re-derive it against the corrected fee
+before repeating the claim; the direction of the risk is unchanged, the size is not
+known.
 
 Open and unblocked, in rough priority:
 
-1. **Maker execution.** Fill rates are unmeasurable on paper — needs real orders.
-2. **Liquidation does not reach the live book.** The check added in `440d658` is in
+1. **Rank on cost instead of theta.** New, cheap, and it needs no forecast — see
+   the second lever above. The only selection experiment left that is arithmetic
+   rather than prediction.
+2. **Maker execution.** Fill rates are unmeasurable on paper — needs real orders.
+   Still worth having; no longer the only hope.
+3. **Liquidation does not reach the live book.** The check added in `440d658` is in
    `Portfolio.evaluate_exits`; `stop_monitor` calls `generate_exit_signal` then
    `pf._close` and never touches it. Cannot fire at a 1.0-sigma stop (0.11 headroom
    vs a 0.0115 stop), but it is a real engine/live divergence.
-3. **Walk-forward across several periods.** Everything here is ONE 35-day window.
+4. **Walk-forward across several periods.** Everything here is ONE 35-day window.
    The 4–5 day lookback collapse may be this window, not the lookback.
-4. **`ENTRY_WINDOW_DAYS = 2` is unjustified.** Shipped on reasoning; the sweep
+5. **`ENTRY_WINDOW_DAYS = 2` is unjustified.** Shipped on reasoning; the sweep
    cannot rank it against 1, 3, 6 or 7. Not wrong, just unsupported.
 
 ---

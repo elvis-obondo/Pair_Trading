@@ -51,10 +51,19 @@ real backtest/live divergence and `rolling_spread` exists to prevent exactly thi
 
 ## What the fresh book can and cannot settle
 
-It can tell you whether the +0.2826 sigma edge is real live. It cannot make the
-strategy profitable: the OKX taker round trip is 0.2260 sigma, so a taker-fee book
-runs at breakeven by construction. Only maker execution changes that -- keeping
-44% of the edge posting one side, 68% posting both, against 20% now.
+It can tell you whether the +0.2826 sigma edge is real live.
+
+**Corrected 2026-09-29: the 0.2260 sigma taker round trip was about double and is
+withdrawn.** Measured on this very archive two independent ways it is 0.105 sigma
+(n=403); on the fresh ratio/2d book 0.143 (n=14); on 3.6M backtest episodes 0.066.
+The arithmetic in this file already used 0.105 -- gross -0.0663 and net -0.1714
+differ by exactly 0.1051. See SESSION_HANDOFF section 1.
+
+So a taker book does NOT run at breakeven by construction: net is +0.140 at the
+fresh-book fee, +0.178 at the archive's, and the CI excludes zero either way.
+Maker execution still helps (keeping 64% posting one side, 80% posting both,
+against 50% now) but it is no longer the only thing that can work. The cost is
+also SELECTABLE -- frac*(1+|beta|)/sigma is known at entry and varies ~4x.
 
 ---
 
