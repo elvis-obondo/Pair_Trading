@@ -15,8 +15,14 @@ user_data/config.json
 .env
 
 # Freqtrade runtime data (regenerable / large / local-only)
-# user_data/data/ is tracked: it's the OKX 30m feather price data the
-# visualizer app and research pipeline read from (2.8MB, small enough to bundle).
+#
+# user_data/data/ is NOT tracked (untracked 2026-09-30). It was, on the grounds
+# that it was 2.8MB and small enough to bundle; it had grown to 485MB across 855
+# feather files, and every `git status` was unreadable because the whole price
+# directory churned on each refresh. Nothing needs it from git: .dockerignore
+# already excludes it from the deploy image, and scripts/update_data.sh and
+# download_1m.sh re-download it from OKX. The files stay on disk.
+user_data/data/
 user_data/logs/
 user_data/backtest_results/
 user_data/hyperopt_results/
@@ -65,3 +71,12 @@ trading_data/
 research/dislocations.parquet
 research/dislocations_1m.parquet
 research/screen_*.csv
+
+# Closed-question sweep outputs (untracked 2026-09-30). 129 CSVs and logs from
+# exit_study and rank_experiment: entry grids, noise seeds, stop/cooldown walks,
+# the ranking arms. Every conclusion they support is written down in
+# docs/SESSION_HANDOFF.md section 3, and re-running the sweep regenerates them.
+# The two files NOT ignored here are the stored-path dataset still in use.
+research/exit_study/**/*.csv
+research/exit_study/**/*.log
+research/rank_experiment/
