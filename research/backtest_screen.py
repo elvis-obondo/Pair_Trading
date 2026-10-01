@@ -136,7 +136,8 @@ def neutrality_score(beta) -> np.ndarray:
 
 
 def rank_bar(rows: pd.DataFrame, arrays: dict, take_profit_pct: float = 1.0,
-             bar_hours: float = 0.5, rank_by: str = "theta") -> pd.DataFrame:
+             bar_hours: float = 0.5, rank_by: str = "theta",
+             direction: str = "revert", target_sigma: float = 1.0) -> pd.DataFrame:
     """Fit theta for one bar's candidates and rank them.
 
     Mirrors scanner.scan()'s output contract so Portfolio.fill_slots cannot tell
@@ -178,8 +179,20 @@ def rank_bar(rows: pd.DataFrame, arrays: dict, take_profit_pct: float = 1.0,
         theta_at(arrays, r.ticker_a, r.ticker_b, int(r.bar),
                  r.beta_at_entry, r.alpha_at_entry, bar_hours)
         for r in d.itertuples(index=False)]
-    d["take_profit_level"] = (d.entry_spread
-                              - take_profit_pct * (d.entry_spread - d.mu_at_entry))
+    # Target placement, and it is the ONLY thing the direction changes here: the
+    # candidate set, the geometry and the sizing are identical either way, so a
+    # difference in results is a difference in barriers and nothing else.
+    # Mirrors generate_entry_signal Step 4 exactly.
+    if direction not in ("revert", "expand"):
+        raise ValueError(f'direction must be "revert" or "expand", got {direction!r}')
+    away = np.where(d.entry_spread > d.mu_at_entry, 1.0, -1.0)
+    if direction == "expand":
+        d["take_profit_level"] = (d.entry_spread
+                                  + away * target_sigma * d.sigma_at_entry)
+    else:
+        d["take_profit_level"] = (d.entry_spread
+                                  - take_profit_pct * (d.entry_spread - d.mu_at_entry))
+    d["direction"] = direction
     d["neutrality"] = neutrality_score(d.beta_at_entry)
 
     if rank_by == "theta":

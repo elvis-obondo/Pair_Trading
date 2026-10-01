@@ -73,8 +73,14 @@ class Position:
         self.signal = signal            # the frozen entry signal; never mutated
         self.sizing = sizing
         self.opened_at = opened_at
-        # Short the spread when it sits above its mean, long it when below.
-        self.direction = -1.0 if signal["entry_spread"] > signal["mu_at_entry"] else 1.0
+        # REVERT: short the spread when it sits above its mean, long it when
+        # below -- betting on a return to mu. EXPAND takes the other side of the
+        # same dislocation, so every leg sign flips. The sizer is unaffected: it
+        # reads only beta, and leg B's side is derived from leg A's in `exposure`.
+        toward_mu = -1.0 if signal["entry_spread"] > signal["mu_at_entry"] else 1.0
+        self.direction = (-toward_mu
+                          if signal.get("direction", "revert") == "expand"
+                          else toward_mu)
         # When the stop was FIRST seen breached, or None if it is not currently
         # breached. Only read when the book runs a debounce; see evaluate_exits.
         self.breach_since = None
@@ -463,6 +469,12 @@ class Portfolio:
             # upstream. Anything not named here is silently dropped.
             if hasattr(row, "r2_at_entry"):
                 signal["r2_at_entry"] = getattr(row, "r2_at_entry")
+            # Same reason r2 is optional, and the same trap: a candidate frame
+            # without this column is a REVERT frame, which is the settled spec.
+            # Dropping it silently would run expansion entries through reversion
+            # barriers and report the result as a direction test.
+            if hasattr(row, "direction"):
+                signal["direction"] = getattr(row, "direction")
             sizing = compute_position_size(
                 entry_signal=signal, equity=self.equity,
                 capital_frac=self.capital_frac, leverage=self.leverage,

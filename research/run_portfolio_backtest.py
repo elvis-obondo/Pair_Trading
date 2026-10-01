@@ -68,6 +68,7 @@ def run(days=30, stride=1, bar_hours=0.5, equity=300.0, slots=10, end_date=None,
         rank_by="theta", exit_check_minutes=None, debounce_minutes=0.0,
         grace_minutes=0.0, out_path=OUT,
         cooldown_hours=None, entry_window_days=None, pool_mult=1.0, seed=0,
+        direction="revert", target_sigma=1.0,
         pairs_file=None, pairs_min_stability=None):
     # THE ENTRY WINDOW is a module constant in rolling_spread, deliberately: it is
     # THE definition, and both research and the live path read it so they cannot
@@ -164,6 +165,9 @@ def run(days=30, stride=1, bar_hours=0.5, equity=300.0, slots=10, end_date=None,
         if live != used:
             print(f"[WARN] {name}={used} but the LIVE book runs {live} — "
                   f"this run does not describe the live strategy")
+    print(f"[INFO] direction {direction}"
+          + (f" | target {target_sigma} sigma beyond entry" if direction == "expand"
+             else "") )
     print(f"[INFO] entry {min_deviation_sigma} sigma | tp {take_profit_pct} | "
           f"stop {stop_sigma} | hold {max_hold_hours}h | {slots} slots | "
           f"{capital_frac*100:.0f}% margin at {leverage:.0f}x"
@@ -276,7 +280,8 @@ def run(days=30, stride=1, bar_hours=0.5, equity=300.0, slots=10, end_date=None,
         pf.evaluate_exits(prices, now)
         if pf.free_slots > 0 and i in by_bar:
             cands = rank_bar(by_bar[i], arrays, take_profit_pct, bar_hours,
-                             rank_by=rank_by)
+                             rank_by=rank_by, direction=direction,
+                             target_sigma=target_sigma)
             # SHORTLIST THEN SAMPLE, so a run is not a single fixed path.
             # Deterministic top-k makes every run byte-identical: p5, median and
             # p95 all land on the same number, and an end equity of $1,107 cannot
@@ -366,6 +371,8 @@ def run(days=30, stride=1, bar_hours=0.5, equity=300.0, slots=10, end_date=None,
         "cfg_entry_sigma":        min_deviation_sigma,
         "cfg_stop_sigma":         stop_sigma,
         "cfg_take_profit_pct":    take_profit_pct,
+        "cfg_direction":          direction,
+        "cfg_target_sigma":       target_sigma,
         "cfg_max_hold_hours":     max_hold_hours,
         "cfg_slots":              slots,
         "cfg_bar_hours":          bar_hours,
@@ -480,11 +487,19 @@ def report(pf: Portfolio, out_path: str = OUT, stamp: dict | None = None) -> Non
     # should not have to be repeated to inspect what it got wrong.
     print("\n  invariants:")
     peak, dup = int(max_concurrent(d)), not no_overlap(d)
-    zbad = int((d.z_at_entry.abs() < 3.0 - 1e-9).sum())
+    # READ THE RUN'S OWN THRESHOLD. This was hardcoded 3.0, so every run with
+    # --entry below 3.0 aborted on a spurious "opened below the entry threshold"
+    # with a ledger that was in fact clean -- an --entry 2.5 run flagged 7,954 of
+    # its 11,300 trades while its true minimum |z| was exactly 2.5. An invariant
+    # that fires on a correct run is worse than none: trap 7 in the handoff is
+    # about invariants that lied, and this is the same failure pointing the other
+    # way. Fall back to 3.0 only when no stamp was passed.
+    entry_floor = float((stamp or {}).get("cfg_entry_sigma", 3.0))
+    zbad = int((d.z_at_entry.abs() < entry_floor - 1e-9).sum())
     hbad = int((d.hours_held > pf.max_hold_hours + 1e-9).sum())
     print(f"    max concurrent open  : {peak} (cap {pf.max_slots})")
     print(f"    duplicate pair open  : {'FOUND' if dup else 'none'}")
-    print(f"    all |z| >= entry     : {zbad == 0}")
+    print(f"    all |z| >= entry     : {zbad == 0}  (floor {entry_floor})")
     print(f"    all holds <= cap     : {hbad == 0}")
     print(f"\n[INFO] ledger written to {out_path}")
     print("=" * 100)
@@ -592,6 +607,16 @@ if __name__ == "__main__":
                          "1 checks every minute, which is far closer to what the "
                          "live tick monitor does. Entries are unaffected either "
                          "way; only exits move.")
+    ap.add_argument("--direction", default="revert", choices=("revert", "expand"),
+                    help="revert = the settled strategy, trade against the "
+                         "dislocation. expand = trade WITH it: stop on a retrace "
+                         "toward mu, target --target sigma further out. Every "
+                         "threshold was calibrated for revert; under expand they "
+                         "are placeholders, and theta ranking is actively wrong "
+                         "(it predicts the thing expand bets against).")
+    ap.add_argument("--target", type=float, default=1.0,
+                    help="EXPAND ONLY. Take profit this many sigma further from "
+                         "mu than entry, measured from entry_spread.")
     ap.add_argument("--rank-by", default="theta", choices=RANK_MODES,
                     help="which key orders candidates for the ten slots. "
                          "Choices come from backtest_screen.RANK_MODES so the "
@@ -610,6 +635,7 @@ if __name__ == "__main__":
         max_per_ticker=a.max_per_ticker, end_date=a.end_date,
         stop_fill_overshoot=_overshoot(a.stop_fill_overshoot),
         max_notional=a.max_notional,
+        direction=a.direction, target_sigma=a.target,
         rank_by=a.rank_by, exit_check_minutes=a.exit_check_minutes,
         debounce_minutes=a.debounce_minutes, grace_minutes=a.grace_minutes,
         out_path=a.out)

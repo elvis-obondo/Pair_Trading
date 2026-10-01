@@ -62,6 +62,8 @@ def generate_entry_signal(
     min_deviation_sigma: float = 3.0,
     take_profit_pct: float = 1.0,
     bar_hours: float = 0.5,
+    direction: str = "revert",
+    target_sigma: float = 1.0,
 ) -> dict | None:
     """Return an entry signal if the spread has stretched far enough, else None.
 
@@ -78,10 +80,30 @@ def generate_entry_signal(
         disables the check.
     take_profit_pct : float, default 1.0
         Fraction of the entry gap to capture. 1.0 puts the target at mu itself
-        -- full reversion, the settled value.
+        -- full reversion, the settled value. REVERT ONLY; ignored when
+        direction="expand", which sizes its target in sigma instead.
     bar_hours : float, default 0.5
         Real hours between consecutive samples. Sets the rolling window length
         and makes theta come back genuinely per-hour.
+    direction : {"revert", "expand"}, default "revert"
+        Which side of the dislocation to take. "revert" is the settled strategy:
+        trade AGAINST the move, stop further from mu, target mu. "expand" trades
+        WITH it: stop on a retrace TOWARD mu, target target_sigma further out.
+
+        THE THRESHOLDS ARE NOT CALIBRATED FOR "expand". min_deviation_sigma=3.0,
+        the stop width and the mu target were fitted together in exit_sweep.py
+        against reversion. Under "expand" none of them is calibrated -- they are
+        placeholders, and the first result off this path is one arbitrary point
+        in a parameter space nobody has swept, not a verdict on the direction.
+        theta ranking is worse than uninformative here: it predicts reversion
+        speed, which is the thing "expand" bets against, and it measurably
+        selects the most EXPENSIVE trades (median cost in sigma climbs 0.056 ->
+        0.081 across nine of ten theta deciles).
+    target_sigma : float, default 1.0
+        EXPAND ONLY. How much further from mu the spread must travel to take
+        profit, in entry sigma. Measured from entry_spread, like the stop, not as
+        a fixed level -- see generate_exit_signal for why that distinction is
+        load-bearing.
 
     Returns
     -------
@@ -139,7 +161,16 @@ def generate_entry_signal(
              if np.isfinite(params.theta) and params.theta > 0 else float("nan"))
 
     # Step 4 -- signal
-    take_profit_level = pt.spread - take_profit_pct * (pt.spread - pt.mu)
+    #
+    # away = +1 when the spread sits ABOVE mu. Both directions place their target
+    # by travelling from entry_spread along this axis; only the sign differs.
+    if direction not in ("revert", "expand"):
+        raise ValueError(f'direction must be "revert" or "expand", got {direction!r}')
+    away = 1.0 if pt.spread > pt.mu else -1.0
+    if direction == "expand":
+        take_profit_level = pt.spread + away * target_sigma * pt.sigma
+    else:
+        take_profit_level = pt.spread - take_profit_pct * (pt.spread - pt.mu)
 
     return {
         "entry_spread":      float(pt.spread),
@@ -150,6 +181,12 @@ def generate_entry_signal(
         "alpha_at_entry":    float(pt.alpha),
         "theta_at_entry":    theta,
         "take_profit_level": float(take_profit_level),
+        # Which side of the dislocation this trade takes. Position reads it to
+        # set its leg signs and generate_exit_signal reads it to decide which
+        # barrier is the stop -- so it MUST survive the trip through
+        # Portfolio.fill_slots, which copies a whitelist and silently drops
+        # anything not named there.
+        "direction":         str(direction),
         # Fit quality of the hedge over the same window. RECORDED, NOT A GATE.
         # beta says how much B to hold; r2 says whether holding it hedges
         # anything. A beta near 0 (10% of candidates) means the regression found
@@ -240,20 +277,43 @@ def generate_exit_signal(
     # Step 4 -- stop distance, in the same rolling sigma the entry was measured in
     stop_distance = stop_sigma * entry_signal["sigma_at_entry"]
 
-    # Step 5 -- time stop, unconditional, checked first
+    # EXPANDING USES REVERT'S OWN COMPARISONS WITH THE ABOVE/BELOW BRANCH SWAPPED.
+    # An expansion trade entered ABOVE mu is stopped by falling back toward mu and
+    # takes profit by rising further -- which is exactly the pair of tests a
+    # reversion trade entered BELOW mu applies. So one flag picks the branch and
+    # the four comparisons below are character-for-character the ones that were
+    # here before.
+    #
+    # Comparing LEVELS and not distances travelled is load-bearing, not style. An
+    # earlier cut of this subtracted entry_spread from both sides first, which is
+    # algebraically identical and numerically is not: at a stop exactly one
+    # stop_distance away, (0.035 - 0.03) >= 0.005 is FALSE in float64 while
+    # 0.035 >= 0.03 + 0.005 is TRUE. validate_exit_signal tests that exact
+    # boundary and caught it.
+    expanding = entry_signal.get("direction", "revert") == "expand"
+    hi = (entry_spread > mu) != expanding
+
+    # Step 5 -- time stop, unconditional, checked first.
+    #
+    # NOTE ITS ROLE INVERTS. For "revert" this is a loss-cutter on a trade that
+    # never came back. For "expand" it is a profit-taker, because the thing being
+    # bet on is precisely that the spread keeps going. Same 72h, opposite job,
+    # and the number was calibrated for the first one.
     if hours_elapsed >= max_hold_hours:
         return _exit("time_stop")
 
-    # Step 6 -- adverse move, measured from entry_spread
-    if entry_spread > mu:
+    # Step 6 -- adverse move, measured from entry_spread. "revert" is stopped by
+    # travelling FURTHER from mu; "expand" by retracing back TOWARD it.
+    if hi:
         if current_spread >= entry_spread + stop_distance:
             return _exit("adverse_move")
     else:
         if current_spread <= entry_spread - stop_distance:
             return _exit("adverse_move")
 
-    # Step 7 -- take profit, direction derived from entry
-    if entry_spread > mu:
+    # Step 7 -- take profit, at the level the entry signal computed. "revert"
+    # targets mu; "expand" targets target_sigma beyond entry, on the far side.
+    if hi:
         if current_spread <= take_profit:
             return _exit("take_profit")
     else:

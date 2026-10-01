@@ -92,6 +92,13 @@ for row in cand.head(25).itertuples(index=False):
         continue
     for f in SIGNAL_FIELDS:
         a, b = getattr(row, f), direct[f]
+        # `direction` is the one non-numeric field in the contract; comparing it
+        # exactly is the whole point, since a dropped or altered value would run
+        # the trade through the wrong barriers.
+        if isinstance(b, str):
+            if a != b:
+                mismatch += 1
+            continue
         if not ((np.isnan(a) and np.isnan(b)) or np.isclose(a, b, rtol=0, atol=1e-12)):
             mismatch += 1
 check("scan() row == generate_entry_signal() called directly",
