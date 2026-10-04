@@ -95,8 +95,24 @@ def extract(trades_path: str, max_hold_hours: float, timeframe: str = "1m",
     # at offset 0. Without this the autopsy counts pre-entry stop crossings and
     # reports negative lags -- the bar close appearing to precede the breach it
     # reacted to.
-    bar_minutes = int(round(bar_hours * 60))
-    fill_offset = bar_minutes - 1
+    # CHANGED 2026-10-02. The offset is now -1, not bar_minutes-1.
+    #
+    # The comment above described the engine as it WAS: opened_at carried the
+    # bar's label, 14:30, so a path had to start 29 minutes later to begin at
+    # the 14:59 close the trade actually filled at. Commit c287477 fixed the
+    # engine to record the fill instant itself, and this compensation silently
+    # became a double count -- it landed the path 29 minutes AFTER the fill.
+    #
+    # opened_at is now the bar's close instant (15:00 for the 14:30 bar). The
+    # 1-minute bar covering the minute that ENDS there is labelled 14:59, one
+    # minute earlier, because 1m bars are labelled by open too. Hence -1.
+    #
+    # Measured on 400 trades of the current ledger, median |path[0] -
+    # entry_spread| in sigma: offset -1 gives 0.0000 and p95 0.0000 -- an
+    # identity, not a fit -- against 0.7418 at offset 29 and 0.1850 at 0.
+    #
+    # The assertion at the bottom of this file is what caught it. Keep it.
+    fill_offset = -1
 
     flat, starts, lens, keep = [], [], [], []
     total = 0

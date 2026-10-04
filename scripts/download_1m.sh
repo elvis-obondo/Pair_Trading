@@ -24,13 +24,54 @@ PAUSE="${3:-15}"
 LOG="logs/download_1m.log"
 mkdir -p logs
 
+# STALE COUNTS AS MISSING. This used to list only pairs with NO 1m feather at
+# all. Once every ticker had one the function returned empty forever: pass 1
+# broke immediately and the script exited 0 having downloaded nothing, while
+# the 1m store sat nine days behind the 30m store. That is the same
+# silent-success failure the header warns about, arriving from the other
+# direction -- a data command that exits 0 without checking what it wrote.
+#
+# A pair needs work if it has no 1m file, or if its last 1m candle is more than
+# STALE_MINUTES behind the newest 30m candle on disk. The 30m store is the
+# reference because update_data.sh advances it and it is what the research
+# engine reads, so "as fresh as 30m" is the only definition of current that
+# matters here. freqtrade resumes from each feather's last candle, so a stale
+# pair is appended to rather than refetched.
+STALE_MINUTES="${STALE_MINUTES:-60}"
 missing() {
-  python3 - <<'PY'
-import json, glob, os
-have = {os.path.basename(p).split("_USDT")[0]
-        for p in glob.glob("user_data/data/okx/futures/*-1m-futures.feather")}
+  STALE_MINUTES="$STALE_MINUTES" python3 - <<'PY'
+import glob, json, os
+import pandas as pd
+
+D = "user_data/data/okx/futures"
+slack = pd.Timedelta(minutes=float(os.environ.get("STALE_MINUTES", "60")))
+
+ref = None
+for f in glob.glob(f"{D}/*-30m-futures.feather"):
+    try:
+        m = pd.read_feather(f, columns=["date"]).date.max()
+    except Exception:
+        continue
+    if m is not None and (ref is None or m > ref):
+        ref = m
+cut = None if ref is None else ref - slack
+
+last = {}
+for f in glob.glob(f"{D}/*-1m-futures.feather"):
+    t = os.path.basename(f).split("_USDT")[0]
+    try:
+        last[t] = pd.read_feather(f, columns=["date"]).date.max()
+    except Exception:
+        last[t] = None
+
 want = json.load(open("user_data/config.json"))["exchange"]["pair_whitelist"]
-out = [p for p in want if p.split("/")[0] not in have]
+out = []
+for p in want:
+    t = p.split("/")[0]
+    if t not in last or last[t] is None:
+        out.append(p)
+    elif cut is not None and last[t] < cut:
+        out.append(p)
 print(" ".join(out))
 PY
 }
@@ -44,7 +85,7 @@ echo "=== 1m download started $(date '+%F %T')  days=$DAYS batch=$BATCH pause=${
 for pass in 1 2 3; do
   todo=($(missing))
   n=${#todo[@]}
-  echo "--- pass $pass: $n pairs missing ---" | tee -a "$LOG"
+  echo "--- pass $pass: $n pairs missing or stale ---" | tee -a "$LOG"
   [ "$n" -eq 0 ] && break
   before=$n
 
@@ -65,5 +106,5 @@ for pass in 1 2 3; do
   [ "$after" -eq "$before" ] && { echo "no progress, stopping" | tee -a "$LOG"; break; }
 done
 
-echo "=== finished $(date '+%F %T'); $(missing | wc -w) still missing ===" | tee -a "$LOG"
+echo "=== finished $(date '+%F %T'); $(missing | wc -w) still missing or stale ===" | tee -a "$LOG"
 python3 research/intrabar.py 2>&1 | tee -a "$LOG"

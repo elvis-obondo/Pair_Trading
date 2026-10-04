@@ -80,3 +80,13 @@ research/screen_*.csv
 research/exit_study/**/*.csv
 research/exit_study/**/*.log
 research/rank_experiment/
+
+# The stored-path dataset (untracked 2026-10-02). It was tracked at 26MB; the
+# current-geometry rebuild is 64MB and would put a fresh blob in history on
+# every regeneration -- the exact cost this file's other rules just removed.
+# Tracking it also bought less than it looked like: user_data/data/ is not
+# tracked either, so a fresh clone could never regenerate it anyway.
+# Rebuild with:
+#   research/extract_paths.py --trades <a backtest ledger, actual fills>
+research/exit_study/paths.npz
+research/exit_study/paths_meta.parquet
