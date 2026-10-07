@@ -13,7 +13,7 @@ SINGLE WRITER, AND WHY IT MATTERS
 The scanner imports the config and the paths, reads state read-only, and writes its
 own separate `scan_history` — never the book.
 
-This is not fastidiousness. `docs/HANDOFF.md` records a ledger corruption whose root
+This is not fastidiousness. `attic/docs/HANDOFF.md` records a ledger corruption whose root
 cause was never identified, and the two mechanisms that produce one are both live
 here: two processes appending to the same CSV, and `to_csv(mode="a")` writing
 whatever columns a frame happens to carry under a header written once from the first

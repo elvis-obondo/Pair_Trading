@@ -12,7 +12,7 @@
 #
 # NOTHING IS DELETED. The ledger, the state file and the equity curve are copied
 # to trading_data/archive/<timestamp>/ first. This repo has lost a book to a
-# ledger bug once already (see docs/HANDOFF.md); archives are cheap.
+# ledger bug once already (see attic/docs/HANDOFF.md); archives are cheap.
 #
 # WHAT IS KEPT ACROSS THE RESET
 #

@@ -1,0 +1,58 @@
+[nu] UNCONDITIONAL, fit period : nu 2.709  scale 0.4815
+[nu] CONDITIONAL on v_0        : nu 3.087  scale 0.5252
+     nu moves 2.709 -> 3.087 (+14.0%) once between-episode
+     heterogeneity is removed from the pool -- thinner, as expected
+
+[v_0] held-out multiplier mean 1.063  p95/p5 5.2x
+
+================================================================================
+SCORECARD at 2000 draws
+================================================================================
+
+--- A baseline gaussian, seven pinned  (24s, 2000 draws) ---
+  move size       model     real   ratio
+  median           0.73     0.38    1.95x
+  1 in 10          1.78     1.23    1.46x
+  1 in 100         2.79     3.09    0.90x
+  1 in 1,000       3.58     6.93    0.52x
+  largest          6.15    58.06    0.11x
+  outside all 2000 draws  1.15%   day-clustered 95% [0.82%, 1.58%]   floor 0.10%
+  band 0.5h 1.15x  cover 90.7%
+  band 10h 0.98x  cover 92.9%
+  CRPS 1.935 vs climatology 1.921 = 100.7%
+
+--- B nu unconditional 2.709  (56s, 2000 draws) ---
+  move size       model     real   ratio
+  median           0.52     0.38    1.40x
+  1 in 10          1.49     1.23    1.22x
+  1 in 100         3.41     3.09    1.10x
+  1 in 1,000       7.58     6.93    1.09x
+  largest        240.64    58.06    4.14x
+  outside all 2000 draws  0.47%   day-clustered 95% [0.26%, 0.73%]   floor 0.10%
+  band 0.5h 1.17x  cover 90.1%
+  band 10h 0.98x  cover 92.7%
+  CRPS 1.908 vs climatology 1.921 = 99.3%
+
+--- C nu unconditional 2.709 + v_0  (56s, 2000 draws) ---
+  move size       model     real   ratio
+  median           0.50     0.38    1.34x
+  1 in 10          1.52     1.23    1.24x
+  1 in 100         3.61     3.09    1.17x
+  1 in 1,000       8.01     6.93    1.16x
+  largest        235.59    58.06    4.06x
+  outside all 2000 draws  0.34%   day-clustered 95% [0.20%, 0.53%]   floor 0.10%
+  band 0.5h 1.17x  cover 90.5%
+  band 10h 0.98x  cover 93.4%
+  CRPS 1.877 vs climatology 1.921 = 97.7%
+
+--- D nu CONDITIONAL 3.087 + v_0  (52s, 2000 draws) ---
+  move size       model     real   ratio
+  median           0.56     0.38    1.48x
+  1 in 10          1.64     1.23    1.34x
+  1 in 100         3.62     3.09    1.17x
+  1 in 1,000       7.27     6.93    1.05x
+  largest        125.68    58.06    2.16x
+  outside all 2000 draws  0.44%   day-clustered 95% [0.28%, 0.65%]   floor 0.10%
+  band 0.5h 1.16x  cover 90.9%
+  band 10h 0.98x  cover 93.5%
+  CRPS 1.888 vs climatology 1.921 = 98.3%

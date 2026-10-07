@@ -1,0 +1,46 @@
+[SPLIT] fit 41,936  held out 18,064 over 79 days
+
+==============================================================================================
+2a-i  does volatility cluster inside the window?
+==============================================================================================
+
+  forecast window, 20 steps
+     lag      1      2      3      4      5      6      7      8      9     10
+    sq pooled    0.109  0.050  0.031  0.031  0.042  0.042  0.038  0.047  0.072  0.022
+    sq within    0.023 -0.044 -0.067 -0.070 -0.061 -0.077 -0.081 -0.071 -0.047 -0.105
+    |d| pooled   0.283  0.233  0.198  0.177  0.181  0.163  0.161  0.157  0.148  0.130
+    |d| within   0.087  0.020 -0.025 -0.053 -0.050 -0.073 -0.075 -0.078 -0.085 -0.107
+    |d| pooled lag-1 day-clustered 95%: [+0.263, +0.311]
+
+  entry window, 335 steps
+     lag      1      2      3      4      5      6      7      8      9     10
+    sq pooled    0.086  0.061  0.032  0.031  0.047  0.025  0.025  0.026  0.025  0.019
+    sq within    0.072  0.046  0.017  0.016  0.032  0.010  0.009  0.011  0.010  0.003
+    |d| pooled   0.279  0.240  0.212  0.202  0.192  0.184  0.175  0.171  0.162  0.164
+    |d| within   0.183  0.140  0.108  0.096  0.084  0.075  0.065  0.061  0.050  0.052
+    |d| pooled lag-1 day-clustered 95%: [+0.268, +0.289]
+
+==============================================================================================
+2a-ii  does pre-entry volatility predict post-entry volatility?
+==============================================================================================
+  target: log post-entry realised variance over the 20 forecast steps
+  predictor                     held-out R2    95% CI (day-clustered)
+  log RV last 48 bars                27.44%     [ 27.00%,  27.56%]
+  log RV last 96 bars                27.14%     [ 26.55%,  27.33%]
+  log RV all 335 bars                21.65%     [ 21.16%,  21.86%]
+  all three together                 29.95%     [ 29.14%,  30.14%]
+
+  GATE: proceed to the 1-minute build only if this is above 5%  ->  29.95%  PASS
+
+==============================================================================================
+2a-iii  selection artifact: how much elevation is our own entry rule?
+==============================================================================================
+  3000 held-out pairs -> 15,000 control bars (|z|<3, same pairs, same period), 16s
+
+                                      dislocation   control  elevation
+  REAL  log post-entry RV (mean)           -0.843    -1.905      1.062
+  SYNTHETIC constant vol                   -1.864    -2.511      0.647
+
+  total elevation 1.062 log-var = 2.89x variance
+  of which the 3-sigma entry rule alone explains 0.647 = 1.91x
+  REMAINDER for xi and eta: +0.415 log-var = 1.51x variance

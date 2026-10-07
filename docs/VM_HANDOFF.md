@@ -57,7 +57,7 @@ It can tell you whether the +0.2826 sigma edge is real live.
 withdrawn.** Measured on this very archive two independent ways it is 0.105 sigma
 (n=403); on the fresh ratio/2d book 0.143 (n=14); on 3.6M backtest episodes 0.066.
 The arithmetic in this file already used 0.105 -- gross -0.0663 and net -0.1714
-differ by exactly 0.1051. See SESSION_HANDOFF section 1.
+differ by exactly 0.1051. See docs/STATE.md section 9.
 
 So a taker book does NOT run at breakeven by construction: net is +0.140 at the
 fresh-book fee, +0.178 at the archive's, and the CI excludes zero either way.

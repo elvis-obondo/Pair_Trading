@@ -90,3 +90,12 @@ research/rank_experiment/
 #   research/extract_paths.py --trades <a backtest ledger, actual fills>
 research/exit_study/paths.npz
 research/exit_study/paths_meta.parquet
+
+# Dislocation modelling datasets (promoted 2026-10-06 from a session temp dir
+# that was about to be garbage-collected). 93MB. The RECIPE is what is tracked:
+# research/dislocation_model/REBUILD.md gives the exact command for each file,
+# and validate_dislocation_harness.py checks a rebuild against a published cell.
+# Committing these would be committing a cache -- and the panel they come from
+# (user_data/data/) is not tracked either, so a fresh clone could not verify a
+# blob anyway.
+research/datasets/

@@ -1,0 +1,62 @@
+============================================================================================
+TRUTH  E0's vector
+============================================================================================
+  k_revert=0.0850  k_diverge=-0.0200  qL=0.4880  qX=0.4750  r=0.0980  q_rd=0.0379  q_dr=0.0912
+  rep0  n=1504  336s  nll 509.1978
+        k_revert=0.0044  k_diverge=-0.0045  qL=0.0000  qX=0.9251  r=0.1185  q_rd=0.2458  q_dr=0.2894
+  rep1  n=1529  422s  nll 509.4228
+        k_revert=0.0004  k_diverge=-0.0170  qL=0.9686  qX=0.0000  r=0.1071  q_rd=0.0046  q_dr=0.2736
+/private/tmp/claude-501/-Users-elvisobondo-Pair-Trading/0189ea06-e901-4d24-83ff-b7b3c5ca8f65/scratchpad/recover.py:17: RuntimeWarning: overflow encountered in exp
+  sig=lambda z:1/(1+np.exp(-z))
+  rep2  n=1533  283s  nll 508.9925
+        k_revert=0.0000  k_diverge=0.0119  qL=0.0000  qX=0.9517  r=0.1159  q_rd=0.0050  q_dr=0.2324
+
+  param          truth  median est    err %   verdict
+  k_revert      0.0850      0.0004   -99.6%   PINNED/MISSED
+  k_diverge    -0.0200     -0.0045    77.7%   PINNED/MISSED
+  qL            0.4880      0.0000  -100.0%   PINNED/MISSED
+  qX            0.4750      0.9251    94.8%   PINNED/MISSED
+  r             0.0980      0.1159    18.2%   FITTED
+  q_rd          0.0379      0.0050   -86.8%   PINNED/MISSED
+  q_dr          0.0912      0.2736   200.0%   PINNED/MISSED
+
+============================================================================================
+TRUTH  strong, drifting mean
+============================================================================================
+  k_revert=0.1500  k_diverge=-0.0100  qL=0.3000  qX=0.5000  r=0.0100  q_rd=0.0200  q_dr=0.1500
+  rep0  n=1517  200s  nll 455.9310
+        k_revert=0.0000  k_diverge=-0.0701  qL=0.6320  qX=0.1383  r=0.0466  q_rd=0.0000  q_dr=0.5000
+  rep1  n=1530  165s  nll 455.4245
+        k_revert=0.0003  k_diverge=-0.0133  qL=0.0000  qX=0.7707  r=0.0448  q_rd=0.0000  q_dr=0.5000
+  rep2  n=1523  120s  nll 455.8270
+        k_revert=0.0000  k_diverge=0.0005  qL=0.0000  qX=0.7583  r=0.0521  q_rd=0.5000  q_dr=0.4996
+
+  param          truth  median est    err %   verdict
+  k_revert      0.1500      0.0000  -100.0%   PINNED/MISSED
+  k_diverge    -0.0100     -0.0133   -32.8%   PINNED/MISSED
+  qL            0.3000      0.0000  -100.0%   PINNED/MISSED
+  qX            0.5000      0.7583    51.7%   PINNED/MISSED
+  r             0.0100      0.0466   366.3%   PINNED/MISSED
+  q_rd          0.0200      0.0000  -100.0%   PINNED/MISSED
+  q_dr          0.1500      0.5000   233.3%   PINNED/MISSED
+
+============================================================================================
+TRUTH  weak reverter
+============================================================================================
+  k_revert=0.0200  k_diverge=-0.0050  qL=0.2000  qX=0.5000  r=0.0500  q_rd=0.0300  q_dr=0.1000
+  rep0  n=1505  133s  nll 443.4738
+        k_revert=0.0000  k_diverge=0.0011  qL=0.0000  qX=0.6943  r=0.0546  q_rd=0.5000  q_dr=0.5000
+  rep1  n=1544  129s  nll 443.7292
+        k_revert=0.0005  k_diverge=-0.2359  qL=0.0000  qX=0.7001  r=0.0521  q_rd=0.0000  q_dr=0.5000
+  rep2  n=1503  189s  nll 444.4012
+        k_revert=0.0000  k_diverge=0.0003  qL=0.0000  qX=0.6931  r=0.0573  q_rd=0.5000  q_dr=0.0000
+
+  param          truth  median est    err %   verdict
+  k_revert      0.0200      0.0000  -100.0%   PINNED/MISSED
+  k_diverge    -0.0050      0.0003   106.5%   PINNED/MISSED
+  qL            0.2000      0.0000  -100.0%   PINNED/MISSED
+  qX            0.5000      0.6943    38.9%   PINNED/MISSED
+  r             0.0500      0.0546     9.3%   FITTED
+  q_rd          0.0300      0.5000  1566.7%   PINNED/MISSED
+  q_dr          0.1000      0.5000   400.0%   PINNED/MISSED
+

@@ -13,7 +13,7 @@
 Live since 2026-08-16, last updated 2026-08-17. This is the actual deployment
 record (GCP, not Oracle — see "Why GCP, not Oracle" below), with the real
 values in place so this doubles as the runbook for redeploying, migrating, or
-debugging. See `docs/HANDOFF.md` for the wider system context.
+debugging. See `attic/docs/HANDOFF.md` for the wider system context.
 
 ## Current deployment
 
@@ -35,7 +35,7 @@ debugging. See `docs/HANDOFF.md` for the wider system context.
   into the container, survives rebuilds/recreates. Contains
   `paper_trades.csv` (the ledger — reset to empty on 2026-08-17 by explicit
   request; prior history archived at
-  `research/paper_trades_archive_20260817_105807.csv`, see `docs/HANDOFF.md`),
+  `research/paper_trades_archive_20260817_105807.csv`, see `attic/docs/HANDOFF.md`),
   `paper_trade_heartbeat.log`, and `paper_live/` (bar cache — must have
   `MIN_BARS`+ history per ticker or the strategy can't evaluate signals, see
   the MIN_BARS incident below).
@@ -149,7 +149,7 @@ evaluation unblocked immediately.
 for the merge logic. Every future pair switch gets full history seeded
 before the container restarts — this class of bug shouldn't recur. The
 underlying 300-candle cap / no-pagination gap in `data_cache.py` itself is
-still unpatched though (see `docs/HANDOFF.md` Known gaps) — the workaround
+still unpatched though (see `attic/docs/HANDOFF.md` Known gaps) — the workaround
 only helps when the laptop already has that ticker's canonical feather
 downloaded.
 

@@ -39,7 +39,7 @@ vs +0.420 per unit risked, equal-weighted across 12 folds); it raises the win
 rate in 11 of 12 folds but wins shrink to match. The alternatives are worse, not
 better: spread volatility looks best per-trade (+3.40% vs +0.30%) purely because
 payoff scales with sigma, and carries 32% ruin; cointegration p-value correlates
--0.223 with outcome. See docs/SCANNER_SESSION_HANDOFF.md section 6c.
+-0.223 with outcome. See attic/docs/SCANNER_SESSION_HANDOFF.md section 6c.
 
 ORDERING MATTERS. The z-screen runs before the OU fit, not after. Only ~322 of
 22,366 pairs a day clear 3 sigma, so fitting after screening is what keeps the

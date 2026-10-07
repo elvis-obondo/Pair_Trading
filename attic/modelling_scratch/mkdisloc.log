@@ -1,0 +1,23 @@
+[INFO] panel 36172 bars x 212 tickers, 2024-09-11 00:00:00 -> 2026-10-04 13:30:00 (753 days)
+[INFO] 22366 pairs; entry window 96 bars, fit window 336 bars, min_bars_required 191
+  250 pairs scanned, 5000 dislocations, 3s
+  500 pairs scanned, 10000 dislocations, 5s
+  750 pairs scanned, 15000 dislocations, 7s
+  1000 pairs scanned, 20000 dislocations, 9s
+  1250 pairs scanned, 25000 dislocations, 11s
+  1500 pairs scanned, 30000 dislocations, 13s
+  1750 pairs scanned, 35000 dislocations, 15s
+  2000 pairs scanned, 40000 dislocations, 17s
+  2250 pairs scanned, 45000 dislocations, 19s
+  2500 pairs scanned, 50000 dislocations, 21s
+  2750 pairs scanned, 55000 dislocations, 23s
+  3000 pairs scanned, 60000 dislocations, 25s
+
+[INVARIANT] max |W[:,-1] - z_entry| 0.000e+00   max |Y[:,0] - z_entry| 0.000e+00
+
+[DONE] 60,000 dislocations, 3,000 distinct pairs, 746 days, 3000 pairs scanned (0 too short)
+       2024-09-18 -> 2026-10-04   30s
+       per pair: median 20, true triggers per pair median 141
+       long 51.8%  short 48.2%
+       70/30 day split at 2026-02-23: fit 21,523  held-out 38,477
+       windows (60000, 336) 81MB   outcomes (60000, 21)

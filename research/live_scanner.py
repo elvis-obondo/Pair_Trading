@@ -8,7 +8,7 @@ the stop has to be watched between bars and a process that wakes every 30 minute
 cannot do it. See that module for why.
 
 The split also removes a real hazard. Two processes appending to one ledger is
-one of the two mechanisms that produce the corruption docs/HANDOFF.md records and
+one of the two mechanisms that produce the corruption attic/docs/HANDOFF.md records and
 never explained. One writer removes it by construction.
 
 SINGLE-SHOT BY DESIGN

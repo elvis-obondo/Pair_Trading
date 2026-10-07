@@ -1,0 +1,31 @@
+[SPLIT] cut 2026-07-18   fit 41,936 (70%)   held-out 18,064 (30%)   days 667/79
+[CLIMATOLOGY  0.5h]  CRPS 0.571 sigma   held-out change sd 1.175   fit-period sd 1.409
+[CLIMATOLOGY  1.0h]  CRPS 0.754 sigma   held-out change sd 1.543   fit-period sd 1.648
+[CLIMATOLOGY  2.0h]  CRPS 0.998 sigma   held-out change sd 1.999   fit-period sd 2.111
+[CLIMATOLOGY 10.0h]  CRPS 1.923 sigma   held-out change sd 3.816   fit-period sd 3.783
+
+=== held-out R2 of the 10h change, single feature (trained on fit period) ===
+  z_entry        -0.560%
+  abs_z          -0.560%
+  step_sd_48     -0.610%
+  slope_336      -0.621%
+  w_mean         -0.633%
+  w_range        -0.689%
+  step_sd        -0.697%
+  w_sd           -0.699%
+  log_sigma      -0.701%
+  step_ac1       -0.709%
+  abs_beta       -0.711%
+  two_ruler      -0.714%
+  slope_96       -0.715%
+  frac_above     -0.732%
+  time_above3    -0.749%
+  vol_ratio      -0.775%
+  r2             -0.848%
+  slope_48       -0.866%
+
+all 18 features together, HELD OUT: -0.965%
+   day-clustered 200 resamples: [-1.756%, -0.606%]
+
+gate needs 9.75%  ->  CRPS would be 94.6% of climatology
+what -0.96% buys: CRPS ~ 100.5% of climatology

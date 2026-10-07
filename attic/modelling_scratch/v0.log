@@ -1,0 +1,51 @@
+[v_0] regression on 41,936 fit rows, applied to 18,064 held out
+      held-out multiplier: mean 1.063  median 0.942  p5 0.406  p95 2.114  ratio p95/p5 5.2x
+      (mean near 1.000 means the centring holds out of sample)
+
+==============================================================================
+SCORECARD
+==============================================================================
+
+--- BASELINE  gaussian, seven pinned ---
+  move size       model     real   ratio
+  median           0.73     0.38    1.95x
+  1 in 10          1.78     1.23    1.46x
+  1 in 100         2.79     3.09    0.90x
+  1 in 1,000       3.57     6.93    0.52x
+  largest          7.08    58.06    0.12x
+  outside all 200 draws   2.79%   (GATE <2%)  FAIL
+  band 0.5h 1.16x cover 90.4%    band 10h 0.98x cover 92.8%
+  CRPS 1.943 vs climatology 1.921 = 101.2%
+
+--- nu = 2.689 ---
+  move size       model     real   ratio
+  median           0.52     0.38    1.39x
+  1 in 10          1.48     1.23    1.21x
+  1 in 100         3.40     3.09    1.10x
+  1 in 1,000       7.63     6.93    1.10x
+  largest        277.29    58.06    4.78x
+  outside all 200 draws   2.59%   (GATE <2%)  FAIL
+  band 0.5h 1.21x cover 89.1%    band 10h 1.00x cover 92.3%
+  CRPS 1.915 vs climatology 1.921 = 99.7%
+
+--- nu = 2.689  +  v_0 ---
+  move size       model     real   ratio
+  median           0.50     0.38    1.33x
+  1 in 10          1.51     1.23    1.23x
+  1 in 100         3.60     3.09    1.17x
+  1 in 1,000       8.08     6.93    1.17x
+  largest        383.01    58.06    6.60x
+  outside all 200 draws   2.19%   (GATE <2%)  FAIL
+  band 0.5h 1.21x cover 89.3%    band 10h 1.00x cover 92.9%
+  CRPS 1.884 vs climatology 1.921 = 98.1%
+
+--- v_0 alone, gaussian ---
+  move size       model     real   ratio
+  median           0.70     0.38    1.86x
+  1 in 10          1.82     1.23    1.49x
+  1 in 100         3.16     3.09    1.02x
+  1 in 1,000       4.43     6.93    0.64x
+  largest         10.85    58.06    0.19x
+  outside all 200 draws   2.31%   (GATE <2%)  FAIL
+  band 0.5h 1.16x cover 90.8%    band 10h 0.98x cover 93.5%
+  CRPS 1.911 vs climatology 1.921 = 99.5%

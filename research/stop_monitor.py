@@ -30,7 +30,7 @@ WHAT THIS OWNS
 Everything about the book: opening, closing, sizing, the state file and the
 ledger. `live_scanner.py` is a stateless candidate producer that writes a file.
 One writer, because two processes appending to one CSV is how you get the ledger
-corruption docs/HANDOFF.md never explained.
+corruption attic/docs/HANDOFF.md never explained.
 
 IT SUBMITS NO ORDERS. `_submit_close` is a stub. This maintains a paper book
 against live prices with the production sizer and exit logic; execution is

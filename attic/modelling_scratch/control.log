@@ -1,0 +1,30 @@
+[v_0] held-out R2 0.3259
+[v_0] fit-period residual variance 0.638 -> log-sd 0.798, multiplier spread exp(+/-sd) = 2.22x either way
+[v_0] Jensen factor exp(var/2) = 1.38x -- the mixture's mean variance is that much above the point estimate's
+
+Jensen factor exp(var/2) = 1.375
+
+================================================================================================================
+cfg                                 mean m  outside         95% CI  D10 cov  D10 out  D1-9 cov  D1-9 out  band10h    CRPS
+C   level 1.06, no shape              1.06    0.35%  [0.20,0.56]    66.0%    3.04%     96.4%     0.05%     0.98   97.7%
+G   level 1.46, NO SHAPE              1.46    0.20%  [0.09,0.35]    72.5%    1.94%     98.0%     0.01%     0.84   99.6%
+E'  level 1.06, SHAPE                 1.06    0.22%  [0.11,0.36]    65.7%    1.99%     96.5%     0.02%     0.98   97.0%
+E   level 1.46, SHAPE                 1.46    0.14%  [0.06,0.24]    72.7%    1.33%     98.0%     0.01%     0.84   97.9%
+
+================================================================================================================
+2x2 READ  (decile 10 coverage, target ~90%)
+================================================================================================================
+                          no shape     SHAPE   shape effect
+level 1.06                   66.0%     65.7%          -0.3pp
+level 1.46                   72.5%     72.7%          +0.2pp
+level effect                +6.5pp     +7.0pp
+
+decile 10 outside-all     no shape     SHAPE
+level 1.06                   3.04%     1.99%
+level 1.46                   1.94%     1.33%
+
+nine-decile cost (coverage, target ~90%; higher = over-covered)
+  C   level 1.06, no shape             96.4%   outside 0.05%
+  G   level 1.46, NO SHAPE             98.0%   outside 0.01%
+  E'  level 1.06, SHAPE                96.5%   outside 0.02%
+  E   level 1.46, SHAPE                98.0%   outside 0.01%

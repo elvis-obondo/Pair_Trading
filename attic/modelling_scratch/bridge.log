@@ -1,0 +1,11 @@
+=== synthetic, E0's vector: does a ridge on the window find the oracle's 7.68%? ===
+  n 12020   ridge on 336 bars, held out: 6.68%   (lambda 10000)
+  oracle filter on the same held-out rows:  0.03%
+  -> the ridge RECOVERS the oracle's signal
+
+=== real, 60,000 dislocations over 746 days ===
+  n 60000   fit 41,936 / held out 18,064 by calendar day
+  ridge on 336 bars, held out: -1.10%   (lambda 1000)
+  day-clustered 60 resamples: [-3.77%, 0.11%]
+
+  gate needs 9.75%.  oracle on E0's vector got 7.68% on synthetic.

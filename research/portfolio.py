@@ -30,7 +30,7 @@ notional without bound -- the full-spec walk-forward produced 1.1e11x that way,
 arithmetically correct and physically impossible, since a position eventually
 exceeds the depth of the pair it trades. Report per-trade net_pct and R
 (profit per unit risked); both are immune to compounding. See
-docs/SCANNER_SESSION_HANDOFF.md section 6c.
+attic/docs/SCANNER_SESSION_HANDOFF.md section 6c.
 
 DIFFERENCE FROM risk_sim.simulate()
 
