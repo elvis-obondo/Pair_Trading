@@ -53,6 +53,25 @@ if [ -f "$ROOT/logs/cron.log" ] && [ "$(wc -c < "$ROOT/logs/cron.log")" -gt 3355
     echo "  rotated cron.log"
 fi
 
+# Open interest: 13.5MB of raw CSV a day on a 20GB disk. Gzip anything that is no
+# longer being appended to (~10x), and prune after 90 days. 90 days gzipped is
+# about 125MB, which leaves a long margin for the laptop being offline -- the
+# pull is by missing day, so it self-heals as long as the file is still here.
+# There is no archive to re-download this from if it is deleted early.
+OI_DIR="$ROOT/trading_data/oi"
+if [ -d "$OI_DIR" ]; then
+    today="$(date -u +%F)"
+    n_gz=0
+    for f in "$OI_DIR"/*.csv; do
+        [ -e "$f" ] || continue
+        day="$(basename "$f" .csv)"
+        [ "$day" = "$today" ] && continue   # still being appended to
+        gzip -f "$f" && n_gz=$((n_gz + 1))
+    done
+    n_rm=$(find "$OI_DIR" -name '*.csv.gz' -mtime +90 -print -delete | wc -l | tr -d ' ')
+    echo "  oi: gzipped $n_gz day(s), pruned $n_rm older than 90d, $(du -sh "$OI_DIR" | cut -f1) total"
+fi
+
 echo "-- after --"
 df -h / | tail -1
 du -sh "$ROOT/trading_data" 2>/dev/null

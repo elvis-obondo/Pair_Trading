@@ -25,6 +25,7 @@
 #   scripts/check_vm.sh ledger [N]     # last N ledger rows (5)
 #   scripts/check_vm.sh overshoot      # THE number: how far past the stop fills land
 #   scripts/check_vm.sh pull           # copy ledger + scan history down
+#   scripts/check_vm.sh oi             # copy new open-interest days down, merge, report gaps
 #   scripts/check_vm.sh deploy         # build here, push to the registry, VM pulls
 #   scripts/check_vm.sh ssh            # interactive shell
 #   scripts/check_vm.sh positions      # check the live positions
@@ -121,6 +122,98 @@ else:
     echo "-> research/from_vm/"
     ;;
 
+  oi)
+    # Open interest, collected on the VM every 5 minutes by collect_oi.py and
+    # pulled down here. It is collected forward rather than downloaded because
+    # OKX keeps no usable archive -- see the header of scripts/collect_oi.py.
+    #
+    # Pull is by MISSING DAY, not by date range, so a week offline self-heals on
+    # the next run. Today's file is always re-pulled because it is still growing.
+    # Lands in research/datasets/ (gitignored) -- at 13.5MB/day raw this must
+    # never go near git.
+    OI_LOCAL="$PROJECT_ROOT/research/datasets/oi"
+    mkdir -p "$OI_LOCAL"
+    today="$(date -u +%F)"
+    remote_days="$(run "ls -1 $REMOTE/trading_data/oi/ 2>/dev/null" | tr -d '\r' \
+                   | grep -E '^[0-9-]+\.csv(\.gz)?$' || true)"
+    if [ -z "$remote_days" ]; then echo "no open-interest files on the VM yet"; exit 0; fi
+
+    want=""
+    for f in $remote_days; do
+        day="${f%%.*}"
+        # Re-pull today, which is still growing. Otherwise pull only what we lack
+        # in EITHER form, since VM housekeeping gzips yesterday's file in place.
+        if [ "$day" = "$today" ] \
+           || { [ ! -f "$OI_LOCAL/$day.csv" ] && [ ! -f "$OI_LOCAL/$day.csv.gz" ]; }; then
+            want="$want $f"
+        fi
+    done
+    if [ -z "${want// /}" ]; then
+        echo "nothing new -- $(ls -1 "$OI_LOCAL" | wc -l | tr -d ' ') day file(s) already local"
+    else
+        for f in $want; do
+            gcloud compute scp "$INSTANCE:$REMOTE/trading_data/oi/$f" "$OI_LOCAL/" \
+              --project="$PROJECT" --zone="$ZONE" -q
+        done
+        echo "pulled:$want"
+        # A day that arrives gzipped supersedes any plain copy we still hold.
+        for f in $want; do
+            case "$f" in *.gz) rm -f "$OI_LOCAL/${f%.gz}";; esac
+        done
+    fi
+
+    python3 - "$OI_LOCAL" <<'OIMERGE'
+import glob, os, sys
+import pandas as pd
+
+d = sys.argv[1]
+files = sorted(glob.glob(os.path.join(d, "*.csv")) + glob.glob(os.path.join(d, "*.csv.gz")))
+if not files:
+    print("no local day files"); raise SystemExit(0)
+
+frames = []
+for f in files:
+    x = pd.read_csv(f)
+    x["poll_ts"] = pd.to_datetime(x.poll_ts, utc=True, format="ISO8601")
+    frames.append(x)
+oi = pd.concat(frames, ignore_index=True)
+# A re-pulled growing file alongside an earlier partial copy duplicates rows.
+oi = oi.drop_duplicates(["poll_ts", "inst_id"]).sort_values(["poll_ts", "inst_id"])
+
+out = os.path.join(os.path.dirname(d), "open_interest.feather")
+oi.reset_index(drop=True).to_feather(out)
+
+polls = oi.poll_ts.drop_duplicates().sort_values().reset_index(drop=True)
+print(f"\n{len(oi):,} rows  {oi.inst_id.nunique()} instruments  "
+      f"{len(polls):,} polls  {polls.min()} -> {polls.max()}")
+print(f"-> {os.path.relpath(out)}  ({os.path.getsize(out)/1e6:.1f}MB)")
+
+# GAPS MUST BE LOUD. A VM outage leaves holes in a series whose whole value is
+# that it is continuous, and a silent merge would hide them.
+PER_HOUR = 12  # the 5-minute grid
+now = pd.Timestamp.now(tz="UTC")
+per_day = polls.dt.date.value_counts().sort_index()
+for day, n in per_day.items():
+    # Today is still in progress, so expect only the polls that could have run.
+    # A fixed 288 would scream on every pull and train us to ignore the one
+    # time it means something.
+    if day == now.date():
+        expect = max(1, int((now - now.normalize()).total_seconds() // 300))
+        label = f"{expect} so far"
+    else:
+        expect = 24 * PER_HOUR
+        label = str(expect)
+    flag = "" if n >= expect - 2 else f"   <-- {expect - n} MISSING"
+    print(f"  {day}  {n:3d}/{label} polls{flag}")
+gaps = polls.diff()
+gaps = gaps[gaps > pd.Timedelta(minutes=11)]
+if len(gaps):
+    print(f"\n{len(gaps)} gap(s) longer than two polls:")
+    for i, g in gaps.items():
+        print(f"  {g} ending {polls[i]}")
+OIMERGE
+    ;;
+
   deploy)
     # Deploying means building on the laptop and pushing to Artifact Registry.
     # The VM never builds. See scripts/release.sh.
@@ -132,7 +225,7 @@ else:
     ;;
 
   *)
-    sed -n '19,30p' "${BASH_SOURCE[0]}"
+    sed -n '19,31p' "${BASH_SOURCE[0]}"
     exit 1
     ;;
 esac
