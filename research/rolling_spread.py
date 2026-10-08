@@ -268,7 +268,13 @@ class SpreadPoint(NamedTuple):
 def rolling_spread_stats(price_a: np.ndarray,
                          price_b: np.ndarray,
                          bar_hours: float = 0.5) -> RollingSpread:
-    """Rolling hedge ratio and spread statistics over a 7-day trailing window.
+    """Rolling hedge ratio and spread statistics over an ENTRY_WINDOW_DAYS window.
+
+    That is 96 bars = 2 days at 30m, not the 7 days this docstring used to
+    claim -- the window moved when the live model switched to the symmetric
+    2-day geometry and the text did not follow. Worth being exact about,
+    because the dislocation set legitimately uses BOTH: 96 bars for the entry
+    geometry computed here, and a separate 336-bar window as the model input.
 
     price_a/price_b are LOG prices (what data_loader.get_price_levels returns),
     so the spread is already a return and a spread move of x is a fractional
@@ -300,8 +306,9 @@ def rolling_spread_stats(price_a: np.ndarray,
     s = pd.Series(spread)
     mu = s.rolling(window).mean().to_numpy()
     # ddof=1, pandas' default -- exit_sweep.py built its `sigma` column the same
-    # way. A ddof mismatch would shift every z-score by sqrt(336/335) and quietly
-    # decalibrate the 3.0 entry threshold against the grid it was scored on.
+    # way. A ddof mismatch would shift every z-score by sqrt(window/(window-1)),
+    # i.e. sqrt(96/95) at the live geometry, and quietly decalibrate the 3.0 entry
+    # threshold against the grid it was scored on.
     sigma = s.rolling(window).std().to_numpy()
 
     with np.errstate(divide="ignore", invalid="ignore"):
