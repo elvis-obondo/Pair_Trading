@@ -49,8 +49,32 @@ def load_panel(tail_bars: int | None = None, force: bool = False) -> pd.DataFram
     """
     global _PANEL
     if _PANEL is None or force:
-        _PANEL = get_price_levels(align=False)
+        _PANEL = _trim_factor_only_lead(get_price_levels(align=False))
     return _PANEL if tail_bars is None else _PANEL.tail(tail_bars)
+
+
+def _trim_factor_only_lead(panel: pd.DataFrame) -> pd.DataFrame:
+    """Drop leading rows that exist ONLY because a FACTOR_ONLY ticker reaches
+    further back than the tradeable universe.
+
+    THIS IS NOT COSMETIC, for the same reason drop_forming_bars is not. BTC and
+    ETH were added in October 2026 as market factors, and OKX serves them from
+    2024-07-27 against the altcoin universe's 2024-09-11. The panel grew by
+    2,229 rows, and since `usable_tickers` requires a column to be finite across
+    the WHOLE panel it then disqualified everything except BTC and ETH: 91
+    usable tickers became 2, and 4,095 pairs became 0.
+
+    The live scanner was never exposed -- it calls `.tail(need)` before
+    `usable_tickers` -- but every research caller that works on the untrimmed
+    panel was, silently and completely. Trimming here keeps the panel's extent a
+    property of the TRADEABLE universe, so adding a factor ticker can never
+    shrink it again.
+    """
+    reg = [c for c in panel.columns if _base_symbol(c) not in FACTOR_ONLY]
+    if not reg or len(reg) == len(panel.columns):
+        return panel
+    have = panel[reg].notna().any(axis=1).to_numpy()
+    return panel.iloc[int(have.argmax()):] if have.any() else panel
 
 
 def drop_forming_bars(panel: pd.DataFrame, lookback: int = 20,
@@ -97,6 +121,10 @@ def refresh() -> pd.DataFrame:
     return load_panel(force=True)
 
 
+FACTOR_ONLY = frozenset({"BTC", "ETH"})
+"""Carried in the panel for factor construction, never formed into a pair."""
+
+
 def tradeable_pairs(tickers) -> list[tuple[str, str]]:
     """Every unordered pair of distinct underlyings.
 
@@ -110,9 +138,21 @@ def tradeable_pairs(tickers) -> list[tuple[str, str]]:
     This is the one definition.
 
     212 tickers -> 22,366 pairs.
+
+    FACTOR_ONLY tickers are excluded from pair formation. BTC and ETH were added
+    to the data in October 2026 so that market-factor features could be built
+    from the assets that actually drive this market -- the 212-ticker panel is
+    all altcoins, so every "market-wide" measure built from it was an altcoin
+    average with the two dominant assets missing. They are carried in the panel
+    and deliberately NOT traded: the panel is assembled by globbing the data
+    directory (adapters/okx_futures.py), so downloading a ticker is otherwise
+    the same act as admitting it to the tradeable universe, and that decision
+    should be made on measurement rather than as a side effect of a download.
     """
     return [(a, b) for a, b in itertools.combinations(tickers, 2)
-            if _base_symbol(a) != _base_symbol(b)]
+            if _base_symbol(a) != _base_symbol(b)
+            and _base_symbol(a) not in FACTOR_ONLY
+            and _base_symbol(b) not in FACTOR_ONLY]
 
 
 def usable_tickers(panel: pd.DataFrame, bar_hours: float = 0.5) -> list[str]:

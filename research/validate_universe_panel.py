@@ -10,7 +10,7 @@ import pandas as pd
 
 from universe_panel import (
     load_panel, tradeable_pairs, usable_tickers, price_precision, panel_precisions,
-    drop_forming_bars,
+    drop_forming_bars, FACTOR_ONLY, _base_symbol,
 )
 from rolling_spread import min_bars_required
 
@@ -34,7 +34,13 @@ print("=" * 104)
 # against at all.
 panel = drop_forming_bars(load_panel())
 check("unaligned panel loaded", len(panel) > 0, f"{panel.shape[0]}x{panel.shape[1]}")
-check("212 tickers", panel.shape[1] == 212, f"{panel.shape[1]}")
+# 214 columns, 212 tradeable: BTC and ETH are carried for factor construction
+# only (universe_panel.FACTOR_ONLY) and never formed into a pair. The pair
+# count below is C(212,2), so it doubles as the test that the guard holds.
+check("214 tickers", panel.shape[1] == 214, f"{panel.shape[1]}")
+check("212 of them tradeable",
+      len([c for c in panel.columns if _base_symbol(c) not in FACTOR_ONLY]) == 212,
+      f"{len([c for c in panel.columns if _base_symbol(c) not in FACTOR_ONLY])}")
 check("spans well over a year", len(panel) > 500 * 48, f"{len(panel)/48:.0f} days")
 
 # The trap, demonstrated rather than asserted in a comment: the frame-wide
@@ -52,7 +58,7 @@ print("2. Pair enumeration")
 print("=" * 104)
 tk = usable_tickers(panel.tail(min_bars_required(0.5)))
 pairs = tradeable_pairs(tk)
-check("22,366 pairs from 212 tickers", len(pairs) == 22366, f"{len(pairs):,}")
+check("22,366 pairs from the 212 tradeable", len(pairs) == 22366, f"{len(pairs):,}")
 check("no pair repeats", len(set(pairs)) == len(pairs), f"{len(set(pairs)):,} unique")
 check("no self-pairs", all(a != b for a, b in pairs))
 check("unordered (no (b,a) duplicate of an (a,b))",
