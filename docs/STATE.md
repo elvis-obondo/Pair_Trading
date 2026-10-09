@@ -362,8 +362,17 @@ nobody reports it as a bug.
                                              M/A provenance and a WITHDRAWN section
     research/dislocation_model/logs/         saved runs: envfeat, validate_envfeat
     research/datasets/                       ~85MB, not tracked, rebuilt from REBUILD.md
-    research/validate_dislocation_harness.py PASS/FAIL: the CI-bug regression test AND
-                                             the whole quality bar for the feature matrix
+    research/validate_dislocation_harness.py PASS/FAIL: the CI-bug regression test, the
+                                             PINNED SCORER ANCHOR, and the whole quality
+                                             bar for the feature matrix
+
+**The scorer is pinned to a number as of 2026-10-10.** `harness.fit_predict` and
+`harness.ci` are run end to end on a SYNTHETIC target (a fixed function of three
+`windows` columns plus seeded noise, carrying no information about `Y`) and the
+score and both CI bounds are asserted to 4dp. Before that the scorer had no
+numeric test: a change to the val-selection line would have left the validator
+printing ALL PASS while voiding comparability with every number in NUMBERS.md.
+The anchor is version-sensitive — pinned under sklearn 1.9.1.
 
 **The old feature layer was retired 2026-10-09.** `external.py` (41 external
 features) and `wave_full.py` are in `attic/research/`, and `extfeat.npz` /
@@ -374,13 +383,16 @@ columns worth keeping (rv48, two, vr) are three lines of numpy over `windows`.
 
 **The current feature matrix is 60,000 x 5**, joined onto the existing
 `disloc_meta.parquet` by position and validated rather than scored — there is no
-target attached to it yet, by design (section 12).
+target attached to it yet, by design (section 12). All five columns are in sigma
+units; `off_mark` was rescaled on 2026-10-10 because 46.4% of its variance was
+between-pair, which a temporal split turns into a pair label. Scaling halved that
+to 23.6%.
 
     vol_48      SCALE     mean |30m spread step|, last 48 bars, in sigma    median 0.407
     vratio      SHAPE     step sd / level sd, last 96 bars, iid = 1         median 1.680
     vol_slope   TIMING    sd(last 16 steps) / sd(prior 32)                  median 1.322
     sandwich    COHESION  leg-high/low spread bound minus close, in sigma   median 0.643
-    off_mark    BASIS     hedge-weighted mean |close - mark|, log units     median 0.00024
+    off_mark    BASIS     hedge-weighted mean |close - mark|, in sigma      median 0.013
 
 Two of those medians say something on their own. **vratio's median of 1.68 means
 the typical entry window is 68% choppier than an iid walk** — a long path for

@@ -12,6 +12,11 @@ Checks, in order of what they protect:
      `336 raw bars / reversion / 10h` print 0.5016 with a band of
      [0.4826, 0.5007] -- an interval excluding its own point estimate.
   4. the bootstrap is day-clustered, not row-clustered
+  4b. THE SCORER IS PINNED TO A NUMBER. fit_predict and ci are run end to end on
+     a SYNTHETIC target and the score and both CI bounds are asserted to 4dp.
+     Without this the scorer had no numeric test at all: a change to the
+     val-selection line in fit_predict would leave this file printing ALL PASS
+     while silently voiding comparability with every number in NUMBERS.md.
   5. THE FEATURE MATRIX, envfeat.npz. With no target and no score, these checks
      ARE the quality bar -- nothing else makes the matrix trustworthy:
        join alignment, element-wise on (ticker_a, ticker_b, entry_time), all rows
@@ -124,6 +129,46 @@ else:
     check("no day appears as a partial slice", not partial,
           f"{len(partial)} partial days" if partial else "whole days only")
 
+
+    print("\n=== THE SCORER IS PINNED: fit_predict + ci on a SYNTHETIC target ===")
+    # THIS IS A UNIT TEST, NOT A RESEARCH CELL. Do not read it as a finding and
+    # do not quote the number as a result.
+    #
+    # The target is a fixed linear function of three `windows` columns plus
+    # seeded gaussian noise. It carries NO information about the real outcome
+    # (Y is never touched here), so running it through the held-out block scores
+    # arithmetic, not data -- the held-out set is not being looked at in the
+    # sense the split exists to prevent.
+    #
+    # `windows` is used and nothing else, deliberately: it is permanent, and the
+    # old anchor died because it ran through window_features/extfeat.npz, which
+    # were not. Do not restore either to recover a different anchor.
+    #
+    # The signal is strong on purpose (R2 ~ 0.53, not ~0) so the assertion fails
+    # loudly on any scorer change rather than drowning in noise. 107 of 200
+    # boosting iterations are chosen, interior to the range, so the val-selection
+    # line in fit_predict is genuinely exercised.
+    #
+    # A LIBRARY UPGRADE WILL MOVE THIS NUMBER. Pinned under sklearn 1.9.1
+    # (numpy 2.4.6). If it fails after an upgrade, that is the reason -- re-pin
+    # it and record the new version in NUMBERS.md. It is not evidence of a bug.
+    C = W[:, [0, -48, -1]].astype(np.float64)
+    rg_a = np.random.default_rng(20261009)
+    y_syn = 1.0 * C[:, 2] - 0.5 * C[:, 1] + 0.25 * C[:, 0] + 4.0 * rg_a.standard_normal(len(C))
+    a_score, a_pred, a_iters = harness.fit_predict(C, y_syn, sp, classify=False)
+    a_lo, a_hi = harness.ci(sp, a_pred, y_syn[sp.test], classify=False)
+    import sklearn
+    print(f"      sklearn {sklearn.__version__}, numpy {np.__version__}; "
+          f"{a_iters} of {harness.TREE['max_iter']} iterations chosen on val")
+    check("synthetic held-out R2 == 0.5335", abs(a_score - 0.5335) < 5e-5,
+          f"{a_score:.10f}")
+    check("its CI low bound == 0.5184", abs(a_lo - 0.5184) < 5e-5, f"{a_lo:.10f}")
+    check("its CI high bound == 0.5512", abs(a_hi - 0.5512) < 5e-5, f"{a_hi:.10f}")
+    check("the CI contains its own point estimate", a_lo <= a_score <= a_hi,
+          "the nonlinear.py CI bug announced itself exactly here")
+    check("the iteration count is interior, so val-selection is live",
+          0 < a_iters < harness.TREE["max_iter"], f"{a_iters}")
+
     print("\n=== envfeat: the vratio iid normaliser, by simulation ===")
     import envfeat
     n = envfeat.RATIO_BARS
@@ -213,9 +258,25 @@ else:
         over = int((audit["touch"] > audit["entry"]).sum())
         check("max panel index touched never exceeds the entry index", over == 0,
               f"{over} rows over")
-        check("max index touched EQUALS the entry index on every row",
-              int((audit["touch"] == audit["entry"]).sum()) == 60_000,
-              f"{int((audit['touch'] == audit['entry']).sum()):,} of 60,000")
+        # The aggregate "== entry" check that used to sit here was TRUE BY
+        # CONSTRUCTION: features 1-3 legitimately reach the entry bar, so the
+        # shared max hit it the moment they ran, and the check then read as proof
+        # that off_mark reaches the entry bar too. It does not. Per family:
+        ent = audit["entry"]
+        check("features 1-3 reach exactly the entry bar on every row",
+              int((audit["touch_win"] == ent).sum()) == 60_000,
+              f"{int((audit['touch_win'] == ent).sum()):,} of 60,000")
+        check("sandwich reaches exactly the entry bar on every row",
+              int((audit["touch_sw"] == ent).sum()) == 60_000,
+              f"{int((audit['touch_sw'] == ent).sum()):,} of 60,000")
+        dom = audit["touch_om"] - ent
+        check("off_mark stops STRICTLY BEFORE the entry bar on every row",
+              bool((dom < 0).all()),
+              f"i-1 on {int((dom == -1).sum()):,} rows (entry on the hour), "
+              f"i-2 on {int((dom == -2).sum()):,} rows (entry on the :30, where "
+              f"T-60 is not a mark label so the code steps back to T-90)")
+        check("off_mark never reaches the entry bar, as its docstring now states",
+              int((dom == 0).sum()) == 0, f"{int((dom == 0).sum())} rows at i+0")
         print(f"      max entry index {audit['entry'].max():,} of a "
               f"{audit['n_panel']:,}-bar panel; "
               f"{audit['n_panel'] - 1 - audit['entry'].max():,} later bars exist and are UNUSED")

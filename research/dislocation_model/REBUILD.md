@@ -36,25 +36,24 @@ both in sigma units of the entry bar's frozen geometry.
 so a panel with new listings yields a different sample. A rebuild reproduces the
 published numbers only on the same panel. If the numbers move, suspect this first.
 
-> **A rebuild today will NOT reproduce the promoted datasets.** `universe_panel.py`
-> has an uncommitted change (as of 2026-10-06) adding `FACTOR_ONLY = {BTC, ETH}`:
-> the two are carried in the panel for market-factor construction and excluded
-> from pair formation, and leading rows that exist only because a FACTOR_ONLY
-> ticker reaches further back are trimmed. Both move `tradeable_pairs` and the
-> panel's extent, so both move the sampled pairs. The promoted datasets predate
-> it. Expect the split counts (41,936 / 18,064) to shift, and re-read
+>  **A rebuild will NOT reproduce the promoted datasets.** `FACTOR_ONLY =
+> {BTC, ETH}` landed in `universe_panel.py` in `c9c8824`: the two are carried in
+> the panel for market-factor construction and excluded from pair formation, and
+> leading rows that exist only because a FACTOR_ONLY ticker reaches further back
+> are trimmed. Both move `tradeable_pairs` and the panel's extent, so both move
+> the sampled pairs. The promoted datasets predate it.
+>
+> Expect the split counts (41,936 / 18,064) to shift, and read
 > `validate_dislocation_harness.py` as a change detector rather than a pass/fail
 > when they do.
 >
-> Measured 2026-10-06, the gap is already visible:
+>     promoted datasets came from   36,172 bars x 212 tickers
+>     panel as fetched 2026-10-10   36,415 bars x 214 tickers (212 tradeable)
 >
->     promoted datasets came from   36,172 bars x 212 tickers, 753 days
->     the panel today loads         36,215 bars x 214 tickers, 754 days
->
-> `validate_universe_panel.py` fails one assertion on exactly this ("212 tickers:
-> 214") and that assertion belongs to the FACTOR_ONLY change, not to this
-> pipeline. Settle the ticker count before rebuilding, or the rebuilt dataset
-> will not be comparable to any number in `NUMBERS.md` or `docs/STATE.md`.
+> **Record a fetch DATE, not a bar count.** The panel rolls forward — 36,215 on
+> 2026-10-09, 36,415 on 2026-10-10 — so a bar count written here dates
+> immediately. `validate_universe_panel.py` asserts 214 and passes 33/33; it is
+> not a signal about this pipeline either way.
 
 **The invariant that makes it trustworthy.** `(spread[i]-mu_i)/sigma_i` IS `z[i]`
 by definition, so `windows[:,-1]` and `outcomes[:,0]` must both equal `z_at_entry`
@@ -74,7 +73,8 @@ disloc.npz, for the determinism reason above.
     vol_slope   sd of steps over the last 16 bars / sd over the prior 32
     sandwich    mean per-bar gap between the leg-high/low spread bound and the
                 close-to-close spread move, last 96 bars, in sigma
-    off_mark    hedge-weighted mean |close - mark| across both legs, last 96 bars' time
+    off_mark    hedge-weighted mean |close - mark| across both legs, last 96 bars'
+                time, in sigma
 
 The first three come from `windows` and `meta` alone. `sandwich` reads the raw
 30-minute high/low feathers; `off_mark` reads the 1-hour mark feathers. Both do
@@ -86,6 +86,12 @@ derived. The analytic `sqrt((n^2-1)/(6n))` = 3.999783 normalises the ratio of
 expectations and is 17.7% too large for the expectation of a ratio. If you change
 `RATIO_BARS`, the constant must be re-simulated — `iid_vratio_norm` will do it for
 an unknown n, and the validator checks the result on a fresh seed.
+
+All five columns are in SIGMA units. `off_mark` was unscaled (log units) until
+2026-10-10; 46.4% of its variance was between-pair against 5.5-21.4% for the
+other four, and with a temporal split that lets a tree recover pair identity.
+Dividing by `meta.sigma` halved it to 23.6%. Do not reintroduce the unscaled
+form, and do not add a flag to switch between them.
 
 Deterministic given `disloc.npz` and the panel: the validator asserts a rebuild is
 bit-identical to the stored matrix. Saved runs are in `logs/`.
@@ -99,16 +105,26 @@ were stale as well as superseded.
 
     .venv/bin/python research/validate_dislocation_harness.py
 
-It asserts the split (41,936 / 18,064 over 667 / 79 days), the alignment
-invariant, and — for the feature matrix — row-for-row join alignment, no
-lookahead per row, the sandwich bound ordering, sign-folding invariance, and
-per-column finiteness counts and percentiles. If the split counts move, the panel
-changed — see the determinism note above.
+46 PASS, 0 FAIL as of 2026-10-10. It asserts the split (41,936 / 18,064 over
+667 / 79 days), the alignment invariant, **the pinned scorer anchor**, and — for
+the feature matrix — row-for-row join alignment, per-family lookahead maxima, the
+sandwich bound ordering, sign-folding invariance, between-pair variance shares,
+and per-column finiteness counts and percentiles. If the split counts move, the
+panel changed — see the determinism note above.
+
+**The scorer anchor is version-sensitive.** `harness.fit_predict` and
+`harness.ci` are run on a synthetic target and the score and both CI bounds are
+asserted to 4dp: R2 0.5335, CI [0.5184, 0.5512], 107 of 200 iterations, under
+**sklearn 1.9.1**. A library upgrade will move those numbers. If the anchor
+fails after one, re-pin it and record the new version in NUMBERS.md — it is not
+evidence of a bug. The target is seeded noise over three `windows` columns and
+carries no information about `Y`; it is a unit test, not a research cell.
 
 The old published-cell assertion (WINDOW / regression / 10h = -0.0104) was retired
 with `window_features` on 2026-10-09. It ran through a function that no longer
 exists, and keeping a dead function alive to satisfy a test is not a trade this
-project makes.
+project makes — but it left the scorer with no numeric test for a day, which is
+what the anchor above fixes.
 
 ## What is NOT here
 

@@ -23,6 +23,14 @@ PASS  every resample is held-out-relative  max index 18063 < 18064
 PASS  300 resamples  300
 PASS  no day appears as a partial slice  whole days only
 
+=== THE SCORER IS PINNED: fit_predict + ci on a SYNTHETIC target ===
+      sklearn 1.9.1, numpy 2.4.6; 107 of 200 iterations chosen on val
+PASS  synthetic held-out R2 == 0.5335  0.5335209428
+PASS  its CI low bound == 0.5184  0.5184061154
+PASS  its CI high bound == 0.5512  0.5511822286
+PASS  the CI contains its own point estimate  the nonlinear.py CI bug announced itself exactly here
+PASS  the iteration count is interior, so val-selection is live  107
+
 === envfeat: the vratio iid normaliser, by simulation ===
 PASS  iid vratio MEDIAN centres on 1.0 (+/- 0.02)  median 1.0076  mean 1.0535  divisor 3.396899  n=96
 PASS  the shipped divisor is NOT the analytic one  analytic 3.999783 normalises the ratio of expectations and is 17.7% too large for the expectation of the ratio
@@ -40,7 +48,7 @@ PASS  entry_time matches meta on all 60,000 rows  0 mismatches
 PASS  the join key is stored in the file at all  a positional join with no key is how silent misalignment happens
 
 --- the entry index still resolves against TODAY'S panel ---
-PASS  panel.index[bar_index] == entry_time on all 60,000 rows  panel is 36,215 x 214 today
+PASS  panel.index[bar_index] == entry_time on all 60,000 rows  panel is 36,415 x 214 today
 PASS  every meta ticker is still in the panel  212 tickers
 
 --- finiteness, REPORTED not repaired ---
@@ -57,14 +65,17 @@ PASS  no column contains NaN or inf  the old pipeline nan_to_num'd silently and 
       vratio         0.83299    1.03740    1.39554    1.67972    1.99383    2.48983    2.87026
       vol_slope      0.54188    0.70300    1.01230    1.32221    1.76584    2.97535    4.95916
       sandwich       0.26066    0.33930    0.49170    0.64334    0.85128    1.32818    1.85995
-      off_mark       0.00008    0.00011    0.00018    0.00024    0.00032    0.00045    0.00058
+      off_mark       0.00160    0.00336    0.00796    0.01336    0.02162    0.04140    0.06241
 PASS  every column has non-zero spread
 PASS  vratio is centred above 1 (spreads are choppier than iid)  median 1.6797
 
 --- no lookahead, and the sandwich bound, recomputed from scratch ---
 PASS  max panel index touched never exceeds the entry index  0 rows over
-PASS  max index touched EQUALS the entry index on every row  60,000 of 60,000
-      max entry index 36,151 of a 36,215-bar panel; 63 later bars exist and are UNUSED
+PASS  features 1-3 reach exactly the entry bar on every row  60,000 of 60,000
+PASS  sandwich reaches exactly the entry bar on every row  60,000 of 60,000
+PASS  off_mark stops STRICTLY BEFORE the entry bar on every row  i-1 on 31,494 rows (entry on the hour), i-2 on 28,506 rows (entry on the :30, where T-60 is not a mark label so the code steps back to T-90)
+PASS  off_mark never reaches the entry bar, as its docstring now states  0 rows at i+0
+      max entry index 36,151 of a 36,415-bar panel; 263 later bars exist and are UNUSED
 PASS  sandwich upper bound >= folded close on EVERY bar of every row  0 violations (worst 0.00e+00); a violation means the beta sign or the leg assignment is wrong
 PASS  the rebuild reproduces the stored matrix  bit-identical
 

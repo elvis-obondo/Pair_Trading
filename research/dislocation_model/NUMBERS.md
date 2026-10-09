@@ -97,7 +97,12 @@ Saved logs: `research/dislocation_model/logs/envfeat.log` and
 
 The 41 external + 21 window features are RETIRED, with `external.py` and
 `wave_full.py` in `attic/research/` and their datasets deleted. They were built
-against a 212-ticker / 36,172-bar panel; the panel now loads 214 / 36,215.
+against a 212-ticker / 36,172-bar panel; the panel loads 214 tickers now.
+
+**Record a FETCH DATE for the panel, not a bar count.** It rolls forward: 36,172
+bars when the dataset was built, 36,215 on 2026-10-09, 36,415 on 2026-10-10. A
+bar count in this file dates instantly; the date is what lets the next person
+tell drift from a bug.
 
 `envfeat.npz` replaces them: 60,000 x 5 float32, joined onto the EXISTING
 `disloc_meta.parquet` by position. **No target, no model, no score.**
@@ -120,8 +125,8 @@ against a 212-ticker / 36,172-bar panel; the panel now loads 214 / 36,215.
 | number | M/A |
 |---|---|
 | `panel.index[bar_index] == entry_time` on 60,000 of 60,000 rows | M |
-| panel today 36,215 x 214; the dataset came from 36,172 x 212 | M |
-| the 43 extra bars are all at the END, so every index still resolves | M |
+| panel 36,415 x 214 as FETCHED 2026-10-10; the dataset came from 36,172 x 212 | M |
+| the extra bars are all at the END, so every index still resolves | M |
 | 212 of 212 meta tickers still present in the panel | M |
 | ticker_a / ticker_b / entry_time match meta element-wise, 0 mismatches each | M |
 
@@ -141,11 +146,41 @@ All 60,000 rows finite on all five columns: 0 NaN, 0 inf. Nothing was
 | `vratio` iid=1 | M | 0.833 | 1.037 | 1.396 | **1.680** | 1.994 | 2.490 | 2.870 | 1.712 | 0.445 |
 | `vol_slope` | M | 0.542 | 0.703 | 1.012 | **1.322** | 1.766 | 2.975 | 4.959 | 1.527 | 0.916 |
 | `sandwich` sigma | M | 0.261 | 0.339 | 0.492 | **0.643** | 0.851 | 1.328 | 1.860 | 0.713 | 0.327 |
-| `off_mark` log | M | 0.00008 | 0.00011 | 0.00018 | **0.00024** | 0.00032 | 0.00045 | 0.00058 | 0.00026 | 0.00011 |
+| `off_mark` sigma | M | 0.0016 | 0.0034 | 0.0080 | **0.0134** | 0.0216 | 0.0414 | 0.0624 | 0.0167 | 0.0128 |
 
-`off_mark` is in log-price units, NOT sigma. The brief specified sigma for
-`vol_48` and `sandwich` only, and a log difference is already a relative
-quantity. Do not compare it to the other four without rescaling.
+**All five columns are now in sigma units.** The unscaled `off_mark` (log units,
+median 0.00024) is SUPERSEDED, 2026-10-10, and is not kept: 46.4% of its variance
+was between-pair against 5.5-21.4% for the other four, and because the split is
+temporal — every pair in both blocks — a tree could route on it to recover pair
+identity, which scores in held out and does not survive new pairs. Dividing by
+`meta.sigma` halved that share to 23.6%. See the next section.
+
+## Between-pair variance share — eta-squared on the pair grouping
+
+The number that justified scaling `off_mark`. 3,000 distinct pairs, 60,000 rows.
+
+| column | M/A | between-pair, UNSCALED off_mark | between-pair, CURRENT |
+|---|---|---|---|
+| `vol_48` | M | 5.9% | 5.9% |
+| `vratio` | M | 6.3% | 6.3% |
+| `vol_slope` | M | 5.5% | 5.5% |
+| `sandwich` | M | 21.4% | 21.4% |
+| `off_mark` | M | **46.4%** | **23.6%** |
+
+Only `off_mark` changed; the other four are untouched and are repeated so the
+comparison is readable in one place.
+
+**Why it matters, and it is about the SPLIT, not the feature.** `harness.CUT` is
+temporal, so all 3,000 pairs sit in both the fit and the held-out block. A column
+that is mostly between-pair is partly a pair label, and a tree can route on it to
+recover pair identity. That would score on the held-out block and would not
+survive a pair the model has never seen. 23.6% is in line with `sandwich`'s
+21.4%; both legitimately carry cross-sectional information about how cohesive a
+pair's legs are. This is reported, not gated — a feature should carry some
+cross-sectional variation, the point is to know how much.
+
+Done BEFORE any target exists, deliberately. After a score is on the table,
+changing a feature is choosing one on results.
 
 ## Two things the population says on its own
 
@@ -183,8 +218,8 @@ what catches it. Implemented sign-corrected; 0 violations.
 |---|---|
 | rows where max panel index touched exceeds the entry index: 0 | M |
 | rows where it EQUALS the entry index: 60,000 of 60,000 | M |
-| max entry index 36,151 of 36,215; 63 later bars exist and are UNUSED | M |
-| 18,108 of 36,215 grid slots are hourly mark labels | M |
+| max entry index 36,151; 263 later bars exist and are UNUSED (panel fetched 2026-10-10) | M |
+| 18,208 of 36,415 grid slots are hourly mark labels (panel fetched 2026-10-10) | M |
 
 `off_mark` reads 1h mark labelled <= T-60 and the 30m close one index later, so
 its own maximum index is i-1 — strictly before the entry bar. A 1h bar labelled T
@@ -216,3 +251,87 @@ re-derivation that could share a mistake.
 | number | why |
 |---|---|
 | `WINDOW / regression / 10h = -0.0104, CI [-0.0288, -0.0022]` | The validator's published-cell assertion ran through `harness.window_features`, which is gone. Keeping a dead function alive to satisfy a test is not a trade this project makes. The cell's finding stands in `docs/STATE.md` section 3; only the assertion is retired. |
+
+---
+
+# Scorer anchor and lookahead audit, 2026-10-10
+
+M = measured from data.  A = assumed / typed by me as an input.
+
+Saved logs: `logs/envfeat.log`, `logs/validate_envfeat.log` (46 PASS, 0 FAIL).
+
+## THE SCORER IS PINNED TO A NUMBER
+
+Before this, `harness.py`'s scorer had **no numeric test at all.** The published
+cell assertion (`WINDOW / regression / 10h = -0.0104`) was retired on 2026-10-09
+with `window_features` and nothing replaced it. `fit_predict`,
+`permutation_null`, `score_set` and `passes`-with-a-null were never called by the
+validator, and `ci()` was tested only for raising on bad shapes, never for the
+value it returns. A change to the val-selection line in `fit_predict` would have
+left the validator printing ALL PASS while silently voiding comparability with
+every number in this file.
+
+| number | M/A | value |
+|---|---|---|
+| synthetic held-out R2 | **M** | 0.5335209428 |
+| its day-clustered 95% CI | **M** | [0.5184061154, 0.5511822286] |
+| boosting iterations chosen on val | **M** | 107 of 200 |
+| identical across two consecutive runs | **M** | yes, to 10dp |
+| **sklearn** | — | **1.9.1** (numpy 2.4.6, scipy 1.17.1) |
+
+**THIS IS A UNIT TEST, NOT A RESEARCH CELL.** Do not read 0.5335 as a finding or
+quote it as a result. The target is a fixed linear function of three `windows`
+columns plus seeded gaussian noise:
+
+    C = windows[:, [0, -48, -1]].astype(float64)
+    y = 1.0*C[:,2] - 0.5*C[:,1] + 0.25*C[:,0] + 4.0 * default_rng(20261009).standard_normal(60000)
+
+It carries NO information about the real outcome — `Y` is never touched — so
+scoring it on the held-out block measures arithmetic, not data. The held-out set
+is not being looked at in the sense the split exists to prevent.
+
+| choice | M/A | why |
+|---|---|---|
+| `windows` and nothing else | **A** | `windows` is permanent. The old anchor died because it ran through `window_features` / `extfeat.npz`, which were not. Do not restore either to recover a different anchor. |
+| noise scale 4.0, giving R2 ~0.53 | **A** | strong on purpose, so the assertion fails loudly on a scorer change instead of drowning in noise |
+| 107 iterations, interior to 200 | **M** | the val-selection line is genuinely exercised; a boundary value would not test it |
+
+**A LIBRARY UPGRADE WILL MOVE THIS NUMBER.** Pinned under sklearn 1.9.1. If the
+anchor fails after an upgrade, that is the reason — re-pin it and record the new
+version here. It is not evidence of a bug.
+
+**Still unpinned**, and stated so nobody assumes otherwise: `permutation_null`,
+`score_set` and `passes`-with-a-null have no numeric test. The brief asked for one
+anchor and it covers `fit_predict` + `ci`, which are the two functions that carry
+every published number.
+
+## Lookahead: per-feature-family maxima
+
+The aggregate check `max index touched == entry index, 60,000 of 60,000` was
+**true by construction** and has been replaced. `touch` was set to the entry
+index unconditionally before features 4 and 5 ran, so the aggregate hit it the
+moment features 1-3 were computed — and then read as proof that `off_mark`
+reaches the entry bar. It does not.
+
+| family | M/A | max index touched, relative to entry |
+|---|---|---|
+| features 1-3 (`windows`) | M | `i+0` on 60,000 rows |
+| `sandwich` (30m high/low) | M | `i+0` on 60,000 rows |
+| `off_mark` (1h mark + 30m close) | M | `i-1` on 31,494 rows, `i-2` on 28,506 rows, `i+0` on **0** |
+
+The aggregate "never exceeds the entry index" check is unchanged — it is the live
+one and it still reports 0 rows over.
+
+**The two `off_mark` cases, which the docstring previously got wrong.** Mark
+labels are hourly, the entry grid is half-hourly:
+
+    T on the hour   T-60 IS a mark label. Last mark read is T-60; paired 30m
+                    close at i-1.
+    T on the :30    T-60 is also :30 and is NOT a mark label, so the code steps
+                    back one more slot to T-90. Last mark read is T-90; paired
+                    30m close at i-2.
+
+The docstring claimed `<= T-60` in both cases. The code reads `<= T-90` for a
+`:30` entry, which is CONSERVATIVE, not leaky — it gives up an hour of history.
+Corrected in the docstring and left alone in the code: widening it to recover the
+hour would change the feature, and that is not on this plan.

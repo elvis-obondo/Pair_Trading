@@ -1,9 +1,9 @@
-[DATA] 60,000 dislocations, panel (36215, 214), entry bars 336..36151
+[DATA] 60,000 dislocations, panel (36415, 214), entry bars 336..36151
 [DATA] beta negative on 15,713 rows (26.2%) -- the sandwich bound is sign-corrected
 [1-3 ] from windows+meta, 3s   vratio iid divisor 3.39690
 [4   ] high/low panels loaded, 5s
-[4   ] sandwich done, 5s   bound violations 0 (worst 0.00e+00)
-[5   ] mark panel loaded, 7s   18,108 of 36,215 grid slots are hourly labels
+[4   ] sandwich done, 6s   bound violations 0 (worst 0.00e+00)
+[5   ] mark panel loaded, 7s   18,208 of 36,415 grid slots are hourly labels
 [5   ] off_mark done, 7s
 
 ================================================================================================
@@ -24,14 +24,32 @@ vol_48           0.19129     0.23815     0.32618     0.40701     0.50418     0.6
 vratio           0.83299     1.03740     1.39554     1.67972     1.99383     2.48983     2.87026     1.71238     0.44461
 vol_slope        0.54188     0.70300     1.01230     1.32221     1.76584     2.97535     4.95916     1.52734     0.91611
 sandwich         0.26066     0.33930     0.49170     0.64334     0.85128     1.32818     1.85995     0.71332     0.32699
-off_mark         0.00008     0.00011     0.00018     0.00024     0.00032     0.00045     0.00058     0.00026     0.00011
+off_mark         0.00160     0.00336     0.00796     0.01336     0.02162     0.04140     0.06241     0.01669     0.01275
+
+================================================================================================
+BETWEEN-PAIR VARIANCE SHARE -- eta-squared on the pair grouping
+================================================================================================
+  3,000 distinct pairs. The split is TEMPORAL, so every pair sits in
+  BOTH blocks: a mostly between-pair column is partly a pair label.
+  column        between-pair
+  vol_48                5.9%
+  vratio                6.3%
+  vol_slope             5.5%
+  sandwich             21.4%
+  off_mark             23.6%
 
 ================================================================================================
 NO LOOKAHEAD
 ================================================================================================
   rows where max index touched > entry index:        0  (must be 0)
-  rows where max index touched == entry index:       60,000
-  max entry index 36,151 of a 36,215-bar panel; 63 later bars exist and are UNUSED
+
+  max index touched RELATIVE TO THE ENTRY BAR, per feature family:
+    features 1-3 (windows)      i+0: 60,000
+    sandwich (30m high/low)     i+0: 60,000
+    off_mark (1h mark + close)  i-2: 28,506  i-1: 31,494
+  only features 1-3 and sandwich reach the entry bar. off_mark stops
+  short, and that is the point of carrying these separately.
+  max entry index 36,151 of a 36,415-bar panel; 263 later bars exist and are UNUSED
   sandwich bound violations (upper < folded close):  0  (must be 0)
 
   the two bounds on within-bar travel, both in sigma:

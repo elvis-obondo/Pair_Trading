@@ -40,7 +40,18 @@ index `i` with label T; information is observable through T+30.
                    Max index touched = i.
     sandwich       reads 30m high/low at [i-95, i]. Max index touched = i.
     off_mark       reads 1h mark labelled <= T-60 and the 30m close one index
-                   later. Max index touched = i-1, strictly BEFORE the entry bar.
+                   later, so its max index is strictly BEFORE the entry bar.
+                   TWO CASES, because mark labels are hourly and the entry grid
+                   is half-hourly:
+                     T on the hour  -- T-60 IS a mark label. Last mark read is
+                                       T-60; paired 30m close at i-1.
+                     T on the :30   -- T-60 is also :30 and is NOT a mark label,
+                                       so the code steps back one more slot to
+                                       T-90. Last mark read is T-90; paired 30m
+                                       close at i-2.
+                   The :30 case gives up an hour of history. That is CONSERVATIVE,
+                   not leaky, and it is deliberately left alone: widening it to
+                   recover the hour would change the feature.
 
 The script records the maximum panel index it touches PER ROW and asserts it
 equals the entry index. `external.py` did this and it is the single most
@@ -205,8 +216,15 @@ def build(verbose=True, flip=False):
               f"({100*(beta < 0).mean():.1f}%) -- the sandwich bound is sign-corrected",
               flush=True)
 
-    # per-row maximum 30-minute panel index touched by any feature
-    touch = np.full(N, -1, np.int64)
+    # Per-row maximum 30-minute panel index touched, CARRIED PER FEATURE FAMILY.
+    # A single shared array was misleading: features 1-3 legitimately reach the
+    # entry bar, so `max(touch) == entry` was true by construction the moment they
+    # ran, and the aggregate check then read as proof that off_mark reaches the
+    # entry bar too. It does not -- see the off_mark note below. The aggregate
+    # "never exceeds" check stays; it is the live one.
+    touch_win = np.full(N, -1, np.int64)      # features 1-3, from `windows`
+    touch_sw = np.full(N, -1, np.int64)       # sandwich, from 30m high/low
+    touch_om = np.full(N, -1, np.int64)       # off_mark, from 1h mark + 30m close
 
     # ---------------------------------------------------------------- 1-3
     # `windows` is already in sigma units of the entry bar's frozen geometry, and
@@ -214,7 +232,7 @@ def build(verbose=True, flip=False):
     # these three (|s*d| = |d|, sd(s*x) = sd(x)), which is why they are invariant.
     Wf = (g * W) * s[:, None]
     dW = np.diff(Wf, axis=1)                      # 335 steps, index -1 = into bar i
-    touch = np.maximum(touch, J)
+    touch_win = np.maximum(touch_win, J)
 
     vol_48 = np.abs(dW[:, -VOL_BARS:]).mean(1)
 
@@ -274,7 +292,7 @@ def build(verbose=True, flip=False):
         sandwich[rows] = np.nanmean(gap, axis=1) / sig[rows]
         # reported diagnostic only, not a feature: the close-to-close lower bound
         c2c_mean[rows] = np.nanmean(np.abs(np.diff(f_cl, axis=1)), axis=1) / sig[rows]
-        touch[rows] = np.maximum(touch[rows], I.max(axis=1))
+        touch_sw[rows] = np.maximum(touch_sw[rows], I.max(axis=1))
 
     if verbose:
         print(f"[4   ] sandwich done, {time.time()-t0:.0f}s   "
@@ -304,11 +322,20 @@ def build(verbose=True, flip=False):
         qa, qb = ja[rows, None], jb[rows, None]
         da = np.abs(CLOSE[Kc, qa] - MK[Km, qa])
         db = np.abs(CLOSE[Kc, qb] - MK[Km, qb])
-        off_mark[rows] = np.nanmean(aw[rows, None] * da + bw[rows, None] * db, axis=1)
-        touch[rows] = np.maximum(touch[rows], Kc.max(axis=1))
+        # DIVIDED BY SIGMA, same as vol_48 and sandwich. Unscaled, 46.4% of this
+        # column's variance was BETWEEN-PAIR against 5.5-21.4% for the other four.
+        # The split is temporal, so all 3,000 pairs sit in both the fit and the
+        # held-out block, and a tree can route on an unscaled off_mark to recover
+        # pair identity -- which scores in held out and does not survive new
+        # pairs. It is a basis feature and it should measure basis.
+        off_mark[rows] = (np.nanmean(aw[rows, None] * da + bw[rows, None] * db, axis=1)
+                          / sig[rows])
+        touch_om[rows] = np.maximum(touch_om[rows], Kc.max(axis=1))
 
     X = np.column_stack([vol_48, vratio, vol_slope, sandwich, off_mark]).astype(np.float32)
-    audit = dict(touch=touch, entry=J, bound_viol=bound_viol, worst_viol=worst_viol,
+    touch = np.maximum(np.maximum(touch_win, touch_sw), touch_om)
+    audit = dict(touch=touch, touch_win=touch_win, touch_sw=touch_sw, touch_om=touch_om,
+                 entry=J, bound_viol=bound_viol, worst_viol=worst_viol,
                  c2c_mean=c2c_mean, n_panel=len(pidx), on_hour=on_hour, j0=j0,
                  key_a=M.ticker_a.to_numpy(str), key_b=M.ticker_b.to_numpy(str),
                  key_t=entry.to_numpy("datetime64[ns]"))
@@ -317,7 +344,39 @@ def build(verbose=True, flip=False):
     return X, list(NAMES), audit
 
 
-def report(X, names, audit):
+def between_pair_share(X, names, meta):
+    """Share of each column's variance that is BETWEEN pair, not within.
+
+    Eta-squared on the pair grouping: SS_between / SS_total. This is the number
+    that moved off_mark onto a sigma scale. The split is TEMPORAL, so every pair
+    appears in both the fit and the held-out block; a column that is mostly
+    between-pair is partly a pair label, and a tree can route on it to recover
+    pair identity. That scores in held out and does not survive new pairs.
+
+    Reported, not gated. A feature SHOULD carry some cross-sectional variation --
+    the point is to know how much.
+    """
+    key = meta.ticker_a.astype(str) + "/" + meta.ticker_b.astype(str)
+    codes, _ = pd.factorize(key)
+    k = int(codes.max()) + 1
+    out = {}
+    for j, nm in enumerate(names):
+        c = X[:, j].astype(np.float64)
+        ok = np.isfinite(c)
+        cc, co = c[ok], codes[ok]
+        n = np.bincount(co, minlength=k).astype(float)
+        tot = np.bincount(co, weights=cc, minlength=k)
+        live = n > 0
+        gm = cc.mean()
+        grp = np.zeros(k)
+        grp[live] = tot[live] / n[live]
+        ss_between = float((n[live] * (grp[live] - gm) ** 2).sum())
+        ss_total = float(((cc - gm) ** 2).sum())
+        out[nm] = ss_between / ss_total if ss_total > 0 else np.nan
+    return out, k
+
+
+def report(X, names, audit, meta=None):
     """Finiteness counts and percentiles. Nothing is nan_to_num'd on the way in."""
     N = len(X)
     print()
@@ -349,6 +408,18 @@ def report(X, names, audit):
         print(f"{nm:<12}" + "".join(f"{x:>12.5f}" for x in v)
               + f"{c.mean():>12.5f}{c.std():>12.5f}")
 
+    if meta is not None:
+        print()
+        print("=" * 96)
+        print("BETWEEN-PAIR VARIANCE SHARE -- eta-squared on the pair grouping")
+        print("=" * 96)
+        shares, npair = between_pair_share(X, names, meta)
+        print(f"  {npair:,} distinct pairs. The split is TEMPORAL, so every pair sits in")
+        print(f"  BOTH blocks: a mostly between-pair column is partly a pair label.")
+        print(f"  {'column':<12}{'between-pair':>14}")
+        for nm in names:
+            print(f"  {nm:<12}{100*shares[nm]:>13.1f}%")
+
     print()
     print("=" * 96)
     print("NO LOOKAHEAD")
@@ -356,7 +427,17 @@ def report(X, names, audit):
     touch, entry = audit["touch"], audit["entry"]
     over = int((touch > entry).sum())
     print(f"  rows where max index touched > entry index:        {over:,}  (must be 0)")
-    print(f"  rows where max index touched == entry index:       {int((touch == entry).sum()):,}")
+    print()
+    print(f"  max index touched RELATIVE TO THE ENTRY BAR, per feature family:")
+    for lbl, key in (("features 1-3 (windows)", "touch_win"),
+                     ("sandwich (30m high/low)", "touch_sw"),
+                     ("off_mark (1h mark + close)", "touch_om")):
+        d = audit[key] - entry
+        u, c = np.unique(d, return_counts=True)
+        spread = "  ".join(f"i{v:+d}: {n:,}" for v, n in zip(u, c))
+        print(f"    {lbl:<28}{spread}")
+    print(f"  only features 1-3 and sandwich reach the entry bar. off_mark stops")
+    print(f"  short, and that is the point of carrying these separately.")
     print(f"  max entry index {entry.max():,} of a {audit['n_panel']:,}-bar panel; "
           f"{audit['n_panel'] - 1 - entry.max():,} later bars exist and are UNUSED")
     print(f"  sandwich bound violations (upper < folded close):  {audit['bound_viol']:,}  (must be 0)")
@@ -371,7 +452,7 @@ def report(X, names, audit):
 
 if __name__ == "__main__":
     X, names, audit = build()
-    report(X, names, audit)
+    report(X, names, audit, meta=pd.read_parquet(paths.META))
     # The join key goes in the FILE, not just the audit. envfeat is joined onto
     # disloc_meta BY POSITION, and a positional join with no stored key is how
     # silent misalignment happens -- the validator asserts these three against
