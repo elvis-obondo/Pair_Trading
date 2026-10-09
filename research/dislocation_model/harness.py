@@ -214,46 +214,23 @@ def score_set(X, y, sp, classify, null=False, ref_pred=None):
                 null=nl, hit=passes(score, lo, classify, nl))
 
 
-def window_features(W, meta, sign=None):
-    """The 21 window features, derived FROM the folded window.
+def load():
+    """The dataset. Returns (W, Y, meta, Split).
 
-    Order and names are frozen -- `extfeat.npz` stores them in this order and a
-    change here silently remaps the saved columns.
+    There is no feature argument. The 41 external + 21 window features were
+    retired on 2026-10-09: they were built against a 212-ticker / 36,172-bar
+    panel and the panel now loads 214 / 36,215, so they were stale as well as
+    superseded. `research/dislocation_model/envfeat.py` is the current feature
+    layer and writes its own file; load it directly from `paths.ENVFEAT`.
+
+    Nothing permanent was lost with `window_features`. The three columns worth
+    keeping -- rv48, two and vr -- are three lines of numpy over `windows`,
+    which stays in disloc.npz.
     """
-    s = np.ones(len(W), np.float32) if sign is None else sign.astype(np.float32)
-    Wf = np.asarray(W, np.float32) * s[:, None]
-    dWf = np.diff(Wf, axis=1)
-    log = lambda x: np.log(np.maximum(x, 1e-12))
-    beta = meta.beta.to_numpy(np.float32)
-    sig = meta.sigma.to_numpy(np.float64)
-    f = {
-        "z": Wf[:, -1], "absz": np.abs(Wf[:, -1]), "r2": meta.r2.to_numpy(np.float32),
-        "absb": np.abs(beta), "lsig": np.log(np.clip(sig, 1e-12, None)),
-        "wsd": Wf.std(1), "wmean": Wf.mean(1), "wrange": Wf.max(1) - Wf.min(1),
-        "sl48": (Wf[:, -1] - Wf[:, -48]) / 48, "sl96": (Wf[:, -1] - Wf[:, -96]) / 96,
-        "sl336": (Wf[:, -1] - Wf[:, 0]) / 336,
-        "ssd": dWf.std(1), "ssd48": dWf[:, -48:].std(1),
-        "two": dWf.std(1) / np.clip(Wf.std(1), 1e-9, None),
-        "vr": dWf[:, -48:].std(1) / np.clip(dWf.std(1), 1e-9, None),
-        "ac1": np.array([np.corrcoef(dWf[i, :-1], dWf[i, 1:])[0, 1] for i in range(len(Wf))], np.float32),
-        "fa": (Wf > 0).mean(1), "ta3": (np.abs(Wf) >= 3).mean(1),
-        "rv48": log((dWf[:, -48:] ** 2).mean(1)), "rv96": log((dWf[:, -96:] ** 2).mean(1)),
-        "rv335": log((dWf ** 2).mean(1)),
-    }
-    X = np.nan_to_num(np.column_stack(list(f.values())).astype(np.float32),
-                      nan=0, posinf=0, neginf=0)
-    return X, list(f)
-
-
-def load(features=False):
-    """The dataset. Returns (W, Y, meta, Split) and optionally the feature sets."""
     import paths
     z = np.load(paths.DISLOC)
     W = z["windows"].astype(np.float32)
     Y = z["outcomes"].astype(np.float64)
     meta = pd.read_parquet(paths.META)
     sp = Split(meta.day.to_numpy(), Y[:, 0])
-    if not features:
-        return W, Y, meta, sp
-    f = np.load(paths.EXTFEAT)
-    return W, Y, meta, sp, dict(EXT=f["EXT"], WIN=f["WIN"], names=list(f["names"]))
+    return W, Y, meta, sp

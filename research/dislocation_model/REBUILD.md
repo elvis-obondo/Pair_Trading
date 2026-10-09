@@ -61,35 +61,54 @@ by definition, so `windows[:,-1]` and `outcomes[:,0]` must both equal `z_at_entr
 exactly. The script asserts it and `validate_dislocation_harness.py` re-checks it.
 An off-by-one bar in either window breaks this and nothing else would catch it.
 
-### 2. `extfeat.npz` — about 3 min
+### 2. `envfeat.npz` — about 2 min
 
-    .venv/bin/python research/dislocation_model/external.py
+    .venv/bin/python research/dislocation_model/envfeat.py
 
-41 external features (which leg moved, market-wide vs idiosyncratic, the
-dislocation wave, crowding) plus the 21 window features. Every family stops at the
-entry bar INCLUSIVE; the script asserts the maximum panel index it touches and
-prints how many later bars exist and go unused.
+Five environment features, 60,000 x 5 float32 plus a names list. Joined onto the
+EXISTING `disloc_meta.parquet` row-for-row by position — it does NOT rebuild
+disloc.npz, for the determinism reason above.
 
-The `wave` feature here is sampled from 400 pairs. Step 3 replaces it.
+    vol_48      mean |30-minute spread change| over the last 48 window bars, in sigma
+    vratio      step sd / level sd over the last 96 bars, normalised so iid gives 1
+    vol_slope   sd of steps over the last 16 bars / sd over the prior 32
+    sandwich    mean per-bar gap between the leg-high/low spread bound and the
+                close-to-close spread move, last 96 bars, in sigma
+    off_mark    hedge-weighted mean |close - mark| across both legs, last 96 bars' time
 
-### 3. `wave_full.npz` — about 2 min, optional
+The first three come from `windows` and `meta` alone. `sandwich` reads the raw
+30-minute high/low feathers; `off_mark` reads the 1-hour mark feathers. Both do
+their own grid snap and log transform to match the panel, because the normalized
+store carries `close` only.
 
-    .venv/bin/python research/dislocation_model/wave_full.py
+`vratio`'s iid divisor is `IID_VRATIO_DIVISOR[96] = 3.396899`, SIMULATED, not
+derived. The analytic `sqrt((n^2-1)/(6n))` = 3.999783 normalises the ratio of
+expectations and is 17.7% too large for the expectation of a ratio. If you change
+`RATIO_BARS`, the constant must be re-simulated — `iid_vratio_norm` will do it for
+an unknown n, and the validator checks the result on a fresh seed.
 
-Recomputes the dislocation-share wave over all 22,366 pairs instead of 400, and
-writes the corrected column back into `extfeat.npz`. The sampled version
-correlates 0.9697 with the full one, and the rebuild moved the incremental
-volatility result from +2.04pp to +1.36pp — both fail the 3pp gate, so this
-changes no verdict. Run it for fidelity, skip it to save time.
+Deterministic given `disloc.npz` and the panel: the validator asserts a rebuild is
+bit-identical to the stored matrix. Saved runs are in `logs/`.
+
+**Steps 2 and 3 used to be `extfeat.npz` and `wave_full.npz`.** Both were removed
+on 2026-10-09 along with `external.py` and `wave_full.py` (now in
+`attic/research/`). They were built against the 212-ticker / 36,172-bar panel and
+were stale as well as superseded.
 
 ## Checking a rebuild
 
     .venv/bin/python research/validate_dislocation_harness.py
 
 It asserts the split (41,936 / 18,064 over 667 / 79 days), the alignment
-invariant, and that the harness reproduces a published cell: WINDOW / regression
-/ 10h = -0.0104, CI [-0.0288, -0.0022]. If the split counts move, the panel
+invariant, and — for the feature matrix — row-for-row join alignment, no
+lookahead per row, the sandwich bound ordering, sign-folding invariance, and
+per-column finiteness counts and percentiles. If the split counts move, the panel
 changed — see the determinism note above.
+
+The old published-cell assertion (WINDOW / regression / 10h = -0.0104) was retired
+with `window_features` on 2026-10-09. It ran through a function that no longer
+exists, and keeping a dead function alive to satisfy a test is not a trade this
+project makes.
 
 ## What is NOT here
 

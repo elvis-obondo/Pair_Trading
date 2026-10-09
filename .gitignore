@@ -41,8 +41,11 @@ research/batch_backtest_results.csv
 user_data/normalized/
 
 # Scheduled update_data.sh output (see scripts/update_data.sh, launchd job
-# com.pairtrading.update-data)
-logs/
+# com.pairtrading.update-data). ANCHORED to the repo root 2026-10-09: as a bare
+# `logs/` it also swallowed research/dislocation_model/logs/, where saved runs of
+# the feature build and its validator are a tracked deliverable. user_data/logs/
+# is ignored by its own rule above.
+/logs/
 
 # OS
 .DS_Store

@@ -354,15 +354,41 @@ nobody reports it as a bug.
 
     research/dislocation_model/paths.py      where the datasets live. One definition.
     research/dislocation_model/mkdisloc.py   builds the 60,000 dislocations
-    research/dislocation_model/external.py   41 external + 21 window features
-    research/dislocation_model/wave_full.py  the full-universe wave, replaces the sample
+    research/dislocation_model/envfeat.py    THE feature layer: five environment features
     research/dislocation_model/harness.py    THE harness: split, folding, scorer,
                                              day-clustered bootstrap, permutation null, gates
     research/dislocation_model/REBUILD.md    the exact command for each dataset
     research/dislocation_model/NUMBERS.md    every number of the modelling phase, with
                                              M/A provenance and a WITHDRAWN section
-    research/datasets/                       93MB, not tracked, rebuilt from REBUILD.md
-    research/validate_dislocation_harness.py PASS/FAIL, including the CI-bug regression test
+    research/dislocation_model/logs/         saved runs: envfeat, validate_envfeat
+    research/datasets/                       ~85MB, not tracked, rebuilt from REBUILD.md
+    research/validate_dislocation_harness.py PASS/FAIL: the CI-bug regression test AND
+                                             the whole quality bar for the feature matrix
+
+**The old feature layer was retired 2026-10-09.** `external.py` (41 external
+features) and `wave_full.py` are in `attic/research/`, and `extfeat.npz` /
+`wave_full.npz` are deleted. They were built against a 212-ticker / 36,172-bar
+panel and the panel now loads 214 / 36,215, so they were stale as well as
+superseded by section 3. `harness.window_features` went with them; the three
+columns worth keeping (rv48, two, vr) are three lines of numpy over `windows`.
+
+**The current feature matrix is 60,000 x 5**, joined onto the existing
+`disloc_meta.parquet` by position and validated rather than scored — there is no
+target attached to it yet, by design (section 12).
+
+    vol_48      SCALE     mean |30m spread step|, last 48 bars, in sigma    median 0.407
+    vratio      SHAPE     step sd / level sd, last 96 bars, iid = 1         median 1.680
+    vol_slope   TIMING    sd(last 16 steps) / sd(prior 32)                  median 1.322
+    sandwich    COHESION  leg-high/low spread bound minus close, in sigma   median 0.643
+    off_mark    BASIS     hedge-weighted mean |close - mark|, log units     median 0.00024
+
+Two of those medians say something on their own. **vratio's median of 1.68 means
+the typical entry window is 68% choppier than an iid walk** — a long path for
+little net displacement, which is what microstructure noise or bid-ask bounce
+looks like and is consistent with the step/level ratio work. **vol_slope's median
+of 1.32 means volatility was still arriving at entry**, not receding, matching
+the finding that sigma rises through 96-99% of episodes. Neither is a prediction;
+both are descriptions of the population, and neither has been scored.
 
 The one-off analyses are in `attic/modelling_scratch/` with their logs. Section 3,
 4 and 5 are their findings; the scripts are not pipeline and are not expected to
