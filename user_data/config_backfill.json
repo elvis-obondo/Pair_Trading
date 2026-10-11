@@ -1,0 +1,13 @@
+{
+  "_comment": "Throttle for the 1m HISTORY BACKFILL only. config_slow.json sits at rateLimit 350ms, which exists because one download over 212 pairs at once drew OKX 50011 Too Many Requests. That was a CONCURRENCY failure, and download_1m.sh already fixes concurrency with small batches -- so 350ms was throttling the wrong axis. ccxt's own default for okx is 110ms and OKX documents 20 requests / 2s for history-candles, i.e. 100ms. 150ms keeps margin over both while running a few pairs at once. Measured 2026-10-09: at 350ms the backfill managed 2 pairs of 214 in 13.6 hours, which is 60 days for the set.",
+  "exchange": {
+    "ccxt_config": {
+      "enableRateLimit": true,
+      "rateLimit": 150
+    },
+    "ccxt_async_config": {
+      "enableRateLimit": true,
+      "rateLimit": 150
+    }
+  }
+}

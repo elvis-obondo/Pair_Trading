@@ -36,6 +36,8 @@ set -uo pipefail
 cd "$(dirname "$0")/.."
 
 DAYS="${1:-35}"
+# In backfill mode --days is what sets how far back freqtrade reaches, so it has
+# to be derived from BACKFILL_START or the two silently disagree.
 BATCH="${2:-8}"
 PAUSE="${3:-15}"
 LOG="logs/download_1m.log"
@@ -56,7 +58,19 @@ mkdir -p logs
 # pair is appended to rather than refetched.
 STALE_MINUTES="${STALE_MINUTES:-60}"
 BACKFILL="${BACKFILL:-0}"
-BACKFILL_START="${BACKFILL_START:-2024-04-21}"
+# 2025-07-01, not the 2024-04-21 the venue would serve. The full 818 days covers
+# 100% of fit-period dislocations but is 85+ hours of downloading; 2025-07-01 is
+# 382 days, 47% of the bytes, and still covers 35,544 of 41,936 fit dislocations
+# -- 84.8%. Measured 2026-10-09. Override if the remaining 15% ever matters.
+BACKFILL_START="${BACKFILL_START:-2025-07-01}"
+# Which throttle overlay to load. The backfill is thousands of sequential
+# 100-candle history requests per pair, so the per-request rate IS the runtime;
+# forward mode is a short append and can afford to stay conservative.
+if [ "$BACKFILL" = "1" ]; then
+    THROTTLE="${THROTTLE:-user_data/config_backfill.json}"
+else
+    THROTTLE="${THROTTLE:-user_data/config_slow.json}"
+fi
 missing() {
   STALE_MINUTES="$STALE_MINUTES" BACKFILL="$BACKFILL" \
   BACKFILL_START="$BACKFILL_START" python3 - <<'PY'
@@ -112,8 +126,13 @@ MODE="forward (keep current)"
 if [ "$BACKFILL" = "1" ]; then
     PREPEND_FLAG="--prepend"
     MODE="BACKFILL to $BACKFILL_START"
+    # --days is what actually sets freqtrade's reach, so derive it from
+    # BACKFILL_START. Passing the two independently lets them disagree and the
+    # download silently stops short of where missing() expects it to reach,
+    # which makes every pass report the same pairs forever.
+    DAYS=$(python3 -c "import datetime,sys;print((datetime.date.today()-datetime.date.fromisoformat('$BACKFILL_START')).days+5)")
 fi
-echo "=== 1m download started $(date '+%F %T')  mode=$MODE days=$DAYS batch=$BATCH pause=${PAUSE}s ===" | tee -a "$LOG"
+echo "=== 1m download started $(date -u '+%F %T')Z  mode=$MODE days=$DAYS batch=$BATCH pause=${PAUSE}s throttle=$THROTTLE ===" | tee -a "$LOG"
 
 # Two passes. The first sweeps everything that is missing; the second picks up
 # whatever the first still lost to a transient limit. If a pass downloads
@@ -131,7 +150,7 @@ for pass in 1 2 3; do
     echo "[$(date '+%T')] pass $pass  $((i / BATCH + 1))/$(((n + BATCH - 1) / BATCH))  ${chunk[*]}" | tee -a "$LOG"
     docker compose run --rm freqtrade download-data \
         --config user_data/config.json \
-        --config user_data/config_slow.json \
+        --config "$THROTTLE" \
         --exchange okx --trading-mode futures \
         --timeframes 1m --days "$DAYS" \
         ${PREPEND_FLAG} \
