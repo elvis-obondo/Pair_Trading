@@ -1,0 +1,44 @@
+[INFO] asset_ctxs ['20261012', '20261013']: 1056 stamps, 2026-10-12 00:00:00+00:00 -> 2026-10-13 06:42:00+00:00
+
+BTC: ctx minutes 1056, candles 1863 (2026-10-11 23:50:00+00:00 -> 2026-10-13 06:52:00+00:00), overlap 1843
+  L=-2  corr +0.0630  n 1054
+  L=-1  corr +0.9982  n 1054
+  L=+0  corr +0.0670  n 1054
+  L=+1  corr +0.0367  n 1054
+  L=+2  corr -0.0769  n 1054
+  best L = -1   margin over second-best 0.9312   n 1054
+
+ETH: ctx minutes 1056, candles 1863 (2026-10-11 23:50:00+00:00 -> 2026-10-13 06:52:00+00:00), overlap 1843
+  L=-2  corr +0.0320  n 1054
+  L=-1  corr +0.9962  n 1054
+  L=+0  corr +0.0451  n 1054
+  L=+1  corr +0.0440  n 1054
+  L=+2  corr -0.1032  n 1054
+  best L = -1   margin over second-best 0.9511   n 1054
+
+SOL: ctx minutes 1056, candles 1863 (2026-10-11 23:50:00+00:00 -> 2026-10-13 06:52:00+00:00), overlap 1843
+  L=-2  corr +0.1218  n 1054
+  L=-1  corr +0.9897  n 1054
+  L=+0  corr +0.1215  n 1054
+  L=+1  corr +0.0072  n 1054
+  L=+2  corr -0.1123  n 1054
+  best L = -1   margin over second-best 0.8679   n 1054
+
+HYPE: ctx minutes 1056, candles 1863 (2026-10-11 23:50:00+00:00 -> 2026-10-13 06:52:00+00:00), overlap 1843
+  L=-2  corr -0.0613  n 1054
+  L=-1  corr +0.9955  n 1054
+  L=+0  corr -0.0601  n 1054
+  L=+1  corr +0.0127  n 1054
+  L=+2  corr -0.0915  n 1054
+  best L = -1   margin over second-best 0.9828   n 1054
+
+DOGE: ctx minutes 1056, candles 1863 (2026-10-11 23:50:00+00:00 -> 2026-10-13 06:52:00+00:00), overlap 1843
+  L=-2  corr -0.0085  n 1054
+  L=-1  corr +0.9357  n 1054
+  L=+0  corr +0.0797  n 1054
+  L=+1  corr +0.0579  n 1054
+  L=+2  corr -0.1017  n 1054
+  best L = -1   margin over second-best 0.8561   n 1054
+
+[B0] best lag per coin: {'BTC': -1, 'ETH': -1, 'SOL': -1, 'HYPE': -1, 'DOGE': -1}
+[B0] PASS: all 5 agree on L=-1. Row stamped T -> 1m bar labelled T-1m.

@@ -1,0 +1,4 @@
+part1: 20250525..20251205  195 days  113.8 GB lz4  contains 20251010: True
+part2: 20251206..20260606  183 days  113.5 GB lz4  contains 20251010: False
+part3: 20260607..20261013  129 days  113.6 GB lz4  contains 20251010: False
+total days 507 GB 341.0

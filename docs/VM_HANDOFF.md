@@ -1,3 +1,5 @@
+> **VM DELETED 2026-10-14** (instance `pairs-trading` and its 20 GB boot disk, us-central1-a). Why: OKX was dropped and research moved to Hyperliquid (HL-BUILD1/2), so the OKX paper book, the scanner cron and the OI collector had already been stopped that day; deleting the VM ends the GCP billing. The final ledger (2,043 rows) is in `research/from_vm/scanner_trades.csv`, and the whole VM tree (trading_data including monitor_ticks, logs, state, OI) is in `attic/vm_final/vm_final_20261014.tar.gz` (gitignored, sha256 781b1004...578c65a). The Artifact Registry repo `pairs-trading` (231 MB) was left in place. Everything below is history.
+
 # SESSION 2026-09-29 — the model switched live, and the book restarted
 
 The VM ran the **pre-0bb61a9 OLS build on a 7-day window** until now, confirmed by

@@ -1,0 +1,160 @@
+### GCP setup 2026-10-14T20:18:23Z
+-- laptop python: Python 3.12.2
+-- free disk before: 20 GB
+elvisodangaobondo@gmail.com
+CPUS                                                 200.0        0.0
+DISKS_TOTAL_GB                                       4096.0       0.0
+SSD_TOTAL_GB                                         500.0        0.0
+LOCAL_SSD_TOTAL_GB                                   9.22337e+18  0.0
+COMMITTED_LOCAL_SSD_TOTAL_GB                         0.0          0.0
+E2_CPUS                                              24.0         0.0
+COMMITTED_E2_CPUS                                    0.0          0.0
+{'limit': 32.0, 'metric': 'CPUS_ALL_REGIONS', 'usage': 0.0}
+      23 requirements.txt
+# What the live paper system needs, and nothing else.
+#
+# Derived by walking the import graph from research/stop_monitor.py and
+# research/live_scanner.py -- the two entry points that actually run.
+#
+# streamlit and plotly are gone with visualizer/. ruptures was a change-point
+# prototype that never reached the live pipeline. None of them belong in a
+# paper-trading process, and on a 1GB shared-vCPU VM the difference was a build
+# that ran for seven minutes on dependency resolution alone.
+numpy==2.4.6
+pandas==2.3.3
+scipy==1.17.1
+statsmodels==0.14.6
+
+# Parquet, for the scan history and the tick recordings. pandas imports it
+# lazily, so it does not show up in an import graph.
+pyarrow>=17.0
+
+# The live feed. websockets carries the OKX tickers channel; ccxt is the REST
+# fallback the stop monitor degrades to when the socket drops, so a stop is
+# never left completely unwatched.
+websockets>=13.0
+ccxt>=4.5
+
+### attic upload 2026-10-14T20:20:53Z
+-- local okx_data: files 1289 bytes 2475280364
+
+### create VM 2026-10-14T20:22:44Z
+Created [https://www.googleapis.com/compute/v1/projects/project-0671be06-e22a-44d8-83c/zones/us-central1-a/instances/pt-research].
+WARNING: Some requests generated warnings:
+ - Disk size: '100 GB' is larger than image size: '10 GB'. You might need to resize the root repartition manually if the operating system does not support automatic resizing. See https://cloud.google.com/compute/docs/disks/add-persistent-disk#resize_pd for details.
+
+NAME         ZONE           MACHINE_TYPE  PREEMPTIBLE  INTERNAL_IP  EXTERNAL_IP    STATUS
+pt-research  us-central1-a  e2-highmem-8               10.128.0.3   34.41.195.117  RUNNING
+RUNNING	e2-highmem-8	100
+
+### sync filter dry run (local): 261 files, 20 MB; absent .env, user_data/config.json, user_data/config_backfill.json, .env.example; secret grep of sent tree: no hits; research/**/*.py 89 = 89; dislocation_model .py 26 = 26, logs 47 = 47. Exclude array: .env .env.* user_data/config*.json .venv/ attic/ user_data/data/ research/datasets/ research/hyperliquid/flow/ __pycache__/ .git/ .gcp_pull/ + :- .gitignore
+
+### provision 2026-10-14T20:23:04Z
+
+### budget alert 2026-10-14T20:23:10Z
+Operation "operations/acat.p2-907721711080-6967f0b4-8c28-405e-bb9d-31f1b130c851" finished successfully.
+API [billingbudgets.googleapis.com] not enabled on project 
+[project-0671be06-e22a-44d8-83c]. Would you like to enable and retry (this will 
+take a few minutes)? (y/N)?  
+ERROR: (gcloud.billing.budgets.create) [elvisodangaobondo@gmail.com] does not have permission to access billingAccounts instance [01E84B-17F5D5-818F87] (or it may not exist): Cloud Billing Budget API has not been used in project project-0671be06-e22a-44d8-83c before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/billingbudgets.googleapis.com/overview?project=project-0671be06-e22a-44d8-83c then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. This command is authenticated as elvisodangaobondo@gmail.com which is the active account specified by the [core/account] property.
+Cloud Billing Budget API has not been used in project project-0671be06-e22a-44d8-83c before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/billingbudgets.googleapis.com/overview?project=project-0671be06-e22a-44d8-83c then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.
+Google developers console API activation
+https://console.developers.google.com/apis/api/billingbudgets.googleapis.com/overview?project=project-0671be06-e22a-44d8-83c
+- '@type': type.googleapis.com/google.rpc.ErrorInfo
+  domain: googleapis.com
+  metadata:
+    activationUrl: https://console.developers.google.com/apis/api/billingbudgets.googleapis.com/overview?project=project-0671be06-e22a-44d8-83c
+    consumer: projects/project-0671be06-e22a-44d8-83c
+    containerInfo: project-0671be06-e22a-44d8-83c
+    service: billingbudgets.googleapis.com
+    serviceTitle: Cloud Billing Budget API
+  reason: SERVICE_DISABLED
+
+### IAM pt-gcp-reader 2026-10-14T20:23:25Z
+arn:aws:iam::289869684922:user/pt-gcp-reader
+policy attached (inline read-pair-trading-hl, = scripts/gcp_reader_policy.json)
+managed policies / groups above: expect none
+-- s3 okx_data: Total Objects: 1289    Total Size: 2475280364 
+-- local okx_datasets: files 30 bytes 309542659
+-- s3 okx_datasets: Total Objects: 30    Total Size: 309542659 
+okx_data: name+size diff lines = 0
+okx_datasets: name+size diff lines = 0
+
+### budget alert retry 2026-10-14T20:25:34Z
+Created [d7be9c90-4836-49c3-8e9d-20af5c6dcc77].
+DISPLAY_NAME         UNITS  THRESHOLD_RULES
+pt-research-monthly  50     [{'spendBasis': 'CURRENT_SPEND', 'thresholdPercent': 0.5}, {'spendBasis': 'CURRENT_SPEND', 'thresholdPercent': 0.9}, {'spendBasis': 'CURRENT_SPEND', 'thresholdPercent': 1.0}]
+ssh to pt-research not ready
+provision exit 1
+
+### provision retry 2026-10-14T20:26:13Z (first attempt: 'ssh to pt-research not ready' -- config-ssh does not push the key; ensure_up now runs one gcloud compute ssh first)
+
+### attic laptop delete 2026-10-14T20:26:32Z
+Code Checker spot-check: 40 sampled single-part files (<8 MB), local md5 == S3 ETag, 40/40; multipart files covered by size match + per-file name/size diff 0
+free before: 21.6 GB
+2.3G	attic/okx_data
+295M	attic/okx_datasets
+README.md
+docs
+launchd
+modelling_scratch
+research
+scripts
+vm_final
+free after: 24.3 GB
+### ctx re-saved zstd: 222 files, 6.94 GB lz4 -> 4.45 GB zstd, each read back equal to the original, 53s
+downloading uv 0.13.1 x86_64-unknown-linux-gnu
+installing to /home/elvisobondo/.local/bin
+  uv
+  uvx
+everything's installed!
+
+To add $HOME/.local/bin to your PATH, either restart your shell or run:
+
+    source $HOME/.local/bin/env (sh, bash, zsh)
+    source $HOME/.local/bin/env.fish (fish)
+Downloading cpython-3.12.2-linux-x86_64-gnu (download) (64.9MiB)
+ Downloaded cpython-3.12.2-linux-x86_64-gnu (download)
+Installed Python 3.12.2 in 1.67s
+ + cpython-3.12.2-linux-x86_64-gnu (python3.12)
+Using CPython 3.12.2
+Creating virtual environment at: .venv
+Activate with: source .venv/bin/activate
+Python 3.12.2
+provisioned: Python 3.12.2, idle-stop installed
+provision exit 0
+
+### AWS reader key: written to pt-research ~/.aws/credentials (umask 077) over ssh; laptop scratch key file deleted (2026-10-14T20:28:28Z); key not logged
+
+### ctx zstd -> s3 2026-10-14T20:30:19Z
+
+### VM-side S3 permission tests (pt-gcp-reader, 2026-10-14T20:28Z; outputs only)
+aws s3 ls s3://pair-trading-hl-289869684922/ -> PRE attic/, PRE build2/  (list OK)
+aws s3 ls s3://hl-mainnet-node-data/ --request-payer requester -> An error occurred (AccessDenied) when calling the ListObjectsV2 operation: Access Denied
+aws s3api put-object --bucket pair-trading-hl-289869684922 --key _write_test -> AccessDenied: ... is not authorized to perform: s3:PutObject ... because no identity-based policy allows the s3:PutObject action
+
+### ctx zstd sha256 manifest (laptop) 2026-10-14T20:31:14Z
+manifest: research/hyperliquid/logs/ctx_zstd_sha256.txt, 222 lines, sha256 of manifest 77d7c927c5d7f663...
+local: 222 files 4453590140 B
+s3: Total Objects: 222    Total Size: 4453590140 
+
+### laptop ctx delete 2026-10-14T20:38:11Z (after Code Checker PASS: VM sha256 222/222 = laptop manifest; S3 222 / 4,453,590,140 B)
+free before: 20.0 GB
+6.5G	user_data/data/hyperliquid/ctx
+4.1G	/private/tmp/claude-501/ctx_zstd
+free after: 31.1 GB
+/home/elvisobondo/Pair_Trading/research/hyperliquid/logs/gcp_ctx_pull.log birth=2026-10-14 20:36:21.352731754 +0000 modify=2026-10-14 20:37:17.540591065 +0000
+2026-10-14T20:30:02Z IDLE-START venv_procs=0 load1=0.15
+2026-10-14T20:35:02Z IDLE 5min venv_procs=0 load1=0.00
+
+### idle-stop busy test: ctx pull log birth 20:36:21Z (after the 20:35:02 tick: no miss). gcp_run 'sleep 420' 20:38:42Z -> 20:45:42Z (research/hyperliquid/logs/gcp_idle_busy_test.log):
+2026-10-14T20:40:02Z BUSY venv_procs=2 load1=0.06
+2026-10-14T20:45:02Z BUSY venv_procs=2 load1=0.04
+2026-10-14T20:50:02Z IDLE-START venv_procs=0 load1=0.00
+self-stop expected at the ~21:20 tick
+
+### self-stop: watcher saw TERMINATED at 2026-10-14T21:22:04Z (idle clock from 20:50:02; STOP tick ~21:20)
+gcloud compute instances list: pt-research us-central1-a e2-highmem-8 ... TERMINATED (no external IP while stopped)
+STOP line in /var/log/pt-idle.log: to be read on next start
+cost while running: e2-highmem-8 us-central1 ~ $0.36/h on-demand list (A), from trial credits; stopped = disk only, 100 GB pd-balanced ~ $10/month (A)
+### self-stop STOP line (read on next start): 2026-10-14T21:20:02Z STOP idle 30min venv_procs=0 load1=0.00 -> shutdown -h now

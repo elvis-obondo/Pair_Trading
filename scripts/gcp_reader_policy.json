@@ -1,0 +1,9 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {"Sid": "ListOurBucket", "Effect": "Allow", "Action": ["s3:ListBucket", "s3:GetBucketLocation"],
+     "Resource": "arn:aws:s3:::pair-trading-hl-289869684922"},
+    {"Sid": "ReadOurObjects", "Effect": "Allow", "Action": ["s3:GetObject"],
+     "Resource": "arn:aws:s3:::pair-trading-hl-289869684922/*"}
+  ]
+}

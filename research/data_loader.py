@@ -6,8 +6,7 @@ import numpy as np
 import pandas as pd
 from pathlib import Path
 
-from adapters.okx_futures import sync_normalized_store as _sync_okx_futures
-from adapters.lst_tokens import sync_normalized_store as _sync_lst_tokens
+from adapters.hyperliquid_futures import sync_normalized_store as _sync_hl_futures
 
 NORMALIZED_DIR = Path(__file__).parent.parent / "user_data" / "normalized"
 
@@ -16,8 +15,8 @@ def _parse_timeframe_minutes(timeframe: str) -> int:
     """Parse a "30m"/"1h"-style timeframe string into minutes.
 
     Only minute ("m") and hour ("h") suffixes are supported, matching the
-    only units used anywhere in this pipeline (BAR_LENGTH is minutes; OKX
-    filenames use "30m"/"1h").
+    only units used anywhere in this pipeline (BAR_LENGTH is minutes; bar
+    filenames use "1m"/"30m").
     """
     if timeframe.endswith("m"):
         return int(timeframe[:-1])
@@ -52,8 +51,8 @@ def _snap_to_grid(series: pd.Series, bar_minutes: int) -> pd.Series:
     guarantees this via `sort_values("date")` before construction).
 
     No-op when every timestamp already lands exactly on the grid and no two
-    observations share a grid slot -- verified true for OKX-futures-only
-    data today (already a uniform, phase-aligned 30-minute grid).
+    observations share a grid slot -- true for the Hyperliquid bars, which are
+    built on a uniform, phase-aligned grid.
     """
     grid_index = series.index.floor(f"{bar_minutes}min")
     snapped = pd.Series(series.values, index=grid_index, name=series.name)
@@ -75,11 +74,10 @@ def _align_drop_any_gap(df: pd.DataFrame) -> pd.DataFrame:
     observation for everything currently loaded.
 
     This runs unconditionally whenever the caller asks for it (see the
-    `align` parameter on get_price_levels), not only when a non-OKX source
-    is present, because two 24/7 sources can still drift out of alignment
-    with each other. It is a no-op on already-aligned single-source data
-    (verified: current OKX-futures-only data has zero NaNs and a uniform
-    30-minute grid).
+    `align` parameter on get_price_levels), because two 24/7 sources can still
+    drift out of alignment with each other. On the Hyperliquid bars it is NOT a
+    no-op: archive gaps are NaN closes, and staggered listings leave NaN before
+    each coin's first trade, so align=True drops every such row for all coins.
 
     Trade-off, stated plainly: this is frame-wide, not per-pair. One
     short-lived or gappy instrument shrinks the retained history for every
@@ -123,15 +121,10 @@ def get_price_levels(
         is identical to the whole frame's length (already gap-free), so it
         can no longer distinguish a thin pair from a well-covered one.
     """
-    # Spot data (adapters/okx_spot.py) is intentionally not synced here: OKX
-    # spot prices track their futures counterparts too closely to add a
-    # genuinely independent pair-trading leg, so it's not worth the doubled
-    # scan surface. The adapter and its download tooling
-    # (universe_selection.py) are left in place, unused, in case that's
-    # revisited later.
-    okx_tickers = _sync_okx_futures(NORMALIZED_DIR, timeframe=timeframe)
-    lst_tickers = _sync_lst_tokens(NORMALIZED_DIR, timeframe=timeframe)
-    tickers = okx_tickers + lst_tickers
+    # One source since 2026-10-14 (HL-BUILD2): Hyperliquid perps, bars built
+    # from the trade archive. OKX and the LST adapter are in attic/. Archive
+    # gaps are NaN closes inside a coin's life; align=False keeps them.
+    tickers = _sync_hl_futures(NORMALIZED_DIR, timeframe=timeframe)
     bar_minutes = _parse_timeframe_minutes(timeframe)
 
     series = {}

@@ -1,0 +1,14 @@
+### C3 2026-10-14T19:20:30.182908+00:00
+ctx files 222 coins with bars 222
+ctx files failing (rows == listed_minutes, 10 expected columns, dates unique and increasing): []
+ctx total GB 6.937707156
+futures files to delete 444 GB 1.793449088
+-- delete build-1 mid-price bar files (superseded)
+deleted      444 files; remaining:        0
+-- delete raw asset_ctxs cache
+6.4G	/Users/elvisobondo/.cache/hl_asset_ctxs
+     650
+cache absent
+       0
+-- ctx kept:      222 files
+/dev/disk3s5       228  181        20    90% 2891354 217733720    1%   /System/Volumes/Data

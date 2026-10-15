@@ -1,0 +1,20 @@
+### C2 2026-10-14T19:20:11Z
+-- before
+-	1	com.pairtrading.update-data
+-rw-r--r--@   1 elvisobondo  staff  1776 Sep 12 10:43 com.pairtrading.scanner.plist
+-rw-r--r--@   1 elvisobondo  staff  1863 Aug 13 21:35 com.pairtrading.update-data.plist
+-- /Users/elvisobondo/Library/LaunchAgents/com.pairtrading.scanner.plist
+["\/Users\/elvisobondo\/Pair_Trading\/scripts\/run_scanner.sh"]
+-- /Users/elvisobondo/Library/LaunchAgents/com.pairtrading.update-data.plist
+["\/bin\/bash","-c","echo \"===== $(date -u +%Y-%m-%dT%H:%M:%SZ) =====\" >> \/Users\/elvisobondo\/Pair_Trading\/logs\/update_data.log; \/Users\/elvisobondo\/Pair_Trading\/scripts\/update_data.sh >> \/Users\/elvisobondo\/Pair_Trading\/logs\/update_data.log 2>&1"]
+-- unload update-data
+bootout exit 0
+/Users/elvisobondo/Library/LaunchAgents/com.pairtrading.update-data.plist -> attic/launchd/com.pairtrading.update-data.plist
+-- after
+launchctl list: no pairtrading agents loaded
+com.pairtrading.scanner.plist
+-- com.pairtrading.scanner: NOT loaded (absent from launchctl list); calls scripts/run_scanner.sh, which is NOT in attic -> left in place, listed
+-rwxr-xr-x@ 1 elvisobondo  staff  1589 Sep 12 10:18 scripts/run_scanner.sh
+11:# Note it pulls ONLY the 30m futures timeframe. scripts/update_data.sh pulls
+27:#   scripts/run_scanner.sh --no-refresh     # scan without downloading
+30:python3 research/live_scanner.py "$@"

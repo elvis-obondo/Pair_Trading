@@ -1,0 +1,14 @@
+[ORDER] coins in both day files 178 (TID 178, SEQ 178); D2 compared 178
+[ORDER] candle coverage: min 2026-10-13 00:00:00+00:00 .. 2026-10-13 00:00:00+00:00; max 2026-10-14 00:00:00+00:00 .. 2026-10-14 00:00:00+00:00
+[ORDER] 2026-10-13, 178 coins, median 1282 traded minutes
+  close_tid  p0 0.7081  p5 0.8127  p50 0.9158   coins >= 99%: 6 of 178
+  close_seq  p0 0.9908  p5 0.9992  p50 1.0000   coins >= 99%: 178 of 178
+  open_tid   p0 0.7127  p5 0.8176  p50 0.9185   coins >= 99%: 6 of 178
+  open_seq   p0 0.9908  p5 0.9991  p50 1.0000   coins >= 99%: 178 of 178
+  volume     p0 1.0000  p5 1.0000  p50 1.0000   coins >= 99%: 178 of 178
+[ORDER] GATE (seq): 178 of 178 coins (100.0%) >= 99% close match; need >= 95%
+[ORDER] PASS
+Empty DataFrame
+Columns: [coin, minutes, close_tid, close_seq, open_tid, open_seq, volume]
+Index: []
+ORDER exit 0

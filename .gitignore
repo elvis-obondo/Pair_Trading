@@ -102,3 +102,10 @@ research/exit_study/paths_meta.parquet
 # (user_data/data/) is not tracked either, so a fresh clone could not verify a
 # blob anyway.
 research/datasets/
+
+# OKX data retired 2026-10-14 (HL-BUILD1). 2.3GB of bars plus OKX-built
+# research datasets, kept so pre-2026-10-14 NUMBERS.md results stay re-checkable.
+attic/okx_data/
+attic/okx_datasets/
+attic/vm_final/
+research/.gcp_pull/

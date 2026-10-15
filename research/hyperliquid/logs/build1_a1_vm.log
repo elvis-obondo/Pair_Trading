@@ -1,0 +1,924 @@
+### A1 2026-10-14T18:13:22Z
+
+### STEP1 $ scripts/check_vm.sh status
+NAME           ZONE           MACHINE_TYPE  PREEMPTIBLE  INTERNAL_IP  EXTERNAL_IP      STATUS
+pairs-trading  us-central1-a  e2-medium                  10.128.0.2   104.155.130.144  RUNNING
+
+               total        used        free      shared  buff/cache   available
+Mem:            3913         401        2543           0         967        3267
+Swap:           2047         226        1821
+
+/dev/root        20G   11G  9.1G  53% /
+
+NAMES                STATUS
+pairs-dashboard      Up 2 weeks
+pairs-stop-monitor   Up 2 weeks
+
+NAME                 MEM USAGE / LIMIT     CPU %
+pairs-dashboard      3.172MiB / 3.821GiB   0.03%
+pairs-stop-monitor   119.5MiB / 3.821GiB   13.38%
+
+### STEP1 $ scripts/check_vm.sh positions
+as of 2026-10-14T18:13:34+00:00  (1s ago)   feed=live
+equity 74.72   margin used 38.97   free 35.75   open 10/10
+
+  # pair            side     held   beta    r2  z now  ->stop    P&L $      R  net exp
+--------------------------------------------------------------------------------------
+1026 DOGE/SUI        LONG     0.1h   0.74  0.86  -3.39    -3%     -0.07  -0.23      +11
+1024 BABY/PUMP       SHORT    1.1h   1.02  0.66   3.20   -63%     +0.16  +0.53       +1
+1021 BLUR/WIF        SHORT    3.1h  12.10  0.18   3.05   -91%     +0.33  +0.90      +63
+1023 BAT/TRUMP       LONG     1.1h   8.11  0.24  -2.67  -103%     +0.38  +1.01      -58
+1015 ONT/PLUME       SHORT    4.6h   1.79  0.52   2.12  -111%     +0.70  +1.07      +21
+969 ACT/ATH         LONG    23.6h   0.94  0.95  -1.88  -146%     +0.72  +1.38       +3
+992 DYDX/HUMA       SHORT   13.1h   1.56  0.09   2.74  -170%     +1.49  +1.66      +18
+983 SLX/SSV         SHORT   18.6h   1.40  0.93   2.06  -183%     +0.64  +1.74      +13
+946 AAVE/DASH       SHORT   30.6h   1.22  0.87   1.19  -191%     +0.78  +1.82       +9
+1013 KSM/PLUME       SHORT    4.6h   1.35  0.53   0.42  -259%     +1.39  +2.54      +11
+--------------------------------------------------------------------------------------
+9 up, 1 down   unrealized +6.51
+
+book net exposure    +91.50 on gross 779.34  =  +11.7% directional
+                      +1.22x equity
+
+  ->stop is progress toward the stop level; * marks past 75%.
+  net exp is one-way market exposure: 0 = hedged, +/- = directional.
+
+### STEP1 $ scripts/check_vm.sh ledger 20
+#   scripts/check_vm.sh status         # instance, containers, resources
+#   scripts/check_vm.sh logs [N]       # last N stop-monitor log lines (50)
+#   scripts/check_vm.sh follow         # live-tail the monitor (Ctrl-C to stop)
+#   scripts/check_vm.sh scanner [N]    # last N scanner cycle lines (50)
+#   scripts/check_vm.sh heartbeat [N]  # feed state, tick ages, blind positions
+#   scripts/check_vm.sh positions      # open positions, marked live, P&L and exposure
+#   scripts/check_vm.sh ledger [N]     # last N ledger rows (5)
+#   scripts/check_vm.sh overshoot      # THE number: how far past the stop fills land
+#   scripts/check_vm.sh pull           # copy ledger + scan history down
+#   scripts/check_vm.sh oi             # copy new open-interest days down, merge, report gaps
+#   scripts/check_vm.sh deploy         # build here, push to the registry, VM pulls
+#   scripts/check_vm.sh ssh            # interactive shell
+#   scripts/check_vm.sh positions      # check the live positions
+
+### STEP2 $ scripts/check_vm.sh pull
+-> research/from_vm/
+
+### STEP2 $ scripts/check_vm.sh oi
+pulled: 2026-10-09.csv.gz 2026-10-10.csv.gz 2026-10-11.csv.gz 2026-10-12.csv.gz 2026-10-13.csv.gz 2026-10-14.csv
+
+830,426 rows  504 instruments  1,660 polls  2026-10-08 02:42:00+00:00 -> 2026-10-14 18:10:00+00:00
+-> research/datasets/open_interest.feather  (18.5MB)
+  2026-10-08    1/288 polls   <-- 287 MISSING
+  2026-10-09  288/288 polls
+  2026-10-10  288/288 polls
+  2026-10-11  288/288 polls
+  2026-10-12  288/288 polls
+  2026-10-13  288/288 polls
+  2026-10-14  219/218 so far polls
+
+1 gap(s) longer than two polls:
+  0 days 21:18:00 ending 2026-10-09 00:00:00+00:00
+
+### STEP2 PULL1_ROWS local:     2043
+
+### STEP1 (rerun; the loop above passed 'ledger 20' as one arg under zsh and printed usage) $ scripts/check_vm.sh ledger 20
+event,trade_num,ticker_a,ticker_b,time,opened_at,closed_at,hours_held,exit_reason,entry_spread,exit_spread,mu_at_entry,sigma_at_entry,z_at_entry,beta_at_entry,alpha_at_entry,theta_at_entry,take_profit_level,leg_a_notional,leg_b_notional,gross_notional,margin,leverage,notional_capped,realized_pnl_net,net_pct,r,exit_detected_at,exit_level_spread,overshoot_ratio,confirm_delay_ms,blind_gap_seconds,feed_state,entry_bar_z,entry_fill_z,exec_spread_at_exit,r2_at_entry,net_exposure,net_exposure_frac
+close,1012,SSV,XLM,2026-10-14 13:50:36.656182,2026-10-14 13:36:02.179654,2026-10-14 13:50:36.656182,0.2429101466666667,adverse_move,0.015511539093113313,0.022541176992625367,-0.007552785052403098,0.007017496589349129,3.286688329927015,1.7225384963039359,3.854182922007313,0.6835210088596289,,26.773539019151933,46.11845164278473,72.89199066193666,3.644599533096833,,False,-0.26059003132039826,-0.8022637899512054,-1.1432336015222988,2026-10-14T13:50:36.552+00:00,0.022529035682462444,1.0017301483525267,103.54208946228027,0.0,live,3.579986792835856,3.286688329927015,0.023007946600207774,0.8662959868981446,19.344912623632794,0.2653914709690386
+close,1014,BLUR,GRAM,2026-10-14 13:52:19.920301,2026-10-14 13:36:02.179654,2026-10-14 13:52:19.920301,0.27159462416666663,adverse_move,0.1325888517025522,0.218069120290469,-0.10686539208939605,0.07614362743320369,3.144770637595475,26.71232837879948,-12.911524672783589,0.6082094490644167,,2.6303091413170674,70.26168152061959,72.89199066193666,3.644599533096833,,False,-0.29722127859633884,-8.64732685879168,-1.1356599560977665,2026-10-14T13:52:19.875+00:00,0.20873247913575588,1.1226188122296064,44.712066650390625,0.0,live,4.093629773822596,3.144770637595475,0.22840606147492437,0.1630301578902743,67.63137237930252,0.927829954500321
+open,1017,BLUR,PUMP,2026-10-14 14:06:05.217012,,,,,0.11429580868185951,,-0.09380775288944755,0.058701575085366955,3.545110352978975,7.588783280231717,35.75931031942574,0.6080993560381441,-0.09380775288944754,8.421935563155627,63.91224378886431,72.33417935201993,3.6167089676009967,20.0,False,,,,,,,,,,3.310106194586397,3.545110352978975,,0.4991250924551167,55.49030822570868,0.7671381457949604
+open,1018,BLUR,CFX,2026-10-14 14:06:05.217012,,,,,0.12973428942873255,,-0.09364552683675546,0.05884846505940178,3.795847793821095,8.722213963939307,20.474728075766684,0.574905405878296,-0.09364552683675548,7.44009333885418,64.89408601316575,72.33417935201993,3.6167089676009967,20.0,False,,,,,,,,,,3.6812614278096345,3.795847793821095,,0.652473683237578,57.453992674311564,0.7942855395470407
+close,1017,BLUR,PUMP,2026-10-14 14:17:23.292385,2026-10-14 14:06:05.217012,2026-10-14 14:17:23.292385,0.1883542702777778,adverse_move,0.11429580868185951,0.17618862149048908,-0.09380775288944755,0.058701575085366955,3.545110352978975,7.588783280231717,35.75931031942574,0.6080993560381441,,8.421935563155627,63.91224378886431,72.33417935201993,3.6167089676009967,,False,-0.5930851213932872,-6.288581280862957,-1.0712798202974567,2026-10-14T14:17:23.275+00:00,0.17299738376722645,1.054363749501129,17.304658889770508,0.0,live,3.310106194586397,3.545110352978975,0.17747754174883568,0.4991250924551167,55.49030822570868,0.7671381457949604
+open,1019,ME,SKY,2026-10-14 14:36:27.990218,,,,,0.032019663163714185,,-0.014269853364782521,0.01005765719030814,4.602415418682462,1.7079441989915245,1.7102040290291902,0.572470836467526,-0.014269853364782523,26.492825907322608,45.24826832330402,71.74109423062663,3.5870547115313314,20.0,False,,,,,,,,,,4.438322294264891,4.602415418682462,,0.6232336592645487,18.75544241598141,0.2614323438626145
+close,997,ESP,USELESS,2026-10-14 14:44:44.135939,2026-10-14 08:36:31.945251,2026-10-14 14:44:44.135939,6.136719635555555,take_profit,0.05079418261045188,-0.011090374053700947,-0.011047669345867988,0.01916272325544448,3.2271953799024606,0.7025039053668393,-1.0245693487853356,0.26877446922269765,,47.064574293813486,33.063047245831726,80.12762153964522,4.006381076982261,,False,2.833003586570863,6.089155666415282,3.177604552988178,2026-10-14T14:44:43.940+00:00,0.06995690586589635,3.22942391012041,195.88184356689453,0.0,live,3.037787460280193,3.2271953799024606,-0.010669431849044342,0.7946939261404444,-14.00152704798176,-0.17474033022500415
+close,1019,ME,SKY,2026-10-14 15:00:37.178135,2026-10-14 14:36:27.990218,2026-10-14 15:00:37.178135,0.4025521991666667,adverse_move,0.032019663163714185,0.042260923754898094,-0.014269853364782521,0.01005765719030814,4.602415418682462,1.7079441989915245,1.7102040290291902,0.572470836467526,,26.492825907322608,45.24826832330402,71.74109423062663,3.5870547115313314,,False,-0.34255884048477137,-1.123426059118391,-1.1169858326459547,2026-10-14T15:00:37.041+00:00,0.04207732035402233,1.018255086388577,136.30151748657227,0.0,live,4.438322294264891,4.602415418682462,0.042851090292910676,0.6232336592645487,18.75544241598141,0.2614323438626145
+open,1020,APR,PUMP,2026-10-14 15:06:11.121194,,,,,0.40128643480139914,,-0.07747411777358877,0.10237538924806816,4.6765199731245195,8.517655888404601,42.242919376055,0.33296368943095017,-0.07747411777358876,7.799351000612379,66.43218797610035,74.23153897671273,3.7115769488356363,20.0,False,,,,,,,,,,3.415959503536446,4.6765199731245195,,0.18355528862053705,58.632836975487976,0.789864224610536
+open,1021,BLUR,WIF,2026-10-14 15:06:11.121194,,,,,0.2046234063084711,,-0.10487801654696229,0.0780622685121937,3.9648018018729214,12.098573388683654,14.642164810823203,0.3252557727073136,-0.10487801654696227,5.66714685439287,68.56439212231986,74.23153897671273,3.7115769488356363,20.0,False,,,,,,,,,,3.0223851588423094,3.9648018018729214,,0.18488094943820568,62.89724526792699,0.8473116162613652
+close,1020,APR,PUMP,2026-10-14 16:18:21.426329,2026-10-14 15:06:11.121194,2026-10-14 16:18:21.426329,1.2028625375,adverse_move,0.40128643480139914,0.5108553542056526,-0.07747411777358877,0.10237538924806816,4.6765199731245195,8.517655888404601,42.242919376055,0.33296368943095017,,7.799351000612379,66.43218797610035,74.23153897671273,3.7115769488356363,,False,-0.9282783793954574,-11.05619194042535,-1.0799658024874355,2026-10-14T16:18:21.294+00:00,0.5036618240494672,1.0702662056674044,132.27033615112305,0.0,live,3.415959503536446,4.6765199731245195,0.5126916394150953,0.18355528862053705,58.632836975487976,0.789864224610536
+open,1022,KGEN,NEAR,2026-10-14 16:35:59.643028,,,,,0.053389721828436265,,-0.0465783487180034,0.03211956285005606,3.112373322548666,3.336890874078187,-7.60162916076025,0.5270804870255724,-0.0465783487180034,16.902260795966647,56.40099980135062,73.30326059731726,3.6651630298658633,20.0,False,,,,,,,,,,3.4259583211304245,3.112373322548666,,0.6857094175297311,39.498739005383975,0.5388401373080196
+close,1018,BLUR,CFX,2026-10-14 16:41:40.797447,2026-10-14 14:06:05.217012,2026-10-14 16:41:40.797447,2.5932167875,take_profit,0.12973428942873255,-0.09825627047729668,-0.09364552683675546,0.05884846505940178,3.795847793821095,8.722213963939307,20.474728075766684,0.574905405878296,,7.44009333885418,64.89408601316575,72.33417935201993,3.6167089676009967,,False,1.6244432059819274,22.699755990602924,3.8573233758416188,2026-10-14T16:41:40.660+00:00,0.18858275448813433,3.874197222916435,136.84749603271484,0.0,live,3.6812614278096345,3.795847793821095,-0.09700350309788774,0.652473683237578,57.453992674311564,0.7942855395470407
+close,1022,KGEN,NEAR,2026-10-14 16:59:17.181449,2026-10-14 16:35:59.643028,2026-10-14 16:59:17.181449,0.38820511694444443,adverse_move,0.053389721828436265,0.08700534813748195,-0.0465783487180034,0.03211956285005606,3.112373322548666,3.336890874078187,-7.60162916076025,0.5270804870255724,,16.902260795966647,56.40099980135062,73.30326059731726,3.6651630298658633,,False,-0.6409702204683839,-3.4608626309045687,-1.077493690390786,2026-10-14T16:59:17.161+00:00,0.08550928467849232,1.0465779520715681,19.593477249145508,0.0,live,3.4259583211304245,3.112373322548666,0.08780471709982773,0.6857094175297311,39.498739005383975,0.5388401373080196
+open,1023,BAT,TRUMP,2026-10-14 17:06:02.297629,,,,,-0.07578501252742242,,0.12305112279566145,0.053859014853591715,-3.691789310732705,8.106913141128457,-6.904659146575953,0.7144106708735917,0.12305112279566144,8.157180422347345,66.12955316048347,74.2867335828308,3.71433667914154,20.0,False,,,,,,,,,,-3.3847322775274553,-3.691789310732705,,0.23873312742937952,-57.97237273813612,-0.7803866173964437
+open,1024,BABY,PUMP,2026-10-14 17:06:02.297629,,,,,0.031124018463392744,,-0.006758807237384941,0.009888563000330077,3.8309737926039578,1.0221963215426897,0.9899138439941426,0.4278691538668792,-0.006758807237384944,36.735668437058116,37.5510651457727,74.2867335828308,3.71433667914154,20.0,False,,,,,,,,,,3.31448435575304,3.8309737926039578,,0.6648815261756361,0.8153967087145801,0.010976343545989954
+close,1016,BARD,COAI,2026-10-14 17:13:39.183548,2026-10-14 13:36:02.179654,2026-10-14 17:13:39.183548,3.6269455261111108,take_profit,-0.016734386458016948,0.0009897310420532435,0.0008821007312514451,0.005559527735293853,-3.168702096300858,0.8500395976009016,-1.0497086062797851,0.5424828499207722,,39.40023270661973,33.49175795531692,72.89199066193666,3.644599533096833,,False,0.6259526072949336,1.673111750007019,3.009449416693279,2026-10-14T17:13:38.184+00:00,-0.0222939141933108,3.1880617102692392,998.8007545471191,0.0,live,-3.18063162872643,-3.168702096300858,0.0003826047124873,0.8798586476556292,5.908474751302812,0.08105794199949251
+open,1025,BONK,ENS,2026-10-14 17:36:05.047335,,,,,0.00722322782046092,,-0.003050331163473493,0.003327925781897032,3.0870757514544485,1.1757168930914097,-14.75210832793864,0.49086856874751306,-0.0030503311634734933,34.4312655879068,40.481420602218954,74.91268619012575,3.7456343095062876,20.0,False,,,,,,,,,,3.201082617040689,3.0870757514544485,,0.9510068657020571,6.050155014312153,0.08076275624340948
+close,1025,BONK,ENS,2026-10-14 17:55:01.667148,2026-10-14 17:36:05.047335,2026-10-14 17:55:01.667148,0.31572772583333336,adverse_move,0.00722322782046092,0.010673461123805517,-0.003050331163473493,0.003327925781897032,3.0870757514544485,1.1757168930914097,-14.75210832793864,0.49086856874751306,,34.4312655879068,40.481420602218954,74.91268619012575,3.7456343095062876,,False,-0.19318419659449368,-0.44432333033445964,-1.3351359358776929,2026-10-14T17:55:01.592+00:00,0.010551153602357952,1.036751877735039,74.94258880615234,0.0,live,3.201082617040689,3.0870757514544485,0.010935361261553034,0.9510068657020571,6.050155014312153,0.08076275624340948
+open,1026,DOGE,SUI,2026-10-14 18:06:07.625049,,,,,-0.008311460387719904,,0.004384208192402077,0.003705984362369867,-3.425721033534928,0.7395063046360859,-2.510937663133358,0.28913812933204514,0.0043842081924020775,42.954430112952636,31.765071880578613,74.71950199353125,3.735975099676563,20.0,False,,,,,,,,,,-3.48058492715764,-3.425721033534928,,0.8573709351526124,11.189358232374023,0.14975150976438156
+### STEP3 start 2026-10-14T18:14:40Z minute 14
+++ seq 1 60
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
++ crontab -l
++ grep -v -E 'vm_scan_cycle|vm_housekeeping|collect_oi'
++ crontab -l
++ crontab -
+15 4 * * * /home/elvisobondo/Pair_Trading/scripts/vm_housekeeping.sh >> /home/elvisobondo/Pair_Trading/logs/cron.log 2>&1
+*/30 * * * * /home/elvisobondo/Pair_Trading/scripts/vm_scan_cycle.sh >> /home/elvisobondo/Pair_Trading/logs/cron.log 2>&1
+*/5 * * * * /usr/bin/python3 /home/elvisobondo/Pair_Trading/scripts/collect_oi.py >> /home/elvisobondo/Pair_Trading/logs/oi.log 2>&1
++ cat /home/elvisobondo/crontab.bak.20261014
+++ seq 1 60
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
+3126074 bash
+scan cycle running, waiting
++ echo 'scan cycle running, waiting'
++ sleep 10
+3126074 bash
+scan cycle running, waiting
++ for i in $(seq 1 60)
++ pgrep -fl vm_scan_cycle
++ echo 'scan cycle running, waiting'
++ sleep 10
++ cd /home/elvisobondo/Pair_Trading
++ docker compose -f docker-compose.trading.yml down
+ Container pairs-dashboard Stopping 
+ Container pairs-stop-monitor Stopping 
+ Container pairs-stop-monitor Stopped 
+ Container pairs-stop-monitor Removing 
+ Container pairs-dashboard Stopped 
+ Container pairs-dashboard Removing 
+ Container pairs-dashboard Removed 
+ Container pairs-stop-monitor Removed 
+ Network pair_trading_default Removing 
+ Network pair_trading_default Removed 
+### STEP4 verify
+-- crontab -l
++ echo '### STEP4 verify'
++ echo '-- crontab -l'
++ crontab -l
+-- sudo crontab -l
++ echo '-- sudo crontab -l'
++ sudo crontab -l
+-- /etc/cron.d
+no crontab for root
++ echo '-- /etc/cron.d'
++ ls -la /etc/cron.d
+total 16
+drwxr-xr-x  2 root root 4096 Jul 31 14:20 .
+drwxr-xr-x 95 root root 4096 Oct 14 16:10 ..
+-rw-r--r--  1 root root  102 Mar 23  2022 .placeholder
+-rw-r--r--  1 root root  201 Jan  8  2022 e2scrub_all
+-- timers
++ echo '-- timers'
++ systemctl list-timers --all
++ grep -i -E 'oi|scan|pairs'
+-- docker ps -a
++ echo '-- docker ps -a'
++ docker ps -a
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+-- pgrep
++ echo '-- pgrep'
++ pgrep -fl 'vm_scan_cycle|collect_oi|live_scanner'
+3126074 bash
+-- VM counts
++ echo '-- VM counts'
+++ wc -l
+VM_LEDGER_ROWS 2043
++ echo 'VM_LEDGER_ROWS 2043'
+++ ls /home/elvisobondo/Pair_Trading/trading_data/scan_history
+++ wc -l
+VM_SCAN_HISTORY_FILES 32
++ echo 'VM_SCAN_HISTORY_FILES 32'
+VM_OI_FILES 7
+++ ls /home/elvisobondo/Pair_Trading/trading_data/oi
+++ wc -l
++ echo 'VM_OI_FILES 7'
+
+### NOTE: every pgrep -f hit above (pid 3126074) is the ssh bash -c itself, whose command text contains the pattern. Last real scan cycle: cron.log '2026-10-14T18:05:50Z scan cycle done'. Crons were removed at ~18:24, before the 18:30 slot. Clean re-check with a self-excluding pattern:
+pgrep: []
+2026-10-14T18:05:50+00:00  scan 22,366 pairs in 95.5s — 90 candidates | 62 ranked (69% fit a theta) | |z| max 4.33 median 3.22
+2026-10-14T18:05:50+00:00  === cycle done in 99s ===
+=== 2026-10-14T18:05:50Z scan cycle done ===
+[oi] 2026-10-14T18:15:00Z  504 instruments -> /home/elvisobondo/Pair_Trading/trading_data/oi/2026-10-14.csv
+[oi] 2026-10-14T18:20:00Z  504 instruments -> /home/elvisobondo/Pair_Trading/trading_data/oi/2026-10-14.csv
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
+### STEP5 second pull 2026-10-14T18:39:20Z
+-> research/from_vm/
+pulled: 2026-10-14.csv
+
+831,434 rows  504 instruments  1,662 polls  2026-10-08 02:42:00+00:00 -> 2026-10-14 18:20:00+00:00
+-> research/datasets/open_interest.feather  (18.5MB)
+  2026-10-08    1/288 polls   <-- 287 MISSING
+  2026-10-09  288/288 polls
+  2026-10-10  288/288 polls
+  2026-10-11  288/288 polls
+  2026-10-12  288/288 polls
+  2026-10-13  288/288 polls
+  2026-10-14  221/223 so far polls
+
+1 gap(s) longer than two polls:
+  0 days 21:18:00 ending 2026-10-09 00:00:00+00:00
+LOCAL_LEDGER_ROWS (PULL2_ROWS)     2043   PULL1_ROWS 2043   VM_LEDGER_ROWS 2043
+LOCAL_SCAN_HISTORY_FILES       32   VM 32
+LOCAL_OI_FILES        7   VM 7
+2026-10-08.csv
+2026-10-09.csv.gz
+2026-10-10.csv.gz
+2026-10-11.csv.gz
+2026-10-12.csv.gz
+2026-10-13.csv.gz
+2026-10-14.csv

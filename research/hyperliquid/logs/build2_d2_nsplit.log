@@ -1,0 +1,10 @@
+[NSPLIT] 178 coins, 544,942 traded minutes compared
+       minutes  close_match
+nb                         
+n=1     126825     0.999905
+n=2-5   211057     0.904765
+n>5     207060     0.840486
+
+[MISMATCH] 53,141 minutes: our close == candle high or low 30.5%; within the candle's [low, high] 99.8%; outside the range 0.2%
+[N=1 per coin] close_match p0 0.9902  p5 0.9992  p50 1.0000
+NSPLIT exit 0

@@ -1,3 +1,5 @@
+> **Results before 2026-10-14 are OKX.** OKX data (bars and the datasets built from them) is in attic/okx_data/ and attic/okx_datasets/. From [HL-BUILD1] on, the venue is Hyperliquid.
+
 # Every number produced this session
 
 M = measured from data.  A = assumed / typed by me as an input.
@@ -335,3 +337,97 @@ The docstring claimed `<= T-60` in both cases. The code reads `<= T-90` for a
 `:30` entry, which is CONSERVATIVE, not leaky — it gives up an hour of history.
 Corrected in the docstring and left alone in the code: widening it to recover the
 hour would change the feature, and that is not on this plan.
+
+---
+
+# HL-BUILD1 — OKX retired; Hyperliquid bars built; STOPPED at the B2 missing-minutes gate
+
+Tag: **HL-BUILD1**. Brief: docs/prompts/HL_BUILD1_BARS_AND_DISLOCATIONS.md (from the HyperLiquid Start planning session; user approved the full brief 2026-10-14). Logs in research/hyperliquid/logs/build1_*.log. Code Checker (Code Checker 2) passed every step listed.
+
+**Part A: OKX retired.** (build1_a1_vm.log, build1_a2_files.log)
+
+| finding | M/A |
+|---|---|
+| VM snapshot at 2026-10-14T18:13Z: equity 74.72, 10/10 positions open (9 up, 1 down), unrealized +6.51; positions left frozen, no synthetic closes | M |
+| VM crontab: 3 lines removed (vm_housekeeping, vm_scan_cycle, collect_oi), backup ~/crontab.bak.20261014; `docker compose -f docker-compose.trading.yml down` removed pairs-stop-monitor and pairs-dashboard; instance left RUNNING | M |
+| last scan cycle 18:05:50Z; last OI poll 18:20Z | M |
+| final pull, VM static: ledger rows 2,043 local = 2,043 VM (no change between pulls); scan_history 32 = 32; OI day files 7 = 7 | M |
+| moved to attic/: 7 OKX scripts and 3 adapters (git mv), user_data/data/okx (2.3 GB) to attic/okx_data/, 24 research/datasets entries (297 MB) to attic/okx_datasets/; both gitignored | M |
+
+**Part B: Hyperliquid.**
+
+| finding | M/A |
+|---|---|
+| asset_ctxs files 20250101..20261013: 650 (20260708 missing entirely), 6.4 GB lz4 (build1_raw_coverage.log) | M |
+| B0 timestamp: best lag -1 min on all 5 coins (BTC 0.9982, ETH 0.9962, SOL 0.9897, HYPE 0.9955, DOGE 0.9357; margin over next lag ≥ 0.856; n 1,054 each), so row stamped T = close of the 1m bar labelled T-1m. PASS (build1_b0_timestamp.log) | M |
+| B0 gap-fill: no full archive day lies inside the candle window, so 20261012 + 20261013 were used (1,056 stamps) | A |
+| B2 gap-fill: 39,341 off-minute rows on 192 stamps dropped; each is its floor minute's snapshot taken 1-59 s late, so labelling it on the minute would be look-ahead (build1_offminute.log) | M |
+| coins: 234 in coins.csv; 12 never have a valid mid (no files); 222 with bars; 56 delisted (44 with last valid mid before 2026-10-13, plus the 12), 178 live; 156 listed from 2025-01-01, 66 later | M |
+| delisted flag corrected from 0 to 56 after run 3: the archive keeps delisted coins as empty-mid rows to the end (build1_corrections.log) | M |
+| archive minute grid: 907,268 of 936,403 minutes present; 29,135 archive-wide missing | M |
+| 30m close == 1m close at date+29, asserted on all 5,543,390 bars of 222 coins | M |
+| filled (runs ≤ 5) 33,997 minutes; NaN 5,144,235 of 166,298,904 listed minutes; 6,354 long runs, **all archive-wide, 0 coin-specific** | M |
+| missing share by month (BTC as the archive-wide profile): ≤ 0.001 for 2025-01..2026-04 and 2026-06; 2026-05 0.023, 07 0.032, 08 0.064, 09 0.284, 10 0.636 (October measured over the 17,683 in-window minutes) | M |
+| **GATE: 178 of 222 coins (80.2%) have > 1% of listed minutes filled or NaN; threshold 5% → STOP.** With archive-wide minutes removed (receipt only), 0 of 222 | M |
+| on disk, not uploaded: futures 1.79 GB, ctx 6.94 GB; raw cache kept in ~/.cache/hl_asset_ctxs | M |
+| AWS cost: about $0.60 (6.4 GB requester-pays transfer); Cost Explorer showed $0 on 2026-10-14 because it lags | A |
+
+**Not done, per the STOP:** B3 candle check, B4 dislocation set, the data_loader and envelope swap, the normalized-store rebuild, the S3 copy, deleting the raw cache.
+
+---
+
+# HL-BUILD2 — Hyperliquid bars and flow from the trade archive; the adaptive-trigger dislocation set
+
+Tag: **HL-BUILD2**. Brief: docs/prompts/HL_BUILD2_TRADES_TO_BARS_AND_FLOW.md (HyperLiquid Start; user approved 2026-10-14), plus decisions relayed by the planner on 2026-10-15: the adaptive trigger, rule (iii) + (i) for archive gaps, old-format holes (a), and the execution-order tie-break. Logs in research/hyperliquid/logs/build2_*.log and research/dislocation_model/logs/mkdisloc_hl_adaptive.log. Code Checker (Code Checker 2) passed every step. **Results in this section are on Hyperliquid data, window 2025-05-25 14:32 to 2026-10-13.**
+
+**Part C: housekeeping** (build2_c1_vm.log, build2_c2_launchd.log, build2_c3_cleanup.log)
+
+| finding | M/A |
+|---|---|
+| GCP VM `pairs-trading` and its 20 GB disk deleted 2026-10-14T19:20:56Z; instances, disks and addresses lists all empty | M |
+| VM tree archived first: attic/vm_final/vm_final_20261014.tar.gz, 307,771,513 B, sha256 781b1004…578c65a equal on both sides; 22,273 files / 555,756,735 B equal (excluding 73 macOS `._*` files) | M |
+| Artifact Registry repo `pairs-trading` (231 MB) left in place, as the brief says | M |
+| launchd `com.pairtrading.update-data` booted out (exit 0), plist moved to attic/launchd/; `com.pairtrading.scanner` not loaded, left | M |
+| build-1 mid-price bars (444 files, 1.79 GB) and the raw asset_ctxs cache (6.4 GB) deleted after the 222 ctx files were checked | M |
+
+**Part D: bars and flow from trades**
+
+| finding | M/A |
+|---|---|
+| archive: old format 64 days / 1,507 hour files / 31.8 GB lz4; by-block 445 days / 10,667 files / 310.1 GB; window total 341.0 GB (build2_d_archive_listing.log) | M |
+| window starts at the archive's first fill, 2025-05-25 14:32 (first fill 14:32:53.109). The user's earlier 14:00 start was moved by the planner's (a), applying "archive gaps are missing" | M |
+| folder hour is not fill hour: spill-over up to 217 ms early, 0 late (pilot); each day reads its own 24 files plus the next day's hour 0 | M |
+| exactly 1 taker per tid on every pilot day; dedupe on (tid, wallet) removed 0 (the 2025-07-27 "overlap" hour shares no fill) | M |
+| universe: perps only; dropped '@' and '/' (spot), '#' (outcome), ':' (HIP-3), as the planner confirmed under the existing perps-only decision | A |
+| tie-break for same-ms fills: EXECUTION ORDER (file → line → event in block). The brief's tid tie-break gave a 91% median close match against Hyperliquid's candles with 100% volume match (build2_d2_candles.log). By the candle's trade count: n=1 99.99%, n=2-5 90.5%, n>5 84.0% (build2_d2_nsplit.log). On 2026-10-13, tid matches 6 of 178 coins ≥ 99% against 178 of 178 for execution order (build2_d2_order_diag.log). Corrected as a brief bug (planner) | M |
+| stage 1 (final): 507 days, all exit 0; 3 × r7g.4xlarge by date range, 11-14 min per part (part1 spot was interrupted and rerun on-demand); merged 507 × 3 files (build2_d2_run.log) | M |
+| MISSING TIME, 114 of 729,208 minutes = 0.0156% (gate 0.1%) → PASS: 10 block gaps (54 blocks), 1 duplicate block (706113001, 2025-08-23 08:48:17 → 08:57:37, 10 min), 3 old-format file holes (the 14:32 window-start minute; 2025-06-08 09:44 → 10:27, 44 min; 2025-07-19 09:53 → 10:16, 24 min), the format switch (2025-07-27 08:45:48.7 → 08:49:59.4, 5 min) | M |
+| GAP-FILL: the minutes between a duplicate block's two copies are marked missing | A |
+| report only: 46 chain halts (consecutive blocks > 60 s apart; mostly ~1m10s on weekend mornings), kept as real quiet minutes; 53 market-wide empty old-format minutes remain after the file-edge rule, so there are holes inside old files that cannot be seen | M |
+| CLOSES, rule (iii) (user, 2026-10-15): a close is NaN only if a hole lies between its last trade and the bar end. GAP-FILL: done at minute resolution, so a hole sharing the last trade's minute also invalidates the close | A |
+| 30m NaN closes: 929 coin-bars under rule (iii), against 2,783 bars touching a hole; 32 distinct timestamps; 5 seams with ≥ 50% of live coins NaN (2025-06-08 09:30 and 10:00, 2025-07-19 09:30, 2025-07-27 11:30, 2025-09-27 09:00) | M |
+| stage 2: 206 coins, 4,386,491 30m bars, every bar asserted (close == 1m close at H+29, open == 1m open at H, high/low/volume/notional == the 1m resample). 3:56 wall with 16 workers; output identical to the serial run (4 pilot days, sha256) | M |
+| flow table: research/hyperliquid/flow/{COIN}.parquet, 206 files, 4,160,463,543 B on pt-research = S3 (build2_d2_rerun_pull_and_d2.log). Columns: n_trades, taker_buy_usd, taker_sell_usd, n_taker_wallets, open_taker_usd, close_taker_usd, twap_taker_usd (NaN before 2025-07-27 08:00), top3_taker_share, liq_forced_long_usd, liq_forced_short_usd, backstop_liq_usd, adl_usd; NaN on hole minutes. Unaffected by the tie-break change apart from being regenerated | M |
+| D2 against Hyperliquid's candles (178 listed coins, ~3,460 min each): close match p0 0.9779, p50 0.9997, volume 100%; 177 of 178 ≥ 99% → PASS. SOPH 0.978 overall but 0.998 on traded minutes: a no-trade-minute definitional edge | M |
+| coins: 206 with trades against build 1's 222; the 16 dropped were all delisted before 2025-05-25 (build2_coin_diff.log) | M |
+
+**Part E: dislocation set, adaptive trigger** (mkdisloc_hl_adaptive.log)
+
+| finding | M/A |
+|---|---|
+| trigger (user, 2026-10-15): fresh crossing of |z| above the 99th percentile of the pair's own |z| over the previous 96 bars; no absolute floor; everything else unchanged | A |
+| panel 24,305 bars × 206 tickers (2025-05-25 15:00 → 2026-10-13 23:00; drop_forming_bars removed the 23:30 bar, covered by only 149 coins because lives end at each coin's last trade); 20,706 pairs; shortest usable segment 356 bars | M |
+| 60,004 dislocations (the last pair overshoots 60,000), 3,004 distinct pairs, 473 days, 49 pairs too short; invariant max \|W[:,-1] − z\| = max \|Y[:,0] − z\| = 0; nan_windows asserted 0 | M |
+| 70/30 day split at 2026-05-25: fit 41,941, held-out 18,063 | M |
+| segments: 2,438 pairs split by NaN closes; 12,103 segments used, 407 too short; warm-up lost per split pair median 1,340 bars (~28 days), max 2,607; 0 pairs fully lost | M |
+| seams: dislocations in the 14 days after a seam fall sharply after the two old-format seams (06-08: 2,330 → 615; 07-19: 1,964 → 76, as the 07-27 seam falls inside the warm-up), and hold roughly level after 07-27 (751 → 862) and 09-27 (1,412 → 1,164). The dips are option (i)'s warm-up; nothing piles up at the seams | M |
+| threshold_at_entry p5/25/50/75/95: 1.260 / 1.744 / 2.118 / 2.539 / 3.259; \|z_at_entry\| 1.481 / 2.021 / 2.468 / 3.011 / 4.097; \|z\| < 2: 23.9%, 2-3: 50.7%, ≥ 3: 25.4% | M |
+| true triggers per pair: median 386; per pair-month median 25.0 (mean 24.5, p95 35). The adaptive rule fires about daily per pair | M |
+| stale: either leg ≥ 30 min since its last trade at the trigger bar: 0.79% (474) | M |
+| beta_stab p5/50/95: 0.198 / 0.845 / 9.726; NaN for 3,375 (5.6%): triggers whose fit window starts before the segment's first finite beta | M |
+| coins used 204 (BTC and ETH factor-only), 31 delisted coins included; long 50.8%, short 49.2% | M |
+| per month: 2025-06 4,148 … 2026-10 2,841 (17 months, ~2,800-4,150 each) | M |
+
+**Cost:** AWS ≈ $4-5 to date: EC2 ≈ $1.6, S3 transfer to GCP ≈ $2.5 (ctx and two bar/flow pulls), requester-pays requests a few cents; bucket 88 GB ≈ $2.2/month. Cost Explorer showed no data on 2026-10-15 because it lags. GCP: trial credits, ≈ $0.36/h while pt-research runs plus ≈ $10/month disk | A |
+
+**Superseded but kept for provenance:** s3://…/build2/d1/ (tid tie-break bars, plain and rule-(iii) asm) and build2/code_d1_tid/. Deleting them saves ~45 GB.

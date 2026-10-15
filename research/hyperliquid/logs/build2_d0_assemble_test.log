@@ -1,0 +1,25 @@
+== 20250601
+[GATE] missing minutes 0 of 1,440 = 0.0000% (hours 0, block gaps 0), threshold 0.1%
+[DONE] 170 coins, 8,071 30m bars asserted
+exit 0   2.48 real 2.34 user 0.57 sys  258686976 maximum resident set size 
+  coins 170  post_gap_nan_total 0  missing 0  block_gaps 0  BTC {'life_minutes': 1440, 'trade_minutes': 1436, 'notrade_minutes': 4, 'missing_minutes': 0, 'post_gap_nan_minutes': 0}
+ 10M	/private/tmp/claude-501/asm/20250601/out/futures 8.7M	/private/tmp/claude-501/asm/20250601/out/flow 
+== 20250727
+[GATE] missing minutes 9 of 1,440 = 0.6250% (hours 0, block gaps 1), threshold 0.1%
+[GATE] (--test: one-day grid, gate reported only; not a D1 verdict)
+[DONE] 173 coins, 8,255 30m bars asserted
+exit 0   2.60 real 2.42 user 0.60 sys  302415872 maximum resident set size 
+  coins 173  post_gap_nan_total 258  missing 9  block_gaps 1  BTC {'life_minutes': 1440, 'trade_minutes': 1399, 'notrade_minutes': 33, 'missing_minutes': 9, 'post_gap_nan_minutes': 1}
+ 10M	/private/tmp/claude-501/asm/20250727/out/futures 9.3M	/private/tmp/claude-501/asm/20250727/out/flow 
+== 20251010
+[GATE] missing minutes 0 of 1,440 = 0.0000% (hours 0, block gaps 0), threshold 0.1%
+[DONE] 182 coins, 8,694 30m bars asserted
+exit 0   2.70 real 2.53 user 0.63 sys  340131840 maximum resident set size 
+  coins 182  post_gap_nan_total 0  missing 0  block_gaps 0  BTC {'life_minutes': 1440, 'trade_minutes': 1440, 'notrade_minutes': 0, 'missing_minutes': 0, 'post_gap_nan_minutes': 0}
+ 12M	/private/tmp/claude-501/asm/20251010/out/futures  12M	/private/tmp/claude-501/asm/20251010/out/flow 
+== 20260708
+[GATE] missing minutes 0 of 1,440 = 0.0000% (hours 0, block gaps 0), threshold 0.1%
+[DONE] 176 coins, 8,415 30m bars asserted
+exit 0   2.60 real 2.46 user 0.61 sys  321257472 maximum resident set size 
+  coins 176  post_gap_nan_total 0  missing 0  block_gaps 0  BTC {'life_minutes': 1440, 'trade_minutes': 1440, 'notrade_minutes': 0, 'missing_minutes': 0, 'post_gap_nan_minutes': 0}
+ 11M	/private/tmp/claude-501/asm/20260708/out/futures  10M	/private/tmp/claude-501/asm/20260708/out/flow 

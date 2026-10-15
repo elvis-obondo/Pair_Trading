@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.pairtrading.update-data</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>-c</string>
+        <string>echo "===== $(date -u +%Y-%m-%dT%H:%M:%SZ) =====" &gt;&gt; /Users/elvisobondo/Pair_Trading/logs/update_data.log; /Users/elvisobondo/Pair_Trading/scripts/update_data.sh &gt;&gt; /Users/elvisobondo/Pair_Trading/logs/update_data.log 2&gt;&amp;1</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/elvisobondo/Pair_Trading</string>
+
+    <!-- Every 12 hours (43200s), relative to load time / last completion.
+         launchd will run it immediately if the machine was asleep/off past
+         a due run, rather than skipping it silently. -->
+    <key>StartInterval</key>
+    <integer>43200</integer>
+
+    <!-- Don't fire immediately on load -- we already ran it manually. -->
+    <key>RunAtLoad</key>
+    <false/>
+
+    <!-- launchd LaunchAgents default to a minimal PATH (/usr/bin:/bin:/usr/sbin:/sbin)
+         that excludes both /usr/local/bin (docker CLI) and the project's venv
+         (pandas, used by update_data.sh's before/after snapshot check) --
+         set explicitly so the job runs the same way it does interactively. -->
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/Users/elvisobondo/Pair_Trading/.venv/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    </dict>
+
+    <key>StandardOutPath</key>
+    <string>/Users/elvisobondo/Pair_Trading/logs/launchd.out.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/elvisobondo/Pair_Trading/logs/launchd.err.log</string>
+</dict>
+</plist>

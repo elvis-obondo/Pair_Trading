@@ -1,0 +1,7 @@
+### CORRECTION 1: delisted flag in coins.csv (Code Checker approved), applied from coins.csv, no rerun
+old: delisted 0, live 234.  new: delisted 56 (last valid mid before 2026-10-13: 44, no_valid 12), live 178
+
+### CORRECTION 2: October NaN share over in-window minutes (archive ends 2026-10-13 06:42)
+BTC Oct NaN minutes 11,245 / in-window Oct minutes 17,683 = 0.636  (was 0.252 over the full calendar month)
+
+### CORRECTION 3: the 30m assertion ran on 222 coins (234 minus 12 no_valid have no files)

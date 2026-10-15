@@ -1,0 +1,38 @@
+<stdin>:15: UserWarning: Converting to PeriodArray/Index representation will drop timezone information.
+coins.csv rows 234 no_valid 12
+last_date value counts (top):
+last_date
+2026-10-13    178
+2026-05-05      8
+2025-04-11      7
+2025-04-04      6
+2026-05-25      4
+coins with last valid mid before 2026-10-13: 44
+first_date == 2025-01-01: 156  listed later: 66
+
+worst 8 coins by bad share:
+   coin first_date  last_date  listed_minutes  nan_minutes      bad
+USELESS 2026-09-08 2026-10-13           49840        23529 0.472171
+   PONS 2026-08-31 2026-10-13           62093        23529 0.379012
+CASHCAT 2026-07-11 2026-10-13          135476        26378 0.194809
+   GRAM 2026-07-02 2026-10-13          148156        27818 0.187863
+   CHIP 2026-04-22 2026-10-13          250812        28840 0.115086
+  AZTEC 2026-02-12 2026-10-13          349821        28840 0.082539
+    SKR 2026-01-22 2026-10-13          380390        28840 0.075917
+   DASH 2026-01-18 2026-10-13          386091        28840 0.074796
+
+filled minutes per coin: median 195.0 max 199
+
+BTC long NaN runs 36 minutes 28940  longest 1440 2026-07-07 23:59:00+00:00
+BTC NaN minutes by month (share of month):
+  2025-05       9  0.000
+  2025-06      52  0.001
+  2025-07      29  0.001
+  2025-08      10  0.000
+  2026-05    1022  0.023
+  2026-07    1440  0.032
+  2026-08    2849  0.064
+  2026-09   12284  0.284
+  2026-10   11245  0.252
+
+run length quantiles (BTC): {0.5: 902.5, 0.9: 1254.0, 0.99: 1389.2499999999998}

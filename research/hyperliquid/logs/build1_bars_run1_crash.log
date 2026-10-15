@@ -1,0 +1,107 @@
+[DISK] free 23.3 GB, preflight floor 16.0 GB
+[INFO] 650 day files 20250101 -> 20261013
+  10/650 days, 3s, 23.2 GB free
+  20/650 days, 7s, 23.1 GB free
+  30/650 days, 10s, 23.0 GB free
+  40/650 days, 14s, 22.8 GB free
+  50/650 days, 18s, 22.7 GB free
+  60/650 days, 21s, 22.6 GB free
+  70/650 days, 25s, 22.4 GB free
+  80/650 days, 29s, 22.3 GB free
+  90/650 days, 32s, 22.1 GB free
+  100/650 days, 36s, 22.0 GB free
+  110/650 days, 40s, 21.9 GB free
+  120/650 days, 43s, 21.8 GB free
+  130/650 days, 47s, 21.6 GB free
+  140/650 days, 51s, 21.5 GB free
+  150/650 days, 55s, 21.4 GB free
+  160/650 days, 59s, 21.2 GB free
+  170/650 days, 63s, 21.1 GB free
+  180/650 days, 66s, 21.0 GB free
+  190/650 days, 70s, 20.8 GB free
+  200/650 days, 74s, 20.7 GB free
+  210/650 days, 78s, 20.6 GB free
+  220/650 days, 82s, 20.5 GB free
+  230/650 days, 86s, 20.3 GB free
+  240/650 days, 90s, 20.2 GB free
+  250/650 days, 94s, 20.1 GB free
+  260/650 days, 98s, 19.9 GB free
+  270/650 days, 102s, 19.8 GB free
+  280/650 days, 106s, 19.7 GB free
+  290/650 days, 110s, 19.5 GB free
+  300/650 days, 114s, 19.4 GB free
+  310/650 days, 119s, 19.2 GB free
+  320/650 days, 123s, 19.1 GB free
+  330/650 days, 127s, 18.9 GB free
+  340/650 days, 132s, 18.8 GB free
+  350/650 days, 136s, 18.6 GB free
+  360/650 days, 140s, 18.5 GB free
+  370/650 days, 145s, 18.4 GB free
+  380/650 days, 149s, 18.2 GB free
+  390/650 days, 154s, 18.1 GB free
+  400/650 days, 158s, 18.0 GB free
+  410/650 days, 162s, 17.8 GB free
+  420/650 days, 167s, 17.7 GB free
+  430/650 days, 171s, 17.5 GB free
+  440/650 days, 176s, 17.4 GB free
+  450/650 days, 180s, 17.3 GB free
+  460/650 days, 185s, 17.1 GB free
+  470/650 days, 189s, 17.0 GB free
+  480/650 days, 195s, 15.8 GB free
+  490/650 days, 200s, 15.7 GB free
+  500/650 days, 204s, 15.5 GB free
+  510/650 days, 209s, 15.4 GB free
+  520/650 days, 213s, 15.3 GB free
+  530/650 days, 217s, 15.1 GB free
+  540/650 days, 222s, 15.0 GB free
+  550/650 days, 226s, 14.9 GB free
+  560/650 days, 230s, 14.8 GB free
+  570/650 days, 235s, 14.6 GB free
+  580/650 days, 239s, 14.5 GB free
+  590/650 days, 243s, 14.4 GB free
+  600/650 days, 247s, 14.3 GB free
+  610/650 days, 252s, 14.2 GB free
+  620/650 days, 256s, 14.0 GB free
+  630/650 days, 259s, 14.0 GB free
+  640/650 days, 261s, 13.9 GB free
+  650/650 days, 263s, 13.9 GB free
+[B1] case-collision check: 234 coin names, collisions []
+[DISK] PARTS 8.35 GB, free 13.9 GB
+[B1] excluded names (':' or '@'): 0 []
+Traceback (most recent call last):
+  File "/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/pandas/core/series.py", line 1310, in __setitem__
+    self._set_with_engine(key, value, warn=warn)
+  File "/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/pandas/core/series.py", line 1382, in _set_with_engine
+    loc = self.index.get_loc(key)
+          ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/pandas/core/indexes/datetimes.py", line 590, in get_loc
+    self._check_indexing_error(key)
+  File "/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/pandas/core/indexes/base.py", line 6072, in _check_indexing_error
+    raise InvalidIndexError(key)
+pandas.errors.InvalidIndexError: DatetimeIndex(['2025-01-01 00:00:00+00:00', '2025-01-01 00:01:00+00:00',
+               '2025-01-01 00:02:00+00:00', '2025-01-01 00:03:00+00:00',
+               '2025-01-01 00:04:00+00:00', '2025-01-01 00:05:00+00:00',
+               '2025-01-01 00:06:00+00:00', '2025-01-01 00:07:00+00:00',
+               '2025-01-01 00:08:00+00:00', '2025-01-01 00:09:00+00:00',
+               ...
+               '2026-10-13 06:33:00+00:00', '2026-10-13 06:34:00+00:00',
+               '2026-10-13 06:35:00+00:00', '2026-10-13 06:36:00+00:00',
+               '2026-10-13 06:37:00+00:00', '2026-10-13 06:38:00+00:00',
+               '2026-10-13 06:39:00+00:00', '2026-10-13 06:40:00+00:00',
+               '2026-10-13 06:41:00+00:00', '2026-10-13 06:42:00+00:00'],
+              dtype='datetime64[ns, UTC]', length=907460, freq=None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/elvisobondo/Pair_Trading/research/hyperliquid/build1_bars.py", line 142, in <module>
+    arch_has = pd.Series(False, index=arch_grid); arch_has[stamps] = True
+                                                  ~~~~~~~~^^^^^^^^
+  File "/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/pandas/core/series.py", line 1376, in __setitem__
+    self._set_with(key, value, warn=warn)
+  File "/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/pandas/core/series.py", line 1417, in _set_with
+    self._set_labels(key, value, warn=warn)
+  File "/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/pandas/core/series.py", line 1424, in _set_labels
+    raise KeyError(f"{key[mask]} not in index")
+KeyError: "<DatetimeArray>\n['2025-01-05 13:50:57+00:00', '2025-01-12 11:46:46+00:00',\n '2025-01-12 11:47:05+00:00', '2025-01-26 12:18:24+00:00',\n '2025-02-08 10:31:03+00:00', '2025-02-16 15:19:17+00:00',\n '2025-02-18 04:10:01+00:00', '2025-02-23 14:33:35+00:00',\n '2025-03-03 10:46:44+00:00', '2025-03-03 10:47:05+00:00',\n ...\n '2026-08-01 09:06:02+00:00', '2026-08-08 08:35:20+00:00',\n '2026-08-15 08:05:28+00:00', '2026-08-23 08:18:10+00:00',\n '2026-08-29 08:33:24+00:00', '2026-09-05 09:29:28+00:00',\n '2026-09-13 08:37:33+00:00', '2026-09-19 08:34:59+00:00',\n '2026-10-03 09:11:36+00:00', '2026-10-10 08:18:13+00:00']\nLength: 192, dtype: datetime64[ns, UTC] not in index"
+exit 1

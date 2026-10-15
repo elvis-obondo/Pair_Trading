@@ -1,0 +1,3 @@
+[DISK] free 13.9 GB, preflight floor 16.0 GB
+[ABORT] preflight: 13.9 GB free, under 16.0 GB. Report; delete nothing.
+exit 1

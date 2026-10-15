@@ -1,0 +1,22 @@
+### D archive listing 2026-10-14T19:23:20.103612+00:00
+block: 445 days 20250727..20261014, 10667 hour files, 310.1 GB lz4
+old: 64 days 20250525..20250727, 1507 hour files, 31.8 GB lz4
+window 2025-05-25 00h..2026-10-13 23h: 12168 hours, missing in both formats: 14 (0.115%)
+  missing 2025-05-25 00:00:00+00:00
+  missing 2025-05-25 01:00:00+00:00
+  missing 2025-05-25 02:00:00+00:00
+  missing 2025-05-25 03:00:00+00:00
+  missing 2025-05-25 04:00:00+00:00
+  missing 2025-05-25 05:00:00+00:00
+  missing 2025-05-25 06:00:00+00:00
+  missing 2025-05-25 07:00:00+00:00
+  missing 2025-05-25 08:00:00+00:00
+  missing 2025-05-25 09:00:00+00:00
+  missing 2025-05-25 10:00:00+00:00
+  missing 2025-05-25 11:00:00+00:00
+  missing 2025-05-25 12:00:00+00:00
+  missing 2025-05-25 13:00:00+00:00
+hours present in both formats: 1 ['20250727']
+today's files (20261014): 19
+block format GB/day: median 0.67 max 1.60 (20260821)
+window total lz4 341.0 GB

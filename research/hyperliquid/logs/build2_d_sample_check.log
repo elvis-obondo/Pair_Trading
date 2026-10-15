@@ -1,0 +1,23 @@
+<stdin>:15: DeprecationWarning: datetime.datetime.utcfromtimestamp() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.fromtimestamp(timestamp, datetime.UTC).
+<stdin>:15: DeprecationWarning: datetime.datetime.utcfromtimestamp() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.fromtimestamp(timestamp, datetime.UTC).
+
+== old_20250601_8.lz4: 123,244 fills, fill time 2025-06-01 08:00:00.002000 .. 2025-06-01 08:59:59.855000 (folder hour 2025-06-01 08:00:00)
+  fills before folder hour: 0
+  fills with time < folder hour: 0  >= folder hour+1h: 0
+  coin categories: {'plain': 102018, '@spot': 21226}
+  example '#' coins: []
+  plain-coin dir counts: {'Close Short': 24707, 'Open Short': 26818, 'Open Long': 24475, 'Close Long': 22271, 'Short > Long': 845, 'Long > Short': 938, 'Buy': 982, 'Sell': 982}
+  plain-coin keys: ['builderFee', 'cloid', 'closedPnl', 'coin', 'crossed', 'dir', 'fee', 'feeToken', 'hash', 'liquidation', 'oid', 'px', 'side', 'startPosition', 'sz', 'tid', 'time']
+  plain tids: 51009  takers per tid: {1: 51009}
+  plain fills with liquidation obj: 22  forced legs: 11
+
+== blk_20260708_21.lz4: 260,228 fills, fill time 2026-07-08 20:59:59.848000 .. 2026-07-08 21:59:59.719000 (folder hour 2026-07-08 21:00:00)
+  fills before folder hour: 0
+  fills with time < folder hour: 24  >= folder hour+1h: 0
+  coin categories: {'hip3(:)': 88188, '#outcome?': 7524, 'plain': 155762, '@spot': 8754}
+  example '#' coins: ['#1710', '#1730', '#1731', '#1760', '#1761', '#1880', '#1881', '#1890']
+  plain-coin dir counts: {'Open Long': 37345, 'Close Long': 39129, 'Open Short': 37385, 'Close Short': 39243, 'Long > Short': 1307, 'Short > Long': 1233, 'Buy': 60, 'Sell': 60}
+  plain-coin keys: ['builder', 'builderFee', 'cloid', 'closedPnl', 'coin', 'crossed', 'dir', 'fee', 'feeToken', 'hash', 'liquidation', 'oid', 'priorityGas', 'px', 'side', 'startPosition', 'sz', 'tid', 'time', 'twapId']
+  plain tids: 77881  takers per tid: {1: 77881}
+  plain fills with liquidation obj: 496  forced legs: 248
+  blocks 51,009: 1065462408..1065513416, span 51,009; step counts {1: 51008}; dup 0
