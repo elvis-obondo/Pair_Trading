@@ -1,0 +1,53 @@
++ OUT=s3://pair-trading-hl-289869684922/build5/pilot
++ trap up EXIT
++ dnf install -y -q lz4 python3.11 python3.11-pip time
+
+Installed:
+  lz4-1.9.4-1.amzn2023.0.3.aarch64                                              
+  mpdecimal-2.5.1-3.amzn2023.0.3.aarch64                                        
+  python3.11-3.11.16-1.amzn2023.0.1.aarch64                                     
+  python3.11-libs-3.11.16-1.amzn2023.0.1.aarch64                                
+  python3.11-pip-22.3.1-2.amzn2023.0.15.noarch                                  
+  python3.11-pip-wheel-22.3.1-2.amzn2023.0.15.noarch                            
+  python3.11-setuptools-65.5.1-2.amzn2023.0.7.noarch                            
+  python3.11-setuptools-wheel-65.5.1-2.amzn2023.0.7.noarch                      
+
++ python3.11 -m pip install -q orjson pandas pyarrow numpy
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
++ mkdir -p /w/out /w/flow
++ cd /w
++ for f in build2_fills.py build5_wallets.py listing.txt build5_missing_minutes.parquet
++ aws s3 cp s3://pair-trading-hl-289869684922/build5/code/build2_fills.py . --region ap-northeast-1 --only-show-errors
++ for f in build2_fills.py build5_wallets.py listing.txt build5_missing_minutes.parquet
++ aws s3 cp s3://pair-trading-hl-289869684922/build5/code/build5_wallets.py . --region ap-northeast-1 --only-show-errors
++ for f in build2_fills.py build5_wallets.py listing.txt build5_missing_minutes.parquet
++ aws s3 cp s3://pair-trading-hl-289869684922/build5/code/listing.txt . --region ap-northeast-1 --only-show-errors
++ for f in build2_fills.py build5_wallets.py listing.txt build5_missing_minutes.parquet
++ aws s3 cp s3://pair-trading-hl-289869684922/build5/code/build5_missing_minutes.parquet . --region ap-northeast-1 --only-show-errors
++ export HL_LISTING=/w/listing.txt HL_MISSING=/w/build5_missing_minutes.parquet OMP_NUM_THREADS=1 AWS_DEFAULT_REGION=ap-northeast-1
++ HL_LISTING=/w/listing.txt
++ HL_MISSING=/w/build5_missing_minutes.parquet
++ OMP_NUM_THREADS=1
++ AWS_DEFAULT_REGION=ap-northeast-1
++ nproc
+1
++ free -g
+               total        used        free      shared  buff/cache   available
+Mem:              15           0          13           0           0          14
+Swap:              0           0           0
++ date -u +%FT%TZ
++ printf '%s\n' 20251010 20250727 20260708 20250601
++ xargs -P 4 '-I{}' sh -c 'aws s3 cp s3://pair-trading-hl-289869684922/build2/d3/day/{}.parquet /w/flow/{}.parquet --region ap-northeast-1 --only-show-errors; /usr/bin/time -v python3.11 -u build5_wallets.py {} /w/out --flow /w/flow > /w/out/{}.stdout 2> /w/out/{}.time; echo "{} exit $?"'
++ tee /w/out/exits.txt
+20250601 exit 0
+20250727 exit 0
+20260708 exit 0
+20251010 exit 0
++ date -u +%FT%TZ
++ cp start.txt end.txt /w/out/
++ aws s3 cp /w/out s3://pair-trading-hl-289869684922/build5/pilot/ --recursive --region ap-northeast-1 --only-show-errors
++ up
++ aws s3 cp /var/log/build5.log s3://pair-trading-hl-289869684922/build5/pilot/ec2.log --region ap-northeast-1 --only-show-errors
++ shutdown -h now
++ up
++ aws s3 cp /var/log/build5.log s3://pair-trading-hl-289869684922/build5/pilot/ec2.log --region ap-northeast-1 --only-show-errors

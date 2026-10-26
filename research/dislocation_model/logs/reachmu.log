@@ -1,0 +1,312 @@
+========================================================================================================================
+REACH-MU -- which spreads come back to mu within 10 hours
+========================================================================================================================
+  [SPLIT] train 22,645 (<2026-05-01)   val 13,048   HELD OUT 18,064 (>=2026-07-18)
+[SPLIT] held-out used ONCE, for scoring only; iterations chosen on val
+  HO1 8,200 (to 2026-08-25)   HO2 9,864 (from 2026-08-26)
+  features: 44
+  missing set to the TRAIN median (why-it-moved counts are why_columns' fill):
+    lone_share_4 81;  common_share_4 81;  vol_spike_mover_4 81;  vol_spike_ratio_4 81;  vadj_resid_4 81;  lagger_spread_4 84;  lone_share_12 153;  common_share_12 153;  vol_spike_mover_12 153;  vol_spike_ratio_12 153;  vadj_resid_12 153;  lagger_spread_12 157;  vol_spike_mover_1m_4 730;  vol_spike_ratio_1m_4 1378;  vadj_resid_1m_4 172;  vol_spike_mover_1m_12 741;  vol_spike_ratio_1m_12 1142;  vadj_resid_1m_12 154;  mover_resid_z_4 813;  mover_ret_4 81;  mover_resid_z_12 876;  mover_ret_12 153
+
+========================================================================================================================
+STEP 1 -- the chance bar (reading tool only) and how far the mover moved
+========================================================================================================================
+  train  n 22,645   real reach 0.2235   mean chance 0.3062   gap -0.0827
+  val    n 13,048   real reach 0.2259   mean chance 0.2978   gap -0.0719
+  HO1    n  8,200   real reach 0.2433   mean chance 0.2955   gap -0.0522
+  HO2    n  9,864   real reach 0.2452   mean chance 0.2818   gap -0.0365
+  mover distributions (raw, before fill): median [p5, p95]
+    mover_resid_z_4   train +1.9953 [-0.4292, +8.1513]   HO1 +2.1318 [+0.2307, +7.4102]   HO2 +1.9293 [-0.4235, +7.7131]
+    mover_resid_z_12  train +1.7504 [-0.2967, +6.5556]   HO1 +1.8469 [+0.3239, +5.8907]   HO2 +1.6680 [-0.2095, +5.7768]
+    mover_ret_4       train +0.0266 [-0.0076, +0.1170]   HO1 +0.0266 [+0.0037, +0.0999]   HO2 +0.0290 [+0.0001, +0.1065]
+    mover_ret_12      train +0.0390 [-0.0097, +0.1594]   HO1 +0.0393 [+0.0066, +0.1444]   HO2 +0.0425 [+0.0032, +0.1335]
+  by decile of mover_resid_z_12 (TRAIN cut points; finite rows): real reach / chance / gap  (n)
+    train  d1 0.239/0.342/-0.103 (2201)  d2 0.260/0.335/-0.075 (2201)  d3 0.243/0.321/-0.078 (2201)  d4 0.230/0.312/-0.081 (2200)  d5 0.211/0.314/-0.103 (2199)  d6 0.208/0.297/-0.089 (2203)  d7 0.209/0.291/-0.082 (2201)  d8 0.218/0.294/-0.076 (2201)  d9 0.208/0.287/-0.079 (2201)  d10 0.224/0.271/-0.046 (2201)
+    HO1    d1 0.264/0.336/-0.072 (518)  d2 0.283/0.341/-0.058 (735)  d3 0.246/0.321/-0.075 (905)  d4 0.237/0.313/-0.076 (841)  d5 0.218/0.288/-0.070 (843)  d6 0.217/0.289/-0.071 (856)  d7 0.222/0.274/-0.052 (905)  d8 0.257/0.270/-0.013 (1002)  d9 0.243/0.276/-0.033 (914)  d10 0.260/0.269/-0.009 (681)
+    HO2    d1 0.302/0.289/+0.013 (1011)  d2 0.279/0.308/-0.028 (1006)  d3 0.247/0.296/-0.049 (1194)  d4 0.298/0.295/+0.003 (1054)  d5 0.235/0.283/-0.048 (906)  d6 0.231/0.291/-0.060 (930)  d7 0.197/0.278/-0.081 (977)  d8 0.247/0.257/-0.010 (889)  d9 0.185/0.263/-0.078 (1103)  d10 0.227/0.248/-0.021 (794)
+  [3s]
+
+========================================================================================================================
+STEP 2 -- models (fitted on train; every choice on val by log loss)
+========================================================================================================================
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+  vol-only: val log loss 0.50559
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+    logistic L1 C=0.001  val log loss 0.52041   nonzero 2
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+    logistic L1 C=0.003  val log loss 0.50749   nonzero 5
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+    logistic L1 C=0.01   val log loss 0.50294   nonzero 20
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+    logistic L1 C=0.03   val log loss 0.50187   nonzero 35
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+    logistic L1 C=0.1    val log loss 0.50161   nonzero 42
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+    logistic L1 C=0.3    val log loss 0.50172   nonzero 43
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+    logistic L1 C=1.0    val log loss 0.50177   nonzero 43
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+    logistic L1 C=3.0    val log loss 0.50179   nonzero 44
+  logistic L1: C = 0.1 (val log loss 0.50161); nonzero coefficients 42 of 44: sandwich, vadj_resid_1m_4 dropped
+  [4s]
+  depth 1 gbdt   val log loss 0.50343  {'num_leaves': 2, 'min_data_in_leaf': 400, 'learning_rate': 0.1, 'rounds': 450}  trees 450, fitted depth max 1 mean 1.00, leaves max 2 mean 2.0   [10s]
+  depth 1 dart   val log loss 0.50497  {'num_leaves': 2, 'min_data_in_leaf': 400, 'learning_rate': 0.1, 'rounds': 600}  trees 600, fitted depth max 1 mean 1.00, leaves max 2 mean 2.0   [16s]
+  depth 2 gbdt   val log loss 0.50266  {'num_leaves': 4, 'min_data_in_leaf': 400, 'learning_rate': 0.1, 'rounds': 175}  trees 175, fitted depth max 2 mean 2.00, leaves max 4 mean 3.9   [19s]
+  depth 2 dart   val log loss 0.50385  {'num_leaves': 4, 'min_data_in_leaf': 400, 'learning_rate': 0.1, 'rounds': 600}  trees 600, fitted depth max 2 mean 2.00, leaves max 4 mean 4.0   [27s]
+  depth 3 gbdt   val log loss 0.50328  {'num_leaves': 8, 'min_data_in_leaf': 400, 'learning_rate': 0.03, 'rounds': 231}  trees 231, fitted depth max 3 mean 3.00, leaves max 8 mean 7.2   [30s]
+  depth 3 dart   val log loss 0.50418  {'num_leaves': 8, 'min_data_in_leaf': 400, 'learning_rate': 0.1, 'rounds': 300}  trees 300, fitted depth max 3 mean 3.00, leaves max 8 mean 7.6   [43s]
+  depth 4 gbdt   val log loss 0.50377  {'num_leaves': 16, 'min_data_in_leaf': 400, 'learning_rate': 0.03, 'rounds': 176}  trees 176, fitted depth max 4 mean 4.00, leaves max 16 mean 12.0   [46s]
+  depth 4 dart   val log loss 0.50460  {'num_leaves': 16, 'min_data_in_leaf': 400, 'learning_rate': 0.1, 'rounds': 300}  trees 300, fitted depth max 4 mean 4.00, leaves max 16 mean 12.7   [64s]
+  depth 6 gbdt   val log loss 0.50360  {'num_leaves': 64, 'min_data_in_leaf': 400, 'learning_rate': 0.1, 'rounds': 31}  trees 31, fitted depth max 6 mean 6.00, leaves max 36 mean 25.1   [69s]
+  depth 6 dart   val log loss 0.50641  {'num_leaves': 64, 'min_data_in_leaf': 400, 'learning_rate': 0.1, 'rounds': 300}  trees 300, fitted depth max 6 mean 6.00, leaves max 37 mean 24.9   [102s]
+  depth 8 gbdt   val log loss 0.50371  {'num_leaves': 256, 'min_data_in_leaf': 400, 'learning_rate': 0.03, 'rounds': 116}  trees 116, fitted depth max 8 mean 8.00, leaves max 44 mean 33.1   [109s]
+  depth 8 dart   val log loss 0.50664  {'num_leaves': 256, 'min_data_in_leaf': 400, 'learning_rate': 0.1, 'rounds': 300}  trees 300, fitted depth max 8 mean 8.00, leaves max 45 mean 34.1   [161s]
+  unlim gbdt     val log loss 0.50369  {'num_leaves': 64, 'min_data_in_leaf': 400, 'learning_rate': 0.03, 'rounds': 95}  trees 95, fitted depth max 18 mean 11.16, leaves max 46 mean 43.4   [218s]
+  unlim dart     val log loss 0.50683  {'num_leaves': 64, 'min_data_in_leaf': 400, 'learning_rate': 0.1, 'rounds': 100}  trees 100, fitted depth max 19 mean 11.20, leaves max 47 mean 43.5   [579s]
+  BEST TREE (val): depth 2 gbdt (val log loss 0.50266);  val-best depth-1 tree: depth 1 gbdt;  BEST MODEL (val): logistic L1
+
+========================================================================================================================
+STEP 3 -- scoring, held out only, HO1 and HO2 separately
+========================================================================================================================
+  HO1: n 8,200, reverters 1,995 (0.2433), mean chance 0.2955
+    model                  catch 50%: flag / hit       catch 80%: flag / hit       catch 90%: flag / hit  top20 hit  top20 gap     AUC  log loss
+    random                         0.500 / 0.243               0.800 / 0.243               0.900 / 0.243      0.243     -0.052   0.500   0.55595
+    vol-only                       0.350 / 0.348               0.656 / 0.297               0.794 / 0.276      0.378     -0.067  0.6483   0.53051
+    logistic L1                    0.342 / 0.356               0.650 / 0.299               0.784 / 0.279      0.391     -0.059  0.6541   0.52720
+    depth 1 gbdt                   0.345 / 0.353               0.653 / 0.298               0.784 / 0.279      0.387     -0.055  0.6534   0.52669
+    depth 1 dart                   0.340 / 0.358               0.644 / 0.302               0.789 / 0.278      0.388     -0.058  0.6556   0.52765
+    depth 2 gbdt                   0.349 / 0.349               0.662 / 0.294               0.770 / 0.284      0.390     -0.056  0.6547   0.52581
+    depth 2 dart                   0.347 / 0.351               0.649 / 0.300               0.780 / 0.281      0.399     -0.044  0.6541   0.52651
+    depth 3 gbdt                   0.346 / 0.352               0.649 / 0.300               0.776 / 0.282      0.398     -0.047  0.6594   0.52502
+    depth 3 dart                   0.344 / 0.354               0.644 / 0.302               0.777 / 0.282      0.396     -0.048  0.6567   0.52549
+    depth 4 gbdt                   0.339 / 0.359               0.640 / 0.304               0.774 / 0.283      0.407     -0.041  0.6621   0.52407
+    depth 4 dart                   0.345 / 0.353               0.652 / 0.298               0.778 / 0.282      0.405     -0.037  0.6560   0.52537
+    depth 6 gbdt                   0.345 / 0.353               0.642 / 0.303               0.780 / 0.281      0.395     -0.050  0.6581   0.52541
+    depth 6 dart                   0.345 / 0.353               0.654 / 0.298               0.777 / 0.282      0.401     -0.035  0.6532   0.52674
+    depth 8 gbdt                   0.342 / 0.356               0.643 / 0.303               0.778 / 0.281      0.404     -0.040  0.6601   0.52452
+    depth 8 dart                   0.344 / 0.354               0.660 / 0.295               0.785 / 0.279      0.396     -0.037  0.6527   0.52711
+    unlim gbdt                     0.340 / 0.358               0.645 / 0.302               0.780 / 0.281      0.401     -0.044  0.6599   0.52459
+    unlim dart                     0.343 / 0.355               0.656 / 0.297               0.784 / 0.280      0.401     -0.037  0.6549   0.52723
+
+  HO2: n 9,864, reverters 2,419 (0.2452), mean chance 0.2818
+    model                  catch 50%: flag / hit       catch 80%: flag / hit       catch 90%: flag / hit  top20 hit  top20 gap     AUC  log loss
+    random                         0.500 / 0.245               0.800 / 0.245               0.900 / 0.245      0.245     -0.037   0.500   0.55837
+    vol-only                       0.334 / 0.367               0.639 / 0.307               0.786 / 0.281      0.395     -0.038  0.6582   0.52893
+    logistic L1                    0.330 / 0.372               0.637 / 0.308               0.788 / 0.280      0.415     -0.029  0.6671   0.52436
+    depth 1 gbdt                   0.338 / 0.363               0.642 / 0.306               0.792 / 0.279      0.417     -0.029  0.6603   0.52767
+    depth 1 dart                   0.339 / 0.362               0.650 / 0.302               0.792 / 0.279      0.408     -0.035  0.6586   0.52880
+    depth 2 gbdt                   0.337 / 0.363               0.647 / 0.303               0.804 / 0.275      0.417     -0.027  0.6606   0.52759
+    depth 2 dart                   0.338 / 0.363               0.652 / 0.301               0.799 / 0.276      0.418     -0.028  0.6594   0.52752
+    depth 3 gbdt                   0.339 / 0.361               0.655 / 0.300               0.799 / 0.276      0.418     -0.027  0.6601   0.52775
+    depth 3 dart                   0.333 / 0.369               0.651 / 0.301               0.802 / 0.275      0.416     -0.029  0.6586   0.52786
+    depth 4 gbdt                   0.335 / 0.366               0.650 / 0.302               0.795 / 0.278      0.420     -0.026  0.6618   0.52704
+    depth 4 dart                   0.328 / 0.374               0.646 / 0.304               0.787 / 0.280      0.418     -0.024  0.6633   0.52624
+    depth 6 gbdt                   0.338 / 0.363               0.652 / 0.301               0.788 / 0.280      0.420     -0.022  0.6586   0.52781
+    depth 6 dart                   0.329 / 0.373               0.643 / 0.305               0.795 / 0.278      0.416     -0.023  0.6639   0.52634
+    depth 8 gbdt                   0.336 / 0.366               0.652 / 0.301               0.790 / 0.280      0.421     -0.022  0.6611   0.52706
+    depth 8 dart                   0.334 / 0.367               0.647 / 0.303               0.791 / 0.279      0.405     -0.032  0.6600   0.52834
+    unlim gbdt                     0.335 / 0.366               0.652 / 0.301               0.788 / 0.280      0.421     -0.022  0.6613   0.52679
+    unlim dart                     0.331 / 0.371               0.655 / 0.300               0.786 / 0.281      0.424     -0.013  0.6608   0.52598
+
+  PAIRED, day-clustered 95% (A minus B). flag80 = flag share needed for an 80% catch (- = A needs fewer); top20 = top-20% hit rate (+ = A better)
+    logistic L1 - vol-only            HO1 flag80 -0.0062 [-0.0273,+0.0157]   HO1 top20 +0.0134 [-0.0039,+0.0264]   HO2 flag80 -0.0020 [-0.0308,+0.0203]   HO2 top20 +0.0198 [+0.0049,+0.0337]*
+    depth 1 gbdt - vol-only           HO1 flag80 -0.0032 [-0.0217,+0.0209]   HO1 top20 +0.0091 [-0.0097,+0.0283]   HO2 flag80 +0.0031 [-0.0245,+0.0220]   HO2 top20 +0.0218 [+0.0015,+0.0368]*   (reported, does not vote)
+    depth 1 dart - vol-only           HO1 flag80 -0.0126 [-0.0267,+0.0053]   HO1 top20 +0.0098 [-0.0070,+0.0213]   HO2 flag80 +0.0109 [-0.0129,+0.0247]   HO2 top20 +0.0122 [-0.0044,+0.0265]    (reported, does not vote)
+    depth 2 gbdt - vol-only           HO1 flag80 +0.0060 [-0.0239,+0.0309]   HO1 top20 +0.0116 [-0.0083,+0.0316]   HO2 flag80 +0.0078 [-0.0260,+0.0307]   HO2 top20 +0.0218 [+0.0010,+0.0397]*
+    depth 2 dart - vol-only           HO1 flag80 -0.0071 [-0.0300,+0.0179]   HO1 top20 +0.0207 [+0.0015,+0.0336]*  HO2 flag80 +0.0135 [-0.0203,+0.0344]   HO2 top20 +0.0223 [+0.0025,+0.0372]*   (reported, does not vote)
+    depth 3 gbdt - vol-only           HO1 flag80 -0.0070 [-0.0320,+0.0135]   HO1 top20 +0.0201 [+0.0012,+0.0369]*  HO2 flag80 +0.0162 [-0.0208,+0.0352]   HO2 top20 +0.0223 [+0.0028,+0.0383]*   (reported, does not vote)
+    depth 3 dart - vol-only           HO1 flag80 -0.0120 [-0.0381,+0.0145]   HO1 top20 +0.0177 [-0.0000,+0.0347]   HO2 flag80 +0.0125 [-0.0197,+0.0322]   HO2 top20 +0.0203 [+0.0000,+0.0379]    (reported, does not vote)
+    depth 4 gbdt - vol-only           HO1 flag80 -0.0167 [-0.0403,+0.0058]   HO1 top20 +0.0287 [+0.0078,+0.0458]*  HO2 flag80 +0.0114 [-0.0176,+0.0295]   HO2 top20 +0.0243 [+0.0076,+0.0410]*   (reported, does not vote)
+    depth 4 dart - vol-only           HO1 flag80 -0.0038 [-0.0293,+0.0236]   HO1 top20 +0.0274 [+0.0027,+0.0504]*  HO2 flag80 +0.0074 [-0.0270,+0.0247]   HO2 top20 +0.0223 [+0.0018,+0.0368]*   (reported, does not vote)
+    depth 6 gbdt - vol-only           HO1 flag80 -0.0138 [-0.0396,+0.0115]   HO1 top20 +0.0165 [-0.0043,+0.0388]   HO2 flag80 +0.0130 [-0.0228,+0.0346]   HO2 top20 +0.0248 [+0.0071,+0.0440]*   (reported, does not vote)
+    depth 6 dart - vol-only           HO1 flag80 -0.0022 [-0.0248,+0.0259]   HO1 top20 +0.0232 [-0.0068,+0.0475]   HO2 flag80 +0.0036 [-0.0168,+0.0232]   HO2 top20 +0.0203 [-0.0032,+0.0380]    (reported, does not vote)
+    depth 8 gbdt - vol-only           HO1 flag80 -0.0137 [-0.0375,+0.0103]   HO1 top20 +0.0256 [+0.0079,+0.0439]*  HO2 flag80 +0.0128 [-0.0176,+0.0337]   HO2 top20 +0.0253 [+0.0044,+0.0429]*   (reported, does not vote)
+    depth 8 dart - vol-only           HO1 flag80 +0.0033 [-0.0191,+0.0241]   HO1 top20 +0.0177 [-0.0074,+0.0432]   HO2 flag80 +0.0080 [-0.0110,+0.0289]   HO2 top20 +0.0101 [-0.0144,+0.0310]    (reported, does not vote)
+    unlim gbdt - vol-only             HO1 flag80 -0.0109 [-0.0329,+0.0106]   HO1 top20 +0.0232 [-0.0003,+0.0441]   HO2 flag80 +0.0126 [-0.0158,+0.0304]   HO2 top20 +0.0253 [+0.0031,+0.0424]*   (reported, does not vote)
+    unlim dart - vol-only             HO1 flag80 -0.0001 [-0.0258,+0.0224]   HO1 top20 +0.0226 [-0.0016,+0.0448]   HO2 flag80 +0.0157 [-0.0089,+0.0300]   HO2 top20 +0.0289 [+0.0040,+0.0463]*   (reported, does not vote)
+    depth 2 gbdt - logistic L1        HO1 flag80 +0.0122 [-0.0113,+0.0271]   HO1 top20 -0.0018 [-0.0144,+0.0170]   HO2 flag80 +0.0098 [-0.0073,+0.0278]   HO2 top20 +0.0020 [-0.0141,+0.0139] 
+    depth 2 gbdt - depth 1 gbdt       HO1 flag80 +0.0091 [-0.0091,+0.0193]   HO1 top20 +0.0024 [-0.0098,+0.0163]   HO2 flag80 +0.0047 [-0.0076,+0.0146]   HO2 top20 +0.0000 [-0.0114,+0.0127] 
+    (* = A significantly better, ! = A significantly worse)
+
+  DEPTH CURVE -- flag share for an 80% catch and top-20% hit rate, by depth (intervals: the model's own level, day-clustered)
+    gbdt HO1  d1 0.653/0.387   d2 0.662/0.390   d3 0.649/0.398   d4 0.640/0.407   d6 0.642/0.395   d8 0.643/0.404   unl 0.645/0.401
+    gbdt HO2  d1 0.642/0.417   d2 0.647/0.417   d3 0.655/0.418   d4 0.650/0.420   d6 0.652/0.420   d8 0.652/0.421   unl 0.652/0.421
+    dart HO1  d1 0.644/0.388   d2 0.649/0.399   d3 0.644/0.396   d4 0.652/0.405   d6 0.654/0.401   d8 0.660/0.396   unl 0.656/0.401
+    dart HO2  d1 0.650/0.408   d2 0.652/0.418   d3 0.651/0.416   d4 0.646/0.418   d6 0.643/0.416   d8 0.647/0.405   unl 0.655/0.424
+
+  CANDIDATE LEVELS at 80% catch: flag share and beyond-chance gap of the flagged set, with day-clustered 95%
+    logistic L1     HO1  flag share 0.6500 [0.6210, 0.6822]   beyond-chance gap -0.0531 [-0.0738, -0.0300]
+    logistic L1     HO2  flag share 0.6370 [0.5953, 0.6665]   beyond-chance gap -0.0408 [-0.0644, -0.0169]
+    depth 2 gbdt    HO1  flag share 0.6622 [0.6272, 0.6887]   beyond-chance gap -0.0526 [-0.0745, -0.0266]
+    depth 2 gbdt    HO2  flag share 0.6468 [0.6047, 0.6768]   beyond-chance gap -0.0424 [-0.0641, -0.0197]
+
+  READING RULES
+    logistic L1      flag80 significantly below vol-only in: neither half
+    depth 2 gbdt     flag80 significantly below vol-only in: neither half
+    SIGNAL: NO
+    COMBINATIONS MATTER: NO
+    STRONG (flag80 wholly < 0.5 and flagged beyond-chance gap wholly > 0, both halves): none
+  [603s]
+
+  CALIBRATION by decile of score (mean predicted / observed), held out halves
+    vol-only        HO1  0.091/0.096  0.129/0.139  0.153/0.165  0.177/0.201  0.198/0.207  0.222/0.256  0.246/0.294  0.275/0.318  0.316/0.339  0.403/0.417
+    vol-only        HO2  0.090/0.095  0.130/0.137  0.155/0.154  0.180/0.196  0.202/0.221  0.226/0.249  0.252/0.287  0.283/0.323  0.323/0.349  0.407/0.442
+    logistic L1     HO1  0.083/0.080  0.123/0.132  0.151/0.178  0.176/0.210  0.201/0.210  0.227/0.265  0.257/0.277  0.292/0.299  0.341/0.337  0.448/0.446
+    logistic L1     HO2  0.082/0.085  0.117/0.133  0.145/0.163  0.172/0.180  0.197/0.222  0.224/0.246  0.254/0.285  0.291/0.307  0.341/0.363  0.446/0.467
+    depth 2 gbdt    HO1  0.083/0.071  0.129/0.130  0.160/0.198  0.185/0.204  0.210/0.212  0.235/0.262  0.263/0.268  0.296/0.309  0.342/0.334  0.427/0.445
+    depth 2 gbdt    HO2  0.077/0.100  0.116/0.147  0.145/0.149  0.172/0.181  0.199/0.219  0.225/0.258  0.255/0.279  0.291/0.285  0.336/0.379  0.423/0.455
+
+========================================================================================================================
+IMPORTANCE -- grouped permutation, held out, 20 shuffles, log-loss skill points lost (+ = matters), day-clustered 95%
+========================================================================================================================
+  groups: vol_48(2);  vratio(1);  vol_slope(1);  sandwich(1);  off_mark(1);  lone_share(2);  common_share(2);  mkt_move(2);  vol_spike_mover(4);  vol_spike_ratio(4);  vadj_resid(4);  lagger_spread(2);  mover_resid_z(2);  mover_ret(2);  triggers_past_rate(1);  triggers_past_30d(1);  breadth (a, b, ratio)(3);  market_breadth(1);  abs_z(1);  beta(1);  r2(1);  sigma(1);  hour(2);  weekday(2)
+    done logistic L1   [605s]
+    done depth 2 gbdt   [622s]
+  logistic L1
+    vol_48                  +12.6643 [+11.8023, +13.6301]  clears   HO1 +12.1299  HO2 +13.1065
+    abs_z                   +1.9890 [+1.5652, +2.3996]  clears   HO1 +1.5448  HO2 +2.3567
+    vol_spike_mover         +0.4988 [+0.2973, +0.7416]  clears   HO1 +0.5750  HO2 +0.4358
+    vol_slope               +0.3495 [+0.1609, +0.5518]  clears   HO1 +0.5059  HO2 +0.2201
+    vol_spike_ratio         +0.2117 [+0.1264, +0.3067]  clears   HO1 +0.1714  HO2 +0.2450
+    off_mark                +0.1794 [+0.0741, +0.2629]  clears   HO1 +0.2020  HO2 +0.1608
+    vratio                  +0.1398 [+0.0430, +0.2569]  clears   HO1 +0.1030  HO2 +0.1702
+    sigma                   +0.1230 [-0.0263, +0.3026]           HO1 +0.1458  HO2 +0.1041
+    breadth (a, b, ratio)   +0.1016 [-0.0434, +0.2618]           HO1 +0.2620  HO2 -0.0312
+    weekday                 +0.0706 [-0.0943, +0.2540]           HO1 +0.0230  HO2 +0.1099
+    r2                      +0.0625 [-0.0242, +0.1454]           HO1 -0.0378  HO2 +0.1455
+    mkt_move                +0.0604 [-0.0767, +0.1818]           HO1 -0.0661  HO2 +0.1650
+    mover_resid_z           +0.0443 [-0.0986, +0.1666]           HO1 +0.1929  HO2 -0.0787
+    mover_ret               +0.0270 [-0.0157, +0.0753]           HO1 +0.0697  HO2 -0.0083
+    lagger_spread           +0.0194 [-0.0202, +0.0628]           HO1 +0.0105  HO2 +0.0268
+    lone_share              +0.0136 [-0.0052, +0.0343]           HO1 +0.0244  HO2 +0.0047
+    vadj_resid              +0.0090 [-0.0836, +0.1170]           HO1 +0.0088  HO2 +0.0091
+    sandwich                +0.0000 [+0.0000, +0.0000]           HO1 +0.0000  HO2 +0.0000
+    triggers_past_rate      -0.0030 [-0.0074, +0.0007]           HO1 -0.0071  HO2 +0.0004
+    triggers_past_30d       -0.0041 [-0.0243, +0.0159]           HO1 -0.0243  HO2 +0.0126
+    beta                    -0.0151 [-0.0399, +0.0089]           HO1 -0.0302  HO2 -0.0025
+    common_share            -0.0296 [-0.0837, +0.0278]           HO1 +0.0136  HO2 -0.0653
+    market_breadth          -0.0411 [-0.2267, +0.1289]           HO1 +0.0687  HO2 -0.1320
+    hour                    -0.0809 [-0.2223, +0.0427]           HO1 -0.0231  HO2 -0.1287
+  depth 2 gbdt
+    vol_48                  +8.5953 [+7.9393, +9.3189]  clears   HO1 +8.1578  HO2 +8.9574
+    abs_z                   +1.2044 [+0.9408, +1.4945]  clears   HO1 +0.9700  HO2 +1.3984
+    vol_spike_mover         +0.2629 [+0.0622, +0.4823]  clears   HO1 +0.4437  HO2 +0.1133
+    sandwich                +0.2323 [+0.1395, +0.3339]  clears   HO1 +0.1964  HO2 +0.2620
+    vol_slope               +0.2284 [+0.0665, +0.3977]  clears   HO1 +0.3431  HO2 +0.1334
+    vadj_resid              +0.1744 [+0.0554, +0.2985]  clears   HO1 +0.2174  HO2 +0.1388
+    vratio                  +0.1235 [+0.0350, +0.2304]  clears   HO1 +0.0730  HO2 +0.1653
+    beta                    +0.1056 [+0.0204, +0.1780]  clears   HO1 +0.0276  HO2 +0.1702
+    weekday                 +0.1012 [-0.0645, +0.2617]           HO1 +0.1089  HO2 +0.0947
+    mover_resid_z           +0.0939 [-0.0104, +0.1928]           HO1 +0.2562  HO2 -0.0404
+    breadth (a, b, ratio)   +0.0738 [-0.0268, +0.1897]           HO1 +0.1869  HO2 -0.0198
+    mover_ret               +0.0319 [-0.0112, +0.0935]           HO1 +0.0364  HO2 +0.0282
+    common_share            +0.0291 [-0.0310, +0.0938]           HO1 +0.0258  HO2 +0.0319
+    lone_share              +0.0198 [+0.0057, +0.0324]  clears   HO1 +0.0231  HO2 +0.0170
+    vol_spike_ratio         +0.0171 [-0.0251, +0.0620]           HO1 +0.0167  HO2 +0.0175
+    r2                      +0.0136 [-0.0271, +0.0534]           HO1 -0.0365  HO2 +0.0551
+    lagger_spread           +0.0084 [-0.0284, +0.0444]           HO1 -0.0225  HO2 +0.0341
+    triggers_past_rate      +0.0029 [-0.0031, +0.0077]           HO1 +0.0034  HO2 +0.0025
+    triggers_past_30d       +0.0000 [+0.0000, +0.0000]           HO1 +0.0000  HO2 +0.0000
+    off_mark                -0.0070 [-0.0309, +0.0187]           HO1 +0.0069  HO2 -0.0185
+    sigma                   -0.0379 [-0.1446, +0.0834]           HO1 -0.0377  HO2 -0.0381
+    hour                    -0.0599 [-0.2166, +0.1012]           HO1 +0.1477  HO2 -0.2318
+    mkt_move                -0.0821 [-0.4757, +0.2963]           HO1 -0.0637  HO2 -0.0973
+    market_breadth          -0.0902 [-0.3094, +0.0862]           HO1 +0.0750  HO2 -0.2269
+
+========================================================================================================================
+SHAP INTERACTIONS -- best tree only (depth 2 gbdt), 5,000 held-out episodes (2,500 HO1 + 2,500 HO2)
+========================================================================================================================
+  free + inactive memory: 1.63 GB;  swap: total = 3072.00M  used = 1399.31M  free = 1672.69M  (encrypted)
+  shap TreeExplainer on 100 rows: 0.0s -> about 0.0 min for 5,000
+  tool: shap 0.53.0 TreeExplainer   [623s]
+  TOP 10 PAIRS by mean |interaction|; 2x2 at TRAIN medians (first feature L/H, second L/H), reach rate (n)
+  vol_48 x vol_48_1m   (rank 1, mean |interaction| 0.01992)
+    held out  LL 0.148 (7151)  LH 0.224 (660)  HL 0.227 (2347)  HH 0.338 (7906)   contrast +0.0349 [-0.0025, +0.0763]
+    HO1       LL 0.150 (3271)  LH 0.252 (210)  HL 0.223 (1244)  HH 0.338 (3475)   contrast +0.0129 [-0.0520, +0.0803]
+    HO2       LL 0.146 (3880)  LH 0.211 (450)  HL 0.232 (1103)  HH 0.339 (4431)   contrast +0.0417 [-0.0069, +0.0926]
+  sandwich x mkt_move_12   (rank 2, mean |interaction| 0.01343)
+    held out  LL 0.203 (7135)  LH 0.187 (4563)  HL 0.336 (4142)  HH 0.326 (2224)   contrast +0.0055 [-0.0292, +0.0370]
+    HO1       LL 0.204 (4107)  LH 0.187 (1596)  HL 0.342 (1856)  HH 0.351 (641)   contrast +0.0259 [-0.0292, +0.0866]
+    HO2       LL 0.201 (3028)  LH 0.187 (2967)  HL 0.331 (2286)  HH 0.315 (1583)   contrast -0.0014 [-0.0405, +0.0388]
+  vol_48_1m x mkt_move_12   (rank 3, mean |interaction| 0.01196)
+    held out  LL 0.173 (5819)  LH 0.159 (3679)  HL 0.335 (5458)  HH 0.319 (3108)   contrast -0.0023 [-0.0363, +0.0332]
+    HO1       LL 0.178 (3233)  LH 0.151 (1282)  HL 0.329 (2730)  HH 0.347 (955)   contrast +0.0450 [+0.0048, +0.0885]  clears
+    HO2       LL 0.167 (2586)  LH 0.164 (2397)  HL 0.342 (2728)  HH 0.307 (2153)   contrast -0.0318 [-0.0694, +0.0213]
+  vol_slope x vol_spike_mover_1m_4   (rank 4, mean |interaction| 0.00812)
+    held out  LL 0.257 (4672)  LH 0.261 (4635)  HL 0.236 (2656)  HH 0.226 (6101)   contrast -0.0144 [-0.0442, +0.0113]
+    HO1       LL 0.243 (1921)  LH 0.263 (2314)  HL 0.237 (994)  HH 0.230 (2971)   contrast -0.0276 [-0.0712, +0.0080]
+    HO2       LL 0.266 (2751)  LH 0.258 (2321)  HL 0.236 (1662)  HH 0.222 (3130)   contrast -0.0054 [-0.0388, +0.0316]
+  vol_48 x sandwich   (rank 5, mean |interaction| 0.00795)
+    held out  LL 0.150 (6898)  LH 0.189 (913)  HL 0.264 (4800)  HH 0.356 (5453)   contrast +0.0519 [+0.0272, +0.0800]  clears
+    HO1       LL 0.151 (3247)  LH 0.226 (234)  HL 0.263 (2456)  HH 0.356 (2263)   contrast +0.0175 [-0.0376, +0.0651]
+    HO2       LL 0.148 (3651)  LH 0.177 (679)  HL 0.265 (2344)  HH 0.356 (3190)   contrast +0.0622 [+0.0297, +0.1013]  clears
+  vol_48 x vratio   (rank 6, mean |interaction| 0.00751)
+    held out  LL 0.140 (4958)  LH 0.178 (2853)  HL 0.287 (2719)  HH 0.322 (7534)   contrast -0.0030 [-0.0294, +0.0244]
+    HO1       LL 0.140 (2198)  LH 0.183 (1283)  HL 0.285 (1295)  HH 0.316 (3424)   contrast -0.0117 [-0.0478, +0.0211]
+    HO2       LL 0.141 (2760)  LH 0.175 (1570)  HL 0.289 (1424)  HH 0.327 (4110)   contrast +0.0040 [-0.0274, +0.0496]
+  vol_spike_mover_1m_12 x abs_z   (rank 7, mean |interaction| 0.00728)
+    held out  LL 0.251 (4140)  LH 0.246 (2948)  HL 0.254 (4578)  HH 0.232 (6398)   contrast -0.0162 [-0.0450, +0.0096]
+    HO1       LL 0.233 (1645)  LH 0.248 (1140)  HL 0.255 (2305)  HH 0.238 (3110)   contrast -0.0320 [-0.0724, +0.0039]
+    HO2       LL 0.263 (2495)  LH 0.245 (1808)  HL 0.252 (2273)  HH 0.227 (3288)   contrast -0.0070 [-0.0376, +0.0276]
+  vadj_resid_12 x leg_b_breadth   (rank 8, mean |interaction| 0.00724)
+    held out  LL 0.236 (4838)  LH 0.203 (4239)  HL 0.270 (4465)  HH 0.267 (4522)   contrast +0.0302 [+0.0041, +0.0541]  clears
+    HO1       LL 0.243 (2249)  LH 0.203 (1753)  HL 0.271 (2055)  HH 0.250 (2143)   contrast +0.0197 [-0.0319, +0.0641]
+    HO2       LL 0.229 (2589)  LH 0.203 (2486)  HL 0.269 (2410)  HH 0.283 (2379)   contrast +0.0399 [+0.0028, +0.0690]  clears
+  common_share_12 x mkt_move_12   (rank 9, mean |interaction| 0.00698)
+    held out  LL 0.239 (7778)  LH 0.227 (1810)  HL 0.278 (3499)  HH 0.234 (4977)   contrast -0.0316 [-0.0773, +0.0216]
+    HO1       LL 0.239 (3925)  LH 0.258 (648)  HL 0.262 (2038)  HH 0.225 (1589)   contrast -0.0556 [-0.1329, +0.0726]
+    HO2       LL 0.240 (3853)  LH 0.210 (1162)  HL 0.302 (1461)  HH 0.239 (3388)   contrast -0.0329 [-0.0964, +0.0368]
+  vol_slope x beta   (rank 10, mean |interaction| 0.00673)
+    held out  LL 0.250 (5099)  LH 0.269 (4208)  HL 0.221 (5060)  HH 0.240 (3697)   contrast +0.0005 [-0.0232, +0.0247]
+    HO1       LL 0.246 (2422)  LH 0.265 (1813)  HL 0.217 (2386)  HH 0.254 (1579)   contrast +0.0172 [-0.0202, +0.0611]
+    HO2       LL 0.254 (2677)  LH 0.272 (2395)  HL 0.224 (2674)  HH 0.230 (2118)   contrast -0.0118 [-0.0500, +0.0191]
+
+  PRE-REGISTERED PAIRS
+  lone_share_12 x vol_spike_mover_12
+    held out  LL 0.259 (4797)  LH 0.224 (4757)  HL 0.274 (3301)  HH 0.231 (5209)   contrast -0.0074 [-0.0407, +0.0214]
+    HO1       LL 0.249 (2066)  LH 0.231 (2197)  HL 0.264 (1506)  HH 0.237 (2431)   contrast -0.0092 [-0.0575, +0.0306]
+    HO2       LL 0.266 (2731)  LH 0.218 (2560)  HL 0.281 (1795)  HH 0.227 (2778)   contrast -0.0067 [-0.0517, +0.0395]
+  common_share_12 x lagger_spread_12
+    held out  LL 0.238 (4732)  LH 0.236 (4856)  HL 0.259 (4040)  HH 0.247 (4436)   contrast -0.0103 [-0.0404, +0.0151]
+    HO1       LL 0.239 (2385)  LH 0.245 (2188)  HL 0.247 (1804)  HH 0.244 (1823)   contrast -0.0101 [-0.0552, +0.0429]
+    HO2       LL 0.237 (2347)  LH 0.229 (2668)  HL 0.268 (2236)  HH 0.249 (2613)   contrast -0.0109 [-0.0451, +0.0168]
+  breadth_ratio x vol_spike_mover_12
+    held out  LL 0.261 (4950)  LH 0.217 (4193)  HL 0.270 (3148)  HH 0.236 (5773)   contrast +0.0094 [-0.0224, +0.0391]
+    HO1       LL 0.255 (2141)  LH 0.216 (1932)  HL 0.256 (1431)  HH 0.246 (2696)   contrast +0.0285 [-0.0171, +0.0758]
+    HO2       LL 0.266 (2809)  LH 0.218 (2261)  HL 0.282 (1717)  HH 0.226 (3077)   contrast -0.0074 [-0.0504, +0.0324]
+  [626s]
+
+========================================================================================================================
+LIQUIDATION at 20x -- reverters the best model (logistic L1) flags at an 80% catch
+========================================================================================================================
+  HO1: flagged reverters 1,596; hit liquidation before mu 32 (0.0201);  all reverters in HO1: 46 of 1,995 (0.0231)
+  HO2: flagged reverters 1,936; hit liquidation before mu 30 (0.0155);  all reverters in HO2: 44 of 2,419 (0.0182)
+
+  Nothing written to the registry or the live system. No stop. pair_triggers_true never read.
+  [626s]
+========================================================================================================================

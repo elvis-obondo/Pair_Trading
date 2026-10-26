@@ -1,0 +1,47 @@
+================================================================================================================
+MARKET-VOL, Linear QR / MAE -- all five horizons, importance, plain miss
+================================================================================================================
+  population: 53,757 episodes; newfeat.npz reused, stored columns vs a fresh read of meta: max diff 0.0e+00
+
+[1m  ] 1-minute >= 30-minute, every episode/direction/horizon: 0 violations
+[1m  ] deepest shortfall -9.374e-07; as a fraction of the float32 reference's precision (8.0 ulps): 0.062 (must be < 1)
+  baselines: MFE match1m 9e332d92a294 (vol_48), MAE match1m_mae_vol1m 5bd8d15af8c8 (vol_48_1m) -- both match
+
+       [SPLIT] train 22,645 (<2026-05-01)   val 13,048   HELD OUT 18,064 (>=2026-07-18)
+[SPLIT] held-out used ONCE, for scoring only; iterations chosen on val
+  fitted Linear QR MAE 0.5h   [76s]
+  fitted Linear QR MAE 1h   [133s]
+  fitted Linear QR MAE 2h   [189s]
+  fitted Linear QR MAE 5h   [246s]
+  fitted Linear QR MAE 10h   [308s]
+  Linear QR LP fallbacks (alpha > 0): 0
+
+================================================================================================================
+PAIRED vs Linear QR's cached MAE baseline -- skill: + helps; gap: - better
+================================================================================================================
+  h      skill base  +mvol  new-old          [95% CI]        gap base  +mvol  new-old          [95% CI]         mvol importance          [95% CI]
+  0.5h        +2.39  +2.39   -0.005   [-0.046,+0.039]            2.16   2.14   -0.017   [-0.099,+0.082]                  -0.009   [-0.044,+0.042]
+  1h          +2.25  +2.28   +0.025   [-0.011,+0.060]            2.45   2.44   -0.016   [-0.099,+0.084]                  +0.039   [-0.003,+0.078]
+  2h          +2.32  +2.39   +0.071   [+0.022,+0.121] better     2.76   2.72   -0.044   [-0.146,+0.064]                  +0.071   [+0.019,+0.121]
+  5h          +2.74  +2.84   +0.101   [+0.012,+0.187] better     3.04   3.01   -0.029   [-0.132,+0.092]                  +0.122   [+0.032,+0.221]
+  10h         +3.21  +3.37   +0.164   [+0.017,+0.315] better     3.03   3.04   +0.016   [-0.118,+0.171]                  +0.211   [+0.040,+0.385]
+  all five paired deltas reproduce the MARKET-VOL run (asserted).
+
+================================================================================================================
+PLAIN MISS -- MAE 10h, average |actual - median guess|, sigma, held out
+================================================================================================================
+  Climatology                   1.949 sigma   (reproduces PLAIN-MISS)
+  Linear QR, without market_vol 1.908 sigma   (reproduces PLAIN-MISS)
+  Linear QR, with market_vol    1.9051 sigma
+  with - without: -0.0026 sigma [-0.0053, -0.0001];  vs climatology: -0.0434 sigma (-2.2%)
+
+================================================================================================================
+DECISION -- rule fixed in mvol_linear()' docstring before the run
+================================================================================================================
+  (a) no harm: horizons with a significantly worse measure: none
+  (b) net improvement: mean paired skill gain over five horizons +0.071 [+0.011, +0.132]
+  VERDICT: ADOPT market_vol for Linear QR / MAE -- the registry rebuild is the next build
+  Levels are a later look at already-scored rows; paired differences are the
+  measurement. Nothing in the registry was written.
+  [310s]
+================================================================================================================

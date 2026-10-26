@@ -1,0 +1,56 @@
+[HL5-FEATURES] 40,357 rows (4,791 events, 35,566 links), 4 chunks, 5 windows x 15 features
+  [2025-05-25..2025-06-05] day 2025-05-31 rows 35  [4s]
+  [2025-06-05..2025-06-16] day 2025-06-05 rows 1279  [7s]
+  [2025-06-16..2025-06-27] day 2025-06-16 rows 1238  [7s]
+  [2025-06-27..2025-07-09] day 2025-06-27 rows 1506  [8s]
+  [2025-05-25..2025-06-05] day 2025-06-01 rows 1008  [8s]
+  [2025-06-16..2025-06-27] day 2025-06-17 rows 1002  [12s]
+  [2025-06-05..2025-06-16] day 2025-06-06 rows 1180  [12s]
+  [2025-05-25..2025-06-05] day 2025-06-02 rows 1215  [12s]
+  [2025-06-27..2025-07-09] day 2025-06-28 rows 1622  [12s]
+  [2025-05-25..2025-06-05] day 2025-06-03 rows 954  [16s]
+  [2025-06-27..2025-07-09] day 2025-06-29 rows 917  [16s]
+  [2025-06-16..2025-06-27] day 2025-06-18 rows 1110  [16s]
+  [2025-06-05..2025-06-16] day 2025-06-07 rows 1874  [16s]
+  [2025-06-27..2025-07-09] day 2025-06-30 rows 720  [20s]
+  [2025-06-16..2025-06-27] day 2025-06-19 rows 771  [20s]
+  [2025-05-25..2025-06-05] day 2025-06-04 rows 1103  [20s]
+  [2025-06-05..2025-06-16] day 2025-06-08 rows 1104  [20s]
+  [2025-06-16..2025-06-27] day 2025-06-20 rows 1084  [24s]
+  [2025-06-27..2025-07-09] day 2025-07-01 rows 1591  [25s]
+  [2025-06-05..2025-06-16] day 2025-06-14 rows 1655  [25s]
+  [2025-06-16..2025-06-27] day 2025-06-21 rows 880  [28s]
+  [2025-06-05..2025-06-16] day 2025-06-15 rows 1351  [29s]
+  [2025-06-27..2025-07-09] day 2025-07-02 rows 1643  [30s]
+  [2025-06-16..2025-06-27] day 2025-06-22 rows 743  [32s]
+  [2025-06-27..2025-07-09] day 2025-07-03 rows 1259  [35s]
+  [2025-06-16..2025-06-27] day 2025-06-23 rows 1401  [36s]
+  [2025-06-27..2025-07-09] day 2025-07-04 rows 1445  [39s]
+  [2025-06-16..2025-06-27] day 2025-06-24 rows 1541  [41s]
+  [2025-06-27..2025-07-09] day 2025-07-05 rows 1086  [43s]
+  [2025-06-16..2025-06-27] day 2025-06-25 rows 1060  [46s]
+  [2025-06-27..2025-07-09] day 2025-07-06 rows 1291  [47s]
+  [2025-06-16..2025-06-27] day 2025-06-26 rows 1418  [50s]
+  [2025-06-27..2025-07-09] day 2025-07-07 rows 1065  [51s]
+  [2025-06-27..2025-07-09] day 2025-07-08 rows 1206  [55s]
+[WROTE] /home/elvisobondo/Pair_Trading/research/datasets/hl5_features.npz  [60s]
+  NaN share of events per window (top1): P1 0.9363, P2 0.9360, P3 0.9359, C6 0.9359, C24 0.9359
+  top1          P1: finite 0.0637  median 0.4411  p10 0.2059  p90 0.7543
+  top3          P1: finite 0.0637  median 0.815  p10 0.4604  p90 1
+  hhi           P1: finite 0.0637  median 0.3008  p10 0.1067  p90 0.6001
+  nw            P1: finite 0.0642  median 9  p10 3  p90 45
+  pers          P1: finite 0.0637  median 0.4701  p10 0.06667  p90 1
+/home/elvisobondo/Pair_Trading/research/dislocation_model/hl5_features.py:296: RuntimeWarning: All-NaN slice encountered
+  print(f"  {FEATS[f]:<13} P1: finite {np.isfinite(v).mean():.4f}  median {np.nanmedian(v):.4g}  p10 {np.nanpercentile(v, 10):.4g}  p90 {np.nanpercentile(v, 90):.4g}")
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/numpy/lib/_nanfunctions_impl.py:1396: RuntimeWarning: All-NaN slice encountered
+  return _nanquantile_unchecked(
+  twap          P1: finite 0.0000  median nan  p10 nan  p90 nan
+  skill_mean    P1: finite 0.0637  median 0.0003449  p10 -0.000369  p90 0.002198
+  skill_cov     P1: finite 0.0637  median 1  p10 0.8251  p90 1
+  bot           P1: finite 0.0637  median 0.0138  p10 0  p90 0.4201
+  topd          P1: finite 0.0637  median 0.2557  p10 0  p90 0.7544
+  prior_forced  P1: finite 0.0637  median 0  p10 0  p90 0.1779
+  backstop      P1: finite 0.0637  median 0  p10 0  p90 0
+  push_total    P1: finite 0.0642  median 8527  p10 631.1  p90 3.059e+05
+  forced_push   P1: finite 0.0642  median 0  p10 0  p90 0
+  absorbed_opp  P1: finite 0.0642  median 0  p10 0  p90 0

@@ -1,0 +1,117 @@
+================================================================================================================
+FEATURE IMPORTANCE -- 1-minute target, ALL, MFE 10h and MAE 10h
+================================================================================================================
+       [SPLIT] train 22,645 (<2026-05-01)   val 13,048   HELD OUT 18,064 (>=2026-07-18)
+[SPLIT] held-out used ONCE, for scoring only; iterations chosen on val
+[1m  ] 1-minute >= 30-minute, every episode/direction/horizon: 0 violations
+[1m  ] deepest shortfall -9.374e-07; as a fraction of the float32 reference's precision (8.0 ulps): 0.062 (must be < 1)
+  cache fingerprint matches (9e332d92a2945b03...).
+  held out 18,064 rows / 79 days; 20 shuffles per feature, seed 20261011
+
+================================================================================================================
+TRAIN CORRELATIONS of the five features -- read before the coefficients
+================================================================================================================
+                  vol_48     vratio  vol_slope   sandwich   off_mark
+  vol_48          +1.000     +0.509     -0.120     +0.467     +0.151
+  vratio          +0.509     +1.000     +0.238     +0.334     +0.188
+  vol_slope       -0.120     +0.238     +1.000     -0.063     -0.058
+  sandwich        +0.467     +0.334     -0.063     +1.000     +0.564
+  off_mark        +0.151     +0.188     -0.058     +0.564     +1.000
+
+================================================================================================================
+CELL 1m/MFE/10h
+================================================================================================================
+  QTREE refit, 5 horizons, vs cache after two-pass enforcement: worst 0.000e+00   [34s]
+  Linear QR refit at 10h: 99.9945% of predictions match the cache (the rest are horizon-enforcement lifts), max diff 6.743e-03   [89s]
+  skill vs climatology: QTREE +4.56% (refit, pre-horizon enforcement)  +4.56% (cache)   Linear QR +4.94%
+
+  [99s]
+  THE TABLE -- 1m/MFE/10h. Coefficients in target-sigma per train-SD of
+  the feature. Importance in skill points (of QTREE's +4.56%).
+
+  feature                              LinQR q50  LinQR q95-q5  QTREE perm. importance   [95% CI, day-clustered]
+  vol_48                                 +0.3779       +1.5593                  +5.061           [+4.414,+5.626]
+  vratio                                 +0.0416       +0.1532                  +0.160           [+0.017,+0.299]
+  vol_slope                              +0.2755       +0.9094                  +1.100           [+0.718,+1.519]
+  sandwich                               +0.1336       +0.3052                  +0.878           [+0.657,+1.083]
+  off_mark                               +0.0435       +0.0175                  +0.054           [+0.016,+0.100]
+  VOL TRIO (vol_48+vratio+vol_slope)                                            +6.179           [+5.452,+6.868]
+  MICRO PAIR (sandwich+off_mark)                                                +0.988           [+0.746,+1.214]
+  ALL FIVE                                                                      +8.391           [+7.600,+9.208]
+
+  Cross-check -- Linear QR permutation importance, same units (of its +4.94%):
+    vol_48                                  +6.719  [+5.925,+7.366]
+    vratio                                  +0.088  [+0.013,+0.156]
+    vol_slope                               +1.377  [+0.967,+1.846]
+    sandwich                                +0.210  [+0.107,+0.319]
+    off_mark                                +0.055  [+0.022,+0.095]
+    VOL TRIO (vol_48+vratio+vol_slope)      +7.802  [+7.054,+8.593]
+    MICRO PAIR (sandwich+off_mark)          +0.314  [+0.180,+0.454]
+    ALL FIVE                                +9.444  [+8.568,+10.318]
+
+  Appendix -- Linear QR coefficient at every quantile:
+    feature             q5       q25       q50       q75       q95
+    vol_48         +0.0346   +0.1688   +0.3779   +0.7225   +1.5939
+    vratio         -0.0249   +0.0030   +0.0416   +0.0900   +0.1282
+    vol_slope      -0.0051   +0.1349   +0.2755   +0.4873   +0.9043
+    sandwich       +0.0455   +0.1098   +0.1336   +0.1832   +0.3507
+    off_mark       +0.0155   +0.0227   +0.0435   +0.0445   +0.0330
+
+================================================================================================================
+CELL 1m/MAE/10h
+================================================================================================================
+  QTREE refit, 5 horizons, vs cache after two-pass enforcement: worst 0.000e+00   [120s]
+  Linear QR refit at 10h: 99.9978% of predictions match the cache (the rest are horizon-enforcement lifts), max diff 1.578e-01   [174s]
+  skill vs climatology: QTREE +2.34% (refit, pre-horizon enforcement)  +2.30% (cache)   Linear QR +2.66%
+
+  [186s]
+  THE TABLE -- 1m/MAE/10h. Coefficients in target-sigma per train-SD of
+  the feature. Importance in skill points (of QTREE's +2.34%).
+
+  feature                              LinQR q50  LinQR q95-q5  QTREE perm. importance   [95% CI, day-clustered]
+  vol_48                                 +0.4452       +1.6327                  +3.530           [+3.033,+4.049]
+  vratio                                 +0.0459       +0.1831                  +0.122           [+0.035,+0.228]
+  vol_slope                              +0.1077       +1.7958                  +0.549           [+0.174,+0.893]
+  sandwich                               -0.0431       +0.5951                  +0.308           [+0.154,+0.485]
+  off_mark                               +0.0368       +0.1063                  +0.036           [-0.041,+0.108]
+  VOL TRIO (vol_48+vratio+vol_slope)                                            +3.931           [+3.410,+4.545]
+  MICRO PAIR (sandwich+off_mark)                                                +0.408           [+0.233,+0.587]
+  ALL FIVE                                                                      +5.023           [+4.458,+5.693]
+
+  Cross-check -- Linear QR permutation importance, same units (of its +2.66%):
+    vol_48                                  +4.620  [+4.003,+5.386]
+    vratio                                  +0.060  [+0.016,+0.103]
+    vol_slope                               +0.527  [+0.146,+0.932]
+    sandwich                                +0.087  [+0.058,+0.118]
+    off_mark                                +0.099  [+0.025,+0.153]
+    VOL TRIO (vol_48+vratio+vol_slope)      +5.111  [+4.399,+5.995]
+    MICRO PAIR (sandwich+off_mark)          +0.184  [+0.099,+0.247]
+    ALL FIVE                                +5.485  [+4.821,+6.366]
+
+  Appendix -- Linear QR coefficient at every quantile:
+    feature             q5       q25       q50       q75       q95
+    vol_48         +0.0262   +0.2044   +0.4452   +0.8247   +1.6589
+    vratio         -0.0119   -0.0108   +0.0459   +0.0737   +0.1712
+    vol_slope      -0.0926   +0.0061   +0.1077   +0.4190   +1.7032
+    sandwich       -0.0203   -0.0299   -0.0431   -0.0270   +0.5748
+    off_mark       +0.0030   +0.0202   +0.0368   +0.1616   +0.1093
+
+================================================================================================================
+WHAT IT DECIDES
+================================================================================================================
+  1m/MFE/10h: QTREE skill +4.56%. Shuffling the volatility trio costs +6.18 [+5.45,+6.87] points;
+                shuffling the microstructure pair costs +0.99 [+0.75,+1.21] points.
+  1m/MAE/10h: QTREE skill +2.34%. Shuffling the volatility trio costs +3.93 [+3.41,+4.55] points;
+                shuffling the microstructure pair costs +0.41 [+0.23,+0.59] points.
+
+  Read the group rows, not the single-feature rows, for the decision:
+  the trio and the pair are correlated, and single-feature shuffles
+  share their joint credit unpredictably. If the microstructure pair's
+  interval sits clear of zero at a size comparable to the trio's, it is
+  pulling real weight and basis is worth building. If it is near zero,
+  the skill is the volatility features and basis drops in priority.
+  No threshold was set in advance for 'comparable', so this is read,
+  not gated.
+
+  [186s]
+================================================================================================================

@@ -1,0 +1,69 @@
+================================================================================================================
+COMBINED (exploratory) -- baseline + hour_sin, hour_cos, r2, |beta|; 1h / 5h / 10h
+================================================================================================================
+  population: 53,757 episodes; newfeat.npz reused, stored columns vs a fresh read of meta: max diff 0.0e+00
+
+[1m  ] 1-minute >= 30-minute, every episode/direction/horizon: 0 violations
+[1m  ] deepest shortfall -9.374e-07; as a fraction of the float32 reference's precision (8.0 ulps): 0.062 (must be < 1)
+  baselines: MFE match1m 9e332d92a294 (vol_48), MAE match1m_mae_vol1m 5bd8d15af8c8 (vol_48_1m) -- both match
+
+  skill: + = combination helps.  gap: - = better calibrated.
+  indiv: the two individual tests' paired deltas (hour | hedge), skill / gap.
+
+  cell      measure      base   +four  new - old          [95% CI]            outcome   indiv hour | hedge
+  MFE 1h    skill %     +4.88   +5.10     +0.219   [-0.066,+0.502]              HOLDS   +0.119 | -0.025
+            gap pp       1.10    1.04     -0.062   [-0.167,+0.049]                      +0.023 | -0.017
+            vs individual tests: AS PREDICTED
+  MFE 5h    skill %     +4.50   +4.54     +0.033   [-0.130,+0.189]              HOLDS   +0.031 | +0.052
+            gap pp       2.37    2.43     +0.062   [-0.035,+0.153]                      +0.018 | -0.053
+            vs individual tests: DIFFERENT (worse than predicted IMPROVES)
+  MFE 10h   skill %     +4.56   +4.37     -0.191   [-0.379,-0.014]    WORSE     LOSES   -0.218 | +0.034
+            gap pp       2.45    2.51     +0.059   [-0.037,+0.127]                      +0.029 | +0.021
+            vs individual tests: AS PREDICTED
+  [84s]
+  MAE 1h    skill %     +1.70   +1.45     -0.247   [-0.709,+0.155]              HOLDS   -0.197 | +0.095
+            gap pp       2.23    2.24     +0.006   [-0.067,+0.168]                      +0.053 | +0.127
+            vs individual tests: DIFFERENT (better than predicted LOSES)
+  MAE 5h    skill %     +2.31   +2.31     -0.002   [-0.321,+0.302]           IMPROVES   +0.056 | -0.033
+            gap pp       2.84    2.67     -0.164   [-0.273,-0.034]   better             -0.153 | +0.109
+            vs individual tests: DIFFERENT (better than predicted LOSES)
+  MAE 10h   skill %     +2.77   +2.66     -0.109   [-0.357,+0.108]              LOSES   -0.104 | -0.163
+            gap pp       2.86    2.97     +0.115   [+0.026,+0.228]    WORSE             -0.029 | +0.196
+            vs individual tests: AS PREDICTED
+  [145s]
+
+================================================================================================================
+PERMUTATION IMPORTANCE -- all nine features, skill points vs climatology,
+held out, 20 shuffles, day-clustered 95% interval, pre-horizon-enforcement
+================================================================================================================
+  feature                       MFE 1h                MFE 5h               MFE 10h                MAE 1h                MAE 5h               MAE 10h
+  (refit skill)                 +5.11%                +4.54%                +4.37%                +1.49%                +2.41%                +2.70%
+  vol_48(_1m)      +3.55 [+3.20,+3.92]   +4.68 [+4.10,+5.24]   +4.65 [+4.03,+5.18]   +1.81 [+1.47,+2.14]   +3.50 [+3.02,+3.98]   +4.13 [+3.57,+4.82]
+  vratio           +0.54 [+0.30,+0.83]   +0.19 [+0.02,+0.37]   +0.19 [+0.06,+0.32]   +0.44 [+0.27,+0.62]   +0.11 [-0.01,+0.25]   +0.16 [+0.10,+0.22]
+  vol_slope        +4.00 [+3.08,+4.96]   +2.02 [+1.43,+2.55]   +1.09 [+0.76,+1.49]   +1.50 [+0.96,+2.04]   +0.83 [+0.46,+1.21]   +0.54 [+0.17,+0.92]
+  sandwich         +0.64 [+0.39,+0.92]   +0.70 [+0.47,+0.96]   +0.97 [+0.74,+1.20]   +0.08 [+0.03,+0.11]   +0.10 [+0.01,+0.18]   +0.11 [+0.05,+0.16]
+  off_mark         +0.04 [+0.02,+0.06]   +0.06 [+0.01,+0.10]   +0.02 [-0.02,+0.06]   +0.07 [+0.04,+0.10]   +0.02 [-0.02,+0.07]   +0.04 [+0.00,+0.07]
+  hour_sin         +0.11 [-0.01,+0.23]   +0.03 [-0.07,+0.12]   +0.02 [-0.10,+0.14]   +0.97 [+0.60,+1.33]   +0.45 [+0.30,+0.61]   +0.41 [+0.24,+0.57]
+  hour_cos         +0.14 [-0.04,+0.31]   +0.06 [-0.09,+0.21]   -0.10 [-0.18,-0.01]   +0.98 [+0.62,+1.29]   +0.76 [+0.45,+1.03]   +0.54 [+0.34,+0.77]
+  r2               +0.02 [-0.02,+0.05]   +0.02 [-0.02,+0.05]   +0.00 [-0.07,+0.09]   -0.01 [-0.05,+0.04]   +0.05 [-0.00,+0.10]   +0.05 [-0.02,+0.12]
+  abs_beta         -0.00 [-0.03,+0.03]   +0.02 [-0.02,+0.05]   +0.06 [+0.02,+0.09]   +0.02 [-0.01,+0.05]   +0.05 [+0.01,+0.10]   +0.14 [+0.08,+0.20]
+  hour pair        +0.29 [+0.01,+0.58]   +0.16 [-0.02,+0.33]   -0.11 [-0.26,+0.05]   +0.06 [-0.34,+0.40]   +0.21 [-0.07,+0.45]   +0.12 [-0.09,+0.32]
+  hedge pair       +0.01 [-0.03,+0.06]   +0.03 [-0.03,+0.09]   +0.07 [-0.02,+0.16]   +0.02 [-0.05,+0.08]   +0.10 [+0.03,+0.18]   +0.18 [+0.09,+0.27]
+  all four new     +0.31 [+0.03,+0.59]   +0.17 [-0.00,+0.32]   -0.04 [-0.21,+0.12]   +0.12 [-0.24,+0.44]   +0.31 [+0.05,+0.60]   +0.33 [+0.11,+0.55]
+  old five        +9.42 [+8.53,+10.36]   +8.60 [+7.74,+9.44]   +8.37 [+7.55,+9.24]   +3.96 [+3.28,+4.69]   +4.55 [+3.91,+5.21]   +4.71 [+4.14,+5.45]
+  vol_48(_1m) is vol_48 in the MFE columns and vol_48_1m in the MAE columns.
+
+================================================================================================================
+IS THE COMBINATION DIFFERENT? -- rule fixed in combined()' docstring
+================================================================================================================
+  MFE 1h    combined HOLDS     predicted HOLDS     -> AS PREDICTED
+  MFE 5h    combined HOLDS     predicted IMPROVES  -> DIFFERENT (worse than predicted IMPROVES)
+  MFE 10h   combined LOSES     predicted LOSES     -> AS PREDICTED
+  MAE 1h    combined HOLDS     predicted LOSES     -> DIFFERENT (better than predicted LOSES)
+  MAE 5h    combined IMPROVES  predicted LOSES     -> DIFFERENT (better than predicted LOSES)
+  MAE 10h   combined LOSES     predicted LOSES     -> AS PREDICTED
+  3 of 6 cells differ from the individual tests' prediction.
+  EXPLORATORY: no adoption verdict is issued by this stage. Nothing in the
+  registry was written.
+  [145s]
+================================================================================================================

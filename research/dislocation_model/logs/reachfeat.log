@@ -1,0 +1,58 @@
+================================================================================================================
+REACH-MU STEP 0 -- mover size, past dislocation history, breadth
+================================================================================================================
+  panel 36,595 bars x 214 tickers; 60,000 episodes
+  market factor recomputed (whyfeat.market_factor)   [163s]
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+  L= 4: mover_resid_z > 0 exactly when the dominant contribution widened the spread: 58,596 of 58,596
+  L=12: mover_resid_z > 0 exactly when the dominant contribution widened the spread: 58,555 of 58,555
+
+    4,000 of 22,366 pairs   [188s]
+    8,000 of 22,366 pairs   [211s]
+    12,000 of 22,366 pairs   [233s]
+    16,000 of 22,366 pairs   [257s]
+    20,000 of 22,366 pairs   [279s]
+  every pair's z on its own geometry: 22,366 pairs   [292s]
+  GATE -- recomputed z at entry vs z_at_entry: max |diff| 0.00e+00 (must be <= 1e-6); entry bar is a fresh crossing on 60,000 of 60,000
+  episodes with under 30 days of history before entry: 6,432 of 60,000 (triggers_past_30d counts only the history they have)
+  [WROTE] datasets/breadth_counts.npz  (36,595 bars x 214 coins)
+
+================================================================================================================
+CHECKS
+================================================================================================================
+  LOOK-AHEAD -- max 30m index touched minus the entry index, per family:
+    mover L=4                                max +0 (must be <= 0)
+    mover L=12                               max +0 (must be <= 0)
+    past triggers (latest crossing used)     max -1 (must be <= 0)
+    breadth (count table row read)           max +0 (must be <= 0)
+    -> PASS
+
+  COVERAGE and DISTRIBUTION (all 60,000; and on the 53,757 set)
+    feature                 finite  finite 53,757     median         p5        p95
+    mover_resid_z_4         58,521         52,944          2    -0.3337      7.682
+    mover_ret_4             59,830         53,676    0.02753   -0.00325     0.1109
+    mover_resid_z_12        58,424         52,881      1.758    -0.1365       6.12
+    mover_ret_12            59,707         53,604    0.04081  -0.003248     0.1524
+    triggers_past_rate      60,000         53,757     0.3724     0.2301       0.48
+    triggers_past_30d       60,000         53,757         11          3         17
+    leg_a_breadth           60,000         53,757    0.05376          0     0.6449
+    leg_b_breadth           60,000         53,757    0.05238          0     0.5976
+    breadth_ratio           60,000         53,757      7.928      1.208         83
+    market_breadth          60,000         53,757    0.02289   0.006796     0.1253
+
+  SPEARMAN on the 53,757 set, flag > 0.8 against vol_48 or vol_48_1m
+    mover_resid_z_4        vol_48 -0.195   vol_48_1m -0.235
+    mover_ret_4            vol_48 -0.112   vol_48_1m -0.241
+    mover_resid_z_12       vol_48 -0.259   vol_48_1m -0.294
+    mover_ret_12           vol_48 -0.180   vol_48_1m -0.303
+    triggers_past_rate     vol_48 -0.001   vol_48_1m +0.001
+    triggers_past_30d      vol_48 -0.007   vol_48_1m -0.015
+    leg_a_breadth          vol_48 -0.065   vol_48_1m -0.098
+    leg_b_breadth          vol_48 -0.047   vol_48_1m -0.068
+    breadth_ratio          vol_48 -0.151   vol_48_1m -0.189
+    market_breadth         vol_48 +0.001   vol_48_1m -0.037
+  flagged 'restates volatility': none
+  [WROTE] datasets/reachfeat.npz  (60,000 x 10)
+  [296s]
+================================================================================================================

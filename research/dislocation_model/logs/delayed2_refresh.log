@@ -1,0 +1,136 @@
+================================================================================================================
+DELAYED DECISION v2 -- refreshed detection features at the decision point
+================================================================================================================
+  k=0: rebuilt W equals disloc.npz windows exactly: True
+[1m  ] loaded 212 instruments, 985 MB of dense float64 minute grids (NaN where a minute did not trade)
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+  [1m-feat] rows  5,000 of 53,757
+  [1m-feat] rows 10,000 of 53,757
+  [1m-feat] rows 15,000 of 53,757
+  [1m-feat] rows 20,000 of 53,757
+  [1m-feat] rows 25,000 of 53,757
+  [1m-feat] rows 30,000 of 53,757
+  [1m-feat] rows 35,000 of 53,757
+  [1m-feat] rows 40,000 of 53,757
+  [1m-feat] rows 45,000 of 53,757
+  [1m-feat] rows 50,000 of 53,757
+  [1m-feat] rows 53,757 of 53,757
+  k=0: envfeat + vol_48_1m rebuilt; reproduction ratio 0.062, vol_48 recomputation 8.75e-08   [17s]
+    GATE vol_48                   reproduces t0 exactly: True   (max |diff| 0.000e+00)
+    GATE vratio                   reproduces t0 exactly: True   (max |diff| 0.000e+00)
+    GATE vol_slope                reproduces t0 exactly: True   (max |diff| 0.000e+00)
+    GATE sandwich                 reproduces t0 exactly: True   (max |diff| 0.000e+00)
+    GATE off_mark                 reproduces t0 exactly: True   (max |diff| 0.000e+00)
+    GATE vol_48_1m                reproduces t0 exactly: True   (max |diff| 0.000e+00)
+[1m  ] loaded 212 instruments, 985 MB of dense float64 minute grids (NaN where a minute did not trade)
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+  [1m-feat] rows  5,000 of 53,757
+  [1m-feat] rows 10,000 of 53,757
+  [1m-feat] rows 15,000 of 53,757
+  [1m-feat] rows 20,000 of 53,757
+  [1m-feat] rows 25,000 of 53,757
+  [1m-feat] rows 30,000 of 53,757
+  [1m-feat] rows 35,000 of 53,757
+  [1m-feat] rows 40,000 of 53,757
+  [1m-feat] rows 45,000 of 53,757
+  [1m-feat] rows 50,000 of 53,757
+  [1m-feat] rows 53,757 of 53,757
+  k=1: envfeat + vol_48_1m rebuilt; reproduction ratio 0.062, vol_48 recomputation 7.51e-08   [29s]
+[1m  ] loaded 212 instruments, 985 MB of dense float64 minute grids (NaN where a minute did not trade)
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+  [1m-feat] rows  5,000 of 53,757
+  [1m-feat] rows 10,000 of 53,757
+  [1m-feat] rows 15,000 of 53,757
+  [1m-feat] rows 20,000 of 53,757
+  [1m-feat] rows 25,000 of 53,757
+  [1m-feat] rows 30,000 of 53,757
+  [1m-feat] rows 35,000 of 53,757
+  [1m-feat] rows 40,000 of 53,757
+  [1m-feat] rows 45,000 of 53,757
+  [1m-feat] rows 50,000 of 53,757
+  [1m-feat] rows 53,757 of 53,757
+  k=2: envfeat + vol_48_1m rebuilt; reproduction ratio 0.062, vol_48 recomputation 1.20e-07   [41s]
+    GATE beta                     reproduces t0 exactly: True   (max |diff| 0.000e+00)
+    GATE r2                       reproduces t0 exactly: True   (max |diff| 0.000e+00)
+    GATE z_roll (vs z_at_entry)   reproduces t0 exactly: True   (max |diff| 0.000e+00)
+  rolling beta, r2, z at J+k   [57s]
+  [prepare] market factor   [162s]
+  raw 30m OHLCV loaded   [167s]
+  rolling 48-bar EDGE at every bar, every ticker   [300s]
+  whyfeat.prepare done   [358s]
+  30m features built   [368s]
+STEP 2b -- 1-minute versions of vol_spike_mover / vol_spike_ratio / vadj_resid
+    1m volume: 50 of 212 tickers   [378s]
+    1m volume: 100 of 212 tickers   [388s]
+    1m volume: 150 of 212 tickers   [397s]
+    1m volume: 200 of 212 tickers   [406s]
+  1m features built; max minute read relative to entry_time: +29 (must be +29)   [409s]
+
+    GATE common_share_4           reproduces t0 exactly: True   (max |diff| 0.000e+00)
+    GATE common_share_12          reproduces t0 exactly: True   (max |diff| 0.000e+00)
+    GATE vol_spike_mover_4        reproduces t0 exactly: True   (max |diff| 0.000e+00)
+    GATE vol_spike_mover_12       reproduces t0 exactly: True   (max |diff| 0.000e+00)
+    GATE vol_spike_mover_1m_4     reproduces t0 exactly: True   (max |diff| 0.000e+00)
+    GATE vol_spike_mover_1m_12    reproduces t0 exactly: True   (max |diff| 0.000e+00)
+    GATE vol_spike_ratio_4        reproduces t0 exactly: True   (max |diff| 0.000e+00)
+    GATE vol_spike_ratio_12       reproduces t0 exactly: True   (max |diff| 0.000e+00)
+    GATE vol_spike_ratio_1m_4     reproduces t0 exactly: True   (max |diff| 0.000e+00)
+    GATE vol_spike_ratio_1m_12    reproduces t0 exactly: True   (max |diff| 0.000e+00)
+    GATE lagger_spread_4          reproduces t0 exactly: True   (max |diff| 0.000e+00)
+    GATE lagger_spread_12         reproduces t0 exactly: True   (max |diff| 0.000e+00)
+  whyfeat.compute k=0   [409s]
+  30m features built   [419s]
+STEP 2b -- 1-minute versions of vol_spike_mover / vol_spike_ratio / vadj_resid
+    1m volume: 50 of 212 tickers   [428s]
+    1m volume: 100 of 212 tickers   [437s]
+    1m volume: 150 of 212 tickers   [446s]
+    1m volume: 200 of 212 tickers   [456s]
+  1m features built; max minute read relative to entry_time: +29 (must be +29)   [458s]
+
+  whyfeat.compute k=1   [458s]
+  30m features built   [468s]
+STEP 2b -- 1-minute versions of vol_spike_mover / vol_spike_ratio / vadj_resid
+    1m volume: 50 of 212 tickers   [477s]
+    1m volume: 100 of 212 tickers   [486s]
+    1m volume: 150 of 212 tickers   [495s]
+    1m volume: 200 of 212 tickers   [505s]
+  1m features built; max minute read relative to entry_time: +29 (must be +29)   [507s]
+
+  whyfeat.compute k=2   [507s]
+
+  LOOK-AHEAD -- max index read minus the anchor J+k (1-minute: minutes past the anchor bar's close)
+    envfeat k=0                                          +0
+    vol_48_1m k=0 (min vs bar label)                     +0
+    envfeat k=1                                          +0
+    vol_48_1m k=1 (min vs bar label)                     +0
+    envfeat k=2                                          +0
+    vol_48_1m k=2 (min vs bar label)                     +0
+    rolling beta/r2/z k=0                                +0
+    rolling beta/r2/z k=1                                +0
+    rolling beta/r2/z k=2                                +0
+    whyfeat factor/resid L=4 k=0                         +0
+    whyfeat volume L=4 k=0                               +0
+    whyfeat EDGE L=4 k=0                                 +0
+    whyfeat factor/resid L=12 k=0                        +0
+    whyfeat volume L=12 k=0                              +0
+    whyfeat EDGE L=12 k=0                                +0
+    whyfeat 1m k=0 (min vs bar label)                    +0
+    whyfeat factor/resid L=4 k=1                         +0
+    whyfeat volume L=4 k=1                               +0
+    whyfeat EDGE L=4 k=1                                 +0
+    whyfeat factor/resid L=12 k=1                        +0
+    whyfeat volume L=12 k=1                              +0
+    whyfeat EDGE L=12 k=1                                +0
+    whyfeat 1m k=1 (min vs bar label)                    +0
+    whyfeat factor/resid L=4 k=2                         +0
+    whyfeat volume L=4 k=2                               +0
+    whyfeat EDGE L=4 k=2                                 +0
+    whyfeat factor/resid L=12 k=2                        +0
+    whyfeat volume L=12 k=2                              +0
+    whyfeat EDGE L=12 k=2                                +0
+    whyfeat 1m k=2 (min vs bar label)                    +0
+    -> PASS;  every refreshed feature reproduces t0 exactly at k = 0
+  [WROTE] datasets/delayed2_refresh.npz   [508s]

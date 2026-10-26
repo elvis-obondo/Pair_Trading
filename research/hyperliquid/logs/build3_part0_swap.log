@@ -1,0 +1,10 @@
+flow_d3 local: 206 files 6071182484 B
+flow_d3 s3:    Total Objects: 206    Total Size: 6071182484 
+futures_d3 local: 412 files 4383087776 B
+futures_d3 s3:    Total Objects: 412    Total Size: 4383087776 
+[FLOWCMP] 206 coin flow files, 131,600,580 rows: existing columns bit-identical except 0 differences
+[FLOWCMP] new columns present in all files; sum identities hold on every non-NaN row, max abs err 2.98e-08 USD
+[FLOWCMP] 412 bar files compared (1m and 30m)
+COMPARE PASSED -> swapping
+SWAP-DONE flow: 206 files; futures: 412 files
+SWAP exit 0

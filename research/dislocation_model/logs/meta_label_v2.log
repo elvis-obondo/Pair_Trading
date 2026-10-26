@@ -1,0 +1,148 @@
+============================================================================================================================================
+META-LABEL v2 -- a one-sided envelope flag, on replayed 1-minute stop fills
+============================================================================================================================================
+  STATED BEFORE ANY NUMBER:
+  - all 10 slots are full 86.5% of the time: this can rule the idea OUT, not IN
+  - 17 Aug - 21 Sep is the previously identified favourable window
+  - 31% of trades entered beyond 3.5 sigma (1,178), unlike the first-crossing training episodes; reported separately
+  - position size grew over the window: median gross notional by week 213, 319, 270, 534, 983, 1,083 -- dollar results are weighted to the last weeks
+
+STEP 0.1 -- refit Linear QR exactly as the registry
+       [SPLIT] train 22,645 (<2026-05-01)   val 13,048   HELD OUT 18,064 (>=2026-07-18)
+[SPLIT] held-out used ONCE, for scoring only; iterations chosen on val
+  fitted Linear QR MFE 0.5h
+  fitted Linear QR MFE 1h
+  fitted Linear QR MFE 2h
+  fitted Linear QR MFE 5h
+  fitted Linear QR MFE 10h
+  GATE 1 MFE: refit vs cached held-out predictions, worst 0.00e+00
+  fitted Linear QR MAE 0.5h
+  fitted Linear QR MAE 1h
+  fitted Linear QR MAE 2h
+  fitted Linear QR MAE 5h
+  fitted Linear QR MAE 10h
+  GATE 1 MAE: refit vs cached held-out predictions, worst 0.00e+00
+  [567s]
+
+STEP 0.2 -- score every trade at its own entry bar
+[1m  ] loaded 212 instruments, 985 MB of dense float64 minute grids (NaN where a minute did not trade)
+  [1m-feat] rows  3,844 of 3,844
+  complete feature rows 3,844 of 3,844
+  entry geometry recomputed vs the ledger's own: beta max |diff| 3.81e-08, sigma max relative diff 5.19e-09
+  [601s]
+
+STEP 0.3 -- replay every exit on the engine's own check sequence
+  gate replay with the engine's 1-minute data cut-off at 2026-09-21 00:00:00
+  exit reason agrees: 3,844 of 3,844
+  take-profit / time-stop trades reproducing reason, exit time and R (1e-9): 757 of 757
+  adverse-move trades reproducing exit time, and the ledger R when booked at 1.005x through pnl(): 3,087 of 3,087
+  -> PASS: the replay walks exactly the engine's path
+  analysis replay on the true 1-minute path: 3 trade(s) differ from the gate replay: #3810 -1.517->-1.271, #3843 +6.743->+6.522, #3851 -3.470->-1.522
+  replayed stop overshoot (3,087 stops): median 1.237x, mean 1.458x, p90 1.944x (the ledger booked 1.005x)
+  ALL trades: ledger mean R +0.4259 (total +1637.0);  replayed mean R +0.0617 (total +237.3), replayed $ -1,138
+  overshoot cost, replayed fills vs exact stop fills: 1415.0 R in total
+  [632s]
+
+STEP 0.4 -- the no-stop arm (take profit, 72h, or liquidation at 20x)
+  take_profit    2,734  (71.1%)
+  liquidated       834  (21.7%)
+  time_stop        276  (7.2%)
+  no-stop mean R +0.4662 (total +1792.1), $ +3,727;  with-stop mean R +0.0617
+  [647s]
+
+============================================================================================================================================
+STEP 1 -- FLAGS (top 20% of trades by the prediction; never tuned on outcomes)
+============================================================================================================================================
+  0.5h  A: MAE q95 cut 4.385 sigma, 769 flagged;  B: MFE q50 <= 0 on 0 trades (ratio := +inf), cut 0.850, 769 flagged;  A and B overlap 30
+  1h    A: MAE q95 cut 6.099 sigma, 769 flagged;  B: MFE q50 <= 0 on 0 trades (ratio := +inf), cut 0.882, 769 flagged;  A and B overlap 78
+  2h    A: MAE q95 cut 8.090 sigma, 769 flagged;  B: MFE q50 <= 0 on 0 trades (ratio := +inf), cut 0.927, 769 flagged;  A and B overlap 82
+  5h    A: MAE q95 cut 11.629 sigma, 769 flagged;  B: MFE q50 <= 0 on 0 trades (ratio := +inf), cut 0.987, 769 flagged;  A and B overlap 113
+  10h   A: MAE q95 cut 15.108 sigma, 769 flagged;  B: MFE q50 <= 0 on 0 trades (ratio := +inf), cut 0.999, 769 flagged;  A and B overlap 207
+
+  [WROTE] datasets/meta_label_v2_state.npz -- per-trade state for --stage fills
+============================================================================================================================================
+STEP 2 -- THE SCOREBOARD, all 3,844 trades, replayed fills. d = arm - ALL; pct = percentile in the random null
+============================================================================================================================================
+  ALL TRADES: ALL  3,844 trades  mean R +0.0617  total R +237.3  total $ -1,138  win 0.197
+  cell         flag%   mean R           d mean R [95% CI]  total R          d total R [95% CI]   total $                  d $ [95% CI]     n    win  pct R  pct $
+  A 0.5h SKIP  20.0%  +0.0620   +0.0003 [-0.0693,+0.0685]   +190.7       -46.6 [-326.2,+218.8]      -661            +477 [-106,+1,163]  3075  0.199  50.6%  96.4%
+  A 0.5h HALF  20.0%  +0.0557   -0.0061 [-0.0444,+0.0276]   +214.0       -23.3 [-163.1,+109.4]      -900               +238 [-53,+581]  3844  0.197  50.6%  96.4%
+  B 0.5h SKIP  20.0%  +0.0473   -0.0145 [-0.0724,+0.0386]   +145.3       -91.9 [-288.2,+111.4]    -1,059               +79 [-337,+464]  3075  0.197  29.6%  15.2%
+  B 0.5h HALF  20.0%  +0.0498   -0.0120 [-0.0395,+0.0136]   +191.3        -46.0 [-144.1,+55.7]    -1,099               +40 [-168,+232]  3844  0.197  29.6%  15.2%
+  A 1h SKIP    20.0%  +0.0606   -0.0011 [-0.0693,+0.0672]   +186.5       -50.8 [-324.4,+208.1]      -653            +485 [-100,+1,155]  3075  0.199  48.1%  96.8%
+  A 1h HALF    20.0%  +0.0551   -0.0066 [-0.0435,+0.0266]   +211.9       -25.4 [-162.2,+104.1]      -896               +242 [-50,+578]  3844  0.197  48.1%  96.8%
+  B 1h SKIP    20.0%  +0.0379   -0.0238 [-0.0986,+0.0428]   +116.5      -120.7 [-398.5,+136.2]    -1,008              +130 [-397,+609]  3075  0.197  22.5%  27.7%
+  B 1h HALF    20.0%  +0.0460   -0.0157 [-0.0525,+0.0171]   +176.9        -60.4 [-199.2,+68.1]    -1,073               +65 [-198,+304]  3844  0.197  22.5%  27.7%
+  A 2h SKIP    20.0%  +0.0819   +0.0202 [-0.0550,+0.0845]   +251.8       +14.5 [-259.9,+271.4]      -615             +523 [-89,+1,231]  3075  0.201  76.3%  97.6%
+  A 2h HALF    20.0%  +0.0636   +0.0019 [-0.0345,+0.0346]   +244.5        +7.3 [-129.9,+135.7]      -876               +262 [-45,+615]  3844  0.197  76.3%  97.6%
+  B 2h SKIP    20.0%  +0.0421   -0.0197 [-0.0877,+0.0396]   +129.4      -107.9 [-364.8,+144.4]    -1,117               +21 [-441,+432]  3075  0.197  23.9%   7.9%
+  B 2h HALF    20.0%  +0.0477   -0.0140 [-0.0484,+0.0182]   +183.3        -54.0 [-182.4,+72.2]    -1,128               +10 [-221,+216]  3844  0.197  23.9%   7.9%
+  A 5h SKIP    20.0%  +0.0674   +0.0056 [-0.0794,+0.0855]   +207.1       -30.2 [-349.4,+267.0]      -645            +493 [-137,+1,206]  3075  0.198  57.3%  96.0%
+  A 5h HALF    20.0%  +0.0578   -0.0039 [-0.0460,+0.0337]   +222.2       -15.1 [-174.7,+133.5]      -892               +246 [-68,+603]  3844  0.197  57.3%  96.0%
+  B 5h SKIP    20.0%  +0.0298   -0.0319 [-0.0902,+0.0237]    +91.6      -145.6 [-375.7,+102.2]      -975              +163 [-330,+733]  3075  0.195  12.8%  31.7%
+  B 5h HALF    20.0%  +0.0428   -0.0189 [-0.0510,+0.0129]   +164.5        -72.8 [-187.8,+51.1]    -1,056               +82 [-165,+367]  3844  0.197  12.8%  31.7%
+  A 10h SKIP   20.0%  +0.0557   -0.0060 [-0.0891,+0.0702]   +171.3       -66.0 [-382.4,+260.4]      -768            +370 [-214,+1,011]  3075  0.196  40.0%  83.0%
+  A 10h HALF   20.0%  +0.0531   -0.0086 [-0.0510,+0.0317]   +204.3       -33.0 [-191.2,+130.2]      -953              +185 [-107,+506]  3844  0.197  40.0%  83.0%
+  B 10h SKIP   20.0%  +0.0228   -0.0390 [-0.1070,+0.0178]    +70.0       -167.3 [-414.1,+86.0]    -1,001              +137 [-278,+612]  3075  0.195   7.8%  24.9%
+  B 10h HALF   20.0%  +0.0400   -0.0218 [-0.0557,+0.0107]   +153.6        -83.6 [-207.1,+43.0]    -1,069               +69 [-139,+306]  3844  0.197   7.8%  24.9%
+
+============================================================================================================================================
+WHERE THE LOSS LIVES -- overshoot cost and the stopping premium, by flag
+============================================================================================================================================
+  flag       trade share  overshoot-cost share  premium flagged  premium unflagged   (premium = with-stop R - no-stop R, mean)
+  A 0.5h           0.200                 0.257          -0.6198            -0.3506
+  B 0.5h           0.200                 0.146          +0.1640            -0.5466
+  A 1h             0.200                 0.253          -0.5244            -0.3745
+  B 1h             0.200                 0.151          +0.1956            -0.5546
+  A 2h             0.200                 0.260          -0.5943            -0.3570
+  B 2h             0.200                 0.155          +0.0180            -0.5101
+  A 5h             0.200                 0.257          -1.1475            -0.2187
+  B 5h             0.200                 0.156          +0.0280            -0.5126
+  A 10h            0.200                 0.255          -0.8470            -0.2938
+  B 10h            0.200                 0.155          +0.0400            -0.5156
+  all trades: premium -0.4045
+
+============================================================================================================================================
+THE SAME SCOREBOARD, trades entered beyond 3.5 sigma only (1,178)
+============================================================================================================================================
+  >3.5 SIGMA: ALL  1,178 trades  mean R +0.0723  total R +85.2  total $ -429  win 0.183
+  cell         flag%   mean R           d mean R [95% CI]  total R          d total R [95% CI]   total $                  d $ [95% CI]     n    win  pct R  pct $
+  A 0.5h SKIP  33.4%  +0.0659   -0.0064 [-0.1799,+0.1450]    +51.7       -33.5 [-222.7,+152.6]      -137               +292 [-57,+667]   784  0.184  46.3%  88.9%
+  A 0.5h HALF  33.4%  +0.0581   -0.0142 [-0.0976,+0.0603]    +68.4        -16.8 [-111.4,+76.3]      -283               +146 [-28,+333]  1178  0.183  46.3%  88.9%
+  B 0.5h SKIP  12.1%  +0.0909   +0.0186 [-0.0660,+0.0898]    +94.1         +8.9 [-85.4,+104.8]      -348               +81 [-116,+295]  1035  0.186  66.2%  63.3%
+  B 0.5h HALF  12.1%  +0.0761   +0.0038 [-0.0393,+0.0420]    +89.7          +4.5 [-42.7,+52.4]      -388                +41 [-58,+147]  1178  0.183  66.2%  63.3%
+  A 1h SKIP    33.1%  +0.0643   -0.0080 [-0.1786,+0.1465]    +50.7       -34.5 [-212.8,+148.5]      -138               +291 [-39,+665]   788  0.184  45.7%  90.2%
+  A 1h HALF    33.1%  +0.0577   -0.0147 [-0.0945,+0.0608]    +67.9        -17.3 [-106.4,+74.3]      -283               +145 [-19,+332]  1178  0.183  45.7%  90.2%
+  B 1h SKIP    13.8%  +0.0708   -0.0016 [-0.1329,+0.0979]    +71.9       -13.3 [-157.1,+103.6]      -329              +100 [-128,+356]  1016  0.183  49.1%  68.4%
+  B 1h HALF    13.8%  +0.0667   -0.0056 [-0.0698,+0.0423]    +78.5          -6.7 [-78.5,+51.8]      -379                +50 [-64,+178]  1178  0.183  49.1%  68.4%
+  A 2h SKIP    32.8%  +0.1190   +0.0467 [-0.1131,+0.1977]    +94.3        +9.1 [-171.6,+191.7]       -85               +344 [-39,+779]   792  0.188  71.9%  97.1%
+  A 2h HALF    32.8%  +0.0762   +0.0039 [-0.0749,+0.0751]    +89.7          +4.5 [-85.8,+95.9]      -257               +172 [-20,+389]  1178  0.183  71.9%  97.1%
+  B 2h SKIP    14.0%  +0.0492   -0.0232 [-0.1394,+0.0704]    +49.8        -35.4 [-166.1,+86.6]      -456               -27 [-268,+227]  1013  0.181  29.6%  13.4%
+  B 2h HALF    14.0%  +0.0573   -0.0150 [-0.0716,+0.0364]    +67.5         -17.7 [-83.0,+43.3]      -442               -13 [-134,+113]  1178  0.183  29.6%  13.4%
+  A 5h SKIP    31.5%  +0.0861   +0.0137 [-0.1750,+0.2042]    +69.5       -15.7 [-210.7,+193.2]      -116              +313 [-116,+806]   807  0.183  55.0%  94.8%
+  A 5h HALF    31.5%  +0.0656   -0.0067 [-0.0902,+0.0807]    +77.3         -7.9 [-105.4,+96.6]      -272               +157 [-58,+403]  1178  0.183  55.0%  94.8%
+  B 5h SKIP    14.2%  +0.0434   -0.0289 [-0.1555,+0.0693]    +43.9        -41.3 [-181.9,+80.8]      -347               +82 [-152,+338]  1011  0.180  27.7%  58.8%
+  B 5h HALF    14.2%  +0.0548   -0.0175 [-0.0808,+0.0334]    +64.6         -20.6 [-91.0,+40.4]      -388                +41 [-76,+169]  1178  0.183  27.7%  58.8%
+  A 10h SKIP   29.2%  +0.0562   -0.0161 [-0.1777,+0.1642]    +46.9       -38.3 [-229.6,+181.1]      -249              +180 [-299,+665]   834  0.180  41.8%  68.9%
+  A 10h HALF   29.2%  +0.0561   -0.0163 [-0.0976,+0.0690]    +66.1        -19.1 [-114.8,+90.5]      -339               +90 [-149,+332]  1178  0.183  41.8%  68.9%
+  B 10h SKIP   14.3%  +0.0500   -0.0223 [-0.1470,+0.0749]    +50.5        -34.7 [-169.2,+82.1]      -359               +70 [-126,+279]  1010  0.181  31.9%  52.6%
+  B 10h HALF   14.3%  +0.0576   -0.0147 [-0.0769,+0.0334]    +67.9         -17.3 [-84.6,+41.1]      -394                +35 [-63,+139]  1178  0.183  31.9%  52.6%
+
+============================================================================================================================================
+READING RULE -- fixed in the brief (gaps filled in the docstring)
+============================================================================================================================================
+  cells beating the null's 95th pct on BOTH total R and $: 0 of 20 (about 1 expected by chance)
+  winners clustered in one flag (>= 2/3): False
+  cells significantly worse on dollars: 0
+  VERDICT: DOES NOT SURVIVE -- reported as found
+
+  MULTIPLE-TESTING CHECKS, beside the rule (not replacing it): daily P&L, 20 arms
+  vs take-everything; Hansen SPA and Romano-Wolf StepM (arch.bootstrap)
+  total R (36 days): SPA p-values lower 0.5674  consistent 0.7842  upper 0.7842
+    StepM adjusted p (0.005 grid; '>1' = never kept): A 2h SKIP 0.785, A 2h HALF 0.805, A 5h HALF 0.885, A 0.5h HALF 0.910, A 1h HALF 0.915, A 5h SKIP 0.920, A 10h HALF 0.925, A 0.5h SKIP 0.945, B 0.5h SKIP 0.945, B 0.5h HALF 0.945, A 1h SKIP 0.945, B 1h SKIP 0.945, B 1h HALF 0.945, B 2h SKIP 0.945, B 2h HALF 0.945, B 5h SKIP 0.945, B 5h HALF 0.945, A 10h SKIP 0.945, B 10h SKIP 0.945, B 10h HALF 0.945
+  dollars (36 days): SPA p-values lower 0.1056  consistent 0.1056  upper 0.1056
+    StepM adjusted p (0.005 grid; '>1' = never kept): A 2h SKIP 0.110, A 0.5h SKIP 0.125, A 1h SKIP 0.125, A 5h SKIP 0.125, A 10h SKIP 0.190, A 2h HALF 0.245, A 1h HALF 0.270, A 5h HALF 0.270, A 0.5h HALF 0.275, B 5h SKIP 0.360, A 10h HALF 0.360, B 1h SKIP 0.385, B 10h SKIP 0.385, B 0.5h SKIP 0.455, B 1h HALF 0.455, B 5h HALF 0.455, B 10h HALF 0.455, B 0.5h HALF 0.485, B 2h SKIP 0.485, B 2h HALF 0.485
+  (beyond 3.5 sigma, reported not gated: 0 of 20 cells beat the null on both)
+  Nothing in the registry or live system was touched.
+  [695s]
+============================================================================================================================================

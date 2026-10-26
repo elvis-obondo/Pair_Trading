@@ -1,0 +1,64 @@
+================================================================================================================
+WIDER SCREEN -- hour-of-day and hedge quality at 1h / 5h / 10h, 12 cells
+================================================================================================================
+  population: 53,757 episodes; newfeat.npz reused, stored columns vs a fresh read of meta: max diff 0.0e+00
+
+[1m  ] 1-minute >= 30-minute, every episode/direction/horizon: 0 violations
+[1m  ] deepest shortfall -9.374e-07; as a fraction of the float32 reference's precision (8.0 ulps): 0.062 (must be < 1)
+  baselines: MFE match1m 9e332d92a294 (vol_48), MAE match1m_mae_vol1m 5bd8d15af8c8 (vol_48_1m) -- both match
+
+================================================================================================================
+HOUR-OF-DAY -- baseline + hour_sin + hour_cos, QTREE, paired on identical rows
+================================================================================================================
+  skill: + = candidate helps.  gap: - = better calibrated.
+  cell      measure      base   +cand  new - old          [95% CI]            horizon
+  MFE 1h    skill %     +4.88   +5.00     +0.119   [-0.201,+0.415]              HOLDS
+            gap pp       1.10    1.13     +0.023   [-0.128,+0.115]         
+  MFE 5h    skill %     +4.50   +4.53     +0.031   [-0.127,+0.190]              HOLDS
+            gap pp       2.37    2.39     +0.018   [-0.063,+0.103]         
+  MFE 10h   skill %     +4.56   +4.34     -0.218   [-0.383,-0.046]    WORSE     LOSES
+            gap pp       2.45    2.48     +0.029   [-0.065,+0.105]         
+            10h reproduces the published deltas (-0.218 / +0.029)
+  -> MFE: HOLDS / HOLDS / LOSES at 1h / 5h / 10h -> RULED OUT   [36s]
+  MAE 1h    skill %     +1.70   +1.50     -0.197   [-0.595,+0.141]              HOLDS
+            gap pp       2.23    2.29     +0.053   [-0.032,+0.148]         
+  MAE 5h    skill %     +2.31   +2.37     +0.056   [-0.241,+0.332]           IMPROVES
+            gap pp       2.84    2.69     -0.153   [-0.259,-0.052]   better
+  MAE 10h   skill %     +2.77   +2.67     -0.104   [-0.338,+0.144]              HOLDS
+            gap pp       2.86    2.83     -0.029   [-0.145,+0.074]         
+            10h reproduces the published deltas (-0.104 / -0.029)
+  -> MAE: HOLDS / IMPROVES / HOLDS at 1h / 5h / 10h -> NOT CLEAR   [58s]
+  VERDICT HOUR-OF-DAY: MFE RULED OUT, MAE NOT CLEAR -> MARGINAL (confirmed)
+
+================================================================================================================
+HEDGE-QUALITY -- baseline + r2 + abs_beta, QTREE, paired on identical rows
+================================================================================================================
+  skill: + = candidate helps.  gap: - = better calibrated.
+  cell      measure      base   +cand  new - old          [95% CI]            horizon
+  MFE 1h    skill %     +4.88   +4.86     -0.025   [-0.079,+0.026]              HOLDS
+            gap pp       1.10    1.09     -0.017   [-0.068,+0.029]         
+  MFE 5h    skill %     +4.50   +4.55     +0.052   [-0.011,+0.120]           IMPROVES
+            gap pp       2.37    2.32     -0.053   [-0.099,-0.007]   better
+  MFE 10h   skill %     +4.56   +4.59     +0.034   [-0.076,+0.131]              HOLDS
+            gap pp       2.45    2.48     +0.021   [-0.036,+0.065]         
+            10h reproduces the published deltas (+0.034 / +0.021)
+  -> MFE: HOLDS / IMPROVES / HOLDS at 1h / 5h / 10h -> NOT CLEAR   [81s]
+  MAE 1h    skill %     +1.70   +1.79     +0.095   [-0.008,+0.184]              LOSES
+            gap pp       2.23    2.36     +0.127   [+0.041,+0.197]    WORSE
+  MAE 5h    skill %     +2.31   +2.28     -0.033   [-0.155,+0.103]              LOSES
+            gap pp       2.84    2.95     +0.109   [+0.020,+0.196]    WORSE
+  MAE 10h   skill %     +2.77   +2.61     -0.163   [-0.299,-0.013]    WORSE     LOSES
+            gap pp       2.86    3.05     +0.196   [+0.096,+0.299]    WORSE
+            10h reproduces the published deltas (-0.163 / +0.196)
+  -> MAE: LOSES / LOSES / LOSES at 1h / 5h / 10h -> RULED OUT   [106s]
+  VERDICT HEDGE-QUALITY: MFE NOT CLEAR, MAE RULED OUT -> MARGINAL (confirmed)
+
+================================================================================================================
+DECISION -- rule fixed in horizons()' docstring before the run
+================================================================================================================
+  HOUR-OF-DAY     MFE RULED OUT  MAE NOT CLEAR  -> MARGINAL (confirmed)
+  HEDGE-QUALITY   MFE NOT CLEAR  MAE RULED OUT  -> MARGINAL (confirmed)
+  10h is a reproduction; 1h and 5h are new paired measurements on
+  held-out rows scored before. Nothing in the registry was written.
+  [106s]
+================================================================================================================

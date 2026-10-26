@@ -1,0 +1,6 @@
+  path blocks built from seg minutes 0..60   [8s]
+  GATE d=30: sum of blk_move = seg[d] - seg[0], max |diff| 7.11e-15 (<= 1e-12);  blk_pos_3 == dist_now exactly: True;  max |seg[0]| 4.69e-07 (the float32 rounding of the stored z_at_entry against the float64 1-minute rebuild; not a block error)
+  GATE d=60: sum of blk_move = seg[d] - seg[0], max |diff| 7.11e-15 (<= 1e-12);  blk_pos_6 == dist_now exactly: True;  max |seg[0]| 4.69e-07 (the float32 rounding of the stored z_at_entry against the float64 1-minute rebuild; not a block error)
+  dominance recomputed; undefined 153   [176s]
+  volume and BTC blocks built; latest minute read = t0 close + 60 (must be <= 60)   [193s]
+  [WROTE] datasets/delayed3_blocks.npz   [194s]

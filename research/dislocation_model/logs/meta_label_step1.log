@@ -1,0 +1,78 @@
+================================================================================================================
+META-LABEL STEP 0b + STEP 1 -- skip / half-size flagged trades, grid_w2_s050.csv
+================================================================================================================
+  STATED BEFORE ANY NUMBER:
+  - all 10 slots are full 86.5% of the time: this can rule the rule OUT, never IN
+  - stops are booked at 1.005x, so the stop-overshoot leak is NOT in this ledger
+  - no liquidation is applied by the engine that wrote it
+  - 17 Aug - 21 Sep is the previously identified favourable window
+
+[1m  ] loaded 212 instruments, 985 MB of dense float64 minute grids (NaN where a minute did not trade)
+  [1m-feat] rows  3,844 of 3,844
+STEP 0b -- the six features at every trade's own entry bar
+  envfeat max index touched > entry bar: 0 (asserted); 1-minute reads stop at +29 min (the entry bar's close); 1m path vs 30m window at the marks 0.062 of the float32 budget
+  complete feature rows: 3,844 of 3,844
+  REPRODUCTION on trades matched to an episode at the exact decision bar (same pair order): 78
+    five envfeat features, float32: max diff 0.000e+00;  vol_48_1m (78 in the 1m set): max diff 0.000e+00
+  -> PASS
+  [32s]
+
+================================================================================================================
+  classifier setup (TAIL-CLASSIFIER population, split, labels)
+================================================================================================================
+  A MAGNITUDE TARGET: does the spread make an outsized move EITHER way.
+  Not the envelope quantiles (how far, as a distribution) and not the
+  direction target (which way). Not sign-folded: up and down are each held
+  to their own train 90th percentile, and either crossing it is 'violent'.
+
+  population: the matched 53,757-episode set
+  [SPLIT] train 22,645 (<2026-05-01)   val 13,048   HELD OUT 18,064 (>=2026-07-18)
+[SPLIT] held-out used ONCE, for scoring only; iterations chosen on val
+  features: vol_48, vol_48_1m, vratio, vol_slope, sandwich, off_mark
+
+[1m  ] 1-minute >= 30-minute, every episode/direction/horizon: 0 violations
+[1m  ] deepest shortfall -9.374e-07; as a fraction of the float32 reference's precision (8.0 ulps): 0.062 (must be < 1)
+  unfold check: up/down from MAE/MFE vs read straight off the raw 30m path, max diff 0.0e+00
+
+  h        up p90  down p90    train     val  held out     HO1     HO2   base rate, share violent
+  0.5h      1.582     1.605    0.193   0.157     0.180   0.176   0.184
+  1h        2.158     2.194    0.195   0.161     0.177   0.172   0.181
+  2h        2.949     3.001    0.195   0.153     0.173   0.171   0.175
+  5h        4.275     4.372    0.196   0.162     0.179   0.183   0.175
+  10h       5.755     5.802    0.196   0.172     0.180   0.195   0.168
+  [44s]
+
+
+THE FLAG -- 0.5h classifier (reproduces AUC 0.7150), cut-off = 80th pct of TRAIN
+  flagged share: trades 0.857 (3,293 of 3,844);  episodes -- train 0.200, validation 0.167, held out 0.203
+  R of flagged trades: mean +0.445, total +1464.0, win 0.197;  unflagged: mean +0.314, total +173.0, win 0.194
+  exits, flagged vs unflagged: adverse_move 0.80/0.81; take_profit 0.20/0.19; time_stop 0.00/0.00
+
+================================================================================================================
+STEP 1 -- the arms against taking every trade (day-clustered paired 95% intervals)
+================================================================================================================
+                           ALL      SKIP      HALF   SKIP - ALL [95% CI]            HALF - ALL [95% CI]
+  mean R per trade     +0.4259   +0.3140   +0.2354     -0.1119 [-0.3779, +0.1323]  -0.1904 [-0.2756, -0.1010]
+  total R              +1637.0    +173.0    +905.0     -1464.0 [-2072.0, -800.7]    -732.0 [-1036.0, -400.4]
+  trades                  3844       551      3844       -3293 [-3710, -2834]            0 [0, 0]
+  win rate               0.197     0.194     0.197      -0.003 [-0.037, 0.028]       0.000 [0.000, 0.000]
+  (median overshoot ratio is not reported: every stop in this ledger is booked
+   at exactly 1.005x, so it carries no information)
+
+================================================================================================================
+RANDOM NULL -- the same 3,293 trades chosen at random, 1,000 draws
+================================================================================================================
+  SKIP mean R   real +0.3140   null p5 +0.2025  median +0.4275  p95 +0.6507   real sits at the 19.3th percentile
+  SKIP total R  real +173.0098   null p5 +111.5665  median +235.5277  p95 +358.5455   real sits at the 19.3th percentile
+  HALF mean R   real +0.2354   null p5 +0.2274  median +0.2436  p95 +0.2596   real sits at the 19.3th percentile
+  HALF total R  real +905.0182   null p5 +874.2965  median +936.2771  p95 +997.7861   real sits at the 19.3th percentile
+
+================================================================================================================
+READING RULE -- fixed in the brief
+================================================================================================================
+  SKIP: does NOT beat the random null on total R -- SHELVED
+  HALF: does NOT beat the random null on total R -- SHELVED
+  Slots full 86.5% of the time: a pass could only rule the idea in for a full
+  backtest; a fail rules it out. Nothing in the registry or live system touched.
+  [45s]
+================================================================================================================

@@ -1,0 +1,368 @@
+================================================================================================================
+ENVELOPE DESCRIPTION -- target source 30m
+================================================================================================================
+  60,000 episodes, 5 features: vol_48, vratio, vol_slope, sandwich, off_mark
+  target: running MAE and MFE, sign-folded, UNCLAMPED (see docstring)
+  quantiles (0.05, 0.25, 0.5, 0.75, 0.95)   horizons ['0.5h', '1h', '2h', '5h', '10h']
+
+======================================================================================================================
+CONFORMALIZED QUANTILE REGRESSION -- QTREE only, calibrated on val
+======================================================================================================================
+  WHY QTREE AND NOTHING ELSE. One base model, not four. QTREE carries
+  the strongest point-estimate skill on MFE, so it is the one worth
+  asking whether that skill can be paired with a formal coverage
+  guarantee instead of the quantile loss's unguaranteed calibration.
+
+  THE GUARANTEE ASSUMES EXCHANGEABILITY AND THIS DATA IS NOT
+  EXCHANGEABLE. The halves analysis measured a 1.06pp gap next to the
+  cut and 3.05pp further out, worse in 80 of 80 cells. So the
+  hypothesis, stated before the numbers: the val-fitted correction
+  holds on HO1, which abuts val in time, and decays on HO2. A failure
+  on HO2 confirms the drift mechanism through a more rigorous tool --
+  it is not a defect of CQR.
+
+  SECOND LEAK, SMALLER AND EASY TO MISS. Val chose QTREE's iteration
+  count. That is not a new discipline exception -- val has always been
+  the iteration block and is still never scored -- but the model was
+  stopped where pinball was lowest ON THESE ROWS, so the calibration
+  residuals are optimistic and the conformal width is biased DOWNWARD.
+  Every correction below is therefore a slight under-correction, and a
+  failure reads as 'at least this bad', never as 'at most'.
+
+  WHAT CQR GUARANTEES IS THE PAIR, NOT THE LEVEL: the (q5,q95)
+  interval at 90% and (q25,q75) at 50%. The 5-level gap is reported
+  next to it because the rest of this project tracks it, but it is not
+  what the method promises.
+
+[1m  ] 212 of 212 instruments have a 1-minute file
+[1m  ] 131 begin at the backfill wall (2025-06-26/2025-06-27); 81 reach further back
+       [SPLIT] train 22,645 (<2026-05-01)   val 13,048   HELD OUT 18,064 (>=2026-07-18)
+[SPLIT] held-out used ONCE, for scoring only; iterations chosen on val
+  calibration block (val): 13,048 rows, 2026-05-01 .. 2026-07-18
+[1m  ] 1-minute >= 30-minute, every episode/direction/horizon: 0 violations
+[1m  ] deepest shortfall -9.374e-07; as a fraction of the float32 reference's precision (8.0 ulps): 0.062 (must be < 1)
+  HO1 8,200 rows / 39 days   HO2 9,864 rows / 40 days   boundary 2026-08-26
+
+======================================================================================================================
+REFIT CHECK -- the cached held-out predictions must come back identical
+======================================================================================================================
+  Only held-out predictions were persisted and CQR needs the
+  calibration block, so QTREE is refitted. Everything feeding it is
+  deterministic, so the refit must reproduce the cache exactly.
+
+  THE CACHE HOLDS PREDICTIONS AFTER BOTH ENFORCEMENT PASSES -- quantile
+  axis, then horizon axis -- so the refit gets the same two passes,
+  across all five horizons of each group, BEFORE it is compared. An
+  earlier version applied only the quantile pass. Horizon enforcement
+  had moved 0.16-0.68% of QTREE's predictions in every group, so that
+  version would have aborted on every run, blaming a drift that never
+  happened and advising deletion of a cache that was correct.
+
+  cache fingerprint matches (9e332d92a2945b03...).
+
+  src  dir       h  val rows              iters chosen   max |refit - cache|
+  30m  MAE    0.5h    13,048       [51, 76, 8, 20, 62]             0.000e+00
+  30m  MAE      1h    13,048       [44, 37, 2, 23, 64]             0.000e+00
+  30m  MAE      2h    13,048      [50, 24, 27, 27, 96]             0.000e+00
+  30m  MAE      5h    13,048    [46, 11, 19, 117, 161]             0.000e+00
+  30m  MAE     10h    13,048      [41, 13, 26, 64, 65]             0.000e+00
+  30m  MFE    0.5h    13,048       [62, 20, 8, 76, 51]             0.000e+00
+  30m  MFE      1h    13,048       [64, 1, 36, 41, 43]             0.000e+00
+  30m  MFE      2h    13,048      [112, 1, 41, 46, 56]             0.000e+00
+  30m  MFE      5h    13,048       [59, 9, 37, 76, 71]             0.000e+00
+  30m  MFE     10h    13,048      [32, 17, 57, 55, 79]             0.000e+00
+  1m   MAE    0.5h    13,048      [52, 12, 32, 42, 70]             0.000e+00
+  1m   MAE      1h    13,048      [32, 20, 33, 53, 89]             0.000e+00
+  1m   MAE      2h    13,048      [36, 19, 58, 68, 79]             0.000e+00
+  1m   MAE      5h    13,048     [18, 37, 33, 72, 140]             0.000e+00
+  1m   MAE     10h    13,048     [11, 35, 38, 89, 151]             0.000e+00
+  1m   MFE    0.5h    13,048      [18, 32, 38, 48, 61]             0.000e+00
+  1m   MFE      1h    13,048       [1, 33, 48, 52, 48]             0.000e+00
+  1m   MFE      2h    13,048       [1, 31, 61, 53, 49]             0.000e+00
+  1m   MFE      5h    13,048       [1, 39, 42, 52, 71]             0.000e+00
+  1m   MFE     10h    13,048       [1, 63, 62, 62, 70]             0.000e+00
+
+  worst disagreement across all 20 cells: 0.000e+00
+  Identical. The held-out predictions below are run match1m's, not a
+  re-estimate; only the val block is new.
+
+======================================================================================================================
+THE CORRECTION -- one set of widths per cell, fitted on val only
+======================================================================================================================
+  A NEGATIVE width is legitimate: it means the raw interval was too
+  wide on val and conformalisation TIGHTENS it. The outer pair targets
+  90% coverage and the inner pair 50%.
+  q-reorder: CQR widens each pair independently, which can cross the
+  levels. h-reorder: each horizon has its own widths, which can break
+  the running max in k, so it is re-applied -- every other model in the
+  table is horizon-enforced and this one must be too. The horizon pass
+  only RAISES predictions, so it can erode a pair's guarantee slightly
+  at its lower bound; the rate says by how much it touched.
+
+  src  dir       h   w(5,95)  w(25,75)  median shift  q-reorder  h-reorder
+  30m  MAE    0.5h   -0.0159   -0.0067       -0.0126     0.000%     0.259%
+  30m  MAE      1h   -0.0645   -0.0151       -0.0153     0.000%     0.259%
+  30m  MAE      2h   -0.0379   -0.0362       -0.0276     0.000%     0.259%
+  30m  MAE      5h   -0.0433   -0.0318       -0.0785     0.000%     0.259%
+  30m  MAE     10h   -0.0483   -0.0325       -0.1031     0.000%     0.259%
+  30m  MFE    0.5h   -0.0159   -0.0067       +0.0126     0.000%     0.435%
+  30m  MFE      1h   -0.0556   -0.0018       +0.0404     0.001%     0.435%
+  30m  MFE      2h   -0.0475   -0.0125       +0.0457     0.000%     0.435%
+  30m  MFE      5h   -0.0864   -0.0116       +0.0714     0.000%     0.435%
+  30m  MFE     10h   -0.0473   -0.0239       +0.1003     0.000%     0.435%
+  1m   MAE    0.5h   -0.0178   -0.0132       -0.0283     0.000%     0.386%
+  1m   MAE      1h   -0.0148   -0.0109       -0.0460     0.000%     0.386%
+  1m   MAE      2h   -0.0206   -0.0170       -0.0719     0.000%     0.386%
+  1m   MAE      5h   -0.0223   -0.0115       -0.1195     0.000%     0.386%
+  1m   MAE     10h   -0.0063   -0.0036       -0.1557     0.000%     0.386%
+  1m   MFE    0.5h   +0.0001   +0.0024       +0.0016     0.000%     0.130%
+  1m   MFE      1h   -0.0180   +0.0010       +0.0123     0.000%     0.130%
+  1m   MFE      2h   -0.0144   -0.0080       +0.0196     0.000%     0.130%
+  1m   MFE      5h   -0.0210   -0.0114       +0.0564     0.000%     0.130%
+  1m   MFE     10h   -0.0173   -0.0162       +0.1017     0.000%     0.130%
+
+======================================================================================================================
+GUARANTEED QUANTITY -- two-sided interval coverage, per held-out half
+======================================================================================================================
+  This is the number CQR promises to hold at or above nominal. Read
+  HO1 against HO2: the correction was fitted on val, which abuts HO1.
+
+  src  dir       h      pair  nominal  HO1 raw  HO1 CQR  HO2 raw  HO2 CQR            
+  30m  MAE    0.5h    q5-q95      90%     90.7     90.4     90.2     90.0    HO1 only
+  30m  MAE    0.5h   q25-q75      50%     50.7     50.4     49.4     48.9    HO1 only
+  30m  MAE      1h    q5-q95      90%     91.9     90.9     90.9     89.9    HO1 only
+  30m  MAE      1h   q25-q75      50%     51.0     49.9     50.3     49.2     neither
+  30m  MAE      2h    q5-q95      90%     91.5     91.1     90.6     90.0        both
+  30m  MAE      2h   q25-q75      50%     51.2     48.8     51.2     49.0     neither
+  30m  MAE      5h    q5-q95      90%     91.1     90.5     91.3     90.7        both
+  30m  MAE      5h   q25-q75      50%     51.1     49.5     50.6     49.1     neither
+  30m  MAE     10h    q5-q95      90%     91.1     90.5     91.1     90.5        both
+  30m  MAE     10h   q25-q75      50%     50.6     49.3     50.1     48.9     neither
+  30m  MFE    0.5h    q5-q95      90%     90.7     90.4     90.2     90.0    HO1 only
+  30m  MFE    0.5h   q25-q75      50%     50.7     50.4     49.4     48.9    HO1 only
+  30m  MFE      1h    q5-q95      90%     90.8     90.0     90.4     89.6    HO1 only
+  30m  MFE      1h   q25-q75      50%     50.2     50.1     50.6     50.5        both
+  30m  MFE      2h    q5-q95      90%     90.2     89.4     90.0     89.3     neither
+  30m  MFE      2h   q25-q75      50%     49.8     49.0     50.7     50.1     neither
+  30m  MFE      5h    q5-q95      90%     90.2     89.3     90.3     89.6     neither
+  30m  MFE      5h   q25-q75      50%     50.6     50.0     50.9     50.4     neither
+  30m  MFE     10h    q5-q95      90%     89.8     89.5     90.8     90.3     neither
+  30m  MFE     10h   q25-q75      50%     50.2     49.0     52.7     51.8     neither
+  1m   MAE    0.5h    q5-q95      90%     91.0     90.2     88.9     88.2    HO1 only
+  1m   MAE    0.5h   q25-q75      50%     50.9     49.4     48.8     46.8     neither
+  1m   MAE      1h    q5-q95      90%     91.4     90.8     89.2     88.6    HO1 only
+  1m   MAE      1h   q25-q75      50%     50.6     49.6     48.4     47.4     neither
+  1m   MAE      2h    q5-q95      90%     91.4     90.3     89.1     88.1    HO1 only
+  1m   MAE      2h   q25-q75      50%     49.9     48.6     49.7     48.6     neither
+  1m   MAE      5h    q5-q95      90%     91.2     90.3     89.6     88.6    HO1 only
+  1m   MAE      5h   q25-q75      50%     50.2     49.6     49.5     48.9     neither
+  1m   MAE     10h    q5-q95      90%     90.4     90.2     89.3     89.0    HO1 only
+  1m   MAE     10h   q25-q75      50%     49.3     49.2     48.8     48.7     neither
+  1m   MFE    0.5h    q5-q95      90%     90.9     90.9     91.1     91.1        both
+  1m   MFE    0.5h   q25-q75      50%     50.0     50.4     52.0     52.4        both
+  1m   MFE      1h    q5-q95      90%     91.3     90.5     91.3     90.6        both
+  1m   MFE      1h   q25-q75      50%     50.4     50.4     51.6     51.7        both
+  1m   MFE      2h    q5-q95      90%     90.5     90.0     90.7     90.3        both
+  1m   MFE      2h   q25-q75      50%     50.5     49.9     51.8     51.2     neither
+  1m   MFE      5h    q5-q95      90%     89.6     89.1     90.6     90.2     neither
+  1m   MFE      5h   q25-q75      50%     51.0     50.4     51.4     50.7        both
+  1m   MFE     10h    q5-q95      90%     89.5     89.0     91.1     90.8     neither
+  1m   MFE     10h   q25-q75      50%     50.2     49.6     52.5     51.8     neither
+
+  40 (cell, pair) combinations. Conformalised coverage at or above
+  nominal:  HO1 21 of 40   HO2 18 of 40.
+  NOT EVIDENCE EITHER WAY. Raw interval coverage already sits within
+  ~1pp of nominal, CQR moves it by tenths of a point, and this table
+  carries NO intervals, so a strict >= count on numbers that close is
+  near a coin flip. The guarantee is therefore UNTESTED by this run.
+  An earlier version of this line called the HO1-HO2 difference 'the
+  exchangeability failure, measured through the guarantee'. It was not.
+
+======================================================================================================================
+5-LEVEL CALIBRATION GAP -- before and after, paired within each half
+======================================================================================================================
+  NOT the guaranteed quantity. Reported because every other number in
+  this project is in these units. Paired: identical rows and day
+  resamples on both sides, only the prediction changing. Negative =
+  CQR improved it.
+
+  src  dir       h half     raw     CQR  CQR-raw          [95% CI]          
+  30m  MAE    0.5h  HO1    1.14    1.02    -0.12     [-0.21,+0.04]          
+  30m  MAE    0.5h  HO2    1.60    1.39    -0.21     [-0.24,+0.04]          
+  30m  MAE      1h  HO1    1.27    0.95    -0.32     [-0.53,-0.01]  IMPROVES
+  30m  MAE      1h  HO2    2.08    2.04    -0.04     [-0.31,+0.08]          
+  30m  MAE      2h  HO1    1.16    1.05    -0.11     [-0.39,+0.13]          
+  30m  MAE      2h  HO2    2.91    3.00    +0.09     [-0.05,+0.17]          
+  30m  MAE      5h  HO1    1.11    0.83    -0.29     [-0.44,+0.40]          
+  30m  MAE      5h  HO2    3.53    3.38    -0.14     [-0.32,-0.05]  IMPROVES
+  30m  MAE     10h  HO1    1.06    0.76    -0.30     [-0.45,+0.48]          
+  30m  MAE     10h  HO2    4.08    3.93    -0.15     [-0.38,-0.08]  IMPROVES
+  30m  MFE    0.5h  HO1    1.14    1.02    -0.12     [-0.21,+0.04]          
+  30m  MFE    0.5h  HO2    1.60    1.39    -0.21     [-0.24,+0.04]          
+  30m  MFE      1h  HO1    1.01    0.63    -0.38     [-0.56,+0.36]          
+  30m  MFE      1h  HO2    2.15    1.72    -0.42     [-0.58,-0.23]  IMPROVES
+  30m  MFE      2h  HO1    0.80    0.43    -0.38     [-0.47,+0.44]          
+  30m  MFE      2h  HO2    3.06    2.67    -0.38     [-0.49,-0.24]  IMPROVES
+  30m  MFE      5h  HO1    1.59    1.12    -0.47     [-0.59,+0.16]          
+  30m  MFE      5h  HO2    3.98    3.51    -0.47     [-0.54,-0.38]  IMPROVES
+  30m  MFE     10h  HO1    2.01    1.38    -0.63     [-0.70,+0.05]          
+  30m  MFE     10h  HO2    3.46    2.96    -0.49     [-0.61,-0.41]  IMPROVES
+  1m   MAE    0.5h  HO1    1.82    1.60    -0.22     [-0.38,+0.01]          
+  1m   MAE    0.5h  HO2    2.83    2.78    -0.05     [-0.13,+0.20]          
+  1m   MAE      1h  HO1    1.98    1.49    -0.49     [-0.56,-0.23]  IMPROVES
+  1m   MAE      1h  HO2    3.38    3.10    -0.28     [-0.34,-0.18]  IMPROVES
+  1m   MAE      2h  HO1    2.00    1.66    -0.34     [-0.59,-0.12]  IMPROVES
+  1m   MAE      2h  HO2    3.86    3.64    -0.23     [-0.32,-0.13]  IMPROVES
+  1m   MAE      5h  HO1    2.02    1.34    -0.69     [-0.78,+0.06]          
+  1m   MAE      5h  HO2    4.42    4.04    -0.39     [-0.46,-0.29]  IMPROVES
+  1m   MAE     10h  HO1    1.56    1.07    -0.49     [-0.70,+0.58]          
+  1m   MAE     10h  HO2    4.73    4.13    -0.61     [-0.70,-0.52]  IMPROVES
+  1m   MFE    0.5h  HO1    0.36    0.34    -0.02     [-0.10,+0.11]          
+  1m   MFE    0.5h  HO2    1.07    1.08    +0.01     [-0.02,+0.11]          
+  1m   MFE      1h  HO1    0.49    0.34    -0.15     [-0.32,+0.29]          
+  1m   MFE      1h  HO2    1.71    1.41    -0.30     [-0.34,+0.21]          
+  1m   MFE      2h  HO1    0.35    0.25    -0.10     [-0.39,+0.36]          
+  1m   MFE      2h  HO2    2.53    2.30    -0.23     [-0.29,-0.10]  IMPROVES
+  1m   MFE      5h  HO1    1.30    0.86    -0.44     [-0.60,+0.07]          
+  1m   MFE      5h  HO2    3.26    2.81    -0.45     [-0.54,-0.39]  IMPROVES
+  1m   MFE     10h  HO1    1.66    1.11    -0.54     [-0.70,+0.38]          
+  1m   MFE     10h  HO2    3.12    2.56    -0.56     [-0.65,-0.45]  IMPROVES
+
+  HO1: gap smaller after CQR (point estimate) 20 of 20;  interval excludes zero 3 of 20.
+  HO2: gap smaller after CQR (point estimate) 18 of 20;  interval excludes zero 13 of 20.
+  The second number in each line is the one that counts.
+  Chance alone puts about 0.5 of 20 intervals past zero on
+  the improving side per half (2.5% each), so read the counts against
+  that, not against zero.
+
+======================================================================================================================
+PER-LEVEL BREAKDOWN -- which levels carry the gap change
+======================================================================================================================
+  apply_cqr moves q50 by the median shift and moves q5/q95 and q25/q75
+  ONLY by their pair's width, so this separates a location correction
+  (q50) from the tightening (the four pair levels). Each entry is
+  |cov_CQR - q| - |cov_raw - q| in pp; negative = closer to nominal.
+  '*' = interval excludes zero on the improving side, '!' = worsening.
+
+  src  dir       h half        q5       q25       q50       q75       q95
+  30m  MAE    0.5h  HO1    -0.20     +0.26     -0.62     -0.11*    +0.07 
+  30m  MAE    0.5h  HO2    -0.10     +0.27!    -0.79     -0.30*    -0.11 
+  30m  MAE      1h  HO1    -0.71*    +0.65     -0.77     -0.45     -0.32 
+  30m  MAE      1h  HO2    +0.55     +0.68!    -0.77*    -0.42*    -0.24 
+  30m  MAE      2h  HO1    -0.29*    +1.57     -0.88     -0.85*    -0.09 
+  30m  MAE      2h  HO2    +0.42     +1.65!    -0.91*    -0.61*    -0.10*
+  30m  MAE      5h  HO1    -0.49*    +1.15     -1.61     -0.43     -0.06 
+  30m  MAE      5h  HO2    +0.51     +1.22!    -2.07*    -0.29*    -0.08*
+  30m  MAE     10h  HO1    -0.57*    +0.91     -1.45     -0.39     -0.02 
+  30m  MAE     10h  HO2    +0.61     +0.92!    -2.07*    -0.19*    -0.03 
+  30m  MFE    0.5h  HO1    +0.07     -0.11*    -0.62     +0.26     -0.20 
+  30m  MFE    0.5h  HO2    -0.11     -0.30*    -0.79     +0.27!    -0.10 
+  30m  MFE      1h  HO1    +0.40     -0.09     -1.89     +0.01     -0.34 
+  30m  MFE      1h  HO2    -0.16     -0.07*    -2.06*    +0.01     +0.16 
+  30m  MFE      2h  HO1    +0.43     -0.40     -1.96     +0.35     -0.29 
+  30m  MFE      2h  HO2    -0.28     -0.35*    -1.97*    +0.31!    +0.39 
+  30m  MFE      5h  HO1    -0.41     -0.34*    -2.26     +0.26     +0.40 
+  30m  MFE      5h  HO2    -0.43*    -0.29*    -2.17*    +0.22!    +0.31!
+  30m  MFE     10h  HO1    -0.29     -0.77*    -2.51     +0.37!    +0.06 
+  30m  MFE     10h  HO2    -0.32*    -0.34*    -2.49*    +0.51!    +0.18 
+  1m   MAE    0.5h  HO1    -0.24     +1.27!    -1.80*    -0.23*    -0.10 
+  1m   MAE    0.5h  HO2    +0.70!    +1.42!    -1.85*    -0.49*    -0.04 
+  1m   MAE      1h  HO1    -0.49     +0.79!    -2.50*    -0.20*    -0.07 
+  1m   MAE      1h  HO2    +0.61!    +0.84!    -2.60*    -0.17*    -0.07 
+  1m   MAE      2h  HO1    +0.22     +1.01!    -2.61*    -0.24*    -0.09*
+  1m   MAE      2h  HO2    +0.98!    +0.82!    -2.65*    -0.28*    -0.02 
+  1m   MAE      5h  HO1    -0.44     +0.39!    -3.15     -0.20*    -0.04 
+  1m   MAE      5h  HO2    +0.97!    +0.43!    -3.17*    -0.13*    -0.02 
+  1m   MAE     10h  HO1    -0.17     +0.15!    -2.43     -0.04     +0.02 
+  1m   MAE     10h  HO2    +0.23!    +0.07!    -3.33*    -0.01     -0.01 
+  1m   MFE    0.5h  HO1    +0.00     -0.26     +0.02     +0.13     +0.00 
+  1m   MFE    0.5h  HO2    +0.00     +0.26!    -0.09     -0.14     +0.00 
+  1m   MFE      1h  HO1    +0.16     +0.04     -0.83     +0.02     -0.13*
+  1m   MFE      1h  HO2    -0.52     +0.09!    -0.87     -0.05     -0.14 
+  1m   MFE      2h  HO1    +0.37     -0.27     -0.48     -0.11     -0.04 
+  1m   MFE      2h  HO2    -0.36     -0.31*    -0.85*    +0.28!    +0.08 
+  1m   MFE      5h  HO1    -0.13     -0.33     -2.01*    +0.21     +0.06 
+  1m   MFE      5h  HO2    -0.35*    -0.38*    -1.93*    +0.33!    +0.07 
+  1m   MFE     10h  HO1    +0.07     -0.39     -2.63     +0.22     +0.02 
+  1m   MFE     10h  HO2    -0.27*    -0.40*    -2.45*    +0.30!    +0.03 
+
+  SUMMARY over the 20 cells of each half:
+  half    level  mean change  improves*  worsens!  share of total
+  HO1        q5       -0.136          4         0            8.2%
+  HO1       q25       +0.262          3         5          -15.8%
+  HO1       q50       -1.649          4         0           99.9%
+  HO1       q75       -0.071          6         1            4.3%
+  HO1       q95       -0.057          2         0            3.4%
+  HO1                q50 vs the four pair levels:  99.9% from the median shift, 0.1% from the widths
+  HO2        q5       +0.134          4         5           -9.7%
+  HO2       q25       +0.311          8        12          -22.6%
+  HO2       q50       -1.793         16         0          130.2%
+  HO2       q75       -0.042          9         7            3.1%
+  HO2       q95       +0.013          2         1           -0.9%
+  HO2                q50 vs the four pair levels:  130.2% from the median shift, -30.2% from the widths
+  'share of total' is each level's part of the summed gap change; a
+  negative share means that level moved AWAY from nominal on balance.
+
+======================================================================================================================
+HO1 ON SIGNED DEVIATION -- read where the absolute gap folds at zero
+======================================================================================================================
+  raw and CQR are actual - nominal coverage in pp, signed. change is
+  CQR - raw with a day-clustered interval. 'T' = it moves TOWARD
+  nominal and the interval excludes zero; 'A' = moves AWAY, same test.
+  Toward means the change has the opposite sign to the raw deviation.
+
+  src  dir       h        q5 raw>CQR       q25 raw>CQR       q50 raw>CQR       q75 raw>CQR       q95 raw>CQR
+  30m  MAE    0.5h  -0.65> -0.45 T    +1.23> +1.49 A    +1.82> +1.20 T    +1.96> +1.85 T    +0.02> -0.10 T  
+  30m  MAE      1h  -1.45> -0.74 T    +0.78> +1.43 A    +1.84> +1.07 T    +1.78> +1.33 T    +0.49> +0.17 T  
+  30m  MAE      2h  -1.09> -0.79 T    +0.61> +2.18 A    +1.83> +0.95 T    +1.83> +0.98 T    +0.43> +0.34 T  
+  30m  MAE      5h  -0.95> -0.46 T    +0.78> +1.93 A    +1.87> -0.26 T    +1.84> +1.41 T    +0.13> +0.07 T  
+  30m  MAE     10h  -0.91> -0.34 T    +0.98> +1.89 A    +1.68> -0.23 T    +1.57> +1.18 T    +0.17> +0.15    
+  30m  MFE    0.5h  -0.02> +0.10 T    -1.96> -1.85 T    -1.82> -1.20 T    -1.23> -1.49 A    +0.65> +0.45 T  
+  30m  MFE      1h  +0.10> +0.50 A    -1.17> -1.09 T    -1.90> -0.01 T    -1.00> -1.01      +0.89> +0.55 T  
+  30m  MFE      2h  +0.28> +0.71 A    -0.51> -0.11 T    -2.05> -0.09 T    -0.74> -1.10 A    +0.44> +0.15 T  
+  30m  MFE      5h  -0.48> +0.06 T    -2.22> -1.88 T    -3.34> -1.09 T    -1.65> -1.90 A    -0.26> -0.66 A  
+  30m  MFE     10h  -0.61> -0.32 T    -2.52> -1.76 T    -3.76> -1.24 T    -2.37> -2.73 A    -0.78> -0.84 A  
+  1m   MAE    0.5h  -0.48> +0.23 T    +1.82> +3.09 A    +3.57> +1.77 T    +2.67> +2.44 T    +0.56> +0.46 T  
+  1m   MAE      1h  -0.62> -0.13 T    +1.96> +2.76 A    +4.02> +1.52 T    +2.52> +2.33 T    +0.77> +0.70 T  
+  1m   MAE      2h  -0.39> +0.61 T    +2.44> +3.45 A    +3.83> +1.22 T    +2.34> +2.10 T    +0.99> +0.90 T  
+  1m   MAE      5h  -0.63> +0.20 T    +2.80> +3.20 A    +3.16> -0.01 T    +3.00> +2.80 T    +0.52> +0.49    
+  1m   MAE     10h  -0.37> -0.20 T    +2.66> +2.80 A    +2.78> -0.35 T    +2.00> +1.96      +0.00> -0.02    
+  1m   MFE    0.5h  -0.40> -0.40      +0.40> +0.15 T    -0.05> +0.07 T    +0.45> +0.59 A    +0.48> +0.48    
+  1m   MFE      1h  -0.22> +0.38 T    -0.06> -0.10      -0.84> -0.01 T    +0.29> +0.32      +1.05> +0.91 T  
+  1m   MFE      2h  -0.01> +0.38 T    -0.30> +0.04 T    -0.79> +0.32 T    +0.18> -0.07 T    +0.46> +0.43    
+  1m   MFE      5h  -0.33> +0.20 T    -1.63> -1.30 T    -3.21> -1.20 T    -0.66> -0.87 A    -0.68> -0.74 A  
+  1m   MFE     10h  -0.16> +0.23 T    -2.07> -1.68 T    -3.45> -0.82 T    -1.89> -2.11 A    -0.71> -0.73    
+
+  half    level  toward T   away A   (of 20 cells)
+  HO1        q5        17        2
+  HO1       q25         9       10
+  HO1       q50        20        0
+  HO1       q75        10        7
+  HO1       q95        11        3
+  HO2        q5        11        8
+  HO2       q25         8       12
+  HO2       q50        20        0
+  HO2       q75        11        7
+  HO2       q95         9        5
+
+  [CACHE] wrote envelope_preds_cqr.npz: the CQR-corrected held-out
+  predictions and each cell's (w_outer, w_inner, median shift), with the
+  same fingerprint as the match1m cache. A later breakdown reads these
+  and refits nothing; until now they existed only in process memory.
+
+  [95s]
+======================================================================================================================
+WHAT IS AND IS NOT DEMONSTRATED
+======================================================================================================================
+  NOT TESTED: CQR's guarantee. The interval-coverage table carries no
+  intervals and sits within ~1pp of nominal before any correction, so
+  it cannot say whether the guarantee holds on either half.
+  DEMONSTRATED, where the counts above say so: a correction fitted on
+  val shrinks the 5-level calibration gap, by paired intervals that
+  exclude zero, against the ~1 per half chance would produce. The
+  isotonic recalibration managed 0 of 80 on the same kind of test.
+  THE MECHANISM is whatever the per-level breakdown shows -- location
+  (q50) or tightening (the pair levels) -- and is not asserted beyond it.
+  Levels here are a later look at rows already scored; the raw-versus-
+  CQR differences are within-row contrasts and are the new measurement.
+======================================================================================================================

@@ -1,0 +1,7 @@
+  1-minute window exists (rule B): 60,004 of 60,004 dislocations; finite on all 601 minutes: 59,759; lost to archive holes: 245 (0.41% of the matched)
+  depth vs the 10h MFE target: max |diff| 0.00e+00 (must be 0)
+  reach mu within 10h: 0.3294 (19,685 of 59,759)
+  liquidation headroom at 20x, entry sigma: median 8.474 [p5 3.124, p95 20.103]
+  reverters hitting liquidation before mu: 104 of 19,685;  any episode hitting it within 10h: 3,246
+  chance probability (50 sign-flip seeds): mean 0.4464   [121s]
+  [WROTE] datasets/reach_paths.npz

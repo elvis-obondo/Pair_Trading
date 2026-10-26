@@ -1,0 +1,51 @@
+{
+ "day": "20250601",
+ "fills_read_incl_spill": 4170009,
+ "read_s": 37.1,
+ "dedupe_removed": 0,
+ "tids": 1581768,
+ "tids_unbalanced": 1,
+ "sum_oi_delta_coin_abs": 2900048237.3739,
+ "vault_consecutive_pairs": 0,
+ "vault_continuity_violations": 0,
+ "vault_continuity_max_gap": 0.0,
+ "perp_fills": 3163535,
+ "flow_check": {
+  "taker_open_buy": [
+   1248181178.524786,
+   1248181178.524786,
+   0.0,
+   1.7901143539063326e-06
+  ],
+  "taker_open_sell": [
+   750099561.6835461,
+   750099561.6835461,
+   0.0,
+   1.772337421188079e-05
+  ],
+  "taker_close_buy": [
+   725138092.701486,
+   725138092.701486,
+   0.0,
+   2.784598921608323e-06
+  ],
+  "taker_close_sell": [
+   983689227.466872,
+   983689227.4668721,
+   -1.211859256177489e-16,
+   0.00028487018646683324
+  ]
+ },
+ "sizes": {
+  "oi": {
+   "rows": 178632,
+   "bytes": 8408065
+  },
+  "vault": {
+   "rows": 0,
+   "bytes": 3311
+  }
+ },
+ "total_s": 37.2,
+ "peak_rss_mb": 1093.4
+}

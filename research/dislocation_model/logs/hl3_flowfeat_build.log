@@ -1,0 +1,52 @@
+[INFO] 60,004 rows, 204 leg coins; window minutes 729,208; cutoffs 24,307; hole minutes 114
+  coin 20/206  [20s]
+  coin 40/206  [38s]
+  coin 60/206  [55s]
+  coin 80/206  [72s]
+  coin 100/206  [91s]
+  coin 120/206  [107s]
+  coin 140/206  [125s]
+  coin 160/206  [143s]
+  coin 180/206  [160s]
+  coin 200/206  [178s]
+[BUILT] X (60004, 27)  [184s]
+  stale legs 474; span touches a seam bar 0; flag_gap 474; hole minute in [C-60, C) 40
+[WROTE] datasets/flowfeat.npz, datasets/flowfeat_legs.npz
+
+FEATURES: 27 model inputs in 5 groups; context columns lone_mover, driver_is_A, flag_gap
+  feature                           group     NaN share
+  h1_forced_share_30                H1            0.31%
+  h1_forced_share_60                H1            0.07%
+  h1_backstop_share_30              H1            0.31%
+  h1_backstop_share_60              H1            0.07%
+  h1_adl_share_30                   H1            0.31%
+  h1_adl_share_60                   H1            0.07%
+  h2_open_push_30                   H2            0.31%
+  h2_open_push_60                   H2            0.07%
+  h2_close_push_30                  H2            0.31%
+  h2_close_push_60                  H2            0.07%
+  h2_open_close_ratio_30            H2            0.98%
+  h2_open_close_ratio_60            H2            0.44%
+  h3_top3_30                        H3            0.31%
+  h3_top3_60                        H3            0.07%
+  h3_wallets_per_musd_30            H3            0.34%
+  h3_wallets_per_musd_60            H3            0.08%
+  h3_twap_twap_share_30             H3-TWAP      11.90%
+  h3_twap_twap_share_60             H3-TWAP      11.68%
+  market_btc_ret_30                 MARKET        0.00%
+  market_btc_ret_60                 MARKET        0.00%
+  market_eth_ret_30                 MARKET        0.00%
+  market_eth_ret_60                 MARKET        0.00%
+  market_btc_corr_7d                MARKET        0.00%
+  market_liq_usd_30                 MARKET        0.04%
+  market_liq_usd_60                 MARKET        0.07%
+  market_liq_7d_ratio               MARKET        4.92%
+  market_breadth_60                 MARKET        0.00%
+  GROUP H1       6 features; rows with any NaN 202 (0.34%), all NaN 30
+  GROUP H2       6 features; rows with any NaN 604 (1.01%), all NaN 30
+  GROUP H3       4 features; rows with any NaN 215 (0.36%), all NaN 30
+  GROUP H3-TWAP  2 features; rows with any NaN 7,154 (11.92%), all NaN 6,998
+  GROUP MARKET   9 features; rows with any NaN 2,994 (4.99%), all NaN 0
+  TWAP exists (finite) on 52,863 of 60,004 rows (NaN before 2025-07-27 08:00)
+  lone_mover share 0.726; driver_is_A share 0.483; weights NaN 0
+  PROXY CAVEAT: h3 top3 and wallets_per_musd are proxies (per-minute top-3 share and per-minute distinct wallets aggregated over the window), not window-level concentration.

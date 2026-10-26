@@ -1,0 +1,333 @@
+================================================================================================================
+ENVELOPE DESCRIPTION -- target source 30m
+================================================================================================================
+  60,000 episodes, 5 features: vol_48, vratio, vol_slope, sandwich, off_mark
+  target: running MAE and MFE, sign-folded, UNCLAMPED (see docstring)
+  quantiles (0.05, 0.25, 0.5, 0.75, 0.95)   horizons ['0.5h', '1h', '2h', '5h', '10h']
+
+======================================================================================================================
+MATCHED 30-MINUTE vs 1-MINUTE TARGET -- same episodes, same split
+======================================================================================================================
+  THE QUESTION: the 30-minute target reads bar CLOSES, so it never sees the
+  worst point inside a bar. Earlier work put the understatement near 0.3
+  sigma, one-sided. Climatology is biased the same way, which is why the
+  skill numbers were assumed largely unaffected. That was an ASSUMPTION.
+  This stage tests it on the episodes where the minutes exist.
+
+  HELD-OUT REUSE, STATED PLAINLY. These held-out episodes were already
+  scored by the first envelope run. The halves analysis reused that run's
+  cached predictions and refitted nothing; this stage fits new models and
+  scores them on the same rows with a different target. That is the SECOND
+  independent scoring of those episodes. It is a deliberate, named
+  exception: there is no unscored block with 1-minute coverage, so the
+  measurement question cannot be asked any other way. Confirmatory only.
+
+[1m  ] 212 of 212 instruments have a 1-minute file
+[1m  ] 131 begin at the backfill wall (2025-06-26/2025-06-27); 81 reach further back
+
+  COVERAGE -- three rules, all measured. B is the one used.
+  rule  episodes      fit  held out   pairs   days  span                      
+  A        9,240    4,977     4,263     462    376  2025-07-11 .. 2026-10-04  
+  B       53,757   35,693    18,064   3,000    466  2025-06-26 .. 2026-10-04  
+  A = neither leg at the backfill wall. REPORTED, NOT USED: 46% of it is
+      held out against 30% of the full set, and its 462 pairs are selected
+      by which instruments got backfilled first.
+  B = each leg's 1-minute history spans the window. USED. All 18,064
+      held-out rows -- exactly the population run 1 scored -- so the
+      30-minute arm sits on the same ground as the published numbers.
+      B is a SPAN test, so its interior gaps were measured, not assumed:
+      192 missing minutes of 32,307,957 (0.0006%), 7 episodes of 53,757
+      affected, deepest 41. Trivial. Both structural checks pass on it.
+
+
+  SELECTION, measured rather than asserted. Rule B's exclusion is purely
+  TEMPORAL: it drops episodes entered before the backfill wall and keeps
+  every pair, so the cross-section is intact (3,000 of 3,000) and the
+  sample starts 2025-06-26 instead of 2024-09-18. That is a milder bias than
+  A's: A is selected by which instruments were backfilled first, B by
+  calendar alone.
+  STILL NOT THE FULL 60,000. The fit block loses its first nine months, so
+  nothing here describes the envelope over the whole history. It answers
+  one question: on the episodes where the measurement can be checked, does
+  the measurement fix matter.
+======================================================================================================================
+POPULATION -- the 53,757-episode measurable subset, ALL only
+======================================================================================================================
+  NO ALL/TRENDING SPLIT this round, as specified. Trending is a refinement
+  and the question here is whether the measurement fix matters at all; a
+  terciled subset answers a narrower question on a third of the rows. Under
+  rule B thinness is no longer the binding reason -- the sample is 53,757 --
+  but the question still does not need the split.
+       [SPLIT] train 22,645 (<2026-05-01)   val 13,048   HELD OUT 18,064 (>=2026-07-18)
+[SPLIT] held-out used ONCE, for scoring only; iterations chosen on val
+  real counts after filtering: fit 35,693  train 22,645  val 13,048  HELD OUT 18,064   held-out days 79
+
+======================================================================================================================
+TARGETS -- built twice on the same rows
+======================================================================================================================
+  30-minute target built on 53,757 rows.
+[1m  ] 212 of 212 instruments have a 1-minute file
+[1m  ] 131 begin at the backfill wall (2025-06-26/2025-06-27); 81 reach further back
+[1m  ] loaded 212 instruments, 985 MB of dense float64 minute grids (NaN where a minute did not trade)
+[1m  ] max |1-minute path - 30-minute close| at the 21 30m marks: 3.314e-06
+[1m  ] as a fraction of the stored float32 reference's own precision (8.0 ulps): 0.062  (1,128,893 comparisons, must be < 1)
+[1m  ] missing minutes per episode (of 601): mean 0.0  p50 0  p95 0  max 41   episodes with none: 53,750 of 53,757
+[1m  ] 1-minute >= 30-minute, every episode/direction/horizon: 0 violations
+[1m  ] deepest shortfall -9.374e-07; as a fraction of the float32 reference's precision (8.0 ulps): 0.062 (must be < 1)
+
+  THE UNDERSTATEMENT, measured. How much the 1-minute target adds, in sigma.
+  This is the quantity the 30-minute run could not see; if it is small the
+  rest of this table has nothing to find.
+  dir       h   mean add      p50      p95   mean 30m   mean 1m   add %
+  MAE    0.5h     0.7137   0.4925   1.9999    -0.0048    0.7089   91.8%
+  MAE      1h     0.6792   0.4616   1.8849     0.3345    1.0137   73.9%
+  MAE      2h     0.6645   0.4448   1.8390     0.7288    1.3933   56.4%
+  MAE      5h     0.6593   0.4266   1.8041     1.3966    2.0559   38.3%
+  MAE     10h     0.6809   0.4200   1.8282     2.1191    2.8000   28.7%
+  MFE    0.5h     0.6446   0.3865   1.9689     0.0048    0.6494   82.9%
+  MFE      1h     0.5541   0.3427   1.6827     0.3524    0.9065   62.5%
+  MFE      2h     0.5041   0.3174   1.4884     0.7320    1.2360   44.9%
+  MFE      5h     0.4638   0.2955   1.3193     1.3833    1.8471   28.2%
+  MFE     10h     0.4569   0.2895   1.2873     2.0534    2.5103   20.3%
+
+  fitted 30m  MAE Climatology  5 horizons x 5 quantiles   [14s]
+  fitted 30m  MAE Linear QR    5 horizons x 5 quantiles   [294s]
+  fitted 30m  MAE QTREE        5 horizons x 5 quantiles   [312s]
+  fitted 30m  MAE kNN          5 horizons x 5 quantiles   [313s]
+  fitted 30m  MFE Climatology  5 horizons x 5 quantiles   [313s]
+  fitted 30m  MFE Linear QR    5 horizons x 5 quantiles   [588s]
+  fitted 30m  MFE QTREE        5 horizons x 5 quantiles   [608s]
+  fitted 30m  MFE kNN          5 horizons x 5 quantiles   [609s]
+  fitted 1m   MAE Climatology  5 horizons x 5 quantiles   [609s]
+  fitted 1m   MAE Linear QR    5 horizons x 5 quantiles   [911s]
+  fitted 1m   MAE QTREE        5 horizons x 5 quantiles   [931s]
+  fitted 1m   MAE kNN          5 horizons x 5 quantiles   [932s]
+  fitted 1m   MFE Climatology  5 horizons x 5 quantiles   [932s]
+  fitted 1m   MFE Linear QR    5 horizons x 5 quantiles   [1213s]
+  fitted 1m   MFE QTREE        5 horizons x 5 quantiles   [1231s]
+  fitted 1m   MFE kNN          5 horizons x 5 quantiles   [1232s]
+
+======================================================================================================================
+STRUCTURAL CORRECTNESS -- enforced, not gated
+======================================================================================================================
+  src  dir  model         quantile enforce    horizon enforce
+  30m  MAE  Climatology             0.000%             0.000%
+  30m  MAE  Linear QR               0.000%             0.000%
+  30m  MAE  QTREE                   0.000%             0.679%
+  30m  MAE  kNN                     0.000%             0.000%
+  30m  MFE  Climatology             0.000%             0.000%
+  30m  MFE  Linear QR               0.000%             0.001%
+  30m  MFE  QTREE                   0.000%             0.561%
+  30m  MFE  kNN                     0.000%             0.000%
+  1m   MAE  Climatology             0.000%             0.000%
+  1m   MAE  Linear QR               0.000%             0.001%
+  1m   MAE  QTREE                   0.000%             0.532%
+  1m   MAE  kNN                     0.000%             0.000%
+  1m   MFE  Climatology             0.000%             0.000%
+  1m   MFE  Linear QR               0.000%             0.002%
+  1m   MFE  QTREE                   0.000%             0.158%
+  1m   MFE  kNN                     0.000%             0.000%
+
+  [CACHE] wrote envelope_preds_match1m.npz -- post-enforcement, so no rerun refits.
+
+======================================================================================================================
+COVERAGE -- actual, at each nominal level. 30m and 1m on the SAME rows
+======================================================================================================================
+  nominal                                    5.0    25.0    50.0    75.0    95.0
+  MAE   0.5hClimatology    30m        4.4    26.3    52.4    76.4    95.2
+  MAE   0.5hClimatology     1m        5.1    28.0    53.3    77.4    95.6
+  MAE   0.5hLinear QR      30m        4.6    26.8    52.7    77.6    95.4
+  MAE   0.5hLinear QR       1m        5.4    28.7    54.0    78.3    95.8
+  MAE   0.5hQTREE          30m        4.7    27.0    52.5    77.0    95.1
+  MAE   0.5hQTREE           1m        5.5    28.4    54.1    78.1    95.4
+  MAE   0.5hkNN            30m        5.0    27.1    53.0    77.0    95.1
+  MAE   0.5hkNN             1m        5.8    28.8    54.0    77.8    95.5
+  MAE     1hClimatology    30m        4.1    26.0    53.2    76.9    95.9
+  MAE     1hClimatology     1m        5.3    27.9    53.8    77.6    96.1
+  MAE     1hLinear QR      30m        4.4    26.8    53.9    77.8    95.9
+  MAE     1hLinear QR       1m        5.4    29.0    55.1    78.8    96.1
+  MAE     1hQTREE          30m        4.3    26.7    53.2    77.3    95.7
+  MAE     1hQTREE           1m        5.6    28.7    55.0    78.1    95.8
+  MAE     1hkNN            30m        4.7    26.9    53.7    77.1    95.5
+  MAE     1hkNN             1m        6.2    29.3    54.9    78.0    95.6
+  MAE     2hClimatology    30m        4.4    26.6    53.3    77.3    95.8
+  MAE     2hClimatology     1m        5.6    28.2    54.0    77.7    96.1
+  MAE     2hLinear QR      30m        4.7    27.0    54.5    78.7    96.1
+  MAE     2hLinear QR       1m        5.6    29.5    55.3    79.1    96.3
+  MAE     2hQTREE          30m        4.7    27.1    53.9    78.3    95.7
+  MAE     2hQTREE           1m        5.8    29.0    55.2    78.7    96.0
+  MAE     2hkNN            30m        4.8    27.6    54.2    78.2    95.6
+  MAE     2hkNN             1m        6.5    29.5    55.2    78.8    95.8
+  MAE     5hClimatology    30m        4.5    27.4    53.8    78.0    96.4
+  MAE     5hClimatology     1m        5.5    28.7    54.5    78.2    96.4
+  MAE     5hLinear QR      30m        4.6    28.1    55.3    78.7    96.5
+  MAE     5hLinear QR       1m        5.7    29.4    56.1    79.4    96.7
+  MAE     5hQTREE          30m        4.7    27.6    54.6    78.5    95.9
+  MAE     5hQTREE           1m        5.7    29.5    55.7    79.3    96.0
+  MAE     5hkNN            30m        5.0    28.9    55.0    78.5    96.0
+  MAE     5hkNN             1m        6.5    29.8    55.9    79.0    96.1
+  MAE    10hClimatology    30m        4.5    28.1    53.8    78.0    95.9
+  MAE    10hClimatology     1m        5.8    29.0    54.4    78.5    96.2
+  MAE    10hLinear QR      30m        4.9    28.9    55.4    79.4    96.2
+  MAE    10hLinear QR       1m        6.0    29.9    56.2    79.3    96.5
+  MAE    10hQTREE          30m        4.7    28.5    54.8    78.8    95.8
+  MAE    10hQTREE           1m        5.9    29.8    55.8    78.9    95.6
+  MAE    10hkNN            30m        5.2    29.4    55.3    78.8    95.6
+  MAE    10hkNN             1m        6.7    30.2    56.1    79.0    95.9
+  MFE   0.5hClimatology    30m        4.8    23.6    47.6    73.7    95.6
+  MFE   0.5hClimatology     1m        4.3    23.8    48.9    75.1    95.8
+  MFE   0.5hLinear QR      30m        4.6    22.4    47.3    73.2    95.4
+  MFE   0.5hLinear QR       1m        4.1    23.9    49.1    75.4    95.4
+  MFE   0.5hQTREE          30m        4.9    23.0    47.5    73.0    95.3
+  MFE   0.5hQTREE           1m        4.3    23.9    49.0    75.1    95.3
+  MFE   0.5hkNN            30m        4.9    23.0    47.0    72.9    95.0
+  MFE   0.5hkNN             1m        4.7    23.6    48.6    74.9    95.3
+  MFE     1hClimatology    30m        4.9    22.9    47.2    73.4    95.6
+  MFE     1hClimatology     1m        4.5    23.6    48.6    74.2    96.0
+  MFE     1hLinear QR      30m        4.7    22.0    46.3    73.4    95.2
+  MFE     1hLinear QR       1m        4.2    23.3    47.8    74.8    95.5
+  MFE     1hQTREE          30m        4.9    22.8    46.5    73.2    95.5
+  MFE     1hQTREE           1m        4.4    23.4    48.0    74.4    95.7
+  MFE     1hkNN            30m        5.2    22.5    46.2    73.0    95.0
+  MFE     1hkNN             1m        4.7    23.6    47.9    74.3    95.3
+  MFE     2hClimatology    30m        4.7    22.5    46.4    72.7    95.2
+  MFE     2hClimatology     1m        4.5    22.6    47.4    73.9    95.4
+  MFE     2hLinear QR      30m        4.3    21.8    45.5    73.0    95.0
+  MFE     2hLinear QR       1m        4.3    22.6    46.9    74.2    95.0
+  MFE     2hQTREE          30m        4.9    22.5    45.4    72.8    95.0
+  MFE     2hQTREE           1m        4.5    22.6    46.9    73.7    95.1
+  MFE     2hkNN            30m        4.8    22.1    45.6    72.4    94.6
+  MFE     2hkNN             1m        4.7    22.6    47.0    73.4    94.9
+  MFE     5hClimatology    30m        4.1    21.0    44.8    71.7    94.6
+  MFE     5hClimatology     1m        4.3    21.7    45.7    72.3    94.7
+  MFE     5hLinear QR      30m        3.8    20.5    44.4    72.3    94.5
+  MFE     5hLinear QR       1m        4.1    21.5    45.4    72.8    94.5
+  MFE     5hQTREE          30m        4.2    20.8    44.4    71.6    94.5
+  MFE     5hQTREE           1m        4.3    21.6    45.0    72.8    94.4
+  MFE     5hkNN            30m        4.4    20.9    44.2    71.6    94.3
+  MFE     5hkNN             1m        4.5    21.6    45.0    72.5    94.4
+  MFE    10hClimatology    30m        4.1    20.9    45.3    72.0    94.4
+  MFE    10hClimatology     1m        4.2    21.3    45.8    72.5    94.5
+  MFE    10hLinear QR      30m        3.6    20.4    44.8    72.5    94.8
+  MFE    10hLinear QR       1m        3.9    20.9    45.6    72.8    94.7
+  MFE    10hQTREE          30m        4.1    20.6    44.8    72.1    94.4
+  MFE    10hQTREE           1m        4.2    21.2    45.3    72.6    94.5
+  MFE    10hkNN            30m        4.2    20.8    44.9    72.0    94.3
+  MFE    10hkNN             1m        4.3    21.0    45.6    72.2    94.4
+
+======================================================================================================================
+CALIBRATION GAP -- mean |actual - nominal| over the 5 levels, pp
+======================================================================================================================
+  The headline. 1m-30m is PAIRED: identical rows, identical split,
+  identical day resamples. Negative = the 1-minute target is better
+  calibrated, i.e. the understatement was doing real damage.
+
+  dir       hmodel          30m gap         [95% CI]   1m gap         [95% CI]   1m-30m         [95% CI]      
+  MAE    0.5hClimatology       1.17      [0.45,2.05]     1.89      [0.88,3.06]    +0.72    [+0.10,+1.40]    GROWS
+  MAE    0.5hLinear QR         1.59      [0.76,2.45]     2.43      [1.21,3.58]    +0.84    [+0.23,+1.49]    GROWS
+  MAE    0.5hQTREE             1.39      [0.63,2.34]     2.29      [1.18,3.40]    +0.90    [+0.26,+1.52]    GROWS
+  MAE    0.5hkNN               1.45      [0.76,2.46]     2.38      [1.23,3.45]    +0.93    [+0.19,+1.51]    GROWS
+  MAE      1hClimatology       1.55      [0.96,2.34]     2.15      [1.21,3.15]    +0.60    [+0.03,+1.19]    GROWS
+  MAE      1hLinear QR         2.02      [1.26,2.77]     2.89      [1.90,3.87]    +0.87    [+0.34,+1.46]    GROWS
+  MAE      1hQTREE             1.71      [1.00,2.49]     2.63      [1.67,3.60]    +0.92    [+0.39,+1.48]    GROWS
+  MAE      1hkNN               1.70      [1.01,2.48]     2.78      [1.76,3.81]    +1.07    [+0.52,+1.64]    GROWS
+  MAE      2hClimatology       1.72      [1.05,2.50]     2.33      [1.38,3.30]    +0.60    [+0.09,+1.07]    GROWS
+  MAE      2hLinear QR         2.34      [1.67,3.14]     3.14      [2.24,4.13]    +0.81    [+0.35,+1.25]    GROWS
+  MAE      2hQTREE             2.04      [1.36,2.86]     2.95      [2.06,3.91]    +0.91    [+0.43,+1.36]    GROWS
+  MAE      2hkNN               2.15      [1.49,2.96]     3.15      [2.22,4.11]    +1.00    [+0.54,+1.44]    GROWS
+  MAE      5hClimatology       2.23      [1.24,3.24]     2.65      [1.52,3.84]    +0.41    [+0.02,+0.81]    GROWS
+  MAE      5hLinear QR         2.81      [1.79,3.81]     3.47      [2.42,4.61]    +0.66    [+0.32,+1.01]    GROWS
+  MAE      5hQTREE             2.38      [1.40,3.42]     3.22      [2.16,4.41]    +0.84    [+0.46,+1.19]    GROWS
+  MAE      5hkNN               2.69      [1.72,3.79]     3.47      [2.37,4.67]    +0.78    [+0.39,+1.09]    GROWS
+  MAE     10hClimatology       2.28      [0.77,3.86]     2.79      [1.06,4.48]    +0.51    [+0.15,+0.87]    GROWS
+  MAE     10hLinear QR         2.98      [1.57,4.51]     3.59      [2.08,5.14]    +0.61    [+0.23,+0.89]    GROWS
+  MAE     10hQTREE             2.66      [1.20,4.10]     3.23      [1.72,4.83]    +0.57    [+0.20,+0.91]    GROWS
+  MAE     10hkNN               2.87      [1.39,4.46]     3.57      [1.96,5.16]    +0.70    [+0.41,+0.92]    GROWS
+  MFE    0.5hClimatology       1.17      [0.45,2.05]     0.78      [0.50,1.59]    -0.39    [-0.86,+0.45]         
+  MFE    0.5hLinear QR         1.59      [0.76,2.45]     0.75      [0.43,1.44]    -0.84    [-1.32,+0.18]         
+  MFE    0.5hQTREE             1.39      [0.63,2.34]     0.62      [0.36,1.51]    -0.77    [-1.20,+0.18]         
+  MFE    0.5hkNN               1.45      [0.76,2.46]     0.69      [0.39,1.59]    -0.76    [-1.17,-0.06]  SHRINKS
+  MFE      1hClimatology       1.43      [0.75,2.37]     1.03      [0.42,1.96]    -0.40    [-0.76,+0.03]         
+  MFE      1hLinear QR         1.76      [0.96,2.69]     1.06      [0.58,2.01]    -0.70    [-0.97,-0.30]  SHRINKS
+  MFE      1hQTREE             1.61      [0.88,2.55]     1.10      [0.51,2.05]    -0.51    [-0.84,-0.19]  SHRINKS
+  MFE      1hkNN               1.71      [1.02,2.70]     0.97      [0.41,1.93]    -0.73    [-1.05,-0.44]  SHRINKS
+  MFE      2hClimatology       1.78      [0.88,2.89]     1.41      [0.59,2.42]    -0.37    [-0.67,-0.10]  SHRINKS
+  MFE      2hLinear QR         2.10      [1.23,3.22]     1.42      [0.65,2.52]    -0.69    [-0.94,-0.42]  SHRINKS
+  MFE      2hQTREE             1.90      [1.18,3.03]     1.48      [0.62,2.51]    -0.43    [-0.68,-0.24]  SHRINKS
+  MFE      2hkNN               2.08      [1.24,3.21]     1.47      [0.60,2.58]    -0.61    [-0.86,-0.34]  SHRINKS
+  MFE      5hClimatology       2.76      [1.75,3.80]     2.26      [1.20,3.29]    -0.50    [-0.75,-0.17]  SHRINKS
+  MFE      5hLinear QR         2.89      [1.78,3.87]     2.34      [1.27,3.33]    -0.55    [-0.81,-0.30]  SHRINKS
+  MFE      5hQTREE             2.89      [1.86,3.93]     2.37      [1.29,3.38]    -0.52    [-0.77,-0.21]  SHRINKS
+  MFE      5hkNN               2.94      [1.88,3.92]     2.40      [1.33,3.39]    -0.54    [-0.76,-0.28]  SHRINKS
+  MFE     10hClimatology       2.64      [1.45,3.84]     2.35      [1.17,3.50]    -0.28    [-0.49,-0.08]  SHRINKS
+  MFE     10hLinear QR         2.79      [1.60,4.05]     2.41      [1.21,3.66]    -0.38    [-0.57,-0.21]  SHRINKS
+  MFE     10hQTREE             2.80      [1.55,4.07]     2.45      [1.20,3.74]    -0.35    [-0.50,-0.19]  SHRINKS
+  MFE     10hkNN               2.75      [1.48,3.97]     2.48      [1.26,3.79]    -0.27    [-0.45,-0.07]  SHRINKS
+
+  40 cells. 1-minute gap smaller (point estimate): 20 of 40.
+  Interval excludes zero on the better side: 16 of 40.
+  A point estimate is not a result. The second line is the one that counts.
+
+  THE TWO GAP COLUMNS ARE LEVELS and are a THIRD look at rows already
+  scored twice -- confirmatory only. The 1m-30m COLUMN IS THE NEW
+  MEASUREMENT: a within-row contrast on identical rows, split and day
+  resamples, with only the target changing, so whatever the reuse did to
+  the levels it did to both sides of the subtraction equally. Read the
+  difference as the result of this stage and the levels as context.
+
+======================================================================================================================
+PINBALL SKILL vs CLIMATOLOGY -- within each target source
+======================================================================================================================
+  LEVELS, confirmatory only -- a third look at twice-scored rows.
+  Each model against the climatology fitted on the SAME target source, so
+  the two columns are each internally consistent. Positive = better than
+  doing nothing. Comparing skill ACROSS sources is comparing two different
+  targets, so the columns are read side by side, not differenced.
+
+  dir       hmodel          30m skill %           [95% CI]   1m skill %           [95% CI]
+  MAE    0.5hLinear QR            +1.66      [+1.21,+2.13]        +2.18      [+1.35,+2.98]
+  MAE    0.5hQTREE                +1.40      [+1.02,+1.84]        +1.79      [+0.94,+2.53]
+  MAE    0.5hkNN                  +1.05      [+0.63,+1.48]        +1.54      [+0.73,+2.32]
+  MAE      1hLinear QR            +1.30      [+0.85,+1.77]        +1.90      [+1.23,+2.64]
+  MAE      1hQTREE                +1.26      [+0.88,+1.66]        +1.50      [+0.85,+2.21]
+  MAE      1hkNN                  +0.80      [+0.33,+1.20]        +1.12      [+0.46,+1.77]
+  MAE      2hLinear QR            +1.13      [+0.61,+1.67]        +1.86      [+1.16,+2.59]
+  MAE      2hQTREE                +1.13      [+0.74,+1.56]        +1.53      [+0.90,+2.20]
+  MAE      2hkNN                  +0.60      [+0.15,+1.06]        +1.21      [+0.59,+1.92]
+  MAE      5hLinear QR            +1.63      [+1.04,+2.21]        +2.24      [+1.58,+3.04]
+  MAE      5hQTREE                +1.54      [+1.06,+1.98]        +1.88      [+1.28,+2.54]
+  MAE      5hkNN                  +1.14      [+0.63,+1.72]        +1.66      [+1.00,+2.37]
+  MAE     10hLinear QR            +2.02      [+1.44,+2.76]        +2.66      [+2.02,+3.48]
+  MAE     10hQTREE                +1.84      [+1.40,+2.31]        +2.30      [+1.75,+2.96]
+  MAE     10hkNN                  +1.50      [+1.00,+2.05]        +2.07      [+1.51,+2.70]
+  MFE    0.5hLinear QR            +1.66      [+1.21,+2.13]        +4.39      [+3.35,+5.58]
+  MFE    0.5hQTREE                +1.40      [+1.02,+1.84]        +4.55      [+3.68,+5.57]
+  MFE    0.5hkNN                  +1.05      [+0.63,+1.48]        +4.39      [+3.36,+5.52]
+  MFE      1hLinear QR            +2.05      [+1.45,+2.68]        +4.69      [+3.55,+5.73]
+  MFE      1hQTREE                +2.05      [+1.57,+2.59]        +4.88      [+3.96,+5.76]
+  MFE      1hkNN                  +1.48      [+0.90,+2.06]        +4.60      [+3.59,+5.58]
+  MFE      2hLinear QR            +2.92      [+2.29,+3.51]        +5.23      [+4.32,+6.27]
+  MFE      2hQTREE                +2.66      [+2.11,+3.20]        +4.87      [+4.09,+5.69]
+  MFE      2hkNN                  +2.18      [+1.62,+2.77]        +4.68      [+3.86,+5.58]
+  MFE      5hLinear QR            +3.29      [+2.59,+3.96]        +4.88      [+4.04,+5.72]
+  MFE      5hQTREE                +3.03      [+2.35,+3.69]        +4.50      [+3.72,+5.27]
+  MFE      5hkNN                  +2.64      [+1.94,+3.34]        +4.28      [+3.39,+5.12]
+  MFE     10hLinear QR            +3.77      [+3.03,+4.44]        +4.94      [+4.15,+5.72]
+  MFE     10hQTREE                +3.44      [+2.72,+4.08]        +4.56      [+3.80,+5.33]
+  MFE     10hkNN                  +3.11      [+2.38,+3.78]        +4.23      [+3.49,+5.03]
+
+  [1259s]
+======================================================================================================================
+WHAT THIS DOES AND DOES NOT SETTLE
+======================================================================================================================
+  Settles: on these 53,757 episodes, 3,000 pairs, whether the
+  close-versus-true understatement changes the calibration gap. Same rows,
+  same split, same models, same day resamples on both sides.
+  The held-out arm is all 18,064 rows the first envelope run scored, so
+  the 30-minute column is directly comparable to the published numbers.
+  Does NOT settle: anything about the full 60,000. The fit block loses its
+  first nine months to the backfill wall, so this describes the envelope over
+  a shorter history. A null here is evidence the fix does not matter ON THESE
+  ROWS, not that the understatement is small -- it is 0.46 to 0.68 sigma at
+  10 hours, twice what this project assumed.
+======================================================================================================================

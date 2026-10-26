@@ -1,0 +1,142 @@
+================================================================================================================
+TAIL-REFINE step 1 -- does the classifier know anything new?
+================================================================================================================
+  A MAGNITUDE TARGET: does the spread make an outsized move EITHER way.
+  Not the envelope quantiles (how far, as a distribution) and not the
+  direction target (which way). Not sign-folded: up and down are each held
+  to their own train 90th percentile, and either crossing it is 'violent'.
+
+  population: the matched 53,757-episode set
+  [SPLIT] train 22,645 (<2026-05-01)   val 13,048   HELD OUT 18,064 (>=2026-07-18)
+[SPLIT] held-out used ONCE, for scoring only; iterations chosen on val
+  features: vol_48, vol_48_1m, vratio, vol_slope, sandwich, off_mark
+
+[1m  ] 1-minute >= 30-minute, every episode/direction/horizon: 0 violations
+[1m  ] deepest shortfall -9.374e-07; as a fraction of the float32 reference's precision (8.0 ulps): 0.062 (must be < 1)
+  unfold check: up/down from MAE/MFE vs read straight off the raw 30m path, max diff 0.0e+00
+
+  h        up p90  down p90    train     val  held out     HO1     HO2   base rate, share violent
+  0.5h      1.582     1.605    0.193   0.157     0.180   0.176   0.184
+  1h        2.158     2.194    0.195   0.161     0.177   0.172   0.181
+  2h        2.949     3.001    0.195   0.153     0.173   0.171   0.175
+  5h        4.275     4.372    0.196   0.162     0.179   0.183   0.175
+  10h       5.755     5.802    0.196   0.172     0.180   0.195   0.168
+  [12s]
+
+  registry caches: MFE match1m 9e332d92a294, MAE match1m_mae_vol1m 5bd8d15af8c8 -- both match
+
+================================================================================================================
+0.5h -- held-out AUC for 'violent', and classifier minus each comparator (paired, day-clustered)
+================================================================================================================
+  logistic classifier   AUC 0.7150 [0.6991,0.7318]  (reproduces TAIL-CLASSIFIER)
+  vol_48                AUC 0.6371 [0.6248,0.6520]   classifier - this +0.0779 [+0.0571,+0.0981]  BEATS
+  vol_48_1m             AUC 0.6228 [0.6044,0.6416]   classifier - this +0.0922 [+0.0668,+0.1198]  BEATS
+  Linear QR q95         AUC 0.7000 [0.6779,0.7185]   classifier - this +0.0150 [+0.0097,+0.0209]  BEATS
+  CQR q95               AUC 0.6937 [0.6740,0.7110]   classifier - this +0.0213 [+0.0156,+0.0265]  BEATS
+  -> classifier beats all four: YES
+  logistic permutation importance, AUC points lost when shuffled (10 shuffles, day-clustered):
+    vol_48                          +0.0237 [+0.0194,+0.0281]
+    vol_48_1m                       +0.0317 [+0.0257,+0.0376]
+    vratio                          +0.0223 [+0.0169,+0.0275]
+    vol_slope                       +0.0847 [+0.0648,+0.1021]
+    sandwich                        -0.0000 [-0.0001,+0.0001]
+    off_mark                        -0.0006 [-0.0017,+0.0004]
+    vol pair (vol_48 + vol_48_1m)   +0.0957 [+0.0863,+0.1048]
+    other four                      +0.1223 [+0.1022,+0.1418]
+  mean predicted probability, held out 0.193 (HO1 0.188, HO2 0.197);  actual: train 0.193, held out 0.180 (HO1 0.176, HO2 0.184)
+  [101s]
+
+================================================================================================================
+1h -- held-out AUC for 'violent', and classifier minus each comparator (paired, day-clustered)
+================================================================================================================
+  logistic classifier   AUC 0.7125 [0.6961,0.7289]  (reproduces TAIL-CLASSIFIER)
+  vol_48                AUC 0.6570 [0.6420,0.6716]   classifier - this +0.0554 [+0.0357,+0.0765]  BEATS
+  vol_48_1m             AUC 0.6463 [0.6290,0.6632]   classifier - this +0.0662 [+0.0431,+0.0920]  BEATS
+  Linear QR q95         AUC 0.6875 [0.6660,0.7080]   classifier - this +0.0250 [+0.0172,+0.0323]  BEATS
+  CQR q95               AUC 0.6804 [0.6600,0.7001]   classifier - this +0.0320 [+0.0250,+0.0386]  BEATS
+  -> classifier beats all four: YES
+  logistic permutation importance, AUC points lost when shuffled (10 shuffles, day-clustered):
+    vol_48                          +0.0394 [+0.0345,+0.0441]
+    vol_48_1m                       +0.0321 [+0.0273,+0.0377]
+    vratio                          +0.0144 [+0.0099,+0.0193]
+    vol_slope                       +0.0667 [+0.0511,+0.0826]
+    sandwich                        -0.0001 [-0.0001,-0.0000]
+    off_mark                        -0.0002 [-0.0008,+0.0005]
+    vol pair (vol_48 + vol_48_1m)   +0.1167 [+0.1070,+0.1254]
+    other four                      +0.0934 [+0.0757,+0.1135]
+  mean predicted probability, held out 0.196 (HO1 0.191, HO2 0.200);  actual: train 0.195, held out 0.177 (HO1 0.172, HO2 0.181)
+  [189s]
+
+================================================================================================================
+2h -- held-out AUC for 'violent', and classifier minus each comparator (paired, day-clustered)
+================================================================================================================
+  logistic classifier   AUC 0.7086 [0.6929,0.7248]  (reproduces TAIL-CLASSIFIER)
+  vol_48                AUC 0.6598 [0.6424,0.6745]   classifier - this +0.0489 [+0.0299,+0.0674]  BEATS
+  vol_48_1m             AUC 0.6508 [0.6329,0.6693]   classifier - this +0.0579 [+0.0381,+0.0787]  BEATS
+  Linear QR q95         AUC 0.6873 [0.6686,0.7056]   classifier - this +0.0213 [+0.0141,+0.0291]  BEATS
+  CQR q95               AUC 0.6734 [0.6545,0.6908]   classifier - this +0.0352 [+0.0266,+0.0450]  BEATS
+  -> classifier beats all four: YES
+  logistic permutation importance, AUC points lost when shuffled (10 shuffles, day-clustered):
+    vol_48                          +0.0417 [+0.0353,+0.0480]
+    vol_48_1m                       +0.0457 [+0.0388,+0.0529]
+    vratio                          +0.0098 [+0.0056,+0.0147]
+    vol_slope                       +0.0583 [+0.0442,+0.0729]
+    sandwich                        -0.0002 [-0.0009,+0.0006]
+    off_mark                        -0.0002 [-0.0005,+0.0001]
+    vol pair (vol_48 + vol_48_1m)   +0.1388 [+0.1261,+0.1509]
+    other four                      +0.0798 [+0.0622,+0.0980]
+  mean predicted probability, held out 0.197 (HO1 0.194, HO2 0.201);  actual: train 0.195, held out 0.173 (HO1 0.171, HO2 0.175)
+  [276s]
+
+================================================================================================================
+5h -- held-out AUC for 'violent', and classifier minus each comparator (paired, day-clustered)
+================================================================================================================
+  logistic classifier   AUC 0.7063 [0.6907,0.7208]  (reproduces TAIL-CLASSIFIER)
+  vol_48                AUC 0.6740 [0.6570,0.6895]   classifier - this +0.0323 [+0.0182,+0.0450]  BEATS
+  vol_48_1m             AUC 0.6704 [0.6528,0.6852]   classifier - this +0.0359 [+0.0212,+0.0513]  BEATS
+  Linear QR q95         AUC 0.6958 [0.6803,0.7112]   classifier - this +0.0105 [+0.0035,+0.0179]  BEATS
+  CQR q95               AUC 0.6741 [0.6589,0.6895]   classifier - this +0.0322 [+0.0232,+0.0412]  BEATS
+  -> classifier beats all four: YES
+  logistic permutation importance, AUC points lost when shuffled (10 shuffles, day-clustered):
+    vol_48                          +0.0492 [+0.0420,+0.0556]
+    vol_48_1m                       +0.0644 [+0.0553,+0.0719]
+    vratio                          +0.0046 [+0.0020,+0.0067]
+    vol_slope                       +0.0362 [+0.0258,+0.0466]
+    sandwich                        +0.0008 [-0.0004,+0.0022]
+    off_mark                        +0.0001 [-0.0001,+0.0004]
+    vol pair (vol_48 + vol_48_1m)   +0.1774 [+0.1616,+0.1919]
+    other four                      +0.0477 [+0.0351,+0.0594]
+  mean predicted probability, held out 0.202 (HO1 0.198, HO2 0.204);  actual: train 0.196, held out 0.179 (HO1 0.183, HO2 0.175)
+  [362s]
+
+================================================================================================================
+10h -- held-out AUC for 'violent', and classifier minus each comparator (paired, day-clustered)
+================================================================================================================
+  logistic classifier   AUC 0.7144 [0.6995,0.7323]  (reproduces TAIL-CLASSIFIER)
+  vol_48                AUC 0.6870 [0.6716,0.7023]   classifier - this +0.0273 [+0.0162,+0.0386]  BEATS
+  vol_48_1m             AUC 0.6867 [0.6715,0.7047]   classifier - this +0.0277 [+0.0155,+0.0403]  BEATS
+  Linear QR q95         AUC 0.7096 [0.6937,0.7293]   classifier - this +0.0047 [-0.0014,+0.0105]  does not beat
+  CQR q95               AUC 0.6883 [0.6742,0.7036]   classifier - this +0.0260 [+0.0177,+0.0350]  BEATS
+  -> classifier beats all four: no
+  logistic permutation importance, AUC points lost when shuffled (10 shuffles, day-clustered):
+    vol_48                          +0.0483 [+0.0415,+0.0550]
+    vol_48_1m                       +0.0716 [+0.0633,+0.0805]
+    vratio                          +0.0033 [+0.0014,+0.0050]
+    vol_slope                       +0.0281 [+0.0185,+0.0378]
+    sandwich                        +0.0005 [-0.0006,+0.0015]
+    off_mark                        +0.0001 [-0.0001,+0.0003]
+    vol pair (vol_48 + vol_48_1m)   +0.1939 [+0.1780,+0.2121]
+    other four                      +0.0369 [+0.0261,+0.0481]
+  mean predicted probability, held out 0.199 (HO1 0.196, HO2 0.202);  actual: train 0.196, held out 0.180 (HO1 0.195, HO2 0.168)
+  [447s]
+
+================================================================================================================
+DECISION -- rule fixed in incremental()' docstring before the run
+================================================================================================================
+  classifier beats all four comparators at 4 of 5 horizons (0.5h, 1h, 2h, 5h); need 3
+  VERDICT: NEW TAIL INFORMATION -- Step 2 (the flagged-subset quantile
+  model) is justified. Not built in this run.
+  Held-out rows have been scored before (TAIL-CLASSIFIER); the paired
+  differences are the new measurement. Nothing in the registry was written.
+  [447s]
+================================================================================================================

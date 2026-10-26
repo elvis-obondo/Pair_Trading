@@ -1,0 +1,99 @@
+================================================================================================================
+WHY-IT-MOVED -- build and checks
+================================================================================================================
+  panel 36,595 bars x 214 tickers (2024-09-11 00:00:00 -> 2026-10-13 09:00:00); 60,000 episodes
+
+STEP 1 -- trailing PCA market factor, every bar, previous 336 bars, 3 components
+  fitted on 36,258 bars; eligible tickers per bar: median 149, min 93, max 214   [160s]
+  variance explained (share of the correlation trace), median by quarter:
+    2024Q3   PC1 0.646  PC2 0.018  PC3 0.015  (sum 0.679)
+    2024Q4   PC1 0.675  PC2 0.021  PC3 0.016  (sum 0.712)
+    2025Q1   PC1 0.718  PC2 0.025  PC3 0.015  (sum 0.759)
+    2025Q2   PC1 0.686  PC2 0.020  PC3 0.014  (sum 0.720)
+    2025Q3   PC1 0.660  PC2 0.018  PC3 0.014  (sum 0.691)
+    2025Q4   PC1 0.604  PC2 0.016  PC3 0.013  (sum 0.633)
+    2026Q1   PC1 0.513  PC2 0.016  PC3 0.013  (sum 0.542)
+    2026Q2   PC1 0.437  PC2 0.018  PC3 0.014  (sum 0.470)
+    2026Q3   PC1 0.334  PC2 0.019  PC3 0.014  (sum 0.367)
+    2026Q4   PC1 0.457  PC2 0.023  PC3 0.014  (sum 0.493)
+  over all bars: PC1 median 0.603 [p5 0.316, p95 0.771]; PC2 0.019; PC3 0.014
+  corr(PC1 return, BTC return), all bars: 0.741
+    by quarter: 2024Q3 0.855, 2024Q4 0.734, 2025Q1 0.792, 2025Q2 0.823, 2025Q3 0.755, 2025Q4 0.673, 2026Q1 0.847, 2026Q2 0.843, 2026Q3 0.760, 2026Q4 0.738
+
+STEP 2 -- features at the entry bar, lookbacks 4 and 12 bars
+  raw 30m OHLCV loaded   [166s]
+  rolling 48-bar EDGE at every bar, every ticker   [300s]
+  30m features built   [311s]
+  SIGN CONVENTION (features are unsigned or folded; reported, not used):
+    L= 4: dominant leg is A on 0.462; the dominant leg's contribution pushed the spread TOWARD the dislocation (sign = sign(z)) on 0.937
+    L=12: dominant leg is A on 0.477; the dominant leg's contribution pushed the spread TOWARD the dislocation (sign = sign(z)) on 0.944
+
+STEP 2b -- 1-minute versions of vol_spike_mover / vol_spike_ratio / vadj_resid
+    1m volume: 50 of 212 tickers   [324s]
+    1m volume: 100 of 212 tickers   [333s]
+    1m volume: 150 of 212 tickers   [343s]
+    1m volume: 200 of 212 tickers   [352s]
+  1m features built; max minute read relative to entry_time: +29 (must be +29)   [355s]
+
+================================================================================================================
+CHECKS
+================================================================================================================
+  LOOKAHEAD -- max 30m index touched minus the entry index, per family:
+    factor/resid L=4       max +0 (must be <= 0)
+    volume L=4             max +0 (must be <= 0)
+    EDGE L=4               max +0 (must be <= 0)
+    factor/resid L=12      max +0 (must be <= 0)
+    volume L=12            max +0 (must be <= 0)
+    EDGE L=12              max +0 (must be <= 0)
+    1-minute families      max minute +29 relative to entry_time (must be <= +29)
+    -> PASS
+
+  COVERAGE and DISTRIBUTION (60,000 episodes; _1m features on the 53,757 set)
+    feature                     finite      of     median         p5        p95   missing by cause
+    lone_share_4                59,830  60,000     0.8371     0.5423     0.9863   a leg not in the factor fit (listing edge / gap): 170
+    common_share_4              59,830  60,000      0.155   0.009382     0.8839   a leg not in the factor fit (listing edge / gap): 170
+    mkt_move_4                  59,952  60,000   0.006739  0.0005374    0.03658   a leg not in the factor fit (listing edge / gap): 48
+    vol_spike_mover_4           59,830  60,000      2.555     0.6917      20.58   a leg not in the factor fit (listing edge / gap): 170
+    vol_spike_ratio_4           59,830  60,000      1.816     0.2556      20.01   a leg not in the factor fit (listing edge / gap): 170
+    vadj_resid_4                59,830  60,000     0.8031    -0.1256       3.79   a leg not in the factor fit (listing edge / gap): 170
+    lagger_spread_4             59,830  60,000      1.013     0.2996      2.109   a leg not in the factor fit (listing edge / gap): 170
+    lone_share_12               59,707  60,000     0.8195     0.5386     0.9841   a leg not in the factor fit (listing edge / gap): 293
+    common_share_12             59,707  60,000     0.1679    0.01171     0.8748   a leg not in the factor fit (listing edge / gap): 293
+    mkt_move_12                 59,924  60,000     0.0115  0.0009867    0.04936   a leg not in the factor fit (listing edge / gap): 76
+    vol_spike_mover_12          59,707  60,000      1.894     0.6465       12.8   a leg not in the factor fit (listing edge / gap): 293
+    vol_spike_ratio_12          59,707  60,000      1.405     0.2735      11.43   a leg not in the factor fit (listing edge / gap): 293
+    vadj_resid_12               59,707  60,000      1.623    -0.1012      6.535   a leg not in the factor fit (listing edge / gap): 293
+    lagger_spread_12            59,707  60,000      1.009     0.2987      2.094   a leg not in the factor fit (listing edge / gap): 293
+    vol_spike_mover_1m_4        53,078  53,757      6.912     0.5982      202.1   1m volume missing or zero median: 598; a leg not in the factor fit (dominant leg undefined): 81
+    vol_spike_ratio_1m_4        52,742  53,757       3.39    0.08646      230.8   1m volume missing or zero median: 934; a leg not in the factor fit (dominant leg undefined): 81
+    vadj_resid_1m_4             53,585  53,757    0.02982    -0.3258     0.6572   1m volume missing or zero median: 91; a leg not in the factor fit (dominant leg undefined): 81
+    vol_spike_mover_1m_12       53,017  53,757      8.052     0.9624      190.6   1m volume missing or zero median: 587; a leg not in the factor fit (dominant leg undefined): 153
+    vol_spike_ratio_1m_12       52,998  53,757      3.005     0.1071      126.4   1m volume missing or zero median: 606; a leg not in the factor fit (dominant leg undefined): 153
+    vadj_resid_1m_12            53,603  53,757    0.09953    -0.3179      1.025   a leg not in the factor fit (dominant leg undefined): 153; 1m volume missing or zero median: 1
+
+  SPEARMAN against the existing six (on the 53,757 set), flag > 0.8 vs vol_48 / vol_48_1m
+    feature                        vol_48  vol_48_1m     vratio  vol_slope   sandwich   off_mark
+    lone_share_4                   -0.083     -0.111     +0.025     +0.155     -0.087     -0.028
+    common_share_4                 +0.173     +0.142     +0.040     -0.134     -0.010     -0.129
+    mkt_move_4                     +0.030     +0.021     +0.054     +0.068     +0.002     -0.070
+    vol_spike_mover_4              -0.155     -0.234     -0.036     +0.371     -0.285     -0.104
+    vol_spike_ratio_4              -0.167     -0.205     -0.041     +0.201     -0.189     -0.004
+    vadj_resid_4                   +0.195     +0.259     +0.173     -0.139     +0.362     +0.222
+    lagger_spread_4                +0.058     +0.039     +0.000     +0.003     +0.006     -0.047
+    lone_share_12                  -0.087     -0.109     -0.015     +0.153     -0.092     -0.035
+    common_share_12                +0.200     +0.161     +0.090     -0.106     +0.002     -0.108
+    mkt_move_12                    -0.011     -0.018     +0.006     +0.085     -0.028     -0.063
+    vol_spike_mover_12             -0.125     -0.195     -0.093     +0.366     -0.270     -0.125
+    vol_spike_ratio_12             -0.150     -0.180     -0.079     +0.177     -0.180     -0.030
+    vadj_resid_12                  +0.120     +0.183     +0.126     -0.151     +0.305     +0.211
+    lagger_spread_12               +0.056     +0.037     +0.001     +0.005     +0.007     -0.041
+    vol_spike_mover_1m_4           -0.111     -0.199     +0.030     +0.327     -0.258     -0.020
+    vol_spike_ratio_1m_4           -0.138     -0.172     -0.010     +0.198     -0.147     +0.009
+    vadj_resid_1m_4                +0.070     +0.081     +0.042     -0.027     +0.087     +0.053
+    vol_spike_mover_1m_12          -0.108     -0.195     +0.031     +0.342     -0.265     -0.013
+    vol_spike_ratio_1m_12          -0.141     -0.178     -0.019     +0.213     -0.157     -0.015
+    vadj_resid_1m_12               +0.121     +0.138     +0.081     -0.059     +0.151     +0.083
+  flagged 'restates volatility': none
+  [WROTE] datasets/whyfeat.npz  (60,000 x 20)
+  [356s]
+================================================================================================================

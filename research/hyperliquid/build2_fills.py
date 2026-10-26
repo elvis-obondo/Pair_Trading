@@ -62,6 +62,11 @@ FLOW (per coin, per minute; raw dollars):
   top3_taker_share               : top-3 taker wallets' share of on-book taker notional
   open_taker_usd / close_taker_usd : from the taker dir; flips split with the
                                    closing part min(|startPosition|, sz), rest opens
+  open_buy_usd / open_sell_usd / close_buy_usd / close_sell_usd : the same opening
+                                   and closing parts, split by the TAKER's side (B / A);
+                                   open_buy + open_sell == open_taker_usd and
+                                   close_buy + close_sell == close_taker_usd (asserted on
+                                   every row; added for HL-FLOW1 / H2, 2026-10-15)
   liq_forced_long_usd / _short_usd : forced legs (liquidation.liquidatedUser == the
                                    fill's own wallet) with an on-book dir, taker or
                                    maker, once per tid; side A closes a long -> long,
@@ -261,11 +266,15 @@ def main():
                           np.where(B.dir.str.startswith("Close"), B.sz, 0.0))
     B = B.assign(close_usd=closing_sz * B.px)
     B = B.assign(open_usd=B.usd - B.close_usd, twap_usd=np.where(B.twap, B.usd, 0.0))
+    B = B.assign(open_buy=np.where(B.side, B.open_usd, 0.0), open_sell=np.where(B.side, 0.0, B.open_usd),
+                 close_buy=np.where(B.side, B.close_usd, 0.0), close_sell=np.where(B.side, 0.0, B.close_usd))
     g = B.groupby(key, sort=True, observed=True)
     flow = pd.DataFrame({"taker_buy_usd": g.buy.sum(), "taker_sell_usd": g.sell.sum(),
                          "n_taker_wallets": g.wallet.nunique(),
                          "open_taker_usd": g.open_usd.sum(), "close_taker_usd": g.close_usd.sum(),
-                         "twap_taker_usd": g.twap_usd.sum()})
+                         "twap_taker_usd": g.twap_usd.sum(),
+                         "open_buy_usd": g.open_buy.sum(), "open_sell_usd": g.open_sell.sum(),
+                         "close_buy_usd": g.close_buy.sum(), "close_sell_usd": g.close_sell.sum()})
     w = B.groupby(key + ["wallet"], sort=False, observed=True).usd.sum().reset_index()
     w = w.sort_values(key + ["usd"], ascending=[True, True, False])
     top3 = w.groupby(key, observed=True).head(3).groupby(key, observed=True).usd.sum()
@@ -281,6 +290,10 @@ def main():
     fz = [c for c in R.columns if c not in ("open", "high", "low", "close", "top3_taker_share")]
     R[fz] = R[fz].fillna(0.0)
     R.loc[R.index.get_level_values("minute") < TWAP_FROM_MS, "twap_taker_usd"] = np.nan
+    # the side x dir split must add back to the unsplit columns on EVERY row
+    for tot, a, b in (("open_taker_usd", "open_buy_usd", "open_sell_usd"),
+                      ("close_taker_usd", "close_buy_usd", "close_sell_usd")):
+        assert np.allclose(R[a] + R[b], R[tot], rtol=1e-9, atol=1e-6), f"{a}+{b} != {tot}"
     R = R.reset_index()
     R["minute"] = pd.to_datetime(R.minute, unit="ms", utc=True)
     R.to_parquet(os.path.join(out, f"{day}.parquet"), index=False)

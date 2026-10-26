@@ -1,0 +1,81 @@
+================================================================================================================
+META-LABEL STEP 0 -- can the skip rule be tested on stored trades?
+================================================================================================================
+  ledger: exit_study/grid_run/grid_w2_s050.csv  3,844 trades, 2026-08-17 01:00:00 -> 2026-09-21 00:00:00
+  stamps: entry_window_days=2.0, hedge_estimator=ratio, entry_sigma=3.0, stop_sigma=0.5, take_profit_pct=1.0, max_hold_hours=72.0, slots=10, bar_hours=0.5, exit_check_minutes=1, stop_fill_overshoot=1.005, cooldown_hours=72.0, rank_by=theta, leverage=20.0, capital_frac=0.05, days=35, end_date=2026-09-21 00:00:00
+
+A. GENERATED AFTER THE ONE-BAR ENTRY FIX?
+   max concurrent open 10 (cap 10); pair open twice at once 0; min hours_held 0.00 (the bug floored it at 0.50)
+   file written 2026-09-27 19:52, the fix committed 19:50; carries the cfg_*
+   stamp columns that same fix introduced
+   -> PASS: post-fix
+
+B. DID THIS LEDGER'S ENGINE APPLY LIQUIDATION?
+   NO. Liquidation entered run_portfolio_backtest in commit 440d658 (2026-09-27
+   21:27), after this ledger was written; that commit says the grid_run ledgers
+   'predate all of the above' and booked stops at a 1.005x fill, not the measured
+   1.04x. Any damage measured on these trades is a FLOOR.
+
+C. MATCH TRADES TO EPISODES (same pair, closest entry)
+   trades on a pair with NO episode in disloc_meta: 3,361 of 3,844 (the set samples 3,000 pairs, <=20 episodes each)
+   distance from the exact decision bar, trades on a sampled pair (483):
+     within   0 bars:    78
+     within   1 bars:    87
+     within   2 bars:    97
+     within   4 bars:   117
+     within  48 bars:   203
+     within 336 bars:   353
+   raw offset (episode label - opened_at, bars), -4..+4: -4:4, -3:3, -2:9, -1:78, 1:7, 2:9, 3:4, 4:4
+   MATCHED (exact decision bar): 78 of 3,844 = 2.0%;  unmatched, excluded: 3,766
+
+D. LEAKAGE BUCKETS, matched trades
+   clean (>= 2026-07-18) 78;  validation 0;  contaminated 0
+   all 3,844 trades fall in the clean window: True
+
+E. SLOT CONTENTION
+   30-minute bars in span 1,680; all 10 slots full on 1,453 = 86.5%;  median open 10
+   candidates turned away (full slots / one-per-ticker): NOT IN THIS LEDGER. It
+   records taken trades only, so the turned-away count, and how many the
+   classifier would have approved, cannot be measured from it.
+
+F. TAIL CLASSIFIER, AUC on its training episodes vs held out
+================================================================================================================
+  (classifier setup: same population, split and labels as TAIL-CLASSIFIER)
+================================================================================================================
+  A MAGNITUDE TARGET: does the spread make an outsized move EITHER way.
+  Not the envelope quantiles (how far, as a distribution) and not the
+  direction target (which way). Not sign-folded: up and down are each held
+  to their own train 90th percentile, and either crossing it is 'violent'.
+
+  population: the matched 53,757-episode set
+  [SPLIT] train 22,645 (<2026-05-01)   val 13,048   HELD OUT 18,064 (>=2026-07-18)
+[SPLIT] held-out used ONCE, for scoring only; iterations chosen on val
+  features: vol_48, vol_48_1m, vratio, vol_slope, sandwich, off_mark
+
+[1m  ] 1-minute >= 30-minute, every episode/direction/horizon: 0 violations
+[1m  ] deepest shortfall -9.374e-07; as a fraction of the float32 reference's precision (8.0 ulps): 0.062 (must be < 1)
+  unfold check: up/down from MAE/MFE vs read straight off the raw 30m path, max diff 0.0e+00
+
+  h        up p90  down p90    train     val  held out     HO1     HO2   base rate, share violent
+  0.5h      1.582     1.605    0.193   0.157     0.180   0.176   0.184
+  1h        2.158     2.194    0.195   0.161     0.177   0.172   0.181
+  2h        2.949     3.001    0.195   0.153     0.173   0.171   0.175
+  5h        4.275     4.372    0.196   0.162     0.179   0.183   0.175
+  10h       5.755     5.802    0.196   0.172     0.180   0.195   0.168
+  [12s]
+
+   0.5h  train 0.7383   held out 0.7150   train - held out +0.0233
+   1h    train 0.7290   held out 0.7125   train - held out +0.0165
+   2h    train 0.7124   held out 0.7086   train - held out +0.0037
+   5h    train 0.6992   held out 0.7063   train - held out -0.0071
+   10h   train 0.6963   held out 0.7144   train - held out -0.0181
+   median hold in this ledger 0.50h -> nearest horizon 0.5h
+
+================================================================================================================
+STEP 0 VERDICT
+================================================================================================================
+  STOP. 78 clean matched trades, fewer than 500. The episode set
+  samples pairs, so 3,361 of 3,844 trades have no episode to match.
+  Step 1 is not run. Nothing in the registry or live system was touched.
+  [12s]
+================================================================================================================

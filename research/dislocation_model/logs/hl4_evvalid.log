@@ -1,0 +1,4 @@
+[EVVALID] loaded flows for 189 sampled coins and the market sum  [69s]
+[EVVALID] 500 events + 500 links x 12 series x 5 windows = 60,000 comparisons; mismatches 0; max abs diff 1.53e-03  [96s]
+[EVVALID] every flow and market array was truncated at the row's cutoff C before any read
+[EVVALID] PASS

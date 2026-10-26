@@ -1,0 +1,277 @@
+========================================================================================================================
+REACH-MU v2 -- prune on val, then perp vs index, spike detail, signed breadth
+========================================================================================================================
+  [SPLIT] train 22,645 (<2026-05-01)   val 13,048   HELD OUT 18,064 (>=2026-07-18)
+[SPLIT] held-out used ONCE, for scoring only; iterations chosen on val
+  HO1 8,200   HO2 9,864
+
+========================================================================================================================
+STEP 1 -- PRUNE on VALIDATION (held out not read)
+========================================================================================================================
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+  logistic L1: C 0.1, val log loss 0.50161;  depth-2 tree: min_data_in_leaf 1000, 308 rounds, val log loss 0.50279
+  group                                       L1 val [95%]               depth-2 val [95%]   decision
+  vol_48                      +12.6378 [+11.5206,+13.7864]       +8.0218 [+7.1988,+8.8165]   keep (always)
+  vratio                         +0.1878 [+0.1043,+0.2792]       +0.2478 [+0.1610,+0.3598]   keep
+  vol_slope                      +0.2621 [+0.0675,+0.4879]       +0.1185 [-0.0567,+0.3055]   keep
+  sandwich                       +0.0000 [+0.0000,+0.0000]       +0.2228 [+0.1043,+0.3595]   keep
+  off_mark                       +0.2890 [+0.1684,+0.3970]       +0.0000 [+0.0000,+0.0000]   keep
+  lone_share                     -0.0099 [-0.0399,+0.0163]       +0.0048 [-0.0106,+0.0169]   DROP
+  common_share                   -0.0505 [-0.1126,+0.0027]       +0.0719 [+0.0097,+0.1363]   keep
+  mkt_move                       +0.0888 [-0.0001,+0.1775]       +0.2252 [-0.0879,+0.5102]   DROP
+  vol_spike_mover                +0.3955 [+0.1137,+0.6410]       +0.1531 [-0.0152,+0.3286]   keep
+  vol_spike_ratio                +0.1703 [+0.0440,+0.3063]       -0.0196 [-0.0550,+0.0204]   keep
+  vadj_resid                     -0.0382 [-0.1182,+0.0458]       +0.0835 [-0.0304,+0.1983]   DROP
+  lagger_spread                  +0.0619 [+0.0022,+0.1186]       +0.0066 [-0.0287,+0.0464]   keep
+  mover_resid_z                  -0.0455 [-0.1720,+0.0730]       +0.0384 [-0.0595,+0.1274]   DROP
+  mover_ret                      -0.0036 [-0.0579,+0.0627]       -0.0185 [-0.0656,+0.0240]   DROP
+  triggers_past_rate             -0.0006 [-0.0075,+0.0073]       +0.0000 [+0.0000,+0.0000]   DROP
+  triggers_past_30d              -0.0120 [-0.0546,+0.0352]       +0.0012 [-0.0156,+0.0195]   DROP
+  breadth (a, b, ratio)          +0.0368 [-0.1480,+0.2130]       -0.0213 [-0.1463,+0.0836]   DROP
+  market_breadth                 -0.0181 [-0.1295,+0.0863]       -0.0008 [-0.0826,+0.0701]   DROP
+  abs_z                          +1.8274 [+1.3728,+2.1706]       +0.8034 [+0.4985,+1.0668]   keep (always)
+  beta                           -0.0276 [-0.0602,-0.0002]       +0.1336 [+0.0729,+0.2002]   keep
+  r2                             +0.0754 [+0.0062,+0.1541]       +0.0251 [-0.0131,+0.0690]   keep
+  sigma                          +0.3155 [+0.1064,+0.5198]       +0.0595 [-0.0050,+0.1311]   keep
+  hour                           -0.0033 [-0.1433,+0.1342]       -0.0235 [-0.1469,+0.1052]   DROP
+  weekday                        +0.1624 [+0.0304,+0.3122]       +0.2184 [+0.0753,+0.3705]   keep
+  KEPT 14 groups (24 columns): vol_48, vratio, vol_slope, sandwich, off_mark, common_share, vol_spike_mover, vol_spike_ratio, lagger_spread, abs_z, beta, r2, sigma, weekday
+  DROPPED 10 groups: lone_share, mkt_move, vadj_resid, mover_resid_z, mover_ret, triggers_past_rate, triggers_past_30d, breadth (a, b, ratio), market_breadth, hour
+  [30s]
+  basis_rel_move_diff_2 identical to basis_move_diff_2: True -> dropped
+  basis_rel_move_diff_6 identical to basis_move_diff_6: True -> dropped
+
+  Step 2 features missing -> TRAIN median: basis_now_dom 153;  basis_now_oth 153;  basis_rel_now_dom 153;  basis_rel_now_oth 153;  basis_move_dom_2 81;  basis_rel_move_dom_2 81;  index_share_dom_2 308;  basis_move_diff_2 81;  index_share_diff_2 871;  basis_move_dom_6 153;  basis_rel_move_dom_6 153;  index_share_dom_6 255;  basis_move_diff_6 153;  index_share_diff_6 606;  impact_per_vol 387;  wick_reject 155;  retrace_started 158;  spike_persistence 155;  mins_since_peak 155;  coinc_other 155;  coinc_btc 155;  signed_breadth_gap 153;  breadth_change_1h 153;  breadth_change_4h 153
+
+========================================================================================================================
+STEP 3 -- MODELS (train; every setting on val by log loss; trees gbdt, lr 0.05, min_data_in_leaf over (100, 400, 1000, 2000))
+========================================================================================================================
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+  kept L1            val log loss 0.50196   C 0.1, nonzero 22 of 24
+  kept d1            val log loss 0.50401   min_data_in_leaf 1000, rounds 1033; trees 1033, depth max 1 (mean 1.00), leaves max 2 (mean 2.0)   [35s]
+  kept d2            val log loss 0.50328   min_data_in_leaf 400, rounds 375; trees 375, depth max 2 (mean 2.00), leaves max 4 (mean 3.9)   [36s]
+  kept d3            val log loss 0.50375   min_data_in_leaf 1000, rounds 144; trees 144, depth max 3 (mean 3.00), leaves max 8 (mean 6.4)   [38s]
+  kept d4            val log loss 0.50326   min_data_in_leaf 1000, rounds 128; trees 128, depth max 4 (mean 4.00), leaves max 14 (mean 9.3)   [39s]
+  kept d6            val log loss 0.50306   min_data_in_leaf 1000, rounds 88; trees 88, depth max 6 (mean 5.94), leaves max 19 (mean 14.4)   [41s]
+  -> kept is represented by kept L1 (lowest val log loss)
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+  kept+new L1        val log loss 0.50010   C 0.1, nonzero 44 of 50
+  kept+new d1        val log loss 0.50222   min_data_in_leaf 100, rounds 813; trees 813, depth max 1 (mean 1.00), leaves max 2 (mean 2.0)   [55s]
+  kept+new d2        val log loss 0.50206   min_data_in_leaf 100, rounds 424; trees 424, depth max 2 (mean 2.00), leaves max 4 (mean 3.9)   [57s]
+  kept+new d3        val log loss 0.50285   min_data_in_leaf 100, rounds 154; trees 154, depth max 3 (mean 3.00), leaves max 8 (mean 7.4)   [59s]
+  kept+new d4        val log loss 0.50241   min_data_in_leaf 100, rounds 125; trees 125, depth max 4 (mean 4.00), leaves max 16 (mean 13.2)   [61s]
+  kept+new d6        val log loss 0.50330   min_data_in_leaf 100, rounds 83; trees 83, depth max 6 (mean 6.00), leaves max 53 (mean 35.3)   [63s]
+  -> kept+new is represented by kept+new L1 (lowest val log loss)
+
+========================================================================================================================
+STEP 4 -- SCORING, held out only
+========================================================================================================================
+  HO1: n 8,200, reverters 1,995 (0.2433)
+    model                    catch 50%: flag / hit       catch 80%: flag / hit       catch 90%: flag / hit  top20 hit     AUC
+    random                           0.500 / 0.243               0.800 / 0.243               0.900 / 0.243      0.243   0.500
+    vol-only                         0.350 / 0.348               0.656 / 0.297               0.794 / 0.276      0.378  0.6483
+    kept L1                          0.346 / 0.352               0.648 / 0.301               0.788 / 0.278      0.387  0.6544  <- kept
+    kept d1                          0.346 / 0.351               0.655 / 0.297               0.787 / 0.278      0.387  0.6524
+    kept d2                          0.346 / 0.352               0.652 / 0.298               0.783 / 0.280      0.390  0.6512
+    kept d3                          0.345 / 0.352               0.640 / 0.304               0.780 / 0.281      0.389  0.6556
+    kept d4                          0.345 / 0.352               0.642 / 0.303               0.777 / 0.282      0.385  0.6551
+    kept d6                          0.337 / 0.361               0.650 / 0.300               0.779 / 0.281      0.389  0.6577
+    kept+new L1                      0.335 / 0.363               0.645 / 0.302               0.773 / 0.283      0.398  0.6610  <- kept+new
+    kept+new d1                      0.337 / 0.361               0.645 / 0.302               0.780 / 0.281      0.398  0.6625
+    kept+new d2                      0.333 / 0.366               0.643 / 0.303               0.781 / 0.280      0.401  0.6611
+    kept+new d3                      0.335 / 0.363               0.633 / 0.307               0.777 / 0.282      0.404  0.6635
+    kept+new d4                      0.335 / 0.363               0.641 / 0.304               0.778 / 0.282      0.403  0.6632
+    kept+new d6                      0.332 / 0.366               0.640 / 0.304               0.773 / 0.283      0.395  0.6633
+
+  HO2: n 9,864, reverters 2,419 (0.2452)
+    model                    catch 50%: flag / hit       catch 80%: flag / hit       catch 90%: flag / hit  top20 hit     AUC
+    random                           0.500 / 0.245               0.800 / 0.245               0.900 / 0.245      0.245   0.500
+    vol-only                         0.334 / 0.367               0.639 / 0.307               0.786 / 0.281      0.395  0.6582
+    kept L1                          0.326 / 0.376               0.636 / 0.309               0.782 / 0.282      0.422  0.6699  <- kept
+    kept d1                          0.329 / 0.373               0.632 / 0.310               0.787 / 0.280      0.421  0.6687
+    kept d2                          0.329 / 0.373               0.639 / 0.307               0.787 / 0.281      0.429  0.6685
+    kept d3                          0.328 / 0.374               0.641 / 0.306               0.788 / 0.280      0.422  0.6674
+    kept d4                          0.329 / 0.372               0.637 / 0.308               0.787 / 0.281      0.421  0.6690
+    kept d6                          0.328 / 0.374               0.631 / 0.311               0.783 / 0.282      0.426  0.6706
+    kept+new L1                      0.330 / 0.372               0.633 / 0.310               0.779 / 0.284      0.416  0.6694  <- kept+new
+    kept+new d1                      0.335 / 0.366               0.633 / 0.310               0.779 / 0.283      0.411  0.6651
+    kept+new d2                      0.329 / 0.373               0.637 / 0.308               0.780 / 0.283      0.413  0.6643
+    kept+new d3                      0.337 / 0.364               0.635 / 0.309               0.775 / 0.285      0.406  0.6654
+    kept+new d4                      0.333 / 0.368               0.635 / 0.309               0.780 / 0.283      0.413  0.6650
+    kept+new d6                      0.333 / 0.369               0.636 / 0.308               0.777 / 0.284      0.403  0.6628
+
+  PAIRED, day-clustered 95% (A minus B). flag80: - = A needs fewer flags; top20: + = A better
+    kept+new - kept       (kept+new L1 vs kept L1)
+      HO1 flag80 -0.0030 [-0.0165,+0.0095]   HO1 top20 +0.0110 [-0.0052,+0.0292]   HO2 flag80 -0.0027 [-0.0154,+0.0110]   HO2 top20 -0.0061 [-0.0134,+0.0041] 
+    kept+new - vol-only   (kept+new L1 vs vol-only)
+      HO1 flag80 -0.0117 [-0.0316,+0.0074]   HO1 top20 +0.0201 [-0.0003,+0.0403]   HO2 flag80 -0.0058 [-0.0343,+0.0168]   HO2 top20 +0.0203 [+0.0075,+0.0315]*
+    kept - vol-only       (kept L1 vs vol-only)
+      HO1 flag80 -0.0087 [-0.0276,+0.0092]   HO1 top20 +0.0091 [-0.0094,+0.0247]   HO2 flag80 -0.0030 [-0.0308,+0.0116]   HO2 top20 +0.0264 [+0.0134,+0.0377]*
+    (* = A significantly better, ! = A significantly worse)
+
+  DEPTH CURVE, kept+new (flag share for an 80% catch / top-20% hit rate)
+    HO1  L1 0.645/0.398   d1 0.645/0.398   d2 0.643/0.401   d3 0.633/0.404   d4 0.641/0.403   d6 0.640/0.395
+    HO2  L1 0.633/0.416   d1 0.633/0.411   d2 0.637/0.413   d3 0.635/0.406   d4 0.635/0.413   d6 0.636/0.403
+
+========================================================================================================================
+IMPORTANCE, held out, the kept+new representative (kept+new L1); 20 shuffles; log-loss skill points lost; day-clustered 95% per half
+========================================================================================================================
+  GROUPS (Step 2 families as one group each; + = interval wholly above zero)
+    vol_48                    held out +12.9873 [+12.0194,+14.0124]+   HO1 +12.3852 [+11.0602,+13.6873]+   HO2 +13.4858 [+12.1223,+14.9390]+
+    abs_z                     held out +2.0063 [+1.6101,+2.4229]+   HO1 +1.5476 [+0.9604,+2.1283]+   HO2 +2.3861 [+1.8916,+2.9106]+
+    vol_spike_mover           held out +0.9575 [+0.6345,+1.2695]+   HO1 +1.2184 [+0.7828,+1.6064]+   HO2 +0.7415 [+0.3474,+1.2905]+
+    vol_spike_ratio           held out +0.3446 [+0.2031,+0.4671]+   HO1 +0.2331 [+0.0286,+0.4540]+   HO2 +0.4370 [+0.2570,+0.6108]+
+    vol_slope                 held out +0.3439 [+0.1119,+0.5704]+   HO1 +0.5399 [+0.1872,+0.8924]+   HO2 +0.1817 [-0.0845,+0.4932] 
+    off_mark                  held out +0.1810 [+0.0569,+0.2835]+   HO1 +0.2176 [+0.0429,+0.4237]+   HO2 +0.1507 [-0.0009,+0.2851] 
+    spike_detail [NEW]        held out +0.1665 [-0.0469,+0.3729]    HO1 +0.3272 [+0.0888,+0.6148]+   HO2 +0.0335 [-0.2311,+0.3258] 
+    signed_breadth [NEW]      held out +0.1622 [-0.0055,+0.3246]    HO1 +0.2714 [+0.0772,+0.4661]+   HO2 +0.0718 [-0.1556,+0.3271] 
+    sigma                     held out +0.1521 [+0.0130,+0.3296]+   HO1 +0.1750 [-0.0869,+0.4414]    HO2 +0.1331 [-0.0715,+0.3702] 
+    vratio                    held out +0.1002 [+0.0278,+0.1947]+   HO1 +0.0928 [-0.0128,+0.2201]    HO2 +0.1063 [-0.0157,+0.2473] 
+    perp_index [NEW]          held out +0.0771 [+0.0089,+0.1449]+   HO1 +0.1219 [+0.0383,+0.2059]+   HO2 +0.0400 [-0.0646,+0.1571] 
+    weekday                   held out +0.0410 [-0.0850,+0.1893]    HO1 -0.0089 [-0.1373,+0.1334]    HO2 +0.0823 [-0.1142,+0.3130] 
+    r2                        held out +0.0287 [-0.0365,+0.0852]    HO1 -0.0427 [-0.1296,+0.0405]    HO2 +0.0879 [+0.0246,+0.1486]+
+    lagger_spread             held out +0.0085 [-0.0252,+0.0447]    HO1 -0.0052 [-0.0588,+0.0476]    HO2 +0.0198 [-0.0242,+0.0567] 
+    sandwich                  held out +0.0005 [-0.0013,+0.0026]    HO1 +0.0004 [-0.0022,+0.0030]    HO2 +0.0007 [-0.0029,+0.0033] 
+    beta                      held out -0.0145 [-0.0371,+0.0079]    HO1 -0.0297 [-0.0712,+0.0030]    HO2 -0.0019 [-0.0299,+0.0251] 
+    common_share              held out -0.0210 [-0.2191,+0.1897]    HO1 +0.1046 [-0.1256,+0.2906]    HO2 -0.1249 [-0.3953,+0.1961] 
+  STEP 2 MEMBERS, each alone
+   perp_index
+    basis_now_dom             held out +0.0000 [+0.0000,+0.0000]    HO1 +0.0000 [+0.0000,+0.0000]    HO2 +0.0000 [+0.0000,+0.0000] 
+    basis_now_oth             held out +0.0082 [-0.0066,+0.0266]    HO1 +0.0083 [-0.0129,+0.0306]    HO2 +0.0081 [-0.0191,+0.0350] 
+    basis_rel_now_dom         held out +0.0036 [-0.0135,+0.0220]    HO1 -0.0073 [-0.0298,+0.0135]    HO2 +0.0127 [-0.0089,+0.0339] 
+    basis_rel_now_oth         held out +0.0005 [-0.0026,+0.0042]    HO1 -0.0000 [-0.0044,+0.0048]    HO2 +0.0009 [-0.0038,+0.0061] 
+    basis_move_dom_2          held out +0.0000 [+0.0000,+0.0000]    HO1 +0.0000 [+0.0000,+0.0000]    HO2 +0.0000 [+0.0000,+0.0000] 
+    basis_rel_move_dom_2      held out +0.0000 [+0.0000,+0.0000]    HO1 +0.0000 [+0.0000,+0.0000]    HO2 +0.0000 [+0.0000,+0.0000] 
+    index_share_dom_2         held out +0.0026 [-0.0191,+0.0219]    HO1 +0.0006 [-0.0239,+0.0263]    HO2 +0.0043 [-0.0271,+0.0414] 
+    basis_move_diff_2         held out +0.0000 [+0.0000,+0.0000]    HO1 +0.0000 [+0.0000,+0.0000]    HO2 +0.0000 [+0.0000,+0.0000] 
+    index_share_diff_2        held out +0.0051 [-0.0196,+0.0280]    HO1 +0.0192 [-0.0156,+0.0513]    HO2 -0.0065 [-0.0404,+0.0384] 
+    basis_move_dom_6          held out +0.0000 [+0.0000,+0.0000]    HO1 +0.0000 [+0.0000,+0.0000]    HO2 +0.0000 [+0.0000,+0.0000] 
+    basis_rel_move_dom_6      held out +0.0000 [+0.0000,+0.0000]    HO1 +0.0000 [+0.0000,+0.0000]    HO2 +0.0000 [+0.0000,+0.0000] 
+    index_share_dom_6         held out +0.0087 [-0.0116,+0.0301]    HO1 +0.0105 [-0.0176,+0.0395]    HO2 +0.0072 [-0.0192,+0.0409] 
+    basis_move_diff_6         held out +0.0109 [-0.0067,+0.0318]    HO1 +0.0308 [+0.0101,+0.0557]+   HO2 -0.0056 [-0.0247,+0.0139] 
+    index_share_diff_6        held out +0.0157 [-0.0130,+0.0451]    HO1 +0.0373 [-0.0091,+0.0826]    HO2 -0.0022 [-0.0479,+0.0330] 
+   spike_detail
+    impact_per_vol            held out -0.0077 [-0.0302,+0.0148]    HO1 -0.0106 [-0.0442,+0.0182]    HO2 -0.0053 [-0.0370,+0.0270] 
+    wick_reject               held out +0.0099 [-0.0042,+0.0248]    HO1 +0.0169 [-0.0029,+0.0340]    HO2 +0.0041 [-0.0153,+0.0215] 
+    retrace_started           held out +0.0262 [-0.0530,+0.1358]    HO1 +0.0881 [-0.0621,+0.2694]    HO2 -0.0250 [-0.1015,+0.0677] 
+    spike_persistence         held out +0.0388 [-0.0178,+0.1021]    HO1 +0.0046 [-0.0724,+0.0745]    HO2 +0.0672 [-0.0351,+0.1549] 
+    mins_since_peak           held out -0.0026 [-0.0059,+0.0005]    HO1 -0.0007 [-0.0061,+0.0043]    HO2 -0.0041 [-0.0096,+0.0001] 
+    coinc_other               held out +0.0016 [-0.0416,+0.0458]    HO1 +0.0355 [-0.0205,+0.0792]    HO2 -0.0265 [-0.0864,+0.0457] 
+    coinc_btc                 held out +0.0245 [-0.1068,+0.1351]    HO1 +0.0993 [-0.0277,+0.2097]    HO2 -0.0375 [-0.1868,+0.1438] 
+   signed_breadth
+    signed_breadth_a          held out +0.1307 [+0.0302,+0.2278]+   HO1 +0.0004 [-0.1328,+0.1296]    HO2 +0.2385 [+0.1168,+0.3615]+
+    signed_breadth_b          held out +0.0682 [+0.0033,+0.1512]+   HO1 +0.1010 [-0.0230,+0.2224]    HO2 +0.0412 [-0.0412,+0.1242] 
+    signed_breadth_gap        held out +0.0206 [-0.0798,+0.1261]    HO1 +0.1403 [+0.0079,+0.2680]+   HO2 -0.0785 [-0.2255,+0.0912] 
+    breadth_change_1h         held out +0.0243 [-0.0446,+0.0889]    HO1 +0.0801 [-0.0041,+0.1778]    HO2 -0.0219 [-0.1046,+0.0701] 
+    breadth_change_4h         held out +0.0295 [-0.0266,+0.0798]    HO1 +0.0831 [+0.0072,+0.1685]+   HO2 -0.0149 [-0.0815,+0.0559] 
+
+========================================================================================================================
+READING RULES
+========================================================================================================================
+  representatives: kept = kept L1, kept+new = kept+new L1
+  same-learner, reported, not gating: kept+new L1 - kept L1, flag80   HO1 -0.0030 [-0.0165,+0.0095]   HO2 -0.0027 [-0.0154,+0.0110]
+  sigma survived the prune: True 
+  NEW FEATURES HELP (kept+new - kept, flag80 below zero in both halves): NO  (clears in: neither)
+  SIGNAL OVERALL (kept+new - vol-only, both halves): NO  (clears in: neither)
+  REGIME-DEPENDENT: none
+  FAMILY perp_index      clears in HO1 only (regime-dependent)
+  FAMILY spike_detail    clears in HO1 only (regime-dependent)
+  FAMILY signed_breadth  clears in HO1 only (regime-dependent)
+  Nothing written to the registry or the live system. No stop. No funding data.
+  [75s]
+========================================================================================================================

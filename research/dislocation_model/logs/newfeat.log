@@ -1,0 +1,63 @@
+================================================================================================================
+NEW FEATURES -- hour-of-day and hedge quality, tested separately
+================================================================================================================
+  population: the matched 53,757-episode set
+
+================================================================================================================
+BUILD -- with checks
+================================================================================================================
+  HOUR   entry minutes present: [0, 30];  distinct hours 48;  max |sin^2+cos^2-1| 2.220e-16
+         episodes per UTC hour: min 1,611, max 3,421
+  r2     NaN 0, non-finite 0;  min 0.0000  median 0.2740  max 0.9973
+  |beta| NaN 0, non-finite 0;  min 0.0226  median 1.2559  max 106.6191
+  Spearman(r2, |beta|) = -0.1069
+  GEOMETRY  300 random episodes recomputed from the panel at the entry bar (rolling_spread_stats, 96-bar window), max relative diff:
+            beta 0.00e+00  alpha 0.00e+00  mu 0.00e+00  sigma 0.00e+00  r2 0.00e+00
+            r2 reproduces with beta, alpha, mu and sigma: the same frozen entry-time geometry.
+  [WROTE] research/datasets/newfeat.npz
+
+[1m  ] 1-minute >= 30-minute, every episode/direction/horizon: 0 violations
+[1m  ] deepest shortfall -9.374e-07; as a fraction of the float32 reference's precision (8.0 ulps): 0.062 (must be < 1)
+  baselines: MFE match1m 9e332d92a294 (vol_48), MAE match1m_mae_vol1m 5bd8d15af8c8 (vol_48_1m) -- both match
+
+================================================================================================================
+HOUR-OF-DAY -- baseline + hour_sin + hour_cos, QTREE, 10h, paired on identical rows
+================================================================================================================
+       [SPLIT] train 22,645 (<2026-05-01)   val 13,048   HELD OUT 18,064 (>=2026-07-18)
+[SPLIT] held-out used ONCE, for scoring only; iterations chosen on val
+  refitted QTREE MFE, five horizons   [73s]
+  refitted QTREE MAE, five horizons   [98s]
+
+  skill: + = candidate helps.  gap: - = better calibrated.
+  cell      measure      base   +cand  new - old          [95% CI]               cell
+  MFE 10h   skill %     +4.56   +4.34     -0.218   [-0.383,-0.046]    WORSE     LOSES
+            gap pp       2.45    2.48     +0.029   [-0.065,+0.105]         
+  MAE 10h   skill %     +2.77   +2.67     -0.104   [-0.338,+0.144]              HOLDS
+            gap pp       2.86    2.83     -0.029   [-0.145,+0.074]         
+
+  VERDICT HOUR-OF-DAY: MFE LOSES, MAE HOLDS -> MARGINAL. No cell improves. Stop; not propagated.
+
+================================================================================================================
+HEDGE-QUALITY -- baseline + r2 + abs_beta, QTREE, 10h, paired on identical rows
+================================================================================================================
+  refitted QTREE MFE, five horizons   [121s]
+  refitted QTREE MAE, five horizons   [145s]
+
+  skill: + = candidate helps.  gap: - = better calibrated.
+  cell      measure      base   +cand  new - old          [95% CI]               cell
+  MFE 10h   skill %     +4.56   +4.59     +0.034   [-0.076,+0.131]              HOLDS
+            gap pp       2.45    2.48     +0.021   [-0.036,+0.065]         
+  MAE 10h   skill %     +2.77   +2.61     -0.163   [-0.299,-0.013]    WORSE     LOSES
+            gap pp       2.86    3.05     +0.196   [+0.096,+0.299]    WORSE
+
+  VERDICT HEDGE-QUALITY: MFE HOLDS, MAE LOSES -> MARGINAL. No cell improves. Stop; not propagated.
+
+================================================================================================================
+DECISION -- rule fixed in the docstring before the run
+================================================================================================================
+  HOUR-OF-DAY     MARGINAL
+  HEDGE-QUALITY   MARGINAL
+  Levels are a later look at already-scored rows; the paired differences
+  are the new measurement. Nothing in the registry was written.
+  [145s]
+================================================================================================================

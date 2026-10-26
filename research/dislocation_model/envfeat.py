@@ -169,8 +169,15 @@ def _mark_on_grid(panel_index, tickers):
     return out.to_numpy(float)
 
 
-def build(verbose=True, flip=False):
+def build(verbose=True, flip=False, W=None, M=None):
     """Returns (X, NAMES, audit) where audit carries the per-row index bounds.
+
+    W and M default to disloc.npz's windows and disloc_meta.parquet. Passing
+    them computes the SAME five features for any other set of entries -- e.g.
+    backtest trades (meta_label.py) -- through this exact code, so there is one
+    definition of every feature. M needs bar_index, entry_time, ticker_a,
+    ticker_b, beta, sigma, z_at_entry; W the 336-bar sigma-unit window built as
+    mkdisloc builds it.
 
     flip=True negates the SPREAD everywhere -- the window, the within-bar bounds
     (whose hi and lo swap under negation) and the close -- which also flips every
@@ -181,9 +188,11 @@ def build(verbose=True, flip=False):
     """
     t0 = time.time()
     g = -1.0 if flip else 1.0
-    z = np.load(paths.DISLOC)
-    W = z["windows"].astype(np.float64)
-    M = pd.read_parquet(paths.META)
+    if W is None:
+        W = np.load(paths.DISLOC)["windows"]
+    W = np.asarray(W).astype(np.float64)
+    if M is None:
+        M = pd.read_parquet(paths.META)
     N = len(M)
 
     panel = universe_panel.drop_forming_bars(universe_panel.load_panel())

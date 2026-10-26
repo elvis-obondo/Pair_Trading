@@ -53,7 +53,7 @@ import pandas as pd
 from sklearn.ensemble import HistGradientBoostingRegressor, HistGradientBoostingClassifier
 from sklearn.metrics import roc_auc_score
 
-CUT = np.datetime64("2026-07-18")
+CUT = np.datetime64("2026-05-25")
 VAL_FRAC = 0.8
 N_BOOT = 300
 N_PERM = 15
@@ -169,21 +169,27 @@ def ci(sp, pred, y_test, classify, ref=None):
     return np.nanpercentile(out, 2.5), np.nanpercentile(out, 97.5)
 
 
-def permutation_null(X, y, sp, classify, n=N_PERM, seed=100):
+def permutation_null(X, y, sp, classify, n=N_PERM, seed=100, fitter=None):
     """Rerun the identical pipeline on shuffled targets.
 
     row-shuffle breaks everything; day-shuffle keeps the day clustering intact
     and is the one that matters. Returns {"row": array, "day": array}.
+
+    `fitter(X, y, sp, seed) -> (score, ...)` replaces the harness learner when
+    the model under test is not it (e.g. a logistic baseline), so every model
+    gets the SAME shuffles from this one null rather than a private copy.
     """
     X = np.asarray(X)
     y = np.asarray(y)
+    if fitter is None:
+        fitter = lambda X_, y_, sp_, seed: fit_predict(X_, y_, sp_, classify, seed=seed)
     fit_idx = np.flatnonzero(sp.fit)
     rows, days = [], []
     for k in range(n):
         r = np.random.default_rng(seed + k)
         yp = y.copy()
         yp[fit_idx] = y[r.permutation(fit_idx)]
-        rows.append(fit_predict(X, yp, sp, classify, seed=k)[0])
+        rows.append(fitter(X, yp, sp, k)[0])
 
         dmap = {d: v for d, v in zip(sp.fit_days, r.permutation(sp.fit_days))}
         yp2 = y.copy()
@@ -192,7 +198,7 @@ def permutation_null(X, y, sp, classify, n=N_PERM, seed=100):
             b = np.flatnonzero(sp.day == dmap[d])
             if len(a) and len(b):
                 yp2[a] = y[r.choice(b, len(a), replace=True)]
-        days.append(fit_predict(X, yp2, sp, classify, seed=k)[0])
+        days.append(fitter(X, yp2, sp, k)[0])
     return {"row": np.asarray(rows), "day": np.asarray(days)}
 
 

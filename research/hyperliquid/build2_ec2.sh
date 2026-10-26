@@ -78,7 +78,7 @@ EOF
        --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=hl-build2-$NAME}]" \
        --user-data "file://$UD" --query 'Instances[0].InstanceId' --output text)
   rm -f "$UD"
-  echo "launched $ID ($TYPE, spot) name=$NAME par=$PAR timer=${TIMER}min days=$DAYS"
+  echo "launched $ID ($TYPE, $([ "${ONDEMAND:-0}" = 1 ] && echo on-demand || echo spot)) name=$NAME par=$PAR timer=${TIMER}min days=$DAYS"
   ;;
 
 launch-d1)
@@ -125,7 +125,7 @@ EOF
        --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=hl-build2-$NAME}]" \
        --user-data "file://$UD" --query 'Instances[0].InstanceId' --output text)
   rm -f "$UD"
-  echo "launched $ID ($TYPE, spot) name=$NAME par=$PAR timer=${TIMER}min days=$FIRST..$LAST"
+  echo "launched $ID ($TYPE, $([ "${ONDEMAND:-0}" = 1 ] && echo on-demand || echo spot)) name=$NAME par=$PAR timer=${TIMER}min days=$FIRST..$LAST"
   ;;
 
 launch-resume)

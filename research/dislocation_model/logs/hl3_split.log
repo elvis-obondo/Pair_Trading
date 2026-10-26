@@ -1,0 +1,4 @@
+rows 60,004; CUT 2026-05-25: fit 41,941 (331 days), held out 18,063 (142 days)
+validation cut (last 20% of fit days) 2026-03-19: train 33,323, val 8,618
+HO1 = held-out days <= 2026-08-14: 9,057 rows, 82 days
+HO2 = days >= 2026-08-15 (HO_BOUNDARY): 9,006 rows, 60 days

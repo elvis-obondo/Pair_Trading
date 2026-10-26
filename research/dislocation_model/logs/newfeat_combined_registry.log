@@ -1,0 +1,370 @@
+================================================================================================================
+COMBINED, FULL REGISTRY (exploratory) -- 4 models x 5 horizons x 2 directions = 40 cells
+================================================================================================================
+  population: 53,757 episodes; newfeat.npz reused, stored columns vs a fresh read of meta: max diff 0.0e+00
+
+[1m  ] 1-minute >= 30-minute, every episode/direction/horizon: 0 violations
+[1m  ] deepest shortfall -9.374e-07; as a fraction of the float32 reference's precision (8.0 ulps): 0.062 (must be < 1)
+  baselines: MFE match1m 9e332d92a294 (vol_48), MAE match1m_mae_vol1m 5bd8d15af8c8 (vol_48_1m) -- both match
+
+       [SPLIT] train 22,645 (<2026-05-01)   val 13,048   HELD OUT 18,064 (>=2026-07-18)
+[SPLIT] held-out used ONCE, for scoring only; iterations chosen on val
+  fitted MFE 0.5h  all four models; rebuilt kNN/CQR match the registry (0e+00, 0e+00)   [100s]
+  fitted MFE 1h    all four models; rebuilt kNN/CQR match the registry (0e+00, 0e+00)   [181s]
+  fitted MFE 2h    all four models; rebuilt kNN/CQR match the registry (0e+00, 0e+00)   [260s]
+  fitted MFE 5h    all four models; rebuilt kNN/CQR match the registry (0e+00, 0e+00)   [345s]
+  fitted MFE 10h   all four models; rebuilt kNN/CQR match the registry (0e+00, 0e+00)   [427s]
+  fitted MAE 0.5h  all four models; rebuilt kNN/CQR match the registry (0e+00, 0e+00)   [523s]
+  fitted MAE 1h    all four models; rebuilt kNN/CQR match the registry (0e+00, 0e+00)   [609s]
+  fitted MAE 2h    all four models; rebuilt kNN/CQR match the registry (0e+00, 0e+00)   [699s]
+  fitted MAE 5h    all four models; rebuilt kNN/CQR match the registry (0e+00, 0e+00)   [780s]
+  fitted MAE 10h   all four models; rebuilt kNN/CQR match the registry (0e+00, 0e+00)   [865s]
+
+  QTREE reproduces the 3-horizon COMBINED deltas at all six cells.
+  Linear QR LP fallbacks (alpha > 0): 0
+
+================================================================================================================
+PAIRED vs each model's own 5-feature baseline -- skill: + helps; gap: - better
+================================================================================================================
+  Linear QR
+    cell       skill base  +four  new-old          [95% CI]        gap base  +four  new-old          [95% CI]          outcome  vs prediction
+    MFE 0.5h        +4.39  +4.39   -0.004   [-0.106,+0.105]            0.75   0.75   -0.002   [-0.081,+0.057]            HOLDS  consistent
+    MFE 1h          +4.69  +4.64   -0.047   [-0.147,+0.044]            1.06   1.02   -0.034   [-0.128,+0.044]            HOLDS  consistent
+    MFE 2h          +5.23  +5.16   -0.068   [-0.199,+0.055]            1.42   1.50   +0.081   [-0.050,+0.160]            HOLDS  consistent
+    MFE 5h          +4.88  +4.79   -0.095   [-0.243,+0.057]            2.34   2.28   -0.062   [-0.141,+0.036]            HOLDS  consistent
+    MFE 10h         +4.94  +4.82   -0.115   [-0.318,+0.093]            2.41   2.33   -0.087   [-0.161,+0.086]            HOLDS  consistent
+    MAE 0.5h        +2.39  +2.40   +0.006   [-0.069,+0.088]            2.16   2.19   +0.032   [-0.029,+0.085]            HOLDS  consistent
+    MAE 1h          +2.25  +2.22   -0.037   [-0.107,+0.027]            2.45   2.49   +0.041   [-0.028,+0.099]            HOLDS  consistent
+    MAE 2h          +2.32  +2.27   -0.045   [-0.106,+0.026]            2.76   2.74   -0.020   [-0.089,+0.048]            HOLDS  consistent
+    MAE 5h          +2.74  +2.67   -0.077   [-0.219,+0.070]            3.04   3.10   +0.056   [-0.027,+0.132]            HOLDS  consistent
+    MAE 10h         +3.21  +3.24   +0.029   [-0.125,+0.209]            3.03   3.17   +0.140   [+0.053,+0.228]  WORSE     LOSES  consistent
+
+  QTREE
+    cell       skill base  +four  new-old          [95% CI]        gap base  +four  new-old          [95% CI]          outcome  vs prediction
+    MFE 0.5h        +4.55  +4.74   +0.185   [+0.013,+0.374] better     0.62   0.58   -0.038   [-0.168,+0.105]         IMPROVES  NEW -- extra scrutiny
+    MFE 1h          +4.88  +5.10   +0.219   [-0.066,+0.502]            1.10   1.04   -0.062   [-0.167,+0.049]            HOLDS  as predicted
+    MFE 2h          +4.87  +4.94   +0.071   [-0.210,+0.332]            1.48   1.48   +0.008   [-0.141,+0.145]            HOLDS  consistent
+    MFE 5h          +4.50  +4.54   +0.033   [-0.130,+0.189]            2.37   2.43   +0.062   [-0.035,+0.153]            HOLDS  DIFFERENT (worse than IMPROVES) -- reproduced
+    MFE 10h         +4.56  +4.37   -0.191   [-0.379,-0.014]  WORSE     2.45   2.51   +0.059   [-0.037,+0.127]            LOSES  as predicted
+    MAE 0.5h        +1.93  +1.90   -0.023   [-0.364,+0.307]            1.99   1.92   -0.064   [-0.120,+0.069]            HOLDS  consistent
+    MAE 1h          +1.70  +1.45   -0.247   [-0.709,+0.155]            2.23   2.24   +0.006   [-0.067,+0.168]            HOLDS  DIFFERENT (better than LOSES) -- reproduced
+    MAE 2h          +1.88  +1.66   -0.221   [-0.676,+0.130]            2.52   2.41   -0.105   [-0.190,+0.087]            HOLDS  consistent
+    MAE 5h          +2.31  +2.31   -0.002   [-0.321,+0.302]            2.84   2.67   -0.164   [-0.273,-0.034] better  IMPROVES  DIFFERENT (better than LOSES) -- reproduced
+    MAE 10h         +2.77  +2.66   -0.109   [-0.357,+0.108]            2.86   2.97   +0.115   [+0.026,+0.228]  WORSE     LOSES  as predicted
+
+  kNN
+    cell       skill base  +four  new-old          [95% CI]        gap base  +four  new-old          [95% CI]          outcome  vs prediction
+    MFE 0.5h        +4.39  +3.85   -0.535   [-0.904,-0.130]  WORSE     0.69   0.88   +0.190   [-0.091,+0.400]            LOSES  consistent
+    MFE 1h          +4.60  +3.93   -0.671   [-1.065,-0.284]  WORSE     0.97   1.22   +0.249   [+0.053,+0.489]  WORSE     LOSES  consistent
+    MFE 2h          +4.68  +4.13   -0.546   [-1.009,-0.093]  WORSE     1.47   1.75   +0.286   [+0.117,+0.451]  WORSE     LOSES  consistent
+    MFE 5h          +4.28  +3.95   -0.330   [-0.680,+0.035]            2.40   2.61   +0.208   [+0.074,+0.366]  WORSE     LOSES  consistent
+    MFE 10h         +4.23  +3.79   -0.438   [-0.778,-0.100]  WORSE     2.48   2.61   +0.126   [-0.019,+0.270]            LOSES  consistent
+    MAE 0.5h        +1.67  +1.25   -0.419   [-0.750,-0.084]  WORSE     2.21   2.00   -0.209   [-0.377,-0.037] better     LOSES  consistent
+    MAE 1h          +1.48  +0.98   -0.498   [-0.785,-0.234]  WORSE     2.42   2.25   -0.171   [-0.338,+0.048]            LOSES  consistent
+    MAE 2h          +1.65  +1.33   -0.319   [-0.664,+0.018]            2.86   2.63   -0.226   [-0.413,-0.029] better  IMPROVES  NEW -- extra scrutiny
+    MAE 5h          +2.04  +1.88   -0.161   [-0.569,+0.300]            3.08   2.92   -0.164   [-0.394,+0.042]            HOLDS  consistent
+    MAE 10h         +2.48  +2.32   -0.163   [-0.701,+0.326]            3.20   2.99   -0.208   [-0.426,-0.010] better  IMPROVES  NEW -- extra scrutiny
+
+  CQR
+    cell       skill base  +four  new-old          [95% CI]        gap base  +four  new-old          [95% CI]          outcome  vs prediction
+    MFE 0.5h        +4.55  +4.73   +0.181   [+0.017,+0.367] better     0.68   0.63   -0.042   [-0.111,+0.106]         IMPROVES  NEW -- extra scrutiny
+    MFE 1h          +4.92  +5.12   +0.205   [-0.078,+0.498]            0.80   0.91   +0.109   [-0.211,+0.199]            HOLDS  consistent
+    MFE 2h          +4.92  +4.98   +0.062   [-0.224,+0.324]            1.18   1.25   +0.069   [-0.092,+0.172]            HOLDS  consistent
+    MFE 5h          +4.62  +4.65   +0.033   [-0.128,+0.186]            1.89   1.95   +0.062   [-0.047,+0.129]            HOLDS  consistent
+    MFE 10h         +4.70  +4.49   -0.205   [-0.390,-0.027]  WORSE     1.86   2.01   +0.149   [+0.049,+0.227]  WORSE     LOSES  consistent
+    MAE 0.5h        +1.96  +1.93   -0.030   [-0.377,+0.303]            1.99   2.03   +0.045   [-0.052,+0.170]            HOLDS  consistent
+    MAE 1h          +1.78  +1.54   -0.247   [-0.708,+0.156]            2.02   1.97   -0.051   [-0.123,+0.109]            HOLDS  consistent
+    MAE 2h          +1.98  +1.76   -0.217   [-0.671,+0.138]            2.41   2.21   -0.200   [-0.307,+0.008]            HOLDS  consistent
+    MAE 5h          +2.46  +2.46   +0.001   [-0.312,+0.303]            2.55   2.31   -0.249   [-0.359,-0.129] better  IMPROVES  NEW -- extra scrutiny
+    MAE 10h         +2.92  +2.82   -0.101   [-0.349,+0.118]            2.38   2.43   +0.055   [-0.047,+0.160]            HOLDS  consistent
+
+================================================================================================================
+COUNTS
+================================================================================================================
+  model      dir   IMPROVES  HOLDS  LOSES  skill+  skill-  gap+  gap-
+  Linear QR  MFE          0      5      0       0       0     0     0
+  Linear QR  MAE          0      4      1       0       0     0     1
+  QTREE      MFE          1      3      1       1       1     0     0
+  QTREE      MAE          1      3      1       0       0     1     1
+  kNN        MFE          0      0      5       0       4     0     3
+  kNN        MAE          2      1      2       0       2     3     0
+  CQR        MFE          1      3      1       1       1     0     1
+  CQR        MAE          1      4      0       0       0     1     0
+  ALL 40                  6     23     11       2       8     5     6
+  (skill+/gap+ = significantly better; skill-/gap- = significantly worse.
+   By chance alone, about 2 of 80 tests would fire on each side.)
+
+================================================================================================================
+PERMUTATION IMPORTANCE -- models showing movement: Linear QR, QTREE, kNN, CQR
+skill points vs climatology, held out, 20 shuffles, day-clustered 95% interval,
+per-horizon predictions before horizon enforcement; at each moved cell only
+================================================================================================================
+  Linear QR MAE 10h (LOSES; refit skill +3.24%, pre-horizon-enforcement)
+    vol_48_1m       +5.920  [+5.218,+6.738]
+    vratio          +0.215  [+0.121,+0.304]
+    vol_slope       +0.674  [+0.246,+1.112]
+    sandwich        -0.013  [-0.115,+0.092]
+    off_mark        -0.002  [-0.011,+0.009]
+    hour_sin        +0.058  [+0.014,+0.104]  <- new
+    hour_cos        +0.116  [+0.007,+0.232]  <- new
+    r2              -0.005  [-0.067,+0.048]  <- new
+    abs_beta        +0.080  [+0.012,+0.152]  <- new
+    hour pair       +0.160  [+0.044,+0.272]  <- new
+    hedge pair      +0.088  [-0.011,+0.189]  <- new
+    all four new    +0.230  [+0.086,+0.400]  <- new
+    old five        +5.645  [+4.840,+6.567]
+    [876s]
+  QTREE MFE 0.5h (IMPROVES; refit skill +4.74%, pre-horizon-enforcement)
+    vol_48          +2.927  [+2.613,+3.254]
+    vratio          +0.778  [+0.484,+1.147]
+    vol_slope       +4.284  [+3.397,+5.307]
+    sandwich        +0.595  [+0.378,+0.823]
+    off_mark        +0.002  [-0.031,+0.028]
+    hour_sin        +0.133  [+0.041,+0.226]  <- new
+    hour_cos        +0.270  [+0.122,+0.423]  <- new
+    r2              +0.002  [-0.032,+0.033]  <- new
+    abs_beta        -0.044  [-0.077,-0.004]  <- new
+    hour pair       +0.298  [+0.127,+0.456]  <- new
+    hedge pair      -0.041  [-0.086,+0.011]  <- new
+    all four new    +0.301  [+0.135,+0.475]  <- new
+    old five        +9.021  [+8.039,+10.051]
+    [891s]
+  QTREE MFE 10h (LOSES; refit skill +4.37%, pre-horizon-enforcement)
+    vol_48          +4.646  [+4.033,+5.178]
+    vratio          +0.189  [+0.058,+0.315]
+    vol_slope       +1.089  [+0.761,+1.485]
+    sandwich        +0.974  [+0.737,+1.201]
+    off_mark        +0.018  [-0.017,+0.061]
+    hour_sin        +0.023  [-0.105,+0.136]  <- new
+    hour_cos        -0.097  [-0.179,-0.014]  <- new
+    r2              +0.002  [-0.071,+0.085]  <- new
+    abs_beta        +0.059  [+0.023,+0.093]  <- new
+    hour pair       -0.109  [-0.258,+0.046]  <- new
+    hedge pair      +0.075  [-0.022,+0.157]  <- new
+    all four new    -0.042  [-0.211,+0.123]  <- new
+    old five        +8.373  [+7.552,+9.236]
+    [905s]
+  QTREE MAE 5h (IMPROVES; refit skill +2.41%, pre-horizon-enforcement)
+    vol_48_1m       +3.507  [+3.023,+4.025]
+    vratio          +0.106  [-0.008,+0.246]
+    vol_slope       +0.839  [+0.453,+1.198]
+    sandwich        +0.092  [+0.001,+0.176]
+    off_mark        +0.020  [-0.023,+0.059]
+    hour_sin        +0.453  [+0.296,+0.618]  <- new
+    hour_cos        +0.764  [+0.442,+1.021]  <- new
+    r2              +0.051  [-0.001,+0.103]  <- new
+    abs_beta        +0.054  [+0.012,+0.102]  <- new
+    hour pair       +0.214  [-0.062,+0.468]  <- new
+    hedge pair      +0.099  [+0.028,+0.177]  <- new
+    all four new    +0.309  [+0.048,+0.584]  <- new
+    old five        +4.571  [+3.969,+5.208]
+    [919s]
+  QTREE MAE 10h (LOSES; refit skill +2.70%, pre-horizon-enforcement)
+    vol_48_1m       +4.135  [+3.593,+4.798]
+    vratio          +0.158  [+0.087,+0.219]
+    vol_slope       +0.571  [+0.195,+0.966]
+    sandwich        +0.105  [+0.049,+0.159]
+    off_mark        +0.037  [-0.000,+0.075]
+    hour_sin        +0.407  [+0.245,+0.554]  <- new
+    hour_cos        +0.525  [+0.317,+0.756]  <- new
+    r2              +0.054  [-0.015,+0.121]  <- new
+    abs_beta        +0.137  [+0.079,+0.191]  <- new
+    hour pair       +0.125  [-0.087,+0.321]  <- new
+    hedge pair      +0.184  [+0.096,+0.274]  <- new
+    all four new    +0.294  [+0.073,+0.504]  <- new
+    old five        +4.730  [+4.139,+5.437]
+    [931s]
+  kNN MFE 0.5h (LOSES; refit skill +3.85%, pre-horizon-enforcement)
+    vol_48          +2.091  [+1.802,+2.369]
+    vratio          +0.900  [+0.646,+1.188]
+    vol_slope       +2.517  [+1.785,+3.259]
+    sandwich        +0.297  [+0.168,+0.429]
+    off_mark        +0.020  [-0.088,+0.130]
+    hour_sin        -0.027  [-0.210,+0.174]  <- new
+    hour_cos        +0.187  [-0.097,+0.460]  <- new
+    r2              -0.014  [-0.147,+0.103]  <- new
+    abs_beta        -0.068  [-0.156,+0.028]  <- new
+    hour pair       +0.170  [-0.123,+0.510]  <- new
+    hedge pair      -0.073  [-0.208,+0.065]  <- new
+    all four new    +0.216  [-0.076,+0.553]  <- new
+    old five        +7.043  [+6.271,+7.936]
+    [1686s]
+  kNN MFE 1h (LOSES; refit skill +3.93%, pre-horizon-enforcement)
+    vol_48          +2.331  [+2.048,+2.603]
+    vratio          +0.758  [+0.480,+1.070]
+    vol_slope       +2.224  [+1.392,+2.965]
+    sandwich        +0.282  [+0.144,+0.449]
+    off_mark        +0.041  [-0.068,+0.136]
+    hour_sin        -0.011  [-0.156,+0.147]  <- new
+    hour_cos        +0.102  [-0.171,+0.371]  <- new
+    r2              -0.015  [-0.172,+0.119]  <- new
+    abs_beta        -0.037  [-0.128,+0.042]  <- new
+    hour pair       +0.123  [-0.140,+0.382]  <- new
+    hedge pair      -0.039  [-0.219,+0.110]  <- new
+    all four new    +0.122  [-0.171,+0.396]  <- new
+    old five        +7.467  [+6.653,+8.265]
+    [2445s]
+  kNN MFE 2h (LOSES; refit skill +4.13%, pre-horizon-enforcement)
+    vol_48          +2.767  [+2.426,+3.121]
+    vratio          +0.758  [+0.453,+1.057]
+    vol_slope       +2.067  [+1.347,+2.932]
+    sandwich        +0.353  [+0.209,+0.496]
+    off_mark        +0.093  [-0.008,+0.208]
+    hour_sin        +0.126  [-0.021,+0.276]  <- new
+    hour_cos        +0.035  [-0.229,+0.277]  <- new
+    r2              +0.105  [-0.031,+0.238]  <- new
+    abs_beta        -0.044  [-0.115,+0.047]  <- new
+    hour pair       +0.195  [-0.125,+0.482]  <- new
+    hedge pair      +0.056  [-0.084,+0.206]  <- new
+    all four new    +0.247  [-0.125,+0.573]  <- new
+    old five        +7.510  [+6.818,+8.336]
+    [3197s]
+  kNN MFE 5h (LOSES; refit skill +3.95%, pre-horizon-enforcement)
+    vol_48          +3.050  [+2.593,+3.470]
+    vratio          +0.768  [+0.512,+1.014]
+    vol_slope       +1.134  [+0.633,+1.693]
+    sandwich        +0.444  [+0.272,+0.649]
+    off_mark        +0.129  [+0.019,+0.239]
+    hour_sin        +0.192  [-0.005,+0.349]  <- new
+    hour_cos        +0.022  [-0.193,+0.220]  <- new
+    r2              +0.102  [-0.019,+0.214]  <- new
+    abs_beta        -0.020  [-0.092,+0.046]  <- new
+    hour pair       +0.232  [-0.026,+0.510]  <- new
+    hedge pair      +0.076  [-0.073,+0.217]  <- new
+    all four new    +0.244  [-0.024,+0.523]  <- new
+    old five        +7.172  [+6.457,+7.935]
+    [3946s]
+  kNN MFE 10h (LOSES; refit skill +3.79%, pre-horizon-enforcement)
+    vol_48          +3.308  [+2.865,+3.695]
+    vratio          +0.706  [+0.474,+0.939]
+    vol_slope       +0.596  [+0.312,+0.944]
+    sandwich        +0.484  [+0.296,+0.645]
+    off_mark        +0.080  [-0.045,+0.202]
+    hour_sin        +0.102  [-0.140,+0.309]  <- new
+    hour_cos        -0.100  [-0.290,+0.082]  <- new
+    r2              +0.074  [-0.051,+0.180]  <- new
+    abs_beta        +0.090  [+0.004,+0.184]  <- new
+    hour pair       +0.011  [-0.260,+0.255]  <- new
+    hedge pair      +0.134  [-0.009,+0.269]  <- new
+    all four new    +0.079  [-0.189,+0.332]  <- new
+    old five        +7.193  [+6.444,+7.904]
+    [4696s]
+  kNN MAE 0.5h (LOSES; refit skill +1.25%, pre-horizon-enforcement)
+    vol_48_1m       +0.961  [+0.748,+1.172]
+    vratio          +0.941  [+0.649,+1.234]
+    vol_slope       +1.336  [+0.826,+1.893]
+    sandwich        +0.025  [-0.067,+0.130]
+    off_mark        +0.024  [-0.087,+0.140]
+    hour_sin        +0.053  [-0.182,+0.252]  <- new
+    hour_cos        -0.053  [-0.385,+0.292]  <- new
+    r2              +0.097  [-0.044,+0.256]  <- new
+    abs_beta        +0.104  [+0.012,+0.185]  <- new
+    hour pair       -0.083  [-0.457,+0.258]  <- new
+    hedge pair      +0.176  [+0.031,+0.337]  <- new
+    all four new    +0.117  [-0.226,+0.465]  <- new
+    old five        +4.169  [+3.552,+4.779]
+    [5433s]
+  kNN MAE 1h (LOSES; refit skill +0.98%, pre-horizon-enforcement)
+    vol_48_1m       +1.269  [+0.977,+1.556]
+    vratio          +0.951  [+0.639,+1.278]
+    vol_slope       +0.950  [+0.535,+1.317]
+    sandwich        +0.103  [+0.010,+0.216]
+    off_mark        +0.018  [-0.099,+0.137]
+    hour_sin        -0.105  [-0.419,+0.141]  <- new
+    hour_cos        -0.039  [-0.261,+0.214]  <- new
+    r2              +0.051  [-0.128,+0.239]  <- new
+    abs_beta        +0.104  [+0.030,+0.168]  <- new
+    hour pair       -0.184  [-0.428,+0.066]  <- new
+    hedge pair      +0.158  [-0.026,+0.349]  <- new
+    all four new    +0.026  [-0.257,+0.301]  <- new
+    old five        +3.779  [+3.081,+4.518]
+    [6173s]
+  kNN MAE 2h (IMPROVES; refit skill +1.33%, pre-horizon-enforcement)
+    vol_48_1m       +1.513  [+1.200,+1.802]
+    vratio          +0.746  [+0.464,+1.042]
+    vol_slope       +0.809  [+0.449,+1.148]
+    sandwich        +0.118  [+0.020,+0.230]
+    off_mark        +0.040  [-0.077,+0.161]
+    hour_sin        -0.091  [-0.335,+0.163]  <- new
+    hour_cos        +0.074  [-0.110,+0.251]  <- new
+    r2              +0.032  [-0.122,+0.196]  <- new
+    abs_beta        +0.037  [-0.057,+0.122]  <- new
+    hour pair       +0.026  [-0.246,+0.295]  <- new
+    hedge pair      +0.195  [+0.004,+0.372]  <- new
+    all four new    +0.220  [-0.115,+0.573]  <- new
+    old five        +3.897  [+3.240,+4.629]
+    [6908s]
+  kNN MAE 10h (IMPROVES; refit skill +2.32%, pre-horizon-enforcement)
+    vol_48_1m       +2.584  [+2.167,+3.062]
+    vratio          +0.477  [+0.271,+0.670]
+    vol_slope       +0.269  [+0.054,+0.498]
+    sandwich        +0.184  [+0.035,+0.344]
+    off_mark        +0.081  [-0.050,+0.198]
+    hour_sin        +0.023  [-0.238,+0.285]  <- new
+    hour_cos        +0.153  [-0.105,+0.411]  <- new
+    r2              +0.151  [+0.010,+0.268]  <- new
+    abs_beta        +0.100  [-0.022,+0.219]  <- new
+    hour pair       +0.160  [-0.261,+0.583]  <- new
+    hedge pair      +0.292  [+0.126,+0.464]  <- new
+    all four new    +0.369  [-0.063,+0.807]  <- new
+    old five        +4.423  [+3.844,+5.086]
+    [7640s]
+  CQR MFE 0.5h (IMPROVES; refit skill +4.73%, pre-horizon-enforcement)
+    vol_48          +2.932  [+2.607,+3.266]
+    vratio          +0.781  [+0.487,+1.140]
+    vol_slope       +4.300  [+3.364,+5.349]
+    sandwich        +0.597  [+0.387,+0.810]
+    off_mark        +0.002  [-0.032,+0.028]
+    hour_sin        +0.155  [+0.066,+0.254]  <- new
+    hour_cos        +0.266  [+0.124,+0.419]  <- new
+    r2              +0.008  [-0.025,+0.039]  <- new
+    abs_beta        -0.050  [-0.084,-0.008]  <- new
+    hour pair       +0.311  [+0.134,+0.470]  <- new
+    hedge pair      -0.043  [-0.088,+0.013]  <- new
+    all four new    +0.290  [+0.119,+0.465]  <- new
+    old five        +8.982  [+8.003,+10.077]
+    [7655s]
+  CQR MFE 10h (LOSES; refit skill +4.49%, pre-horizon-enforcement)
+    vol_48          +4.734  [+4.142,+5.269]
+    vratio          +0.178  [+0.044,+0.308]
+    vol_slope       +1.051  [+0.720,+1.450]
+    sandwich        +0.939  [+0.698,+1.155]
+    off_mark        +0.015  [-0.026,+0.059]
+    hour_sin        +0.035  [-0.097,+0.157]  <- new
+    hour_cos        -0.100  [-0.177,-0.022]  <- new
+    r2              +0.012  [-0.064,+0.091]  <- new
+    abs_beta        +0.058  [+0.021,+0.092]  <- new
+    hour pair       -0.096  [-0.239,+0.056]  <- new
+    hedge pair      +0.068  [-0.027,+0.150]  <- new
+    all four new    -0.045  [-0.229,+0.122]  <- new
+    old five        +8.573  [+7.759,+9.348]
+    [7672s]
+  CQR MAE 5h (IMPROVES; refit skill +2.56%, pre-horizon-enforcement)
+    vol_48_1m       +3.494  [+3.003,+3.989]
+    vratio          +0.108  [-0.014,+0.245]
+    vol_slope       +0.834  [+0.460,+1.206]
+    sandwich        +0.097  [+0.006,+0.181]
+    off_mark        +0.015  [-0.028,+0.055]
+    hour_sin        +0.429  [+0.279,+0.586]  <- new
+    hour_cos        +0.765  [+0.441,+1.032]  <- new
+    r2              +0.045  [-0.009,+0.094]  <- new
+    abs_beta        +0.042  [+0.002,+0.091]  <- new
+    hour pair       +0.230  [-0.043,+0.481]  <- new
+    hedge pair      +0.110  [+0.034,+0.184]  <- new
+    all four new    +0.325  [+0.051,+0.608]  <- new
+    old five        +4.583  [+3.949,+5.246]
+    [7687s]
+
+================================================================================================================
+DIFFERENT FROM THE INDIVIDUAL TESTS? -- rule fixed in the docstring
+================================================================================================================
+  NEW (an improvement where the individual tests predict no gain): 5 of 34 cells without a cell-level prediction
+    QTREE MFE 0.5h: skill +0.185 [+0.013,+0.374]  gap -0.038 [-0.168,+0.105]
+    CQR MFE 0.5h: skill +0.181 [+0.017,+0.367]  gap -0.042 [-0.111,+0.106]
+    kNN MAE 2h: skill -0.319 [-0.664,+0.018]  gap -0.226 [-0.413,-0.029]
+    kNN MAE 10h: skill -0.163 [-0.701,+0.326]  gap -0.208 [-0.426,-0.010]
+    CQR MAE 5h: skill +0.001 [-0.312,+0.303]  gap -0.249 [-0.359,-0.129]
+  QTREE 1h/5h/10h: reproduced from the 3-horizon run, not new.
+  EXPLORATORY: no adoption verdict. Nothing in the registry was written.
+  [7687s]
+================================================================================================================

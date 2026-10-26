@@ -1,0 +1,364 @@
+================================================================================================================
+ENVELOPE DESCRIPTION -- target source 30m
+================================================================================================================
+  60,000 episodes, 5 features: vol_48, vratio, vol_slope, sandwich, off_mark
+  target: running MAE and MFE, sign-folded, UNCLAMPED (see docstring)
+  quantiles (0.05, 0.25, 0.5, 0.75, 0.95)   horizons ['0.5h', '1h', '2h', '5h', '10h']
+
+  THIS RUN USES 30-MINUTE CLOSES. The true envelope is strictly worse:
+  the worst point inside a bar is never observed. Earlier work puts the
+  understatement at roughly 0.3 sigma, one-sided, scaling with volatility.
+  CLIMATOLOGY IS BIASED THE SAME WAY, so comparative skill should be
+  largely unaffected -- an assumption, stated and not corrected for.
+
+  TRENDING = bottom tercile of vratio. Cutoff 1.47220, computed on the
+  FIT BLOCK ONLY (41,936 rows) and applied as a fixed
+  number to both blocks -- never recomputed on held-out data.
+    ALL        60,000 episodes  (18,064 held out)
+    TRENDING   18,669 episodes  (4,690 held out)
+
+================================================================================================================
+BASELINE TRANSFER -- climatology's own coverage, in-sample vs held out
+================================================================================================================
+  Climatology is the TRAIN block's empirical quantile -- the same 22,683 rows
+  every model is fitted on -- so IN-SAMPLE coverage is exact by construction.
+  Any gap on the held-out block is REGIME DRIFT in the envelope's level, not a
+  modelling choice, and every model below inherits it.
+  TRAIN, not train+val: this must use the same block as fit_climatology or the
+  diagnostic disagrees with the model it is explaining. It did, briefly --
+  0.265 against 0.262 at ALL/MAE/0.5h -- when climatology moved to train and
+  this block was left on the fit block.
+
+  dir       h       block       q5      q25      q50      q75      q95
+  MAE    0.5h   in-sample    0.050    0.250    0.500    0.750    0.950
+                 HELD OUT    0.046    0.262    0.520    0.764    0.952   <- gap here is drift, inherited by every model
+  MAE      1h   in-sample    0.050    0.250    0.500    0.750    0.950
+                 HELD OUT    0.042    0.254    0.525    0.763    0.957   <- gap here is drift, inherited by every model
+  MAE      2h   in-sample    0.050    0.250    0.500    0.750    0.950
+                 HELD OUT    0.044    0.262    0.525    0.767    0.957   <- gap here is drift, inherited by every model
+  MAE      5h   in-sample    0.050    0.250    0.500    0.750    0.950
+                 HELD OUT    0.046    0.270    0.531    0.770    0.960   <- gap here is drift, inherited by every model
+  MAE     10h   in-sample    0.050    0.250    0.500    0.750    0.950
+                 HELD OUT    0.046    0.278    0.532    0.773    0.957   <- gap here is drift, inherited by every model
+  MFE    0.5h   in-sample    0.050    0.250    0.500    0.750    0.950
+                 HELD OUT    0.048    0.236    0.480    0.738    0.954   <- gap here is drift, inherited by every model
+  MFE      1h   in-sample    0.050    0.250    0.500    0.750    0.950
+                 HELD OUT    0.049    0.231    0.475    0.736    0.955   <- gap here is drift, inherited by every model
+  MFE      2h   in-sample    0.050    0.250    0.500    0.750    0.950
+                 HELD OUT    0.046    0.226    0.465    0.728    0.951   <- gap here is drift, inherited by every model
+  MFE      5h   in-sample    0.050    0.250    0.500    0.750    0.950
+                 HELD OUT    0.040    0.210    0.447    0.714    0.945   <- gap here is drift, inherited by every model
+  MFE     10h   in-sample    0.050    0.250    0.500    0.750    0.950
+                 HELD OUT    0.041    0.209    0.453    0.718    0.943   <- gap here is drift, inherited by every model
+
+  [ALL]
+       [SPLIT] train 22,683 (<2026-03-06)   val 19,253   HELD OUT 18,064 (>=2026-07-18)
+[SPLIT] held-out used ONCE, for scoring only; iterations chosen on val
+  [TRENDING]
+       [SPLIT] train 7,612 (<2026-03-08)   val 6,367   HELD OUT 4,690 (>=2026-07-18)
+[SPLIT] held-out used ONCE, for scoring only; iterations chosen on val
+
+  fitted ALL       MAE Climatology  5 horizons x 5 quantiles   [2s]
+  fitted ALL       MAE Linear QR    5 horizons x 5 quantiles   [279s]
+  fitted ALL       MAE QTREE        5 horizons x 5 quantiles   [297s]
+  fitted ALL       MAE kNN          5 horizons x 5 quantiles   [297s]
+  fitted ALL       MFE Climatology  5 horizons x 5 quantiles   [297s]
+  fitted ALL       MFE Linear QR    5 horizons x 5 quantiles   [576s]
+  fitted ALL       MFE QTREE        5 horizons x 5 quantiles   [595s]
+  fitted ALL       MFE kNN          5 horizons x 5 quantiles   [595s]
+  fitted TRENDING  MAE Climatology  5 horizons x 5 quantiles   [595s]
+  fitted TRENDING  MAE Linear QR    5 horizons x 5 quantiles   [630s]
+  fitted TRENDING  MAE QTREE        5 horizons x 5 quantiles   [646s]
+  fitted TRENDING  MAE kNN          5 horizons x 5 quantiles   [646s]
+  fitted TRENDING  MFE Climatology  5 horizons x 5 quantiles   [646s]
+  fitted TRENDING  MFE Linear QR    5 horizons x 5 quantiles   [681s]
+  fitted TRENDING  MFE QTREE        5 horizons x 5 quantiles   [697s]
+  fitted TRENDING  MFE kNN          5 horizons x 5 quantiles   [697s]
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/numpy/lib/_nanfunctions_impl.py:1593: RuntimeWarning: All-NaN slice encountered
+  return fnb._ureduce(a,
+
+================================================================================================================
+STRUCTURAL CORRECTNESS -- bug-catchers, not judgment calls
+================================================================================================================
+  The target is a running max in k, and quantiles are ordered in q. Both are
+  HARD constraints, so both are now ENFORCED rather than gated on.
+
+  THIS WAS A GATE AND THE GATE WAS WRONG. It required zero violations, and
+  it counted them across all five horizons at once, so a single violation
+  anywhere disqualified every horizon of that model. Each horizon is an
+  INDEPENDENT fit -- nothing forces the 10h fit above the 5h fit on a given
+  episode -- so cross-horizon violations are normal behaviour, not a bug.
+  Measured on val: QTREE/MAE had 7,060 monotonicity violations of 385,060
+  (1.833%) and 8 quantile crossings (0.002%). Climatology cannot violate
+  either. The rule therefore failed every conditional model BY CONSTRUCTION
+  and would have retired the feature set on an artifact.
+
+  populationdir  model         quantile enforce    horizon enforce
+  ALL       MAE  Climatology             0.000%             0.000%
+  ALL       MAE  Linear QR               0.000%             0.002%
+  ALL       MAE  QTREE                   0.000%             0.624%
+  ALL       MAE  kNN                     0.000%             0.000%
+  ALL       MFE  Climatology             0.000%             0.000%
+  ALL       MFE  Linear QR               0.000%             0.002%
+  ALL       MFE  QTREE                   0.000%             0.372%
+  ALL       MFE  kNN                     0.000%             0.000%
+  TRENDING  MAE  Climatology             0.000%             0.000%
+  TRENDING  MAE  Linear QR               0.000%             0.004%
+  TRENDING  MAE  QTREE                   0.000%             0.664%
+  TRENDING  MAE  kNN                     0.000%             0.000%
+  TRENDING  MFE  Climatology             0.000%             0.000%
+  TRENDING  MFE  Linear QR               0.000%             0.000%
+  TRENDING  MFE  QTREE                   0.000%             0.443%
+  TRENDING  MFE  kNN                     0.000%             0.000%
+  Rates are the share of (episode, horizon, quantile) predictions that
+  enforcement MOVED. 0.000% means the model already satisfied the
+  constraint. Climatology and kNN cannot violate either: np.quantile is
+  non-decreasing in q, and the quantile of a running maximum is
+  non-decreasing in k. Independent per-horizon fits have no such guarantee.
+
+================================================================================================================
+CALIBRATION -- this decides which models get their sharpness compared
+================================================================================================================
+  A coverage number is CONSISTENT if its day-clustered 95% interval contains
+  the quantile it targets. Slices: predicted-magnitude decile, realized-
+  magnitude decile, and early/late half of the held-out period.
+  Admissible = all 5 aggregate quantiles consistent AND inconsistent slices
+  no more than 2x the 5% expected by chance. The monotonicity and
+  crossing constraints are ENFORCED above and are NOT part of this rule.
+
+  CELL COUNT: 2 populations x 2 directions x 4 models x 5 horizons = 80 cells.
+  Each prints a PASS/fail and, below, a ratio against climatology. BOTH
+  WILL BE READ AS FINDINGS whatever this run calls itself, so the chance
+  rates are stated here rather than left to be worked out later.
+  The aggregate screen is 5 interval checks at 95%, so a PERFECTLY
+  calibrated cell clears it only 77.4% of the time: about
+  18 of 80 cells would fail on chance alone.
+  This screen's error runs toward FALSE FAILURE, not false discovery.
+  On the slice side, 5% of slices are expected inconsistent by chance and
+  the tolerance is 2x that.
+
+----------------------------------------------------------------------------------------------------------------
+  ALL / MAE
+----------------------------------------------------------------------------------------------------------------
+  model             h            q5           q25           q50           q75           q95   bad/tot   worst    realzd verdict
+  Climatology    0.5h   0.046         0.262         0.520*        0.764*        0.952          1/10     0.025     50/50    fail  const pred: no predicted-decile slice
+  Climatology      1h   0.042*        0.254         0.525*        0.763*        0.957*         3/10     0.037     50/50    fail  const pred: no predicted-decile slice
+  Climatology      2h   0.044*        0.262         0.525*        0.767*        0.957*         4/10     0.043     50/50    fail  const pred: no predicted-decile slice
+  Climatology      5h   0.046         0.270*        0.531*        0.770*        0.960*         6/10     0.053     50/50    fail  const pred: no predicted-decile slice
+  Climatology     10h   0.046         0.278*        0.532*        0.773         0.957          3/10     0.059     50/50    fail  const pred: no predicted-decile slice
+  Linear QR      0.5h   0.047         0.267*        0.528*        0.780*        0.958*        21/60     0.069     48/50    fail
+  Linear QR        1h   0.045*        0.263         0.539*        0.778*        0.961*        32/60     0.060     49/50    fail
+  Linear QR        2h   0.047         0.269*        0.542*        0.784*        0.960*        37/60     0.067     50/50    fail
+  Linear QR        5h   0.045         0.281*        0.552*        0.783*        0.963*        41/60     0.073     49/50    fail
+  Linear QR       10h   0.048         0.290*        0.554*        0.788*        0.961*        32/60     0.081     49/50    fail
+  QTREE          0.5h   0.049         0.266         0.522*        0.769*        0.952         15/60     0.066     50/50    fail
+  QTREE            1h   0.045*        0.264         0.525*        0.770*        0.959*        14/45     0.087     50/50    fail
+  QTREE            2h   0.046         0.271*        0.529*        0.778*        0.956         22/60     0.080     50/50    fail
+  QTREE            5h   0.048         0.273*        0.542*        0.783*        0.960*        33/60     0.083     50/50    fail
+  QTREE           10h   0.049         0.285*        0.549*        0.783*        0.957         28/60     0.096     50/50    fail
+  kNN            0.5h   0.052         0.265         0.530*        0.774*        0.952         16/60     0.110     49/50    fail
+  kNN              1h   0.047         0.265*        0.536*        0.769*        0.956*        26/60     0.110     50/50    fail
+  kNN              2h   0.048         0.274*        0.537*        0.777*        0.955         27/60     0.098     50/50    fail
+  kNN              5h   0.050         0.287*        0.547*        0.781*        0.959*        30/60     0.096     50/50    fail
+  kNN             10h   0.053         0.294*        0.550*        0.782*        0.955         29/60     0.081     50/50    fail
+  * = this aggregate coverage's day-clustered interval excludes its target
+  bad/tot = COUNTED slices (predicted-magnitude decile + time chunk)
+  worst   = largest |coverage - target| over the counted slices
+  realzd  = realized-magnitude decile slices, DIAGNOSTIC, never counted
+  NOTE the asymmetry: a constant predictor has no predicted-magnitude
+  spread, so climatology is judged on 10 counted slices where the
+  conditional models are judged on 60. Fewer tests is an easier screen.
+
+----------------------------------------------------------------------------------------------------------------
+  ALL / MFE
+----------------------------------------------------------------------------------------------------------------
+  model             h            q5           q25           q50           q75           q95   bad/tot   worst    realzd verdict
+  Climatology    0.5h   0.048         0.236*        0.480*        0.738         0.954          1/10     0.025     50/50    fail  const pred: no predicted-decile slice
+  Climatology      1h   0.049         0.231*        0.475*        0.736         0.955          3/10     0.040     50/50    fail  const pred: no predicted-decile slice
+  Climatology      2h   0.046         0.226*        0.465*        0.728*        0.951          3/10     0.059     49/50    fail  const pred: no predicted-decile slice
+  Climatology      5h   0.040*        0.210*        0.447*        0.714*        0.945          6/10     0.075     50/50    fail  const pred: no predicted-decile slice
+  Climatology     10h   0.041*        0.209*        0.453*        0.718*        0.943          4/10     0.063     50/50    fail  const pred: no predicted-decile slice
+  Linear QR      0.5h   0.042*        0.220*        0.472*        0.733*        0.953         21/60     0.069     48/50    fail
+  Linear QR        1h   0.044         0.218*        0.461*        0.735         0.952         28/60     0.068     49/50    fail
+  Linear QR        2h   0.040*        0.215*        0.450*        0.724*        0.950         32/60     0.078     48/50    fail
+  Linear QR        5h   0.036*        0.202*        0.440*        0.718*        0.944*        42/60     0.093     50/50    fail
+  Linear QR       10h   0.034*        0.203*        0.444*        0.724*        0.944         41/60     0.093     49/50    fail
+  QTREE          0.5h   0.048         0.231*        0.479*        0.734         0.951         14/50     0.044     50/50    fail
+  QTREE            1h   0.047         0.230*        0.465*        0.732         0.950         19/60     0.070     49/50    fail
+  QTREE            2h   0.044         0.226*        0.451*        0.726*        0.947         30/60     0.070     47/50    fail
+  QTREE            5h   0.039*        0.208*        0.438*        0.715*        0.945         40/60     0.093     49/50    fail
+  QTREE           10h   0.039*        0.206*        0.445*        0.718*        0.942*        38/60     0.076     48/50    fail
+  kNN            0.5h   0.048         0.226*        0.470*        0.735         0.948         16/60     0.110     49/50    fail
+  kNN              1h   0.049         0.224*        0.463*        0.733*        0.948         23/60     0.099     49/50    fail
+  kNN              2h   0.046         0.219*        0.456*        0.722*        0.945         29/60     0.087     46/50    fail
+  kNN              5h   0.041*        0.207*        0.436*        0.713*        0.940*        45/60     0.106     50/50    fail
+  kNN             10h   0.040*        0.207*        0.447*        0.716*        0.938*        43/60     0.090     49/50    fail
+  * = this aggregate coverage's day-clustered interval excludes its target
+  bad/tot = COUNTED slices (predicted-magnitude decile + time chunk)
+  worst   = largest |coverage - target| over the counted slices
+  realzd  = realized-magnitude decile slices, DIAGNOSTIC, never counted
+  NOTE the asymmetry: a constant predictor has no predicted-magnitude
+  spread, so climatology is judged on 10 counted slices where the
+  conditional models are judged on 60. Fewer tests is an easier screen.
+
+----------------------------------------------------------------------------------------------------------------
+  TRENDING / MAE
+----------------------------------------------------------------------------------------------------------------
+  model             h            q5           q25           q50           q75           q95   bad/tot   worst    realzd verdict
+  Climatology    0.5h   0.049         0.257         0.518*        0.748         0.953          1/10     0.028     50/50    fail  const pred: no predicted-decile slice
+  Climatology      1h   0.049         0.263         0.530*        0.768*        0.958          3/10     0.044     50/50    fail  const pred: no predicted-decile slice
+  Climatology      2h   0.050         0.277*        0.538*        0.778*        0.960*         4/10     0.059     50/50    fail  const pred: no predicted-decile slice
+  Climatology      5h   0.053         0.278*        0.536*        0.773         0.964*         4/10     0.071     49/50    fail  const pred: no predicted-decile slice
+  Climatology     10h   0.053         0.290*        0.545*        0.790*        0.961*         4/10     0.083     50/50    fail  const pred: no predicted-decile slice
+  Linear QR      0.5h   0.046         0.265         0.525*        0.767*        0.956          7/60     0.059     50/50    fail
+  Linear QR        1h   0.049         0.276*        0.534*        0.776*        0.962*        19/60     0.071     50/50    fail
+  Linear QR        2h   0.052         0.284*        0.553*        0.791*        0.960*        24/60     0.086     49/50    fail
+  Linear QR        5h   0.050         0.290*        0.552*        0.790*        0.961*        20/60     0.093     48/50    fail
+  Linear QR       10h   0.052         0.305*        0.569*        0.807*        0.958         23/60     0.105     50/50    fail
+  QTREE          0.5h   0.051         0.260         0.519*        0.750         0.953          3/30     0.038     50/50    fail
+  QTREE            1h   0.052         0.273*        0.529*        0.768*        0.959*        13/40     0.045     50/50    fail
+  QTREE            2h   0.055         0.281*        0.544*        0.785*        0.958         13/60     0.104     50/50    fail
+  QTREE            5h   0.053         0.282*        0.547*        0.787*        0.960*        16/60     0.080     49/50    fail
+  QTREE           10h   0.056         0.294*        0.559*        0.799*        0.960*        23/60     0.096     48/50    fail
+  kNN            0.5h   0.055         0.264         0.524*        0.754         0.950         10/60     0.069     50/50    fail
+  kNN              1h   0.054         0.270*        0.528*        0.761         0.958          7/60     0.063     50/50    fail
+  kNN              2h   0.058         0.289*        0.539*        0.777*        0.954         18/60     0.088     50/50    fail
+  kNN              5h   0.055         0.289*        0.548*        0.784*        0.959         20/60     0.098     48/50    fail
+  kNN             10h   0.060*        0.296*        0.557*        0.794*        0.956         21/60     0.118     48/50    fail
+  * = this aggregate coverage's day-clustered interval excludes its target
+  bad/tot = COUNTED slices (predicted-magnitude decile + time chunk)
+  worst   = largest |coverage - target| over the counted slices
+  realzd  = realized-magnitude decile slices, DIAGNOSTIC, never counted
+  NOTE the asymmetry: a constant predictor has no predicted-magnitude
+  spread, so climatology is judged on 10 counted slices where the
+  conditional models are judged on 60. Fewer tests is an easier screen.
+
+----------------------------------------------------------------------------------------------------------------
+  TRENDING / MFE
+----------------------------------------------------------------------------------------------------------------
+  model             h            q5           q25           q50           q75           q95   bad/tot   worst    realzd verdict
+  Climatology    0.5h   0.047         0.252         0.482*        0.743         0.951          1/10     0.028     50/50    fail  const pred: no predicted-decile slice
+  Climatology      1h   0.049         0.237         0.478*        0.733*        0.947          2/10     0.033     50/50    fail  const pred: no predicted-decile slice
+  Climatology      2h   0.044         0.223*        0.471*        0.723*        0.946          3/10     0.055     49/50    fail  const pred: no predicted-decile slice
+  Climatology      5h   0.046         0.208*        0.445*        0.715*        0.945          3/10     0.090     50/50    fail  const pred: no predicted-decile slice
+  Climatology     10h   0.043         0.214*        0.453*        0.719*        0.943          4/10     0.079     49/50    fail  const pred: no predicted-decile slice
+  Linear QR      0.5h   0.044         0.233*        0.475*        0.735         0.954          7/60     0.059     50/50    fail
+  Linear QR        1h   0.043         0.228*        0.470*        0.722*        0.943         13/60     0.087     48/50    fail
+  Linear QR        2h   0.042*        0.213*        0.455*        0.703*        0.942         22/60     0.087     47/50    fail
+  Linear QR        5h   0.043         0.197*        0.435*        0.709*        0.948         24/60     0.101     49/50    fail
+  Linear QR       10h   0.038*        0.200*        0.437*        0.716*        0.948         25/60     0.095     48/50    fail
+  QTREE          0.5h   0.047         0.250         0.481*        0.740         0.949          6/30     0.052     50/50    fail
+  QTREE            1h   0.049         0.238         0.477*        0.721*        0.942         17/60     0.081     50/50    fail
+  QTREE            2h   0.045         0.223*        0.464*        0.712*        0.943         23/60     0.083     49/50    fail
+  QTREE            5h   0.044         0.207*        0.436*        0.707*        0.942         25/60     0.099     50/50    fail
+  QTREE           10h   0.043         0.211*        0.443*        0.713*        0.943         16/60     0.114     49/50    fail
+  kNN            0.5h   0.050         0.246         0.476*        0.736         0.945         10/60     0.069     50/50    fail
+  kNN              1h   0.047         0.235*        0.473*        0.729*        0.934*        15/60     0.066     49/50    fail
+  kNN              2h   0.047         0.220*        0.461*        0.705*        0.937*        18/60     0.078     46/50    fail
+  kNN              5h   0.048         0.206*        0.433*        0.699*        0.939*        24/60     0.112     50/50    fail
+  kNN             10h   0.043         0.205*        0.442*        0.708*        0.941         20/60     0.090     49/50    fail
+  * = this aggregate coverage's day-clustered interval excludes its target
+  bad/tot = COUNTED slices (predicted-magnitude decile + time chunk)
+  worst   = largest |coverage - target| over the counted slices
+  realzd  = realized-magnitude decile slices, DIAGNOSTIC, never counted
+  NOTE the asymmetry: a constant predictor has no predicted-magnitude
+  spread, so climatology is judged on 10 counted slices where the
+  conditional models are judged on 60. Fewer tests is an easier screen.
+
+================================================================================================================
+SHARPNESS -- mean pinball across the 5 quantiles, as % of climatology
+================================================================================================================
+  ONLY among models that passed calibration at that cell. A model that
+  failed calibration is omitted rather than shown losing or winning: a
+  pinball number from a miscalibrated model is not interpretable.
+  Below 100% = sharper than the unconditional envelope.
+  EVERY RATIO CARRIES A DAY-CLUSTERED 95% INTERVAL. A ratio whose interval
+  contains 100% is not distinguishable from climatology at this sample size.
+
+  ALL / MAE
+    model                              0.5h                        1h                        2h                        5h                       10h
+    Climatology                      (fail)                    (fail)                    (fail)                    (fail)                    (fail)
+    Linear QR                        (fail)                    (fail)                    (fail)                    (fail)                    (fail)
+    QTREE                            (fail)                    (fail)                    (fail)                    (fail)                    (fail)
+    kNN                              (fail)                    (fail)                    (fail)                    (fail)                    (fail)
+
+  ALL / MFE
+    model                              0.5h                        1h                        2h                        5h                       10h
+    Climatology                      (fail)                    (fail)                    (fail)                    (fail)                    (fail)
+    Linear QR                        (fail)                    (fail)                    (fail)                    (fail)                    (fail)
+    QTREE                            (fail)                    (fail)                    (fail)                    (fail)                    (fail)
+    kNN                              (fail)                    (fail)                    (fail)                    (fail)                    (fail)
+
+  TRENDING / MAE
+    model                              0.5h                        1h                        2h                        5h                       10h
+    Climatology                      (fail)                    (fail)                    (fail)                    (fail)                    (fail)
+    Linear QR                        (fail)                    (fail)                    (fail)                    (fail)                    (fail)
+    QTREE                            (fail)                    (fail)                    (fail)                    (fail)                    (fail)
+    kNN                              (fail)                    (fail)                    (fail)                    (fail)                    (fail)
+
+  TRENDING / MFE
+    model                              0.5h                        1h                        2h                        5h                       10h
+    Climatology                      (fail)                    (fail)                    (fail)                    (fail)                    (fail)
+    Linear QR                        (fail)                    (fail)                    (fail)                    (fail)                    (fail)
+    QTREE                            (fail)                    (fail)                    (fail)                    (fail)                    (fail)
+    kNN                              (fail)                    (fail)                    (fail)                    (fail)                    (fail)
+
+================================================================================================================
+PREDICTION SPREAD -- does the model actually vary episode to episode?
+================================================================================================================
+  IQR of the predicted MEDIAN quantile across held-out episodes, in sigma.
+  Climatology is 0.000 by construction: it predicts one number for every
+  episode. A conditional model with a near-zero IQR is reproducing
+  climatology with extra steps, however well it scores.
+
+  REPORTED UNGATED, and deliberately. The brief gated this on calibration,
+  but with no conditional model admissible anywhere the gated table is empty
+  and the primary question -- do these five features describe the envelope
+  at all -- goes unanswered. Spread is a property of the model's OUTPUT, not
+  a skill claim: it says how much the prediction moves, never whether it
+  moves correctly. A miscalibrated model with real spread and a miscalibrated
+  model with none are different objects and the difference is worth seeing.
+  Sharpness above stays gated, because pinball from a miscalibrated model
+  genuinely is not interpretable as sharpness.
+  cal = did that cell pass calibration.
+
+  ALL / MAE
+    model                  0.5h            1h            2h            5h           10h
+    Climatology         0.0000~       0.0000~       0.0000~       0.0000~       0.0000~
+    Linear QR           0.0687~       0.0407~       0.1148~       0.3033~       0.4658~
+    QTREE               0.0246~       0.0003~       0.0457~       0.2035~       0.3929~
+    kNN                 0.1049~       0.1204~       0.1787~       0.3574~       0.5267~
+                 ~ = that cell failed calibration; the spread is still what the model predicted
+
+  ALL / MFE
+    model                  0.5h            1h            2h            5h           10h
+    Climatology         0.0000~       0.0000~       0.0000~       0.0000~       0.0000~
+    Linear QR           0.0687~       0.1489~       0.2208~       0.3836~       0.5370~
+    QTREE               0.0158~       0.1029~       0.1784~       0.3111~       0.4537~
+    kNN                 0.1049~       0.1484~       0.2102~       0.3589~       0.4974~
+                 ~ = that cell failed calibration; the spread is still what the model predicted
+
+  TRENDING / MAE
+    model                  0.5h            1h            2h            5h           10h
+    Climatology         0.0000~       0.0000~       0.0000~       0.0000~       0.0000~
+    Linear QR           0.0188~       0.0439~       0.1131~       0.2290~       0.3795~
+    QTREE               0.0027~       0.0038~       0.0407~       0.1850~       0.2544~
+    kNN                 0.0713~       0.0711~       0.1134~       0.2593~       0.3812~
+                 ~ = that cell failed calibration; the spread is still what the model predicted
+
+  TRENDING / MFE
+    model                  0.5h            1h            2h            5h           10h
+    Climatology         0.0000~       0.0000~       0.0000~       0.0000~       0.0000~
+    Linear QR           0.0188~       0.0700~       0.1250~       0.2380~       0.3329~
+    QTREE               0.0027~       0.0399~       0.0666~       0.1870~       0.2355~
+    kNN                 0.0713~       0.1148~       0.1503~       0.2493~       0.2983~
+                 ~ = that cell failed calibration; the spread is still what the model predicted
+
+================================================================================================================
+SOLVER FALLBACKS -- named, not absorbed
+================================================================================================================
+  none. Every Linear QR cell solved unpenalised (alpha=0).
+
+================================================================================================================
+[721s]  target source 30m.  No gate, no null, no direction claim, no strategy.
+================================================================================================================

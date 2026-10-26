@@ -1,0 +1,26 @@
+/dev/root        97G   21G   77G  21% /
+disloc.npz
+disloc_meta.parquet
+ev_after.npz
+ev_bars
+ev_coin_table.parquet
+ev_coinstats
+ev_events.parquet
+ev_impact.npz
+ev_market.npz
+ev_pairs.parquet
+ev_post.npz
+ev_profile.npz
+ev_series.npz
+ev_table.parquet
+ev_targets.npz
+flowfeat.npz
+flowfeat_legs.npz
+hl3_reference.npz
+reach_paths.npz
+2026-10-15 20:41:51       1431 20250525.stdout
+2026-10-15 20:41:51        796 20250525.time
+2026-10-15 20:41:51       1545 20250525_b5_meta.json
+
+[Errno 32] Broken pipe
+2.3.3 24.0.0

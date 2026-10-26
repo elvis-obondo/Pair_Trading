@@ -1,0 +1,4 @@
+1274 bash -c cd ~/Pair_Trading && mkdir -p $(dirname research/dislocation_model/logs/hl5_probe3.log) &&     nohup env VIRTUAL_ENV=$HOME/Pair_Trading/.venv PATH=$HOME/Pair_Trading/.venv/bin:$PATH       OMP_NUM_THREADS=1 PYTHONUNBUFFERED=1 bash -c pgrep\ -af\ hl5_\ \|\ head\ -5\;\ tail\ -2\ research/dislocation_model/logs/hl5_features.log > research/dislocation_model/logs/hl5_probe3.log 2>&1 < /dev/null & echo "started pid $! -> research/dislocation_model/logs/hl5_probe3.log"
+1277 bash -c pgrep -af hl5_ | head -5; tail -2 research/dislocation_model/logs/hl5_features.log
+  forced_push   P1: finite 0.9991  median 0  p10 0  p90 0
+  absorbed_opp  P1: finite 0.9991  median 0  p10 0  p90 0
