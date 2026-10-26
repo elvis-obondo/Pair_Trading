@@ -1,0 +1,4 @@
+[IMPACT] fit period (bars before 2026-05-25): 2,994,639 bars, 200 coins
+  coefficients (per unit of the normalised regressor, in units of the coin's residual volatility): imbalance +0.2138 (se 0.0014), signed forced flow +0.3443 (se 0.0309); within-coin R2 0.0079
+  frozen model on held-out bars (display only): 1,177,787 bars, R2 0.0128
+  at the triggers: explained_share finite for 73,248 of 74,607 events (median 0.011, p10 -0.105, p90 0.127; 0.2% clipped at 2, 0.5% at -1); unexplained_move median +1.479 sigma, p10 +0.507, p90 +3.255  [24s]

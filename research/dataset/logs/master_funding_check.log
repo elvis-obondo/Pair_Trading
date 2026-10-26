@@ -1,0 +1,13 @@
+[FUNDING CHECK] 234 coins with API history; ctx loaded [1011s]
+    L       pairs   corr funding   median |diff|  exact match   corr premium  median |diff| prem
+    0   2,575,162        0.85370       3.158e-13       61.52%        0.85807           8.166e-05
+    1   2,568,622        0.99997       3.158e-13       68.88%        0.87817           7.985e-05
+    2   2,568,655        0.99987       3.158e-13       68.78%        0.88242           7.903e-05
+    5   2,569,149        0.99918       3.158e-13       68.55%        0.89247           7.773e-05
+   10   2,569,848        0.99656       3.158e-13       68.24%        0.90850           7.646e-05
+   30   2,572,582        0.97280       3.158e-13       67.13%        0.93416           7.097e-05
+   59   2,573,927        0.88621       3.158e-13       64.26%        0.88113           8.180e-05
+[FUNDING CHECK] per-coin at the best L = 1: correlation median 0.99995, 5% 0.99974, min 0.99887 (PONS); coins below 0.99: 0 of 234: PONS 0.9989, NOT 0.9994, FOGO 0.9995, EIGEN 0.9996, PURR 0.9996, RSR 0.9996, ETHFI 0.9996, AR 0.9996; exact-match share per coin median 68.1%, lowest TRUMP 28.6%, 0G 29.0%, 2Z 32.5%, STABLE 34.9%, KAITO 36.5%
+[FUNDING CHECK] the >= 0.9 rule (fixed before looking) gates FUNDING only; premium is reported, not gated (the API premium is an hourly average, the ctx premium is instantaneous)
+[FUNDING CHECK] best L = 1 (corr 0.99997); per-coin correlation at L = 0: median 0.7213; lowest: EIGEN 0.011, RENDER 0.166, PAXG 0.234, CFX 0.255, FARTCOIN 0.260, ETHFI 0.268, PURR 0.302, NOT 0.324
+[FUNDING CHECK] PASS: the best correlation is 0.99997 (rule: >= 0.9)  [1023s]

@@ -1,0 +1,7 @@
+[G2b coin] 74,607 events in 865 segments  [5s]
+[DONE coin] 74,607 events  [7s]
+  NaN: sigma_sym 0.000%, z_sym 0.000%, z_ratio 0.000%, threshold_sym 0.000%, trig_sym 0.000%
+  share of current events with trig_sym = 1: 35.34% (trig_sym defined for 100.00%)
+  corr(z, z_sym) 0.9327; same sign 97.20%
+  z_ratio quantiles 1/5/25/50/75/95/99%: 0.040 / 0.188 / 0.684 / 0.975 / 1.154 / 1.494 / 1.866
+  |z_sym| > threshold_sym at the event bar for 43.08% of events

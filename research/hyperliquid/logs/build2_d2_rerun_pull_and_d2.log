@@ -1,0 +1,16 @@
+futures local: 412 files 4383087776 B
+futures s3: Total Objects: 412    Total Size: 4383087776 
+flow local: 206 files 4160463543 B
+flow s3: Total Objects: 206    Total Size: 4160463543 
+PULL-DONE
+[INFO] 206 coins with 1m bars; bars end 2026-10-13 23:59:00+00:00; now 2026-10-15 03:58:30.760127+00:00
+[D2] coins compared 178; minutes per coin median 3460; window 2026-10-11 12:44:00+00:00 -> 2026-10-13 23:59:00+00:00
+[D2] candles returned: min 2026-10-11 12:44:00+00:00 .. 2026-10-11 16:42:00+00:00;  max 2026-10-14 00:00:00+00:00 .. 2026-10-14 00:00:00+00:00  (overlap must reach 2026-10-13 23:59:00+00:00)
+[D2] close_match quantiles: p0 0.9779  p5 0.9991  p50 0.9997
+[D2] volume_match quantiles: p0 1.0000  p5 1.0000  p50 1.0000
+[D2] coins below 99% close match:
+coin  minutes  close_match  volume_match  close_match_traded                      from                        to                candle_min                candle_max
+SOPH     3488     0.977924           1.0            0.998282 2026-10-11 13:10:00+00:00 2026-10-13 23:17:00+00:00 2026-10-11 13:10:00+00:00 2026-10-14 00:00:00+00:00
+[D2] GATE: 177 of 178 coins (99.4%) have >= 99% matching closes; need >= 95%
+[D2] PASS
+D2 exit 0

@@ -1,0 +1,24 @@
+  coin 20/204  [24s]
+  coin 40/204  [44s]
+  coin 60/204  [63s]
+  coin 80/204  [83s]
+  coin 100/204  [102s]
+  coin 120/204  [120s]
+  coin 140/204  [140s]
+  coin 160/204  [159s]
+  coin 180/204  [179s]
+  coin 200/204  [199s]
+[EVENTFLOW] events 74,607, links 522,909; 1-minute path reproduces the z at the entry and the 30-minute marks, max abs error 3.40e-13  [237s]
+[TARGET] 1-minute window finite for 73,967 of 74,326 events with an outcome window (lost to holes 359); reach 0.3223; mean chance 0.4372
+  NaN share, events, imb      C24: 1.57%
+  NaN share, events, forced   C24: 1.57%
+  NaN share, events, open     C24: 1.57%
+  NaN share, events, close    C24: 1.57%
+  NaN share, events, ratio    C24: 1.60%
+  NaN share, events, top3     C24: 1.57%
+  NaN share, events, wallets  C24: 1.57%
+  NaN share, events, volume   C24: 1.57%
+  NaN share, events, twap     C24: 10.39%
+  NaN share, events, resid    C24: 0.00%
+  NaN share, events, mk_idx   C24: 0.00%
+  NaN share, events, mk_liq   C24: 1.57%

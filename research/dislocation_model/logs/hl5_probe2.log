@@ -1,0 +1,8 @@
+-rw-rw-r-- 1 elvisobondo elvisobondo 7722508 Oct 15 20:58 research/datasets/hl5_features.npz
+-rw-rw-r-- 1 elvisobondo elvisobondo     36 Oct 15 20:55 hl5_download.log
+-rw-rw-r-- 1 elvisobondo elvisobondo    510 Oct 15 20:52 hl5_probe.log
+-rw-rw-r-- 1 elvisobondo elvisobondo     93 Oct 16 14:16 hl5_probe2.log
+-rw-rw-r-- 1 elvisobondo elvisobondo      0 Oct 15 20:57 hl5_smoke_chain.log
+-rw-rw-r-- 1 elvisobondo elvisobondo   3724 Oct 15 20:58 hl5_smoke_features.log
+-rw-rw-r-- 1 elvisobondo elvisobondo    131 Oct 15 21:34 hl5_smoke_valid.log
+tail: cannot open 'research/dislocation_model/logs/hl5_chain1.log' for reading: No such file or directory

@@ -1,0 +1,1020 @@
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+======================================================================================================================
+HL-EVENT1 PART B -- the reference on the coin-level events
+======================================================================================================================
+  events 74,607; matched population 73,967 (finite 1-minute window and a 10h outcome window); train 41,269 val 10,702 held out 21,996 (HO1 12,872, HO2 9,124)
+  reach rate 0.3223, mean chance 0.4372; reference coefficients [0.455, 0.18, -0.064, -0.464]
+  HO1: n 12,872, reach 0.3309, chance 0.3990, AUC 0.6867
+    catch 50%: flag share 0.336, hit rate 0.492  (random 0.500 / 0.331); flagged chance 0.553
+    catch 80%: flag share 0.634, hit rate 0.417  (random 0.800 / 0.331); flagged chance 0.484
+    catch 90%: flag share 0.766, hit rate 0.389  (random 0.900 / 0.331); flagged chance 0.454
+    flag share at 80% catch                     +0.6342  [+0.6106, +0.6548]
+    top-20% hit rate                            +0.5427  [+0.5037, +0.5754]
+    beyond-chance gap, flagged at 80% catch     -0.0663  [-0.0937, -0.0404]
+    beyond-chance gap, top 20%                  -0.0496  [-0.0858, -0.0167]
+  HO2: n 9,124, reach 0.3188, chance 0.3830, AUC 0.6890
+    catch 50%: flag share 0.327, hit rate 0.488  (random 0.500 / 0.319); flagged chance 0.541
+    catch 80%: flag share 0.635, hit rate 0.402  (random 0.800 / 0.319); flagged chance 0.463
+    catch 90%: flag share 0.771, hit rate 0.372  (random 0.900 / 0.319); flagged chance 0.435
+    flag share at 80% catch                     +0.6346  [+0.6047, +0.6583]
+    top-20% hit rate                            +0.5326  [+0.4935, +0.5719]
+    beyond-chance gap, flagged at 80% catch     -0.0614  [-0.0928, -0.0343]
+    beyond-chance gap, top 20%                  -0.0498  [-0.0854, -0.0179]
+  REFERENCE GATE (gap80 wholly above zero in both halves): NO
+
+======================================================================================================================
+HL-EVENT1 PART B3 -- flow features against position, coin-level events
+======================================================================================================================
+  [SPLIT] train 41,269 (<2026-03-19)   val 10,702   HELD OUT 21,996 (>=2026-05-25)
+[SPLIT] held-out used ONCE, for scoring only; iterations chosen on val
+  matched 73,967; HO1 12,872  HO2 9,124
+  features 33 (groups: FORCED 3, OPENCLOSE 9, CONCENTRATION 6, VOLUME 3, IMPACT 2, MARKET 7; CONC-TWAP 3); CONC-TWAP exists on 66,291 of 73,967 rows
+  group NaN fill counts (rows with any NaN in the group -> train-median fill + indicator):
+    FORCED          1,249 of 73,967 rows   per column max 1,120
+    OPENCLOSE       1,427 of 73,967 rows   per column max 1,144
+    CONCENTRATION   1,256 of 73,967 rows   per column max 1,120
+    VOLUME          1,135 of 73,967 rows   per column max 1,120
+    IMPACT          1,313 of 73,967 rows   per column max 1,313
+    MARKET          1,120 of 73,967 rows   per column max 1,120
+  CELLS: 9 sets x 5 models x 2 halves x 3 measures = 270; expected by chance at 95% two-sided: 13.5 (6.8 in the good direction)
+
+======================================================================================================================
+STEP 1 -- PRUNE on VALIDATION (held out not read)
+======================================================================================================================
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+  ALL: logistic L1 C 0.003, val log loss 0.57789;  depth-2 tree: min_data_in_leaf 100, 727 rounds, val log loss 0.57165
+  group               L1 val skill pts [95%]       depth-2 val skill pts [95%]   decision
+  FORCED           -0.0029 [-0.0403,+0.0358]         -0.0044 [-0.0892,+0.0878]   DROP
+  OPENCLOSE         +0.0000 [+0.0000,+0.0000]         +0.0474 [-0.0495,+0.1326]   DROP
+  CONCENTRATION         +0.0240 [-0.0106,+0.0576]         +0.1065 [-0.0292,+0.2235]   DROP
+  VOLUME           +0.0000 [+0.0000,+0.0000]         +0.1286 [+0.0018,+0.2434]   keep
+  IMPACT           +0.4812 [+0.1366,+0.8312]         +0.8152 [+0.3546,+1.2890]   keep
+  MARKET           +0.0095 [+0.0032,+0.0161]         +0.8639 [+0.3931,+1.3589]   keep
+  KEPT groups: VOLUME, IMPACT, MARKET
+  [61s]
+
+======================================================================================================================
+STEP 2 -- MODELS (train; every setting on validation by log loss)
+======================================================================================================================
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+  reference L1 0.57928   d1 0.57621   d2 0.57645   d3 0.57757   d4 0.57764   -> representative d1
+      L1  C 0.01, nonzero 4 of 4
+      d1  min_data_in_leaf 100, rounds 517, depth max 1, leaves max 2
+      d2  min_data_in_leaf 100, rounds 333, depth max 2, leaves max 4
+      d3  min_data_in_leaf 100, rounds 130, depth max 3, leaves max 8
+      d4  min_data_in_leaf 100, rounds 75, depth max 4, leaves max 16
+  [72s]
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+  FORCED    L1 0.57927   d1 0.57610   d2 0.57609   d3 0.57724   d4 0.57732   -> representative d2
+      L1  C 0.01, nonzero 8 of 8
+      d1  min_data_in_leaf 100, rounds 630, depth max 1, leaves max 2
+      d2  min_data_in_leaf 100, rounds 557, depth max 2, leaves max 4
+      d3  min_data_in_leaf 100, rounds 291, depth max 3, leaves max 8
+      d4  min_data_in_leaf 1000, rounds 154, depth max 4, leaves max 16
+  [82s]
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+  OPENCLOSE L1 0.57907   d1 0.57600   d2 0.57625   d3 0.57703   d4 0.57716   -> representative d1
+      L1  C 0.03, nonzero 10 of 14
+      d1  min_data_in_leaf 100, rounds 554, depth max 1, leaves max 2
+      d2  min_data_in_leaf 100, rounds 225, depth max 2, leaves max 4
+      d3  min_data_in_leaf 100, rounds 132, depth max 3, leaves max 8
+      d4  min_data_in_leaf 100, rounds 104, depth max 4, leaves max 16
+  [91s]
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+  CONCENTRATIONL1 0.57974   d1 0.57535   d2 0.57573   d3 0.57661   d4 0.57656   -> representative d1
+      L1  C 0.003, nonzero 5 of 11
+      d1  min_data_in_leaf 100, rounds 836, depth max 1, leaves max 2
+      d2  min_data_in_leaf 100, rounds 293, depth max 2, leaves max 4
+      d3  min_data_in_leaf 400, rounds 188, depth max 3, leaves max 8
+      d4  min_data_in_leaf 400, rounds 107, depth max 4, leaves max 16
+  [102s]
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+  VOLUME    L1 0.57877   d1 0.57442   d2 0.57507   d3 0.57613   d4 0.57615   -> representative d1
+      L1  C 3.0, nonzero 8 of 8
+      d1  min_data_in_leaf 100, rounds 905, depth max 1, leaves max 2
+      d2  min_data_in_leaf 100, rounds 367, depth max 2, leaves max 4
+      d3  min_data_in_leaf 100, rounds 212, depth max 3, leaves max 8
+      d4  min_data_in_leaf 400, rounds 152, depth max 4, leaves max 16
+  [112s]
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+  IMPACT    L1 0.57744   d1 0.57470   d2 0.57539   d3 0.57596   d4 0.57583   -> representative d1
+      L1  C 0.01, nonzero 7 of 7
+      d1  min_data_in_leaf 100, rounds 663, depth max 1, leaves max 2
+      d2  min_data_in_leaf 400, rounds 222, depth max 2, leaves max 4
+      d3  min_data_in_leaf 400, rounds 147, depth max 3, leaves max 8
+      d4  min_data_in_leaf 100, rounds 87, depth max 4, leaves max 16
+  [121s]
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+  MARKET    L1 0.57862   d1 0.57298   d2 0.57307   d3 0.57312   d4 0.57453   -> representative d1
+      L1  C 3.0, nonzero 12 of 12
+      d1  min_data_in_leaf 100, rounds 1226, depth max 1, leaves max 2
+      d2  min_data_in_leaf 100, rounds 357, depth max 2, leaves max 4
+      d3  min_data_in_leaf 100, rounds 519, depth max 3, leaves max 8
+      d4  min_data_in_leaf 100, rounds 242, depth max 4, leaves max 16
+  [136s]
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+  ALL       L1 0.57789   d1 0.57135   d2 0.57165   d3 0.57226   d4 0.57247   -> representative d1
+      L1  C 0.003, nonzero 11 of 40
+      d1  min_data_in_leaf 100, rounds 1553, depth max 1, leaves max 2
+      d2  min_data_in_leaf 100, rounds 727, depth max 2, leaves max 4
+      d3  min_data_in_leaf 100, rounds 384, depth max 3, leaves max 8
+      d4  min_data_in_leaf 400, rounds 189, depth max 4, leaves max 16
+  [169s]
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+  CONC-TWAP L1 0.57895   d1 0.57618   d2 0.57645   d3 0.57712   d4 0.57729   -> representative d1
+      L1  C 0.1, nonzero 7 of 7
+      d1  min_data_in_leaf 100, rounds 490, depth max 1, leaves max 2
+      d2  min_data_in_leaf 100, rounds 250, depth max 2, leaves max 4
+      d3  min_data_in_leaf 100, rounds 130, depth max 3, leaves max 8
+      d4  min_data_in_leaf 100, rounds 141, depth max 4, leaves max 16
+  [175s]
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+  KEPT      L1 0.57632   d1 0.57101   d2 0.57126   d3 0.57189   d4 0.57204   -> representative d1
+      L1  C 0.1, nonzero 14 of 19
+      d1  min_data_in_leaf 100, rounds 1505, depth max 1, leaves max 2
+      d2  min_data_in_leaf 100, rounds 623, depth max 2, leaves max 4
+      d3  min_data_in_leaf 400, rounds 298, depth max 3, leaves max 8
+      d4  min_data_in_leaf 100, rounds 237, depth max 4, leaves max 16
+  [195s]
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+  reference refitted on the CONC-TWAP rows: L1 0.57897   d1 0.57617   d2 0.57677   d3 0.57753   d4 0.57735   -> representative d1
+
+======================================================================================================================
+STEP 3 -- SCORING, held out only, HO1 and HO2 separately (day-clustered 95%)
+======================================================================================================================
+  HO1: n 12,872, reverters 4,259 (0.3309), mean chance 0.3990
+    set / model                catch 50%: flag / hit     catch 80%: flag / hit     catch 90%: flag / hit   top20    gap80     AUC
+    reference logistic                 0.336 / 0.492             0.634 / 0.417             0.766 / 0.389   0.543  -0.0663  0.6867
+    reference L1                       0.337 / 0.492             0.635 / 0.417             0.765 / 0.389   0.543  -0.0662  0.6866
+    reference d1                       0.333 / 0.497             0.628 / 0.421             0.769 / 0.387   0.538  -0.0654  0.6892
+    reference d2                       0.332 / 0.498             0.629 / 0.421             0.771 / 0.386   0.545  -0.0651  0.6895
+    reference d3                       0.333 / 0.497             0.632 / 0.419             0.768 / 0.388   0.542  -0.0666  0.6882
+    reference d4                       0.335 / 0.494             0.634 / 0.418             0.767 / 0.388   0.540  -0.0663  0.6879
+    FORCED L1                          0.337 / 0.491             0.635 / 0.417             0.767 / 0.388   0.539  -0.0670  0.6859
+    FORCED d1                          0.333 / 0.497             0.630 / 0.420             0.766 / 0.389   0.534  -0.0662  0.6886
+    FORCED d2                          0.333 / 0.497             0.629 / 0.421             0.770 / 0.387   0.542  -0.0649  0.6887
+    FORCED d3                          0.333 / 0.497             0.631 / 0.420             0.768 / 0.388   0.540  -0.0653  0.6869
+    FORCED d4                          0.332 / 0.499             0.632 / 0.419             0.768 / 0.388   0.538  -0.0651  0.6889
+    OPENCLOSE L1                       0.337 / 0.491             0.636 / 0.416             0.767 / 0.388   0.539  -0.0666  0.6862
+    OPENCLOSE d1                       0.333 / 0.496             0.629 / 0.421             0.769 / 0.387   0.541  -0.0655  0.6891
+    OPENCLOSE d2                       0.333 / 0.496             0.627 / 0.422             0.771 / 0.387   0.542  -0.0640  0.6894
+    OPENCLOSE d3                       0.334 / 0.496             0.632 / 0.419             0.770 / 0.387   0.541  -0.0661  0.6876
+    OPENCLOSE d4                       0.334 / 0.496             0.631 / 0.420             0.771 / 0.387   0.543  -0.0655  0.6870
+    CONCENTRATION L1                   0.336 / 0.492             0.633 / 0.418             0.767 / 0.388   0.540  -0.0653  0.6868
+    CONCENTRATION d1                   0.333 / 0.498             0.627 / 0.422             0.767 / 0.388   0.543  -0.0651  0.6916
+    CONCENTRATION d2                   0.333 / 0.497             0.623 / 0.425             0.764 / 0.390   0.540  -0.0630  0.6913
+    CONCENTRATION d3                   0.334 / 0.495             0.622 / 0.426             0.766 / 0.389   0.546  -0.0621  0.6899
+    CONCENTRATION d4                   0.332 / 0.499             0.625 / 0.424             0.766 / 0.389   0.542  -0.0633  0.6906
+    VOLUME L1                          0.337 / 0.491             0.634 / 0.418             0.766 / 0.389   0.540  -0.0666  0.6865
+    VOLUME d1                          0.330 / 0.502             0.626 / 0.423             0.765 / 0.390   0.544  -0.0646  0.6923
+    VOLUME d2                          0.333 / 0.497             0.624 / 0.424             0.763 / 0.390   0.543  -0.0630  0.6918
+    VOLUME d3                          0.334 / 0.496             0.628 / 0.421             0.769 / 0.387   0.546  -0.0644  0.6898
+    VOLUME d4                          0.332 / 0.499             0.628 / 0.421             0.765 / 0.389   0.546  -0.0637  0.6912
+    IMPACT L1                          0.332 / 0.499             0.627 / 0.422             0.764 / 0.390   0.547  -0.0650  0.6907
+    IMPACT d1                          0.333 / 0.497             0.626 / 0.423             0.766 / 0.389   0.543  -0.0653  0.6918
+    IMPACT d2                          0.330 / 0.502             0.625 / 0.423             0.761 / 0.392   0.545  -0.0643  0.6924
+    IMPACT d3                          0.334 / 0.496             0.627 / 0.422             0.765 / 0.389   0.544  -0.0649  0.6917
+    IMPACT d4                          0.335 / 0.494             0.627 / 0.423             0.766 / 0.389   0.542  -0.0645  0.6915
+    MARKET L1                          0.338 / 0.490             0.634 / 0.418             0.766 / 0.389   0.542  -0.0660  0.6868
+    MARKET d1                          0.329 / 0.504             0.624 / 0.424             0.765 / 0.390   0.543  -0.0617  0.6925
+    MARKET d2                          0.329 / 0.503             0.622 / 0.425             0.763 / 0.391   0.549  -0.0602  0.6947
+    MARKET d3                          0.333 / 0.496             0.626 / 0.423             0.768 / 0.388   0.538  -0.0586  0.6898
+    MARKET d4                          0.329 / 0.504             0.624 / 0.424             0.762 / 0.391   0.544  -0.0582  0.6919
+    ALL L1                             0.332 / 0.498             0.628 / 0.421             0.763 / 0.391   0.549  -0.0654  0.6907
+    ALL d1                             0.329 / 0.503             0.615 / 0.430             0.758 / 0.393   0.550  -0.0601  0.6971
+    ALL d2                             0.327 / 0.506             0.620 / 0.427             0.758 / 0.393   0.557  -0.0611  0.6982
+    ALL d3                             0.324 / 0.510             0.618 / 0.429             0.755 / 0.395   0.552  -0.0595  0.6991
+    ALL d4                             0.323 / 0.512             0.620 / 0.427             0.756 / 0.394   0.551  -0.0598  0.6991
+    CONC-TWAP L1                       0.336 / 0.492             0.636 / 0.416             0.764 / 0.390   0.544  -0.0673  0.6866
+    CONC-TWAP d1                       0.338 / 0.490             0.629 / 0.421             0.767 / 0.388   0.535  -0.0662  0.6882
+    CONC-TWAP d2                       0.336 / 0.493             0.632 / 0.419             0.767 / 0.388   0.534  -0.0673  0.6875
+    CONC-TWAP d3                       0.335 / 0.493             0.634 / 0.418             0.767 / 0.388   0.537  -0.0674  0.6864
+    CONC-TWAP d4                       0.337 / 0.490             0.639 / 0.414             0.767 / 0.388   0.537  -0.0680  0.6857
+    KEPT L1                            0.331 / 0.499             0.626 / 0.423             0.763 / 0.390   0.545  -0.0652  0.6916
+    KEPT d1                            0.329 / 0.503             0.622 / 0.426             0.757 / 0.393   0.554  -0.0623  0.6969
+    KEPT d2                            0.327 / 0.507             0.616 / 0.430             0.757 / 0.394   0.554  -0.0590  0.6987
+    KEPT d3                            0.328 / 0.504             0.619 / 0.428             0.757 / 0.394   0.549  -0.0592  0.6978
+    KEPT d4                            0.325 / 0.510             0.620 / 0.427             0.755 / 0.395   0.549  -0.0590  0.6975
+
+  HO2: n 9,124, reverters 2,909 (0.3188), mean chance 0.3830
+    set / model                catch 50%: flag / hit     catch 80%: flag / hit     catch 90%: flag / hit   top20    gap80     AUC
+    reference logistic                 0.327 / 0.488             0.635 / 0.402             0.771 / 0.372   0.533  -0.0614  0.6890
+    reference L1                       0.328 / 0.487             0.634 / 0.402             0.771 / 0.372   0.531  -0.0612  0.6887
+    reference d1                       0.327 / 0.488             0.625 / 0.408             0.768 / 0.374   0.536  -0.0587  0.6899
+    reference d2                       0.324 / 0.492             0.629 / 0.406             0.770 / 0.373   0.534  -0.0594  0.6909
+    reference d3                       0.321 / 0.496             0.628 / 0.406             0.770 / 0.373   0.533  -0.0593  0.6904
+    reference d4                       0.322 / 0.496             0.631 / 0.405             0.769 / 0.373   0.535  -0.0606  0.6895
+    FORCED L1                          0.328 / 0.486             0.636 / 0.401             0.772 / 0.372   0.532  -0.0620  0.6884
+    FORCED d1                          0.326 / 0.489             0.624 / 0.409             0.762 / 0.377   0.539  -0.0585  0.6906
+    FORCED d2                          0.324 / 0.492             0.622 / 0.410             0.763 / 0.376   0.533  -0.0573  0.6922
+    FORCED d3                          0.321 / 0.496             0.625 / 0.408             0.760 / 0.378   0.530  -0.0581  0.6924
+    FORCED d4                          0.325 / 0.491             0.632 / 0.403             0.767 / 0.374   0.530  -0.0624  0.6887
+    OPENCLOSE L1                       0.328 / 0.486             0.632 / 0.404             0.770 / 0.373   0.533  -0.0604  0.6887
+    OPENCLOSE d1                       0.327 / 0.488             0.629 / 0.406             0.771 / 0.372   0.535  -0.0600  0.6893
+    OPENCLOSE d2                       0.327 / 0.488             0.629 / 0.406             0.772 / 0.372   0.535  -0.0601  0.6897
+    OPENCLOSE d3                       0.325 / 0.491             0.630 / 0.405             0.775 / 0.371   0.535  -0.0602  0.6900
+    OPENCLOSE d4                       0.324 / 0.492             0.631 / 0.405             0.772 / 0.372   0.538  -0.0610  0.6901
+    CONCENTRATION L1                   0.330 / 0.483             0.636 / 0.401             0.768 / 0.374   0.531  -0.0612  0.6880
+    CONCENTRATION d1                   0.328 / 0.487             0.623 / 0.409             0.770 / 0.373   0.532  -0.0581  0.6918
+    CONCENTRATION d2                   0.327 / 0.488             0.622 / 0.410             0.770 / 0.373   0.536  -0.0580  0.6923
+    CONCENTRATION d3                   0.326 / 0.490             0.624 / 0.409             0.770 / 0.373   0.527  -0.0593  0.6919
+    CONCENTRATION d4                   0.323 / 0.494             0.625 / 0.408             0.771 / 0.372   0.532  -0.0594  0.6914
+    VOLUME L1                          0.325 / 0.490             0.633 / 0.403             0.767 / 0.374   0.534  -0.0611  0.6900
+    VOLUME d1                          0.324 / 0.492             0.625 / 0.408             0.763 / 0.376   0.534  -0.0598  0.6928
+    VOLUME d2                          0.325 / 0.491             0.623 / 0.409             0.766 / 0.375   0.534  -0.0584  0.6933
+    VOLUME d3                          0.324 / 0.492             0.623 / 0.409             0.762 / 0.377   0.533  -0.0587  0.6927
+    VOLUME d4                          0.325 / 0.491             0.624 / 0.409             0.762 / 0.376   0.535  -0.0591  0.6926
+    IMPACT L1                          0.326 / 0.489             0.625 / 0.408             0.766 / 0.375   0.539  -0.0583  0.6923
+    IMPACT d1                          0.321 / 0.496             0.626 / 0.408             0.766 / 0.375   0.544  -0.0587  0.6930
+    IMPACT d2                          0.324 / 0.493             0.631 / 0.404             0.763 / 0.376   0.551  -0.0614  0.6925
+    IMPACT d3                          0.322 / 0.495             0.630 / 0.405             0.768 / 0.374   0.549  -0.0607  0.6936
+    IMPACT d4                          0.321 / 0.496             0.626 / 0.407             0.765 / 0.375   0.548  -0.0596  0.6930
+    MARKET L1                          0.332 / 0.480             0.631 / 0.404             0.764 / 0.376   0.514  -0.0606  0.6819
+    MARKET d1                          0.325 / 0.491             0.612 / 0.417             0.755 / 0.380   0.536  -0.0538  0.6980
+    MARKET d2                          0.324 / 0.492             0.607 / 0.420             0.754 / 0.381   0.543  -0.0504  0.7000
+    MARKET d3                          0.324 / 0.492             0.611 / 0.418             0.750 / 0.383   0.540  -0.0505  0.6997
+    MARKET d4                          0.324 / 0.492             0.619 / 0.412             0.755 / 0.380   0.535  -0.0562  0.6969
+    ALL L1                             0.326 / 0.489             0.628 / 0.407             0.766 / 0.375   0.535  -0.0596  0.6915
+    ALL d1                             0.317 / 0.503             0.613 / 0.416             0.751 / 0.382   0.546  -0.0552  0.7013
+    ALL d2                             0.321 / 0.496             0.609 / 0.419             0.748 / 0.384   0.541  -0.0528  0.7011
+    ALL d3                             0.315 / 0.506             0.610 / 0.418             0.750 / 0.383   0.541  -0.0537  0.7020
+    ALL d4                             0.319 / 0.500             0.612 / 0.417             0.746 / 0.385   0.538  -0.0544  0.7015
+    CONC-TWAP L1                       0.327 / 0.487             0.633 / 0.403             0.769 / 0.373   0.533  -0.0612  0.6884
+    CONC-TWAP d1                       0.331 / 0.482             0.629 / 0.405             0.766 / 0.375   0.536  -0.0598  0.6889
+    CONC-TWAP d2                       0.327 / 0.488             0.628 / 0.406             0.770 / 0.373   0.533  -0.0595  0.6887
+    CONC-TWAP d3                       0.326 / 0.489             0.630 / 0.405             0.771 / 0.372   0.532  -0.0599  0.6882
+    CONC-TWAP d4                       0.325 / 0.491             0.630 / 0.405             0.769 / 0.373   0.528  -0.0600  0.6877
+    KEPT L1                            0.330 / 0.483             0.625 / 0.408             0.766 / 0.375   0.530  -0.0592  0.6894
+    KEPT d1                            0.320 / 0.499             0.612 / 0.417             0.749 / 0.383   0.543  -0.0545  0.7012
+    KEPT d2                            0.318 / 0.502             0.605 / 0.422             0.747 / 0.384   0.539  -0.0499  0.7017
+    KEPT d3                            0.319 / 0.499             0.609 / 0.419             0.749 / 0.383   0.542  -0.0520  0.7022
+    KEPT d4                            0.319 / 0.501             0.611 / 0.418             0.752 / 0.382   0.541  -0.0525  0.7006
+
+  PAIRED, every model minus the Part 1 reference logistic. flag80: - = better; top20, gap80: + = better.
+  * = wholly on the good side, ! = wholly on the bad side. (TWAP rows: against the reference logistic's scores on those rows.)
+    FORCED L1     HO1 flag80 +0.0012 [-0.0028,+0.0028]   HO1 top20 -0.0035 [-0.0072,+0.0029]   HO1 gap80 -0.0007 [-0.0013,+0.0012]   HO2 flag80 +0.0012 [-0.0045,+0.0032]   HO2 top20 -0.0005 [-0.0062,+0.0035]   HO2 gap80 -0.0007 [-0.0012,+0.0020] 
+    FORCED d1     HO1 flag80 -0.0044 [-0.0126,+0.0018]   HO1 top20 -0.0089 [-0.0208,+0.0051]   HO1 gap80 +0.0001 [-0.0025,+0.0035]   HO2 flag80 -0.0109 [-0.0185,+0.0001]   HO2 top20 +0.0060 [-0.0096,+0.0127]   HO2 gap80 +0.0029 [-0.0019,+0.0064] 
+    FORCED d2     HO1 flag80 -0.0050 [-0.0127,+0.0031]   HO1 top20 -0.0008 [-0.0115,+0.0113]   HO1 gap80 +0.0014 [-0.0023,+0.0048]   HO2 flag80 -0.0125 [-0.0225,-0.0004]*  HO2 top20 +0.0000 [-0.0135,+0.0083]   HO2 gap80 +0.0041 [-0.0013,+0.0087] 
+    FORCED d3     HO1 flag80 -0.0037 [-0.0110,+0.0050]   HO1 top20 -0.0023 [-0.0138,+0.0120]   HO1 gap80 +0.0010 [-0.0025,+0.0043]   HO2 flag80 -0.0096 [-0.0195,+0.0031]   HO2 top20 -0.0022 [-0.0168,+0.0126]   HO2 gap80 +0.0032 [-0.0021,+0.0075] 
+    FORCED d4     HO1 flag80 -0.0020 [-0.0116,+0.0055]   HO1 top20 -0.0047 [-0.0148,+0.0094]   HO1 gap80 +0.0012 [-0.0024,+0.0056]   HO2 flag80 -0.0022 [-0.0104,+0.0081]   HO2 top20 -0.0027 [-0.0164,+0.0109]   HO2 gap80 -0.0011 [-0.0054,+0.0030] 
+    OPENCLOSE L1  HO1 flag80 +0.0015 [-0.0028,+0.0058]   HO1 top20 -0.0039 [-0.0081,+0.0048]   HO1 gap80 -0.0003 [-0.0022,+0.0017]   HO2 flag80 -0.0025 [-0.0071,+0.0034]   HO2 top20 +0.0000 [-0.0102,+0.0064]   HO2 gap80 +0.0010 [-0.0016,+0.0029] 
+    OPENCLOSE d1  HO1 flag80 -0.0052 [-0.0136,+0.0026]   HO1 top20 -0.0016 [-0.0146,+0.0131]   HO1 gap80 +0.0008 [-0.0029,+0.0044]   HO2 flag80 -0.0060 [-0.0162,+0.0055]   HO2 top20 +0.0027 [-0.0114,+0.0150]   HO2 gap80 +0.0013 [-0.0034,+0.0054] 
+    OPENCLOSE d2  HO1 flag80 -0.0074 [-0.0149,+0.0021]   HO1 top20 -0.0008 [-0.0133,+0.0112]   HO1 gap80 +0.0022 [-0.0023,+0.0051]   HO2 flag80 -0.0055 [-0.0135,+0.0059]   HO2 top20 +0.0027 [-0.0071,+0.0176]   HO2 gap80 +0.0013 [-0.0032,+0.0048] 
+    OPENCLOSE d3  HO1 flag80 -0.0023 [-0.0098,+0.0054]   HO1 top20 -0.0016 [-0.0134,+0.0146]   HO1 gap80 +0.0002 [-0.0037,+0.0031]   HO2 flag80 -0.0049 [-0.0126,+0.0075]   HO2 top20 +0.0022 [-0.0094,+0.0144]   HO2 gap80 +0.0011 [-0.0039,+0.0043] 
+    OPENCLOSE d4  HO1 flag80 -0.0037 [-0.0113,+0.0036]   HO1 top20 +0.0000 [-0.0131,+0.0167]   HO1 gap80 +0.0008 [-0.0031,+0.0040]   HO2 flag80 -0.0039 [-0.0135,+0.0054]   HO2 top20 +0.0055 [-0.0140,+0.0153]   HO2 gap80 +0.0003 [-0.0038,+0.0039] 
+    CONCENTRATION L1HO1 flag80 -0.0014 [-0.0068,+0.0033]   HO1 top20 -0.0023 [-0.0065,+0.0039]   HO1 gap80 +0.0010 [-0.0011,+0.0030]   HO2 flag80 +0.0016 [-0.0045,+0.0052]   HO2 top20 -0.0016 [-0.0067,+0.0031]   HO2 gap80 +0.0002 [-0.0015,+0.0024] 
+    CONCENTRATION d1HO1 flag80 -0.0072 [-0.0167,-0.0017]*  HO1 top20 +0.0004 [-0.0116,+0.0151]   HO1 gap80 +0.0012 [-0.0013,+0.0054]   HO2 flag80 -0.0112 [-0.0227,+0.0001]   HO2 top20 -0.0005 [-0.0128,+0.0121]   HO2 gap80 +0.0032 [-0.0019,+0.0079] 
+    CONCENTRATION d2HO1 flag80 -0.0113 [-0.0203,-0.0045]*  HO1 top20 -0.0023 [-0.0159,+0.0133]   HO1 gap80 +0.0033 [-0.0001,+0.0070]   HO2 flag80 -0.0126 [-0.0234,+0.0010]   HO2 top20 +0.0033 [-0.0110,+0.0153]   HO2 gap80 +0.0034 [-0.0025,+0.0082] 
+    CONCENTRATION d3HO1 flag80 -0.0127 [-0.0196,-0.0028]*  HO1 top20 +0.0031 [-0.0101,+0.0161]   HO1 gap80 +0.0041 [-0.0000,+0.0069]   HO2 flag80 -0.0110 [-0.0231,+0.0054]   HO2 top20 -0.0060 [-0.0180,+0.0080]   HO2 gap80 +0.0021 [-0.0046,+0.0076] 
+    CONCENTRATION d4HO1 flag80 -0.0093 [-0.0167,-0.0010]*  HO1 top20 -0.0008 [-0.0126,+0.0149]   HO1 gap80 +0.0030 [-0.0009,+0.0067]   HO2 flag80 -0.0098 [-0.0183,+0.0035]   HO2 top20 -0.0005 [-0.0129,+0.0098]   HO2 gap80 +0.0019 [-0.0046,+0.0052] 
+    VOLUME L1     HO1 flag80 -0.0002 [-0.0022,+0.0023]   HO1 top20 -0.0027 [-0.0043,+0.0024]   HO1 gap80 -0.0003 [-0.0011,+0.0007]   HO2 flag80 -0.0019 [-0.0050,+0.0019]   HO2 top20 +0.0011 [-0.0030,+0.0054]   HO2 gap80 +0.0003 [-0.0011,+0.0018] 
+    VOLUME d1     HO1 flag80 -0.0078 [-0.0149,+0.0001]   HO1 top20 +0.0012 [-0.0094,+0.0185]   HO1 gap80 +0.0017 [-0.0025,+0.0048]   HO2 flag80 -0.0092 [-0.0222,+0.0030]   HO2 top20 +0.0016 [-0.0132,+0.0142]   HO2 gap80 +0.0015 [-0.0034,+0.0076] 
+    VOLUME d2     HO1 flag80 -0.0102 [-0.0177,-0.0007]*  HO1 top20 +0.0000 [-0.0127,+0.0141]   HO1 gap80 +0.0033 [-0.0010,+0.0067]   HO2 flag80 -0.0115 [-0.0226,+0.0005]   HO2 top20 +0.0016 [-0.0109,+0.0163]   HO2 gap80 +0.0029 [-0.0032,+0.0077] 
+    VOLUME d3     HO1 flag80 -0.0059 [-0.0153,+0.0022]   HO1 top20 +0.0035 [-0.0087,+0.0163]   HO1 gap80 +0.0019 [-0.0019,+0.0058]   HO2 flag80 -0.0115 [-0.0197,+0.0040]   HO2 top20 +0.0005 [-0.0136,+0.0132]   HO2 gap80 +0.0026 [-0.0045,+0.0059] 
+    VOLUME d4     HO1 flag80 -0.0061 [-0.0173,+0.0010]   HO1 top20 +0.0031 [-0.0107,+0.0154]   HO1 gap80 +0.0025 [-0.0011,+0.0077]   HO2 flag80 -0.0109 [-0.0209,+0.0016]   HO2 top20 +0.0022 [-0.0127,+0.0157]   HO2 gap80 +0.0022 [-0.0033,+0.0065] 
+    IMPACT L1     HO1 flag80 -0.0074 [-0.0149,+0.0005]   HO1 top20 +0.0043 [-0.0041,+0.0146]   HO1 gap80 +0.0013 [-0.0018,+0.0051]   HO2 flag80 -0.0098 [-0.0191,+0.0008]   HO2 top20 +0.0066 [-0.0048,+0.0191]   HO2 gap80 +0.0030 [-0.0020,+0.0067] 
+    IMPACT d1     HO1 flag80 -0.0083 [-0.0172,-0.0004]*  HO1 top20 +0.0000 [-0.0113,+0.0168]   HO1 gap80 +0.0010 [-0.0026,+0.0049]   HO2 flag80 -0.0085 [-0.0224,+0.0043]   HO2 top20 +0.0115 [-0.0056,+0.0253]   HO2 gap80 +0.0026 [-0.0031,+0.0079] 
+    IMPACT d2     HO1 flag80 -0.0090 [-0.0197,+0.0018]   HO1 top20 +0.0023 [-0.0098,+0.0165]   HO1 gap80 +0.0019 [-0.0031,+0.0074]   HO2 flag80 -0.0037 [-0.0153,+0.0083]   HO2 top20 +0.0181 [-0.0006,+0.0289]   HO2 gap80 -0.0000 [-0.0051,+0.0045] 
+    IMPACT d3     HO1 flag80 -0.0072 [-0.0199,+0.0023]   HO1 top20 +0.0016 [-0.0099,+0.0168]   HO1 gap80 +0.0014 [-0.0034,+0.0076]   HO2 flag80 -0.0042 [-0.0168,+0.0070]   HO2 top20 +0.0164 [+0.0000,+0.0307]   HO2 gap80 +0.0007 [-0.0041,+0.0055] 
+    IMPACT d4     HO1 flag80 -0.0077 [-0.0182,+0.0005]   HO1 top20 -0.0008 [-0.0128,+0.0141]   HO1 gap80 +0.0017 [-0.0021,+0.0067]   HO2 flag80 -0.0082 [-0.0179,+0.0056]   HO2 top20 +0.0153 [-0.0039,+0.0265]   HO2 gap80 +0.0017 [-0.0040,+0.0062] 
+    MARKET L1     HO1 flag80 -0.0007 [-0.0044,+0.0038]   HO1 top20 -0.0012 [-0.0058,+0.0043]   HO1 gap80 +0.0003 [-0.0018,+0.0020]   HO2 flag80 -0.0033 [-0.0166,+0.0141]   HO2 top20 -0.0186 [-0.0493,-0.0011]!  HO2 gap80 +0.0008 [-0.0055,+0.0062] 
+    MARKET d1     HO1 flag80 -0.0103 [-0.0170,+0.0010]   HO1 top20 +0.0004 [-0.0112,+0.0192]   HO1 gap80 +0.0045 [-0.0005,+0.0082]   HO2 flag80 -0.0229 [-0.0385,-0.0089]*  HO2 top20 +0.0033 [-0.0121,+0.0169]   HO2 gap80 +0.0075 [+0.0008,+0.0148]*
+    MARKET d2     HO1 flag80 -0.0119 [-0.0220,-0.0001]*  HO1 top20 +0.0062 [-0.0083,+0.0208]   HO1 gap80 +0.0061 [-0.0002,+0.0111]   HO2 flag80 -0.0276 [-0.0409,-0.0057]*  HO2 top20 +0.0104 [-0.0088,+0.0230]   HO2 gap80 +0.0109 [+0.0012,+0.0177]*
+    MARKET d3     HO1 flag80 -0.0080 [-0.0221,+0.0075]   HO1 top20 -0.0051 [-0.0180,+0.0113]   HO1 gap80 +0.0076 [-0.0004,+0.0156]   HO2 flag80 -0.0238 [-0.0419,-0.0012]*  HO2 top20 +0.0077 [-0.0156,+0.0233]   HO2 gap80 +0.0109 [+0.0001,+0.0211]*
+    MARKET d4     HO1 flag80 -0.0105 [-0.0233,+0.0053]   HO1 top20 +0.0016 [-0.0120,+0.0172]   HO1 gap80 +0.0081 [+0.0003,+0.0153]*  HO2 flag80 -0.0157 [-0.0362,+0.0014]   HO2 top20 +0.0027 [-0.0168,+0.0179]   HO2 gap80 +0.0052 [-0.0033,+0.0158] 
+    ALL L1        HO1 flag80 -0.0058 [-0.0131,-0.0007]*  HO1 top20 +0.0062 [-0.0016,+0.0132]   HO1 gap80 +0.0008 [-0.0011,+0.0039]   HO2 flag80 -0.0070 [-0.0161,+0.0009]   HO2 top20 +0.0027 [-0.0075,+0.0126]   HO2 gap80 +0.0017 [-0.0016,+0.0065] 
+    ALL d1        HO1 flag80 -0.0190 [-0.0259,-0.0056]*  HO1 top20 +0.0070 [-0.0053,+0.0230]   HO1 gap80 +0.0062 [-0.0002,+0.0094]   HO2 flag80 -0.0218 [-0.0383,-0.0081]*  HO2 top20 +0.0132 [-0.0044,+0.0304]   HO2 gap80 +0.0061 [-0.0011,+0.0143] 
+    ALL d2        HO1 flag80 -0.0140 [-0.0246,-0.0039]*  HO1 top20 +0.0144 [-0.0019,+0.0271]   HO1 gap80 +0.0052 [-0.0002,+0.0109]   HO2 flag80 -0.0252 [-0.0412,-0.0090]*  HO2 top20 +0.0082 [-0.0141,+0.0254]   HO2 gap80 +0.0085 [+0.0005,+0.0165]*
+    ALL d3        HO1 flag80 -0.0165 [-0.0278,-0.0050]*  HO1 top20 +0.0097 [-0.0044,+0.0251]   HO1 gap80 +0.0067 [+0.0006,+0.0128]*  HO2 flag80 -0.0242 [-0.0416,-0.0071]*  HO2 top20 +0.0088 [-0.0121,+0.0229]   HO2 gap80 +0.0076 [-0.0015,+0.0156] 
+    ALL d4        HO1 flag80 -0.0141 [-0.0253,-0.0018]*  HO1 top20 +0.0082 [-0.0044,+0.0233]   HO1 gap80 +0.0064 [+0.0001,+0.0126]*  HO2 flag80 -0.0226 [-0.0404,-0.0061]*  HO2 top20 +0.0049 [-0.0141,+0.0206]   HO2 gap80 +0.0069 [-0.0017,+0.0157] 
+    CONC-TWAP L1  HO1 flag80 +0.0009 [-0.0026,+0.0035]   HO1 top20 +0.0012 [-0.0035,+0.0056]   HO1 gap80 -0.0008 [-0.0021,+0.0007]   HO2 flag80 -0.0012 [-0.0042,+0.0052]   HO2 top20 +0.0000 [-0.0051,+0.0045]   HO2 gap80 +0.0002 [-0.0021,+0.0017] 
+    CONC-TWAP d1  HO1 flag80 -0.0049 [-0.0123,+0.0037]   HO1 top20 -0.0086 [-0.0210,+0.0045]   HO1 gap80 -0.0000 [-0.0036,+0.0031]   HO2 flag80 -0.0052 [-0.0138,+0.0048]   HO2 top20 +0.0033 [-0.0100,+0.0125]   HO2 gap80 +0.0015 [-0.0026,+0.0053] 
+    CONC-TWAP d2  HO1 flag80 -0.0022 [-0.0079,+0.0077]   HO1 top20 -0.0082 [-0.0187,+0.0055]   HO1 gap80 -0.0011 [-0.0053,+0.0016]   HO2 flag80 -0.0065 [-0.0150,+0.0041]   HO2 top20 +0.0016 [-0.0121,+0.0107]   HO2 gap80 +0.0019 [-0.0028,+0.0059] 
+    CONC-TWAP d3  HO1 flag80 -0.0003 [-0.0072,+0.0074]   HO1 top20 -0.0062 [-0.0177,+0.0057]   HO1 gap80 -0.0011 [-0.0046,+0.0027]   HO2 flag80 -0.0048 [-0.0135,+0.0081]   HO2 top20 -0.0005 [-0.0130,+0.0124]   HO2 gap80 +0.0015 [-0.0041,+0.0055] 
+    CONC-TWAP d4  HO1 flag80 +0.0044 [-0.0033,+0.0145]   HO1 top20 -0.0058 [-0.0160,+0.0084]   HO1 gap80 -0.0016 [-0.0064,+0.0016]   HO2 flag80 -0.0046 [-0.0131,+0.0062]   HO2 top20 -0.0055 [-0.0190,+0.0103]   HO2 gap80 +0.0014 [-0.0034,+0.0051] 
+    KEPT L1       HO1 flag80 -0.0086 [-0.0161,-0.0003]*  HO1 top20 +0.0019 [-0.0050,+0.0149]   HO1 gap80 +0.0011 [-0.0024,+0.0048]   HO2 flag80 -0.0100 [-0.0241,+0.0051]   HO2 top20 -0.0022 [-0.0279,+0.0138]   HO2 gap80 +0.0021 [-0.0035,+0.0073] 
+    KEPT d1       HO1 flag80 -0.0123 [-0.0241,-0.0018]*  HO1 top20 +0.0117 [-0.0008,+0.0270]   HO1 gap80 +0.0039 [-0.0013,+0.0094]   HO2 flag80 -0.0222 [-0.0362,-0.0076]*  HO2 top20 +0.0104 [-0.0108,+0.0262]   HO2 gap80 +0.0069 [-0.0001,+0.0136] 
+    KEPT d2       HO1 flag80 -0.0181 [-0.0280,-0.0034]*  HO1 top20 +0.0117 [-0.0018,+0.0285]   HO1 gap80 +0.0072 [-0.0008,+0.0126]   HO2 flag80 -0.0300 [-0.0452,-0.0092]*  HO2 top20 +0.0060 [-0.0107,+0.0233]   HO2 gap80 +0.0115 [+0.0014,+0.0186]*
+    KEPT d3       HO1 flag80 -0.0151 [-0.0284,-0.0012]*  HO1 top20 +0.0058 [-0.0099,+0.0221]   HO1 gap80 +0.0070 [+0.0002,+0.0140]*  HO2 flag80 -0.0260 [-0.0440,-0.0107]*  HO2 top20 +0.0093 [-0.0126,+0.0277]   HO2 gap80 +0.0093 [+0.0015,+0.0182]*
+    KEPT d4       HO1 flag80 -0.0144 [-0.0274,-0.0003]*  HO1 top20 +0.0062 [-0.0055,+0.0228]   HO1 gap80 +0.0072 [+0.0002,+0.0142]*  HO2 flag80 -0.0239 [-0.0423,-0.0041]*  HO2 top20 +0.0088 [-0.0113,+0.0241]   HO2 gap80 +0.0089 [-0.0013,+0.0178] 
+  CELLS scored 270: good-side hits 40, bad-side 1  (expected by chance: 6.8 each side at 95% two-sided)
+
+  SAME-LEARNER DIAGNOSTICS, flag80 (set's L1 minus reference-set L1; set's best tree minus reference-set best tree)
+    FORCED   L1 - L1       HO1 +0.0005 [-0.0027,+0.0035]  HO2 +0.0014 [-0.0050,+0.0036]   same-learner clears both: no 
+    FORCED   d2 - d1       HO1 +0.0009 [-0.0051,+0.0056]  HO2 -0.0034 [-0.0140,+0.0021]   same-learner clears both: no 
+    OPENCLOSEL1 - L1       HO1 +0.0007 [-0.0025,+0.0054]  HO2 -0.0023 [-0.0070,+0.0035]   same-learner clears both: no 
+    OPENCLOSEd1 - d1       HO1 +0.0007 [-0.0048,+0.0045]  HO2 +0.0031 [-0.0049,+0.0052]   same-learner clears both: no 
+    CONCENTRATIONL1 - L1       HO1 -0.0022 [-0.0051,+0.0023]  HO2 +0.0019 [-0.0038,+0.0054]   same-learner clears both: no 
+    CONCENTRATIONd1 - d1       HO1 -0.0013 [-0.0107,+0.0015]  HO2 -0.0021 [-0.0122,+0.0039]   same-learner clears both: no 
+    VOLUME   L1 - L1       HO1 -0.0009 [-0.0026,+0.0037]  HO2 -0.0016 [-0.0058,+0.0024]   same-learner clears both: no 
+    VOLUME   d1 - d1       HO1 -0.0019 [-0.0082,+0.0041]  HO2 -0.0001 [-0.0138,+0.0057]   same-learner clears both: no 
+    IMPACT   L1 - L1       HO1 -0.0082 [-0.0150,+0.0011]  HO2 -0.0095 [-0.0196,+0.0005]   same-learner clears both: no 
+    IMPACT   d1 - d1       HO1 -0.0024 [-0.0117,+0.0038]  HO2 +0.0005 [-0.0136,+0.0091]   same-learner clears both: no 
+    MARKET   L1 - L1       HO1 -0.0015 [-0.0042,+0.0048]  HO2 -0.0031 [-0.0165,+0.0141]   same-learner clears both: no 
+    MARKET   d1 - d1       HO1 -0.0044 [-0.0114,+0.0033]  HO2 -0.0138 [-0.0277,-0.0038]   same-learner clears both: no 
+    ALL      L1 - L1       HO1 -0.0066 [-0.0130,-0.0004]  HO2 -0.0068 [-0.0164,+0.0020]   same-learner clears both: no 
+    ALL      d1 - d1       HO1 -0.0131 [-0.0203,-0.0015]  HO2 -0.0127 [-0.0286,-0.0017]   same-learner clears both: YES
+    CONC-TWAPL1 - L1       HO1 -0.0008 [-0.0026,+0.0017]  HO2 -0.0029 [-0.0038,+0.0044]   same-learner clears both: no 
+    CONC-TWAPd1 - d1       HO1 -0.0013 [-0.0050,+0.0036]  HO2 +0.0000 [-0.0067,+0.0050]   same-learner clears both: no 
+    KEPT     L1 - L1       HO1 -0.0094 [-0.0157,+0.0001]  HO2 -0.0098 [-0.0236,+0.0061]   same-learner clears both: no 
+    KEPT     d1 - d1       HO1 -0.0064 [-0.0179,+0.0034]  HO2 -0.0132 [-0.0277,-0.0029]   same-learner clears both: no 
+  DISAGREEMENTS between the same-learner test and the gating test (representative vs reference logistic): ALL L1 - L1 (same-learner False, gating True), KEPT L1 - L1 (same-learner False, gating True), KEPT d1 - d1 (same-learner False, gating True)
+
+======================================================================================================================
+PERMUTATION NULL -- representative refitted with the set's flow block row-permuted (20 seeds)
+======================================================================================================================
+  FORCED d2  HO1: observed -0.0050; null min -0.0070 median -0.0049 max -0.0013   observed below the null's min: no
+  FORCED d2  HO2: observed -0.0125; null min -0.0105 median -0.0059 max -0.0038   observed below the null's min: YES
+  [427s]
+  OPENCLOSEd1  HO1: observed -0.0052; null min -0.0072 median -0.0053 max -0.0024   observed below the null's min: no
+  OPENCLOSEd1  HO2: observed -0.0060; null min -0.0091 median -0.0066 max -0.0041   observed below the null's min: no
+  [483s]
+  CONCENTRATIONd1  HO1: observed -0.0072; null min -0.0076 median -0.0060 max -0.0040   observed below the null's min: no
+  CONCENTRATIONd1  HO2: observed -0.0112; null min -0.0107 median -0.0065 max -0.0043   observed below the null's min: YES
+  [539s]
+  VOLUME d1  HO1: observed -0.0078; null min -0.0071 median -0.0056 max -0.0040   observed below the null's min: YES
+  VOLUME d1  HO2: observed -0.0092; null min -0.0096 median -0.0068 max -0.0035   observed below the null's min: no
+  [591s]
+  IMPACT d1  HO1: observed -0.0083; null min -0.0070 median -0.0052 max -0.0023   observed below the null's min: YES
+  IMPACT d1  HO2: observed -0.0085; null min -0.0099 median -0.0078 max -0.0050   observed below the null's min: no
+  [641s]
+  MARKET d1  HO1: observed -0.0103; null min -0.0085 median -0.0053 max -0.0037   observed below the null's min: YES
+  MARKET d1  HO2: observed -0.0229; null min -0.0096 median -0.0067 max -0.0041   observed below the null's min: YES
+  [696s]
+  ALL    d1  HO1: observed -0.0190; null min -0.0075 median -0.0060 max -0.0021   observed below the null's min: YES
+  ALL    d1  HO2: observed -0.0218; null min -0.0088 median -0.0060 max -0.0018   observed below the null's min: YES
+  [775s]
+  KEPT   d1  HO1: observed -0.0123; null min -0.0076 median -0.0054 max -0.0031   observed below the null's min: YES
+  KEPT   d1  HO2: observed -0.0222; null min -0.0084 median -0.0062 max -0.0034   observed below the null's min: YES
+  [837s]
+
+======================================================================================================================
+DIRECTION CHECK -- held-out correlation of each flow feature with the reference's residual (reach - predicted)
+======================================================================================================================
+  feature                            expect   HO1 corr [95%]            HO2 corr [95%]            verdict
+  forced_P1                               +   +0.0052 [-0.0100,+0.0233] +0.0050 [-0.0159,+0.0267] -/-
+  forced_C6                               +   -0.0011 [-0.0182,+0.0190] +0.0053 [-0.0166,+0.0290] -/-
+  forced_C24                              +   -0.0011 [-0.0125,+0.0137] -0.0154 [-0.0465,+0.0122] -/-
+  open_P1                                 -   -0.0003 [-0.0173,+0.0196] +0.0108 [-0.0151,+0.0362] -/-
+  close_P1                                +   -0.0009 [-0.0250,+0.0214] -0.0136 [-0.0362,+0.0102] -/-
+  ratio_P1                          2-sided   +0.0060 [-0.0135,+0.0283] +0.0117 [-0.0101,+0.0336] -/-
+  open_C6                                 -   +0.0008 [-0.0222,+0.0238] +0.0044 [-0.0179,+0.0265] -/-
+  close_C6                                +   -0.0138 [-0.0403,+0.0105] -0.0043 [-0.0293,+0.0242] -/-
+  ratio_C6                          2-sided   +0.0058 [-0.0175,+0.0281] +0.0026 [-0.0242,+0.0260] -/-
+  open_C24                                -   -0.0014 [-0.0247,+0.0206] -0.0083 [-0.0324,+0.0156] -/-
+  close_C24                               +   +0.0066 [-0.0127,+0.0253] -0.0100 [-0.0363,+0.0218] -/-
+  ratio_C24                         2-sided   -0.0068 [-0.0261,+0.0118] -0.0012 [-0.0332,+0.0255] -/-
+  top3_P1                           2-sided   -0.0051 [-0.0245,+0.0154] +0.0136 [-0.0147,+0.0381] -/-
+  wallets_P1                        2-sided   -0.0025 [-0.0268,+0.0215] -0.0046 [-0.0311,+0.0227] -/-
+  top3_C6                           2-sided   +0.0098 [-0.0103,+0.0290] +0.0241 [-0.0049,+0.0505] -/-
+  wallets_C6                        2-sided   +0.0261 [-0.0096,+0.0505] +0.0055 [-0.0287,+0.0404] -/-
+  top3_C24                          2-sided   +0.0236 [+0.0039,+0.0437] +0.0306 [-0.0021,+0.0591] +/-
+  wallets_C24                       2-sided   +0.0460 [+0.0163,+0.0743] +0.0255 [-0.0106,+0.0589] +/-
+  twap_P1                           2-sided   -0.0253 [-0.0396,-0.0091] +0.0127 [-0.0100,+0.0350] neg/-
+  twap_C6                           2-sided   -0.0238 [-0.0419,-0.0056] +0.0179 [-0.0051,+0.0418] neg/-
+  twap_C24                          2-sided   -0.0317 [-0.0485,-0.0146] +0.0205 [-0.0069,+0.0491] neg/-
+  volume_P1                         2-sided   +0.0075 [-0.0018,+0.0371] +0.0278 [-0.0022,+0.0466] -/-
+  volume_C6                         2-sided   -0.0054 [-0.0190,+0.0166] +0.0279 [-0.0008,+0.0548] -/-
+  volume_C24                        2-sided   -0.0226 [-0.0427,+0.0016] +0.0049 [-0.0239,+0.0379] -/-
+  explained_share                   2-sided   -0.0200 [-0.0366,-0.0007] -0.0068 [-0.0276,+0.0133] neg/-
+  unexplained_move                        +   +0.0526 [+0.0241,+0.0794] +0.0303 [-0.0021,+0.0608] ok/-
+  mk_idx_P1                         2-sided   +0.0109 [-0.0115,+0.0357] +0.0414 [+0.0080,+0.0701] -/+
+  mk_idx_C6                         2-sided   +0.0185 [-0.0048,+0.0510] +0.0486 [+0.0215,+0.0784] -/+
+  mk_idx_C24                        2-sided   +0.0203 [-0.0000,+0.0466] +0.0580 [+0.0299,+0.0850] -/+
+  mk_liq_P1                         2-sided   +0.0097 [-0.0395,+0.0372] -0.0113 [-0.0238,+0.0232] -/-
+  mk_liq_C6                         2-sided   -0.0318 [-0.0743,-0.0024] -0.0012 [-0.0146,+0.0314] neg/-
+  mk_liq_C24                        2-sided   -0.0537 [-0.0958,-0.0128] +0.0095 [-0.0331,+0.0389] neg/-
+  breadth_60                        2-sided   -0.0214 [-0.0541,+0.0090] -0.0101 [-0.0642,+0.0483] -/-
+  WRONG DIRECTION in at least one half: none
+
+======================================================================================================================
+READING RULES
+======================================================================================================================
+  FORCED   representative d2 : REGIME-DEPENDENT (clears in HO2 only)
+  OPENCLOSE representative d1 : no help
+  CONCENTRATION representative d1 : REGIME-DEPENDENT (clears in HO1 only)
+  VOLUME   representative d1 : no help
+  IMPACT   representative d1 : REGIME-DEPENDENT (clears in HO1 only)
+  MARKET   representative d1 : REGIME-DEPENDENT (clears in HO2 only)
+  ALL      representative d1 : HELP
+  CONC-TWAP representative d1 : no help
+  KEPT     representative d1 : HELP
+  Nothing written to the registry or the live system. No stop, no profit, no delayed features.
+  [841s]
+======================================================================================================================
+
+======================================================================================================================
+B4 -- THE STRONG-EVENT CUT: (|z| >= 3) OR (forced share P1 > 0); groups and reference refitted on the restricted rows
+======================================================================================================================
+  n: all 20,872 of 73,967; train 11,583, val 2,877, HO1 3,539, HO2 2,873; reach rate 0.2506
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+  HO1 reference (restricted refit): flag80 0.582, top20 0.483, gap80 -0.0150
+  HO2 reference (restricted refit): flag80 0.615, top20 0.412, gap80 -0.0517
+  set           model                     HO1 flag80                     HO1 top20                     HO1 gap80                    HO2 flag80                     HO2 top20                     HO2 gap80
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+  FORCED        d1        +0.0082 [-0.0061,+0.0286]     -0.0268 [-0.0562,+0.0035]     -0.0025 [-0.0111,+0.0041]     +0.0237 [-0.0078,+0.0647]     -0.0035 [-0.0341,+0.0250]     -0.0090 [-0.0236,+0.0016] 
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+  OPENCLOSE     L1        +0.0062 [-0.0133,+0.0203]     -0.0099 [-0.0239,+0.0099]     -0.0036 [-0.0100,+0.0053]     +0.0160 [-0.0120,+0.0327]     +0.0087 [-0.0159,+0.0302]     -0.0068 [-0.0137,+0.0045] 
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+  CONCENTRATION d1        +0.0085 [-0.0091,+0.0253]     -0.0240 [-0.0544,+0.0100]     -0.0033 [-0.0110,+0.0056]     +0.0278 [-0.0077,+0.0524]     -0.0035 [-0.0393,+0.0316]     -0.0104 [-0.0202,+0.0028] 
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+  VOLUME        d1        +0.0175 [-0.0079,+0.0363]     -0.0339 [-0.0564,+0.0029]     -0.0080 [-0.0159,+0.0020]     +0.0174 [-0.0247,+0.0402]     +0.0104 [-0.0235,+0.0336]     -0.0084 [-0.0179,+0.0059] 
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+  IMPACT        L1        +0.0008 [-0.0160,+0.0203]     -0.0099 [-0.0228,+0.0204]     -0.0010 [-0.0100,+0.0064]     -0.0007 [-0.0318,+0.0273]     +0.0070 [-0.0211,+0.0306]     -0.0021 [-0.0138,+0.0081] 
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+  MARKET        d4        +0.0119 [-0.0144,+0.0339]     -0.0353 [-0.0749,-0.0057]!    -0.0020 [-0.0131,+0.0108]     +0.0049 [-0.0570,+0.0618]     +0.0104 [-0.0339,+0.0536]     -0.0079 [-0.0291,+0.0176] 
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+  ALL           d3        -0.0065 [-0.0338,+0.0213]     +0.0014 [-0.0405,+0.0393]     +0.0005 [-0.0127,+0.0174]     -0.0063 [-0.0595,+0.0340]     +0.0052 [-0.0317,+0.0496]     -0.0054 [-0.0223,+0.0180] 
+  B4 good-side hits: 0 of 42 cells (expected by chance 1.1); representative = lowest validation log loss; flag80: - is better, top20 and gap80: + is better; * good side, ! bad side
+  [895s]

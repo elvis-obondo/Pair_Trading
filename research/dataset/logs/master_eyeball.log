@@ -1,0 +1,21 @@
+  event 2595857  cell d=-1 early reach=0  -> /home/elvisobondo/Pair_Trading/research/dataset/logs/eyeball/event_2595857.png
+  event 4156749  cell d=-1 early reach=0  -> /home/elvisobondo/Pair_Trading/research/dataset/logs/eyeball/event_4156749.png
+  event 5326499  cell d=-1 early reach=0  -> /home/elvisobondo/Pair_Trading/research/dataset/logs/eyeball/event_5326499.png
+  event 3222527  cell d=-1 early reach=1  -> /home/elvisobondo/Pair_Trading/research/dataset/logs/eyeball/event_3222527.png
+  event 6082284  cell d=-1 early reach=1  -> /home/elvisobondo/Pair_Trading/research/dataset/logs/eyeball/event_6082284.png
+  event 693686  cell d=-1 early reach=1  -> /home/elvisobondo/Pair_Trading/research/dataset/logs/eyeball/event_693686.png
+  event 3436453  cell d=-1 late reach=0  -> /home/elvisobondo/Pair_Trading/research/dataset/logs/eyeball/event_3436453.png
+  event 58024  cell d=-1 late reach=0  -> /home/elvisobondo/Pair_Trading/research/dataset/logs/eyeball/event_58024.png
+  event 6568587  cell d=-1 late reach=0  -> /home/elvisobondo/Pair_Trading/research/dataset/logs/eyeball/event_6568587.png
+  event 4162322  cell d=-1 late reach=1  -> /home/elvisobondo/Pair_Trading/research/dataset/logs/eyeball/event_4162322.png
+  event 6482221  cell d=-1 late reach=1  -> /home/elvisobondo/Pair_Trading/research/dataset/logs/eyeball/event_6482221.png
+  event 5077968  cell d=-1 late reach=1  -> /home/elvisobondo/Pair_Trading/research/dataset/logs/eyeball/event_5077968.png
+  event 3772282  cell d=+1 early reach=0  -> /home/elvisobondo/Pair_Trading/research/dataset/logs/eyeball/event_3772282.png
+  event 1873091  cell d=+1 early reach=0  -> /home/elvisobondo/Pair_Trading/research/dataset/logs/eyeball/event_1873091.png
+  event 1834088  cell d=+1 early reach=1  -> /home/elvisobondo/Pair_Trading/research/dataset/logs/eyeball/event_1834088.png
+  event 4710443  cell d=+1 early reach=1  -> /home/elvisobondo/Pair_Trading/research/dataset/logs/eyeball/event_4710443.png
+  event 4486631  cell d=+1 late reach=0  -> /home/elvisobondo/Pair_Trading/research/dataset/logs/eyeball/event_4486631.png
+  event 3760592  cell d=+1 late reach=0  -> /home/elvisobondo/Pair_Trading/research/dataset/logs/eyeball/event_3760592.png
+  event 6655818  cell d=+1 late reach=1  -> /home/elvisobondo/Pair_Trading/research/dataset/logs/eyeball/event_6655818.png
+  event 5924510  cell d=+1 late reach=1  -> /home/elvisobondo/Pair_Trading/research/dataset/logs/eyeball/event_5924510.png
+[EYEBALL] 20 events plotted  [32s]

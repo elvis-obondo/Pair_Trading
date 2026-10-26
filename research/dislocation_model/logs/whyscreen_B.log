@@ -1,0 +1,69 @@
+========================================================================================================================
+WHY-IT-MOVED SCREENS -- B (the best point toward mu) then A (the envelope)
+========================================================================================================================
+  [SPLIT] train 22,645 (<2026-05-01)   val 13,048   HELD OUT 18,064 (>=2026-07-18)
+[SPLIT] held-out used ONCE, for scoring only; iterations chosen on val
+  new features: 20;  flagged 'restates volatility' by whyfeat: none
+  missing values set to the TRAIN median: lone_share_4 81, common_share_4 81, vol_spike_mover_4 81, vol_spike_ratio_4 81, vadj_resid_4 81, lagger_spread_4 81, lone_share_12 153, common_share_12 153, vol_spike_mover_12 153, vol_spike_ratio_12 153, vadj_resid_12 153, lagger_spread_12 153, vol_spike_mover_1m_4 679, vol_spike_ratio_1m_4 1015, vadj_resid_1m_4 172, vol_spike_mover_1m_12 740, vol_spike_ratio_1m_12 759, vadj_resid_1m_12 154
+
+========================================================================================================================
+SCREEN B -- BASE DISTRIBUTIONS, before any model (minutes 1..600 after the entry bar's close)
+========================================================================================================================
+  depth = the 10h MFE, asserted equal to the registry target (max diff 0)
+  all 53,757  n 53,757  timing median   287 min (p25 81, p75 498);  best point FIRST 0.440;  reaches mu 0.231;  depth median 1.94 sigma
+  train       n 22,645  timing median   275 min (p25 71, p75 495);  best point FIRST 0.454;  reaches mu 0.224;  depth median 1.86 sigma
+  held out    n 18,064  timing median   305 min (p25 93, p75 502);  best point FIRST 0.416;  reaches mu 0.244;  depth median 2.04 sigma
+  HO1         n  8,200  timing median   295 min (p25 83, p75 503);  best point FIRST 0.436;  reaches mu 0.243;  depth median 1.97 sigma
+  HO2         n  9,864  timing median   311 min (p25 100, p75 502);  best point FIRST 0.399;  reaches mu 0.245;  depth median 2.10 sigma
+  timing histogram by hour (all): 0-1h 0.214  1-2h 0.090  2-3h 0.074  3-4h 0.069  4-5h 0.066  5-6h 0.065  6-7h 0.071  7-8h 0.076  8-9h 0.091  9-10h 0.184
+  best point in the last minute of the 10h window (still improving): 0.015;  in the first minute: 0.024
+  [16s]
+
+  fitted timing QR and order logistic on six   [52s]
+  fitted timing QR and order logistic on six+new   [138s]
+========================================================================================================================
+SCREEN B -- RESULTS: skill vs climatology, and six+new minus six (paired, day-clustered 95%)
+========================================================================================================================
+  timing held out  skill six +0.059%  six+new -0.451%  diff -0.510 [-0.967, -0.152]  WORSE
+  timing HO1       skill six +0.040%  six+new -0.331%  diff -0.372 [-0.765, -0.085]  WORSE
+  timing HO2       skill six +0.074%  six+new -0.553%  diff -0.627 [-1.379, -0.008]  WORSE
+  order  held out  skill six -0.063%  six+new -0.738%  diff -0.675 [-1.671, +0.045]   AUC six 0.5141 -> six+new 0.5078
+  order  HO1       skill six -0.062%  six+new -0.084%  diff -0.023 [-0.599, +0.525]   AUC six 0.5049 -> six+new 0.5204
+  order  HO2       skill six -0.063%  six+new -1.286%  diff -1.223 [-2.845, +0.339]   AUC six 0.5228 -> six+new 0.5006
+
+  ORDER calibration by decile of predicted probability (held out): mean predicted / observed
+    six      d1 0.417/0.423  d2 0.437/0.400  d3 0.445/0.395  d4 0.450/0.392  d5 0.455/0.424  d6 0.459/0.405  d7 0.464/0.413  d8 0.470/0.424  d9 0.478/0.435  d10 0.497/0.447
+    six+new  d1 0.384/0.388  d2 0.423/0.419  d3 0.433/0.406  d4 0.441/0.400  d5 0.448/0.436  d6 0.456/0.432  d7 0.464/0.421  d8 0.474/0.425  d9 0.487/0.430  d10 0.519/0.401
+
+  PERMUTATION IMPORTANCE of each new feature in the six+new models (held out, 20 shuffles, skill points, day-clustered 95%)
+    feature                                             timing                           order    
+    lone_share_4                     -0.0071 [-0.0162,+0.0003]       -0.0141 [-0.1056,+0.0622]
+    common_share_4                   -0.0585 [-0.1885,+0.0398]       -0.0779 [-0.4071,+0.1833]
+    mkt_move_4                       +0.0041 [-0.1727,+0.1398]       +0.0278 [-0.0452,+0.1329]
+    vol_spike_mover_4                +0.1104 [+0.0495,+0.1899]       +0.0169 [+0.0008,+0.0369]
+    vol_spike_ratio_4                -0.0157 [-0.0947,+0.0516]       +0.0812 [-0.0678,+0.2208]
+    vadj_resid_4                     +0.0075 [-0.0035,+0.0181]       -0.0011 [-0.0106,+0.0087]
+    lagger_spread_4                  +0.0448 [+0.0175,+0.0745]       +0.0504 [+0.0183,+0.0818]
+    lone_share_12                    +0.0193 [-0.0013,+0.0384]       -0.0104 [-0.0299,+0.0089]
+    common_share_12                  +0.0025 [+0.0001,+0.0046]       -0.0442 [-0.2739,+0.1317]
+    mkt_move_12                      +0.0028 [-0.0293,+0.0480]       -0.0182 [-0.0921,+0.0352]
+    vol_spike_mover_12               +0.0470 [-0.0018,+0.0979]       +0.0030 [-0.0038,+0.0110]
+    vol_spike_ratio_12               +0.0082 [-0.0786,+0.0802]       +0.2394 [+0.1103,+0.4119]
+    vadj_resid_12                    -0.0104 [-0.0478,+0.0333]       -0.0052 [-0.0427,+0.0372]
+    lagger_spread_12                 -0.0106 [-0.0569,+0.0334]       +0.0329 [-0.0215,+0.0909]
+    vol_spike_mover_1m_4             +0.5495 [+0.1691,+0.7998]       +0.5596 [-0.6432,+1.2193]
+    vol_spike_ratio_1m_4             +0.1275 [+0.0102,+0.2337]       +0.1510 [-0.1629,+0.3772]
+    vadj_resid_1m_4                  +0.0120 [-0.0150,+0.0333]       +0.0121 [-0.0479,+0.0476]
+    vol_spike_mover_1m_12            +0.6851 [+0.3854,+1.1093]       +1.0336 [+0.4719,+1.8928]
+    vol_spike_ratio_1m_12            -0.0087 [-0.1173,+0.0616]       +0.0670 [-0.1723,+0.2183]
+    vadj_resid_1m_12                 -0.0022 [-0.0081,+0.0031]       -0.0032 [-0.0099,+0.0018]
+
+  SCREEN B: timing does not pass (HO1 and HO2 both clear);  order does not pass  -> NO PASS
+  depth (= 10h MFE): see screen A, MFE 10h cells
+  [140s]
+
+========================================================================================================================
+SCREEN A -- the envelope: Linear QR and CQR refitted on baseline + 20 new columns
+========================================================================================================================
+    fitted Linear QR MFE 0.5h   [2458s]
+    fitted Linear QR MFE 1h   [7914s]

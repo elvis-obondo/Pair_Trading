@@ -1,0 +1,371 @@
+### C1 inventory 2026-10-14T19:14:34Z
+-- top-level sizes
+4.0K	.env
+4.0K	Dockerfile.trading
+4.0K	docker-compose.trading.yml
+4.0K	docker-compose.yml
+4.0K	requirements.txt
+8.0K	README.md
+36K	dashboard
+200K	scripts
+1.4M	research
+36M	user_data
+66M	logs
+473M	trading_data
+-- trading_data
+trading_data/candidates_consumed
+trading_data/scanner_trades.csv
+trading_data/scanner_state.json
+trading_data/scanner_trades.csv.headerless.bak
+trading_data/stop_monitor.lock
+trading_data/scan_history/2026-09-14.parquet
+trading_data/scan_history/2026-10-11.parquet
+trading_data/scan_history/2026-09-30.parquet
+trading_data/scan_history/2026-09-29.parquet
+trading_data/scan_history/2026-10-05.parquet
+trading_data/scan_history/2026-10-06.parquet
+trading_data/scan_history/2026-10-02.parquet
+trading_data/scan_history/2026-09-25.parquet
+trading_data/scan_history/2026-10-07.parquet
+trading_data/scan_history/2026-10-09.parquet
+trading_data/scan_history/2026-10-08.parquet
+trading_data/scan_history/2026-09-23.parquet
+trading_data/scan_history/2026-09-18.parquet
+trading_data/scan_history/2026-09-26.parquet
+trading_data/scan_history/2026-09-27.parquet
+trading_data/scan_history/2026-10-10.parquet
+trading_data/scan_history/2026-09-24.parquet
+trading_data/scan_history/2026-10-01.parquet
+trading_data/scan_history/2026-09-28.parquet
+trading_data/scan_history/2026-09-19.parquet
+trading_data/scan_history/2026-10-04.parquet
+trading_data/scan_history/2026-10-12.parquet
+trading_data/scan_history/2026-10-14.parquet
+trading_data/scan_history/2026-09-16.parquet
+trading_data/scan_history/2026-09-21.parquet
+trading_data/scan_history/2026-10-13.parquet
+trading_data/scan_history/2026-09-15.parquet
+trading_data/scan_history/2026-09-22.parquet
+trading_data/scan_history/2026-09-13.parquet
+trading_data/scan_history/2026-09-17.parquet
+trading_data/scan_history/2026-09-20.parquet
+trading_data/scan_history/2026-10-03.parquet
+trading_data/oi/2026-10-09.csv.gz
+trading_data/oi/2026-10-12.csv.gz
+trading_data/oi/2026-10-10.csv.gz
+trading_data/oi/2026-10-08.csv.gz
+trading_data/oi/2026-10-11.csv.gz
+trading_data/oi/2026-10-14.csv
+trading_data/oi/2026-10-13.csv.gz
+trading_data/archive/20260913T082908Z/candidates_consumed
+trading_data/archive/20260913T082908Z/scanner_trades.csv
+trading_data/archive/20260913T082908Z/scanner_state.json
+trading_data/archive/20260913T082908Z/open_positions.json
+trading_data/archive/20260913T082908Z/equity_curve.csv
+trading_data/archive/20260913T080636Z/candidates_consumed
+trading_data/archive/20260913T080636Z/scanner_trades.csv
+trading_data/archive/20260913T080636Z/scanner_state.json
+trading_data/archive/20260913T080636Z/open_positions.json
+trading_data/archive/20260913T080636Z/equity_curve.csv
+trading_data/archive/20260929T035550Z/candidates_consumed
+trading_data/archive/20260929T035550Z/scanner_trades.csv
+trading_data/archive/20260929T035550Z/scanner_state.json
+trading_data/archive/20260929T035550Z/open_positions.json
+trading_data/archive/20260929T035550Z/equity_curve.csv
+trading_data/archive/20260913T080014Z/candidates_consumed
+trading_data/archive/20260913T080014Z/scanner_trades.csv
+trading_data/archive/20260913T080014Z/scanner_state.json
+trading_data/archive/20260913T080014Z/open_positions.json
+trading_data/archive/20260913T080014Z/equity_curve.csv
+trading_data/scanner_candidates.json
+trading_data/open_positions.json
+trading_data/scanner_trades.csv.corrupt36.bak
+trading_data/equity_curve.csv
+trading_data/monitor_ticks/2026-10-08/part-1791427836.parquet
+trading_data/monitor_ticks/2026-10-08/part-1791473808.parquet
+trading_data/monitor_ticks/2026-10-08/part-1791442198.parquet
+trading_data/monitor_ticks/2026-10-08/part-1791487269.parquet
+trading_data/monitor_ticks/2026-10-08/part-1791448027.parquet
+trading_data/monitor_ticks/2026-10-08/part-1791466657.parquet
+trading_data/monitor_ticks/2026-10-08/part-1791492917.parquet
+trading_data/monitor_ticks/2026-10-08/part-1791492557.parquet
+trading_data/monitor_ticks/2026-10-08/part-1791467258.parquet
+trading_data/monitor_ticks/2026-10-08/part-1791497124.parquet
+trading_data/monitor_ticks/2026-10-08/part-1791476813.parquet
+trading_data/monitor_ticks/2026-10-08/part-1791478916.parquet
+trading_data/monitor_ticks/2026-10-08/part-1791439493.parquet
+trading_data/monitor_ticks/2026-10-08/part-1791439253.parquet
+trading_data/monitor_ticks/2026-10-08/part-1791423810.parquet
+trading_data/monitor_ticks/2026-10-08/part-1791424771.parquet
+trading_data/monitor_ticks/2026-10-08/part-1791463713.parquet
+trading_data/monitor_ticks/2026-10-08/part-1791458003.parquet
+trading_data/monitor_ticks/2026-10-08/part-1791453736.parquet
+trading_data/monitor_ticks/2026-10-08/part-1791448508.parquet
+trading_data/monitor_ticks/2026-10-08/part-1791423329.parquet
+trading_data/monitor_ticks/2026-10-08/part-1791475010.parquet
+trading_data/monitor_ticks/2026-10-08/part-1791440936.parquet
+trading_data/monitor_ticks/2026-10-08/part-1791503013.parquet
+trading_data/monitor_ticks/2026-10-08/part-1791437751.parquet
+trading_data/monitor_ticks/2026-10-08/part-1791448628.parquet
+trading_data/monitor_ticks/2026-10-08/part-1791451693.parquet
+trading_data/monitor_ticks/2026-10-08/part-1791420384.parquet
+trading_data/monitor_ticks/2026-10-08/part-1791499949.parquet
+trading_data/monitor_ticks/2026-10-08/part-1791469722.parquet
+trading_data/monitor_ticks/2026-10-08/part-1791425492.parquet
+trading_data/monitor_ticks/2026-10-08/part-1791473988.parquet
+21320
+473M	trading_data
+-- logs
+total 67128
+drwxrwxr-x 2 elvisobondo elvisobondo     4096 Oct 14 05:30 .
+drwxrwxr-x 8 elvisobondo elvisobondo     4096 Sep 13 06:09 ..
+-rw-rw-r-- 1 elvisobondo elvisobondo  5855014 Oct 14 18:05 cron.log
+-rw-rw-r-- 1 elvisobondo elvisobondo 33556075 Oct 14 05:05 cron.log.1
+-rw-rw-r-- 1 elvisobondo elvisobondo   234836 Sep 13 04:03 firstscan.log
+-rw-rw-r-- 1 elvisobondo elvisobondo   206928 Oct 14 18:20 oi.log
+-rw-r--r-- 1 root        root          480058 Oct 14 18:05 scanner.log
+-rw-r--r-- 1 root        root          379801 Oct 14 18:06 stop_monitor.log
+-rw-r--r-- 1 root        root        27965852 Oct 14 18:34 stop_monitor_heartbeat.log
+66M	logs
+-- untracked/ignored files (git status --ignored)
+-- home dir
+total 52
+drwxr-x--- 8 elvisobondo elvisobondo 4096 Oct 14 18:24 .
+drwxr-xr-x 4 root        root        4096 Aug 16 20:20 ..
+-rw-r--r-- 1 elvisobondo elvisobondo  220 Jan  6  2022 .bash_logout
+-rw-r--r-- 1 elvisobondo elvisobondo 3771 Jan  6  2022 .bashrc
+drwx------ 2 elvisobondo elvisobondo 4096 Aug 16 20:20 .cache
+drwxrwxr-x 3 elvisobondo elvisobondo 4096 Sep 13 01:32 .config
+drwx------ 3 elvisobondo elvisobondo 4096 Sep 13 01:32 .docker
+-rw-r--r-- 1 elvisobondo elvisobondo  807 Jan  6  2022 .profile
+drwx------ 2 elvisobondo elvisobondo 4096 Oct 14 06:58 .ssh
+drwxrwxr-x 8 elvisobondo elvisobondo 4096 Sep 13 06:09 Pair_Trading
+-rw-rw-r-- 1 elvisobondo elvisobondo  377 Oct 14 18:24 crontab.bak.20261014
+-rwxr-xr-x 1 elvisobondo elvisobondo  723 Aug 16 20:24 install_docker.sh
+drwx------ 3 elvisobondo elvisobondo 4096 Sep 13 01:32 snap
+-- cloudflared
+ls: cannot access '/etc/cloudflared': No such file or directory
+ls: cannot access '/home/elvisobondo/.cloudflared': No such file or directory
+
+### C1 full archive pull 2026-10-14T19:15:01Z
+VM_FILES 22346 + 2
+VM_BYTES 557005626
+-rw-rw-r-- 1 elvisobondo elvisobondo 307771513 Oct 14 19:17 /tmp/vm_final_20261014.tar.gz
+781b1004759493332501169f4970c227cdde4198b19b60d92fbc93645578c65a  /tmp/vm_final_20261014.tar.gz
+781b1004759493332501169f4970c227cdde4198b19b60d92fbc93645578c65a  attic/vm_final/vm_final_20261014.tar.gz
+-rw-r--r--@ 1 elvisobondo  staff  307771513 Oct 14 15:18 attic/vm_final/vm_final_20261014.tar.gz
+LOCAL_TAR_FILES    22295
+LOCAL_EXTRACT_FILES    22281 + 2
+LOCAL_EXTRACT_BYTES 555758039
+
+### GCP billable inventory
+-- gcloud compute instances list
+ERROR: (gcloud) Invalid choice: 'compute instances list'.
+Maybe you meant:
+  gcloud compute config-ssh
+  gcloud compute connect-to-serial-port
+  gcloud compute copy-files
+  gcloud compute reset-windows-password
+  gcloud compute scp
+  gcloud compute sign-url
+  gcloud compute ssh
+  gcloud compute start-iap-tunnel
+
+To search the help text of gcloud commands, run:
+-- gcloud compute disks list
+ERROR: (gcloud) Invalid choice: 'compute disks list'.
+Maybe you meant:
+  gcloud compute config-ssh
+  gcloud compute connect-to-serial-port
+  gcloud compute copy-files
+  gcloud compute reset-windows-password
+  gcloud compute scp
+  gcloud compute sign-url
+  gcloud compute ssh
+  gcloud compute start-iap-tunnel
+
+To search the help text of gcloud commands, run:
+-- gcloud compute addresses list
+ERROR: (gcloud) Invalid choice: 'compute addresses list'.
+Maybe you meant:
+  gcloud compute config-ssh
+  gcloud compute connect-to-serial-port
+  gcloud compute copy-files
+  gcloud compute reset-windows-password
+  gcloud compute scp
+  gcloud compute sign-url
+  gcloud compute ssh
+  gcloud compute start-iap-tunnel
+
+To search the help text of gcloud commands, run:
+-- gcloud compute snapshots list
+ERROR: (gcloud) Invalid choice: 'compute snapshots list'.
+Maybe you meant:
+  gcloud compute config-ssh
+  gcloud compute connect-to-serial-port
+  gcloud compute copy-files
+  gcloud compute reset-windows-password
+  gcloud compute scp
+  gcloud compute sign-url
+  gcloud compute ssh
+  gcloud compute start-iap-tunnel
+
+To search the help text of gcloud commands, run:
+-- gcloud compute images list --no-standard-images
+ERROR: (gcloud) Invalid choice: 'compute images list --no-standard-images'.
+Maybe you meant:
+  gcloud compute config-ssh
+  gcloud compute connect-to-serial-port
+  gcloud compute copy-files
+  gcloud compute reset-windows-password
+  gcloud compute scp
+  gcloud compute sign-url
+  gcloud compute ssh
+  gcloud compute start-iap-tunnel
+
+To search the help text of gcloud commands, run:
+-- gcloud compute firewall-rules list --format=value(name)
+ERROR: (gcloud) Invalid choice: 'compute firewall-rules list --format=value(name)'.
+Maybe you meant:
+  gcloud compute config-ssh
+  gcloud compute connect-to-serial-port
+  gcloud compute copy-files
+  gcloud compute reset-windows-password
+  gcloud compute scp
+  gcloud compute sign-url
+  gcloud compute ssh
+  gcloud compute start-iap-tunnel
+
+To search the help text of gcloud commands, run:
+-- gcloud artifacts repositories list
+ERROR: (gcloud) Invalid choice: 'artifacts repositories list'.
+Maybe you meant:
+  gcloud artifacts apt
+  gcloud artifacts attachments
+  gcloud artifacts files
+  gcloud artifacts generic
+  gcloud artifacts go
+  gcloud artifacts locations
+  gcloud artifacts operations
+  gcloud artifacts packages
+  gcloud artifacts print-settings
+  gcloud artifacts repositories
+-- gcloud storage buckets list
+ERROR: (gcloud) Invalid choice: 'storage buckets list'.
+Maybe you meant:
+  gcloud storage
+
+To search the help text of gcloud commands, run:
+  gcloud help -- SEARCH_TERMS
+-- gcloud run services list
+ERROR: (gcloud) Invalid choice: 'run services list'.
+Maybe you meant:
+  gcloud run
+
+To search the help text of gcloud commands, run:
+  gcloud help -- SEARCH_TERMS
+-- gcloud sql instances list
+ERROR: (gcloud) Invalid choice: 'sql instances list'.
+Maybe you meant:
+  gcloud sql export sql
+  gcloud sql import sql
+  gcloud sql connect
+  gcloud sql generate-login-token
+  gcloud sql reschedule-maintenance
+  gcloud sql backups create
+  gcloud sql backups delete
+  gcloud sql backups describe
+  gcloud sql backups list
+  gcloud sql backups patch
+-- gcloud functions list
+ERROR: (gcloud) Invalid choice: 'functions list'.
+Maybe you meant:
+  gcloud functions
+
+To search the help text of gcloud commands, run:
+  gcloud help -- SEARCH_TERMS
+
+### C1 pull verification: excluding 73 AppleDouble ._* files (macOS metadata copied at deploy), VM real files 22,273 = local extract 22,273, names identical (comm diff 0), bytes 555,756,735 = 555,756,735; sha256 VM = local 781b1004...578c65a; archive attic/vm_final/vm_final_20261014.tar.gz (307,771,513 B) also holds crontab.bak.20261014 and install_docker.sh
+
+### GCP billable inventory (fixed loop)
+-- instances
+NAME           ZONE           MACHINE_TYPE  PREEMPTIBLE  INTERNAL_IP  EXTERNAL_IP      STATUS
+pairs-trading  us-central1-a  e2-medium                  10.128.0.2   104.155.130.144  RUNNING
+-- disks
+NAME           LOCATION       LOCATION_SCOPE  SIZE_GB  TYPE         STATUS
+pairs-trading  us-central1-a  zone            20       pd-standard  READY
+-- addresses
+Listed 0 items.
+-- snapshots
+Listed 0 items.
+-- images (custom)
+Listed 0 items.
+-- artifact repositories
+Listing items under project project-0671be06-e22a-44d8-83c, across all locations.
+
+                                                                                            ARTIFACT_REGISTRY
+REPOSITORY     FORMAT  MODE                 DESCRIPTION                                                       LOCATION     LABELS  ENCRYPTION          CREATE_TIME          UPDATE_TIME          SIZE (MB)
+pairs-trading  DOCKER  STANDARD_REPOSITORY  Live paper-trading images. Built on the laptop, never on the VM.  us-central1          Google-managed key  2026-09-12T10:51:58  2026-09-28T23:54:20  231.001
+-- storage buckets
+-- run services
+API [run.googleapis.com] not enabled on project 
+[project-0671be06-e22a-44d8-83c]. Would you like to enable and retry (this will 
+take a few minutes)? (y/N)?  
+ERROR: (gcloud.run.services.list) PERMISSION_DENIED: Cloud Run Admin API has not been used in project project-0671be06-e22a-44d8-83c before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/run.googleapis.com/overview?project=project-0671be06-e22a-44d8-83c then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. This command is authenticated as elvisodangaobondo@gmail.com which is the active account specified by the [core/account] property.
+Cloud Run Admin API has not been used in project project-0671be06-e22a-44d8-83c before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/run.googleapis.com/overview?project=project-0671be06-e22a-44d8-83c then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.
+Google developers console API activation
+https://console.developers.google.com/apis/api/run.googleapis.com/overview?project=project-0671be06-e22a-44d8-83c
+- '@type': type.googleapis.com/google.rpc.ErrorInfo
+  domain: googleapis.com
+  metadata:
+    activationUrl: https://console.developers.google.com/apis/api/run.googleapis.com/overview?project=project-0671be06-e22a-44d8-83c
+    consumer: projects/project-0671be06-e22a-44d8-83c
+    containerInfo: project-0671be06-e22a-44d8-83c
+    service: run.googleapis.com
+    serviceTitle: Cloud Run Admin API
+  reason: SERVICE_DISABLED
+-- enabled services
+analyticshub.googleapis.com
+artifactregistry.googleapis.com
+bigquery.googleapis.com
+bigqueryconnection.googleapis.com
+bigquerydatapolicy.googleapis.com
+bigquerydatatransfer.googleapis.com
+bigquerymigration.googleapis.com
+bigqueryreservation.googleapis.com
+bigquerystorage.googleapis.com
+cloudapis.googleapis.com
+cloudtrace.googleapis.com
+compute.googleapis.com
+dataform.googleapis.com
+dataplex.googleapis.com
+datastore.googleapis.com
+logging.googleapis.com
+monitoring.googleapis.com
+oslogin.googleapis.com
+servicemanagement.googleapis.com
+serviceusage.googleapis.com
+sql-component.googleapis.com
+storage-api.googleapis.com
+storage-component.googleapis.com
+storage.googleapis.com
+telemetry.googleapis.com
+
+### C1 receipt lines
+raw extract 555,758,039 B - real tree 555,756,735 B = 1,304 B: the 2 non-tree files (crontab.bak.20261014 377 B + install_docker.sh 723 B = 1,100 B) plus 204 B of ._* AppleDouble metadata
+sql / functions: neither sqladmin.googleapis.com nor cloudfunctions.googleapis.com is enabled (enabled-services list above), so neither can hold resources
+-- bq ls
+-- gitignore precondition
+.gitignore:110:attic/vm_final/	attic/vm_final/vm_final_20261014.tar.gz
+
+### C1 step 3: delete 2026-10-14T19:20:56Z
+Deleted [https://www.googleapis.com/compute/v1/projects/project-0671be06-e22a-44d8-83c/zones/us-central1-a/instances/pairs-trading].
+
+### C1 step 4 verify
+-- instances
+Listed 0 items.
+-- disks
+Listed 0 items.
+-- addresses
+Listed 0 items.
+### CORRECTION to the receipt line above (measured): the 1,304 B gap is exactly the 8 ._* files that survived extraction inside Pair_Trading/ (8 files, 1,304 B). The 2 non-tree files (377 + 723 B) were never in LOCAL_EXTRACT_BYTES, which summed Pair_Trading/ only.

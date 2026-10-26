@@ -1,0 +1,45 @@
+/home/elvisobondo/Pair_Trading/research/dataset/master_g3.py:100: RuntimeWarning: Mean of empty slice
+  out["last5_mean"] = np.where(np.isfinite(L5).any(1), np.nanmean(np.where(np.isfinite(L5), L5, np.nan), axis=1), np.nan)
+[G3 coin] 74,607 rows x 14 columns  [0s]
+  n_prev_triggers            NaN   0.00%  median +191  p95 +393
+  n_prev_resolved            NaN   0.00%  median +187  p95 +389
+  prev_reach_raw             NaN   0.49%  median +0.3185  p95 +0.4425
+  prev_reach_shrunk          NaN   0.05%  median +0.3196  p95 +0.4117
+  global_reach_asof          NaN   0.05%  median +0.3217  p95 +0.3293
+  last1_reach                NaN   0.49%  median +0  p95 +1
+  last2_reach                NaN   0.77%  median +0  p95 +1
+  last3_reach                NaN   1.01%  median +0  p95 +1
+  last4_reach                NaN   1.30%  median +0  p95 +1
+  last5_reach                NaN   1.58%  median +0  p95 +1
+  last5_mean                 NaN   0.49%  median +0.2  p95 +0.8
+  days_since_last_trigger    NaN   0.27%  median +0.5  p95 +3.833
+  triggers_last_7d           NaN   0.00%  median +6  p95 +10
+  prev_mean_minutes_to_mu    NaN   1.16%  median +272.2  p95 +335.9
+/home/elvisobondo/Pair_Trading/research/dataset/master_g3.py:100: RuntimeWarning: Mean of empty slice
+  out["last5_mean"] = np.where(np.isfinite(L5).any(1), np.nanmean(np.where(np.isfinite(L5), L5, np.nan), axis=1), np.nan)
+/home/elvisobondo/Pair_Trading/research/dataset/master_g3.py:100: RuntimeWarning: Mean of empty slice
+  out["last5_mean"] = np.where(np.isfinite(L5).any(1), np.nanmean(np.where(np.isfinite(L5), L5, np.nan), axis=1), np.nan)
+/home/elvisobondo/Pair_Trading/research/dataset/master_g3.py:100: RuntimeWarning: Mean of empty slice
+  out["last5_mean"] = np.where(np.isfinite(L5).any(1), np.nanmean(np.where(np.isfinite(L5), L5, np.nan), axis=1), np.nan)
+[G3 pair] 6,697,756 rows x 21 columns  [26s]
+  n_prev_triggers            NaN   0.00%  median +178  p95 +388
+  n_prev_resolved            NaN   0.00%  median +176  p95 +385
+  prev_reach_raw             NaN   0.56%  median +0.3263  p95 +0.4483
+  prev_reach_shrunk          NaN   0.07%  median +0.3275  p95 +0.4177
+  global_reach_asof          NaN   0.07%  median +0.3307  p95 +0.3414
+  last1_reach                NaN   0.56%  median +0  p95 +1
+  last2_reach                NaN   0.84%  median +0  p95 +1
+  last3_reach                NaN   1.13%  median +0  p95 +1
+  last4_reach                NaN   1.43%  median +0  p95 +1
+  last5_reach                NaN   1.73%  median +0  p95 +1
+  last5_mean                 NaN   0.56%  median +0.2  p95 +0.8
+  days_since_last_trigger    NaN   0.30%  median +0.4792  p95 +3.708
+  triggers_last_7d           NaN   0.00%  median +6  p95 +10
+  prev_mean_minutes_to_mu    NaN   1.35%  median +268.1  p95 +325.9
+  a_coin_n_resolved          NaN   0.00%  median +189  p95 +388
+  a_coin_reach_raw           NaN   0.25%  median +0.3147  p95 +0.4444
+  a_coin_reach_shrunk        NaN   0.00%  median +0.3165  p95 +0.416
+  b_coin_n_resolved          NaN   0.00%  median +195  p95 +389
+  b_coin_reach_raw           NaN   0.28%  median +0.3202  p95 +0.4286
+  b_coin_reach_shrunk        NaN   0.00%  median +0.3211  p95 +0.4041
+  coin_reach_shrunk_diff     NaN   0.00%  median -0.003226  p95 +0.1244

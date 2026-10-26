@@ -1,0 +1,1021 @@
+================================================================================================================
+ENVELOPE DESCRIPTION -- target source 30m
+================================================================================================================
+  60,000 episodes, 5 features: vol_48, vratio, vol_slope, sandwich, off_mark
+  target: running MAE and MFE, sign-folded, UNCLAMPED (see docstring)
+  quantiles (0.05, 0.25, 0.5, 0.75, 0.95)   horizons ['0.5h', '1h', '2h', '5h', '10h']
+
+  THIS RUN USES 30-MINUTE CLOSES. The true envelope is strictly worse:
+  the worst point inside a bar is never observed. Earlier work puts the
+  understatement at roughly 0.3 sigma, one-sided, scaling with volatility.
+  CLIMATOLOGY IS BIASED THE SAME WAY, so comparative skill should be
+  largely unaffected -- an assumption, stated and not corrected for.
+
+  TRENDING = bottom tercile of vratio. Cutoff 1.47220, computed on the
+  FIT BLOCK ONLY (41,936 rows) and applied as a fixed
+  number to both blocks -- never recomputed on held-out data.
+    ALL        60,000 episodes  (18,064 held out)
+    TRENDING   18,669 episodes  (4,690 held out)
+
+================================================================================================================
+BASELINE TRANSFER -- climatology's own coverage, in-sample vs held out
+================================================================================================================
+  Climatology is the TRAIN block's empirical quantile -- the same 22,683 rows
+  every model is fitted on -- so IN-SAMPLE coverage is exact by construction.
+  Any gap on the held-out block is REGIME DRIFT in the envelope's level, not a
+  modelling choice, and every model below inherits it.
+  TRAIN, not train+val: this must use the same block as fit_climatology or the
+  diagnostic disagrees with the model it is explaining. It did, briefly --
+  0.265 against 0.262 at ALL/MAE/0.5h -- when climatology moved to train and
+  this block was left on the fit block.
+
+  dir       h       block       q5      q25      q50      q75      q95
+  MAE    0.5h   in-sample    0.050    0.250    0.500    0.750    0.950
+                 HELD OUT    0.046    0.262    0.520    0.764    0.952   <- gap here is drift, inherited by every model
+  MAE      1h   in-sample    0.050    0.250    0.500    0.750    0.950
+                 HELD OUT    0.042    0.254    0.525    0.763    0.957   <- gap here is drift, inherited by every model
+  MAE      2h   in-sample    0.050    0.250    0.500    0.750    0.950
+                 HELD OUT    0.044    0.262    0.525    0.767    0.957   <- gap here is drift, inherited by every model
+  MAE      5h   in-sample    0.050    0.250    0.500    0.750    0.950
+                 HELD OUT    0.046    0.270    0.531    0.770    0.960   <- gap here is drift, inherited by every model
+  MAE     10h   in-sample    0.050    0.250    0.500    0.750    0.950
+                 HELD OUT    0.046    0.278    0.532    0.773    0.957   <- gap here is drift, inherited by every model
+  MFE    0.5h   in-sample    0.050    0.250    0.500    0.750    0.950
+                 HELD OUT    0.048    0.236    0.480    0.738    0.954   <- gap here is drift, inherited by every model
+  MFE      1h   in-sample    0.050    0.250    0.500    0.750    0.950
+                 HELD OUT    0.049    0.231    0.475    0.736    0.955   <- gap here is drift, inherited by every model
+  MFE      2h   in-sample    0.050    0.250    0.500    0.750    0.950
+                 HELD OUT    0.046    0.226    0.465    0.728    0.951   <- gap here is drift, inherited by every model
+  MFE      5h   in-sample    0.050    0.250    0.500    0.750    0.950
+                 HELD OUT    0.040    0.210    0.447    0.714    0.945   <- gap here is drift, inherited by every model
+  MFE     10h   in-sample    0.050    0.250    0.500    0.750    0.950
+                 HELD OUT    0.041    0.209    0.453    0.718    0.943   <- gap here is drift, inherited by every model
+
+  [ALL]
+       [SPLIT] train 22,683 (<2026-03-06)   val 19,253   HELD OUT 18,064 (>=2026-07-18)
+[SPLIT] held-out used ONCE, for scoring only; iterations chosen on val
+  [TRENDING]
+       [SPLIT] train 7,612 (<2026-03-08)   val 6,367   HELD OUT 4,690 (>=2026-07-18)
+[SPLIT] held-out used ONCE, for scoring only; iterations chosen on val
+
+  fitted ALL       MAE Climatology  5 horizons x 5 quantiles   [1s]
+  fitted ALL       MAE Linear QR    5 horizons x 5 quantiles   [281s]
+  fitted ALL       MAE QTREE        5 horizons x 5 quantiles   [300s]
+  fitted ALL       MAE kNN          5 horizons x 5 quantiles   [300s]
+  fitted ALL       MFE Climatology  5 horizons x 5 quantiles   [300s]
+  fitted ALL       MFE Linear QR    5 horizons x 5 quantiles   [588s]
+  fitted ALL       MFE QTREE        5 horizons x 5 quantiles   [610s]
+  fitted ALL       MFE kNN          5 horizons x 5 quantiles   [610s]
+  fitted TRENDING  MAE Climatology  5 horizons x 5 quantiles   [610s]
+  fitted TRENDING  MAE Linear QR    5 horizons x 5 quantiles   [646s]
+  fitted TRENDING  MAE QTREE        5 horizons x 5 quantiles   [662s]
+  fitted TRENDING  MAE kNN          5 horizons x 5 quantiles   [662s]
+  fitted TRENDING  MFE Climatology  5 horizons x 5 quantiles   [662s]
+  fitted TRENDING  MFE Linear QR    5 horizons x 5 quantiles   [700s]
+  fitted TRENDING  MFE QTREE        5 horizons x 5 quantiles   [715s]
+  fitted TRENDING  MFE kNN          5 horizons x 5 quantiles   [715s]
+
+================================================================================================================
+STRUCTURAL CORRECTNESS -- bug-catchers, not judgment calls
+================================================================================================================
+  The target is a running max in k, and quantiles are ordered in q. Both are
+  HARD constraints, so both are now ENFORCED rather than gated on.
+
+  THIS WAS A GATE AND THE GATE WAS WRONG. It required zero violations, and
+  it counted them across all five horizons at once, so a single violation
+  anywhere disqualified every horizon of that model. Each horizon is an
+  INDEPENDENT fit -- nothing forces the 10h fit above the 5h fit on a given
+  episode -- so cross-horizon violations are normal behaviour, not a bug.
+  Measured on val: QTREE/MAE had 7,060 monotonicity violations of 385,060
+  (1.833%) and 8 quantile crossings (0.002%). Climatology cannot violate
+  either. The rule therefore failed every conditional model BY CONSTRUCTION
+  and would have retired the feature set on an artifact.
+
+  populationdir  model         quantile enforce    horizon enforce
+  ALL       MAE  Climatology             0.000%             0.000%
+  ALL       MAE  Linear QR               0.000%             0.002%
+  ALL       MAE  QTREE                   0.000%             0.624%
+  ALL       MAE  kNN                     0.000%             0.000%
+  ALL       MFE  Climatology             0.000%             0.000%
+  ALL       MFE  Linear QR               0.000%             0.002%
+  ALL       MFE  QTREE                   0.000%             0.372%
+  ALL       MFE  kNN                     0.000%             0.000%
+  TRENDING  MAE  Climatology             0.000%             0.000%
+  TRENDING  MAE  Linear QR               0.000%             0.004%
+  TRENDING  MAE  QTREE                   0.000%             0.664%
+  TRENDING  MAE  kNN                     0.000%             0.000%
+  TRENDING  MFE  Climatology             0.000%             0.000%
+  TRENDING  MFE  Linear QR               0.000%             0.000%
+  TRENDING  MFE  QTREE                   0.000%             0.443%
+  TRENDING  MFE  kNN                     0.000%             0.000%
+  Rates are the share of (episode, horizon, quantile) predictions that
+  enforcement MOVED. 0.000% means the model already satisfied the
+  constraint. Climatology and kNN cannot violate either: np.quantile is
+  non-decreasing in q, and the quantile of a running maximum is
+  non-decreasing in k. Independent per-horizon fits have no such guarantee.
+
+  [CACHE] wrote envelope_preds_30m.npz -- post-enforcement predictions, so no rerun refits.
+
+================================================================================================================
+ENVELOPE RUN 2 -- held-out split and isotonic transfer
+================================================================================================================
+  NO REFIT. Every prediction here is run 1's, loaded from the cache or
+  regenerated deterministically and then cached. No model is retrained, no
+  iteration count is reselected, no hyperparameter is touched.
+
+  THE DISCIPLINE BEND, STATED PLAINLY. The held-out block already had its
+  one scoring touch, in run 1. This run goes back into it to test something
+  new: whether the run-1 miscalibration is a stable offset or a moving
+  target. That is a DELIBERATE, STATED EXCEPTION for this diagnostic, not an
+  oversight. It is the second touch. A third needs a better reason than this
+  one, and the recalibration map is fitted on Held Out 1 and tested on Held
+  Out 2 precisely so the transfer claim is not scored on its own fitting set.
+
+  WHY NO NEW MODEL TYPES. In run 1, Climatology (zero capacity) and QTREE
+  (the most flexible model in the registry) missed by almost the same amount
+  in the same direction. That is the signature of a timing problem, not a
+  capacity problem, so adding capacity is not the experiment.
+
+  ALL       HO1:  8,200 rows,  39 days, 2026-07-18 -> 2026-08-25
+  ALL       HO2:  9,864 rows,  40 days, 2026-08-26 -> 2026-10-04
+  TRENDING  HO1:  2,108 rows,  39 days, 2026-07-18 -> 2026-08-25
+  TRENDING  HO2:  2,582 rows,  40 days, 2026-08-26 -> 2026-10-04
+
+================================================================================================================
+STEP 1 -- the same cells re-scored on each half separately
+================================================================================================================
+  Is the run-1 drift steady across the window, or concentrated in one half?
+  gap  = mean |actual - nominal| over the five levels, percentage points.
+  skill= pinball vs climatology, percent. POSITIVE means it beats doing
+         nothing; negative means doing nothing was better.
+  Every number carries a day-clustered 95% interval.
+
+----------------------------------------------------------------------------------------------------------------
+  ALL / MAE
+----------------------------------------------------------------------------------------------------------------
+  Climatology / 0.5h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.0    25.4    51.4    76.2    95.0   gap  0.78pp [0.42,1.56]   skill  +0.00% [ +0.00, +0.00]
+    HO2 actual         5.1    26.9    52.5    76.5    95.3   gap  1.25pp [0.40,3.00]   skill  +0.00% [ +0.00, +0.00]
+  Climatology / 1h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         3.3    24.2    51.0    75.8    95.5   gap  0.96pp [0.60,1.69]   skill  +0.00% [ +0.00, +0.00]
+    HO2 actual         4.9    26.5    53.7    76.7    95.9   gap  1.58pp [0.78,3.04]   skill  +0.00% [ +0.00, +0.00]
+  Climatology / 2h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         3.4    24.8    50.3    74.9    95.6   gap  0.55pp [0.52,1.45]   skill  +0.00% [ +0.00, +0.00]
+    HO2 actual         5.2    27.4    54.3    78.1    95.8   gap  2.17pp [1.11,3.51]   skill  +0.00% [ +0.00, +0.00]
+  Climatology / 5h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         3.6    25.1    50.5    75.5    95.8   gap  0.66pp [0.46,1.86]   skill  +0.00% [ +0.00, +0.00]
+    HO2 actual         5.4    28.6    55.3    78.3    96.2   gap  2.76pp [1.22,4.30]   skill  +0.00% [ +0.00, +0.00]
+  Climatology / 10h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.1    25.5    50.0    75.1    95.1   gap  0.32pp [0.33,2.34]   skill  +0.00% [ +0.00, +0.00]
+    HO2 actual         5.1    29.7    55.9    79.1    96.2   gap  3.19pp [1.28,5.03]   skill  +0.00% [ +0.00, +0.00]
+  Linear QR / 0.5h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.4    25.9    52.3    78.0    95.7   gap  1.50pp [0.86,2.19]   skill  +1.42% [ +0.94, +1.90]
+    HO2 actual         5.0    27.4    53.1    77.9    95.9   gap  1.86pp [0.63,3.53]   skill  +1.64% [ +0.87, +2.30]
+  Linear QR / 1h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         3.9    25.3    52.5    77.4    95.9   gap  1.44pp [0.83,2.31]   skill  +1.32% [ +0.89, +1.77]
+    HO2 actual         4.9    27.1    55.1    78.1    96.3   gap  2.32pp [1.29,3.73]   skill  +1.00% [ +0.15, +1.73]
+  Linear QR / 2h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         3.8    25.6    52.2    77.1    95.8   gap  1.39pp [0.74,2.45]   skill  +1.25% [ +0.71, +1.69]
+    HO2 actual         5.4    28.1    55.8    79.5    96.2   gap  3.00pp [1.87,4.37]   skill  +0.88% [ -0.13, +1.70]
+  Linear QR / 5h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         3.9    26.4    52.6    76.6    95.7   gap  1.47pp [0.57,2.74]   skill  +1.48% [ +0.92, +2.06]
+    HO2 actual         5.1    29.4    57.3    79.7    96.8   gap  3.67pp [2.32,5.10]   skill  +1.30% [ +0.20, +2.25]
+  Linear QR / 10h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.1    26.7    52.5    76.4    95.5   gap  1.39pp [0.51,3.37]   skill  +1.62% [ +0.88, +2.31]
+    HO2 actual         5.4    30.8    57.9    80.8    96.6   gap  4.30pp [2.39,5.98]   skill  +2.06% [ +0.92, +3.14]
+  QTREE / 0.5h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.6    25.8    51.5    76.8    95.2   gap  0.97pp [0.37,1.71]   skill  +1.18% [ +0.73, +1.68]
+    HO2 actual         5.2    27.3    52.8    77.0    95.2   gap  1.48pp [0.48,3.18]   skill  +1.61% [ +1.00, +2.18]
+  QTREE / 1h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         3.7    25.4    51.0    76.5    95.8   gap  0.99pp [0.50,1.91]   skill  +1.19% [ +0.69, +1.72]
+    HO2 actual         5.0    27.3    53.7    77.5    96.1   gap  1.91pp [0.86,3.36]   skill  +1.19% [ +0.64, +1.73]
+  QTREE / 2h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         3.7    25.7    50.8    76.3    95.5   gap  0.92pp [0.46,1.93]   skill  +1.11% [ +0.54, +1.63]
+    HO2 actual         5.2    28.3    54.7    79.1    95.7   gap  2.60pp [1.54,3.86]   skill  +1.01% [ +0.34, +1.70]
+  QTREE / 5h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.1    25.5    51.6    76.8    95.4   gap  1.03pp [0.48,2.23]   skill  +1.28% [ +0.84, +1.74]
+    HO2 actual         5.4    28.8    56.4    79.5    96.5   gap  3.32pp [1.85,4.77]   skill  +1.26% [ +0.47, +1.98]
+  QTREE / 10h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.3    25.9    51.7    76.1    94.9   gap  0.92pp [0.43,2.85]   skill  +1.50% [ +0.87, +2.10]
+    HO2 actual         5.4    30.7    57.5    80.2    96.3   gap  4.02pp [2.08,5.68]   skill  +1.96% [ +1.02, +2.82]
+  kNN / 0.5h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         5.0    25.9    52.6    77.4    95.3   gap  1.23pp [0.72,2.02]   skill  +0.78% [ +0.27, +1.32]
+    HO2 actual         5.4    27.1    53.3    77.3    95.1   gap  1.65pp [0.55,3.30]   skill  +1.09% [ +0.44, +1.74]
+  kNN / 1h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.0    25.4    52.3    76.5    95.4   gap  1.10pp [0.55,2.05]   skill  +0.67% [ +0.21, +1.17]
+    HO2 actual         5.3    27.5    54.7    77.3    95.8   gap  2.13pp [1.03,3.60]   skill  +0.55% [ -0.23, +1.24]
+  kNN / 2h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.0    26.1    51.6    76.2    95.3   gap  1.03pp [0.46,2.03]   skill  +0.60% [ +0.07, +1.08]
+    HO2 actual         5.6    28.5    55.6    79.0    95.7   gap  2.87pp [1.83,4.12]   skill  +0.50% [ -0.38, +1.22]
+  kNN / 5h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.3    27.0    52.1    76.5    95.2   gap  1.30pp [0.44,2.55]   skill  +0.77% [ +0.12, +1.39]
+    HO2 actual         5.7    30.0    57.0    79.4    96.5   gap  3.71pp [2.26,5.07]   skill  +1.01% [ +0.03, +1.81]
+  kNN / 10h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.6    27.0    52.2    75.9    94.6   gap  1.18pp [0.47,3.14]   skill  +1.18% [ +0.42, +1.94]
+    HO2 actual         5.9    31.4    57.3    80.1    96.2   gap  4.17pp [2.30,5.84]   skill  +1.66% [ +0.61, +2.61]
+
+----------------------------------------------------------------------------------------------------------------
+  ALL / MFE
+----------------------------------------------------------------------------------------------------------------
+  Climatology / 0.5h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         5.0    23.8    48.6    74.6    96.0   gap  0.78pp [0.42,1.56]   skill  +0.00% [ +0.00, +0.00]
+    HO2 actual         4.7    23.5    47.5    73.1    94.9   gap  1.25pp [0.40,3.00]   skill  +0.00% [ +0.00, +0.00]
+  Climatology / 1h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         5.2    24.0    49.4    74.6    96.0   gap  0.64pp [0.38,1.56]   skill  +0.00% [ +0.00, +0.00]
+    HO2 actual         4.8    22.2    46.0    72.8    95.0   gap  1.84pp [0.84,3.63]   skill  +0.00% [ +0.00, +0.00]
+  Climatology / 2h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         5.0    24.6    49.3    74.6    95.5   gap  0.41pp [0.24,1.41]   skill  +0.00% [ +0.00, +0.00]
+    HO2 actual         4.4    20.9    44.1    71.3    94.8   gap  2.91pp [1.47,5.12]   skill  +0.00% [ +0.00, +0.00]
+  Climatology / 5h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.2    23.0    47.3    73.0    94.8   gap  1.55pp [0.36,2.92]   skill  +0.00% [ +0.00, +0.00]
+    HO2 actual         3.9    19.4    42.5    70.1    94.4   gap  3.94pp [2.55,5.29]   skill  +0.00% [ +0.00, +0.00]
+  Climatology / 10h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.3    23.1    47.3    72.6    94.0   gap  1.74pp [0.38,3.29]   skill  +0.00% [ +0.00, +0.00]
+    HO2 actual         3.9    19.1    43.7    71.2    94.5   gap  3.52pp [2.02,5.01]   skill  +0.00% [ +0.00, +0.00]
+  Linear QR / 0.5h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.3    22.0    47.7    74.1    95.6   gap  1.50pp [0.86,2.19]   skill  +1.42% [ +0.94, +1.90]
+    HO2 actual         4.1    22.1    46.9    72.6    95.0   gap  1.86pp [0.63,3.53]   skill  +1.64% [ +0.87, +2.30]
+  Linear QR / 1h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.5    22.5    47.8    74.4    95.6   gap  1.28pp [0.66,2.15]   skill  +1.76% [ +0.99, +2.65]
+    HO2 actual         4.3    21.1    44.7    72.7    94.9   gap  2.46pp [1.22,4.16]   skill  +2.10% [ +1.36, +2.78]
+  Linear QR / 2h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.1    23.1    47.5    74.1    95.4   gap  1.31pp [0.64,2.20]   skill  +2.69% [ +1.81, +3.73]
+    HO2 actual         3.9    20.2    42.8    71.0    94.7   gap  3.49pp [2.02,5.31]   skill  +2.79% [ +2.08, +3.49]
+  Linear QR / 5h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         3.8    21.9    46.3    73.6    94.7   gap  1.94pp [0.86,3.22]   skill  +3.34% [ +2.31, +4.36]
+    HO2 actual         3.5    18.7    42.1    70.2    94.2   gap  4.25pp [3.00,5.33]   skill  +3.03% [ +2.10, +4.13]
+  Linear QR / 10h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         3.6    22.2    46.0    73.2    94.2   gap  2.15pp [0.88,3.70]   skill  +4.13% [ +3.04, +5.13]
+    HO2 actual         3.2    18.7    43.0    71.7    94.6   gap  3.77pp [2.12,5.18]   skill  +3.33% [ +2.44, +4.41]
+  QTREE / 0.5h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.8    23.2    48.6    74.2    95.4   gap  0.95pp [0.37,1.70]   skill  +1.18% [ +0.73, +1.68]
+    HO2 actual         4.8    23.0    47.4    72.7    94.8   gap  1.44pp [0.45,3.15]   skill  +1.61% [ +1.00, +2.18]
+  QTREE / 1h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.9    24.0    48.2    74.1    95.4   gap  0.85pp [0.32,1.80]   skill  +1.61% [ +0.91, +2.37]
+    HO2 actual         4.5    22.2    45.1    72.5    94.7   gap  2.19pp [0.96,3.90]   skill  +2.21% [ +1.73, +2.79]
+  QTREE / 2h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.7    24.6    47.6    74.1    95.2   gap  0.83pp [0.36,1.78]   skill  +2.43% [ +1.68, +3.37]
+    HO2 actual         4.1    20.9    43.0    71.4    94.3   gap  3.25pp [1.67,5.14]   skill  +2.71% [ +2.17, +3.25]
+  QTREE / 5h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.2    22.7    46.1    73.2    94.7   gap  1.81pp [0.68,3.14]   skill  +3.08% [ +2.24, +3.95]
+    HO2 actual         3.7    19.2    41.9    70.1    94.3   gap  4.16pp [2.82,5.33]   skill  +2.88% [ +2.15, +3.68]
+  QTREE / 10h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.0    22.7    46.2    72.4    94.0   gap  2.15pp [0.74,3.72]   skill  +3.79% [ +2.82, +4.64]
+    HO2 actual         3.7    18.9    43.1    71.3    94.4   gap  3.72pp [2.09,5.18]   skill  +3.18% [ +2.39, +4.05]
+  kNN / 0.5h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.7    22.6    47.4    74.1    95.0   gap  1.23pp [0.72,2.02]   skill  +0.78% [ +0.27, +1.32]
+    HO2 actual         4.9    22.7    46.7    72.9    94.6   gap  1.65pp [0.55,3.30]   skill  +1.09% [ +0.44, +1.74]
+  kNN / 1h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         5.1    23.2    47.9    74.3    95.1   gap  0.97pp [0.52,1.90]   skill  +1.23% [ +0.40, +2.25]
+    HO2 actual         4.8    21.7    45.0    72.5    94.5   gap  2.31pp [1.13,3.94]   skill  +1.53% [ +0.93, +2.14]
+  kNN / 2h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.9    23.6    48.2    73.5    94.9   gap  0.98pp [0.33,2.02]   skill  +1.97% [ +1.06, +3.07]
+    HO2 actual         4.3    20.6    43.3    71.1    94.1   gap  3.31pp [1.78,5.23]   skill  +2.08% [ +1.47, +2.68]
+  kNN / 5h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.4    22.7    46.1    72.9    94.2   gap  1.95pp [0.72,3.28]   skill  +2.76% [ +1.79, +3.77]
+    HO2 actual         3.9    19.1    41.6    69.9    93.8   gap  4.35pp [3.06,5.49]   skill  +2.27% [ +1.46, +3.13]
+  kNN / 10h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.5    22.7    46.4    72.3    93.6   gap  2.11pp [0.69,3.66]   skill  +3.45% [ +2.49, +4.28]
+    HO2 actual         3.7    19.0    43.3    71.1    94.0   gap  3.78pp [2.12,5.23]   skill  +2.84% [ +2.06, +3.77]
+
+----------------------------------------------------------------------------------------------------------------
+  TRENDING / MAE
+----------------------------------------------------------------------------------------------------------------
+  Climatology / 0.5h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.6    24.8    50.6    75.0    95.3   gap  0.29pp [0.31,1.67]   skill  +0.00% [ +0.00, +0.00]
+    HO2 actual         5.1    26.5    52.8    74.7    95.3   gap  1.00pp [0.63,2.59]   skill  +0.00% [ +0.00, +0.00]
+  Climatology / 1h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.5    25.0    51.2    76.5    95.6   gap  0.76pp [0.36,2.16]   skill  +0.00% [ +0.00, +0.00]
+    HO2 actual         5.2    27.3    54.4    77.1    96.0   gap  1.99pp [1.18,3.15]   skill  +0.00% [ +0.00, +0.00]
+  Climatology / 2h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.9    25.9    51.3    75.9    95.9   gap  0.84pp [0.28,2.71]   skill  +0.00% [ +0.00, +0.00]
+    HO2 actual         5.0    29.0    55.9    79.4    96.1   gap  3.09pp [2.08,4.39]   skill  +0.00% [ +0.00, +0.00]
+  Climatology / 5h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         5.2    25.3    49.2    74.1    95.9   gap  0.61pp [0.48,2.49]   skill  +0.00% [ +0.00, +0.00]
+    HO2 actual         5.4    29.9    57.1    80.0    96.8   gap  3.83pp [2.07,5.73]   skill  +0.00% [ +0.00, +0.00]
+  Climatology / 10h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         5.2    25.9    49.9    75.2    95.6   gap  0.41pp [0.36,2.72]   skill  +0.00% [ +0.00, +0.00]
+    HO2 actual         5.4    31.5    58.3    82.0    96.5   gap  4.75pp [2.48,6.86]   skill  +0.00% [ +0.00, +0.00]
+  Linear QR / 0.5h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.5    25.9    51.1    77.3    95.8   gap  1.14pp [0.54,2.42]   skill  +1.18% [ +0.66, +1.72]
+    HO2 actual         4.6    27.0    53.5    76.1    95.4   gap  1.48pp [0.70,3.11]   skill  +0.20% [ -0.39, +0.85]
+  Linear QR / 1h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.6    26.9    51.7    77.8    96.3   gap  1.59pp [0.67,3.06]   skill  +0.95% [ +0.34, +1.57]
+    HO2 actual         5.2    28.1    54.8    77.5    96.2   gap  2.35pp [1.44,3.60]   skill  -0.04% [ -0.55, +0.52]
+  Linear QR / 2h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.9    26.6    52.7    77.8    96.2   gap  1.67pp [0.49,3.64]   skill  +1.28% [ +0.51, +1.92]
+    HO2 actual         5.5    29.9    57.4    80.3    95.9   gap  3.79pp [2.85,4.99]   skill  +0.07% [ -0.70, +0.87]
+  Linear QR / 5h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.6    27.3    51.2    75.9    95.4   gap  1.05pp [0.51,3.04]   skill  +1.35% [ +0.16, +2.29]
+    HO2 actual         5.3    30.4    58.5    81.5    96.7   gap  4.48pp [2.84,6.15]   skill  -0.07% [ -0.83, +0.92]
+  Linear QR / 10h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         5.0    27.5    52.4    77.8    95.3   gap  1.61pp [0.49,4.00]   skill  +0.86% [ -0.38, +1.81]
+    HO2 actual         5.4    32.9    60.5    83.2    96.2   gap  5.65pp [3.59,7.59]   skill  +1.07% [ -0.06, +2.25]
+  QTREE / 0.5h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.9    25.3    50.7    75.0    95.3   gap  0.27pp [0.26,1.67]   skill  +0.52% [ +0.27, +0.78]
+    HO2 actual         5.2    26.6    52.8    74.9    95.2   gap  1.00pp [0.54,2.59]   skill  +0.15% [ -0.19, +0.55]
+  QTREE / 1h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.6    26.5    51.1    76.7    96.0   gap  1.13pp [0.48,2.61]   skill  +0.63% [ +0.30, +0.95]
+    HO2 actual         5.6    27.9    54.4    76.8    95.9   gap  2.11pp [1.27,3.20]   skill  +0.11% [ -0.20, +0.45]
+  QTREE / 2h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         5.1    26.6    51.9    77.1    95.9   gap  1.32pp [0.37,3.32]   skill  +0.69% [ +0.27, +1.13]
+    HO2 actual         5.8    29.3    56.4    79.6    95.8   gap  3.38pp [2.41,4.55]   skill  +0.11% [ -0.35, +0.46]
+  QTREE / 5h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         5.2    25.8    50.6    75.9    95.3   gap  0.57pp [0.34,2.70]   skill  +0.70% [ +0.01, +1.38]
+    HO2 actual         5.4    30.2    58.0    81.0    96.6   gap  4.23pp [2.53,5.96]   skill  +0.31% [ -0.29, +1.09]
+  QTREE / 10h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         5.4    26.1    51.3    77.2    95.8   gap  1.18pp [0.44,3.66]   skill  +0.58% [ -0.24, +1.29]
+    HO2 actual         5.8    32.0    59.6    82.1    96.2   gap  5.12pp [2.87,7.07]   skill  +0.70% [ -0.00, +1.53]
+  kNN / 0.5h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         5.4    25.7    51.6    75.9    95.0   gap  0.69pp [0.31,2.09]   skill  +0.70% [ +0.22, +1.27]
+    HO2 actual         5.5    27.0    53.0    74.9    95.0   gap  1.13pp [0.56,2.73]   skill  +0.20% [ -0.46, +0.91]
+  kNN / 1h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.8    26.2    51.1    76.1    95.5   gap  0.82pp [0.38,2.39]   skill  +0.57% [ +0.11, +1.10]
+    HO2 actual         5.9    27.6    54.2    76.1    95.9   gap  1.95pp [1.13,3.14]   skill  +0.22% [ -0.38, +0.82]
+  kNN / 2h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         5.2    27.4    51.6    76.1    95.5   gap  1.18pp [0.44,3.20]   skill  +0.69% [ +0.16, +1.34]
+    HO2 actual         6.2    30.1    55.8    78.9    95.4   gap  3.29pp [2.23,4.67]   skill  +0.30% [ -0.47, +1.03]
+  kNN / 5h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         5.1    26.8    50.9    75.5    94.9   gap  0.69pp [0.37,2.90]   skill  +0.42% [ -0.49, +1.21]
+    HO2 actual         5.9    30.7    57.9    80.8    96.7   gap  4.41pp [2.55,6.25]   skill  +0.40% [ -0.41, +1.37]
+  kNN / 10h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         5.5    26.9    51.2    76.5    94.7   gap  1.06pp [0.44,3.50]   skill  +0.10% [ -0.90, +1.08]
+    HO2 actual         6.4    31.9    59.5    81.8    96.3   gap  5.17pp [2.79,7.28]   skill  +0.92% [ -0.14, +2.11]
+
+----------------------------------------------------------------------------------------------------------------
+  TRENDING / MFE
+----------------------------------------------------------------------------------------------------------------
+  Climatology / 0.5h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.7    25.0    49.4    75.2    95.4   gap  0.29pp [0.31,1.67]   skill  +0.00% [ +0.00, +0.00]
+    HO2 actual         4.7    25.3    47.2    73.5    94.9   gap  1.00pp [0.63,2.59]   skill  +0.00% [ +0.00, +0.00]
+  Climatology / 1h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         5.2    24.4    49.3    73.9    95.1   gap  0.53pp [0.30,2.19]   skill  +0.00% [ +0.00, +0.00]
+    HO2 actual         4.7    23.2    46.7    72.7    94.3   gap  1.67pp [0.67,3.07]   skill  +0.00% [ +0.00, +0.00]
+  Climatology / 2h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.6    24.8    50.2    75.0    95.4   gap  0.25pp [0.34,1.95]   skill  +0.00% [ +0.00, +0.00]
+    HO2 actual         4.3    20.3    44.5    70.1    94.0   gap  3.38pp [1.83,5.20]   skill  +0.00% [ +0.00, +0.00]
+  Climatology / 5h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.9    24.0    48.8    74.4    95.2   gap  0.62pp [0.37,3.00]   skill  +0.00% [ +0.00, +0.00]
+    HO2 actual         4.5    18.1    41.0    69.1    94.0   gap  4.68pp [3.19,5.91]   skill  +0.00% [ +0.00, +0.00]
+  Climatology / 10h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.2    24.7    49.2    74.0    94.6   gap  0.65pp [0.43,3.02]   skill  +0.00% [ +0.00, +0.00]
+    HO2 actual         4.4    18.7    42.1    70.2    94.1   gap  4.11pp [2.10,5.67]   skill  +0.00% [ +0.00, +0.00]
+  Linear QR / 0.5h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.2    22.7    48.9    74.1    95.5   gap  1.14pp [0.54,2.42]   skill  +1.18% [ +0.66, +1.72]
+    HO2 actual         4.6    23.9    46.5    73.0    95.4   gap  1.48pp [0.70,3.11]   skill  +0.20% [ -0.39, +0.85]
+  Linear QR / 1h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.3    23.1    48.8    73.1    94.5   gap  1.25pp [0.49,2.98]   skill  +0.76% [ +0.17, +1.36]
+    HO2 actual         4.3    22.6    45.5    71.5    94.2   gap  2.39pp [1.30,3.77]   skill  +0.63% [ +0.18, +1.09]
+  Linear QR / 2h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         3.9    23.2    48.5    72.6    94.6   gap  1.44pp [0.51,3.08]   skill  +1.31% [ +0.66, +2.01]
+    HO2 actual         4.4    19.8    43.1    68.4    93.9   gap  4.07pp [2.45,6.01]   skill  +1.58% [ +0.79, +2.52]
+  Linear QR / 5h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.3    22.8    48.0    73.5    95.8   gap  1.45pp [0.50,3.51]   skill  +1.66% [ +0.71, +2.58]
+    HO2 actual         4.3    17.2    39.9    68.8    94.0   gap  5.14pp [3.49,6.46]   skill  +2.31% [ +1.32, +3.38]
+  Linear QR / 10h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         3.8    23.3    47.2    73.4    95.2   gap  1.46pp [0.41,3.72]   skill  +2.51% [ +1.21, +3.67]
+    HO2 actual         3.8    17.2    40.7    70.1    94.5   gap  4.72pp [2.74,6.19]   skill  +2.49% [ +1.21, +3.59]
+  QTREE / 0.5h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.7    25.0    49.3    74.7    95.1   gap  0.27pp [0.26,1.67]   skill  +0.52% [ +0.27, +0.78]
+    HO2 actual         4.8    25.1    47.2    73.4    94.8   gap  1.00pp [0.54,2.59]   skill  +0.15% [ -0.19, +0.55]
+  QTREE / 1h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         5.1    24.5    49.1    72.7    94.6   gap  0.82pp [0.39,2.49]   skill  +0.34% [ +0.05, +0.76]
+    HO2 actual         4.7    23.2    46.5    71.6    93.8   gap  2.02pp [0.99,3.35]   skill  +0.71% [ +0.32, +1.14]
+  QTREE / 2h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.6    24.8    49.7    73.5    95.0   gap  0.49pp [0.41,2.11]   skill  +0.91% [ +0.54, +1.37]
+    HO2 actual         4.4    20.2    43.8    69.3    93.7   gap  3.71pp [2.11,5.52]   skill  +1.32% [ +0.82, +1.90]
+  QTREE / 5h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.4    24.0    47.9    73.3    95.5   gap  1.17pp [0.47,3.37]   skill  +1.40% [ +0.71, +2.08]
+    HO2 actual         4.4    18.1    40.1    68.6    93.1   gap  5.14pp [3.33,6.52]   skill  +1.54% [ +0.83, +2.24]
+  QTREE / 10h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.5    24.5    48.1    73.1    94.7   gap  1.04pp [0.43,3.51]   skill  +2.07% [ +1.18, +3.03]
+    HO2 actual         4.1    18.3    41.2    69.8    94.0   gap  4.51pp [2.37,6.07]   skill  +2.10% [ +0.87, +3.12]
+  kNN / 0.5h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         5.0    24.1    48.4    74.3    94.6   gap  0.69pp [0.31,2.09]   skill  +0.70% [ +0.22, +1.27]
+    HO2 actual         5.0    25.1    47.0    73.0    94.5   gap  1.13pp [0.56,2.73]   skill  +0.20% [ -0.46, +0.91]
+  kNN / 1h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.8    24.3    48.7    73.6    93.9   gap  0.93pp [0.39,2.53]   skill  +0.42% [ -0.07, +1.00]
+    HO2 actual         4.6    22.7    46.2    72.3    93.0   gap  2.23pp [1.12,3.66]   skill  +0.66% [ +0.12, +1.22]
+  kNN / 2h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.7    23.9    48.8    73.1    94.3   gap  1.04pp [0.35,2.77]   skill  +1.01% [ +0.44, +1.59]
+    HO2 actual         4.6    20.4    43.8    68.4    93.3   gap  3.88pp [2.25,5.83]   skill  +1.11% [ +0.52, +1.80]
+  kNN / 5h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         5.0    23.6    47.8    72.9    95.2   gap  1.19pp [0.48,3.45]   skill  +1.18% [ +0.45, +1.99]
+    HO2 actual         4.6    18.0    39.7    67.5    92.9   gap  5.45pp [3.68,6.81]   skill  +1.47% [ +0.64, +2.29]
+  kNN / 10h
+    nominal            5.0    25.0    50.0    75.0    95.0
+    HO1 actual         4.7    23.8    48.1    72.3    94.6   gap  1.32pp [0.47,3.71]   skill  +2.12% [ +1.10, +3.25]
+    HO2 actual         4.0    17.8    41.0    69.6    93.8   gap  4.77pp [2.65,6.35]   skill  +2.05% [ +1.10, +2.92]
+
+================================================================================================================
+STEP 2 -- isotonic recalibration, FITTED ON HELD OUT 1, TESTED ON HELD OUT 2
+================================================================================================================
+  The map is fitted only on HO1 and only ever applied to HO2, so the
+  transfer claim is never scored on its own fitting set.
+
+  If the correction closes the gap, the miscalibration is a STABLE OFFSET
+  and a static correction is worth having. If it does not, the
+  miscalibration is still MOVING and no static correction fixes it.
+
+----------------------------------------------------------------------------------------------------------------
+  ALL / MAE
+----------------------------------------------------------------------------------------------------------------
+  Climatology / 0.5h      (enforcement moved 0.000% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           5.1    26.9    52.5    76.5    95.3   gap  1.25pp [0.40,3.00]
+    HO2 after            6.1    26.4    51.3    75.2    95.3   gap  0.85pp [0.33,2.62]   indistinguishable
+  Climatology / 1h      (enforcement moved 0.000% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           4.9    26.5    53.7    76.7    95.9   gap  1.58pp [0.78,3.04]
+    HO2 after            6.8    27.2    52.5    75.6    95.6   gap  1.53pp [0.62,3.13]   indistinguishable
+  Climatology / 2h      (enforcement moved 0.000% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           5.2    27.4    54.3    78.1    95.8   gap  2.17pp [1.11,3.51]
+    HO2 after            7.2    27.6    54.0    78.1    95.4   gap  2.47pp [1.20,3.90]   indistinguishable
+  Climatology / 5h      (enforcement moved 0.000% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           5.4    28.6    55.3    78.3    96.2   gap  2.76pp [1.22,4.30]
+    HO2 after            6.5    28.5    54.8    78.0    95.7   gap  2.69pp [1.11,4.26]   indistinguishable
+  Climatology / 10h      (enforcement moved 0.000% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           5.1    29.7    55.9    79.1    96.2   gap  3.19pp [1.28,5.03]
+    HO2 after            6.2    29.2    55.9    78.9    96.1   gap  3.28pp [1.24,5.12]   indistinguishable
+  Linear QR / 0.5h      (enforcement moved 0.008% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           5.0    27.4    53.1    77.9    95.9   gap  1.86pp [0.63,3.53]
+    HO2 after            5.5    26.5    50.7    74.9    95.1   gap  0.58pp [0.33,2.26]   indistinguishable
+  Linear QR / 1h      (enforcement moved 0.008% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           4.9    27.1    55.1    78.1    96.3   gap  2.32pp [1.29,3.73]
+    HO2 after            6.4    26.9    52.6    76.0    95.3   gap  1.43pp [0.52,2.99]   indistinguishable
+  Linear QR / 2h      (enforcement moved 0.008% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           5.4    28.1    55.8    79.5    96.2   gap  3.00pp [1.87,4.37]
+    HO2 after            6.6    27.3    53.7    77.8    95.4   gap  2.17pp [0.98,3.59]   indistinguishable
+  Linear QR / 5h      (enforcement moved 0.008% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           5.1    29.4    57.3    79.7    96.8   gap  3.67pp [2.32,5.10]
+    HO2 after            6.7    28.1    54.8    78.1    96.2   gap  2.75pp [1.23,4.23]   indistinguishable
+  Linear QR / 10h      (enforcement moved 0.008% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           5.4    30.8    57.9    80.8    96.6   gap  4.30pp [2.39,5.98]
+    HO2 after            6.2    29.4    55.2    79.4    96.2   gap  3.28pp [1.31,5.03]   indistinguishable
+  QTREE / 0.5h      (enforcement moved 0.421% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           5.2    27.3    52.8    77.0    95.2   gap  1.48pp [0.48,3.18]
+    HO2 after            5.6    26.5    51.1    75.2    94.9   gap  0.71pp [0.28,2.41]   indistinguishable
+  QTREE / 1h      (enforcement moved 0.421% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           5.0    27.3    53.7    77.5    96.1   gap  1.91pp [0.86,3.36]
+    HO2 after            6.7    27.0    52.6    76.1    95.4   gap  1.53pp [0.54,3.14]   indistinguishable
+  QTREE / 2h      (enforcement moved 0.421% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           5.2    28.3    54.7    79.1    95.7   gap  2.60pp [1.54,3.86]
+    HO2 after            6.5    27.3    53.8    78.1    95.4   gap  2.21pp [0.99,3.58]   indistinguishable
+  QTREE / 5h      (enforcement moved 0.421% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           5.4    28.8    56.4    79.5    96.5   gap  3.32pp [1.85,4.77]
+    HO2 after            6.6    28.3    55.1    77.9    96.2   gap  2.83pp [1.34,4.34]   indistinguishable
+  QTREE / 10h      (enforcement moved 0.421% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           5.4    30.7    57.5    80.2    96.3   gap  4.02pp [2.08,5.68]
+    HO2 after            6.4    29.6    55.6    79.2    96.3   gap  3.41pp [1.46,5.12]   indistinguishable
+  kNN / 0.5h      (enforcement moved 0.738% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           5.4    27.1    53.3    77.3    95.1   gap  1.65pp [0.55,3.30]
+    HO2 after            5.4    26.4    50.9    75.0    94.8   gap  0.57pp [0.26,2.18]   indistinguishable
+  kNN / 1h      (enforcement moved 0.738% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           5.3    27.5    54.7    77.3    95.8   gap  2.13pp [1.03,3.60]
+    HO2 after            6.6    27.1    52.8    76.1    95.4   gap  1.59pp [0.57,3.11]   indistinguishable
+  kNN / 2h      (enforcement moved 0.738% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           5.6    28.5    55.6    79.0    95.7   gap  2.87pp [1.83,4.12]
+    HO2 after            6.8    27.5    53.8    78.0    95.4   gap  2.29pp [1.19,3.63]   indistinguishable
+  kNN / 5h      (enforcement moved 0.738% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           5.7    30.0    57.0    79.4    96.5   gap  3.71pp [2.26,5.07]
+    HO2 after            6.8    27.9    55.0    78.0    96.3   gap  2.81pp [1.33,4.26]   indistinguishable
+  kNN / 10h      (enforcement moved 0.738% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           5.9    31.4    57.3    80.1    96.2   gap  4.17pp [2.30,5.84]
+    HO2 after            6.4    29.2    55.3    79.3    96.2   gap  3.27pp [1.34,4.92]   indistinguishable
+
+----------------------------------------------------------------------------------------------------------------
+  ALL / MFE
+----------------------------------------------------------------------------------------------------------------
+  Climatology / 0.5h      (enforcement moved 0.000% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           4.7    23.5    47.5    73.1    94.9   gap  1.25pp [0.40,3.00]
+    HO2 after            4.7    24.8    48.7    73.6    93.9   gap  0.85pp [0.33,2.62]   indistinguishable
+  Climatology / 1h      (enforcement moved 0.000% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           4.8    22.2    46.0    72.8    95.0   gap  1.84pp [0.84,3.63]
+    HO2 after            4.8    23.0    46.5    73.3    93.7   gap  1.74pp [0.59,3.60]   indistinguishable
+  Climatology / 2h      (enforcement moved 0.000% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           4.4    20.9    44.1    71.3    94.8   gap  2.91pp [1.47,5.12]
+    HO2 after            4.4    21.2    44.9    71.9    94.2   gap  2.69pp [1.13,4.90]   indistinguishable
+  Climatology / 5h      (enforcement moved 0.000% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           3.9    19.4    42.5    70.1    94.4   gap  3.94pp [2.55,5.29]
+    HO2 after            4.6    20.7    45.7    72.4    94.4   gap  2.46pp [1.11,3.81]   indistinguishable
+  Climatology / 10h      (enforcement moved 0.000% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           3.9    19.1    43.7    71.2    94.5   gap  3.52pp [2.02,5.01]
+    HO2 after            4.5    20.8    46.6    73.8    94.5   gap  1.98pp [0.73,3.49]   indistinguishable
+  Linear QR / 0.5h      (enforcement moved 0.000% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           4.1    22.1    46.9    72.6    95.0   gap  1.86pp [0.63,3.53]
+    HO2 after            4.9    25.1    49.3    73.5    94.5   gap  0.58pp [0.33,2.26]   indistinguishable
+  Linear QR / 1h      (enforcement moved 0.000% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           4.3    21.1    44.7    72.7    94.9   gap  2.46pp [1.22,4.16]
+    HO2 after            4.7    23.5    47.3    73.2    94.2   gap  1.41pp [0.37,3.18]   indistinguishable
+  Linear QR / 2h      (enforcement moved 0.000% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           3.9    20.2    42.8    71.0    94.7   gap  3.49pp [2.02,5.31]
+    HO2 after            4.6    21.5    45.6    72.0    94.1   gap  2.42pp [1.04,4.28]   indistinguishable
+  Linear QR / 5h      (enforcement moved 0.000% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           3.5    18.7    42.1    70.2    94.2   gap  4.25pp [3.00,5.33]
+    HO2 after            4.5    21.5    45.4    71.9    94.2   gap  2.51pp [1.16,3.66]   indistinguishable
+  Linear QR / 10h      (enforcement moved 0.000% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           3.2    18.7    43.0    71.7    94.6   gap  3.77pp [2.12,5.18]
+    HO2 after            4.2    21.4    46.8    73.5    94.6   gap  1.89pp [0.58,3.31]   indistinguishable
+  QTREE / 0.5h      (enforcement moved 0.206% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           4.8    23.0    47.4    72.7    94.8   gap  1.44pp [0.45,3.15]
+    HO2 after            5.1    24.8    48.8    73.5    94.4   gap  0.73pp [0.26,2.43]   indistinguishable
+  QTREE / 1h      (enforcement moved 0.206% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           4.5    22.2    45.1    72.5    94.7   gap  2.19pp [0.96,3.90]
+    HO2 after            4.7    23.1    47.3    73.4    94.4   gap  1.43pp [0.38,3.14]   indistinguishable
+  QTREE / 2h      (enforcement moved 0.206% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           4.1    20.9    43.0    71.4    94.3   gap  3.25pp [1.67,5.14]
+    HO2 after            4.4    21.3    45.6    72.2    94.1   gap  2.49pp [0.99,4.39]   indistinguishable
+  QTREE / 5h      (enforcement moved 0.206% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           3.7    19.2    41.9    70.1    94.3   gap  4.16pp [2.82,5.33]
+    HO2 after            4.6    21.0    45.4    72.2    94.3   gap  2.50pp [1.17,3.67]   indistinguishable
+  QTREE / 10h      (enforcement moved 0.206% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           3.7    18.9    43.1    71.3    94.4   gap  3.72pp [2.09,5.18]
+    HO2 after            4.5    21.2    47.1    73.8    94.4   gap  1.81pp [0.64,3.30]   indistinguishable
+  kNN / 0.5h      (enforcement moved 0.341% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           4.9    22.7    46.7    72.9    94.6   gap  1.65pp [0.55,3.30]
+    HO2 after            5.2    25.0    49.1    73.6    94.6   gap  0.57pp [0.26,2.18]   indistinguishable
+  kNN / 1h      (enforcement moved 0.341% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           4.8    21.7    45.0    72.5    94.5   gap  2.31pp [1.13,3.94]
+    HO2 after            4.8    23.3    47.3    73.1    94.3   gap  1.44pp [0.37,3.11]   indistinguishable
+  kNN / 2h      (enforcement moved 0.341% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           4.3    20.6    43.3    71.1    94.1   gap  3.31pp [1.78,5.23]
+    HO2 after            4.4    21.8    45.4    72.5    94.1   gap  2.36pp [0.91,4.24]   indistinguishable
+  kNN / 5h      (enforcement moved 0.341% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           3.9    19.1    41.6    69.9    93.8   gap  4.35pp [3.06,5.49]
+    HO2 after            4.4    20.9    45.4    72.3    93.8   gap  2.63pp [1.34,3.78]   indistinguishable
+  kNN / 10h      (enforcement moved 0.341% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           3.7    19.0    43.3    71.1    94.0   gap  3.78pp [2.12,5.23]
+    HO2 after            4.2    21.1    47.1    73.9    94.0   gap  1.94pp [0.80,3.38]   indistinguishable
+
+----------------------------------------------------------------------------------------------------------------
+  TRENDING / MAE
+----------------------------------------------------------------------------------------------------------------
+  Climatology / 0.5h      (enforcement moved 0.000% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           5.1    26.5    52.8    74.7    95.3   gap  1.00pp [0.63,2.59]
+    HO2 after            5.5    27.0    52.0    74.7    95.0   gap  0.95pp [0.45,2.63]   indistinguishable
+  Climatology / 1h      (enforcement moved 0.000% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           5.2    27.3    54.4    77.1    96.0   gap  1.99pp [1.18,3.15]
+    HO2 after            5.5    27.3    53.3    76.2    95.3   gap  1.51pp [0.75,2.73]   indistinguishable
+  Climatology / 2h      (enforcement moved 0.000% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           5.0    29.0    55.9    79.4    96.1   gap  3.09pp [2.08,4.39]
+    HO2 after            5.1    28.1    54.8    78.5    95.2   gap  2.32pp [1.31,3.63]   indistinguishable
+  Climatology / 5h      (enforcement moved 0.000% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           5.4    29.9    57.1    80.0    96.8   gap  3.83pp [2.07,5.73]
+    HO2 after            5.4    29.7    58.0    81.1    96.2   gap  4.07pp [2.38,5.90]   indistinguishable
+  Climatology / 10h      (enforcement moved 0.000% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           5.4    31.5    58.3    82.0    96.5   gap  4.75pp [2.48,6.86]
+    HO2 after            5.4    30.4    58.4    81.4    96.1   gap  4.35pp [2.09,6.39]   indistinguishable
+  Linear QR / 0.5h      (enforcement moved 0.002% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           4.6    27.0    53.5    76.1    95.4   gap  1.48pp [0.70,3.11]
+    HO2 after            5.0    26.3    52.0    74.2    94.9   gap  0.84pp [0.43,2.19]   indistinguishable
+  Linear QR / 1h      (enforcement moved 0.002% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           5.2    28.1    54.8    77.5    96.2   gap  2.35pp [1.44,3.60]
+    HO2 after            5.4    26.0    53.1    75.4    95.3   gap  1.01pp [0.57,2.22]   indistinguishable
+  Linear QR / 2h      (enforcement moved 0.002% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           5.5    29.9    57.4    80.3    95.9   gap  3.79pp [2.85,4.99]
+    HO2 after            5.5    27.7    54.5    77.8    94.8   gap  2.14pp [1.21,3.57]   indistinguishable
+  Linear QR / 5h      (enforcement moved 0.002% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           5.3    30.4    58.5    81.5    96.7   gap  4.48pp [2.84,6.15]
+    HO2 after            5.6    28.2    56.9    80.4    96.6   gap  3.54pp [1.90,5.14]   indistinguishable
+  Linear QR / 10h      (enforcement moved 0.002% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           5.4    32.9    60.5    83.2    96.2   gap  5.65pp [3.59,7.59]
+    HO2 after            5.4    30.5    58.1    80.1    96.0   gap  4.02pp [1.90,6.08]   indistinguishable
+  QTREE / 0.5h      (enforcement moved 0.449% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           5.2    26.6    52.8    74.9    95.2   gap  1.00pp [0.54,2.59]
+    HO2 after            5.4    26.5    52.1    74.7    94.9   gap  0.85pp [0.39,2.45]   indistinguishable
+  QTREE / 1h      (enforcement moved 0.449% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           5.6    27.9    54.4    76.8    95.9   gap  2.11pp [1.27,3.20]
+    HO2 after            5.8    26.9    53.1    75.6    95.3   gap  1.35pp [0.66,2.49]   indistinguishable
+  QTREE / 2h      (enforcement moved 0.449% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           5.8    29.3    56.4    79.6    95.8   gap  3.38pp [2.41,4.55]
+    HO2 after            5.8    27.7    54.3    77.9    95.0   gap  2.14pp [1.19,3.43]   indistinguishable
+  QTREE / 5h      (enforcement moved 0.449% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           5.4    30.2    58.0    81.0    96.6   gap  4.23pp [2.53,5.96]
+    HO2 after            5.4    29.2    57.4    80.2    96.4   gap  3.72pp [1.97,5.43]   indistinguishable
+  QTREE / 10h      (enforcement moved 0.449% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           5.8    32.0    59.6    82.1    96.2   gap  5.12pp [2.87,7.07]
+    HO2 after            5.8    30.6    58.1    80.3    95.7   gap  4.10pp [1.73,6.16]   indistinguishable
+  kNN / 0.5h      (enforcement moved 0.197% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           5.5    27.0    53.0    74.9    95.0   gap  1.13pp [0.56,2.73]
+    HO2 after            5.5    26.3    51.6    74.4    95.0   gap  0.81pp [0.39,2.17]   indistinguishable
+  kNN / 1h      (enforcement moved 0.197% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           5.9    27.6    54.2    76.1    95.9   gap  1.95pp [1.13,3.14]
+    HO2 after            6.0    26.0    53.5    75.1    95.4   gap  1.19pp [0.74,2.44]   indistinguishable
+  kNN / 2h      (enforcement moved 0.197% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           6.2    30.1    55.8    78.9    95.4   gap  3.29pp [2.23,4.67]
+    HO2 after            6.2    27.0    54.0    77.6    95.1   gap  1.98pp [0.93,3.34]   indistinguishable
+  kNN / 5h      (enforcement moved 0.197% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           5.9    30.7    57.9    80.8    96.7   gap  4.41pp [2.55,6.25]
+    HO2 after            5.9    28.2    56.8    80.2    96.7   gap  3.56pp [1.78,5.27]   indistinguishable
+  kNN / 10h      (enforcement moved 0.197% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           6.4    31.9    59.5    81.8    96.3   gap  5.17pp [2.79,7.28]
+    HO2 after            6.4    29.7    58.2    80.1    96.3   gap  4.15pp [1.79,6.28]   indistinguishable
+
+----------------------------------------------------------------------------------------------------------------
+  TRENDING / MFE
+----------------------------------------------------------------------------------------------------------------
+  Climatology / 0.5h      (enforcement moved 0.000% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           4.7    25.3    47.2    73.5    94.9   gap  1.00pp [0.63,2.59]
+    HO2 after            5.0    25.3    48.0    73.0    94.5   gap  0.95pp [0.45,2.63]   indistinguishable
+  Climatology / 1h      (enforcement moved 0.000% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           4.7    23.2    46.7    72.7    94.3   gap  1.67pp [0.67,3.07]
+    HO2 after            4.7    23.8    47.5    73.7    94.2   gap  1.23pp [0.39,2.66]   indistinguishable
+  Climatology / 2h      (enforcement moved 0.000% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           4.3    20.3    44.5    70.1    94.0   gap  3.38pp [1.83,5.20]
+    HO2 after            4.7    20.4    44.3    70.1    93.5   gap  3.40pp [1.90,5.25]   indistinguishable
+  Climatology / 5h      (enforcement moved 0.000% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           4.5    18.1    41.0    69.1    94.0   gap  4.68pp [3.19,5.91]
+    HO2 after            4.5    18.9    41.8    69.5    93.6   gap  4.34pp [2.70,5.62]   indistinguishable
+  Climatology / 10h      (enforcement moved 0.000% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           4.4    18.7    42.1    70.2    94.1   gap  4.11pp [2.10,5.67]
+    HO2 after            5.1    19.2    43.4    71.6    94.1   gap  3.36pp [1.52,4.91]   indistinguishable
+  Linear QR / 0.5h      (enforcement moved 0.000% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           4.6    23.9    46.5    73.0    95.4   gap  1.48pp [0.70,3.11]
+    HO2 after            5.1    25.8    48.0    73.7    95.0   gap  0.84pp [0.43,2.19]   indistinguishable
+  Linear QR / 1h      (enforcement moved 0.000% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           4.3    22.6    45.5    71.5    94.2   gap  2.39pp [1.30,3.77]
+    HO2 after            5.7    23.9    47.0    74.0    94.2   gap  1.32pp [0.66,2.54]   indistinguishable
+  Linear QR / 2h      (enforcement moved 0.000% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           4.4    19.8    43.1    68.4    93.9   gap  4.07pp [2.45,6.01]
+    HO2 after            5.0    21.0    44.7    70.5    93.9   gap  2.98pp [1.49,4.87]   indistinguishable
+  Linear QR / 5h      (enforcement moved 0.000% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           4.3    17.2    39.9    68.8    94.0   gap  5.14pp [3.49,6.46]
+    HO2 after            4.7    19.1    41.7    70.6    92.8   gap  4.24pp [2.56,5.69]   indistinguishable
+  Linear QR / 10h      (enforcement moved 0.000% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           3.8    17.2    40.7    70.1    94.5   gap  4.72pp [2.74,6.19]
+    HO2 after            4.4    19.2    43.1    71.7    94.4   gap  3.44pp [1.41,4.96]   indistinguishable
+  QTREE / 0.5h      (enforcement moved 0.256% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           4.8    25.1    47.2    73.4    94.8   gap  1.00pp [0.54,2.59]
+    HO2 after            5.1    25.3    47.9    73.5    94.6   gap  0.85pp [0.39,2.45]   indistinguishable
+  QTREE / 1h      (enforcement moved 0.256% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           4.7    23.2    46.5    71.6    93.8   gap  2.02pp [0.99,3.35]
+    HO2 after            4.7    23.7    47.2    74.2    93.8   gap  1.25pp [0.50,2.64]   indistinguishable
+  QTREE / 2h      (enforcement moved 0.256% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           4.4    20.2    43.8    69.3    93.7   gap  3.71pp [2.11,5.52]
+    HO2 after            4.8    20.5    44.1    70.8    93.7   gap  3.21pp [1.71,5.07]   indistinguishable
+  QTREE / 5h      (enforcement moved 0.256% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           4.4    18.1    40.1    68.6    93.1   gap  5.14pp [3.33,6.52]
+    HO2 after            4.7    18.9    41.8    70.4    92.8   gap  4.26pp [2.54,5.60]   indistinguishable
+  QTREE / 10h      (enforcement moved 0.256% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           4.1    18.3    41.2    69.8    94.0   gap  4.51pp [2.37,6.07]
+    HO2 after            4.8    18.7    43.4    72.0    94.0   gap  3.40pp [1.47,4.90]   indistinguishable
+  kNN / 0.5h      (enforcement moved 0.130% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           5.0    25.1    47.0    73.0    94.5   gap  1.13pp [0.56,2.73]
+    HO2 after            5.0    25.6    48.4    73.7    94.5   gap  0.81pp [0.39,2.17]   indistinguishable
+  kNN / 1h      (enforcement moved 0.130% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           4.6    22.7    46.2    72.3    93.0   gap  2.23pp [1.12,3.66]
+    HO2 after            4.9    23.4    47.2    74.2    93.0   gap  1.48pp [0.67,2.93]   indistinguishable
+  kNN / 2h      (enforcement moved 0.130% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           4.6    20.4    43.8    68.4    93.3   gap  3.88pp [2.25,5.83]
+    HO2 after            4.8    21.1    44.3    71.0    93.3   gap  3.11pp [1.53,5.09]   indistinguishable
+  kNN / 5h      (enforcement moved 0.130% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           4.6    18.0    39.7    67.5    92.9   gap  5.45pp [3.68,6.81]
+    HO2 after            4.6    18.9    42.0    71.1    92.9   gap  4.10pp [2.44,5.40]   indistinguishable
+  kNN / 10h      (enforcement moved 0.130% of corrected predictions)
+    nominal              5.0    25.0    50.0    75.0    95.0
+    HO2 before           4.0    17.8    41.0    69.6    93.8   gap  4.77pp [2.65,6.35]
+    HO2 after            4.3    18.9    43.0    72.5    93.8   gap  3.49pp [1.57,4.98]   indistinguishable
+
+================================================================================================================
+SUMMARY -- calibration gap in pp, and the isotonic transfer
+================================================================================================================
+  populationdir  model            h   HO1 gap   HO2 gap  HO2 recal  HO1 skill  HO2 skill
+  ALL       MAE  Climatology   0.5h     0.78      1.25       0.85      +0.00      +0.00
+  ALL       MAE  Climatology     1h     0.96      1.58       1.53      +0.00      +0.00
+  ALL       MAE  Climatology     2h     0.55      2.17       2.47      +0.00      +0.00
+  ALL       MAE  Climatology     5h     0.66      2.76       2.69      +0.00      +0.00
+  ALL       MAE  Climatology    10h     0.32      3.19       3.28      +0.00      +0.00
+  ALL       MAE  Linear QR     0.5h     1.50      1.86       0.58      +1.42      +1.64
+  ALL       MAE  Linear QR       1h     1.44      2.32       1.43      +1.32      +1.00
+  ALL       MAE  Linear QR       2h     1.39      3.00       2.17      +1.25      +0.88
+  ALL       MAE  Linear QR       5h     1.47      3.67       2.75      +1.48      +1.30
+  ALL       MAE  Linear QR      10h     1.39      4.30       3.28      +1.62      +2.06
+  ALL       MAE  QTREE         0.5h     0.97      1.48       0.71      +1.18      +1.61
+  ALL       MAE  QTREE           1h     0.99      1.91       1.53      +1.19      +1.19
+  ALL       MAE  QTREE           2h     0.92      2.60       2.21      +1.11      +1.01
+  ALL       MAE  QTREE           5h     1.03      3.32       2.83      +1.28      +1.26
+  ALL       MAE  QTREE          10h     0.92      4.02       3.41      +1.50      +1.96
+  ALL       MAE  kNN           0.5h     1.23      1.65       0.57      +0.78      +1.09
+  ALL       MAE  kNN             1h     1.10      2.13       1.59      +0.67      +0.55
+  ALL       MAE  kNN             2h     1.03      2.87       2.29      +0.60      +0.50
+  ALL       MAE  kNN             5h     1.30      3.71       2.81      +0.77      +1.01
+  ALL       MAE  kNN            10h     1.18      4.17       3.27      +1.18      +1.66
+  ALL       MFE  Climatology   0.5h     0.78      1.25       0.85      +0.00      +0.00
+  ALL       MFE  Climatology     1h     0.64      1.84       1.74      +0.00      +0.00
+  ALL       MFE  Climatology     2h     0.41      2.91       2.69      +0.00      +0.00
+  ALL       MFE  Climatology     5h     1.55      3.94       2.46      +0.00      +0.00
+  ALL       MFE  Climatology    10h     1.74      3.52       1.98      +0.00      +0.00
+  ALL       MFE  Linear QR     0.5h     1.50      1.86       0.58      +1.42      +1.64
+  ALL       MFE  Linear QR       1h     1.28      2.46       1.41      +1.76      +2.10
+  ALL       MFE  Linear QR       2h     1.31      3.49       2.42      +2.69      +2.79
+  ALL       MFE  Linear QR       5h     1.94      4.25       2.51      +3.34      +3.03
+  ALL       MFE  Linear QR      10h     2.15      3.77       1.89      +4.13      +3.33
+  ALL       MFE  QTREE         0.5h     0.95      1.44       0.73      +1.18      +1.61
+  ALL       MFE  QTREE           1h     0.85      2.19       1.43      +1.61      +2.21
+  ALL       MFE  QTREE           2h     0.83      3.25       2.49      +2.43      +2.71
+  ALL       MFE  QTREE           5h     1.81      4.16       2.50      +3.08      +2.88
+  ALL       MFE  QTREE          10h     2.15      3.72       1.81      +3.79      +3.18
+  ALL       MFE  kNN           0.5h     1.23      1.65       0.57      +0.78      +1.09
+  ALL       MFE  kNN             1h     0.97      2.31       1.44      +1.23      +1.53
+  ALL       MFE  kNN             2h     0.98      3.31       2.36      +1.97      +2.08
+  ALL       MFE  kNN             5h     1.95      4.35       2.63      +2.76      +2.27
+  ALL       MFE  kNN            10h     2.11      3.78       1.94      +3.45      +2.84
+  TRENDING  MAE  Climatology   0.5h     0.29      1.00       0.95      +0.00      +0.00
+  TRENDING  MAE  Climatology     1h     0.76      1.99       1.51      +0.00      +0.00
+  TRENDING  MAE  Climatology     2h     0.84      3.09       2.32      +0.00      +0.00
+  TRENDING  MAE  Climatology     5h     0.61      3.83       4.07      +0.00      +0.00
+  TRENDING  MAE  Climatology    10h     0.41      4.75       4.35      +0.00      +0.00
+  TRENDING  MAE  Linear QR     0.5h     1.14      1.48       0.84      +1.18      +0.20
+  TRENDING  MAE  Linear QR       1h     1.59      2.35       1.01      +0.95      -0.04
+  TRENDING  MAE  Linear QR       2h     1.67      3.79       2.14      +1.28      +0.07
+  TRENDING  MAE  Linear QR       5h     1.05      4.48       3.54      +1.35      -0.07
+  TRENDING  MAE  Linear QR      10h     1.61      5.65       4.02      +0.86      +1.07
+  TRENDING  MAE  QTREE         0.5h     0.27      1.00       0.85      +0.52      +0.15
+  TRENDING  MAE  QTREE           1h     1.13      2.11       1.35      +0.63      +0.11
+  TRENDING  MAE  QTREE           2h     1.32      3.38       2.14      +0.69      +0.11
+  TRENDING  MAE  QTREE           5h     0.57      4.23       3.72      +0.70      +0.31
+  TRENDING  MAE  QTREE          10h     1.18      5.12       4.10      +0.58      +0.70
+  TRENDING  MAE  kNN           0.5h     0.69      1.13       0.81      +0.70      +0.20
+  TRENDING  MAE  kNN             1h     0.82      1.95       1.19      +0.57      +0.22
+  TRENDING  MAE  kNN             2h     1.18      3.29       1.98      +0.69      +0.30
+  TRENDING  MAE  kNN             5h     0.69      4.41       3.56      +0.42      +0.40
+  TRENDING  MAE  kNN            10h     1.06      5.17       4.15      +0.10      +0.92
+  TRENDING  MFE  Climatology   0.5h     0.29      1.00       0.95      +0.00      +0.00
+  TRENDING  MFE  Climatology     1h     0.53      1.67       1.23      +0.00      +0.00
+  TRENDING  MFE  Climatology     2h     0.25      3.38       3.40      +0.00      +0.00
+  TRENDING  MFE  Climatology     5h     0.62      4.68       4.34      +0.00      +0.00
+  TRENDING  MFE  Climatology    10h     0.65      4.11       3.36      +0.00      +0.00
+  TRENDING  MFE  Linear QR     0.5h     1.14      1.48       0.84      +1.18      +0.20
+  TRENDING  MFE  Linear QR       1h     1.25      2.39       1.32      +0.76      +0.63
+  TRENDING  MFE  Linear QR       2h     1.44      4.07       2.98      +1.31      +1.58
+  TRENDING  MFE  Linear QR       5h     1.45      5.14       4.24      +1.66      +2.31
+  TRENDING  MFE  Linear QR      10h     1.46      4.72       3.44      +2.51      +2.49
+  TRENDING  MFE  QTREE         0.5h     0.27      1.00       0.85      +0.52      +0.15
+  TRENDING  MFE  QTREE           1h     0.82      2.02       1.25      +0.34      +0.71
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/numpy/lib/_nanfunctions_impl.py:1593: RuntimeWarning: All-NaN slice encountered
+  return fnb._ureduce(a,
+  TRENDING  MFE  QTREE           2h     0.49      3.71       3.21      +0.91      +1.32
+  TRENDING  MFE  QTREE           5h     1.17      5.14       4.26      +1.40      +1.54
+  TRENDING  MFE  QTREE          10h     1.04      4.51       3.40      +2.07      +2.10
+  TRENDING  MFE  kNN           0.5h     0.69      1.13       0.81      +0.70      +0.20
+  TRENDING  MFE  kNN             1h     0.93      2.23       1.48      +0.42      +0.66
+  TRENDING  MFE  kNN             2h     1.04      3.88       3.11      +1.01      +1.11
+  TRENDING  MFE  kNN             5h     1.19      5.45       4.10      +1.18      +1.47
+  TRENDING  MFE  kNN            10h     1.32      4.77       3.49      +2.12      +2.05
+
+================================================================================================================
+APPENDIX -- pass/fail, DEMOTED. Not the headline, and never was useful as one
+================================================================================================================
+  The same screen as run 1, on the FULL held-out block: all 5
+  aggregate quantile intervals must contain their target, and counted slices
+  must stay within 2x the 5% expected by chance.
+
+  IT IS KEPT FOR CONTINUITY, NOT BECAUSE IT INFORMS ANYTHING. 80 cells,
+  and 5 interval checks at 95% means a PERFECTLY calibrated
+  cell clears the aggregate screen only 77.4% of the time -- about
+  18 of 80 cells fail on chance alone. A binary verdict
+  built on that cannot separate a 1.8pp gap from a 9pp one, which is exactly
+  why the gap and the skill number lead this report instead.
+
+  populationdir  model            h    agg    slices  verdict
+  ALL       MAE  Climatology   0.5h     no      1/10     fail
+  ALL       MAE  Climatology     1h     no      3/10     fail
+  ALL       MAE  Climatology     2h     no      4/10     fail
+  ALL       MAE  Climatology     5h     no      6/10     fail
+  ALL       MAE  Climatology    10h     no      3/10     fail
+  ALL       MAE  Linear QR     0.5h     no     21/60     fail
+  ALL       MAE  Linear QR       1h     no     32/60     fail
+  ALL       MAE  Linear QR       2h     no     37/60     fail
+  ALL       MAE  Linear QR       5h     no     41/60     fail
+  ALL       MAE  Linear QR      10h     no     32/60     fail
+  ALL       MAE  QTREE         0.5h     no     15/60     fail
+  ALL       MAE  QTREE           1h     no     14/45     fail
+  ALL       MAE  QTREE           2h     no     22/60     fail
+  ALL       MAE  QTREE           5h     no     33/60     fail
+  ALL       MAE  QTREE          10h     no     28/60     fail
+  ALL       MAE  kNN           0.5h     no     16/60     fail
+  ALL       MAE  kNN             1h     no     26/60     fail
+  ALL       MAE  kNN             2h     no     27/60     fail
+  ALL       MAE  kNN             5h     no     30/60     fail
+  ALL       MAE  kNN            10h     no     29/60     fail
+  ALL       MFE  Climatology   0.5h     no      1/10     fail
+  ALL       MFE  Climatology     1h     no      3/10     fail
+  ALL       MFE  Climatology     2h     no      3/10     fail
+  ALL       MFE  Climatology     5h     no      6/10     fail
+  ALL       MFE  Climatology    10h     no      4/10     fail
+  ALL       MFE  Linear QR     0.5h     no     21/60     fail
+  ALL       MFE  Linear QR       1h     no     28/60     fail
+  ALL       MFE  Linear QR       2h     no     32/60     fail
+  ALL       MFE  Linear QR       5h     no     42/60     fail
+  ALL       MFE  Linear QR      10h     no     41/60     fail
+  ALL       MFE  QTREE         0.5h     no     14/50     fail
+  ALL       MFE  QTREE           1h     no     19/60     fail
+  ALL       MFE  QTREE           2h     no     30/60     fail
+  ALL       MFE  QTREE           5h     no     40/60     fail
+  ALL       MFE  QTREE          10h     no     38/60     fail
+  ALL       MFE  kNN           0.5h     no     16/60     fail
+  ALL       MFE  kNN             1h     no     23/60     fail
+  ALL       MFE  kNN             2h     no     29/60     fail
+  ALL       MFE  kNN             5h     no     45/60     fail
+  ALL       MFE  kNN            10h     no     43/60     fail
+  TRENDING  MAE  Climatology   0.5h     no      1/10     fail
+  TRENDING  MAE  Climatology     1h     no      3/10     fail
+  TRENDING  MAE  Climatology     2h     no      4/10     fail
+  TRENDING  MAE  Climatology     5h     no      4/10     fail
+  TRENDING  MAE  Climatology    10h     no      4/10     fail
+  TRENDING  MAE  Linear QR     0.5h     no      7/60     fail
+  TRENDING  MAE  Linear QR       1h     no     19/60     fail
+  TRENDING  MAE  Linear QR       2h     no     24/60     fail
+  TRENDING  MAE  Linear QR       5h     no     20/60     fail
+  TRENDING  MAE  Linear QR      10h     no     23/60     fail
+  TRENDING  MAE  QTREE         0.5h     no      3/30     fail
+  TRENDING  MAE  QTREE           1h     no     13/40     fail
+  TRENDING  MAE  QTREE           2h     no     13/60     fail
+  TRENDING  MAE  QTREE           5h     no     16/60     fail
+  TRENDING  MAE  QTREE          10h     no     23/60     fail
+  TRENDING  MAE  kNN           0.5h     no     10/60     fail
+  TRENDING  MAE  kNN             1h     no      7/60     fail
+  TRENDING  MAE  kNN             2h     no     18/60     fail
+  TRENDING  MAE  kNN             5h     no     20/60     fail
+  TRENDING  MAE  kNN            10h     no     21/60     fail
+  TRENDING  MFE  Climatology   0.5h     no      1/10     fail
+  TRENDING  MFE  Climatology     1h     no      2/10     fail
+  TRENDING  MFE  Climatology     2h     no      3/10     fail
+  TRENDING  MFE  Climatology     5h     no      3/10     fail
+  TRENDING  MFE  Climatology    10h     no      4/10     fail
+  TRENDING  MFE  Linear QR     0.5h     no      7/60     fail
+  TRENDING  MFE  Linear QR       1h     no     13/60     fail
+  TRENDING  MFE  Linear QR       2h     no     22/60     fail
+  TRENDING  MFE  Linear QR       5h     no     24/60     fail
+  TRENDING  MFE  Linear QR      10h     no     25/60     fail
+  TRENDING  MFE  QTREE         0.5h     no      6/30     fail
+  TRENDING  MFE  QTREE           1h     no     17/60     fail
+  TRENDING  MFE  QTREE           2h     no     23/60     fail
+  TRENDING  MFE  QTREE           5h     no     25/60     fail
+  TRENDING  MFE  QTREE          10h     no     16/60     fail
+  TRENDING  MFE  kNN           0.5h     no     10/60     fail
+  TRENDING  MFE  kNN             1h     no     15/60     fail
+  TRENDING  MFE  kNN             2h     no     18/60     fail
+  TRENDING  MFE  kNN             5h     no     24/60     fail
+  TRENDING  MFE  kNN            10h     no     20/60     fail
+
+  0 of 80 cells pass. Read the gap and the skill tables above instead.
+
+[757s]  run 2, target source 30m.  No refit. No new model types. Second and stated touch of held out.
+================================================================================================================

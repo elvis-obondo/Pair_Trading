@@ -1,0 +1,67 @@
+[SPLIT] train 22,683 (<2026-03-06T00:00:00.000000000)   val 19,253   HELD OUT 18,064 (>=2026-07-18)
+[SPLIT] held-out used ONCE, for scoring only; iterations chosen on val
+
+[BUILD] features...
+========================================================================================================
+SIGN-FOLDED (primary)
+========================================================================================================
+features      target         h     score     95% day-clustered  iters  CRPS equiv
+336 raw bars  regression  0.5h   -0.0020  [-0.0027,-0.0003]      0      100.1%
+336 raw bars  regression    1h   -0.0019  [-0.0015, 0.0003]      1      100.1%
+336 raw bars  regression    2h   -0.0053  [-0.0042,-0.0004]     11      100.3%
+336 raw bars  regression    5h   -0.0125  [-0.0065,-0.0021]     25      100.6%
+336 raw bars  regression   10h   -0.0079  [-0.0023, 0.0001]      5      100.4%
+336 raw bars  reversion   0.5h    0.5096  [ 0.4964, 0.5134]     36
+336 raw bars  reversion     1h    0.4982  [ 0.4882, 0.5078]      1
+336 raw bars  reversion     2h    0.5078  [ 0.4942, 0.5122]      6
+336 raw bars  reversion     5h    0.5067  [ 0.4980, 0.5145]    172
+336 raw bars  reversion    10h    0.5016  [ 0.4826, 0.5007]     39
+18 engineered regression  0.5h   -0.0031  [-0.0026,-0.0005]      2      100.2%
+18 engineered regression    1h   -0.0018  [-0.0017,-0.0000]      0      100.1%
+18 engineered regression    2h   -0.0075  [-0.0051,-0.0012]     12      100.4%
+18 engineered regression    5h   -0.0117  [-0.0041,-0.0007]      7      100.6%
+18 engineered regression   10h   -0.0110  [-0.0057,-0.0023]     14      100.6%
+18 engineered reversion   0.5h    0.5026  [ 0.4918, 0.5070]    171
+18 engineered reversion     1h    0.5023  [ 0.4882, 0.5032]      1
+18 engineered reversion     2h    0.5153  [ 0.4904, 0.5030]      1
+18 engineered reversion     5h    0.5016  [ 0.4907, 0.5090]     32
+18 engineered reversion    10h    0.5053  [ 0.4882, 0.5033]     24
+
+========================================================================================================
+unfolded
+========================================================================================================
+features      target         h     score     95% day-clustered  iters  CRPS equiv
+336 raw bars  regression  0.5h   -0.0003  [-0.0007, 0.0002]      2      100.0%
+336 raw bars  regression    1h   -0.0005  [-0.0008,-0.0000]      1      100.0%
+336 raw bars  regression    2h    0.0001  [-0.0025,-0.0009]      3      100.0%
+336 raw bars  regression    5h   -0.0019  [-0.0030,-0.0006]      7      100.1%
+336 raw bars  regression   10h   -0.0002  [-0.0019,-0.0002]      0      100.0%
+336 raw bars  reversion   0.5h    0.5555  [ 0.4893, 0.5033]     33
+336 raw bars  reversion     1h    0.5730  [ 0.4886, 0.5059]     21
+336 raw bars  reversion     2h    0.5735  [ 0.4898, 0.5078]     34
+336 raw bars  reversion     5h    0.5898  [ 0.4966, 0.5129]     43
+336 raw bars  reversion    10h    0.5931  [ 0.4903, 0.5078]     32
+18 engineered regression  0.5h   -0.0005  [-0.0012,-0.0002]      1      100.0%
+18 engineered regression    1h   -0.0014  [-0.0028,-0.0008]     12      100.1%
+18 engineered regression    2h    0.0003  [-0.0030,-0.0006]     10      100.0%
+18 engineered regression    5h   -0.0034  [-0.0051,-0.0021]     20      100.2%
+18 engineered regression   10h    0.0004  [-0.0029,-0.0010]      5      100.0%
+18 engineered reversion   0.5h    0.5534  [ 0.4905, 0.5055]      6
+18 engineered reversion     1h    0.5719  [ 0.4904, 0.5063]     18
+18 engineered reversion     2h    0.5718  [ 0.4926, 0.5099]     27
+18 engineered reversion     5h    0.5880  [ 0.4905, 0.5071]     35
+18 engineered reversion    10h    0.5954  [ 0.4864, 0.5043]      4
+
+========================================================================================================
+PERMUTATION NULL at 10h, sign-folded -- identical pipeline, shuffled targets
+========================================================================================================
+  336 raw bars  regression row-shuffle null: mean  -0.0070  [ -0.0084, -0.0059]   REAL  -0.0079   inside the null
+  336 raw bars  regression day-shuffle null: mean  -0.0034  [ -0.0060, -0.0013]   REAL  -0.0079   inside the null
+  336 raw bars  reversion  row-shuffle null: mean   0.4985  [  0.4920,  0.5057]   REAL   0.5016   inside the null
+  336 raw bars  reversion  day-shuffle null: mean   0.5003  [  0.4852,  0.5089]   REAL   0.5016   inside the null
+  18 engineered regression row-shuffle null: mean  -0.0070  [ -0.0084, -0.0059]   REAL  -0.0110   inside the null
+  18 engineered regression day-shuffle null: mean  -0.0033  [ -0.0057, -0.0011]   REAL  -0.0110   inside the null
+  18 engineered reversion  row-shuffle null: mean   0.5009  [  0.4854,  0.5081]   REAL   0.5053   inside the null
+  18 engineered reversion  day-shuffle null: mean   0.5007  [  0.4896,  0.5110]   REAL   0.5053   inside the null
+
+[392s]  gates: regression R2 > +1% with CI excluding 0 and outside null;  classification AUC > 0.55 with CI excluding 0.50 and outside null

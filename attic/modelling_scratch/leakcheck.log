@@ -1,0 +1,8 @@
+base rates (all 60,000):  FULL 18.9%   ADVERSE 20.7%   EITHER 38.7%
+
+predictor                          FULL   ADVERSE   EITHER     gap
+v_0 volatility prediction        0.6488    0.6124   0.6647  0.0363
+boosted tree, 62 features        0.6533    0.6004   0.6807  0.0529
+
+If FULL and ADVERSE score alike, the signal is TRAVEL DISTANCE, not direction.
+EITHER (did it move far at all) is the target that signal is really answering.

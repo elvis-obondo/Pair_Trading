@@ -1,0 +1,118 @@
+### A2 2026-10-14T18:40:32Z
+user_data/data/lst exists? no
+-- .gitignore tail
+
+# OKX data retired 2026-10-14 (HL-BUILD1). 2.3GB of bars plus OKX-built
+# research datasets, kept so pre-2026-10-14 NUMBERS.md results stay re-checkable.
+attic/okx_data/
+attic/okx_datasets/
+.gitignore:108:attic/okx_data/	attic/okx_data/x
+.gitignore:109:attic/okx_datasets/	attic/okx_datasets/x
+-- scripts first (launchd update-data must not re-create okx/)
+Renaming scripts/update_data.sh to attic/scripts/update_data.sh
+Renaming scripts/download_1m.sh to attic/scripts/download_1m.sh
+Renaming scripts/backfill_history.sh to attic/scripts/backfill_history.sh
+Renaming scripts/download_basis.sh to attic/scripts/download_basis.sh
+Renaming scripts/collect_oi.py to attic/scripts/collect_oi.py
+Renaming scripts/history_coverage.py to attic/scripts/history_coverage.py
+Renaming scripts/merge_bar_history.py to attic/scripts/merge_bar_history.py
+Renaming research/adapters/okx_futures.py to attic/research/adapters/okx_futures.py
+Renaming research/adapters/okx_spot.py to attic/research/adapters/okx_spot.py
+Renaming research/adapters/lst_tokens.py to attic/research/adapters/lst_tokens.py
+-- data
+2.3G	user_data/data/okx
+user_data/data/okx -> attic/okx_data
+breadth_counts.npz
+breadth_signed.npz
+delayed2_refresh.npz
+delayed3_blocks.npz
+delayed_paths.npz
+disloc.npz
+disloc_meta.parquet
+envelope_preds_30m.npz
+envelope_preds_copula.npz
+envelope_preds_cqr.npz
+envelope_preds_match1m.npz
+envelope_preds_match1m_mae_vol1m.npz
+envfeat.npz
+market_vol.npz
+meta_label_v2_state.npz
+newfeat.npz
+oi
+open_interest.feather
+reach_paths.npz
+reachfeat.npz
+reachfeat2.npz
+vol48_1m.npz
+vol_slope_1m.npz
+whyfeat.npz
+research/datasets/breadth_counts.npz -> attic/okx_datasets/breadth_counts.npz
+research/datasets/breadth_signed.npz -> attic/okx_datasets/breadth_signed.npz
+research/datasets/delayed2_refresh.npz -> attic/okx_datasets/delayed2_refresh.npz
+research/datasets/delayed3_blocks.npz -> attic/okx_datasets/delayed3_blocks.npz
+research/datasets/delayed_paths.npz -> attic/okx_datasets/delayed_paths.npz
+research/datasets/disloc.npz -> attic/okx_datasets/disloc.npz
+research/datasets/disloc_meta.parquet -> attic/okx_datasets/disloc_meta.parquet
+research/datasets/envelope_preds_30m.npz -> attic/okx_datasets/envelope_preds_30m.npz
+research/datasets/envelope_preds_copula.npz -> attic/okx_datasets/envelope_preds_copula.npz
+research/datasets/envelope_preds_cqr.npz -> attic/okx_datasets/envelope_preds_cqr.npz
+research/datasets/envelope_preds_match1m.npz -> attic/okx_datasets/envelope_preds_match1m.npz
+research/datasets/envelope_preds_match1m_mae_vol1m.npz -> attic/okx_datasets/envelope_preds_match1m_mae_vol1m.npz
+research/datasets/envfeat.npz -> attic/okx_datasets/envfeat.npz
+research/datasets/market_vol.npz -> attic/okx_datasets/market_vol.npz
+research/datasets/meta_label_v2_state.npz -> attic/okx_datasets/meta_label_v2_state.npz
+research/datasets/newfeat.npz -> attic/okx_datasets/newfeat.npz
+research/datasets/oi -> attic/okx_datasets/oi
+research/datasets/open_interest.feather -> attic/okx_datasets/open_interest.feather
+research/datasets/reach_paths.npz -> attic/okx_datasets/reach_paths.npz
+research/datasets/reachfeat.npz -> attic/okx_datasets/reachfeat.npz
+research/datasets/reachfeat2.npz -> attic/okx_datasets/reachfeat2.npz
+research/datasets/vol48_1m.npz -> attic/okx_datasets/vol48_1m.npz
+research/datasets/vol_slope_1m.npz -> attic/okx_datasets/vol_slope_1m.npz
+research/datasets/whyfeat.npz -> attic/okx_datasets/whyfeat.npz
+-- after
+total 0
+drwxr-xr-x@  2 elvisobondo  staff    64 Oct 14 14:40 .
+drwxr-xr-x@ 88 elvisobondo  staff  2816 Oct 14 14:11 ..
+2.3G	attic/okx_data
+297M	attic/okx_datasets
+user_data/data/okx absent
+ M .gitignore
+R  research/adapters/lst_tokens.py -> attic/research/adapters/lst_tokens.py
+R  research/adapters/okx_futures.py -> attic/research/adapters/okx_futures.py
+R  research/adapters/okx_spot.py -> attic/research/adapters/okx_spot.py
+R  scripts/backfill_history.sh -> attic/scripts/backfill_history.sh
+R  scripts/collect_oi.py -> attic/scripts/collect_oi.py
+R  scripts/download_1m.sh -> attic/scripts/download_1m.sh
+R  scripts/download_basis.sh -> attic/scripts/download_basis.sh
+R  scripts/history_coverage.py -> attic/scripts/history_coverage.py
+R  scripts/merge_bar_history.py -> attic/scripts/merge_bar_history.py
+R  scripts/update_data.sh -> attic/scripts/update_data.sh
+### NUMBERS.md header line added
+
+### OKX-bound modules left in place (not modified; for the user to port or retire)
+LIVE TRADING (VM stack, now stopped)
+  research/live_scanner.py        one scan cycle: refreshes OKX bars via freqtrade --exchange okx, screens pairs, publishes candidates
+  research/stop_monitor.py        tick stop monitor on the OKX public websocket; sole ledger writer
+  scripts/vm_scan_cycle.sh        VM cron cycle: freqtrade download-data --exchange okx, then the scanner
+  scripts/check_vm.sh             VM status wrapper; its `oi` subcommand pulls the retired OKX OI collector's files
+DATA PATH
+  research/data_loader.py         get_price_levels; imports adapters.okx_futures + lst_tokens (to be REPLACED in B2 by the HL adapter, per brief)
+  research/universe_panel.py      panel cache + tradeable pairs; OKX only in docstrings ("212 instruments", okx_futures)
+  research/intrabar.py            1m/fine log prices for exit checks; reads user_data/data/okx/futures directly
+  research/validate_intrabar.py   validator for intrabar.py; prints an OKX-specific check
+  research/pair_analysis.py       pair diagnostics; reads raw OKX 30m feathers directly
+  research/coint_screen.py        cointegration-screened universe; reads okx/futures/*_USDT_USDT-30m directly; OKX taker cost in docstring
+RESEARCH (dislocation_model)
+  envelope.py                     MAE/MFE envelope; RAW_BAR_DIR + {t}_USDT_USDT-1m filenames (RAW_BAR_DIR repointed in B2, per brief)
+  meta_label.py                   META-LABEL step 0; builds {t}_USDT_USDT-1m paths off envelope.RAW_BAR_DIR
+  envfeat.py                      five environment features; RAW_DIR = okx/futures (30m OHLCV)
+  whyfeat.py                      WHY-IT-MOVED features; RAW_DIR = okx/futures, OKX volume
+  reachfeat2.py                   REACH-MU v2; perp vs OKX 1h index feathers, 1m futures
+  (transitively: reachmu.py, delayed*.py, chopdrift.py, whyscreen.py, whycheck.py, reachfeat.py import from the above)
+TEXT ONLY
+  research/ou_model.py            OU model; "matches the OKX perpetual funding cycle" (8h) in a comment
+  research/risk_sim.py            portfolio sim; "leverage than OKX allows" in docstring
+CONFIG/OTHER
+  .env.example, requirements.txt, user_data/config_backfill.json, .gitignore comments
+Laptop launchd: com.pairtrading.update-data (loaded, every 12h) runs scripts/update_data.sh, now in attic/ -> fails "No such file" into logs/update_data.log, downloads nothing. Not unloaded (not in brief).

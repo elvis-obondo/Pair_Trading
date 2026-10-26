@@ -1,0 +1,5 @@
+[G8 POISON] 1020 (coin, cutoff) trials, every minute row with exchange time >= t0 overwritten in the RAW table: features at or before the cutoff changed in 0 cases for the rule (must be 0)
+[G8 POISON] broken variant (row labelled t0 read instead of t0 - 1): the same poison changed the features in 837 of 1020 trials (must be > 0: the test can see the bug)
+[G8 AS-OF] deleted t0 - 1 row: value carried from an older minute in 0 cases (must be 0)
+[G8 POISON/AS-OF] PASS
+[TESTS G8 poison-only] PASS [1234s]

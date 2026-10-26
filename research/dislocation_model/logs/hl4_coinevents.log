@@ -1,0 +1,18 @@
+[INFO] panel 24305 bars x 206 coins; 204 non-factor coins; SEG_MIN 287
+  coin 30/204  events so far 11,002  [15s]
+  coin 60/204  events so far 22,040  [24s]
+  coin 90/204  events so far 33,311  [34s]
+  coin 120/204  events so far 43,555  [42s]
+  coin 150/204  events so far 54,806  [51s]
+  coin 180/204  events so far 65,735  [60s]
+
+EVENTS: 74,607 (every trigger, no cap) over 204 coins; with a 10h outcome window 74,326; segments used 924
+  per coin: min 29, median 405, max 483; coins with none: 0
+  long (z > 0) 59.3%  short 40.7%
+  |z| < 2: 23.8%   2-3: 52.6%   >= 3: 23.6%
+  per month: 2025-05 35  2025-06 3,566  2025-07 3,009  2025-08 4,159  2025-09 4,022  2025-10 4,520  2025-11 4,820  2025-12 4,834  2026-01 5,124  2026-02 4,683  2026-03 5,186  2026-04 4,843  2026-05 4,855  2026-06 4,684  2026-07 4,951  2026-08 4,769  2026-09 4,554  2026-10 1,993
+  CONTROLS set 1 (matched, far from triggers): 370,125 links; events with 0 controls 305 (0.41%); controls per event: mean 4.96, median 5, share with 5: 98.8%; candidate bars 927,932
+  CONTROLS set 2 (near-miss): 152,784 links; events with 0 controls 22,927 (30.73%); controls per event: mean 2.05, median 2, share with 5: 19.2%; candidate bars 34,417
+  events with an unknown volatility decile (control match impossible): 103
+  events whose C24 flow window or 30m prices over it are not finite: 1,169 (1.57%); near-miss candidates removed by the +/- 24 h exclusion: 230,282 of 264,699
+[WROTE] datasets/ev_events.parquet, datasets/ev_pairs.parquet  [68s]

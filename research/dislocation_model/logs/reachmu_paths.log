@@ -1,0 +1,6 @@
+  depth vs the 10h MFE target: max |diff| 0.00e+00 (must be 0)
+  reach mu within 10h: 0.2311 (12,424 of 53,757)
+  liquidation headroom at 20x, entry sigma: median 6.711 [p5 2.706, p95 16.686]
+  reverters hitting liquidation before mu: 206 of 12,424;  any episode hitting it within 10h: 5,330
+  chance probability (50 sign-flip seeds): mean 0.2980   [35s]
+  [WROTE] datasets/reach_paths.npz

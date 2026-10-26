@@ -1,0 +1,45 @@
+================================================================================================================
+vol_48_1m FOR MAE AT THE REMAINING HORIZONS -- scoring, no feature build
+================================================================================================================
+  feature reloaded: 53,757 rows, identical to the population; sha256 b3cbe66a18c5
+[1m  ] 1-minute >= 30-minute, every episode/direction/horizon: 0 violations
+[1m  ] deepest shortfall -9.374e-07; as a fraction of the float32 reference's precision (8.0 ulps): 0.062 (must be < 1)
+  cache fingerprint matches (9e332d92a2945b03...): 'old' is the published QTREE.
+       [SPLIT] train 22,645 (<2026-05-01)   val 13,048   HELD OUT 18,064 (>=2026-07-18)
+[SPLIT] held-out used ONCE, for scoring only; iterations chosen on val
+  new QTREE refitted, MAE, all five horizons, two-pass enforced   [34s]
+
+================================================================================================================
+REPRODUCTION -- 10h must return the published new-feature numbers
+================================================================================================================
+  skill +2.77% (published +2.77%)   gap 2.86pp (published 2.86pp)
+  Reproduced.
+
+================================================================================================================
+MAE: OLD vol_48 vs NEW vol_48_1m -- QTREE, paired on identical rows
+================================================================================================================
+  h     measure       old     new  new - old          [95% CI]            horizon
+  0.5h  skill %     +1.79   +1.93     +0.139   [-0.011,+0.288]                WIN
+        gap pp       2.29    1.99     -0.300   [-0.381,-0.179]   better
+  1h    skill %     +1.50   +1.70     +0.196   [-0.016,+0.413]                WIN
+        gap pp       2.63    2.23     -0.397   [-0.495,-0.287]   better
+  2h    skill %     +1.53   +1.88     +0.350   [+0.148,+0.534]   better       WIN
+        gap pp       2.95    2.52     -0.431   [-0.520,-0.353]   better
+  5h    skill %     +1.88   +2.31     +0.437   [+0.226,+0.645]   better       WIN
+        gap pp       3.22    2.84     -0.380   [-0.492,-0.259]   better
+  10h*  skill %     +2.30   +2.77     +0.472   [+0.195,+0.733]   better       WIN
+        gap pp       3.23    2.86     -0.372   [-0.510,-0.229]   better
+  * 10h is the horizon already scored, shown for reference; it does not
+    count toward the decision, which is about the OTHER four.
+
+================================================================================================================
+DECISION -- rule fixed in mae_horizons' docstring before the run
+================================================================================================================
+  remaining four horizons: 0.5h WIN, 1h WIN, 2h WIN, 5h WIN
+  WIN or TIE 4 of 4;  LOSS 0 of 4.
+  VERDICT: ADOPT vol_48_1m FOR MAE. It holds at a majority of the other
+  horizons. Keep vol_48 for MFE. Propagating it into the registry is a
+  separate build: every MAE model's inputs change, so it needs its own
+  feature matrix and cache.
+  [37s]
+================================================================================================================

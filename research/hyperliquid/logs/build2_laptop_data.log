@@ -1,0 +1,11 @@
+### laptop data 2026-10-15T02:45:49Z
+-- normalized store (OKX) -> attic/okx_data/normalized
+     216
+ 57M	user_data/normalized
+.gitignore:108:attic/okx_data/	attic/okx_data/normalized/manifest.json
+user_data/normalized absent
+-- 30m bars down
+local 30m: 206 files 188670996 B
+s3 30m: 206 files 188670996 B
+free: 29.8 GB
+laptop 30m: 206 files 188658884 B; s3: 206 files 188658884 B

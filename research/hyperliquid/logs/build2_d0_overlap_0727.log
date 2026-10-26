@@ -1,0 +1,9 @@
+old 20250727/8: 162815 fills 2025-07-27 08:00:00.018000 -> 2025-07-27 08:45:48.664000
+block 20250727/8: 17516 fills 2025-07-27 08:50:10.273000 -> 2025-07-27 08:59:59.895000  blocks 4345 676607001 -> 676611345
+(tid,wallet) in both: 0
+block steps >1 in this file: []
+first block local/block time: 2025-07-27T08:50:01.519266138 2025-07-27T08:49:59.370823486
+20250727_blocks.npz gap 676713998 -> 676714001 missing 2 2025-07-27 11:53:09.452387698 -> 2025-07-27 12:01:50.963672464 span 0 days 00:08:41.511284766
+20250727_blocks.npz block_time non-decreasing with number: True  max step 0 days 00:08:41.511284766
+20251010_blocks.npz block_time non-decreasing with number: True  max step 0 days 00:00:00.779161810
+20260708_blocks.npz block_time non-decreasing with number: True  max step 0 days 00:00:00.751716746

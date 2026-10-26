@@ -1,0 +1,62 @@
+[DRIFT EXPLAIN pair] 313 flagged columns (479 flagged column-months): fully explained 217, partly 3, none 93
+   flagged column-months by cause:
+     crash_month      151
+     after_crash      116
+     unexplained      111
+     orderbook_gap    41
+     archive_seam     30
+     ctx_gap          11
+     seam_normaliser  10
+     orderbook_rate   7
+     listings         2
+   flagged column-months by group x cause:
+cause     after_crash  archive_seam  crash_month  ctx_gap  listings  orderbook_gap  orderbook_rate  seam_normaliser  unexplained
+group                                                                                                                           
+events              0             1            0        0         0              0               0                0            1
+g2                  2             1            2        0         0              0               0                0            7
+g2b                 0             1            0        0         0              0               0                0            0
+g3                  0             2            0        0         0              0               0                0            0
+g4                  0             5           10        0         2              0               0                0            1
+g5_a               21             5           26        0         0              0               0                4            7
+g5_b               18             4           23        0         0              0               0                3            9
+g5_net             21             6           25        0         0              0               0                3           17
+g5_shape            3             0            4        0         0              0               0                0            0
+g6_a                8             0            9        0         0              0               0                0           11
+g6_b                8             0            9        0         0              0               0                0           10
+g6_net              9             0            9        0         0              0               0                0           10
+g7                 20             0           22       11         0              0               0                0           16
+g8                  0             0            0        0         0             41               7                0           18
+g9a                 6             5           12        0         0              0               0                0            4
+
+   UNEXPLAINED: 96 columns, 111 column-months; months: 202507 1, 202508 8, 202511 16, 202512 9, 202601 5, 202602 28, 202603 4, 202604 9, 202605 17, 202606 4, 202608 2, 202609 3, 202610 5
+   the 30 largest unexplained jumps (column, group, month, ratio):
+     d_rel_bid_d25                                g8        202602  4.6 sd
+     d_vault_gross_usd                            g7        202511  4.6 sd
+     beta_stab                                    g2        202511  4.3 sd
+     d_prem_chg_1h                                g7        202512  4.2 sd
+     a_book_reach_ask_bp                          g8        202605  4.1 sd
+     d_book_reach_ask_bp                          g8        202605  4.1 sd
+     b_book_reach_ask_bp                          g8        202605  4.1 sd
+     mkt_liq_24h                                  g9a       202608  4.0 sd
+     d_vault_share_of_oi                          g7        202605  3.9 sd
+     halflife_h                                   g2        202603  3.9 sd
+     d_rel_bid_d10                                g8        202603  3.9 sd
+     net_wallets_per_musd_30                      g5_net    202604  3.9 sd
+     mkt_liq_1h                                   g9a       202608  3.8 sd
+     b_rel_bid_d10                                g8        202603  3.8 sd
+     b_wallets_per_musd_30                        g5_b      202604  3.8 sd
+     a_rel_ask_d10                                g8        202603  3.8 sd
+     d_chg1h_slip_sell_1k                         g8        202512  3.8 sd
+     net_forced_30m_pre_0                         g5_net    202605  3.7 sd
+     d_oi_rec_chg_6h                              g7        202605  3.7 sd
+     net_imb_30m_pre_7                            g5_net    202512  3.7 sd
+     net_imb_30m_5                                g5_net    202512  3.7 sd
+     net_imb_30m_pre_3                            g5_net    202508  3.7 sd
+     net_imb_30m_1                                g5_net    202508  3.6 sd
+     net_topd_all_360                             g6_net    202602  3.6 sd
+     net_topd_human_360                           g6_net    202602  3.6 sd
+     b_topd_all_360                               g6_b      202602  3.6 sd
+     b_topd_human_360                             g6_b      202602  3.6 sd
+     d_vault_net_chg_24h                          g7        202512  3.6 sd
+     b_topd_all_60                                g6_b      202602  3.6 sd
+     b_topd_human_60                              g6_b      202602  3.6 sd

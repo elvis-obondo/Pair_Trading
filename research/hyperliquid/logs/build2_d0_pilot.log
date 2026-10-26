@@ -1,0 +1,11 @@
+### D0 2026-10-14T19:34:38Z
+-- spot price (A, at launch)
+ap-northeast-1a	0.112100	2026-10-14T19:00:00+00:00
+ap-northeast-1d	0.115100	2026-10-14T19:00:00+00:00
+ap-northeast-1c	0.107900	2026-10-14T13:00:00+00:00
+{
+    "Location": "http://pair-trading-hl-289869684922.s3.amazonaws.com/",
+    "BucketArn": "arn:aws:s3:::pair-trading-hl-289869684922"
+}
+bucket pair-trading-hl-289869684922 and role hl-build2-ec2 ready
+launched i-0c3fd592b11825198 (r7g.xlarge, spot) name=pilot par=4 timer=90min days=20251010 20250727 20260708 20250601

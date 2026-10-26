@@ -1,0 +1,62 @@
+{
+ "day": "20250601",
+ "fills_read_incl_spill": 4170009,
+ "read_s": 34.1,
+ "dedupe_removed": 0,
+ "forced_extra_vs_flow_usd": 0.0,
+ "liquidated_dir_counts": {},
+ "liquidated_tids": 0,
+ "forced_dir_counts": {
+  "Close Short": 851,
+  "Close Long": 609
+ },
+ "forced_fills": 1460,
+ "forced_fills_offbook_dir": 0,
+ "perp_fills": 3163535,
+ "bad_tids": 0,
+ "hole_flagged_bins": 0,
+ "hole_bins_in_day": 0,
+ "totals_usd": {
+  "other_taker_usd": 297771.634677,
+  "maker_usd": 3707405744.6443667,
+  "forced_long_usd": 4075498.6056979997,
+  "forced_short_usd": 3180003.969176,
+  "taker_onbook_usd": 3707108060.37669
+ },
+ "maker_over_onbook_taker": 1.0000803009415502,
+ "t3_top10": [],
+ "t3_total_absorbed_usd": 0.0,
+ "flow_check": {
+  "taker_buy_usd": 3.725290298461914e-09,
+  "taker_sell_usd": 3.725290298461914e-09,
+  "open_buy_usd": 7.450580596923828e-09,
+  "open_sell_usd": 9.313225746154785e-10,
+  "close_buy_usd": 1.862645149230957e-09,
+  "close_sell_usd": 3.725290298461914e-09,
+  "twap_usd": 0.0,
+  "lu_dedup": 1.1641532182693481e-10,
+  "su_dedup": 7.275957614183426e-12,
+  "rows_flow_bins": 47137,
+  "rows_t1_bins": 47137,
+  "total_taker_usd_flow": 3707108060.37669,
+  "total_taker_usd_t1": 3707108060.37669
+ },
+ "sizes": {
+  "wallet_bin": {
+   "rows": 640639,
+   "bytes": 11025544
+  },
+  "wallet_day": {
+   "rows": 16454,
+   "bytes": 882211
+  },
+  "vault": {
+   "rows": 0,
+   "bytes": 2059
+  }
+ },
+ "distinct_wallets": 16454,
+ "distinct_wallet_coin_bins": 640639,
+ "total_s": 36.4,
+ "peak_rss_mb": 1370.6
+}

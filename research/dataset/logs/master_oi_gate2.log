@@ -1,0 +1,24 @@
+[GATE2] loaded  [242s]
+[GATE2] 89,299 coin-days over 206 coins; first half 44,575 (to 2026-02-04), second half 44,724
+  ALL coin-days                          both  99.94%   corr>=0.99  99.99%   drift<0.5%  99.94%   |drift| quantiles 50/90/95/99%: 0.00000 / 0.00000 / 0.00000 / 0.00000
+  first half (diagnostic)                both  99.93%   corr>=0.99  99.98%   drift<0.5%  99.93%   |drift| quantiles 50/90/95/99%: 0.00000 / 0.00000 / 0.00000 / 0.00000
+  SECOND HALF (held out; the verdict)    both  99.96%   corr>=0.99 100.00%   drift<0.5%  99.96%   |drift| quantiles 50/90/95/99%: 0.00000 / 0.00000 / 0.00000 / 0.00000
+
+FAILURE BREAKDOWN (units definition applied). Pass share (both conditions), median |drift|, coin-days -- all days | second half:
+   ADL day            100.00%  0.00000      177   |   100.00%  0.00000        7
+   liquidation-heavy   99.87%  0.00000    8,695   |   100.00%  0.00000    2,583
+   neither             99.95%  0.00000   80,427   |    99.96%  0.00000   42,134
+   gate WITHOUT ADL and liquidation-heavy days: all 99.95%, second half 99.96% (for the user to see whether those days alone account for the shortfall; the verdict is not changed by it)
+   by month (pass share): 2025-05 100.0%, 2025-06 99.6%, 2025-07 100.0%, 2025-08 99.9%, 2025-09 99.9%, 2025-10 100.0%, 2025-11 100.0%, 2025-12 100.0%, 2026-01 100.0%, 2026-02 100.0%, 2026-03 100.0%, 2026-04 100.0%, 2026-05 99.8%, 2026-06 99.9%, 2026-07 100.0%, 2026-08 100.0%, 2026-09 100.0%, 2026-10 100.0%
+   by turnover quintile (low to high), pass share: 100.0%, 100.0%, 100.0%, 100.0%, 99.8%; median |drift|: 0.00000, 0.00000, 0.00000, 0.00000, 0.00000
+   coins with their own pass share < 95%: 0 of 206; 10 lowest: kDOGS 100%, YZY 100%, AI16Z 100%, ALT 100%, BLAST 100%, DOOD 100%, APT 100%, ARK 100%, FTT 100%, FXS 100%; median coin pass share 100.0%
+/home/elvisobondo/Pair_Trading/research/dataset/master_oi_gate2.py:87: RuntimeWarning: invalid value encountered in scalar divide
+  sl = M5.groupby("coin").apply(lambda g: g.sxy.sum() / g.sxx.sum()) / UNITS      # 1.0 = exact definition
+/home/elvisobondo/Pair_Trading/research/dataset/master_oi_gate2.py:87: FutureWarning: DataFrameGroupBy.apply operated on the grouping columns. This behavior is deprecated, and in a future version of pandas the grouping columns will be excluded from the operation. Either pass `include_groups=False` to exclude the groupings or explicitly select the grouping columns after groupby to silence this warning.
+  sl = M5.groupby("coin").apply(lambda g: g.sxy.sum() / g.sxx.sum()) / UNITS      # 1.0 = exact definition
+
+2026-05: pooled slope (units applied; 1.0 exact) 0.4887; coins with |slope - 1| > 0.02 in that month: 191 of 202: PROMPT 0.250, ZEREBRO 0.250, YZY 0.250, BLAST 0.251, USTC 0.255, FTT 0.257, MEW 0.263, MAVIA 0.276, MAV 0.278, CHILLGUY 0.279, SCR 0.356, TST 0.475, ENS 0.500, XMR 0.500, XAI 0.500
+   by day of May 2026 (slope): 1 0.500, 2 0.500, 3 0.500, 4 0.500, 5 0.499, 6 0.500, 7 0.500, 8 0.500, 9 0.500, 10 0.500, 11 0.500, 12 0.500, 13 0.500, 14 0.500, 15 0.500, 16 0.500, 17 0.500, 18 0.500, 19 0.500, 20 0.500, 21 0.500, 22 0.500, 23 0.500, 24 0.500, 25 0.442, 26 0.500, 27 0.500, 28 0.500, 29 0.500, 31 0.500
+
+[OI GATE2] second half 99.96%, all days 99.94% (needs >= 95% on the held-out half AND on all days): PASS
+  [274s]

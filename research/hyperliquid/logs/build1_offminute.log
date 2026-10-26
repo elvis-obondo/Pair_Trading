@@ -1,0 +1,23 @@
+BTC rows 907460 off-minute rows 192
+                       stamp  floor_present  ceil_present  sec
+0  2025-01-05 13:50:57+00:00          False          True   57
+1  2025-01-12 11:46:46+00:00          False         False   46
+2  2025-01-12 11:47:05+00:00          False          True    5
+3  2025-01-26 12:18:24+00:00          False          True   24
+4  2025-02-08 10:31:03+00:00          False          True    3
+5  2025-02-16 15:19:17+00:00          False          True   17
+6  2025-02-18 04:10:01+00:00          False          True    1
+7  2025-02-23 14:33:35+00:00          False          True   35
+8  2025-03-03 10:46:44+00:00          False         False   44
+9  2025-03-03 10:47:05+00:00          False          True    5
+10 2025-03-08 15:18:06+00:00          False          True    6
+11 2025-03-16 13:17:53+00:00          False         False   53
+12 2025-03-16 13:18:13+00:00          False         False   13
+13 2025-03-16 13:19:01+00:00          False          True    1
+14 2025-03-22 10:47:32+00:00          False         False   32
+
+floor present: 0  ceil present: 144  both: 0  neither: 48
+seconds distribution: {'count': 192.0, 'mean': 20.625, 'std': 18.11149298126665, 'min': 1.0, '25%': 4.75, '50%': 17.0, '75%': 35.0, 'max': 59.0}
+ETH off-minute 192
+SOL off-minute 192
+DOGE off-minute 192

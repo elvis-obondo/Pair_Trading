@@ -1,0 +1,62 @@
+================================================================================================================
+TAIL CLASSIFIER -- is this episode likely to be violent?
+================================================================================================================
+  A MAGNITUDE TARGET: does the spread make an outsized move EITHER way.
+  Not the envelope quantiles (how far, as a distribution) and not the
+  direction target (which way). Not sign-folded: up and down are each held
+  to their own train 90th percentile, and either crossing it is 'violent'.
+
+  population: the matched 53,757-episode set
+  [SPLIT] train 22,645 (<2026-05-01)   val 13,048   HELD OUT 18,064 (>=2026-07-18)
+[SPLIT] held-out used ONCE, for scoring only; iterations chosen on val
+  features: vol_48, vol_48_1m, vratio, vol_slope, sandwich, off_mark
+
+[1m  ] 1-minute >= 30-minute, every episode/direction/horizon: 0 violations
+[1m  ] deepest shortfall -9.374e-07; as a fraction of the float32 reference's precision (8.0 ulps): 0.062 (must be < 1)
+  unfold check: up/down from MAE/MFE vs read straight off the raw 30m path, max diff 0.0e+00
+
+  h        up p90  down p90    train     val  held out     HO1     HO2   base rate, share violent
+  0.5h      1.582     1.605    0.193   0.157     0.180   0.176   0.184
+  1h        2.158     2.194    0.195   0.161     0.177   0.172   0.181
+  2h        2.949     3.001    0.195   0.153     0.173   0.171   0.175
+  5h        4.275     4.372    0.196   0.162     0.179   0.183   0.175
+  10h       5.755     5.802    0.196   0.172     0.180   0.195   0.168
+  [12s]
+
+================================================================================================================
+HELD-OUT AUC -- gate: > 0.55, CI lower > 0.50, above the whole permutation null
+================================================================================================================
+  0.5h logistic   AUC 0.7150 [0.6991,0.7318]  null max 0.6685 (day-shuffle 0.3179-0.6143)  PASS   [14s]
+  0.5h GBDT       AUC 0.7093 [0.6880,0.7272]  null max 0.5434 (day-shuffle 0.4263-0.5278)  iters 76  PASS   [46s]
+  0.5h sign only  AUC 0.4962  (diagnostic; label is sign-free by construction)
+  1h   logistic   AUC 0.7125 [0.6961,0.7289]  null max 0.7029 (day-shuffle 0.3321-0.5817)  PASS   [48s]
+  1h   GBDT       AUC 0.7069 [0.6863,0.7278]  null max 0.5486 (day-shuffle 0.4141-0.5359)  iters 47  PASS   [81s]
+  1h   sign only  AUC 0.4926  (diagnostic; label is sign-free by construction)
+  2h   logistic   AUC 0.7086 [0.6929,0.7248]  null max 0.6215 (day-shuffle 0.3239-0.6036)  PASS   [83s]
+  2h   GBDT       AUC 0.7034 [0.6863,0.7212]  null max 0.5427 (day-shuffle 0.4008-0.5417)  iters 65  PASS   [113s]
+  2h   sign only  AUC 0.4985  (diagnostic; label is sign-free by construction)
+  5h   logistic   AUC 0.7063 [0.6907,0.7208]  null max 0.6343 (day-shuffle 0.2978-0.6202)  PASS   [115s]
+  5h   GBDT       AUC 0.7003 [0.6856,0.7145]  null max 0.5643 (day-shuffle 0.4205-0.5643)  iters 20  PASS   [146s]
+  5h   sign only  AUC 0.5054  (diagnostic; label is sign-free by construction)
+  10h  logistic   AUC 0.7144 [0.6995,0.7323]  null max 0.6660 (day-shuffle 0.3128-0.6660)  PASS   [148s]
+  10h  GBDT       AUC 0.7104 [0.6957,0.7284]  null max 0.6062 (day-shuffle 0.4690-0.5655)  iters 41  PASS   [182s]
+  10h  sign only  AUC 0.5090  (diagnostic; label is sign-free by construction)
+
+================================================================================================================
+DOES COMPLEXITY HELP? -- paired held-out AUC, GBDT - logistic, day-clustered
+================================================================================================================
+  0.5h  -0.0057 [-0.0130,+0.0014]  no difference
+  1h    -0.0055 [-0.0118,+0.0006]  no difference
+  2h    -0.0052 [-0.0099,-0.0005]  logistic better
+  5h    -0.0060 [-0.0098,-0.0022]  logistic better
+  10h   -0.0040 [-0.0072,-0.0005]  logistic better
+
+================================================================================================================
+DECISION -- rule fixed in the module docstring before the run
+================================================================================================================
+  logistic  passes at 5 of 5 horizons (0.5h, 1h, 2h, 5h, 10h) -> CLEARS
+  GBDT      passes at 5 of 5 horizons (0.5h, 1h, 2h, 5h, 10h) -> CLEARS
+  VERDICT: logistic and GBDT CLEARS. Next prompt: the tail-specific quantile refinement for the flagged subset.
+  Held out touched once, here. Nothing in the registry was written.
+  [191s]
+================================================================================================================

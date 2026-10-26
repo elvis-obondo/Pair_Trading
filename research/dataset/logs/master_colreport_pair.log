@@ -1,0 +1,103 @@
+[COLREPORT pair] events 6,697,756, usable (label_gap = 0) 6,670,707, reach_10h share 32.88%; 1,124 numeric columns and 15 categorical columns in 15 group files; months 202506..202610  [24s]
+   AUC direction: > 0.5 = higher values go with reaching mu. Rows are not independent (overlapping events of one pair), so no interval is attached. For orientation, not selection. Drift rule tagged A.
+  200/1124 columns  [158s]
+  400/1124 columns  [246s]
+  600/1124 columns  [341s]
+  800/1124 columns  [476s]
+  1000/1124 columns  [591s]
+
+[PART Z pair] columns with an AUC: 1,112; constant columns: 9; columns with a stable sign across months (>= 6 months, all on one side of 0.5): 286
+   |AUC - 0.5| quantiles over columns 50/90/99/max: 0.0038 / 0.0220 / 0.0502 / 0.1279
+   columns with NaN shares among reachers and non-reachers differing by more than 5 points: 0
+   near-misses: columns whose qualifying months lean one way in >= 80% of months but not all: 389
+   categorical columns (15): reach rate by category (categories with >= 500 events), range per column:
+     a_cg_status                  3 categories, reach rate 0.328 .. 0.342
+     a_coin_code                  201 categories, reach rate 0.265 .. 0.492
+     a_listing_src                1 categories, reach rate 0.329 .. 0.329
+     a_margin_table_id            6 categories, reach rate 0.301 .. 0.335
+     a_sector                     11 categories, reach rate 0.301 .. 0.344
+     b_cg_status                  3 categories, reach rate 0.328 .. 0.346
+     b_coin_code                  201 categories, reach rate 0.261 .. 0.463
+     b_listing_src                1 categories, reach rate 0.329 .. 0.329
+     b_margin_table_id            6 categories, reach rate 0.312 .. 0.334
+     b_sector                     11 categories, reach rate 0.319 .. 0.346
+     same_sector                  3 categories, reach rate 0.328 .. 0.343
+     ticker_a                     201 categories, reach rate 0.265 .. 0.492
+     ticker_b                     201 categories, reach rate 0.261 .. 0.463
+     utc_hour                     24 categories, reach rate 0.299 .. 0.356
+     weekday                      7 categories, reach rate 0.291 .. 0.354
+   the 30 largest |AUC - 0.5| (column, auc, std_diff, stable_sign, months pos/neg):
+     vol_48                                       auc 0.6279  sd_diff +0.449  stable 1  17/0
+     sandwich                                     auc 0.6145  sd_diff +0.391  stable 1  17/0
+     threshold                                    auc 0.3941  sd_diff -0.367  stable 1  0/17
+     vratio                                       auc 0.5950  sd_diff +0.336  stable 1  17/0
+     sigma                                        auc 0.4056  sd_diff -0.247  stable 1  0/17
+     ps_realized_var                              auc 0.5835  sd_diff +0.053  stable 1  17/0
+     threshold_sym                                auc 0.4177  sd_diff -0.287  stable 1  0/17
+     ps_max_step                                  auc 0.5665  sd_diff +0.120  stable 1  17/0
+     sigma_sym                                    auc 0.4356  sd_diff -0.151  stable 1  0/17
+     r2_2d                                        auc 0.5517  sd_diff +0.174  stable 1  17/0
+     r2                                           auc 0.5517  sd_diff +0.174  stable 1  17/0
+     crossings_7d                                 auc 0.5505  sd_diff +0.182  stable 1  17/0
+     ps_efficiency                                auc 0.4524  sd_diff -0.162  stable 1  0/17
+     net_volume_ratio_30                          auc 0.4625  sd_diff -0.009  stable 1  0/17
+     net_volume_ratio_60                          auc 0.4631  sd_diff -0.015  stable 1  0/17
+     net_volume_ratio_360                         auc 0.4638  sd_diff -0.025  stable 1  0/17
+     net_top3_30                                  auc 0.5351  sd_diff +0.108  stable 1  17/0
+     net_top3_60                                  auc 0.5341  sd_diff +0.107  stable 1  17/0
+     net_top3_360                                 auc 0.5330  sd_diff +0.106  stable 1  17/0
+     net_top3_human_30                            auc 0.5327  sd_diff +0.110  stable 1  17/0
+     net_top3_all_30                              auc 0.5327  sd_diff +0.110  stable 1  17/0
+     a_nw_human_30                                auc 0.4693  sd_diff -0.055  stable 1  0/17
+     a_nw_all_30                                  auc 0.4693  sd_diff -0.055  stable 1  0/17
+     net_top3_human_60                            auc 0.5303  sd_diff +0.105  stable 1  17/0
+     net_top3_all_60                              auc 0.5302  sd_diff +0.105  stable 1  17/0
+     net_wallets_per_musd_360                     auc 0.5301  sd_diff +0.098  stable 1  17/0
+     a_nw_human_60                                auc 0.4702  sd_diff -0.052  stable 1  0/17
+     a_nw_all_60                                  auc 0.4702  sd_diff -0.052  stable 1  0/17
+     net_wallets_per_musd_60                      auc 0.5289  sd_diff +0.003  stable 1  17/0
+     a_nw_human_360                               auc 0.4712  sd_diff -0.048  stable 1  0/17
+
+[DRIFT pair] columns with a month-to-month jump above 3 sd of their monthly means: 313 of 1,110
+     volratio_eth                                 max jump 4.7 sd  months 202507
+     net_forced_net_1440                          max jump 4.6 sd  months 202510 202511
+     d_rel_bid_d25                                max jump 4.6 sd  months 202602
+     d_vault_gross_usd                            max jump 4.6 sd  months 202511 202512
+     b_liq_rank_7d                                max jump 4.4 sd  months 202508
+     a_ctx_impact_spread_bp                       max jump 4.4 sd  months 202510 202511
+     a_slip_buy_1k                                max jump 4.4 sd  months 202510 202511
+     net_volume_ratio_1440                        max jump 4.4 sd  months 202507 202508
+     b_slip_sell_1k                               max jump 4.4 sd  months 202510 202511
+     b_ctx_impact_spread_bp                       max jump 4.4 sd  months 202510 202511
+     volratio_btc                                 max jump 4.4 sd  months 202507
+     b_slip_buy_1k                                max jump 4.4 sd  months 202510 202511
+     b_oi_obs_chg_1h                              max jump 4.3 sd  months 202510 202511
+     beta_stab                                    max jump 4.3 sd  months 202511 202512
+     a_chg1h_slip_buy_1k                          max jump 4.3 sd  months 202510 202511
+     b_vault_net_usd                              max jump 4.3 sd  months 202510 202511
+     a_chg6h_slip_buy_1k                          max jump 4.3 sd  months 202510 202511
+     a_slip_sell_1k                               max jump 4.3 sd  months 202510 202511
+     b_chg6h_spread_bp                            max jump 4.3 sd  months 202510 202511
+     b_chg1h_slip_sell_1k                         max jump 4.3 sd  months 202510 202511
+     a_chg6h_spread_bp                            max jump 4.2 sd  months 202510 202511
+     b_vault_net_chg_24h                          max jump 4.2 sd  months 202510 202511
+     b_chg6h_slip_sell_1k                         max jump 4.2 sd  months 202510 202511
+     a_chg1h_slip_sell_1k                         max jump 4.2 sd  months 202510 202511
+     b_chg1h_slip_buy_1k                          max jump 4.2 sd  months 202510 202511
+     b_chg6h_slip_buy_1k                          max jump 4.2 sd  months 202510 202511
+     a_chg6h_slip_sell_1k                         max jump 4.2 sd  months 202510 202511
+     b_vault_net_chg_6h                           max jump 4.2 sd  months 202510 202511
+     a_volume_ratio_1440                          max jump 4.2 sd  months 202507 202508
+     b_chg1h_spread_bp                            max jump 4.2 sd  months 202510 202511
+     b_vault_net_chg_1h                           max jump 4.2 sd  months 202510 202511
+     d_prem_chg_1h                                max jump 4.2 sd  months 202512
+     b_oi_delta_24h                               max jump 4.2 sd  months 202510 202511
+     a_rv_7d                                      max jump 4.2 sd  months 202510
+     b_rel_ask_d10                                max jump 4.2 sd  months 202606 202607
+     a_vault_share_of_oi                          max jump 4.1 sd  months 202510 202511
+     net_adl_share_30                             max jump 4.1 sd  months 202510 202511
+     adl_usd_24h                                  max jump 4.1 sd  months 202510 202511
+     net_adl_ratio_30                             max jump 4.1 sd  months 202510 202511
+     a_book_reach_ask_bp                          max jump 4.1 sd  months 202605 202606
+   PNG /home/elvisobondo/Pair_Trading/research/dataset/logs/partz_pair_top_auc.png
+[COLREPORT pair] done  [673s]

@@ -1,0 +1,32 @@
+[DIAG] loaded  [207s]
+[DIAG] 89,299 complete coin-days over 206 coins  [213s]
+
+1. SLOPE of observed on reconstructed hourly change (through the origin), pooled over all hours: 1.99830  (1.0 = no scale bias)
+/home/elvisobondo/Pair_Trading/research/dataset/master_oi_diag.py:53: FutureWarning: DataFrameGroupBy.apply operated on the grouping columns. This behavior is deprecated, and in a future version of pandas the grouping columns will be excluded from the operation. Either pass `include_groups=False` to exclude the groupings or explicitly select the grouping columns after groupby to silence this warning.
+  pc = G.groupby("coin").apply(lambda g: g.sxy.sum() / g.sxx.sum())
+   by coin: median 2.00000, quantiles 5/25/75/95%: 1.50360 / 2.00000 / 2.00000 / 2.00000; coins with |slope-1| > 0.02: 206
+/home/elvisobondo/Pair_Trading/research/dataset/master_oi_diag.py:55: FutureWarning: DataFrameGroupBy.apply operated on the grouping columns. This behavior is deprecated, and in a future version of pandas the grouping columns will be excluded from the operation. Either pass `include_groups=False` to exclude the groupings or explicitly select the grouping columns after groupby to silence this warning.
+  pm = G.groupby("month").apply(lambda g: g.sxy.sum() / g.sxx.sum())
+   by month: 2025-05 2.0000, 2025-06 2.0000, 2025-07 2.0000, 2025-08 2.0000, 2025-09 1.9995, 2025-10 1.9999, 2025-11 2.0000, 2025-12 2.0000, 2026-01 2.0000, 2026-02 2.0000, 2026-03 2.0000, 2026-04 2.0000, 2026-05 1.9549, 2026-06 1.9999, 2026-07 2.0000, 2026-08 2.0000, 2026-09 2.0000, 2026-10 2.0000
+   signed drift (sum rd - sum od)/OI: share positive 49.1%; median +0.00098; quantiles 5/25/75/95%: -0.08368 / -0.01573 / +0.01833 / +0.07705
+   signed drift by month (median): 2025-05 +0.0024, 2025-06 +0.0012, 2025-07 +0.0017, 2025-08 +0.0022, 2025-09 +0.0007, 2025-10 -0.0007, 2025-11 +0.0013, 2025-12 +0.0010, 2026-01 +0.0023, 2026-02 +0.0001, 2026-03 +0.0003, 2026-04 +0.0017, 2026-05 +0.0017, 2026-06 +0.0011, 2026-07 +0.0003, 2026-08 +0.0004, 2026-09 +0.0002, 2026-10 -0.0007
+   correlation of |drift| with turnover (sum |rd| / OI): nan; of signed drift with the net observed change / OI: nan
+   by turnover quintile (low to high): median |drift| 0.0049, 0.0119, 0.0194, 0.0312, 0.0621; share of coin-days with |drift| < 0.5%: 51.1%, 23.1%, 14.0%, 9.1%, 4.9%
+
+2. DRIFT AROUND EVENTS (median |drift|, median signed drift, share passing |drift| < 0.5%, coin-days):
+   ADL day            0.2222  +0.2165    1.1%  177
+   liquidation-heavy  0.0330  +0.0069   10.6%  8,695
+   neither            0.0158  +0.0007   20.1%  80,427
+   within one day of a build 2 hole minute: median |drift| 0.0193, pass 18.7% over 4,391 coin-days; others 0.0169, 19.2%
+   the 7 unbalanced single legs: meta files not on this machine (0 found); their effect is at most half a fill each, USD 2,823 in total.
+/home/elvisobondo/Pair_Trading/research/dataset/master_oi_diag.py:101: FutureWarning: DataFrameGroupBy.apply operated on the grouping columns. This behavior is deprecated, and in a future version of pandas the grouping columns will be excluded from the operation. Either pass `include_groups=False` to exclude the groupings or explicitly select the grouping columns after groupby to silence this warning.
+  s_coin = A.groupby("coin").apply(lambda g: g.sxy.sum() / g.sxx.sum())
+
+3. OUT-OF-SAMPLE CORRECTION: first half 44,575 coin-days (to 2026-02-04), second half 44,724. Slope fitted on the first half: global 1.99993; per-coin median 2.00000 (coins 200)
+/home/elvisobondo/Pair_Trading/research/dataset/master_oi_diag.py:104: RuntimeWarning: invalid value encountered in divide
+  dr = np.abs(f * B.sum_rd.to_numpy() - B.sum_od.to_numpy()) / B.oi.to_numpy()
+   second half, uncorrected   : |drift| < 0.5% in 21.02% of coin-days (median |drift| nan, 90% nan)
+   second half, global slope  : |drift| < 0.5% in 90.48% of coin-days (median |drift| nan, 90% nan)
+   second half, per-coin slope: |drift| < 0.5% in 90.48% of coin-days (median |drift| nan, 90% nan)
+   the unchanged gate needs 95% (hourly correlation is scale-free, 99.99% already); a correction that does not reach it on the held-out half is not adopted.
+  [362s]

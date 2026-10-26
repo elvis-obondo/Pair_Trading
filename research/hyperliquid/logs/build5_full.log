@@ -1,0 +1,52 @@
+HL-BUILD5 full run (build5/full2, corrected T3): c7g.8xlarge on-demand, PAR 12, 2026-10-15 19:58:25Z -> 20:41:50Z (43.4 min)
+days 507 exits non-zero 0
+max abs diff vs flow table, all days, all columns: 1.192e-07 USD at ('20250525', 'close_buy_usd')
+days where (coin,bin) row counts differ: []
+max |total on-book taker USD flow - T1|: 3.815e-06
+absorbed_usd_t1_vs_t3 (T1 absorbed buy+sell minus T3 absorbed): max abs 4.768e-07 over all days
+total rows T1 476476989 T2 18554879 T3 22538
+total parquet bytes 10.15 GB (T1 9.15, T2 1.00, T3 0.0018)
+peak RSS max 7144 MB (20251010); median 2036 MB; per-day wall median 58 s max 158 s
+hole-flagged T1 rows total 35884; forced_extra max 0.000
+
+per day with T3 rows: absorbed (T3), flow backstop_liq_usd, ratio; ADL T3 total, flow adl_usd, ratio; wallets with both >0 and equal values
+  20250710  absorbed 6.6449e+06 flow 6.9963e+06 ratio 0.9498 | ADL 3.5143e+05 flow 3.5143e+05 ratio 1.0000 | both>0 0 equal 0
+  20250826  absorbed 0.0000e+00 flow 1.2283e+08 ratio 0.0000 | ADL 1.2283e+08 flow 1.2283e+08 ratio 1.0000 | both>0 0 equal 0
+  20251008  absorbed 0.0000e+00 flow 2.7779e+05 ratio 0.0000 | ADL 2.7779e+05 flow 2.7779e+05 ratio 1.0000 | both>0 0 equal 0
+  20251010  absorbed 2.2562e+09 flow 4.3595e+09 ratio 0.5175 | ADL 2.1033e+09 flow 2.1033e+09 ratio 1.0000 | both>0 1 equal 0
+  20251104  absorbed 0.0000e+00 flow 9.8797e+05 ratio 0.0000 | ADL 9.8797e+05 flow 9.8797e+05 ratio 1.0000 | both>0 0 equal 0
+  20251112  absorbed 2.8234e+07 flow 4.9505e+07 ratio 0.5703 | ADL 2.1271e+07 flow 2.1271e+07 ratio 1.0000 | both>0 0 equal 0
+  20251225  absorbed 0.0000e+00 flow 8.8013e+05 ratio 0.0000 | ADL 8.8013e+05 flow 8.8013e+05 ratio 1.0000 | both>0 0 equal 0
+  20251226  absorbed 0.0000e+00 flow 2.6987e+04 ratio 0.0000 | ADL 2.6987e+04 flow 2.6987e+04 ratio 1.0000 | both>0 0 equal 0
+  20260402  absorbed 1.7158e+05 flow 1.6529e+07 ratio 0.0104 | ADL 1.6358e+07 flow 1.6358e+07 ratio 1.0000 | both>0 0 equal 0
+  20260408  absorbed 1.6857e+07 flow 2.5789e+07 ratio 0.6537 | ADL 8.9321e+06 flow 8.9321e+06 ratio 1.0000 | both>0 0 equal 0
+  20260712  absorbed 0.0000e+00 flow 2.2866e+05 ratio 0.0000 | ADL 2.2866e+05 flow 2.2866e+05 ratio 1.0000 | both>0 0 equal 0
+  20260717  absorbed 1.6456e+03 flow 9.1245e+04 ratio 0.0180 | ADL 8.9600e+04 flow 8.9600e+04 ratio 1.0000 | both>0 0 equal 0
+  20260805  absorbed 0.0000e+00 flow 1.7752e+06 ratio 0.0000 | ADL 1.7752e+06 flow 1.7752e+06 ratio 1.0000 | both>0 0 equal 0
+  20260822  absorbed 7.6255e+06 flow 8.9310e+06 ratio 0.8538 | ADL 1.3055e+06 flow 1.3055e+06 ratio 1.0000 | both>0 0 equal 0
+wallets with absorbed == adl (both non-zero), all days: 0
+
+total absorbed backstop USD 2.3157e+09 over 4 wallets
+top 20 by absorbed USD (share):
+  0xb0a55f13d22f66e6d495ac98113841b2326e9540  1.4779e+09  0.6382
+  0x2e3d94f0562703b25c83308a05046ddaf9a8dd14  8.1311e+08  0.3511
+  0x5e177e5e39c0f4e421f5865a6d8beed8d921cb70  2.4638e+07  0.0106
+  0x2ed5c4484ea3ff8b57d5f2fb152a40d9f2b68308  1.4339e+04  0.0000
+by month: total absorbed USD, top wallet and share of the month
+  202507  6.645e+06  n 2  top1 0xb0a55f13d22f66e6d495ac98113841b2326e9540 0.941  top3 1.000
+  202510  2.256e+09  n 2  top1 0xb0a55f13d22f66e6d495ac98113841b2326e9540 0.652  top3 1.000
+  202511  2.823e+07  n 2  top1 0x2e3d94f0562703b25c83308a05046ddaf9a8dd14 1.000  top3 1.000
+  202604  1.703e+07  n 1  top1 0x5e177e5e39c0f4e421f5865a6d8beed8d921cb70 1.000  top3 1.000
+  202607  1.646e+03  n 1  top1 0x2ed5c4484ea3ff8b57d5f2fb152a40d9f2b68308 1.000  top3 1.000
+  202608  7.626e+06  n 3  top1 0x5e177e5e39c0f4e421f5865a6d8beed8d921cb70 0.998  top3 1.000
+ADL takers: 21611 wallets, total 2.2787e+09; top 5:
+  0xb317d2bc2d3d2df5fa441b5bae0ab9d8b07283ae  3.3045e+08
+  0x2ea18c23f72a4b6172c55b411823cdc5335923f4  2.3125e+08
+  0x8decc13b6e83873a78126e99036f9442019fd0b5  1.1180e+08
+  0x880ac484a1743862989a441d6d867238c7aa311c  6.4251e+07
+  0x5d2f4460ac3514ada79f5d9838916e508ab39bb7  4.7975e+07
+
+CROSS-CHECK, absorbed + ADL against build 2's backstop_liq_usd (flow table, same day): the ratio of absorbed alone to backstop_liq_usd is 0.52 on 2025-10-10
+(2.2562e9 / 4.3595e9), but absorbed + ADL = 2.2562e9 + 2.1033e9 = 4.3595e9, equal to the flow table's 4.3595e9; likewise 2025-07-10 (6.6449e6 + 3.5143e5 = 6.9963e6),
+2025-11-12 (2.8234e7 + 2.1271e7 = 4.9505e7), 2026-04-08 (1.6857e7 + 8.932e6 = 2.5789e7) and 2025-08-26 (0 + 1.2283e8). So the flow table's backstop_liq_usd counts BOTH real backstop
+liquidations (absorbed by a vault wallet) and auto-deleveraging trades (whose bankrupt side also carries a "Liquidated..." dir). ADL T3 totals equal the flow table's adl_usd on all 14 days.

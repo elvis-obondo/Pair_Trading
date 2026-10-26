@@ -1,0 +1,16 @@
+# The image needs source and one manifest. Everything else in this repo is data.
+#
+# Without this the build context is ~2GB: exit_sweep_paths.parquet alone is
+# 342MB and user_data/data/ is 247MB, none of which the live system reads. The
+# context is tarred and sent to the builder before a single layer is built, so
+# it is pure cost on every build.
+*
+!requirements.txt
+!Dockerfile.trading
+!research/**/*.py
+!user_data/normalized/manifest.json
+
+# Re-exclude things the globs above would otherwise drag back in.
+research/retired_nautilus_paper/
+**/__pycache__/
+**/*.pyc

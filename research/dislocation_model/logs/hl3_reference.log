@@ -1,0 +1,65 @@
+==============================================================================================================
+HL-FLOW1 PART 1 -- target, chance bar, reference
+==============================================================================================================
+  [SPLIT] train 33,180 (<2026-03-20)   val 8,516   HELD OUT 18,063 (>=2026-05-25)
+[SPLIT] held-out used ONCE, for scoring only; iterations chosen on val
+  HO_BOUNDARY (first HO2 day, from the meta only): 2026-08-15
+  matched population 59,759 of 60,004 dislocations (lost 245, 0.41%)
+  train 33,180  val 8,516  held out 18,063  HO1 9,057  HO2 9,006
+
+  REACH RATE vs CHANCE (reading tool; chance uses future step sizes)
+                         n  reach rate  mean chance      gap
+    all             59,759      0.3294       0.4464  -0.1170
+    train           33,180      0.3323       0.4709  -0.1386
+    val              8,516      0.3383       0.4400  -0.1017
+    HO1              9,057      0.3203       0.4197  -0.0994
+    HO2              9,006      0.3195       0.3892  -0.0697
+    |z| < 2         14,288      0.4358       0.5449  -0.1092
+    |z| 2-3         30,297      0.3188       0.4448  -0.1260
+    |z| >= 3        15,174      0.2504       0.3569  -0.1066
+  30-minute-grid reach (secondary target): rate 0.2686 (1-minute 0.3294); 1m reach but not 30m 3,633; 30m reach but not 1m 0
+
+[1m  ] loaded 204 instruments, 1041 MB of dense float64 minute grids (NaN where a minute did not trade)
+  [1m-feat] rows  5,000 of 59,759
+  [1m-feat] rows 10,000 of 59,759
+  [1m-feat] rows 15,000 of 59,759
+  [1m-feat] rows 20,000 of 59,759
+  [1m-feat] rows 25,000 of 59,759
+  [1m-feat] rows 30,000 of 59,759
+  [1m-feat] rows 35,000 of 59,759
+  [1m-feat] rows 40,000 of 59,759
+  [1m-feat] rows 45,000 of 59,759
+  [1m-feat] rows 50,000 of 59,759
+  [1m-feat] rows 55,000 of 59,759
+  [1m-feat] rows 59,759 of 59,759
+  [vol] last minute read entry+29; reproduction 0.062 of budget; vol_48 recomputed from the marks max diff 4.49e-08; missing minutes per episode: median 0, max 12
+  [20s]
+  non-positive or missing vol_48 / vol_48_1m / sigma rows: 0 (set to the TRAIN median after the log, as REACH-MU)
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1381: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+  warnings.warn(
+  reference logistic on log(vol_48), log(vol_48_1m), log(sigma), |z|: coefficients [0.457, 0.183, -0.03, -0.453]; val log loss 0.59723 (base-rate 0.63999)
+  [WROTE] datasets/hl3_reference.npz
+
+==============================================================================================================
+SCORING, held out only, HO1 and HO2 separately (day-clustered 95%)
+==============================================================================================================
+  HO1: n 9,057, reach rate 0.3203, mean chance 0.4197; AUC 0.6897
+    catch 50%: flag share 0.328, hit rate 0.489  (random: 0.500 / 0.320); flagged chance 0.579
+    catch 80%: flag share 0.629, hit rate 0.407  (random: 0.800 / 0.320); flagged chance 0.504
+    catch 90%: flag share 0.761, hit rate 0.379  (random: 0.900 / 0.320); flagged chance 0.476
+    flag share at 80% catch                     +0.6291  [+0.6117, +0.6437]
+    top-20% hit rate                            +0.5356  [+0.5115, +0.5628]
+    beyond-chance gap, flagged at 80% catch     -0.0968  [-0.1156, -0.0780]
+    beyond-chance gap, top 20%                  -0.0828  [-0.1048, -0.0543]
+  HO2: n 9,006, reach rate 0.3195, mean chance 0.3892; AUC 0.6886
+    catch 50%: flag share 0.329, hit rate 0.486  (random: 0.500 / 0.319); flagged chance 0.543
+    catch 80%: flag share 0.630, hit rate 0.406  (random: 0.800 / 0.319); flagged chance 0.472
+    catch 90%: flag share 0.767, hit rate 0.375  (random: 0.900 / 0.319); flagged chance 0.442
+    flag share at 80% catch                     +0.6297  [+0.6035, +0.6541]
+    top-20% hit rate                            +0.5314  [+0.4967, +0.5658]
+    beyond-chance gap, flagged at 80% catch     -0.0658  [-0.0923, -0.0365]
+    beyond-chance gap, top 20%                  -0.0530  [-0.0947, -0.0136]
+
+  GATE: the reference's beyond-chance gap of the flagged set (80% catch) wholly above zero in both halves: NO
+  diagnostic, not the gate: top-20% gap wholly above zero in neither half
+  [25s]

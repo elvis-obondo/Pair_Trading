@@ -1,0 +1,94 @@
+[G7] 204 coins; loading ctx minute arrays ...
+[G7] ctx loaded  [977s]
+[G7] fills deltas and vault inventories loaded (173 coins with vault fills)  [1053s]
+  coin 20/204  [1233s]
+  coin 40/204  [1259s]
+  coin 60/204  [1286s]
+  coin 80/204  [1313s]
+  coin 100/204  [1340s]
+  coin 120/204  [1366s]
+  coin 140/204  [1393s]
+  coin 160/204  [1420s]
+  coin 180/204  [1447s]
+  coin 200/204  [1474s]
+[G7 pair] 6,697,756 rows x 110 columns  [1518s]
+  a_oi_obs_usd             NaN   4.01%  median +1.62e+06  p5 +1.787e+05  p95 +4.635e+07
+  a_oi_obs_age             NaN   4.01%  median +0  p5 +0  p95 +0
+  a_oi_rec_usd             NaN   0.00%  median +1.646e+06  p5 +1.779e+05  p95 +4.747e+07
+  a_oi_rec_age             NaN   0.00%  median +0  p5 +0  p95 +0
+  a_oi_rec_chg_24h         NaN   0.00%  median -0.0008646  p5 -0.1282  p95 +0.1792
+  a_oi_over_taker_24h      NaN   1.30%  median +3.354  p5 +0.8183  p95 +14.07
+  a_oi_delta_24h           NaN   1.30%  median -0.000836  p5 -0.147  p95 +0.1522
+  a_fund_last              NaN   0.00%  median +1.25e-05  p5 -8.167e-05  p95 +1.25e-05
+  a_fund_mean_24h          NaN   0.00%  median +1.063e-05  p5 -6.728e-05  p95 +2.043e-05
+  a_prem_last              NaN   0.00%  median -0.0001851  p5 -0.001153  p95 +0.0005159
+  a_prem_chg_24h           NaN   0.00%  median +1.272e-06  p5 -0.0006606  p95 +0.0006624
+  a_fund_age_h             NaN   0.00%  median +0.5  p5 +0.5  p95 +1
+  a_ctx_funding_inst       NaN   4.45%  median +1.25e-05  p5 -9.147e-05  p95 +1.25e-05
+  a_ctx_basis              NaN   4.45%  median -0.000732  p5 -0.002632  p95 +0.001193
+  a_ctx_impact_spread_bp   NaN   4.45%  median +14.14  p5 +2.345  p95 +53.69
+  a_vault_net_usd          NaN   0.00%  median +0  p5 +0  p95 +0
+  a_vault_gross_usd        NaN   0.00%  median +0  p5 +0  p95 +0
+  a_vault_share_of_oi      NaN   0.00%  median +0  p5 +0  p95 +0
+  a_vault_net_chg_24h      NaN   0.00%  median +0  p5 +0  p95 +0
+  NaN share by month (a_oi_obs_usd, a_oi_rec_usd, a_fund_last, a_ctx_funding_inst):
+         a_oi_obs_usd  a_oi_rec_usd  a_fund_last  a_ctx_funding_inst
+m                                                                   
+2025-06        0.0000           0.0          0.0              0.0000
+2025-07        0.0000           0.0          0.0              0.0000
+2025-08        0.0000           0.0          0.0              0.0000
+2025-09        0.0000           0.0          0.0              0.0000
+2025-10        0.0000           0.0          0.0              0.0000
+2025-11        0.0000           0.0          0.0              0.0000
+2025-12        0.0000           0.0          0.0              0.0000
+2026-01        0.0000           0.0          0.0              0.0000
+2026-02        0.0000           0.0          0.0              0.0000
+2026-03        0.0000           0.0          0.0              0.0000
+2026-04        0.0000           0.0          0.0              0.0000
+2026-05        0.0171           0.0          0.0              0.0189
+2026-06        0.0000           0.0          0.0              0.0000
+2026-07        0.0263           0.0          0.0              0.0290
+2026-08        0.0749           0.0          0.0              0.0873
+2026-09        0.2642           0.0          0.0              0.2929
+2026-10        0.6163           0.0          0.0              0.6727
+[G7 coin] 74,607 rows x 37 columns  [1536s]
+  a_oi_obs_usd             NaN   3.92%  median +1.67e+06  p5 +1.79e+05  p95 +5.476e+07
+  a_oi_obs_age             NaN   3.92%  median +0  p5 +0  p95 +0
+  a_oi_rec_usd             NaN   0.00%  median +1.692e+06  p5 +1.78e+05  p95 +5.685e+07
+  a_oi_rec_age             NaN   0.00%  median +0  p5 +0  p95 +0
+  a_oi_rec_chg_24h         NaN   0.00%  median -0.0005644  p5 -0.1265  p95 +0.1791
+  a_oi_over_taker_24h      NaN   1.57%  median +3.42  p5 +0.8191  p95 +13.93
+  a_oi_delta_24h           NaN   1.57%  median -0.0005128  p5 -0.145  p95 +0.1529
+  a_fund_last              NaN   0.00%  median +1.25e-05  p5 -7.444e-05  p95 +1.25e-05
+  a_fund_mean_24h          NaN   0.00%  median +1.083e-05  p5 -6.008e-05  p95 +2.264e-05
+  a_prem_last              NaN   0.00%  median -0.0001801  p5 -0.001096  p95 +0.0005725
+  a_prem_chg_24h           NaN   0.00%  median +1.664e-06  p5 -0.0006497  p95 +0.000656
+  a_fund_age_h             NaN   0.00%  median +0.5  p5 +0.5  p95 +1
+  a_ctx_funding_inst       NaN   4.36%  median +1.25e-05  p5 -8.43e-05  p95 +1.25e-05
+  a_ctx_basis              NaN   4.36%  median -0.0007108  p5 -0.002577  p95 +0.00124
+  a_ctx_impact_spread_bp   NaN   4.36%  median +13.64  p5 +2.166  p95 +55.51
+  a_vault_net_usd          NaN   0.00%  median +0  p5 +0  p95 +0
+  a_vault_gross_usd        NaN   0.00%  median +0  p5 +0  p95 +0
+  a_vault_share_of_oi      NaN   0.00%  median +0  p5 +0  p95 +0
+  a_vault_net_chg_24h      NaN   0.00%  median +0  p5 +0  p95 +0
+  NaN share by month (a_oi_obs_usd, a_oi_rec_usd, a_fund_last, a_ctx_funding_inst):
+         a_oi_obs_usd  a_oi_rec_usd  a_fund_last  a_ctx_funding_inst
+m                                                                   
+2025-05        0.0000           0.0          0.0              0.0000
+2025-06        0.0000           0.0          0.0              0.0000
+2025-07        0.0000           0.0          0.0              0.0000
+2025-08        0.0000           0.0          0.0              0.0000
+2025-09        0.0000           0.0          0.0              0.0000
+2025-10        0.0000           0.0          0.0              0.0000
+2025-11        0.0000           0.0          0.0              0.0000
+2025-12        0.0000           0.0          0.0              0.0000
+2026-01        0.0000           0.0          0.0              0.0000
+2026-02        0.0000           0.0          0.0              0.0000
+2026-03        0.0000           0.0          0.0              0.0000
+2026-04        0.0000           0.0          0.0              0.0000
+2026-05        0.0140           0.0          0.0              0.0154
+2026-06        0.0000           0.0          0.0              0.0000
+2026-07        0.0174           0.0          0.0              0.0194
+2026-08        0.0740           0.0          0.0              0.0866
+2026-09        0.2580           0.0          0.0              0.2868
+2026-10        0.6252           0.0          0.0              0.6849

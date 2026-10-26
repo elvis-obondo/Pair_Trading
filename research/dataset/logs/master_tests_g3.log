@@ -1,0 +1,16 @@
+/home/elvisobondo/Pair_Trading/research/dataset/master_g3.py:100: RuntimeWarning: Mean of empty slice
+  out["last5_mean"] = np.where(np.isfinite(L5).any(1), np.nanmean(np.where(np.isfinite(L5), L5, np.nan), axis=1), np.nan)
+[KNOWN] boundary (600 resolved, 599 not), recency order, shrinkage, as-of global rate, gap exclusion, mean minutes to mu: PASS
+/home/elvisobondo/Pair_Trading/research/dataset/master_g3.py:100: RuntimeWarning: Mean of empty slice
+  out["last5_mean"] = np.where(np.isfinite(L5).any(1), np.nanmean(np.where(np.isfinite(L5), L5, np.nan), axis=1), np.nan)
+[POISON coin] 1000 events, all unresolved labels randomised: columns changed in 0 cases [13s]
+[POISON coin] PASS
+/home/elvisobondo/Pair_Trading/research/dataset/master_g3.py:100: RuntimeWarning: Mean of empty slice
+  out["last5_mean"] = np.where(np.isfinite(L5).any(1), np.nanmean(np.where(np.isfinite(L5), L5, np.nan), axis=1), np.nan)
+[POISON pair] 1000 events, all unresolved labels randomised: columns changed in 0 cases [1878s]
+[POISON pair] PASS
+[G3 INDEP coin] 2000 events x 14 columns = 28,000 comparisons; mismatches 0 [1s]
+[G3 INDEP coin] PASS
+[G3 INDEP pair] 2000 events x 14 columns = 28,000 comparisons; mismatches 0 [136s]
+[G3 INDEP pair] PASS
+[TESTS G3] ALL PASS

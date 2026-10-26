@@ -1,0 +1,128 @@
+======================================================================================================================
+GAUSSIAN COPULA on QTREE marginals -- joint MAE/MFE, fitted on val
+======================================================================================================================
+  A separate deliverable. It cannot move any marginal number, so it is
+  scored only on JOINT questions, against independence.
+
+       [SPLIT] train 22,645 (<2026-05-01)   val 13,048   HELD OUT 18,064 (>=2026-07-18)
+[SPLIT] held-out used ONCE, for scoring only; iterations chosen on val
+[1m  ] 1-minute >= 30-minute, every episode/direction/horizon: 0 violations
+[1m  ] deepest shortfall -9.374e-07; as a fraction of the float32 reference's precision (8.0 ulps): 0.062 (must be < 1)
+  cache fingerprint matches (9e332d92a2945b03...).
+  val 13,048 rows (copula fit); held out 18,064 rows -- HO1 8,200, HO2 9,864
+
+======================================================================================================================
+MARGINALS -- QTREE refitted for its val predictions, checked vs cache
+======================================================================================================================
+  30m/MAE: refitted 5 horizons   [36s]
+  30m/MFE: refitted 5 horizons   [59s]
+  1m/MAE: refitted 5 horizons   [81s]
+  1m/MFE: refitted 5 horizons   [103s]
+  worst |refit - cache| over 20 held-out cells: 0.000e+00
+
+======================================================================================================================
+THE COPULA -- one Gaussian correlation per cell, fitted on val PITs
+======================================================================================================================
+  rho = 2 sin(pi rho_s / 6) from val's PIT Spearman. The held-out PIT
+  Spearman is printed for comparison only; it plays no part in the fit.
+
+  src       h  val rho_s  gauss rho  held-out rho_s            
+  30m    0.5h                                         IDENTITY -- skipped
+  30m      1h    -0.8568    -0.8674         -0.8595
+  30m      2h    -0.7889    -0.8028         -0.7890
+  30m      5h    -0.7321    -0.7480         -0.7160
+  30m     10h    -0.7035    -0.7202         -0.6804
+  1m     0.5h    -0.6629    -0.6803         -0.6608
+  1m       1h    -0.6472    -0.6648         -0.6461
+  1m       2h    -0.6388    -0.6565         -0.6352
+  1m       5h    -0.6366    -0.6544         -0.6118
+  1m      10h    -0.6381    -0.6558         -0.6066
+
+======================================================================================================================
+JOINT CALIBRATION -- held out, copula against independence
+======================================================================================================================
+  For every pair of levels (a, b) on the 5 x 5 grid, the event
+  {MAE <= Q_MAE(a) and MFE <= Q_MFE(b)}. Actual frequency against the
+  copula's C(a,b) and independence's a*b. gap = mean |actual - predicted|
+  over the 25 pairs, in pp. cop-ind is PAIRED on identical rows and day
+  resamples: negative = the copula describes the joint law better.
+  'dep only' plugs the ACTUAL held-out marginal frequencies into the
+  copula -- a diagnostic that removes marginal miscalibration and scores
+  the dependence structure alone. Point estimate only; it uses held-out
+  marginals, so it is not a forecast.
+
+  src       h block  ind gap  cop gap  cop-ind          [95% CI]  dep only          
+  30m      1h   ALL     5.54     0.93    -4.62     [-4.75,-4.37]      0.26    COPULA
+  30m      1h   HO1     5.38     0.74    -4.64     [-4.89,-4.27]      0.26    COPULA
+  30m      1h   HO2     5.68     1.14    -4.54     [-4.70,-4.33]      0.26    COPULA
+  30m      2h   ALL     5.20     1.14    -4.06     [-4.29,-3.80]      0.36    COPULA
+  30m      2h   HO1     4.90     0.76    -4.14     [-4.49,-3.64]      0.36    COPULA
+  30m      2h   HO2     5.48     1.55    -3.93     [-4.24,-3.65]      0.36    COPULA
+  30m      5h   ALL     5.08     1.38    -3.70     [-4.03,-3.36]      0.45    COPULA
+  30m      5h   HO1     4.86     0.86    -3.99     [-4.43,-3.52]      0.45    COPULA
+  30m      5h   HO2     5.40     1.82    -3.57     [-3.98,-2.98]      0.45    COPULA
+  30m     10h   ALL     4.80     1.48    -3.32     [-3.72,-2.91]      0.51    COPULA
+  30m     10h   HO1     4.89     0.84    -4.04     [-4.45,-3.42]      0.46    COPULA
+  30m     10h   HO2     4.91     2.07    -2.84     [-3.38,-2.12]      0.55    COPULA
+  1m     0.5h   ALL     3.69     1.31    -2.38     [-2.87,-1.83]      0.42    COPULA
+  1m     0.5h   HO1     3.53     1.27    -2.25     [-3.00,-1.58]      0.42    COPULA
+  1m     0.5h   HO2     3.82     1.46    -2.35     [-2.94,-1.68]      0.44    COPULA
+  1m       1h   ALL     3.87     1.42    -2.44     [-2.83,-1.88]      0.43    COPULA
+  1m       1h   HO1     3.68     1.29    -2.39     [-2.96,-1.67]      0.43    COPULA
+  1m       1h   HO2     4.06     1.68    -2.39     [-2.87,-1.79]      0.43    COPULA
+  1m       2h   ALL     3.94     1.45    -2.48     [-2.80,-1.95]      0.51    COPULA
+  1m       2h   HO1     3.58     1.26    -2.32     [-2.89,-1.60]      0.52    COPULA
+  1m       2h   HO2     4.31     1.85    -2.46     [-2.85,-1.91]      0.50    COPULA
+  1m       5h   ALL     4.14     1.59    -2.55     [-2.91,-2.13]      0.55    COPULA
+  1m       5h   HO1     3.86     1.05    -2.81     [-3.11,-2.12]      0.53    COPULA
+  1m       5h   HO2     4.47     2.06    -2.41     [-2.91,-1.59]      0.55    COPULA
+  1m      10h   ALL     4.21     1.65    -2.56     [-2.98,-2.05]      0.59    COPULA
+  1m      10h   HO1     4.17     1.04    -3.13     [-3.83,-2.41]      0.54    COPULA
+  1m      10h   HO2     4.35     2.29    -2.06     [-2.74,-1.20]      0.62    COPULA
+
+======================================================================================================================
+BOTH LARGE -- P(MAE above its q and MFE above its q), held out
+======================================================================================================================
+  The stop-and-target question: how often does a path run far against
+  you AND far for you. Independence predicts (1-a)(1-b). A Gaussian
+  copula has no tail dependence, so if both-large clusters more than it
+  allows, this is where it shows.
+
+  src       h      corner   actual   copula    indep
+  30m      1h     q75/q75    0.45%    0.03%    6.25%
+  30m      1h     q95/q95    0.00%    0.00%    0.25%
+  30m      2h     q75/q75    0.66%    0.15%    6.25%
+  30m      2h     q95/q95    0.02%    0.00%    0.25%
+  30m      5h     q75/q75    1.07%    0.33%    6.25%
+  30m      5h     q95/q95    0.02%    0.00%    0.25%
+  30m     10h     q75/q75    1.18%    0.45%    6.25%
+  30m     10h     q95/q95    0.03%    0.00%    0.25%
+  1m     0.5h     q75/q75    1.17%    0.64%    6.25%
+  1m     0.5h     q95/q95    0.01%    0.00%    0.25%
+  1m       1h     q75/q75    1.34%    0.72%    6.25%
+  1m       1h     q95/q95    0.01%    0.00%    0.25%
+  1m       2h     q75/q75    1.28%    0.77%    6.25%
+  1m       2h     q95/q95    0.04%    0.00%    0.25%
+  1m       5h     q75/q75    1.35%    0.78%    6.25%
+  1m       5h     q95/q95    0.05%    0.00%    0.25%
+  1m      10h     q75/q75    1.46%    0.78%    6.25%
+  1m      10h     q95/q95    0.06%    0.00%    0.25%
+
+  [CACHE] wrote envelope_preds_copula.npz: one Gaussian rho per cell, fingerprinted.
+
+======================================================================================================================
+VERDICT
+======================================================================================================================
+  9 non-identity cells on the full held-out block. The copula
+  describes the joint law better than independence, by a paired interval
+  excluding zero, in 9 of 9; worse in 0.
+  HO1: better 9, worse 0, of 9.
+  HO2: better 9, worse 0, of 9.
+
+  THIS DOES NOT TOUCH THE CALIBRATION SCOREBOARD. The marginals are
+  QTREE's, unchanged. The copula only says how the two marginals
+  combine on the same path -- the input a joint stop-and-target rule
+  needs. Whether to set them jointly is a strategy-phase decision.
+
+  [107s]
+======================================================================================================================

@@ -1,0 +1,148 @@
+[G4] context: 234 coins, daily taker notional for 206, listing dates; first trade earlier than the asset_ctxs date for 0 coins; left-censored 21  [32s]
+  coin arrays 40/204  [41s]
+  coin arrays 80/204  [48s]
+  coin arrays 120/204  [55s]
+  coin arrays 160/204  [63s]
+  coin arrays 200/204  [72s]
+[G4 pair] 6,697,756 rows x 67 columns  [290s]
+  a_coin_code                NaN   0.00%  median +67  p5 +4  p95 +188
+  a_listing_src              NaN   0.00%  median +0  p5 +0  p95 +0
+  a_listing_left_censored    NaN   0.00%  median +0  p5 +0  p95 +1
+  a_log_price                NaN   0.00%  median -1.621  p5 -5.88  p95 +3.937
+  a_ret_7d                   NaN   0.01%  median -0.01905  p5 -0.234  p95 +0.192
+  a_ret_30d                  NaN   4.07%  median -0.07291  p5 -0.5365  p95 +0.327
+  a_rv_24h                   NaN   0.00%  median +0.001205  p5 +0.0006265  p95 +0.002547
+  a_rv_7d                    NaN   0.00%  median +0.00132  p5 +0.0007322  p95 +0.002783
+  a_rv_24h_rel90             NaN   4.26%  median +0.9471  p5 +0.5642  p95 +1.88
+  a_traded_share_24h         NaN   0.00%  median +0.8326  p5 +0.3958  p95 +0.9937
+  a_mins_since_trade         NaN   0.00%  median +0  p5 +0  p95 +2
+  a_listing_age_days         NaN   0.00%  median +652.7  p5 +105.3  p95 +1101
+  a_liq_7d                   NaN   0.00%  median +5.271e+05  p5 +7.87e+04  p95 +1.961e+07
+  a_liq_30d                  NaN   0.62%  median +6.094e+05  p5 +1.042e+05  p95 +2.166e+07
+  a_liq_rank_7d              NaN   0.00%  median +0.4785  p5 +0.05376  p95 +0.9274
+  a_liq_rank_30d             NaN   0.62%  median +0.4842  p5 +0.0565  p95 +0.9297
+  a_sector                   categories: layer 1 1316375, decentralized finance 1191905, meme 1058404, other 763150, layer 2 606486, artificial intelligence 579565, gaming 485611, real world assets 322221
+  a_cg_status                categories: ok 6449027, unmapped 136818, ambiguous 111911
+  a_max_leverage             NaN   0.00%  median +3  p5 +3  p95 +10
+  a_tier1_max_leverage       NaN  82.37%  median +10  p5 +10  p95 +10
+  a_size_decimals            NaN   0.00%  median +0  p5 +0  p95 +2
+  a_margin_table_id          NaN   0.00%  median +3  p5 +3  p95 +52
+  b_coin_code                NaN   0.00%  median +172  p5 +54  p95 +229
+  b_listing_src              NaN   0.00%  median +0  p5 +0  p95 +0
+  b_listing_left_censored    NaN   0.00%  median +0  p5 +0  p95 +1
+  b_log_price                NaN   0.00%  median -1.967  p5 -5.715  p95 +3.713
+  b_ret_7d                   NaN   0.01%  median -0.01934  p5 -0.2303  p95 +0.1999
+  b_ret_30d                  NaN   3.92%  median -0.07026  p5 -0.5213  p95 +0.3581
+  b_rv_24h                   NaN   0.00%  median +0.001208  p5 +0.0006039  p95 +0.002565
+  b_rv_7d                    NaN   0.00%  median +0.001336  p5 +0.0007222  p95 +0.002929
+  b_rv_24h_rel90             NaN   4.11%  median +0.9379  p5 +0.5568  p95 +1.898
+  b_traded_share_24h         NaN   0.00%  median +0.8347  p5 +0.3514  p95 +0.9979
+  b_mins_since_trade         NaN   0.00%  median +0  p5 +0  p95 +3
+  b_listing_age_days         NaN   0.00%  median +642.2  p5 +121.1  p95 +1078
+  b_liq_7d                   NaN   0.00%  median +6.007e+05  p5 +7.435e+04  p95 +3.588e+07
+  b_liq_30d                  NaN   0.62%  median +6.817e+05  p5 +9.47e+04  p95 +3.565e+07
+  b_liq_rank_7d              NaN   0.00%  median +0.5082  p5 +0.04762  p95 +0.9526
+  b_liq_rank_30d             NaN   0.62%  median +0.5085  p5 +0.04918  p95 +0.9526
+  b_sector                   categories: meme 1445917, layer 1 1152939, decentralized finance 973424, other 769514, layer 2 680554, artificial intelligence 549315, real world assets 483342, gaming 364191
+  b_cg_status                categories: ok 6507824, ambiguous 115359, unmapped 74573
+  b_max_leverage             NaN   0.00%  median +3  p5 +3  p95 +10
+  b_tier1_max_leverage       NaN  81.47%  median +10  p5 +10  p95 +20
+  b_size_decimals            NaN   0.00%  median +0  p5 +0  p95 +2
+  b_margin_table_id          NaN   0.00%  median +3  p5 +3  p95 +52
+  d_log_price                NaN   0.00%  median +0.369  p5 -6.51  p95 +6.866
+  d_ret_7d                   NaN   0.01%  median +5.128e-05  p5 -0.2196  p95 +0.2109
+  d_ret_30d                  NaN   4.91%  median -0.003509  p5 -0.4727  p95 +0.4324
+  d_rv_24h                   NaN   0.00%  median -4.534e-06  p5 -0.001165  p95 +0.001175
+  d_rv_7d                    NaN   0.00%  median -1.828e-05  p5 -0.001379  p95 +0.001291
+  d_rv_24h_rel90             NaN   5.13%  median +0.008233  p5 -0.709  p95 +0.6985
+  d_traded_share_24h         NaN   0.00%  median -0.001389  p5 -0.4222  p95 +0.4604
+  d_listing_age_days         NaN   0.00%  median +8  p5 -691  p95 +674
+  d_liq_rank_7d              NaN   0.00%  median -0.02139  p5 -0.6895  p95 +0.6648
+  d_liq_rank_30d             NaN   0.72%  median -0.02105  p5 -0.6882  p95 +0.6649
+  liq_logratio_7d            NaN   0.00%  median -0.1026  p5 -4.499  p95 +4.042
+  liq_logratio_30d           NaN   0.72%  median -0.09284  p5 -4.354  p95 +3.915
+  same_sector                NaN   3.12%  median +0  p5 +0  p95 +1
+  utc_hour                   NaN   0.00%  median +12  p5 +1  p95 +22
+  hour_sin                   NaN   0.00%  median +0  p5 -0.9659  p95 +0.9659
+  hour_cos                   NaN   0.00%  median -1.837e-16  p5 -0.9659  p95 +0.9659
+  weekday                    NaN   0.00%  median +3  p5 +0  p95 +6
+  weekend                    NaN   0.00%  median +0  p5 +0  p95 +1
+  mins_since_top_hour        NaN   0.00%  median +30  p5 +0  p95 +30
+  sess_asia                  NaN   0.00%  median +0  p5 +0  p95 +1
+  sess_europe                NaN   0.00%  median +0  p5 +0  p95 +1
+  sess_us                    NaN   0.00%  median +0  p5 +0  p95 +1
+  near_seam                  NaN   0.00%  median +0  p5 +0  p95 +0
+  NaN share by month (a_ret_30d, a_rv_24h_rel90, a_liq_30d, a_rv_7d):
+         a_ret_30d  a_rv_24h_rel90  a_liq_30d  a_rv_7d
+m                                                     
+2025-06     0.7058          0.7483     0.1222      0.0
+2025-07     0.0071          0.0060     0.0010      0.0
+2025-08     0.0051          0.0040     0.0008      0.0
+2025-09     0.0090          0.0092     0.0010      0.0
+2025-10     0.0572          0.0555     0.0033      0.0
+2025-11     0.0222          0.0232     0.0024      0.0
+2025-12     0.0101          0.0106     0.0011      0.0
+2026-01     0.0115          0.0120     0.0020      0.0
+2026-02     0.0162          0.0169     0.0006      0.0
+2026-03     0.0043          0.0043     0.0000      0.0
+2026-04     0.0008          0.0008     0.0008      0.0
+2026-05     0.0065          0.0066     0.0002      0.0
+2026-06     0.0000          0.0000     0.0000      0.0
+2026-07     0.0095          0.0095     0.0017      0.0
+2026-08     0.0032          0.0035     0.0000      0.0
+2026-09     0.0042          0.0043     0.0006      0.0
+2026-10     0.0011          0.0011     0.0000      0.0
+[G4 coin] 74,607 rows x 32 columns  [317s]
+  a_coin_code                NaN   0.00%  median +117  p5 +11  p95 +224
+  a_listing_src              NaN   0.00%  median +0  p5 +0  p95 +0
+  a_listing_left_censored    NaN   0.00%  median +0  p5 +0  p95 +1
+  a_log_price                NaN   0.00%  median -1.771  p5 -5.82  p95 +3.809
+  a_ret_7d                   NaN   0.19%  median -0.01917  p5 -0.233  p95 +0.1957
+  a_ret_30d                  NaN   4.61%  median -0.06876  p5 -0.5231  p95 +0.3422
+  a_rv_24h                   NaN   0.00%  median +0.001195  p5 +0.0006147  p95 +0.002531
+  a_rv_7d                    NaN   0.14%  median +0.001322  p5 +0.0007283  p95 +0.002865
+  a_rv_24h_rel90             NaN   4.79%  median +0.9354  p5 +0.5621  p95 +1.864
+  a_traded_share_24h         NaN   0.00%  median +0.8326  p5 +0.3681  p95 +0.9958
+  a_mins_since_trade         NaN   0.00%  median +0  p5 +0  p95 +3
+  a_listing_age_days         NaN   0.00%  median +643.3  p5 +111.4  p95 +1089
+  a_liq_7d                   NaN   0.00%  median +5.582e+05  p5 +7.576e+04  p95 +2.737e+07
+  a_liq_30d                  NaN   0.76%  median +6.439e+05  p5 +9.795e+04  p95 +2.887e+07
+  a_liq_rank_7d              NaN   0.00%  median +0.4859  p5 +0.04918  p95 +0.9421
+  a_liq_rank_30d             NaN   0.76%  median +0.4931  p5 +0.05085  p95 +0.9421
+  a_sector                   categories: meme 13982, layer 1 13658, decentralized finance 12130, other 8572, layer 2 7212, artificial intelligence 6201, gaming 4836, real world assets 4400
+  a_cg_status                categories: ok 72082, ambiguous 1305, unmapped 1220
+  a_max_leverage             NaN   0.00%  median +3  p5 +3  p95 +10
+  a_tier1_max_leverage       NaN  81.83%  median +10  p5 +10  p95 +20
+  a_size_decimals            NaN   0.00%  median +0  p5 +0  p95 +2
+  a_margin_table_id          NaN   0.00%  median +3  p5 +3  p95 +52
+  utc_hour                   NaN   0.00%  median +12  p5 +1  p95 +22
+  hour_sin                   NaN   0.00%  median +0  p5 -0.9659  p95 +0.9659
+  hour_cos                   NaN   0.00%  median -1.837e-16  p5 -0.9659  p95 +0.9659
+  weekday                    NaN   0.00%  median +3  p5 +0  p95 +6
+  weekend                    NaN   0.00%  median +0  p5 +0  p95 +1
+  mins_since_top_hour        NaN   0.00%  median +30  p5 +0  p95 +30
+  sess_asia                  NaN   0.00%  median +0  p5 +0  p95 +1
+  sess_europe                NaN   0.00%  median +0  p5 +0  p95 +1
+  sess_us                    NaN   0.00%  median +0  p5 +0  p95 +1
+  near_seam                  NaN   0.00%  median +0  p5 +0  p95 +0
+  NaN share by month (a_ret_30d, a_rv_24h_rel90, a_liq_30d, a_rv_7d):
+         a_ret_30d  a_rv_24h_rel90  a_liq_30d  a_rv_7d
+m                                                     
+2025-05     1.0000          1.0000     1.0000   1.0000
+2025-06     0.7400          0.7743     0.1239   0.0188
+2025-07     0.0130          0.0116     0.0020   0.0000
+2025-08     0.0079          0.0067     0.0024   0.0000
+2025-09     0.0236          0.0251     0.0012   0.0000
+2025-10     0.0471          0.0462     0.0046   0.0000
+2025-11     0.0191          0.0197     0.0021   0.0000
+2025-12     0.0114          0.0116     0.0027   0.0000
+2026-01     0.0117          0.0119     0.0020   0.0000
+2026-02     0.0124          0.0139     0.0006   0.0000
+2026-03     0.0031          0.0031     0.0000   0.0000
+2026-04     0.0004          0.0004     0.0004   0.0000
+2026-05     0.0039          0.0039     0.0006   0.0000
+2026-06     0.0000          0.0000     0.0000   0.0000
+2026-07     0.0071          0.0071     0.0012   0.0000
+2026-08     0.0019          0.0027     0.0000   0.0000
+2026-09     0.0077          0.0081     0.0007   0.0000
+2026-10     0.0040          0.0040     0.0000   0.0000

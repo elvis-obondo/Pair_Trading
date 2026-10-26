@@ -1,0 +1,123 @@
+================================================================================================================
+REACH-MU v2 STEP 2 -- perp vs index, volume-spike detail, signed breadth
+================================================================================================================
+  panel 36,595 bars x 214 tickers; 60,000 episodes, 53,757 in the matched set
+  dominance recomputed (whyfeat.market_factor)   [170s]
+/Users/elvisobondo/Pair_Trading/research/dislocation_model/reachfeat2.py:187: RuntimeWarning: All-NaN slice encountered
+  med = np.nanmedian(np.where(np.isfinite(B), B, np.nan), axis=1)
+  hourly basis: 18,298 hours x 214 coins; finite cells 2,831,397; median coins per hour 146   [171s]
+  BASIS MOVE vs the cross-sectional median basis move (matched set):
+    2h  leg A     n 53,757   Pearson +0.068 (R2 0.005)   Spearman +0.223
+    2h  leg B     n 53,757   Pearson +0.132 (R2 0.017)   Spearman +0.231
+    2h  dominant  n 53,757   Pearson +0.060 (R2 0.004)   Spearman +0.184
+    6h  leg A     n 53,757   Pearson +0.066 (R2 0.004)   Spearman +0.231
+    6h  leg B     n 53,757   Pearson +0.104 (R2 0.011)   Spearman +0.224
+    6h  dominant  n 53,757   Pearson +0.053 (R2 0.003)   Spearman +0.190
+  perp vs index done   [172s]
+
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/numpy/lib/_nanfunctions_impl.py:1215: RuntimeWarning: All-NaN slice encountered
+  return fnb._ureduce(a, func=_nanmedian, keepdims=keepdims,
+    spike detail: 50 of 212 dominant tickers   [181s]
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/numpy/lib/_nanfunctions_impl.py:1215: RuntimeWarning: All-NaN slice encountered
+  return fnb._ureduce(a, func=_nanmedian, keepdims=keepdims,
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/numpy/lib/_nanfunctions_impl.py:1215: RuntimeWarning: All-NaN slice encountered
+  return fnb._ureduce(a, func=_nanmedian, keepdims=keepdims,
+    spike detail: 100 of 212 dominant tickers   [187s]
+    spike detail: 150 of 212 dominant tickers   [192s]
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/numpy/lib/_nanfunctions_impl.py:1215: RuntimeWarning: All-NaN slice encountered
+  return fnb._ureduce(a, func=_nanmedian, keepdims=keepdims,
+    spike detail: 200 of 212 dominant tickers   [197s]
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/numpy/lib/_nanfunctions_impl.py:1215: RuntimeWarning: All-NaN slice encountered
+  return fnb._ureduce(a, func=_nanmedian, keepdims=keepdims,
+  spike detail done; peak windows end at most +0 min vs T+29 (must be <= 0)   [208s]
+
+    5,000 of 22,366 pairs   [240s]
+    10,000 of 22,366 pairs   [271s]
+    15,000 of 22,366 pairs   [302s]
+    20,000 of 22,366 pairs   [332s]
+  GATE -- recomputed finite-z counts equal breadth_counts.npz's: True
+  [WROTE] datasets/breadth_signed.npz
+
+================================================================================================================
+CHECKS
+================================================================================================================
+  LOOK-AHEAD (must be <= 0):
+    perp vs index: latest hourly close read (minutes vs entry close) max +0
+    spike med30 baseline (30m bars)                                  max -12
+    spike: last 1m read (minutes vs T+29)                            max +0; window ends at T+29 by construction
+    signed breadth / breadth change (bar read)                       max +0
+    -> PASS
+
+  COVERAGE on the matched 53,757, median [p5, p95], missing by cause
+    basis_now_dom            53,604  -0.0006711 [-0.00339, +0.002174]   dominant leg undefined: 153
+    basis_now_oth            53,604  -0.000688 [-0.002539, +0.001639]   dominant leg undefined: 153
+    basis_rel_now_dom        53,604  +1.807e-05 [-0.002629, +0.002808]   dominant leg undefined: 153
+    basis_rel_now_oth        53,604  +3.947e-06 [-0.001722, +0.002289]   dominant leg undefined: 153
+    basis_move_dom_2         53,676  -2.45e-06 [-0.002825, +0.002363]   dominant leg undefined: 81
+    basis_rel_move_dom_2     53,676  -4.556e-05 [-0.002765, +0.002313]   dominant leg undefined: 81
+    index_share_dom_2        53,449  +0.9993 [+0.7664, +1.236]   index/perp missing or perp flat: 227; dominant leg undefined: 81
+    basis_move_diff_2        53,676  -6.503e-05 [-0.003671, +0.00307]   dominant leg undefined: 81
+    basis_rel_move_diff_2    53,676  -6.503e-05 [-0.003671, +0.00307]   dominant leg undefined: 81
+    index_share_diff_2       52,886  +0.002178 [-0.6576, +0.6895]   index/perp missing or perp flat: 790; dominant leg undefined: 81
+    basis_move_dom_6         53,604  -6.992e-06 [-0.003018, +0.002362]   dominant leg undefined: 153
+    basis_rel_move_dom_6     53,604  -5.487e-05 [-0.003033, +0.002303]   dominant leg undefined: 153
+    index_share_dom_6        53,502  +0.9993 [+0.8682, +1.138]   dominant leg undefined: 153; index/perp missing or perp flat: 102
+    basis_move_diff_6        53,604  -7.494e-05 [-0.003875, +0.003055]   dominant leg undefined: 153
+    basis_rel_move_diff_6    53,604  -7.494e-05 [-0.003875, +0.003055]   dominant leg undefined: 153
+    index_share_diff_6       53,151  +0.002566 [-0.412, +0.4458]   index/perp missing or perp flat: 453; dominant leg undefined: 153
+    impact_per_vol           53,370  -6.129 [-8.454, -4.536]   volume/range/baseline missing or zero: 232; dominant leg undefined: 153; under 300 finite minutes in the 6h: 2
+    wick_reject              53,602  +0.4408 [+0.2288, +0.6802]   dominant leg undefined: 153; under 300 finite minutes in the 6h: 2
+    retrace_started          53,599  -1.068 [-6.416, +1.151]   dominant leg undefined: 153; volume/range/baseline missing or zero: 3; under 300 finite minutes in the 6h: 2
+    spike_persistence        53,602  +0.2972 [+0.06389, +0.8083]   dominant leg undefined: 153; under 300 finite minutes in the 6h: 2
+    mins_since_peak          53,602  +4.317 [+1.099, +5.793]   dominant leg undefined: 153; under 300 finite minutes in the 6h: 2
+    coinc_other              53,602  +0.3123 [-1.167, +2.611]   dominant leg undefined: 153; under 300 finite minutes in the 6h: 2
+    coinc_btc                53,602  +0.4114 [-1.082, +2.562]   dominant leg undefined: 153; under 300 finite minutes in the 6h: 2
+    signed_breadth_a         53,757  +0.2264 [+0.01136, +0.8757]   
+    signed_breadth_b         53,757  +0.2238 [+0.01, +0.8382]   
+    signed_breadth_gap       53,604  +0.3923 [-0.2275, +0.8905]   dominant leg undefined: 153
+    breadth_change_1h        53,604  +0.1095 [-0.05312, +0.6619]   dominant leg undefined: 153
+    breadth_change_4h        53,604  +0.1497 [-0.01905, +0.7241]   dominant leg undefined: 153
+
+  SPEARMAN on the matched set, flag > 0.8 against vol_48 or vol_48_1m
+    basis_now_dom            vol_48 +0.043   vol_48_1m +0.036
+    basis_now_oth            vol_48 +0.013   vol_48_1m +0.001
+    basis_rel_now_dom        vol_48 +0.040   vol_48_1m +0.033
+    basis_rel_now_oth        vol_48 +0.006   vol_48_1m -0.005
+    basis_move_dom_2         vol_48 +0.020   vol_48_1m +0.026
+    basis_rel_move_dom_2     vol_48 +0.020   vol_48_1m +0.026
+    index_share_dom_2        vol_48 -0.019   vol_48_1m -0.021
+    basis_move_diff_2        vol_48 +0.015   vol_48_1m +0.020
+    basis_rel_move_diff_2    vol_48 +0.015   vol_48_1m +0.020
+    index_share_diff_2       vol_48 -0.004   vol_48_1m -0.003
+    basis_move_dom_6         vol_48 +0.025   vol_48_1m +0.031
+    basis_rel_move_dom_6     vol_48 +0.028   vol_48_1m +0.033
+    index_share_dom_6        vol_48 -0.028   vol_48_1m -0.029
+    basis_move_diff_6        vol_48 +0.021   vol_48_1m +0.026
+    basis_rel_move_diff_6    vol_48 +0.021   vol_48_1m +0.026
+    index_share_diff_6       vol_48 -0.016   vol_48_1m -0.017
+    impact_per_vol           vol_48 +0.033   vol_48_1m +0.004
+    wick_reject              vol_48 +0.037   vol_48_1m +0.064
+    retrace_started          vol_48 +0.069   vol_48_1m +0.155
+    spike_persistence        vol_48 -0.080   vol_48_1m -0.126
+    mins_since_peak          vol_48 +0.070   vol_48_1m +0.120
+    coinc_other              vol_48 +0.062   vol_48_1m +0.059
+    coinc_btc                vol_48 +0.033   vol_48_1m +0.048
+    signed_breadth_a         vol_48 -0.122   vol_48_1m -0.141
+    signed_breadth_b         vol_48 -0.073   vol_48_1m -0.086
+    signed_breadth_gap       vol_48 -0.180   vol_48_1m -0.217
+    breadth_change_1h        vol_48 -0.115   vol_48_1m -0.171
+    breadth_change_4h        vol_48 -0.175   vol_48_1m -0.230
+  flagged 'restates volatility': none
+  [WROTE] datasets/reachfeat2.npz  (60,000 x 28)
+  [350s]
+================================================================================================================

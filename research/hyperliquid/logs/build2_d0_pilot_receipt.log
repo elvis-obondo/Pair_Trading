@@ -1,0 +1,122 @@
+
+== 20250601
+  hours_present: 24
+  hours_missing: []
+  next_h0_present: True
+  fills_read: 4170009
+  read_s: 34.7
+  total_s: 38.0
+  peak_rss_mb: 995.5
+  max_early_ms: 157
+  max_late_ms: 0
+  dropped_fills: {'spot@': 820462}
+  dropped_taker_usd: {'spot@': 191422996.24}
+  slash_names: {'PURR/USDC': 70612}
+  dedupe_removed: 0
+  dedupe_removed_by_hour: {}
+  tids: 1581768
+  tids_by_takers: {'1': 1581768}
+  offbook_by_dir: {'Net Child Vaults': {'trades': 559, 'usd': 297771.63}}
+  forced_fills: 1460
+  forced_offbook_dir_fills: 0
+  blocks: None
+  perp_fills: 3163535
+  onbook_trades: 1581209
+  rows: 178613
+  coins: 170
+  buy_sell names not @/#: {'PURR/USDC': 70612}
+  parquet MB 12.1  blocks MB 0.0
+
+== 20250727
+  hours_present: 24
+  hours_missing: []
+  next_h0_present: True
+  fills_read: 6593348
+  read_s: 47.4
+  total_s: 54.8
+  peak_rss_mb: 1673.3
+  max_early_ms: 115
+  max_late_ms: 0
+  dropped_fills: {'spot@': 1011585}
+  dropped_taker_usd: {'spot@': 274185277.27}
+  slash_names: {'PURR/USDC': 28358}
+  dedupe_removed: 0
+  dedupe_removed_by_hour: {}
+  tids: 2597735
+  tids_by_takers: {'1': 2597735}
+  offbook_by_dir: {'Net Child Vaults': {'trades': 519, 'usd': 271851.64}}
+  forced_fills: 3014
+  forced_offbook_dir_fills: 0
+  blocks: {'n': 665633, 'first': 676607001, 'last': 677272635, 'dups': 0, 'gaps': 1, 'missing_blocks': 2}
+  perp_fills: 5195470
+  onbook_trades: 2597216
+  rows: 185518
+  coins: 173
+  buy_sell names not @/#: {'PURR/USDC': 28294}
+  parquet MB 13.0  blocks MB 4.2
+
+== 20251010
+  hours_present: 24
+  hours_missing: []
+  next_h0_present: True
+  fills_read: 20619978
+  read_s: 125.3
+  total_s: 150.3
+  peak_rss_mb: 5351.5
+  max_early_ms: 143
+  max_late_ms: 0
+  dropped_fills: {'spot@': 1497880}
+  dropped_taker_usd: {'spot@': 1083924184.05}
+  slash_names: {'PURR/USDC': 37569}
+  dedupe_removed: 0
+  dedupe_removed_by_hour: {}
+  tids: 8814841
+  tids_by_takers: {'1': 8814841}
+  offbook_by_dir: {'Auto-Deleveraging': {'trades': 35022, 'usd': 2103347291.88}, 'Liquidated Cross Long': {'trades': 9973, 'usd': 1966349519.51}, 'Liquidated Cross Short': {'trades': 87, 'usd': 41404588.7}, 'Liquidated Isolated Long': {'trades': 7663, 'usd': 245051861.83}, 'Liquidated Isolated Short': {'trades': 170, 'usd': 3349893.18}, 'Net Child Vaults': {'trades': 2966, 'usd': 30419225.64}}
+  forced_fills: 394452
+  forced_offbook_dir_fills: 52915
+  blocks: {'n': 1061222, 'first': 757860048, 'last': 758921269, 'dups': 0, 'gaps': 0, 'missing_blocks': 0}
+  perp_fills: 17629682
+  onbook_trades: 8758960
+  rows: 225926
+  coins: 182
+  buy_sell names not @/#: {'PURR/USDC': 37486}
+  parquet MB 17.5  blocks MB 6.7
+
+== 20260708
+  hours_present: 24
+  hours_missing: []
+  next_h0_present: True
+  fills_read: 10057798
+  read_s: 60.5
+  total_s: 68.0
+  peak_rss_mb: 1671.5
+  max_early_ms: 217
+  max_late_ms: 0
+  dropped_fills: {'spot@': 293453, 'hip3': 4626634, 'outcome#': 77464}
+  dropped_taker_usd: {'spot@': 138417423.67, 'hip3': 4829405118.38, 'outcome#': 3147646.77}
+  slash_names: {'PURR/USDC': 3552}
+  dedupe_removed: 0
+  dedupe_removed_by_hour: {}
+  tids: 2308083
+  tids_by_takers: {'1': 2308083}
+  offbook_by_dir: {}
+  forced_fills: 13557
+  forced_offbook_dir_fills: 0
+  blocks: {'n': 1212949, 'first': 1064402033, 'last': 1065614981, 'dups': 0, 'gaps': 0, 'missing_blocks': 0}
+  perp_fills: 4616166
+  onbook_trades: 2308083
+  rows: 211297
+  coins: 176
+  buy_sell names not @/#: {'PURR/USDC': 3522}
+  parquet MB 14.8  blocks MB 7.7
+
+### wall / peak RSS per pilot day (from /usr/bin/time -v, copied from the pilot .time files)
+20250727.time:	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:55.27
+20250727.time:	Maximum resident set size (kbytes): 1713448
+20250601.time:	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:38.41
+20250601.time:	Maximum resident set size (kbytes): 1019424
+20260708.time:	Elapsed (wall clock) time (h:mm:ss or m:ss): 1:08.51
+20260708.time:	Maximum resident set size (kbytes): 1711628
+20251010.time:	Elapsed (wall clock) time (h:mm:ss or m:ss): 2:30.86
+20251010.time:	Maximum resident set size (kbytes): 5479936

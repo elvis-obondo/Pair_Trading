@@ -1,0 +1,17 @@
+[REWALK coin] raw 1m closes of 206 coins loaded  [10s]
+[REWALK coin] 30m panel (24305, 206) rebuilt  [12s]
+  MISMATCH P0 event 37327 MET bar 21612: mine 2.037397 z 3.148328 | ir mine 0.00048501 stored 0.00048501 | L mine -1.466957 stored -1.472880 | bars with |ir diff|>1e-9 for this coin: 16 of 24305; n30[b] 177
+  MISMATCH P0 event 21256 FIL bar 10012: mine -1.883947 z -1.678508 | ir mine 0.00320675 stored 0.00320675 | L mine -0.783706 stored -0.784647 | bars with |ir diff|>1e-9 for this coin: 36 of 24305; n30[b] 186
+  MISMATCH P0 event 51134 RUNE bar 13478: mine -2.984309 z -2.185524 | ir mine 0.00030773 stored 0.00030773 | L mine -1.158003 stored -1.160414 | bars with |ir diff|>1e-9 for this coin: 36 of 24305; n30[b] 190
+  MISMATCH P0 event 28305 INIT bar 18893: mine -2.681620 z -2.955437 | ir mine -0.00098065 stored -0.00098065 | L mine -1.299915 stored -1.302486 | bars with |ir diff|>1e-9 for this coin: 36 of 24305; n30[b] 178
+  MISMATCH P0 event 9798 BERA bar 21445: mine 2.528041 z 3.190958 | ir mine 0.00020325 stored 0.00020325 | L mine -1.415853 stored -1.418383 | bars with |ir diff|>1e-9 for this coin: 36 of 24305; n30[b] 177
+  MISMATCH P0 event 60333 TRB bar 5570: mine -2.879836 z -3.078843 | ir mine 0.00348653 stored 0.00348653 | L mine -0.036826 stored -0.035814 | bars with |ir diff|>1e-9 for this coin: 36 of 24305; n30[b] 174
+  MISMATCH P0 event 73362 kNEIRO bar 2013: mine -1.690238 z -1.507119 | ir mine 0.00725636 stored 0.00725636 | L mine -0.126163 stored -0.127430 | bars with |ir diff|>1e-9 for this coin: 36 of 24305; n30[b] 172
+  MISMATCH P0 event 60026 TON bar 6635: mine -3.827613 z -4.222569 | ir mine -0.08833279 stored -0.08833279 | L mine -0.125830 stored -0.120588 | bars with |ir diff|>1e-9 for this coin: 32 of 24305; n30[b] 182
+  MISMATCH P0 event 16362 DOGE bar 7294: mine -1.770414 z -1.933968 | ir mine -0.01183416 stored -0.01183416 | L mine -0.288159 stored -0.287179 | bars with |ir diff|>1e-9 for this coin: 36 of 24305; n30[b] 183
+  MISMATCH P0 event 40283 NEAR bar 10300: mine 2.718237 z 2.806034 | ir mine -0.00102985 stored -0.00102985 | L mine -0.775664 stored -0.776774 | bars with |ir diff|>1e-9 for this coin: 36 of 24305; n30[b] 187
+  MISMATCH P0 event 44255 PAXG bar 17373: mine 2.337854 z 2.176349 | ir mine -0.00189432 stored -0.00189432 | L mine -1.056887 stored -1.059459 | bars with |ir diff|>1e-9 for this coin: 36 of 24305; n30[b] 183
+  MISMATCH P0 event 59012 TAO bar 17271: mine 1.569958 z 2.095020 | ir mine -0.00080307 stored -0.00080307 | L mine -1.109541 stored -1.112113 | bars with |ir diff|>1e-9 for this coin: 36 of 24305; n30[b] 183
+  MISMATCH P0 event 3100 ALGO bar 20643: mine -2.448485 z -2.159717 | ir mine -0.00224530 stored -0.00224530 | L mine -1.437759 stored -1.440288 | bars with |ir diff|>1e-9 for this coin: 36 of 24305; n30[b] 177
+[REWALK coin independent benchmark] 600 events (500 with finite path, 100 gap events): label_gap agrees on 14; 1 paths x 8 labels = 8 comparisons; mismatches 0  [12s]
+[REWALK coin independent benchmark] PASS

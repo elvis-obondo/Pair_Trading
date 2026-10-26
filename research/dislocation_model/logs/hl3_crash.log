@@ -1,0 +1,28 @@
+==============================================================================================================
+HL-FLOW1 PART 4 -- the 10 October 2025 cascade
+==============================================================================================================
+  matched population 59,759; trigger time = entry_time + 30 min (the cutoff)
+  rows are from fit days (the crash is before CUT 2026-05-25; the last fit day is 2026-05-24); descriptive only
+  WINDOW A  2025-10-10 20:00 - 2025-10-11 02:00: n 194, reach rate 0.5103, mean chance 0.6478, gap -0.1375
+      forced-share terciles (h1_forced_share_60): rows with a value 194, NaN 0
+        tercile low : n   65, reach 0.3385, chance 0.5677, gap -0.2292   (forced share 0.0000 .. 0.0248)
+        tercile mid : n   64, reach 0.5625, chance 0.7053, gap -0.1428   (forced share 0.0327 .. 0.2336)
+        tercile high: n   65, reach 0.6308, chance 0.6714, gap -0.0406   (forced share 0.2369 .. 0.6590)
+  WINDOW B  the 3 hours before (17:00 - 20:00): n 32, reach rate 0.3125, mean chance 0.8912, gap -0.5787
+      forced-share terciles (h1_forced_share_60): rows with a value 32, NaN 0
+        tercile low : n   14, reach 0.3571, chance 0.8929, gap -0.5357   (forced share 0.0000 .. 0.0000)
+        tercile mid : n    7, reach 0.2857, chance 0.9029, gap -0.6171   (forced share 0.0001 .. 0.0078)
+        tercile high: n   11, reach 0.2727, chance 0.8818, gap -0.6091   (forced share 0.0243 .. 0.3816)
+  everything else: n 59,533, reach rate 0.3288, mean chance 0.4455, gap -0.1167
+
+  BTC shocks (30-minute return < -5%, 1-minute closes): 9 minutes; first 2025-10-10 21:15:00
+    shock cluster 2025-10-10 21:15:00 .. 2025-10-10 21:25:00  (8 minutes), BTC min 30m return -0.1009
+    shock cluster 2026-02-06 00:19:00 .. 2026-02-06 00:19:00  (1 minutes), BTC min 30m return -0.0507
+
+  IN the cascade regime (C within 3h after a BTC shock): n 140, reach rate 0.6071, mean chance 0.5419, gap +0.0653
+  the rest: n 59,619, reach rate 0.3288, mean chance 0.4462, gap -0.1175
+  regime episodes fall on 3 calendar day(s): 2025-10-10, 2026-02-06, 2025-10-11  -> a day-clustered interval over this few clusters is NOT meaningful; descriptive, fit period
+  difference of gaps (regime minus rest): +0.1827  day-clustered 95% [+0.0221, +0.2410]  (n regime 140, rest 59,619; 266 valid resamples)
+
+  HOLE CHECK: archive hole minutes in 2025-10-10 17:00 - 2025-10-11 03:00: 0
+  nearest seam to the crash window: 13 days 11:00:00 away

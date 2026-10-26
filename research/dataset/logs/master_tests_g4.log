@@ -1,0 +1,15 @@
+[TESTS G4] context loaded [34s]
+[G4 INVARIANTS] PASS (shares and ranks in [0,1], ages and mins_since_trade >= 0, time columns from t0, no duplicate ids)
+[G4 SWAP] 2000 pair events: per-leg columns swap A <-> B, differences and log ratios negate, same_sector unchanged: failures 0
+[G4 SWAP] PASS
+[G4 POISON pair] 1000 events, future raw inputs and trigger-day-onwards daily flow of all coins randomised: columns changed in 0 cases [291s]
+  (static columns: sector, max_leverage, tier1_max_leverage, size_decimals, margin_table_id, cg_status = static snapshot, outside the as-of rule; not counted as passes)
+[G4 POISON pair] PASS
+[G4 POISON coin] 300 events, future raw inputs and trigger-day-onwards daily flow of all coins randomised: columns changed in 0 cases [36s]
+  (static columns: sector, max_leverage, tier1_max_leverage, size_decimals, margin_table_id, cg_status = static snapshot, outside the as-of rule; not counted as passes)
+[G4 POISON coin] PASS
+[G4 INDEP pair] 2000 events x 2 legs: 48,000 comparisons, mismatches 0, worst error / tolerance 0.001 [89s]
+[G4 INDEP pair] PASS
+[G4 INDEP coin] 500 events x 1 legs: 6,000 comparisons, mismatches 0, worst error / tolerance 0.001 [72s]
+[G4 INDEP coin] PASS
+[TESTS G4] ALL PASS [577s]

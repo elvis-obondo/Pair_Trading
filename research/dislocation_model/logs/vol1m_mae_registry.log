@@ -1,0 +1,123 @@
+================================================================================================================
+MAE REGISTRY ON vol_48_1m -- five models, five horizons, MFE untouched
+================================================================================================================
+  vol_48_1m reloaded for 53,757 rows (sha256 b3cbe66a18c5)
+[1m  ] 1-minute >= 30-minute, every episode/direction/horizon: 0 violations
+[1m  ] deepest shortfall -9.374e-07; as a fraction of the float32 reference's precision (8.0 ulps): 0.062 (must be < 1)
+  old MAE predictions: match1m cache, fingerprint 9e332d92a2945b03... (read only)
+       [SPLIT] train 22,645 (<2026-05-01)   val 13,048   HELD OUT 18,064 (>=2026-07-18)
+[SPLIT] held-out used ONCE, for scoring only; iterations chosen on val
+  new MAE cache: match1m_mae_vol1m, fingerprint 5bd8d15af8c89f0f... (vol_48_1m features, 1m MAE targets)
+
+  no cache at envelope_preds_match1m_mae_vol1m.npz -- fitting all 25 cells.
+  fitted 1m/MAE/Climatology/1             [1/25]  0s
+  fitted 1m/MAE/Climatology/2             [2/25]  0s
+  fitted 1m/MAE/Climatology/4             [3/25]  0s
+  fitted 1m/MAE/Climatology/10            [4/25]  0s
+  fitted 1m/MAE/Climatology/20            [5/25]  0s
+  fitted 1m/MAE/Linear QR/1               [6/25]  55s
+  fitted 1m/MAE/Linear QR/2               [7/25]  109s
+  fitted 1m/MAE/Linear QR/4               [8/25]  164s
+  fitted 1m/MAE/Linear QR/10              [9/25]  217s
+  fitted 1m/MAE/Linear QR/20              [10/25]  273s
+  fitted 1m/MAE/QTREE/1                   [11/25]  277s
+  fitted 1m/MAE/QTREE/2                   [12/25]  280s
+  fitted 1m/MAE/QTREE/4                   [13/25]  284s
+  fitted 1m/MAE/QTREE/10                  [14/25]  288s
+  fitted 1m/MAE/QTREE/20                  [15/25]  292s
+  fitted 1m/MAE/kNN/1                     [16/25]  292s
+  fitted 1m/MAE/kNN/2                     [17/25]  292s
+  fitted 1m/MAE/kNN/4                     [18/25]  293s
+  fitted 1m/MAE/kNN/10                    [19/25]  293s
+  fitted 1m/MAE/kNN/20                    [20/25]  293s
+  fitted 1m/MAE/CQR/1                     [21/25]  297s
+  fitted 1m/MAE/CQR/2                     [22/25]  301s
+  fitted 1m/MAE/CQR/4                     [23/25]  304s
+  fitted 1m/MAE/CQR/10                    [24/25]  308s
+  fitted 1m/MAE/CQR/20                    [25/25]  313s
+
+  model         quantile enforce    horizon enforce
+  Climatology             0.000%             0.000%
+  Linear QR               0.000%             0.002%
+  QTREE                   0.000%             0.754%
+  kNN                     0.000%             0.000%
+  CQR                     0.000%             0.961%
+  [CACHE] wrote envelope_preds_match1m_mae_vol1m.npz -- 25 fitted, 0 reloaded, post-enforcement, fingerprinted.
+  [326s]
+
+================================================================================================================
+CHECKS
+================================================================================================================
+  Climatology new vs old (uses no features, must be identical): 0.000e+00
+  CQR new vs old, max |diff| per horizon: 0.5h 7.483  1h 9.804  2h 9.804  5h 7.349  10h 8.963
+  CQR refitted on the new QTREE: every horizon differs from the cached CQR.
+  QTREE 10h reproduces mae_horizons: skill +2.77% (ref +2.77)  gap 2.86pp (ref 2.86)
+
+================================================================================================================
+PER MODEL -- old vol_48 vs new vol_48_1m, MAE, paired on identical rows
+================================================================================================================
+  skill: + = new helps. gap: - = better calibrated. conf = interval clears
+  zero in the new feature's favour; dir = favourable point estimate, interval
+  touches zero; WORSE = interval clears zero against it.
+
+  Climatology
+    h      skill old     new  new-old          [95% CI]         gap old    new  new-old          [95% CI]       
+    0.5h                                  (denominator)     1.89   1.89   +0.000   [+0.000,+0.000]       
+    1h                                    (denominator)     2.15   2.15   +0.000   [+0.000,+0.000]       
+    2h                                    (denominator)     2.33   2.33   +0.000   [+0.000,+0.000]       
+    5h                                    (denominator)     2.65   2.65   +0.000   [+0.000,+0.000]       
+    10h                                   (denominator)     2.79   2.79   +0.000   [+0.000,+0.000]       
+    -> gap confirmed 0/5, directional 0/5;  skill confirmed 0/5, directional 0/5;  worse 0.  VERDICT: n/a -- uses no features
+
+  Linear QR
+    h      skill old     new  new-old          [95% CI]         gap old    new  new-old          [95% CI]       
+    0.5h       +2.18   +2.39   +0.208   [+0.064,+0.340]   conf     2.43   2.16   -0.269   [-0.401,-0.081]   conf
+    1h         +1.90   +2.25   +0.354   [+0.145,+0.527]   conf     2.89   2.45   -0.437   [-0.580,-0.291]   conf
+    2h         +1.86   +2.32   +0.453   [+0.262,+0.637]   conf     3.14   2.76   -0.382   [-0.501,-0.273]   conf
+    5h         +2.24   +2.74   +0.498   [+0.272,+0.714]   conf     3.47   3.04   -0.423   [-0.582,-0.261]   conf
+    10h        +2.66   +3.21   +0.548   [+0.179,+0.889]   conf     3.59   3.03   -0.566   [-0.736,-0.384]   conf
+    -> gap confirmed 5/5, directional 0/5;  skill confirmed 5/5, directional 0/5;  worse 0.  VERDICT: HOLDS
+
+  QTREE
+    h      skill old     new  new-old          [95% CI]         gap old    new  new-old          [95% CI]       
+    0.5h       +1.79   +1.93   +0.139   [-0.011,+0.288]    dir     2.29   1.99   -0.300   [-0.381,-0.179]   conf
+    1h         +1.50   +1.70   +0.196   [-0.016,+0.413]    dir     2.63   2.23   -0.397   [-0.495,-0.287]   conf
+    2h         +1.53   +1.88   +0.350   [+0.148,+0.534]   conf     2.95   2.52   -0.431   [-0.520,-0.353]   conf
+    5h         +1.88   +2.31   +0.437   [+0.226,+0.645]   conf     3.22   2.84   -0.380   [-0.492,-0.259]   conf
+    10h        +2.30   +2.77   +0.472   [+0.195,+0.733]   conf     3.23   2.86   -0.372   [-0.510,-0.229]   conf
+    -> gap confirmed 5/5, directional 0/5;  skill confirmed 3/5, directional 2/5;  worse 0.  VERDICT: HOLDS
+
+  kNN
+    h      skill old     new  new-old          [95% CI]         gap old    new  new-old          [95% CI]       
+    0.5h       +1.54   +1.67   +0.128   [-0.056,+0.312]    dir     2.38   2.21   -0.168   [-0.254,-0.010]   conf
+    1h         +1.12   +1.48   +0.356   [+0.095,+0.587]   conf     2.78   2.42   -0.359   [-0.505,-0.223]   conf
+    2h         +1.21   +1.65   +0.440   [+0.194,+0.717]   conf     3.15   2.86   -0.291   [-0.435,-0.137]   conf
+    5h         +1.66   +2.04   +0.377   [+0.120,+0.612]   conf     3.47   3.08   -0.385   [-0.506,-0.246]   conf
+    10h        +2.07   +2.48   +0.414   [+0.137,+0.675]   conf     3.57   3.20   -0.363   [-0.475,-0.217]   conf
+    -> gap confirmed 5/5, directional 0/5;  skill confirmed 4/5, directional 1/5;  worse 0.  VERDICT: HOLDS
+
+  CQR
+    h      skill old     new  new-old          [95% CI]         gap old    new  new-old          [95% CI]       
+    0.5h       +1.85   +1.96   +0.105   [-0.052,+0.258]    dir     2.25   1.99   -0.256   [-0.362,-0.005]   conf
+    1h         +1.62   +1.78   +0.167   [-0.050,+0.387]    dir     2.34   2.02   -0.321   [-0.429,-0.197]   conf
+    2h         +1.68   +1.98   +0.301   [+0.101,+0.484]   conf     2.74   2.41   -0.333   [-0.444,-0.235]   conf
+    5h         +2.07   +2.46   +0.384   [+0.178,+0.593]   conf     2.81   2.55   -0.255   [-0.388,-0.111]   conf
+    10h        +2.51   +2.92   +0.412   [+0.146,+0.656]   conf     2.64   2.38   -0.258   [-0.380,-0.053]   conf
+    -> gap confirmed 5/5, directional 0/5;  skill confirmed 3/5, directional 2/5;  worse 0.  VERDICT: HOLDS
+
+================================================================================================================
+SUMMARY -- does the QTREE-measured win generalise?
+================================================================================================================
+  model        verdict                    gap conf  gap dir  skill conf  skill dir  worse
+  Climatology  n/a -- uses no features           0        0           0          0      0
+  Linear QR    HOLDS                             5        0           5          0      0
+  QTREE        HOLDS                             5        0           3          2      0
+  kNN          HOLDS                             5        0           4          1      0
+  CQR          HOLDS                             5        0           3          2      0
+
+  MFE SIDE UNCHANGED: every MFE prediction is still the published one in
+  the match1m cache, on vol_48. Nothing on the MFE side was refitted.
+  Levels are a later look at already-scored rows; the old-versus-new
+  differences are within-row paired contrasts and are the new measurement.
+  [338s]
+================================================================================================================

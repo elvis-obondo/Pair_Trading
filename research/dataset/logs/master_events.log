@@ -1,0 +1,47 @@
+[INFO] panel 24305 bars x 206 tickers 2025-05-25 15:00:00 -> 2026-10-13 23:00:00; 20706 pairs; shortest usable segment 356 bars
+  2000 pairs, 633,370 triggers  [27s]
+  4000 pairs, 1,317,482 triggers  [53s]
+  6000 pairs, 1,966,139 triggers  [78s]
+  8000 pairs, 2,577,812 triggers  [101s]
+  10000 pairs, 3,275,361 triggers  [129s]
+  12000 pairs, 3,892,421 triggers  [153s]
+  14000 pairs, 4,571,910 triggers  [180s]
+  16000 pairs, 5,185,864 triggers  [203s]
+  18000 pairs, 5,803,612 triggers  [228s]
+  20000 pairs, 6,464,609 triggers  [253s]
+[DONE] 6,697,756 triggers over 20,375 pairs; 2025-06-01 14:30:00 -> 2026-10-13 13:00:00  [344s]
+  per pair: median 384, max 500; long 51.0%
+[INVARIANT] max |y00 - z| 0.000e+00 (must be < 1e-4)
+[REPRODUCE] old rows 60,004; found in the full set 60,004; missing 0
+  max |z_at_entry - z| 0.000e+00
+  max |beta_old - beta| 0.000e+00
+  max |alpha_old - alpha| 0.000e+00
+  max |mu_old - mu| 0.000e+00
+  max |sigma_old - sigma| 0.000e+00
+  max |r2_old - r2| 0.000e+00
+  max |threshold_at_entry - threshold| 0.000e+00
+  max |beta_stab_old - beta_stab| 0.000e+00  (NaN-equal)
+  max |mins_since_trade_a_old - mins_since_trade_a| 0.000e+00  (NaN-equal)
+  max |mins_since_trade_b_old - mins_since_trade_b| 0.000e+00  (NaN-equal)
+  max |vol_48_old - vol_48| 4.490e-08  (NaN-equal)
+[SHARE] the 60,004 old rows are 0.90% of the full set
+[MONTH] triggers per month:
+entry_time
+2025-06    288710
+2025-07    241983
+2025-08    318125
+2025-09    342917
+2025-10    391134
+2025-11    442508
+2025-12    453423
+2026-01    484206
+2026-02    447510
+2026-03    500513
+2026-04    476993
+2026-05    452662
+2026-06    418341
+2026-07    420546
+2026-08    426640
+2026-09    416051
+2026-10    175494
+Freq: M

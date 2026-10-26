@@ -1,0 +1,6 @@
+  paths rebuilt; reach and depth reproduce reach_paths.npz exactly   [9s]
+  d=30: reverted by d 253, dropped (missing minutes) 2, still open 53,502, reach_d 12,170; chance mean 0.2930   [31s]
+  d=60: reverted by d 762, dropped (missing minutes) 2, still open 52,993, reach_d 11,661; chance mean 0.2830   [51s]
+  dominance (whyfeat, 12-bar) recomputed; undefined 153   [213s]
+  volume since t0 built; latest minute read = t0 close + 60 (must be <= max d = 60)   [231s]
+  [WROTE] datasets/delayed_paths.npz   [232s]

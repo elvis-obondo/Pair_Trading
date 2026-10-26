@@ -1,0 +1,73 @@
+/Users/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+================================================================================================================
+vol_slope_1m -- the same 8h/16h ratio of step sd, at 1-minute resolution
+================================================================================================================
+  population: the matched 53,757-episode set
+
+================================================================================================================
+BUILD -- vol_slope_1m, with the carried-over correctness checks
+================================================================================================================
+[1m  ] loaded 212 instruments, 985 MB of dense float64 minute grids (NaN where a minute did not trade)
+  [1m-feat] rows  5,000 of 53,757
+  [1m-feat] rows 10,000 of 53,757
+  [1m-feat] rows 15,000 of 53,757
+  [1m-feat] rows 20,000 of 53,757
+  [1m-feat] rows 25,000 of 53,757
+  [1m-feat] rows 30,000 of 53,757
+  [1m-feat] rows 35,000 of 53,757
+  [1m-feat] rows 40,000 of 53,757
+  [1m-feat] rows 45,000 of 53,757
+  [1m-feat] rows 50,000 of 53,757
+  [1m-feat] rows 53,757 of 53,757
+
+  1. max minute offset read, relative to entry_time: +29 (must be +29)
+  2. 1-minute path vs stored 30m window at the 49 marks: max error 4.708e-07, 0.062 of the float32 budget
+  3. OLD vol_slope recomputed from the new path's marks vs envfeat: max diff 2.338e-06
+  4. regression: vol_48_1m from the shared path code vs saved vol48_1m.npz: max diff 0.000e+00
+  5. valid one-minute steps: fast window (of 480) min 59, median 480;  slow window (of 960) min 0, median 960
+     episodes with both windows complete: 53,719 of 53,757;  below half in either: 14
+  6. cannot form the ratio (fewer than 2 valid steps in a window): 6 episodes, all in TRAIN (6 train, 0 val, 0 held out).
+     For these only, vol_slope_1m := the 30-minute vol_slope. Flagged per row in vol_slope_1m.npz.
+
+================================================================================================================
+THE PREMISE -- is the 1-minute vol_slope less noisy?
+================================================================================================================
+  Split-half: each window's steps split into interleaved odd and even
+  steps; the ratio is formed from each half; Spearman-Brown corrects the
+  half-length correlation to full length. A diagnostic, not a gate.
+    vol_slope    (16/32 steps)   half-r 0.2503  reliability 0.4004  noise share 60.0%
+    vol_slope_1m (480/960 steps) half-r 0.8246  reliability 0.9038  noise share 9.6%
+    (correlations on log-ratios: a ratio of sds is right-skewed and the
+     log makes the Pearson correlation measure what it should)
+    Spearman(vol_slope, vol_slope_1m) = 0.7184;  median old 1.3270, new 1.1742
+
+[1m  ] 1-minute >= 30-minute, every episode/direction/horizon: 0 violations
+[1m  ] deepest shortfall -9.374e-07; as a fraction of the float32 reference's precision (8.0 ulps): 0.062 (must be < 1)
+  baselines: MFE match1m 9e332d92a294 (vol_48), MAE match1m_mae_vol1m 5bd8d15af8c8 (vol_48_1m) -- both match
+
+       [SPLIT] train 22,645 (<2026-05-01)   val 13,048   HELD OUT 18,064 (>=2026-07-18)
+[SPLIT] held-out used ONCE, for scoring only; iterations chosen on val
+  refitted QTREE MFE, five horizons, vol_slope -> vol_slope_1m   [43s]
+  refitted QTREE MAE, five horizons, vol_slope -> vol_slope_1m   [65s]
+
+================================================================================================================
+OLD vol_slope vs NEW vol_slope_1m -- QTREE, 10h, paired on identical rows
+================================================================================================================
+  baseline per direction = the current registry (MAE on vol_48_1m, MFE on
+  vol_48). skill: + = new helps. gap: - = better calibrated.
+
+  cell      measure       old     new  new - old          [95% CI]               cell
+  MFE 10h   skill %     +4.56   +4.44     -0.121   [-0.495,+0.177]              HOLDS
+            gap pp       2.45    2.50     +0.041   [-0.118,+0.164]         
+  MAE 10h   skill %     +2.77   +2.59     -0.182   [-0.485,+0.108]              HOLDS
+            gap pp       2.86    2.97     +0.113   [-0.002,+0.244]         
+
+================================================================================================================
+DECISION -- rule fixed in slope_cells' docstring before the run
+================================================================================================================
+  MFE HOLDS, MAE HOLDS
+  VERDICT: MARGINAL. Neither direction shows a real improvement. Stop.
+  [WROTE] research/datasets/vol_slope_1m.npz -- the feature for 53,757 rows, with per-window valid-step counts and the fallback flag.
+  [65s]
+================================================================================================================

@@ -1,0 +1,85 @@
+[DISK] free 22.2 GB, preflight floor 16.0 GB
+[INFO] 650 day files 20250101 -> 20261013
+  10/650 days, 3s, 22.1 GB free
+  20/650 days, 7s, 22.0 GB free
+  30/650 days, 11s, 21.9 GB free
+  40/650 days, 14s, 21.7 GB free
+  50/650 days, 18s, 21.6 GB free
+  60/650 days, 22s, 21.5 GB free
+  70/650 days, 25s, 21.3 GB free
+  80/650 days, 29s, 21.2 GB free
+  90/650 days, 33s, 21.1 GB free
+  100/650 days, 37s, 20.9 GB free
+  110/650 days, 40s, 20.8 GB free
+  120/650 days, 44s, 20.7 GB free
+  130/650 days, 48s, 20.5 GB free
+  140/650 days, 52s, 20.4 GB free
+  150/650 days, 56s, 20.3 GB free
+  160/650 days, 60s, 20.2 GB free
+  170/650 days, 64s, 20.0 GB free
+  180/650 days, 68s, 19.9 GB free
+  190/650 days, 72s, 19.8 GB free
+  200/650 days, 75s, 19.6 GB free
+  210/650 days, 79s, 19.5 GB free
+  220/650 days, 83s, 19.4 GB free
+  230/650 days, 87s, 19.3 GB free
+  240/650 days, 91s, 19.1 GB free
+  250/650 days, 95s, 19.0 GB free
+  260/650 days, 99s, 18.9 GB free
+  270/650 days, 104s, 18.7 GB free
+  280/650 days, 108s, 18.6 GB free
+  290/650 days, 112s, 18.5 GB free
+  300/650 days, 117s, 18.3 GB free
+  310/650 days, 121s, 18.2 GB free
+  320/650 days, 126s, 18.0 GB free
+  330/650 days, 130s, 17.9 GB free
+  340/650 days, 135s, 17.7 GB free
+  350/650 days, 139s, 17.6 GB free
+  360/650 days, 144s, 17.4 GB free
+  370/650 days, 148s, 17.3 GB free
+  380/650 days, 152s, 17.2 GB free
+  390/650 days, 157s, 17.0 GB free
+  400/650 days, 161s, 16.9 GB free
+  410/650 days, 166s, 16.7 GB free
+  420/650 days, 170s, 16.6 GB free
+  430/650 days, 175s, 16.5 GB free
+  440/650 days, 180s, 16.3 GB free
+  450/650 days, 184s, 16.2 GB free
+  460/650 days, 189s, 16.1 GB free
+  470/650 days, 193s, 15.9 GB free
+  480/650 days, 197s, 15.8 GB free
+  490/650 days, 202s, 15.7 GB free
+  500/650 days, 206s, 15.5 GB free
+  510/650 days, 211s, 15.4 GB free
+  520/650 days, 215s, 15.3 GB free
+  530/650 days, 219s, 15.2 GB free
+  540/650 days, 224s, 15.0 GB free
+  550/650 days, 228s, 14.9 GB free
+  560/650 days, 233s, 14.8 GB free
+  570/650 days, 237s, 14.7 GB free
+  580/650 days, 242s, 14.5 GB free
+  590/650 days, 246s, 14.4 GB free
+  600/650 days, 250s, 14.3 GB free
+  610/650 days, 254s, 14.2 GB free
+  620/650 days, 259s, 14.0 GB free
+  630/650 days, 262s, 14.0 GB free
+  640/650 days, 264s, 13.9 GB free
+  650/650 days, 266s, 13.9 GB free
+[B1] off-minute rows dropped: 39,341 rows on 192 distinct stamps
+[B1] case-collision check: 234 coin names, collisions []
+[DISK] PARTS 8.35 GB, free 13.9 GB
+[B1] excluded names (':' or '@'): 0 []
+[B1] archive stamps 907,268 of 936,403 minutes 2025-01-01 00:00:00+00:00 -> 2026-10-13 06:42:00+00:00; archive-wide missing 29,135
+
+[B1] coins with no valid mid_px at all (no files written): ['BLZ', 'CANTO', 'FRIEND', 'LOOM', 'MATIC', 'NFTI', 'OX', 'PANDORA', 'RNDR', 'SHIA', 'STRAX', 'UNIBOT']
+[B1] coins whose life was trimmed to the first/last valid mid: 72
+[DISK] futures 1.79 GB, ctx 6.94 GB, free 13.5 GB
+[B2] 30m close == 1m close at date+29 asserted on all 5,543,390 bars of 234 coins
+[B1] coins 234  delisted 0  listed today in archive's last day 234
+[B2] filled minutes 33,997  nan minutes 5,144,235  listed minutes 166,298,904
+[B2] long NaN runs 6,354: archive-wide 6,354 (5,144,235 min), coin-specific 0 (0 min)
+[B2] bad_share quantiles: p10 0.0004  p50 0.0311  p90 0.0522  p100 0.4722
+[B2] (receipt only) coins over 1% EXCLUDING archive-wide minutes: 0 of 222 (0.0%)
+[B2] GATE: coins with > 1% of listed minutes filled or NaN: 178 of 222 (80.2%), threshold 5%  [denominator excludes 12 no_valid coin(s); 234 in coins.csv]
+[B2] STOP: the missing-minutes gate fails. Report; do not proceed to B3/B4.
+exit 2

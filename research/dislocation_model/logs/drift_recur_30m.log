@@ -1,0 +1,209 @@
+======================================================================================================================
+DRIFT RECURRENCE -- climatology only, 3 historical cuts, target source 30m
+======================================================================================================================
+  60,000 episodes, 746 episode days, 2024-09-18 to 2026-10-04
+  POPULATION: ALL only. Trending is a refinement and is not needed to
+  answer a recurrence question.
+  MODELS: Climatology only -- one unconditional empirical quantile vector
+  per (cut, direction, horizon), fitted on EVERYTHING before the cut.
+  Nothing from the halves analysis is refitted and no new model type exists.
+
+  NOTE ON THE FIT RULE. The halves analysis fitted climatology on the TRAIN
+  block only -- the first 80% of fit days -- so that it had exactly the data
+  the conditional models had. There are no conditional models here, so there
+  is nothing to match and the brief's rule applies: everything before the
+  cut. That gives this track MORE fit data per cut than that baseline had,
+  which if anything biases it AGAINST finding drift.
+
+  30-MINUTE CLOSES. The true envelope is strictly worse; the worst point
+  inside a bar is never observed. The bias is the same at every cut, so a
+  comparison ACROSS cuts is unaffected -- which is all this script does.
+
+======================================================================================================================
+CUT POINTS -- derived from the constraints, not chosen
+======================================================================================================================
+  earliest admissible cut  2025-05-27   (episode day #251: exactly 250 precede it)
+  latest   admissible cut  2026-04-29   (80 episode days from here to 2026-07-18)
+  window 337 days, spacing 150 days -> 3 cuts.
+  4 cuts at this spacing would need 3 gaps of 150 = 450 days of window against 337 available,
+  landing the last at 2026-08-20, 113 days past the latest admissible cut.
+  4 cuts DO fit at 112-day spacing; 113 misses by 2 day(s). Neither is 'roughly 150 days apart'.
+
+  cut          train days train rows               near half                far half   near/far rows   q05 SE pp
+  2025-05-27          250      5,391  2025-05-27..2025-07-05  2025-07-06..2025-08-14     1,138/1,569   0.65/0.55
+  2025-10-24          400     11,238  2025-10-24..2025-12-02  2025-12-03..2026-01-11     2,906/3,260   0.40/0.38
+  2026-03-23          550     24,382  2026-03-23..2026-05-01  2026-05-02..2026-06-10     4,610/6,342   0.32/0.27
+  q05 SE is the binomial floor on the noise in a single coverage number.
+  Day clustering widens the real interval. The effect being chased is
+  1.99pp, so read the earliest cut's column against that.
+
+  PROTECTED BLOCK AUDIT: rows scored here with day >= 2026-07-18: 0  (must be 0)
+  CUT OVERLAP AUDIT: rows shared between any two cuts' test windows: 0  (must be 0 at 150-day spacing with 80-day windows)
+
+  TRAIN/TEST OUTCOME OVERLAP, measured. An episode entered in the last hours
+  before a cut has a 10.5-hour outcome window that reaches past it, so its
+  target is partly shaped by near-half conditions. That contaminates the
+  climatology estimate TOWARD the near half, which would shrink the near gap
+  and inflate far-minus-near -- the exact direction of the hypothesis. So it
+  is counted rather than reasoned away. Being unconditional does not make a
+  sample estimate immune; it is the SIZE below that makes it immaterial.
+    2025-05-27       5 of   5,391 train rows cross the cut    0.093%
+    2025-10-24      18 of  11,238 train rows cross the cut    0.160%
+    2026-03-23      29 of  24,382 train rows cross the cut    0.119%
+  No embargo is applied. At this magnitude it cannot move a quantile. For a
+  CONDITIONAL model the same shortcut would not be safe -- the licence here
+  is the count, not the model class.
+
+  The HALVES ANALYSIS numbers, QUOTED from NUMBERS.md and not recomputed:
+    cut 2026-07-18   near half 1.06pp   far half 3.05pp   effect 1.99pp
+    MAE over-covers, MFE under-covers, both halves, magnitude grows
+    by horizon: near half 0.86 -> 1.29pp, far half 1.35 -> 4.33pp (0.5h to 10h)
+
+======================================================================================================================
+THE GAP TABLE -- mean |actual - nominal| over the 5 quantile points, in pp
+======================================================================================================================
+  Day-clustered 95% intervals throughout: resample DAYS with replacement,
+  not rows. Episodes share days and move together on market-wide news.
+  sign: OVER = envelope too wide (actual coverage above nominal), UNDER =
+  too narrow. The bracketed count is how many of the 5 levels miss that
+  way, so a clean mean cannot hide a mixed pattern.
+  far-near carries its own interval because the verdict rests on the
+  ORDERING, not on either gap alone, and its WIDTH is what the power screen
+  reads to decide whether a cut may vote.
+
+  cut         dir      h near gap          [95% CI]  far gap          [95% CI]  far-near          [95% CI]    near sign     far sign
+  ----------------------------------------------------------------------------------------------------------------------------------
+  2025-05-27  MAE   0.5h     1.72       [0.91,3.09]     1.43       [0.68,3.17]     -0.28     [-1.86,+1.38]   UNDER[2/5]    OVER[5/5]
+  2025-05-27  MAE     1h     1.61       [0.87,3.24]     1.07       [0.58,2.58]     -0.54     [-2.30,+1.05]   UNDER[2/5]    OVER[2/5]
+  2025-05-27  MAE     2h     1.75       [0.88,3.33]     0.89       [0.52,2.59]     -0.86     [-2.21,+0.80]   UNDER[2/5]    OVER[3/5]
+  2025-05-27  MAE     5h     1.09       [0.60,2.55]     1.17       [0.47,3.01]     +0.08     [-1.37,+1.76]   UNDER[3/5]   UNDER[2/5]
+  2025-05-27  MAE    10h     0.88       [0.61,2.66]     0.76       [0.51,2.84]     -0.12     [-1.54,+1.83]   UNDER[3/5]   UNDER[1/5]
+  2025-05-27  MFE   0.5h     1.72       [0.91,3.09]     1.43       [0.68,3.17]     -0.28     [-1.86,+1.38]    OVER[3/5]   UNDER[0/5]
+  2025-05-27  MFE     1h     2.18       [1.12,3.46]     1.46       [0.82,3.32]     -0.72     [-2.31,+1.11]    OVER[3/5]   UNDER[0/5]
+  2025-05-27  MFE     2h     2.25       [1.58,3.58]     1.06       [0.65,2.89]     -1.18     [-2.47,+0.77]    OVER[3/5]   UNDER[0/5]
+  2025-05-27  MFE     5h     1.25       [0.87,3.00]     0.76       [0.38,2.77]     -0.49     [-1.95,+1.24]    OVER[3/5]   UNDER[0/5]
+  2025-05-27  MFE    10h     1.04       [0.72,2.75]     1.26       [0.59,3.11]     +0.22     [-1.40,+1.73]    OVER[2/5]   UNDER[2/5]
+  ----------------------------------------------------------------------------------------------------------------------------------
+  2025-10-24  MAE   0.5h     2.11       [0.90,4.00]     1.19       [0.79,2.45]     -0.92     [-2.53,+0.79]   UNDER[1/5]    OVER[3/5]
+  2025-10-24  MAE     1h     1.58       [0.83,3.15]     0.67       [0.53,1.89]     -0.90     [-2.20,+0.49]   UNDER[1/5]    OVER[2/5]
+  2025-10-24  MAE     2h     1.30       [0.64,2.79]     0.83       [0.45,1.92]     -0.46     [-1.95,+0.81]   UNDER[1/5]   UNDER[2/5]
+  2025-10-24  MAE     5h     1.23       [0.55,2.78]     0.33       [0.27,2.01]     -0.90     [-2.09,+0.73]   UNDER[1/5]    OVER[5/5]
+  2025-10-24  MAE    10h     0.86       [0.57,2.48]     1.36       [0.45,3.03]     +0.49     [-1.31,+1.99]    OVER[2/5]    OVER[5/5]
+  2025-10-24  MFE   0.5h     2.11       [0.90,4.00]     1.19       [0.79,2.45]     -0.92     [-2.53,+0.79]    OVER[4/5]   UNDER[2/5]
+  2025-10-24  MFE     1h     1.79       [0.75,4.01]     0.99       [0.50,2.26]     -0.80     [-2.77,+0.94]    OVER[4/5]   UNDER[2/5]
+  2025-10-24  MFE     2h     1.33       [0.85,3.26]     1.25       [0.56,2.65]     -0.08     [-2.04,+1.57]    OVER[3/5]   UNDER[1/5]
+  2025-10-24  MFE     5h     1.37       [0.75,2.91]     2.47       [0.66,4.71]     +1.11     [-1.20,+3.28]    OVER[3/5]   UNDER[0/5]
+  2025-10-24  MFE    10h     0.99       [0.65,2.91]     2.18       [0.56,4.62]     +1.19     [-1.42,+3.42]   UNDER[2/5]   UNDER[0/5]
+  ----------------------------------------------------------------------------------------------------------------------------------
+  2026-03-23  MAE   0.5h     1.30       [0.79,2.14]     1.54       [1.11,2.33]     +0.24     [-0.67,+1.19]   UNDER[2/5]   UNDER[1/5]
+  2026-03-23  MAE     1h     1.05       [0.47,2.07]     1.53       [1.06,2.21]     +0.48     [-0.70,+1.40]   UNDER[1/5]   UNDER[2/5]
+  2026-03-23  MAE     2h     0.91       [0.41,2.40]     1.42       [0.93,2.06]     +0.52     [-1.08,+1.46]   UNDER[1/5]   UNDER[2/5]
+  2026-03-23  MAE     5h     0.88       [0.32,2.78]     0.98       [0.62,1.76]     +0.10     [-1.78,+1.09]   UNDER[0/5]    OVER[3/5]
+  2026-03-23  MAE    10h     0.79       [0.35,2.70]     0.59       [0.41,2.09]     -0.19     [-1.80,+1.19]   UNDER[1/5]   UNDER[3/5]
+  2026-03-23  MFE   0.5h     1.30       [0.79,2.14]     1.54       [1.11,2.33]     +0.24     [-0.67,+1.19]    OVER[3/5]    OVER[4/5]
+  2026-03-23  MFE     1h     1.34       [0.53,2.47]     0.97       [0.56,1.94]     -0.37     [-1.71,+0.84]    OVER[4/5]    OVER[4/5]
+  2026-03-23  MFE     2h     1.16       [0.53,2.57]     0.80       [0.63,1.66]     -0.35     [-1.64,+0.83]    OVER[4/5]    OVER[2/5]
+  2026-03-23  MFE     5h     1.06       [0.42,2.75]     0.94       [0.41,2.15]     -0.12     [-1.94,+1.39]    OVER[4/5]   UNDER[1/5]
+  2026-03-23  MFE    10h     1.13       [0.46,2.90]     0.89       [0.37,2.34]     -0.24     [-2.18,+1.41]    OVER[3/5]   UNDER[1/5]
+  ----------------------------------------------------------------------------------------------------------------------------------
+  [4s]
+
+======================================================================================================================
+PRECISION -- which cuts are entitled to vote
+======================================================================================================================
+  A cut is DECISIVE if the median width of its ten far-minus-near intervals
+  is at or under 1.99pp, the effect size from the halves
+  analysis. Wider than the effect means the cut cannot resolve it either way.
+
+  cut            near/far rows   median CI width          status
+  2025-05-27       1,138/1,569            3.24pp    UNDERPOWERED
+  2025-10-24       2,906/3,260            3.32pp    UNDERPOWERED
+  2026-03-23       4,610/6,342            2.54pp    UNDERPOWERED
+  0 of 3 cuts decisive.
+
+======================================================================================================================
+VERDICT ON RECURRENCE
+======================================================================================================================
+  The rule, stated in the module docstring BEFORE any of the above was run:
+
+  A CELL is (cut, direction, horizon): 3 x 2 x 5 = 30 cells.
+
+  ORDERS      far-half gap > near-half gap (point estimates)
+  ORDERS*     the far-minus-near interval excludes zero on the high side
+  SIGN SAME   near and far signed bias share a sign
+  AS BEFORE   MAE over-covers and MFE under-covers, as at 2026-07-18
+  GROWS       the gap at 10h exceeds the gap at 0.5h, per (cut, direction, half)
+
+  A cut is DECISIVE if the median width of its ten far-minus-near intervals is
+  at or under the effect being chased (1.99pp, from the halves analysis).
+  Wider than that and the cut cannot resolve the effect either way, so it is
+  UNDERPOWERED: printed and pooled, but it does not vote on the majority.
+
+  RECURS                requires ALL FOUR of:
+                          ORDERS    in >= 70% of all 30 cells
+                          ORDERS    in >= 70% of DECISIVE cells
+                          SIGN SAME in >= 70% of all 30 cells
+                          ORDERS    in >= 7 of 10 cells at a majority of
+                                    DECISIVE cuts, and >= 2 decisive cuts exist
+  CALENDAR-SPECIFIC     if ORDERS <= 50% of decisive cells (no better than a
+                          coin flip) OR the MAE/MFE sign pattern flips between
+                          cuts
+  UNDERPOWERED          if fewer than 2 cuts are decisive -- the design cannot
+                          deliver a majority and no verdict is claimed
+  MIXED                 anything else, including pooled and decisive-only
+                          tallies landing on opposite sides of 70%. Report as
+                          mixed and prefer the simpler fix: periodic refitting
+                          on a fixed schedule, no adaptive machinery.
+
+  ALL CELLS
+  ORDERS  far gap > near gap            10 of 30     33.3%
+  ORDERS* interval excludes zero         0 of 30      0.0%
+  SIGN SAME  near and far agree         12 of 30     40.0%
+  AS BEFORE  MAE over / MFE under        2 of 30      6.7%
+  GROWS  10h gap > 0.5h gap              2 of 12     16.7%
+
+  DECISIVE CELLS ONLY
+  none -- every cut's interval is wider than the effect.
+
+  Against coin-flipping, 10 of 30 or better has probability 0.9786. THIS IS NOT A P-VALUE: the 30 cells
+  are not independent -- MAE and MFE share episodes and the horizons are
+  nested running maxima. It says only how strict the 70% threshold is.
+
+  GROWTH WITH HORIZON -- the other half of the shape. At 2026-07-18 the gap
+  barely moved on the near half and more than tripled on the far one:
+  near half 0.86 -> 1.29pp, far half 1.35 -> 4.33pp (0.5h to 10h). Quoted, not recomputed.
+
+  cut         dir    half     0.5h       1h       2h       5h      10h   10h/0.5h   grows
+  2025-05-27  MAE    near     1.72     1.61     1.75     1.09     0.88      0.51x      NO
+  2025-05-27  MAE     far     1.43     1.07     0.89     1.17     0.76      0.53x      NO
+  2025-05-27  MFE    near     1.72     2.18     2.25     1.25     1.04      0.60x      NO
+  2025-05-27  MFE     far     1.43     1.46     1.06     0.76     1.26      0.88x      NO
+  2025-10-24  MAE    near     2.11     1.58     1.30     1.23     0.86      0.41x      NO
+  2025-10-24  MAE     far     1.19     0.67     0.83     0.33     1.36      1.14x     yes
+  2025-10-24  MFE    near     2.11     1.79     1.33     1.37     0.99      0.47x      NO
+  2025-10-24  MFE     far     1.19     0.99     1.25     2.47     2.18      1.84x     yes
+  2026-03-23  MAE    near     1.30     1.05     0.91     0.88     0.79      0.61x      NO
+  2026-03-23  MAE     far     1.54     1.53     1.42     0.98     0.59      0.38x      NO
+  2026-03-23  MFE    near     1.30     1.34     1.16     1.06     1.13      0.87x      NO
+  2026-03-23  MFE     far     1.54     0.97     0.80     0.94     0.89      0.58x      NO
+
+  cut                 status   ORDERS   SIGN SAME   AS BEFORE   votes yes
+  2025-05-27    UNDERPOWERED     2/10        2/10        0/10    abstains
+  2025-10-24    UNDERPOWERED     3/10        3/10        2/10    abstains
+  2026-03-23    UNDERPOWERED     5/10        7/10        0/10    abstains
+
+  MAE modal far-half sign across the 3 cuts: over, under   <- FLIPS between cuts
+  MFE modal far-half sign across the 3 cuts: over, under   <- FLIPS between cuts
+
+  VERDICT: UNDERPOWERED -- NO VERDICT
+  Fewer than two cuts can resolve the effect, so the design cannot
+  deliver a majority and no claim about recurrence is made. Either
+  accept cuts later in history only, or accept a smaller effect size
+  as the thing being tested. Do not read the pooled tally as an answer.
+
+  NO PASS/FAIL AND NO SKILL NUMBER. Climatology has nothing to be scored
+  against but itself, and the screen in the first envelope run is a binary
+  that cannot separate a 1pp gap from a 5pp one. This table is the output.
+
+  [4s]  next: paste the gap table into NUMBERS.md, rows tagged by cut date
+======================================================================================================================

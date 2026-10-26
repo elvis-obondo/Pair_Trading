@@ -1,0 +1,87 @@
+[DATA] held out 18,064 dislocations x 20 steps = 361,280 real 30-minute moves
+
+[FIT] Student-t on RAW increments      nu 2.689  scale 0.4889
+[FIT] Gaussian on the same            sd 0.8799
+      log-lik  t -330,218   gaussian -387,281   t better by 57,062
+
+[FIT] Student-t on FILTER ONE-STEP INNOVATIONS   nu 2.523  scale 0.3665
+      nu moves 2.689 -> 2.523 once the reverting pull and drift are removed
+
+========================================================================================
+TAIL VALIDITY -- is a 50-sigma 30-minute move market behaviour or a bad print?
+========================================================================================
+      pair entry_date  step  move_sigma    sigma  move_logpx
+CORE/TURBO 2026-07-23     5   58.061409 0.003624    0.210403
+  EGLD/OFC 2026-09-19     0   27.376340 0.016393    0.448772
+  DATA/WAL 2026-08-15     0   23.414912 0.014883    0.348485
+  ARKM/CAP 2026-09-19    14   22.894634 0.021730    0.497490
+  ALGO/ONE 2026-07-21     0   21.667492 0.009239    0.200193
+   KMNO/RE 2026-08-06    14   21.056992 0.006816    0.143534
+  AAVE/CAP 2026-09-19    12   21.035845 0.036009    0.757486
+  KAT/ORDI 2026-09-09     2   20.059902 0.009749    0.195568
+  EDEN/KAT 2026-09-09     1   20.009515 0.015748    0.315108
+ AIXBT/MMT 2026-09-15     3   19.961253 0.006291    0.125576
+ LIGHT/ONE 2026-07-21     0   19.263492 0.021532    0.414773
+     DOT/O 2026-07-20    12   18.393270 0.006374    0.117241
+
+  40 largest moves span 38 pairs, 19 dates
+  most frequent legs: {'CAP': np.int64(7), 'KAT': np.int64(6), 'ONE': np.int64(4), 'WLFI': np.int64(3), 'O': np.int64(3), 'CORE': np.int64(2)}
+  implied LOG-PRICE move (sigma units x sigma): median 0.205, max 1.704
+  -> a log move of 0.69 is a 2x price change in 30 minutes
+
+  excluding every dislocation touching ['CAP', 'KAT', 'O', 'ONE', 'WLFI'] (1,578 of 18,064 dislocations):
+                       all  ex-suspect
+    median            0.38        0.37
+    1 in 10           1.23        1.21
+    1 in 100          3.09        2.96
+    1 in 1,000        6.93        6.17
+    largest          58.06       58.06
+    nu refitted without them: 2.758  (was 2.689)
+
+========================================================================================
+SCORECARD
+========================================================================================
+
+--- BASELINE  Gaussian, seven pinned at E0 ---
+  move size       model     real   ratio
+  median           0.73     0.38    1.95x
+  1 in 10          1.78     1.23    1.46x
+  1 in 100         2.79     3.09    0.90x
+  1 in 1,000       3.57     6.93    0.52x
+  largest          7.08    58.06    0.12x
+  outside all 200 draws   2.79%   (target <2%)
+  band 0.5h 1.16x cover 90.4%   band 10h 0.98x cover 92.8%
+  CRPS 1.943 vs climatology 1.921 = 101.2%
+
+--- nu = 2.689 ---
+  move size       model     real   ratio
+  median           0.52     0.38    1.39x
+  1 in 10          1.48     1.23    1.21x
+  1 in 100         3.40     3.09    1.10x
+  1 in 1,000       7.63     6.93    1.10x
+  largest        279.40    58.06    4.81x
+  outside all 200 draws   2.71%   (target <2%)
+  band 0.5h 1.21x cover 89.0%   band 10h 1.00x cover 92.4%
+  CRPS 1.916 vs climatology 1.921 = 99.7%
+
+--- nu = 2.523 ---
+  move size       model     real   ratio
+  median           0.48     0.38    1.28x
+  1 in 10          1.39     1.23    1.14x
+  1 in 100         3.35     3.09    1.08x
+  1 in 1,000       7.98     6.93    1.15x
+  largest        836.05    58.06   14.40x
+  outside all 200 draws   2.78%   (target <2%)
+  band 0.5h 1.24x cover 88.0%   band 10h 1.01x cover 91.8%
+  CRPS 1.907 vs climatology 1.921 = 99.3%
+
+--- nu = 3.000 ---
+  move size       model     real   ratio
+  median           0.57     0.38    1.52x
+  1 in 10          1.59     1.23    1.29x
+  1 in 100         3.40     3.09    1.10x
+  1 in 1,000       6.94     6.93    1.00x
+  largest        276.76    58.06    4.77x
+  outside all 200 draws   2.62%   (target <2%)
+  band 0.5h 1.18x cover 89.9%   band 10h 0.98x cover 92.5%
+  CRPS 1.928 vs climatology 1.921 = 100.3%

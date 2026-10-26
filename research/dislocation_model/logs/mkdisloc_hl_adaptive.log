@@ -1,0 +1,62 @@
+[INFO] panel 24305 bars x 206 tickers, 2025-05-25 15:00:00 -> 2026-10-13 23:00:00 (506 days)
+[INFO] 20706 pairs; entry window 96 bars, threshold look-back 96, fit window 336, min_bars_required 191, shortest usable segment 356
+[INFO] in-life NaN 30m bars per coin: median 5, max 28
+[INFO] coins ending before the panel end (delisted): 31
+  250 pairs scanned, 4983 dislocations, 12s
+  500 pairs scanned, 9978 dislocations, 23s
+  750 pairs scanned, 14963 dislocations, 35s
+  1000 pairs scanned, 19963 dislocations, 46s
+  1250 pairs scanned, 24961 dislocations, 58s
+  1500 pairs scanned, 29959 dislocations, 70s
+  1750 pairs scanned, 34954 dislocations, 82s
+  2000 pairs scanned, 39954 dislocations, 93s
+  2250 pairs scanned, 44941 dislocations, 105s
+  2500 pairs scanned, 49927 dislocations, 117s
+  2750 pairs scanned, 54924 dislocations, 129s
+  3000 pairs scanned, 59924 dislocations, 141s
+
+[INVARIANT] max |W[:,-1] - z_entry| 0.000e+00   max |Y[:,0] - z_entry| 0.000e+00
+
+[DONE] 60,004 dislocations, 3,004 distinct pairs, 473 days, 3004 pairs scanned (49 too short)
+       2025-06-01 -> 2026-10-13   148s
+       per pair: median 20, true triggers per pair median 386
+       long 50.8%  short 49.2%
+       70/30 day split at 2026-05-25: fit 41,941  held-out 18,063
+       windows (60004, 336) 81MB   outcomes (60004, 21)
+
+[SEGMENTS] pairs split by archive gaps 2438; segments used 12103, too short 407; shortest usable segment 356 bars, warm-up 335
+[SEGMENTS] warm-up bars lost per split pair: median 1340, mean 1292, max 2607; pairs with an overlap >= 356 but no usable segment (fully lost): 0
+[SEAMS] 30m bars where >= half the live coins have a NaN close: 5
+  2025-06-08 09:30:00  NaN in 100% of live coins; dislocations 14d before 2,330, 14d after 615
+  2025-06-08 10:00:00  NaN in 99% of live coins; dislocations 14d before 2,330, 14d after 616
+  2025-07-19 09:30:00  NaN in 100% of live coins; dislocations 14d before 1,964, 14d after 76
+  2025-07-27 11:30:00  NaN in 100% of live coins; dislocations 14d before 751, 14d after 862
+  2025-09-27 09:00:00  NaN in 99% of live coins; dislocations 14d before 1,412, 14d after 1,164
+[TRIGGER] threshold_at_entry: p5 1.260  p25 1.744  p50 2.118  p75 2.539  p95 3.259
+[TRIGGER] |z_at_entry|:       p5 1.481  p25 2.021  p50 2.468  p75 3.011  p95 4.097
+[TRIGGER] |z| < 2: 23.9%   2-3: 50.7%   >= 3: 25.4%
+[TRIGGER] true triggers per pair per month (pair-months with >= 1, all scanned pairs): median 25.0, mean 24.53, p95 35.0
+[STALE] either leg mins_since_trade >= 30 at the trigger bar: 0.79% (474)
+[BETA_STAB] p5 0.198  p25 0.393  p50 0.845  p75 1.897  p95 9.726  (finite rows only; NaN for 3,375 = 5.6% -- triggers whose 336-bar fit window starts before the segment's first finite beta, bar MINB-1 = 190)
+[COINS] used 204; delisted coins included 31
+[MONTH] dislocations per month:
+day
+2025-06    4148
+2025-07    2821
+2025-08    2982
+2025-09    2937
+2025-10    3378
+2025-11    3526
+2025-12    3680
+2026-01    3835
+2026-02    3645
+2026-03    4078
+2026-04    3893
+2026-05    3766
+2026-06    3266
+2026-07    3556
+2026-08    3717
+2026-09    3935
+2026-10    2841
+Freq: M
+MKDISLOC exit 0

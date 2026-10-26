@@ -1,0 +1,16 @@
+================================================================================================================
+ENVELOPE DESCRIPTION -- target source 1m
+================================================================================================================
+  60,000 episodes, 5 features: vol_48, vratio, vol_slope, sandwich, off_mark
+  target: running MAE and MFE, sign-folded, UNCLAMPED (see docstring)
+  quantiles (0.05, 0.25, 0.5, 0.75, 0.95)   horizons ['0.5h', '1h', '2h', '5h', '10h']
+
+[1m  ] 212 of 212 instruments have 1-minute history
+[1m  ] episodes start 2024-09-18 00:00:00;  1 instruments reach that far back
+
+[1m  ] ABORT -- the 1-minute history does not span the episode set.
+        1 of 212 instruments reach back to 2024-09-18 00:00:00.
+        earliest 1-minute start across instruments: 2024-04-21 00:00:00
+        Finish the backfill (scripts/download_1m.sh) and rerun. The
+        30-minute run is unaffected and its log stands.
+        Nothing is forward-filled or interpolated to paper over this.

@@ -15,8 +15,14 @@ user_data/config.json
 .env
 
 # Freqtrade runtime data (regenerable / large / local-only)
-# user_data/data/ is tracked: it's the OKX 30m feather price data the
-# visualizer app and research pipeline read from (2.8MB, small enough to bundle).
+#
+# user_data/data/ is NOT tracked (untracked 2026-09-30). It was, on the grounds
+# that it was 2.8MB and small enough to bundle; it had grown to 485MB across 855
+# feather files, and every `git status` was unreadable because the whole price
+# directory churned on each refresh. Nothing needs it from git: .dockerignore
+# already excludes it from the deploy image, and scripts/update_data.sh and
+# download_1m.sh re-download it from OKX. The files stay on disk.
+user_data/data/
 user_data/logs/
 user_data/backtest_results/
 user_data/hyperopt_results/
@@ -26,6 +32,80 @@ user_data/plot/
 
 # Generated research artifacts
 research/*.png
+research/*.parquet
+research/discovery_cache/
+research/batch_backtest_results.csv
+
+# Normalized data store: regenerated from source adapters on every
+# get_price_levels() call, not source data itself.
+user_data/normalized/
+
+# Scheduled update_data.sh output (see scripts/update_data.sh, launchd job
+# com.pairtrading.update-data). ANCHORED to the repo root 2026-10-09: as a bare
+# `logs/` it also swallowed research/dislocation_model/logs/, where saved runs of
+# the feature build and its validator are a tracked deliverable. user_data/logs/
+# is ignored by its own rule above.
+/logs/
 
 # OS
 .DS_Store
+research/entry_gates_parts/
+research/entry_gates_build.log
+backups/
+research/exit_sweep_paths.parquet_parts/
+research/candidate_theta_parts/
+
+# Live paper system runtime state. The book is data, not source -- and on the VM
+# it lives in trading_data/, bind-mounted, so a rebuild cannot lose it.
+research/scanner_state.json
+research/scanner_candidates.json
+research/scanner_trades.csv
+research/stop_monitor.lock
+research/scan_history/
+research/monitor_ticks/
+research/from_vm/
+trading_data/
+
+# Sentinel: enables the laptop -> VM candidate push. Per-machine, not source.
+.push_to_vm
+
+# Dislocation study datasets: 55MB, rebuild in ~30s from
+# research/dislocation_study.py. Committing them would be committing a cache.
+research/dislocations.parquet
+research/dislocations_1m.parquet
+research/screen_*.csv
+
+# Closed-question sweep outputs (untracked 2026-09-30). 129 CSVs and logs from
+# exit_study and rank_experiment: entry grids, noise seeds, stop/cooldown walks,
+# the ranking arms. Every conclusion they support is written down in
+# docs/SESSION_HANDOFF.md section 3, and re-running the sweep regenerates them.
+# The two files NOT ignored here are the stored-path dataset still in use.
+research/exit_study/**/*.csv
+research/exit_study/**/*.log
+research/rank_experiment/
+
+# The stored-path dataset (untracked 2026-10-02). It was tracked at 26MB; the
+# current-geometry rebuild is 64MB and would put a fresh blob in history on
+# every regeneration -- the exact cost this file's other rules just removed.
+# Tracking it also bought less than it looked like: user_data/data/ is not
+# tracked either, so a fresh clone could never regenerate it anyway.
+# Rebuild with:
+#   research/extract_paths.py --trades <a backtest ledger, actual fills>
+research/exit_study/paths.npz
+research/exit_study/paths_meta.parquet
+
+# Dislocation modelling datasets (promoted 2026-10-06 from a session temp dir
+# that was about to be garbage-collected). 93MB. The RECIPE is what is tracked:
+# research/dislocation_model/REBUILD.md gives the exact command for each file,
+# and validate_dislocation_harness.py checks a rebuild against a published cell.
+# Committing these would be committing a cache -- and the panel they come from
+# (user_data/data/) is not tracked either, so a fresh clone could not verify a
+# blob anyway.
+research/datasets/
+
+# OKX data retired 2026-10-14 (HL-BUILD1). 2.3GB of bars plus OKX-built
+# research datasets, kept so pre-2026-10-14 NUMBERS.md results stay re-checkable.
+attic/okx_data/
+attic/okx_datasets/
+attic/vm_final/
+research/.gcp_pull/

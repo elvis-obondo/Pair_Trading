@@ -1,0 +1,17 @@
+  0/22366 pairs, 0s
+  4000/22366 pairs, 25s
+  8000/22366 pairs, 47s
+  12000/22366 pairs, 71s
+  16000/22366 pairs, 93s
+  20000/22366 pairs, 114s
+[WAVE] 22,366 of 22,366 pairs (127s); median live pairs per bar 10,296
+[WAVE] dislocated share at entry bars: median 0.0229 p5 0.0068 p95 0.1253
+[WAVE] corr(sampled wave, full wave) = 0.9697
+
+  EXTERNAL           held-out R2   24.86%
+  WINDOW (control)   held-out R2   34.40%
+  EXT + WINDOW       held-out R2   35.76%
+
+  EXT+WINDOW minus WINDOW = +1.36pp  95% day-clustered on the DIFFERENCE [-0.15,+3.20]pp
+  gate >3pp and CI>0:  FAIL
+  (before the rebuild: +2.04pp [+0.49,+3.95], EXTERNAL alone 26.05%)

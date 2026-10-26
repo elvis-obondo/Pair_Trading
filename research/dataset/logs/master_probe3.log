@@ -1,0 +1,12 @@
+['date', 'open', 'high', 'low', 'close', 'volume', 'notional', 'mins_since_trade', 'gap_in_bar']
+                                     729203                     729204
+date              2026-10-13 23:58:00+00:00  2026-10-13 23:59:00+00:00
+open                                83134.0                    83134.0
+high                                83134.0                    83146.0
+low                                 83133.0                    83133.0
+close                               83134.0                    83134.0
+volume                              0.48296                   30.18375
+notional                        40150.33484              2509481.63186
+mins_since_trade                        0.0                        0.0
+gap_in_bar                            False                      False
+556678 no n_trades

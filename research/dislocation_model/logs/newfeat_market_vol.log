@@ -1,0 +1,121 @@
+================================================================================================================
+MARKET-VOL -- median universe volatility, 4 models x 5 horizons x 2 directions = 40 cells
+================================================================================================================
+  population: 53,757 episodes; newfeat.npz reused, stored columns vs a fresh read of meta: max diff 0.0e+00
+
+[1m  ] 1-minute >= 30-minute, every episode/direction/horizon: 0 violations
+[1m  ] deepest shortfall -9.374e-07; as a fraction of the float32 reference's precision (8.0 ulps): 0.062 (must be < 1)
+  baselines: MFE match1m 9e332d92a294 (vol_48), MAE match1m_mae_vol1m 5bd8d15af8c8 (vol_48_1m) -- both match
+
+================================================================================================================
+BUILD -- with checks, before any scoring
+================================================================================================================
+  universe: 212 tickers (BTC/ETH excluded as factor-only)
+  1. no look-ahead: every episode's window ends at its bar_index, which is its entry_time in the panel; independent recompute on 500 episodes from a slice ending at the entry bar: last row read at offset +0 (must be 0), max diff 4.8e-18
+  2. leg exclusion: neither leg in its own average, all 53,757 episodes (asserted); legs that WERE live and so actually removed: 53,757 of 53,757
+  3. tickers per episode: min 129, median 201, max 210
+       2025Q2   episodes    149   tickers min 129  median   130  max 130
+       2025Q3   episodes  3,653   tickers min 130  median   134  max 145
+       2025Q4   episodes  6,439   tickers min 145  median   169  max 176
+       2026Q1   episodes  8,804   tickers min 176  median   183  max 187
+       2026Q2   episodes 13,424   tickers min 187  median   200  max 208
+       2026Q3   episodes 19,363   tickers min 208  median   210  max 210
+       2026Q4   episodes  1,925   tickers min 210  median   210  max 210
+     thin (< half the median, < 100 tickers): 0 episodes -- train 0, val 0, held out 0
+  normalised: raw / train median (4.413e-03 log-return per 30m); market_vol median 1.008, 5-95% 0.708-1.564, max 7.44
+  Spearman(market_vol, vol_48) 0.041;  (market_vol, vol_48_1m) 0.064
+  [WROTE] research/datasets/market_vol.npz
+  [18s]
+
+       [SPLIT] train 22,645 (<2026-05-01)   val 13,048   HELD OUT 18,064 (>=2026-07-18)
+[SPLIT] held-out used ONCE, for scoring only; iterations chosen on val
+  fitted MFE 0.5h  all four models; rebuilt kNN/CQR match the registry (0e+00, 0e+00)   [92s]
+  fitted MFE 1h    all four models; rebuilt kNN/CQR match the registry (0e+00, 0e+00)   [162s]
+  fitted MFE 2h    all four models; rebuilt kNN/CQR match the registry (0e+00, 0e+00)   [237s]
+  fitted MFE 5h    all four models; rebuilt kNN/CQR match the registry (0e+00, 0e+00)   [305s]
+  fitted MFE 10h   all four models; rebuilt kNN/CQR match the registry (0e+00, 0e+00)   [377s]
+  fitted MAE 0.5h  all four models; rebuilt kNN/CQR match the registry (0e+00, 0e+00)   [457s]
+  fitted MAE 1h    all four models; rebuilt kNN/CQR match the registry (0e+00, 0e+00)   [528s]
+  fitted MAE 2h    all four models; rebuilt kNN/CQR match the registry (0e+00, 0e+00)   [600s]
+  fitted MAE 5h    all four models; rebuilt kNN/CQR match the registry (0e+00, 0e+00)   [668s]
+  fitted MAE 10h   all four models; rebuilt kNN/CQR match the registry (0e+00, 0e+00)   [736s]
+
+
+================================================================================================================
+PAIRED vs each model's own 5-feature baseline -- skill: + helps; gap: - better
+================================================================================================================
+  Linear QR
+    cell       skill base  +mvol  new-old          [95% CI]        gap base  +mvol  new-old          [95% CI]          outcome
+    MFE 0.5h        +4.39  +4.44   +0.052   [-0.026,+0.136]            0.75   0.70   -0.055   [-0.110,+0.086]            HOLDS
+    MFE 1h          +4.69  +4.75   +0.056   [+0.002,+0.112] better     1.06   1.05   -0.013   [-0.071,+0.043]         IMPROVES
+    MFE 2h          +5.23  +5.24   +0.018   [-0.008,+0.045]            1.42   1.43   +0.018   [-0.033,+0.070]            HOLDS
+    MFE 5h          +4.88  +4.86   -0.019   [-0.064,+0.027]            2.34   2.34   +0.002   [-0.055,+0.050]            HOLDS
+    MFE 10h         +4.94  +4.98   +0.041   [-0.047,+0.139]            2.41   2.39   -0.021   [-0.114,+0.061]            HOLDS
+    MAE 0.5h        +2.39  +2.39   -0.005   [-0.046,+0.039]            2.16   2.14   -0.017   [-0.099,+0.082]            HOLDS
+    MAE 1h          +2.25  +2.28   +0.025   [-0.011,+0.060]            2.45   2.44   -0.016   [-0.099,+0.084]            HOLDS
+    MAE 2h          +2.32  +2.39   +0.071   [+0.022,+0.121] better     2.76   2.72   -0.044   [-0.146,+0.064]         IMPROVES
+    MAE 5h          +2.74  +2.84   +0.101   [+0.012,+0.187] better     3.04   3.01   -0.029   [-0.132,+0.092]         IMPROVES
+    MAE 10h         +3.21  +3.37   +0.164   [+0.017,+0.315] better     3.03   3.04   +0.016   [-0.118,+0.171]         IMPROVES
+
+  QTREE
+    cell       skill base  +mvol  new-old          [95% CI]        gap base  +mvol  new-old          [95% CI]          outcome
+    MFE 0.5h        +4.55  +4.52   -0.036   [-0.327,+0.182]            0.62   0.68   +0.068   [-0.058,+0.220]            HOLDS
+    MFE 1h          +4.88  +4.82   -0.058   [-0.220,+0.092]            1.10   1.12   +0.020   [-0.063,+0.112]            HOLDS
+    MFE 2h          +4.87  +4.82   -0.045   [-0.171,+0.065]            1.48   1.46   -0.016   [-0.116,+0.131]            HOLDS
+    MFE 5h          +4.50  +4.47   -0.033   [-0.162,+0.107]            2.37   2.27   -0.106   [-0.180,-0.023] better  IMPROVES
+    MFE 10h         +4.56  +4.43   -0.130   [-0.408,+0.147]            2.45   2.22   -0.231   [-0.466,-0.016] better  IMPROVES
+    MAE 0.5h        +1.93  +1.88   -0.050   [-0.422,+0.284]            1.99   2.07   +0.079   [-0.040,+0.282]            HOLDS
+    MAE 1h          +1.70  +1.88   +0.179   [-0.229,+0.540]            2.23   2.37   +0.134   [-0.028,+0.325]            HOLDS
+    MAE 2h          +1.88  +2.19   +0.307   [-0.007,+0.605]            2.52   2.60   +0.089   [-0.112,+0.334]            HOLDS
+    MAE 5h          +2.31  +2.54   +0.222   [-0.097,+0.524]            2.84   2.77   -0.073   [-0.257,+0.144]            HOLDS
+    MAE 10h         +2.77  +2.75   -0.026   [-0.368,+0.280]            2.86   2.96   +0.102   [-0.168,+0.391]            HOLDS
+
+  kNN
+    cell       skill base  +mvol  new-old          [95% CI]        gap base  +mvol  new-old          [95% CI]          outcome
+    MFE 0.5h        +4.39  +4.32   -0.066   [-0.180,+0.069]            0.69   0.73   +0.042   [-0.122,+0.178]            HOLDS
+    MFE 1h          +4.60  +4.46   -0.139   [-0.272,-0.001]  WORSE     0.97   1.10   +0.127   [-0.014,+0.299]            LOSES
+    MFE 2h          +4.68  +4.61   -0.075   [-0.235,+0.081]            1.47   1.53   +0.060   [-0.051,+0.222]            HOLDS
+    MFE 5h          +4.28  +4.19   -0.090   [-0.232,+0.041]            2.40   2.45   +0.049   [-0.052,+0.153]            HOLDS
+    MFE 10h         +4.23  +4.22   -0.011   [-0.149,+0.139]            2.48   2.51   +0.030   [-0.110,+0.152]            HOLDS
+    MAE 0.5h        +1.67  +1.75   +0.079   [-0.358,+0.390]            2.21   1.99   -0.219   [-0.341,-0.042] better  IMPROVES
+    MAE 1h          +1.48  +1.60   +0.120   [-0.272,+0.433]            2.42   2.28   -0.137   [-0.271,+0.028]            HOLDS
+    MAE 2h          +1.65  +1.77   +0.118   [-0.200,+0.459]            2.86   2.70   -0.159   [-0.363,+0.060]            HOLDS
+    MAE 5h          +2.04  +2.17   +0.128   [-0.161,+0.407]            3.08   2.96   -0.123   [-0.325,+0.091]            HOLDS
+    MAE 10h         +2.48  +2.63   +0.151   [-0.233,+0.551]            3.20   3.03   -0.171   [-0.413,+0.114]            HOLDS
+
+  CQR
+    cell       skill base  +mvol  new-old          [95% CI]        gap base  +mvol  new-old          [95% CI]          outcome
+    MFE 0.5h        +4.55  +4.51   -0.037   [-0.330,+0.181]            0.68   0.74   +0.065   [-0.042,+0.210]            HOLDS
+    MFE 1h          +4.92  +4.85   -0.064   [-0.225,+0.081]            0.80   0.88   +0.082   [-0.080,+0.136]            HOLDS
+    MFE 2h          +4.92  +4.86   -0.054   [-0.178,+0.059]            1.18   1.23   +0.052   [-0.109,+0.177]            HOLDS
+    MFE 5h          +4.62  +4.59   -0.029   [-0.162,+0.117]            1.89   1.74   -0.153   [-0.249,-0.055] better  IMPROVES
+    MFE 10h         +4.70  +4.55   -0.150   [-0.426,+0.131]            1.86   1.71   -0.153   [-0.362,+0.076]            HOLDS
+    MAE 0.5h        +1.96  +1.91   -0.044   [-0.422,+0.283]            1.99   2.09   +0.101   [-0.078,+0.282]            HOLDS
+    MAE 1h          +1.78  +1.98   +0.197   [-0.207,+0.556]            2.02   2.10   +0.073   [-0.131,+0.306]            HOLDS
+    MAE 2h          +1.98  +2.28   +0.305   [-0.012,+0.601]            2.41   2.45   +0.044   [-0.166,+0.305]            HOLDS
+    MAE 5h          +2.46  +2.66   +0.206   [-0.109,+0.498]            2.55   2.53   -0.029   [-0.223,+0.202]            HOLDS
+    MAE 10h         +2.92  +2.88   -0.035   [-0.368,+0.263]            2.38   2.47   +0.091   [-0.181,+0.400]            HOLDS
+
+================================================================================================================
+market_vol IMPORTANCE at every moved cell -- skill points vs climatology
+================================================================================================================
+  Linear QR MFE 1h    IMPROVES   market_vol -0.019 [-0.069,+0.042]   [745s]
+  QTREE     MFE 5h    IMPROVES   market_vol -0.025 [-0.147,+0.117]   [746s]
+  QTREE     MFE 10h   IMPROVES   market_vol +0.028 [-0.235,+0.312]   [747s]
+  kNN       MFE 1h       LOSES   market_vol -0.093 [-0.207,+0.018]   [778s]
+  CQR       MFE 5h    IMPROVES   market_vol -0.027 [-0.161,+0.120]   [779s]
+  Linear QR MAE 2h    IMPROVES   market_vol +0.073 [+0.019,+0.123]   [779s]
+  Linear QR MAE 5h    IMPROVES   market_vol +0.121 [+0.028,+0.213]   [779s]
+  Linear QR MAE 10h   IMPROVES   market_vol +0.213 [+0.038,+0.385]   [779s]
+  kNN       MAE 0.5h  IMPROVES   market_vol -0.008 [-0.443,+0.287]   [809s]
+
+================================================================================================================
+DECISION -- rule fixed in market_vol()' docstring before the run
+================================================================================================================
+  MFE: IMPROVES 4 of 20 (need 11);  confirmed harm 0;  kNN losses read as dilution 1 -- kNN 1h  -> does not clear
+  MAE: IMPROVES 4 of 20 (need 11);  confirmed harm 0;  kNN losses read as dilution 0  -> does not clear
+  VERDICT MARKET-VOL: MARGINAL -- report and stop, nothing propagated
+  Levels are a later look at already-scored rows; paired differences are
+  the new measurement. Nothing in the registry was written.
+  [809s]
+================================================================================================================

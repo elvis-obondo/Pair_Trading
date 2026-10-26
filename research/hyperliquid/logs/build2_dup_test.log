@@ -1,0 +1,14 @@
+20250822.parquet
+20250822_blocks.npz
+20250822_meta.json
+20250823.parquet
+20250823_blocks.npz
+20250823_meta.json
+[GATE] missing minutes 11 of 2,880 = 0.3819% (hours 0, block gaps 1, duplicate blocks 1, format switch None), threshold 0.1%
+[GATE] (--test: one-day grid, gate reported only; not a D1 verdict)
+[DONE] 173 coins, 16,450 30m bars asserted
+duplicate_blocks [[706113001, '2025-08-23 08:48:17.175841018+00:00', '2025-08-23 08:57:37.300005563+00:00', 10, '20250823']]
+block_gaps 1 [[706112990, 706113001, '2025-08-23 08:47:13.018104315+00:00', '2025-08-23 08:48:17.175841018+00:00', 10, '20250823']]
+halts 1 [[706113001, '2025-08-23 08:48:17.175841018+00:00', '0 days 00:09:20.517510677', '20250823']]
+blocks 2178615 [704631180, 706809804]
+BTC {'missing_minutes': 11, 'post_gap_nan_minutes': 0, 'notrade_minutes': 0}

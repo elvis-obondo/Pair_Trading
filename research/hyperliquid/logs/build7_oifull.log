@@ -1,0 +1,16 @@
+HL-MASTER1 G7 raw pass, full: c7g.8xlarge on-demand, PAR 12; 507 days
+exits non-zero 0 (507 x exit 0)
+tids 1,357,729,456; unbalanced tids 7 on 7 days, USD 2,823; max per day 1
+  UNBALANCED 20250601: {'tid': 6896551551965, 'coin': 'ETH', 'time_ms': 1748776570030, 'wallet': '0x100f4a6d8713e0df271f25323f9d9399496ff179', 'side': 'B', 'sz': 0.035, 'px': 2496.2, 'dir': 'Open Long', 'crossed': True, 'format': 'old'}
+  UNBALANCED 20250608: {'tid': 250170946875997, 'coin': 'VVV', 'time_ms': 1749375864524, 'wallet': '0xe86b057f5eb764c9738d6b0d38170befd0723664', 'side': 'B', 'sz': 6.66, 'px': 2.784, 'dir': 'Close Short', 'crossed': False, 'format': 'old'}
+  UNBALANCED 20250614: {'tid': 431488723710250, 'coin': 'KAS', 'time_ms': 1749891772717, 'wallet': '0x31ca8395cf837de08b24da3f660e77761dfb974b', 'side': 'B', 'sz': 661.0, 'px': 0.075766, 'dir': 'Close Short', 'crossed': False, 'format': 'old'}
+  UNBALANCED 20250621: {'tid': 89773935895036, 'coin': 'RUNE', 'time_ms': 1750497427664, 'wallet': '0x31ca8395cf837de08b24da3f660e77761dfb974b', 'side': 'B', 'sz': 12.5, 'px': 1.3548, 'dir': 'Open Long', 'crossed': True, 'format': 'old'}
+  UNBALANCED 20250708: {'tid': 870956457457006, 'coin': 'kBONK', 'time_ms': 1751970643356, 'wallet': '0x628109e67d186ec988eb49256a544bdc94d65894', 'side': 'B', 'sz': 36198.0, 'px': 0.022926, 'dir': 'Open Long', 'crossed': True, 'format': 'old'}
+  UNBALANCED 20250712: {'tid': 12410765120022, 'coin': 'PUMP', 'time_ms': 1752310028883, 'wallet': '0xe383e214bd4b32a9ef9cf688ee98976b57f6c9c6', 'side': 'B', 'sz': 90389.0, 'px': 0.005549, 'dir': 'Open Long', 'crossed': True, 'format': 'old'}
+  UNBALANCED 20250719: {'tid': 439144427585893, 'coin': 'OP', 'time_ms': 1752918802351, 'wallet': '0x07fd993f0fa3a185f7207adccd29f7a87404689d', 'side': 'B', 'sz': 1771.1, 'px': 0.7445, 'dir': 'Close Short', 'crossed': False, 'format': 'old'}
+vault continuity: consecutive pairs 4,605, violations 0, max gap 1.49e-08; days with vault rows: 69
+  20250727: vault rows 0, violations 0
+like-for-like taker open/close vs flow table, max |relative difference| over all days and columns: 6.31e-16 at ('20260224', 'taker_close_buy')
+all-taker-fills differences > 1%: 14 day-columns, e.g. [('20250621', 'taker_open_buy', 0.018221308849455563), ('20250826', 'taker_close_sell', 0.025598206048230397), ('20250922', 'taker_open_buy', 0.01347557339232956), ('20251010', 'taker_open_buy', 0.25868852711008716), ('20251010', 'taker_close_buy', 0.5480517894068221), ('20251112', 'taker_open_buy', 0.012956921220951798)]
+oi rows 104,609,273; vault rows 4,963; parquet bytes 5.27 GB; peak RSS max 5537 MB; wall per day median 59s max 163s
+sum |oi_delta_coin| total 5.6189e+12

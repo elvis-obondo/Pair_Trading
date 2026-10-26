@@ -1,0 +1,4 @@
+[VALID] loaded 206 coins' 1m closes and 204 leg coins' flow  [149s]
+[VALID] 500 rows x 27 features = 13,500 comparisons; mismatches 0; max abs diff 4.71e-04  [161s]
+[VALID] every array was truncated at the row's cutoff C before any read (no minute >= C available)
+[VALID] PASS

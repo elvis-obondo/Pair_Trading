@@ -1,0 +1,57 @@
+[G5] 610 (coin, unit, leg) blocks over 204 coins  [59s]
+  coin 20/204  [76s]
+  coin 40/204  [89s]
+  coin 60/204  [102s]
+  coin 80/204  [117s]
+  coin 100/204  [129s]
+  coin 120/204  [142s]
+  coin 140/204  [154s]
+  coin 160/204  [168s]
+  coin 180/204  [182s]
+  coin 200/204  [195s]
+[G5] price shape and weights  [554s]
+[G5] coin-unit price shape  [586s]
+[G5 pair] written: leg a/b/net x 139 columns, price shape 9  [804s]
+  a_imb_60                   NaN   0.19%  median +0.0858  p5 -0.642  p95 +0.7426
+  a_forced_share_60          NaN   0.19%  median +0  p5 +0  p95 +0.002072
+  a_backstop_share_1440      NaN   1.30%  median +0  p5 +0  p95 +0
+  a_adl_share_1440           NaN   1.30%  median +0  p5 +0  p95 +0
+  a_open_close_ratio_360     NaN   0.36%  median +0.499  p5 +0.1501  p95 +0.8359
+  a_volume_ratio_60          NaN   0.07%  median +1.3  p5 +0.2502  p95 +12.51
+  a_wallets_per_musd_60      NaN   0.19%  median +0.8407  p5 +0.1824  p95 +2.823
+  a_twap_share_60            NaN   8.10%  median +0  p5 +0  p95 +0.1278
+  a_slope_cum_imb_30         NaN   0.39%  median +0.003207  p5 -0.02574  p95 +0.03047
+  a_mins_since_forced_any    NaN  72.09%  median +244  p5 +3  p95 +1274
+  a_mins_since_forced_spike  NaN  93.06%  median +213  p5 +3  p95 +1252
+  a_accel_share              NaN   0.42%  median +0.215  p5 +0.01477  p95 +0.8003
+  ps_realized_var          NaN   0.06%  median +1.347  p5 +0.2716  p95 +8.019
+  ps_efficiency            NaN   0.06%  median +0.1838  p5 +0.03717  p95 +0.4137
+  ps_max_step              NaN   0.06%  median +0.5015  p5 +0.2007  p95 +1.6
+  ps_max_step_min          NaN   0.06%  median +36  p5 +2  p95 +57
+  ps_mins_since_big_step   NaN  31.34%  median +11  p5 +0  p95 +51
+  ps_drawdown              NaN   0.06%  median +0.1235  p5 +0  p95 +0.8806
+  w_a                      NaN   0.00%  median +0.4786  p5 +0  p95 +1
+  contrib_a                NaN   0.00%  median +0.005242  p5 -0.01242  p95 +0.03966
+  contrib_b                NaN   0.00%  median +0.00569  p5 -0.009701  p95 +0.0559
+[G5 coin] written: leg a/b/net x 139 columns, price shape 9  [812s]
+  a_imb_60                   NaN   0.26%  median +0.08133  p5 -0.6513  p95 +0.7487
+  a_forced_share_60          NaN   0.26%  median +0  p5 +0  p95 +0.001886
+  a_backstop_share_1440      NaN   1.57%  median +0  p5 +0  p95 +0
+  a_adl_share_1440           NaN   1.57%  median +0  p5 +0  p95 +0
+  a_open_close_ratio_360     NaN   0.45%  median +0.5048  p5 +0.1488  p95 +0.8407
+  a_volume_ratio_60          NaN   0.11%  median +1.378  p5 +0.2521  p95 +13.46
+  a_wallets_per_musd_60      NaN   0.27%  median +0.81  p5 +0.1743  p95 +2.796
+  a_twap_share_60            NaN   9.05%  median +0  p5 +0  p95 +0.1402
+  a_slope_cum_imb_30         NaN   0.49%  median +0.0031  p5 -0.0259  p95 +0.03085
+  a_mins_since_forced_any    NaN  72.24%  median +254  p5 +2  p95 +1295
+  a_mins_since_forced_spike  NaN  92.50%  median +241  p5 +2  p95 +1271
+  a_accel_share              NaN   0.50%  median +0.2262  p5 +0.01522  p95 +0.8195
+  ps_realized_var          NaN   0.11%  median +1.272  p5 +0.2128  p95 +8.1
+  ps_efficiency            NaN   0.11%  median +0.1807  p5 +0.03581  p95 +0.4305
+  ps_max_step              NaN   0.11%  median +0.4838  p5 +0.1759  p95 +1.599
+  ps_max_step_min          NaN   0.11%  median +35  p5 +2  p95 +57
+  ps_mins_since_big_step   NaN  33.79%  median +11  p5 +0  p95 +51
+  ps_drawdown              NaN   0.11%  median +0.1136  p5 +0  p95 +0.8731
+  w_a                      NaN   0.00%  median +1  p5 +1  p95 +1
+  contrib_a                NaN   0.00%  median +0.005638  p5 -0.0151  p95 +0.04079
+  contrib_b                NaN   0.06%  median +0.00209  p5 -0.0126  p95 +0.0397

@@ -1,0 +1,92 @@
+[COLREPORT coin] events 74,607, usable (label_gap = 0) 73,967, reach_10h share 32.23%; 599 numeric columns and 9 categorical columns in 12 group files; months 202505..202610  [0s]
+   AUC direction: > 0.5 = higher values go with reaching mu. Rows are not independent (overlapping events of one pair), so no interval is attached. For orientation, not selection. Drift rule tagged A.
+  200/599 columns  [2s]
+  400/599 columns  [4s]
+
+[PART Z coin] columns with an AUC: 591; constant columns: 4; columns with a stable sign across months (>= 6 months, all on one side of 0.5): 92
+   |AUC - 0.5| quantiles over columns 50/90/99/max: 0.0045 / 0.0324 / 0.0703 / 0.1044
+   columns with NaN shares among reachers and non-reachers differing by more than 5 points: 0
+   near-misses: columns whose qualifying months lean one way in >= 80% of months but not all: 147
+   categorical columns (9): reach rate by category (categories with >= 500 events), range per column:
+     a_cg_status                  3 categories, reach rate 0.321 .. 0.349
+     a_listing_src                1 categories, reach rate 0.322 .. 0.322
+     a_margin_table_id            4 categories, reach rate 0.302 .. 0.338
+     a_sector                     11 categories, reach rate 0.280 .. 0.354
+     ticker_b                     1 categories, reach rate 0.322 .. 0.322
+     utc_hour                     24 categories, reach rate 0.297 .. 0.361
+     weekday                      7 categories, reach rate 0.297 .. 0.347
+   the 30 largest |AUC - 0.5| (column, auc, std_diff, stable_sign, months pos/neg):
+     threshold                                    auc 0.3956  sd_diff -0.364  stable 1  0/17
+     sigma                                        auc 0.3976  sd_diff -0.241  stable 1  0/17
+     vratio                                       auc 0.5981  sd_diff +0.348  stable 1  17/0
+     ps_realized_var                              auc 0.5836  sd_diff +0.051  stable 1  17/0
+     threshold_sym                                auc 0.4229  sd_diff -0.274  stable 1  0/17
+     sigma_sym                                    auc 0.4231  sd_diff -0.169  stable 1  0/17
+     ps_max_step                                  auc 0.5695  sd_diff +0.118  stable 1  17/0
+     crossings_7d                                 auc 0.5620  sd_diff +0.223  stable 1  17/0
+     r2                                           auc 0.5544  sd_diff +0.150  stable 1  17/0
+     r2_2d                                        auc 0.5544  sd_diff +0.150  stable 1  17/0
+     ps_efficiency                                auc 0.4515  sd_diff -0.166  stable 1  0/17
+     a_nw_human_30                                auc 0.4521  sd_diff -0.081  stable 1  0/17
+     a_nw_all_30                                  auc 0.4521  sd_diff -0.081  stable 1  0/17
+     a_nw_human_60                                auc 0.4531  sd_diff -0.080  stable 1  0/17
+     a_nw_all_60                                  auc 0.4531  sd_diff -0.080  stable 1  0/17
+     a_nw_human_360                               auc 0.4532  sd_diff -0.079  stable 1  0/17
+     a_nw_all_360                                 auc 0.4532  sd_diff -0.079  stable 1  0/17
+     a_push_total_human_360                       auc 0.4562  sd_diff -0.046  stable 1  0/17
+     a_push_total_all_360                         auc 0.4562  sd_diff -0.046  stable 1  0/17
+     a_push_total_human_30                        auc 0.4572  sd_diff -0.030  stable 1  0/17
+     a_push_total_all_30                          auc 0.4572  sd_diff -0.030  stable 1  0/17
+     a_push_total_human_60                        auc 0.4575  sd_diff -0.033  stable 1  0/17
+     a_push_total_all_60                          auc 0.4575  sd_diff -0.033  stable 1  0/17
+     a_nw_human_1440                              auc 0.4578  sd_diff -0.069  stable 1  0/17
+     a_nw_all_1440                                auc 0.4578  sd_diff -0.069  stable 1  0/17
+     a_push_total_human_1440                      auc 0.4584  sd_diff -0.042  stable 1  0/17
+     a_push_total_all_1440                        auc 0.4584  sd_diff -0.042  stable 1  0/17
+     net_top3_360                                 auc 0.5416  sd_diff +0.127  stable 1  17/0
+     a_top3_360                                   auc 0.5416  sd_diff +0.127  stable 1  17/0
+     a_top3_60                                    auc 0.5409  sd_diff +0.124  stable 1  17/0
+
+[DRIFT coin] columns with a month-to-month jump above 3 sd of their monthly means: 203 of 590
+     volratio_eth                                 max jump 4.7 sd  months 202507
+     net_forced_5m_2                              max jump 4.4 sd  months 202510 202511
+     a_forced_5m_2                                max jump 4.4 sd  months 202510 202511
+     a_ctx_impact_spread_bp                       max jump 4.4 sd  months 202510 202511
+     a_slip_sell_1k                               max jump 4.3 sd  months 202510 202511
+     a_chg1h_slip_buy_1k                          max jump 4.3 sd  months 202510 202511
+     a_slip_buy_1k                                max jump 4.3 sd  months 202510 202511
+     a_chg6h_slip_buy_1k                          max jump 4.3 sd  months 202510 202511
+     beta_stab                                    max jump 4.3 sd  months 202508 202509
+     net_volume_ratio_1440                        max jump 4.3 sd  months 202507 202508
+     a_volume_ratio_1440                          max jump 4.3 sd  months 202507 202508
+     a_chg1h_slip_sell_1k                         max jump 4.3 sd  months 202510 202511
+     a_chg6h_slip_sell_1k                         max jump 4.2 sd  months 202510 202511
+     volratio_btc                                 max jump 4.2 sd  months 202507
+     a_rel_ask_d10                                max jump 4.2 sd  months 202603 202604
+     a_rel_ask_d25                                max jump 4.2 sd  months 202601 202602
+     a_chg6h_spread_bp                            max jump 4.2 sd  months 202510 202511
+     a_vault_absorb_share_30                      max jump 4.2 sd  months 202510 202511
+     a_wallets_per_musd_1440                      max jump 4.2 sd  months 202507 202508
+     net_wallets_per_musd_1440                    max jump 4.2 sd  months 202507 202508
+     a_vault_absorb_share_60                      max jump 4.1 sd  months 202510 202511
+     a_vault_absorb_ratio_30                      max jump 4.1 sd  months 202510 202511
+     a_vault_absorb_ratio_60                      max jump 4.1 sd  months 202510 202511
+     net_backstop_share_30                        max jump 4.1 sd  months 202510 202511
+     a_backstop_share_30                          max jump 4.1 sd  months 202510 202511
+     a_chg1h_spread_bp                            max jump 4.1 sd  months 202510 202511
+     net_backstop_share_60                        max jump 4.1 sd  months 202510 202511
+     a_backstop_share_60                          max jump 4.1 sd  months 202510 202511
+     a_vault_share_of_oi                          max jump 4.1 sd  months 202510 202511
+     mkt_liq_24h                                  max jump 4.1 sd  months 202608 202609
+     adl_usd_24h                                  max jump 4.1 sd  months 202510 202511
+     net_backstop_ratio_30                        max jump 4.1 sd  months 202510 202511
+     a_backstop_ratio_30                          max jump 4.1 sd  months 202510 202511
+     hour_cos                                     max jump 4.1 sd  months 202509 202510
+     net_adl_share_30                             max jump 4.1 sd  months 202510 202511
+     a_adl_share_30                               max jump 4.1 sd  months 202510 202511
+     net_backstop_ratio_60                        max jump 4.1 sd  months 202510 202511
+     a_backstop_ratio_60                          max jump 4.1 sd  months 202510 202511
+     a_adl_ratio_30                               max jump 4.1 sd  months 202510 202511
+     net_adl_ratio_30                             max jump 4.1 sd  months 202510 202511
+   PNG /home/elvisobondo/Pair_Trading/research/dataset/logs/partz_coin_top_auc.png
+[COLREPORT coin] done  [7s]

@@ -1,0 +1,55 @@
+[SPLIT] train 22,683 (<2026-03-06T00:00:00.000000000)   val 19,253   HELD OUT 18,064 (>=2026-07-18)
+[SPLIT] held-out used ONCE, for scoring only; iterations chosen on val
+
+[BUILD] features...
+==============================================================================================================
+SIGN-FOLDED (primary)
+==============================================================================================================
+features      target          h     score     95% day-clustered  iters  sign-only   gate
+336 raw bars  regression   0.5h   -0.0020  [-0.0065, 0.0000]      0              fail
+336 raw bars  regression     1h   -0.0019  [-0.0065,-0.0002]      1              fail
+336 raw bars  regression     2h   -0.0053  [-0.0116,-0.0008]     11              fail
+336 raw bars  regression     5h   -0.0125  [-0.0251,-0.0045]     25              fail
+336 raw bars  regression    10h   -0.0079  [-0.0238,-0.0006]      5              fail
+336 raw bars  reversion    0.5h    0.5096  [ 0.4992, 0.5198]     36     0.5012   fail
+336 raw bars  reversion      1h    0.4982  [ 0.4885, 0.5071]      1     0.5086   fail
+336 raw bars  reversion      2h    0.5078  [ 0.4979, 0.5173]      6     0.5031   fail
+336 raw bars  reversion      5h    0.5067  [ 0.4945, 0.5177]    172     0.5097   fail
+336 raw bars  reversion     10h    0.5016  [ 0.4880, 0.5158]     39     0.5064   fail
+18 engineered regression   0.5h   -0.0031  [-0.0076,-0.0009]      2              fail
+18 engineered regression     1h   -0.0018  [-0.0065, 0.0001]      0              fail
+18 engineered regression     2h   -0.0075  [-0.0149,-0.0019]     12              fail
+18 engineered regression     5h   -0.0117  [-0.0248,-0.0036]      7              fail
+18 engineered regression    10h   -0.0110  [-0.0293,-0.0022]     14              fail
+18 engineered reversion    0.5h    0.5026  [ 0.4926, 0.5125]    171     0.5012   fail
+18 engineered reversion      1h    0.5023  [ 0.4919, 0.5111]      1     0.5086   fail
+18 engineered reversion      2h    0.5153  [ 0.5047, 0.5247]      1     0.5031   fail
+18 engineered reversion      5h    0.5016  [ 0.4861, 0.5180]     32     0.5097   fail
+18 engineered reversion     10h    0.5053  [ 0.4906, 0.5231]     24     0.5064   fail
+
+==============================================================================================================
+unfolded
+==============================================================================================================
+features      target          h     score     95% day-clustered  iters  sign-only   gate
+336 raw bars  regression   0.5h   -0.0003  [-0.0014, 0.0007]      2              fail
+336 raw bars  regression     1h   -0.0005  [-0.0018, 0.0000]      1              fail
+336 raw bars  regression     2h    0.0001  [-0.0026, 0.0021]      3              fail
+336 raw bars  regression     5h   -0.0019  [-0.0048,-0.0004]      7              fail
+336 raw bars  regression    10h   -0.0002  [-0.0023, 0.0001]      0              fail
+336 raw bars  reversion    0.5h    0.5555  [ 0.5376, 0.5742]     33     0.4389   PASS
+336 raw bars  reversion      1h    0.5730  [ 0.5588, 0.5901]     21     0.4291   PASS
+336 raw bars  reversion      2h    0.5735  [ 0.5534, 0.5949]     34     0.4247   PASS
+336 raw bars  reversion      5h    0.5898  [ 0.5641, 0.6131]     43     0.4073   PASS
+336 raw bars  reversion     10h    0.5931  [ 0.5631, 0.6236]     32     0.4058   PASS
+18 engineered regression   0.5h   -0.0005  [-0.0019, 0.0008]      1              fail
+18 engineered regression     1h   -0.0014  [-0.0050, 0.0026]     12              fail
+18 engineered regression     2h    0.0003  [-0.0032, 0.0031]     10              fail
+18 engineered regression     5h   -0.0034  [-0.0075,-0.0011]     20              fail
+18 engineered regression    10h    0.0004  [-0.0024, 0.0017]      5              fail
+18 engineered reversion    0.5h    0.5534  [ 0.5388, 0.5701]      6     0.4389   PASS
+18 engineered reversion      1h    0.5719  [ 0.5576, 0.5883]     18     0.4291   PASS
+18 engineered reversion      2h    0.5718  [ 0.5551, 0.5934]     27     0.4247   PASS
+18 engineered reversion      5h    0.5880  [ 0.5668, 0.6092]     35     0.4073   PASS
+18 engineered reversion     10h    0.5954  [ 0.5633, 0.6242]      4     0.4058   PASS
+
+[109s]

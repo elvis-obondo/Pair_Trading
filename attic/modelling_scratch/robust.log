@@ -1,0 +1,41 @@
+======================================================================================
+A  sd of the log-variance estimate, simulated from t(2.709), unit variance
+======================================================================================
+ observations    squared   absolute   bipower   abs/sq
+           20      0.704      0.526     0.547     1.34x
+           48      0.576      0.358     0.377     1.61x
+           96      0.492      0.259     0.281     1.90x
+          335      0.373      0.144     0.161     2.60x
+         1440      0.286      0.072     0.083     3.98x
+  30x more observations (48 -> 1440): squared 2.0x noise cut, absolute 5.0x, ideal sqrt(30) = 5.5x
+
+======================================================================================
+B  v_0 predictor, held-out R2 (fit period only)
+======================================================================================
+
+  target = log post-entry variance from squared returns
+  predictor                                48       96      335   all three
+  squared returns (current)            27.44%   27.14%   21.65%      29.95%
+  absolute returns                     25.63%   24.06%   21.44%      27.09%
+  bipower variation                    23.19%   23.27%   20.64%      25.96%
+
+  target = log post-entry variance from absolute returns
+  predictor                                48       96      335   all three
+  squared returns (current)            29.47%   29.57%   24.07%      32.59%
+  absolute returns                     28.47%   26.96%   24.15%      30.23%
+  bipower variation                    25.76%   26.02%   23.19%      28.99%
+
+  current baseline was 27.44 / 27.14 / 21.65 / 29.95 (squared, squared target)
+
+======================================================================================
+C  measurement-error ceiling
+======================================================================================
+  best single predictor: sq, 48 bars.  held-out R2 29.47%
+  var(predictor) 0.398 = signal 0.066 + estimation noise 0.331   -> 83% of the predictor's spread is noise
+  var(target)    0.895 = signal 0.618 + estimation noise 0.277   -> 31% of the target's spread is noise
+
+  R2 signal-to-signal, both attenuations removed: 100.0%
+  R2 a 1-minute-precision predictor would reach (target noise still removed): 100.0%
+  R2 observable against the SAME noisy 20-step target at 1-minute precision: 79.2%
+
+  the build's gain on the predictor side: 28.1pp of signal-to-signal R2 recovered by better measurement alone

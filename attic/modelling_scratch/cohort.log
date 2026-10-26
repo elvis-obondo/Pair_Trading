@@ -1,0 +1,43 @@
+[v_0] held-out R2 0.3259
+[v_0] fit-period residual variance 0.638 -> log-sd 0.798, multiplier spread exp(+/-sd) = 2.22x either way
+[v_0] Jensen factor exp(var/2) = 1.38x -- the mixture's mean variance is that much above the point estimate's
+
+[ALL 60,000]  reverted at all 56.2%   reached half 47.9%   FULL 18.9%
+[ALL 60,000]  FULL 11,316  PARTIAL 22,926  NONE 25,758
+[ALL] median time to half among those reaching it: 3.5h
+[ALL] median time to FULL among those reaching it: 5.5h
+
+======================================================================================================================
+PER GROUP, held out (18,064), configuration E'
+======================================================================================================================
+group          n   share  centre disp   pred rev p  CRPS/clim  band.5h  cov.5h  band10h  cov10h    out    |z|     r2    v_0
+FULL        3665   20.3%  -0.670±0.24   0.596±0.028      90.2%     1.08   90.1%     1.16   90.9%  0.41%   3.29  0.233   1.16
+PARTIAL     7208   39.9%  -0.651±0.21   0.607±0.028      86.9%     0.97   92.8%     0.32  100.0%  0.00%   3.32  0.183   0.85
+NONE        7191   39.8%  -0.656±0.22   0.603±0.029     116.1%     1.36   87.8%     1.22   88.0%  0.33%   3.30  0.202   0.95
+
+  the clincher: predicted reversion probability is 0.596 / 0.607 / 0.603 for FULL / PARTIAL / NONE
+
+======================================================================================================================
+MEDIAN RETRACEMENT PATH vs the model's k=0.0850 curve (all 60,000)
+======================================================================================================================
+  hours      0.0      2.0      4.0      6.0      8.0     10.0
+  model    0.000    0.299    0.509    0.656    0.759    0.831
+   FULL    0.000    0.391    0.678    0.877    1.007    1.104
+PARTIAL    0.000    0.127    0.199    0.261    0.314    0.368
+   NONE    0.000   -0.143   -0.267   -0.376   -0.457   -0.522
+    ALL    0.000    0.054    0.078    0.097    0.109    0.118
+E-centre    0.033    0.069    0.103    0.134    0.161    0.186
+
+wrote cohort.png
+
+======================================================================================================================
+PREDICTING 'FULL' IN ADVANCE  (base rate 18.9%, a harder target than 56%)
+======================================================================================================================
+predictor                               AUC     95% day-clustered   gate
+model reversion probability          0.5919  [ 0.5778, 0.6066]   PASS
+|z| at entry                         0.5101  [ 0.4977, 0.5217]   fail
+v_0 volatility prediction            0.6488  [ 0.6357, 0.6612]   PASS
+boosted tree, 62 features            0.6533  [ 0.6402, 0.6682]   PASS
+
+[CELLS] 4; expected false positives at a 95% interval: 0.2
+[NULL ] day-shuffle: mean 0.5054 [0.4873,0.5228]   REAL 0.6533   OUTSIDE the null

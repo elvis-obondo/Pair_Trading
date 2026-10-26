@@ -1,0 +1,90 @@
+[1m  ] loaded 204 instruments, 1041 MB of dense float64 minute grids (NaN where a minute did not trade)
+[G2] 6,697,756 events, 20,375 pairs; inputs loaded [23s]
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/numpy/lib/_function_base_impl.py:3023: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[:, None]
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/numpy/lib/_function_base_impl.py:3024: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[None, :]
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/numpy/lib/_function_base_impl.py:3023: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[:, None]
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/numpy/lib/_function_base_impl.py:3024: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[None, :]
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/numpy/lib/_function_base_impl.py:3023: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[:, None]
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/numpy/lib/_function_base_impl.py:3024: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[None, :]
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/numpy/lib/_function_base_impl.py:3023: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[:, None]
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/numpy/lib/_function_base_impl.py:3024: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[None, :]
+  2000 pairs  [51s]
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/numpy/lib/_function_base_impl.py:3023: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[:, None]
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/numpy/lib/_function_base_impl.py:3024: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[None, :]
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/numpy/lib/_function_base_impl.py:3023: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[:, None]
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/numpy/lib/_function_base_impl.py:3024: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[None, :]
+  4000 pairs  [79s]
+  6000 pairs  [107s]
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/numpy/lib/_function_base_impl.py:3023: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[:, None]
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/numpy/lib/_function_base_impl.py:3024: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[None, :]
+  8000 pairs  [132s]
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/numpy/lib/_function_base_impl.py:3023: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[:, None]
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/numpy/lib/_function_base_impl.py:3024: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[None, :]
+  10000 pairs  [163s]
+  12000 pairs  [191s]
+  14000 pairs  [220s]
+  16000 pairs  [247s]
+  18000 pairs  [274s]
+  20000 pairs  [303s]
+[DONE] 6,697,756 rows x 24 columns  [319s]
+  r2_2d          NaN   0.00%  p5 +0.006996  median +0.5286  p95 +0.9415
+  r2_7d          NaN   0.00%  p5 +0.007267  median +0.4837  p95 +0.9361
+  corr_30m_2d    NaN   0.00%  p5 +0.06833  median +0.5374  p95 +0.8696
+  corr_30m_7d    NaN   0.02%  p5 +0.09349  median +0.4928  p95 +0.8485
+  corr_1m_24h    NaN   0.00%  p5 +0.02307  median +0.2333  p95 +0.5442
+  n_1m_24h       NaN   0.00%  p5 +1440  median +1440  p95 +1440
+  both_traded_share_24h NaN   0.00%  p5 +0.1431  median +0.6722  p95 +0.9035
+  beta           NaN   0.00%  p5 -1.503  median +0.9303  p95 +2.861
+  abs_beta       NaN   0.00%  p5 +0.3479  median +1.039  p95 +3.376
+  sign_beta      NaN   0.00%  p5 -1  median +1  p95 +1
+  neutrality     NaN   0.00%  p5 +0.01735  median +0.1925  p95 +0.6217
+  beta_stab      NaN   2.22%  p5 +0.1933  median +0.7934  p95 +9.102
+  beta_chg_24h   NaN   0.00%  p5 -2.002  median +0.07042  p95 +1.825
+  beta_chg_7d    NaN   2.24%  p5 -3.023  median +0.03784  p95 +3.034
+  vol_ratio_2d   NaN   0.00%  p5 +0.4177  median +0.9834  p95 +2.355
+  vol_ratio_7d   NaN   0.02%  p5 +0.4246  median +0.983  p95 +2.352
+  crossings_7d   NaN   0.00%  p5 +4  median +19  p95 +40
+  halflife_h     NaN   0.72%  p5 +4.207  median +14.16  p95 +64.06
+  phi_7d         NaN   0.00%  p5 +0.9211  median +0.976  p95 +0.995
+  vratio         NaN   0.00%  p5 +1.081  median +1.757  p95 +2.626
+  vol_slope      NaN   0.00%  p5 +0.5979  median +1.117  p95 +2.372
+  sandwich       NaN   0.00%  p5 +0.3126  median +0.6603  p95 +1.407
+  g2_nan_1m      NaN   0.00%  p5 +0  median +0  p95 +0
+  seg_bars       NaN   0.00%  p5 +581  median +6572  p95 +1.687e+04
+[INVARIANTS] r2 in [0,1], correlations in [-1,1], neutrality in [0,1], crossings in [0,335]: OK
+[MONTH] NaN share of corr_1m_24h and beta_chg_7d by month:
+         corr_1m_24h  beta_chg_7d  halflife_h  sandwich
+m                                                      
+2025-06       0.0008       0.2245      0.0035       0.0
+2025-07       0.0000       0.0362      0.0115       0.0
+2025-08       0.0000       0.1295      0.0063       0.0
+2025-09       0.0000       0.0136      0.0092       0.0
+2025-10       0.0000       0.0647      0.0080       0.0
+2025-11       0.0000       0.0017      0.0107       0.0
+2025-12       0.0000       0.0017      0.0074       0.0
+2026-01       0.0000       0.0031      0.0084       0.0
+2026-02       0.0000       0.0006      0.0068       0.0
+2026-03       0.0000       0.0000      0.0060       0.0
+2026-04       0.0000       0.0009      0.0074       0.0
+2026-05       0.0000       0.0000      0.0083       0.0
+2026-06       0.0000       0.0000      0.0068       0.0
+2026-07       0.0000       0.0017      0.0039       0.0
+2026-08       0.0000       0.0000      0.0052       0.0
+2026-09       0.0000       0.0017      0.0060       0.0
+2026-10       0.0000       0.0000      0.0066       0.0

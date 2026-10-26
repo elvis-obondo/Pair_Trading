@@ -1,0 +1,31 @@
+### D1 2026-10-14T19:43:40Z
+ap-northeast-1a	0.112100	2026-10-14T19:00:00+00:00
+ap-northeast-1d	0.115100	2026-10-14T19:00:00+00:00
+ap-northeast-1c	0.107900	2026-10-14T13:00:00+00:00
+(check before launch: above should be empty)
+launched i-0c4297bf47100d0df (r7g.xlarge, spot) name=d1 par=4 timer=360min days=20250525..20261013
+
+### D1 stage 1: 19:44:37Z -> 22:05:11Z; 506/507 exit 0; 20260930 exit 1 (block_time '2026-09-30T01:43:36' with no fraction vs inferred %f format; fixed with format=ISO8601). check after: empty
+### D1 resume 2026-10-14T23:08:24Z
+### D1 resume launch attempt 1 hung 15 min in 'aws ec2 describe-subnets' (no instance created; killed). Retry 2026-10-14T23:56:07Z
+launched i-0eb696af7dc025e30 (r7g.xlarge, spot) resume name=d1 par=4 timer=180min days=20260930
+
+### D1 resume 2 (stage 2 only; day-by-day block pass with duplicate-block gap-fill) 2026-10-15T00:49:40Z
+launched i-00ef847dd0c6617f0 (r7g.xlarge, spot) resume name=d1 par=4 timer=180min days=
+
+### stage 2 (plain rule) done 01:32:48Z: [GATE] missing minutes 45 of 729,240 = 0.0062% (hours 0, block gaps 10, duplicate blocks 1, format switch 08:45:48.664 -> 08:49:59.371, 5); [DONE] 206 coins, 4,386,491 30m bars asserted; wall 39:42, RSS 1.34 GB; meta copied to research/hyperliquid/logs/build2_assemble_meta_plain.json
+### move plain asm/ -> asm_plain/ 2026-10-15T01:33:17Z
+asm_plain: Total Objects: 3895    Total Size: 16358672792 
+asm (should be empty):        0
+### stage 2 rule (iii) launch 2026-10-15T01:38:16Z
+launched i-09430e896e72091d3 (r7g.xlarge, spot) resume name=d1 par=4 timer=180min days=
+### 2026-10-15T01:40:07Z rule-(iii) stage-2 run i-09430e896e72091d3 terminated by me: superseded by planner decision (a) (old-format inter-file holes missing; window from the first fill)
+
+### stage 2 rule (iii)+(d) launch 2026-10-15T01:41:56Z
+launched i-0e9c0ee416dbe4eca (r7g.xlarge, spot) resume name=d1 par=4 timer=180min days=
+
+### rule (iii)+(d) run i-0e9c0ee416dbe4eca: spot interruption 01:57:16Z ('instance-terminated-no-capacity'), nothing uploaded. Relaunch ON-DEMAND 2026-10-15T01:59:14Z
+launched i-0ab4f020eaceb270e (r7g.xlarge, on-demand) resume name=d1 par=4 timer=180min days=
+Running On-Demand Standard (A, C, D, H, I, M, R, T, Z) instances	64.0	PENDING	b9d82af4cb034f6ea0037af8e48b439d8W6yUBXg
+All Standard (A, C, D, H, I, M, R, T, Z) Spot Instance Requests	64.0	PENDING	14a16ad75f4c4a88b5f464a0eb2e9524zRBQKbJQ
+### 2026-10-15T03:02:53Z provenance: code behind D1 + plain/(iii) bars copied to build2/code_d1_tid/: build2_assemble.py(22426B) build2_fills.py(17236B) 

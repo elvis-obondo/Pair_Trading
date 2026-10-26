@@ -1,0 +1,40 @@
+[G8] 496 daily tables, 517 index files  [0s]
+[G8] cutoff rows read: 4,399,494  [7s]
+/home/elvisobondo/Pair_Trading/research/dataset/master_g8_run.py:36: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+  I = pd.concat([pd.read_parquet(f).assign(day=os.path.basename(f)[:8]) for f in idx], ignore_index=True)
+[G8 COVERAGE] by month: coin-hour files, snapshots per coin-hour (median), median gap ms, coin-minutes present / (files x 60), non-monotone steps, crossed rows
+   202505: 33,178 files, 6469 per file, gap 548 ms, minutes 100.65%, nonmono 211, crossed 0
+   202506: 143,165 files, 6586 per file, gap 540 ms, minutes 100.22%, nonmono 785, crossed 0
+   202507: 149,325 files, 6608 per file, gap 539 ms, minutes 100.52%, nonmono 494, crossed 0
+   202508: 150,863 files, 6601 per file, gap 540 ms, minutes 100.70%, nonmono 1363, crossed 0
+   202509: 149,823 files, 6587 per file, gap 540 ms, minutes 100.83%, nonmono 1544, crossed 0
+   202510: 119,575 files, 6583 per file, gap 541 ms, minutes 100.69%, nonmono 954, crossed 0
+   202511: 95,744 files, 6423 per file, gap 542 ms, minutes 91.42%, nonmono 10199, crossed 0
+   202512: 139,674 files, 6552 per file, gap 542 ms, minutes 100.54%, nonmono 4179, crossed 0
+   202601: 140,616 files, 6511 per file, gap 542 ms, minutes 98.58%, nonmono 6269, crossed 0
+   202602: 128,748 files, 6523 per file, gap 542 ms, minutes 98.97%, nonmono 33, crossed 0
+   202603: 143,592 files, 6519 per file, gap 542 ms, minutes 98.79%, nonmono 0, crossed 0
+   202604: 138,960 files, 6645 per file, gap 538 ms, minutes 98.74%, nonmono 0, crossed 0
+   202605: 143,592 files, 6646 per file, gap 538 ms, minutes 98.83%, nonmono 0, crossed 0
+   202606: 138,960 files, 1668 per file, gap 2156 ms, minutes 98.76%, nonmono 2, crossed 0
+   202607: 103,333 files, 670 per file, gap 5386 ms, minutes 99.11%, nonmono 40, crossed 0
+   202608: 130,789 files, 670 per file, gap 5384 ms, minutes 100.06%, nonmono 0, crossed 0
+   202609: 127,443 files, 670 per file, gap 5391 ms, minutes 100.07%, nonmono 31, crossed 0
+   202610: 98,256 files, 670 per file, gap 5394 ms, minutes 100.10%, nonmono 0, crossed 0
+[G8] feature matrices for 204 coins  [50s]
+[G8 pair] 6,697,756 rows x 114 columns written  [182s]
+   a_spread_bp: NaN 7.0%  median +4.711  by month NaN%: 25-06 0 25-07 0 25-08 0 25-09 0 25-10 25 25-11 35 25-12 0 26-01 3 26-02 2 26-03 3 26-04 3 26-05 4 26-06 4 26-07 26 26-08 1 26-09 1 26-10 1
+   a_bid_d10: NaN 7.0%  median +5728  by month NaN%: 25-06 0 25-07 0 25-08 0 25-09 0 25-10 25 25-11 35 25-12 0 26-01 3 26-02 2 26-03 3 26-04 3 26-05 4 26-06 4 26-07 26 26-08 1 26-09 1 26-10 1
+   a_slip_buy_1k: NaN 7.0%  median +3.349  by month NaN%: 25-06 0 25-07 0 25-08 0 25-09 0 25-10 25 25-11 35 25-12 0 26-01 3 26-02 2 26-03 3 26-04 3 26-05 4 26-06 4 26-07 26 26-08 1 26-09 1 26-10 1
+   a_rel_bid_d10: NaN 11.3%  median +0.9027  by month NaN%: 25-06 1 25-07 1 25-08 0 25-09 0 25-10 37 25-11 47 25-12 4 26-01 6 26-02 7 26-03 8 26-04 8 26-05 7 26-06 8 26-07 38 26-08 3 26-09 3 26-10 2
+   a_chg6h_spread_bp: NaN 8.5%  median +0.06199  by month NaN%: 25-06 0 25-07 0 25-08 0 25-09 0 25-10 26 25-11 40 25-12 1 26-01 5 26-02 4 26-03 5 26-04 6 26-05 6 26-06 6 26-07 29 26-08 1 26-09 2 26-10 1
+   a_snapshot_age_s: NaN 7.0%  median +59.65  by month NaN%: 25-06 0 25-07 0 25-08 0 25-09 0 25-10 25 25-11 35 25-12 0 26-01 3 26-02 2 26-03 3 26-04 3 26-05 4 26-06 4 26-07 26 26-08 1 26-09 1 26-10 1
+   a_book_reach_bid_bp: NaN 7.0%  median +40.43  by month NaN%: 25-06 0 25-07 0 25-08 0 25-09 0 25-10 25 25-11 35 25-12 0 26-01 3 26-02 2 26-03 3 26-04 3 26-05 4 26-06 4 26-07 26 26-08 1 26-09 1 26-10 1
+[G8 coin] 74,607 rows x 41 columns written  [186s]
+   a_spread_bp: NaN 6.6%  median +4.677  by month NaN%: 25-05 0 25-06 0 25-07 1 25-08 0 25-09 0 25-10 23 25-11 34 25-12 0 26-01 3 26-02 2 26-03 3 26-04 4 26-05 3 26-06 3 26-07 24 26-08 1 26-09 1 26-10 1
+   a_bid_d10: NaN 6.6%  median +6105  by month NaN%: 25-05 0 25-06 0 25-07 1 25-08 0 25-09 0 25-10 23 25-11 34 25-12 0 26-01 3 26-02 2 26-03 3 26-04 4 26-05 3 26-06 3 26-07 24 26-08 1 26-09 1 26-10 1
+   a_slip_buy_1k: NaN 6.6%  median +3.315  by month NaN%: 25-05 0 25-06 0 25-07 1 25-08 0 25-09 0 25-10 23 25-11 34 25-12 1 26-01 3 26-02 2 26-03 3 26-04 4 26-05 3 26-06 3 26-07 24 26-08 1 26-09 1 26-10 1
+   a_rel_bid_d10: NaN 11.1%  median +0.8894  by month NaN%: 25-05 0 25-06 1 25-07 1 25-08 0 25-09 0 25-10 34 25-11 46 25-12 4 26-01 6 26-02 7 26-03 8 26-04 8 26-05 6 26-06 8 26-07 39 26-08 3 26-09 2 26-10 2
+   a_chg6h_spread_bp: NaN 8.0%  median +0.05628  by month NaN%: 25-05 0 25-06 0 25-07 1 25-08 0 25-09 0 25-10 24 25-11 40 25-12 1 26-01 5 26-02 4 26-03 5 26-04 7 26-05 5 26-06 6 26-07 27 26-08 1 26-09 1 26-10 1
+   a_snapshot_age_s: NaN 6.6%  median +59.64  by month NaN%: 25-05 0 25-06 0 25-07 1 25-08 0 25-09 0 25-10 23 25-11 34 25-12 0 26-01 3 26-02 2 26-03 3 26-04 4 26-05 3 26-06 3 26-07 24 26-08 1 26-09 1 26-10 1
+   a_book_reach_bid_bp: NaN 6.6%  median +39.91  by month NaN%: 25-05 0 25-06 0 25-07 1 25-08 0 25-09 0 25-10 23 25-11 34 25-12 0 26-01 3 26-02 2 26-03 3 26-04 4 26-05 3 26-06 3 26-07 24 26-08 1 26-09 1 26-10 1
