@@ -109,13 +109,3 @@ attic/okx_data/
 attic/okx_datasets/
 attic/vm_final/
 research/.gcp_pull/
-
-# attic 2026-10-26: local data and outputs moved with the code; kept on disk, not in git
-attic/2026-10-26/research/from_vm/
-attic/2026-10-26/research/exit_study/
-attic/2026-10-26/research/rank_experiment/
-attic/2026-10-26/research/scan_history/
-attic/2026-10-26/research/backups/
-attic/2026-10-26/research/okx_outputs/
-attic/2026-10-26/top/logs/
-attic/2026-10-26/top/backups/
