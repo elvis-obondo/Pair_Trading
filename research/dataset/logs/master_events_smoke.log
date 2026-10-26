@@ -1,0 +1,6 @@
+[SMOKE TEST] first 200 of 20706 pairs only; outputs are not the dataset
+[INFO] panel 24305 bars x 206 tickers 2025-05-25 15:00:00 -> 2026-10-13 23:00:00; 20706 pairs; shortest usable segment 356 bars
+[DONE] 59,557 triggers over 193 pairs; 2025-10-04 09:30:00 -> 2026-10-13 13:00:00  [6s]
+  per pair: median 332, max 377; long 51.3%
+[INVARIANT] max |y00 - z| 0.000e+00 (must be < 1e-4)
+[SMOKE TEST] reproduction check skipped

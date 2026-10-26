@@ -1,0 +1,8 @@
+[G7 INVARIANTS] PASS (ages in range, observed age <= 120, vault share in [0,1], hourly funding within +-5%, pair differences equal a - b)
+[G7 INDEP] independent inputs read for 199 coins [385s]
+[G7 INDEP] 1500 legs: 28,500 comparisons (observed OI, age, changes, reconstructed level and changes, funding as-of and means); mismatches 0; worst error / tolerance 0.021 [492s]
+[G7 INDEP] PASS
+[G7 POISON] inputs loaded [1050s]
+[G7 POISON] 600 pair legs + 200 coin legs, overwrite and truncation, 37 columns each: changed in 0 cases [1368s]
+[G7 POISON] PASS
+[TESTS G7] ALL PASS [1879s]

@@ -1,0 +1,33 @@
+[G8 PILOT] build8_l2.py, run from the laptop 2026-10-25 (EC2 role denied on hyperliquid-archive), 4 days in parallel, coins.csv filter; times are wall seconds per day from the run output
+
+[L2 20250715] 4824 files, 2.61 GB compressed, 290,852 coin-minutes [1083s]
+[20250715] coins 201; coin-hours present 4,824 of 4,824 (100.00%); failed files 0; compressed bytes 2.613 GB; coin-minutes 290,852; minutes per coin-hour median 60, min 60
+[20250715] crossed/locked rows 0; non-monotone exchange-time steps 0 in 0 files; snapshots per coin-hour median 6617; gap median (of file medians) 539 ms, max gap 2067 ms
+[20250715] first snapshot offset into the minute (s): median 0.30, p90 0.51, max 60.0
+[20250715] NaN share: spread 13.93%, slip_buy_10k 14.0%, slip_sell_10k 14.0%, slip_buy_50k 35.9%, slip_sell_50k 32.2%
+[20250715] trunc share (20th level inside the band): bid 10/25/50 = 6.8% / 37.2% / 67.7%; ask = 6.8% / 34.2% / 65.2%; spread_bp median 3.58
+
+[L2 20251010] 5198 files, 2.64 GB compressed, 314,039 coin-minutes [1079s]
+[20251010] coins 217; coin-hours present 5,198 of 5,208 (99.81%); failed files 0; compressed bytes 2.642 GB; coin-minutes 314,039; minutes per coin-hour median 60, min 11
+[20251010] crossed/locked rows 0; non-monotone exchange-time steps 0 in 0 files; snapshots per coin-hour median 6573; gap median (of file medians) 541 ms, max gap 28151 ms
+[20251010] first snapshot offset into the minute (s): median 0.31, p90 0.54, max 60.0
+[20251010] NaN share: spread 16.16%, slip_buy_10k 16.8%, slip_sell_10k 16.8%, slip_buy_50k 44.6%, slip_sell_50k 44.8%
+[20251010] trunc share (20th level inside the band): bid 10/25/50 = 9.1% / 37.7% / 69.0%; ask = 8.7% / 35.4% / 66.8%; spread_bp median 3.87
+
+[L2 20260301] 4632 files, 1.79 GB compressed, 275,584 coin-minutes [905s]
+[20260301] coins 193; coin-hours present 4,632 of 4,632 (100.00%); failed files 0; compressed bytes 1.789 GB; coin-minutes 275,584; minutes per coin-hour median 60, min 55
+[20260301] crossed/locked rows 0; non-monotone exchange-time steps 0 in 0 files; snapshots per coin-hour median 6532; gap median (of file medians) 542 ms, max gap 399195 ms
+[20260301] first snapshot offset into the minute (s): median 0.29, p90 0.50, max 59.9
+[20260301] NaN share: spread 2.07%, slip_buy_10k 3.1%, slip_sell_10k 3.0%, slip_buy_50k 54.1%, slip_sell_50k 54.4%
+[20260301] trunc share (20th level inside the band): bid 10/25/50 = 6.2% / 26.6% / 51.8%; ask = 6.2% / 25.9% / 51.5%; spread_bp median 5.74
+
+[L2 20260915] 4272 files, 0.47 GB compressed, 256,854 coin-minutes [582s]
+[20260915] coins 178; coin-hours present 4,272 of 4,272 (100.00%); failed files 0; compressed bytes 0.467 GB; coin-minutes 256,854; minutes per coin-hour median 60, min 60
+[20260915] crossed/locked rows 0; non-monotone exchange-time steps 0 in 0 files; snapshots per coin-hour median 670; gap median (of file medians) 5391 ms, max gap 7044 ms
+[20260915] first snapshot offset into the minute (s): median 2.70, p90 4.84, max 59.9
+[20260915] NaN share: spread 0.56%, slip_buy_10k 11.6%, slip_sell_10k 13.5%, slip_buy_50k 71.8%, slip_sell_50k 74.1%
+[20260915] trunc share (20th level inside the band): bid 10/25/50 = 11.3% / 39.8% / 64.4%; ask = 11.5% / 39.9% / 64.2%; spread_bp median 2.79
+
+[G8 PILOT] total 7.51 GB compressed for 4 days; full run ~517 days: about 0.97 TB; laptop egress about $0.68 for the pilot, about $87 for the full run; EC2 us-east-2 cross-region about $10
+[G8 PILOT] note on the spread NaN share of 14-16% in 2025: it is 28 of 201 coins (2025-07-15) whose files hold snapshots with an empty side (delisted coins such as AI, BADGER, STRAX, SHIA, RNDR, RLB, RDNT, PIXEL: 1,447 rows each = every minute they were in the archive). Those rows have crossed = NaN and every quantity NaN, by the rule "empty side -> NaN"; they are not crossed books.
+[G8 PILOT] correction to the note above (checker 2026-10-25): 1,447 rows per coin in one day meant duplicated (coin, minute) labels, not extra minutes. The pilot extractor stored the first snapshot of every minute per hour file, and a minute at an hour boundary appears in two files (a snapshot stamped just before the hour sits in the next hour's file). No minute lies outside the day (0 rows before or after on 2025-07-15 and 2026-03-01). Duplicate rows: 2,824 on 2025-07-15, 4,414 on 2026-03-01. Stage fix in build8_l2.py (for the full run): sort by exchange time, keep the minimum per (coin, minute), assert uniqueness, drop and count rows outside the day, print both counts per day. Dry run on the stored 2025-07-15 table: 1,412 duplicates removed (2,824 rows = 1,412 pairs), maximum 1,440 rows per coin. The pilot parquet files were produced before this fix and are not used downstream.

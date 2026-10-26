@@ -1,0 +1,23 @@
+[OI] observations for 234 coins, fills-based deltas for 206 coins  [224s]
+[OI CONVENTION] synthetic: fills at minutes 10 (+5) and 11 (+7): cd[11] - cd[10] = 5 (the snapshot stamped 11 contains the fill of minute 10, not that of minute 11); cd[12] - cd[11] = 7: PASS
+[OI] snapshots dropped because the stamp is not exactly on the minute: 111,166 of 279,372,741 (0.040%)
+[OI LAG] correlation of hourly observed OI change with the fills-based change, by assumed snapshot delay L (minutes)
+    L       pairs      corr    median |err|/median |obs change|
+   -5   2,240,093   0.96189                              0.6017
+   -4   2,240,093   0.96952                              0.5855
+   -3   2,240,093   0.98150                              0.5686
+   -2   2,240,093   0.99165                              0.5505
+   -1   2,240,093   0.99648                              0.5292
+    0   2,240,093   0.99979                              0.5000
+    1   2,240,093   0.99626                              0.5093
+    2   2,240,093   0.99196                              0.5187
+    3   2,240,093   0.98656                              0.5288
+    4   2,240,093   0.98103                              0.5395
+    5   2,240,093   0.97429                              0.5502
+    6   2,240,093   0.96807                              0.5615
+    7   2,240,093   0.96182                              0.5730
+    8   2,240,093   0.95560                              0.5855
+    9   2,240,093   0.94966                              0.5977
+   10   2,240,093   0.94371                              0.6102
+[OI LAG] L* = 0 (correlation 0.99979)
+  [227s]

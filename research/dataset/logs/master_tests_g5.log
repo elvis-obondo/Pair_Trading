@@ -1,0 +1,23 @@
+   pair a_backstop_ratio_30: max 4.233, share above 1: 0.0080%
+   pair a_adl_ratio_30: max 4.511, share above 1: 0.0084%
+   pair a_backstop_ratio_60: max 3.746, share above 1: 0.0092%
+   pair a_adl_ratio_60: max 3.991, share above 1: 0.0098%
+   pair a_backstop_ratio_360: max 2.615, share above 1: 0.0034%
+   pair a_adl_ratio_360: max 2.786, share above 1: 0.0033%
+   pair a_backstop_ratio_1440: max 2.215, share above 1: 0.0020%
+   pair a_adl_ratio_1440: max 2.263, share above 1: 0.0021%
+   coin a_backstop_ratio_30: max 4.233, share above 1: 0.0094%
+   coin a_adl_ratio_30: max 4.511, share above 1: 0.0108%
+   coin a_backstop_ratio_60: max 3.746, share above 1: 0.0067%
+   coin a_adl_ratio_60: max 3.991, share above 1: 0.0067%
+   coin a_backstop_ratio_360: max 2.615, share above 1: 0.0013%
+   coin a_adl_ratio_360: max 2.786, share above 1: 0.0013%
+   coin a_backstop_ratio_1440: max 2.124, share above 1: 0.0014%
+   coin a_adl_ratio_1440: max 2.263, share above 1: 0.0014%
+[G5 INVARIANTS] PASS (shares in [0,1], imb in [-1,1], net weights in [0,1], the twelve 5-minute bins add up to the 60-minute window)
+[G5 SWAP] PASS on the building blocks (d held fixed): net(x_A, x_B, wA) = net(x_B, x_A, 1 - wA) and equals the stored net columns on 100,000 events; the leg block is a function of (coin, cutoff, push sign) only
+[G5 INDEP] 2000 legs: 278,000 comparisons; mismatches 0; worst error / tolerance 0.001 [167s]
+[G5 INDEP] PASS
+[G5 POISON] 1000 pair legs + 300 coin legs (all raw flow minutes at or after o replaced), 139 columns each: changed in 0 cases [226s]
+[G5 POISON] PASS
+[TESTS G5] ALL PASS [498s]

@@ -1,0 +1,3 @@
+[G6 INDEP] 2000 legs: 216,000 comparisons; mismatches 0; worst error / tolerance 0.001 [3397s]
+[G6 INDEP] PASS
+[TESTS G6 indep-only] PASS [3401s]

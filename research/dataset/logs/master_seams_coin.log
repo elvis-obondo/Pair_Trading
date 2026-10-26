@@ -1,0 +1,181 @@
+[SEAMS coin] events: 9 columns  [2s]
+[SEAMS coin] g2: 24 columns  [2s]
+[SEAMS coin] g2b: 5 columns  [2s]
+[SEAMS coin] g3: 14 columns  [2s]
+[SEAMS coin] g4: 25 columns  [2s]
+[SEAMS coin] g5_a: 139 columns  [2s]
+[SEAMS coin] g5_net: 139 columns  [2s]
+[SEAMS coin] g5_shape: 9 columns  [2s]
+[SEAMS coin] g6_a: 108 columns  [2s]
+[SEAMS coin] g7: 37 columns  [2s]
+[SEAMS coin] g8: 41 columns  [2s]
+[SEAMS coin] g9a: 49 columns  [2s]
+   per group and day the table also holds the MAXIMUM NaN share over the group's columns and that column's name (columns <group>_max, <group>_maxcol in seams_daily.parquet)
+
+[SEAMS coin] days 481; events 74,607; median events per day 152
+   median daily NaN share per group: events 0.0%, g2 4.2%, g2b 0.0%, g3 0.0%, g4 3.4%, g5_a 2.0%, g5_net 2.9%, g5_shape 3.7%, g6_a 0.2%, g7 0.0%, g8 1.7%, g9a 0.0%
+
+1. ARCHIVE SEAMS (events and mean NaN share by group, 24 h before | 24 h from the seam bar; day-level approximation for the NaN shares: the UTC day before | the UTC day of the seam)
+   2025-06-08 09:30:00: events 106 | 0
+      NaN % before: events 0.0, g2 4.2, g2b 0.0, g3 8.3, g4 11.6, g5_a 4.7, g5_net 5.5, g5_shape 6.0, g6_a 7.6, g7 0.0, g8 0.0, g9a 12.2
+      NaN % after : events 0.0, g2 4.2, g2b 0.0, g3 4.8, g4 11.6, g5_a 6.8, g5_net 7.6, g5_shape 3.0, g6_a 8.3, g7 0.0, g8 0.2, g9a 12.2
+   2025-06-08 10:00:00: events 106 | 0
+      NaN % before: events 0.0, g2 4.2, g2b 0.0, g3 8.3, g4 11.6, g5_a 4.7, g5_net 5.5, g5_shape 6.0, g6_a 7.6, g7 0.0, g8 0.0, g9a 12.2
+      NaN % after : events 0.0, g2 4.2, g2b 0.0, g3 4.8, g4 11.6, g5_a 6.8, g5_net 7.6, g5_shape 3.0, g6_a 8.3, g7 0.0, g8 0.2, g9a 12.2
+   2025-07-19 09:30:00: events 106 | 0
+      NaN % before: events 0.0, g2 4.3, g2b 0.0, g3 0.3, g4 3.5, g5_a 4.2, g5_net 5.3, g5_shape 5.1, g6_a 7.5, g7 0.0, g8 0.2, g9a 10.2
+      NaN % after : events 0.0, g2 4.2, g2b 0.0, g3 0.0, g4 3.5, g5_a 4.1, g5_net 5.0, g5_shape 4.3, g6_a 7.4, g7 0.0, g8 0.1, g9a 10.2
+   2025-07-27 11:30:00: events 134 | 0
+      NaN % before: events 0.0, g2 25.5, g2b 0.0, g3 0.2, g4 3.3, g5_a 4.3, g5_net 5.3, g5_shape 5.7, g6_a 8.2, g7 0.0, g8 0.2, g9a 12.3
+      NaN % after : events 0.0, g2 12.5, g2b 0.0, g3 0.0, g4 3.3, g5_a 27.4, g5_net 28.2, g5_shape 13.4, g6_a 28.5, g7 3.5, g8 8.1, g9a 15.7
+   2025-09-27 09:00:00: events 154 | 0
+      NaN % before: events 0.0, g2 4.2, g2b 0.0, g3 1.0, g4 3.8, g5_a 1.2, g5_net 2.4, g5_shape 6.0, g6_a 0.0, g7 0.0, g8 0.0, g9a 4.1
+      NaN % after : events 0.0, g2 4.2, g2b 0.0, g3 0.3, g4 3.5, g5_a 1.2, g5_net 2.2, g5_shape 8.5, g6_a 0.0, g7 0.0, g8 0.0, g9a 4.1
+
+2. ORDER-BOOK COVERAGE FROM THE SOURCE (extractor index files): days with coin-hours present < expected
+   517 days in the index; 50 with coin-hours present < expected (present = 0 for days entirely missing); coin-hours missing in total 64,412 of 2,340,048
+     2025-05-25  present 4,728 / expected 4,752 (99.5%)  events that day 0  g8 mean NaN n/a
+     2025-05-26  present 4,728 / expected 4,752 (99.5%)  events that day 0  g8 mean NaN n/a
+     2025-05-27  present 4,728 / expected 4,752 (99.5%)  events that day 0  g8 mean NaN n/a
+     2025-05-28  present 4,738 / expected 4,752 (99.7%)  events that day 0  g8 mean NaN n/a
+     2025-06-10  present 4,762 / expected 4,776 (99.7%)  events that day 0  g8 mean NaN n/a
+     2025-06-26  present 4,795 / expected 4,800 (99.9%)  events that day 157  g8 mean NaN 0.9%
+     2025-07-10  present 4,821 / expected 4,824 (99.9%)  events that day 133  g8 mean NaN 0.4%
+     2025-08-06  present 4,845 / expected 4,848 (99.9%)  events that day 107  g8 mean NaN 0.1%
+     2025-08-21  present 4,869 / expected 4,872 (99.9%)  events that day 107  g8 mean NaN 0.1%
+     2025-08-22  present 4,887 / expected 4,896 (99.8%)  events that day 205  g8 mean NaN 0.0%
+     2025-08-23  present 4,910 / expected 4,920 (99.8%)  events that day 83  g8 mean NaN 0.2%
+     2025-09-01  present 4,935 / expected 4,944 (99.8%)  events that day 219  g8 mean NaN 0.1%
+     2025-09-17  present 4,963 / expected 4,968 (99.9%)  events that day 228  g8 mean NaN 0.1%
+     2025-09-19  present 4,982 / expected 4,992 (99.8%)  events that day 123  g8 mean NaN 0.0%
+     2025-09-21  present 5,009 / expected 5,016 (99.9%)  events that day 181  g8 mean NaN 0.0%
+     2025-09-22  present 5,051 / expected 5,064 (99.7%)  events that day 239  g8 mean NaN 0.1%
+     2025-09-24  present 5,081 / expected 5,088 (99.9%)  events that day 163  g8 mean NaN 0.2%
+     2025-09-27  present 5,106 / expected 5,112 (99.9%)  events that day 63  g8 mean NaN 0.0%
+     2025-10-02  present 5,134 / expected 5,160 (99.5%)  events that day 0  g8 mean NaN n/a
+     2025-10-08  present 5,180 / expected 5,184 (99.9%)  events that day 134  g8 mean NaN 0.0%
+     2025-10-10  present 5,198 / expected 5,208 (99.8%)  events that day 392  g8 mean NaN 2.2%
+     2025-10-16  present 2,387 / expected 5,208 (45.8%)  events that day 195  g8 mean NaN 73.4%
+     2025-10-17  present 0 / expected 4,392 (0.0%)  events that day 149  g8 mean NaN 100.0%
+     2025-10-18  present 0 / expected 4,392 (0.0%)  events that day 99  g8 mean NaN 100.0%
+     2025-10-19  present 0 / expected 4,392 (0.0%)  events that day 237  g8 mean NaN 100.0%
+     2025-10-20  present 0 / expected 4,392 (0.0%)  events that day 147  g8 mean NaN 100.0%
+     2025-10-21  present 0 / expected 4,392 (0.0%)  events that day 160  g8 mean NaN 100.0%
+     2025-10-22  present 0 / expected 4,392 (0.0%)  events that day 118  g8 mean NaN 100.0%
+     2025-10-31  present 4,404 / expected 4,416 (99.7%)  events that day 144  g8 mean NaN 0.6%
+     2025-11-08  present 4,437 / expected 4,440 (99.9%)  events that day 93  g8 mean NaN 16.2%
+     2025-11-11  present 4,458 / expected 4,464 (99.9%)  events that day 132  g8 mean NaN 16.0%
+     2025-11-17  present 2,417 / expected 4,464 (54.1%)  events that day 197  g8 mean NaN 70.3%
+     2025-12-08  present 4,475 / expected 4,488 (99.7%)  events that day 84  g8 mean NaN 0.2%
+     2025-12-11  present 4,510 / expected 4,512 (100.0%)  events that day 136  g8 mean NaN 0.6%
+     2025-12-22  present 4,521 / expected 4,536 (99.7%)  events that day 197  g8 mean NaN 0.7%
+     2026-02-10  present 4,548 / expected 4,632 (98.2%)  events that day 139  g8 mean NaN 0.6%
+     2026-07-08  present 0 / expected 4,632 (0.0%)  events that day 96  g8 mean NaN 100.0%
+     2026-07-11  present 2,509 / expected 4,632 (54.2%)  events that day 176  g8 mean NaN 70.7%
+     2026-07-12  present 0 / expected 4,224 (0.0%)  events that day 107  g8 mean NaN 100.0%
+     2026-07-13  present 0 / expected 4,224 (0.0%)  events that day 123  g8 mean NaN 100.0%
+     2026-07-14  present 0 / expected 4,224 (0.0%)  events that day 196  g8 mean NaN 100.0%
+     2026-07-15  present 0 / expected 4,224 (0.0%)  events that day 128  g8 mean NaN 100.0%
+     2026-07-16  present 0 / expected 4,224 (0.0%)  events that day 213  g8 mean NaN 100.0%
+     2026-07-17  present 0 / expected 4,224 (0.0%)  events that day 137  g8 mean NaN 100.0%
+     2026-08-24  present 4,048 / expected 4,224 (95.8%)  events that day 142  g8 mean NaN 4.1%
+     2026-08-31  present 4,245 / expected 4,248 (99.9%)  events that day 100  g8 mean NaN 0.1%
+     2026-09-04  present 4,071 / expected 4,248 (95.8%)  events that day 124  g8 mean NaN 4.5%
+     2026-09-08  present 4,256 / expected 4,272 (99.6%)  events that day 134  g8 mean NaN 0.9%
+     2026-09-13  present 4,094 / expected 4,272 (95.8%)  events that day 255  g8 mean NaN 2.8%
+     2026-09-17  present 4,094 / expected 4,272 (95.8%)  events that day 185  g8 mean NaN 3.9%
+
+3. CTX COVERAGE FROM THE SOURCE (asset_ctxs distinct snapshot minutes per coin-day, of 1,440)
+   missing share by month (mean over days of 1 - mean minutes per coin / 1,440): 2025-01 0.1%, 2025-02 0.1%, 2025-03 0.0%, 2025-04 0.1%, 2025-05 0.1%, 2025-06 0.1%, 2025-07 0.1%, 2025-08 0.0%, 2025-09 0.0%, 2025-10 0.0%, 2025-11 0.0%, 2025-12 0.0%, 2026-01 0.0%, 2026-02 0.0%, 2026-03 0.0%, 2026-04 0.0%, 2026-05 2.3%, 2026-06 0.0%, 2026-07 0.0%, 2026-08 6.4%, 2026-09 28.4%, 2026-10 67.7%
+     2026-08-15  ctx missing   0.0%  g7 mean NaN 1.0%  g7 max NaN 37.9% (a_oi_obs_chg_7d)
+     2026-08-16  ctx missing   0.0%  g7 mean NaN 1.6%  g7 max NaN 57.6% (a_oi_obs_chg_7d)
+     2026-08-17  ctx missing   0.0%  g7 mean NaN 0.0%  g7 max NaN 0.0% ()
+     2026-08-18  ctx missing   0.0%  g7 mean NaN 0.0%  g7 max NaN 0.0% ()
+     2026-08-19  ctx missing   0.0%  g7 mean NaN 0.0%  g7 max NaN 0.0% ()
+     2026-08-20  ctx missing   0.0%  g7 mean NaN 0.0%  g7 max NaN 0.0% ()
+     2026-08-21  ctx missing   0.0%  g7 mean NaN 0.0%  g7 max NaN 0.0% ()
+     2026-08-22  ctx missing   0.0%  g7 mean NaN 0.0%  g7 max NaN 0.0% ()
+     2026-08-23  ctx missing   0.0%  g7 mean NaN 0.0%  g7 max NaN 0.0% ()
+     2026-08-24  ctx missing   0.0%  g7 mean NaN 0.0%  g7 max NaN 0.0% ()
+     2026-08-25  ctx missing   0.0%  g7 mean NaN 0.0%  g7 max NaN 0.0% ()
+     2026-08-26  ctx missing   0.0%  g7 mean NaN 0.0%  g7 max NaN 0.0% ()
+     2026-08-27  ctx missing  53.5%  g7 mean NaN 14.5%  g7 max NaN 52.8% (a_ctx_funding_inst)
+     2026-08-28  ctx missing   0.0%  g7 mean NaN 2.5%  g7 max NaN 63.0% (a_oi_obs_chg_24h)
+     2026-08-29  ctx missing   0.0%  g7 mean NaN 0.0%  g7 max NaN 0.0% ()
+     2026-08-30  ctx missing  64.3%  g7 mean NaN 22.6%  g7 max NaN 81.7% (a_ctx_funding_inst)
+     2026-08-31  ctx missing   0.1%  g7 mean NaN 2.5%  g7 max NaN 55.0% (a_oi_obs_chg_24h)
+     2026-09-01  ctx missing   0.0%  g7 mean NaN 0.0%  g7 max NaN 0.0% ()
+     2026-09-02  ctx missing   0.0%  g7 mean NaN 0.0%  g7 max NaN 0.0% ()
+     2026-09-03  ctx missing   0.0%  g7 mean NaN 1.1%  g7 max NaN 41.5% (a_oi_obs_chg_7d)
+     2026-09-04  ctx missing   0.0%  g7 mean NaN 0.0%  g7 max NaN 0.0% ()
+     2026-09-05  ctx missing   0.0%  g7 mean NaN 0.0%  g7 max NaN 0.0% ()
+     2026-09-06  ctx missing   0.0%  g7 mean NaN 1.3%  g7 max NaN 45.6% (a_oi_obs_chg_7d)
+     2026-09-07  ctx missing   0.0%  g7 mean NaN 0.0%  g7 max NaN 0.0% ()
+     2026-09-08  ctx missing   0.3%  g7 mean NaN 0.0%  g7 max NaN 0.0% ()
+     2026-09-09  ctx missing   0.0%  g7 mean NaN 0.0%  g7 max NaN 0.0% ()
+     2026-09-10  ctx missing   0.0%  g7 mean NaN 0.0%  g7 max NaN 0.0% ()
+     2026-09-11  ctx missing   0.0%  g7 mean NaN 0.0%  g7 max NaN 0.0% ()
+     2026-09-12  ctx missing   0.0%  g7 mean NaN 0.0%  g7 max NaN 0.0% ()
+     2026-09-13  ctx missing   0.0%  g7 mean NaN 0.0%  g7 max NaN 0.0% ()
+     2026-09-14  ctx missing   0.0%  g7 mean NaN 0.0%  g7 max NaN 0.0% ()
+     2026-09-15  ctx missing  89.2%  g7 mean NaN 26.7%  g7 max NaN 95.5% (a_ctx_funding_inst)
+     2026-09-16  ctx missing  64.9%  g7 mean NaN 23.3%  g7 max NaN 89.5% (a_oi_obs_chg_24h)
+     2026-09-17  ctx missing   0.0%  g7 mean NaN 2.6%  g7 max NaN 43.8% (a_oi_obs_chg_6h)
+     2026-09-18  ctx missing  58.6%  g7 mean NaN 15.1%  g7 max NaN 54.0% (a_ctx_funding_inst)
+     2026-09-19  ctx missing   0.0%  g7 mean NaN 2.1%  g7 max NaN 58.2% (a_oi_obs_chg_24h)
+     2026-09-20  ctx missing   0.0%  g7 mean NaN 0.0%  g7 max NaN 0.0% ()
+     2026-09-21  ctx missing   0.0%  g7 mean NaN 0.0%  g7 max NaN 0.0% ()
+     2026-09-22  ctx missing  86.4%  g7 mean NaN 27.0%  g7 max NaN 93.3% (a_ctx_funding_inst)
+     2026-09-23  ctx missing  62.0%  g7 mean NaN 21.4%  g7 max NaN 85.2% (a_oi_obs_chg_6h)
+     2026-09-24  ctx missing  79.0%  g7 mean NaN 25.4%  g7 max NaN 98.3% (a_oi_obs_chg_6h)
+     2026-09-25  ctx missing  54.5%  g7 mean NaN 17.2%  g7 max NaN 82.2% (a_oi_obs_chg_24h)
+     2026-09-26  ctx missing  71.3%  g7 mean NaN 23.0%  g7 max NaN 89.6% (a_oi_obs_chg_6h)
+     2026-09-27  ctx missing  87.8%  g7 mean NaN 26.9%  g7 max NaN 100.0% (a_oi_obs_chg_6h)
+     2026-09-28  ctx missing  63.3%  g7 mean NaN 10.5%  g7 max NaN 81.1% (a_oi_obs_chg_6h)
+     2026-09-29  ctx missing  80.3%  g7 mean NaN 23.8%  g7 max NaN 94.0% (a_oi_obs_chg_6h)
+     2026-09-30  ctx missing  55.7%  g7 mean NaN 20.3%  g7 max NaN 87.8% (a_oi_obs_chg_24h)
+     2026-10-01  ctx missing  72.8%  g7 mean NaN 23.5%  g7 max NaN 90.1% (a_oi_obs_chg_6h)
+     2026-10-02  ctx missing  89.9%  g7 mean NaN 27.7%  g7 max NaN 100.0% (a_oi_obs_chg_6h)
+     2026-10-03  ctx missing   0.0%  g7 mean NaN 5.0%  g7 max NaN 85.3% (a_oi_obs_chg_24h)
+     2026-10-04  ctx missing  82.4%  g7 mean NaN 26.5%  g7 max NaN 92.1% (a_ctx_funding_inst)
+     2026-10-05  ctx missing  58.4%  g7 mean NaN 15.0%  g7 max NaN 77.0% (a_oi_obs_chg_6h)
+     2026-10-06  ctx missing  75.7%  g7 mean NaN 20.1%  g7 max NaN 94.6% (a_oi_obs_chg_6h)
+     2026-10-07  ctx missing  51.7%  g7 mean NaN 9.1%  g7 max NaN 82.5% (a_oi_obs_chg_6h)
+     2026-10-08  ctx missing  69.0%  g7 mean NaN 22.9%  g7 max NaN 92.7% (a_oi_obs_chg_6h)
+     2026-10-09  ctx missing  86.2%  g7 mean NaN 27.1%  g7 max NaN 100.0% (a_oi_obs_chg_6h)
+     2026-10-10  ctx missing  61.5%  g7 mean NaN 18.0%  g7 max NaN 85.8% (a_oi_obs_chg_6h)
+     2026-10-11  ctx missing  78.8%  g7 mean NaN 26.4%  g7 max NaN 98.5% (a_oi_obs_chg_6h)
+     2026-10-12  ctx missing  54.7%  g7 mean NaN 19.2%  g7 max NaN 80.7% (a_oi_obs_chg_6h)
+     2026-10-13  ctx missing  72.0%  g7 mean NaN 18.1%  g7 max NaN 88.6% (a_oi_obs_chg_6h)
+     2026-10-14  ctx missing  89.3%  g7 mean NaN n/a  g7 max NaN n/a
+     2026-10-15  ctx missing  65.2%  g7 mean NaN n/a  g7 max NaN n/a
+     2026-10-16  ctx missing  82.4%  g7 mean NaN n/a  g7 max NaN n/a
+     2026-10-17  ctx missing  57.8%  g7 mean NaN n/a  g7 max NaN n/a
+     2026-10-18  ctx missing  74.6%  g7 mean NaN n/a  g7 max NaN n/a
+     2026-10-19  ctx missing  50.0%  g7 mean NaN n/a  g7 max NaN n/a
+     2026-10-20  ctx missing  66.8%  g7 mean NaN n/a  g7 max NaN n/a
+     2026-10-21  ctx missing  83.7%  g7 mean NaN n/a  g7 max NaN n/a
+     2026-10-22  ctx missing  58.9%  g7 mean NaN n/a  g7 max NaN n/a
+     2026-10-23  ctx missing  75.3%  g7 mean NaN n/a  g7 max NaN n/a
+
+4. DAILY NaN SHARE BY MONTH (mean over days), per group
+   month       events        g2       g2b        g3        g4      g5_a    g5_net  g5_shape      g6_a        g7        g8       g9a
+   2025-05        0.0      37.5       0.0      76.5      26.9       9.4      10.5       8.9      11.9       5.4       0.0      36.7
+   2025-06        0.0       7.9       0.0       8.2      10.5       5.0       6.0       4.2       7.8       0.1       0.3      12.2
+   2025-07        0.0       7.1       0.0       0.1       3.4       5.8       6.8       4.4       8.7       0.2       1.0      10.7
+   2025-08        0.0       6.7       0.0       0.1       3.3       5.3       6.3       4.9       5.3       1.0       0.3      11.7
+   2025-09        0.0       4.3       0.0       0.1       3.4       4.3       5.3       5.3       4.2       0.8       0.1       5.4
+   2025-10        0.0       6.5       0.0       0.5       3.7       1.5       2.5       4.4       0.2       0.0      25.3       2.4
+   2025-11        0.0       4.2       0.0       0.1       3.4       1.5       2.5       4.1       0.2       0.0      38.2       2.0
+   2025-12        0.0       4.3       0.0       0.1       3.4       2.0       2.9       3.7       0.2       0.0       1.2       0.3
+   2026-01        0.0       4.2       0.0       0.1       3.4       2.1       3.1       3.4       0.3       0.0       3.9       0.0
+   2026-02        0.0       4.2       0.0       0.1       3.4       2.9       3.9       4.0       0.6       0.0       3.7       0.0
+   2026-03        0.0       4.2       0.0       0.0       3.3       3.0       3.9       3.4       0.6       0.0       4.4       0.0
+   2026-04        0.0       4.2       0.0       0.0       3.3       2.6       3.5       3.3       0.4       0.0       5.5       0.0
+   2026-05        0.0       4.2       0.0       0.0       3.3       2.5       3.5       3.6       0.4       0.5       3.9       0.0
+   2026-06        0.0       4.2       0.0       0.0       3.2       2.0       3.0       3.9       0.3       0.1       4.8       0.0
+   2026-07        0.0       4.2       0.0       0.0       3.3       1.8       2.7       3.5       0.3       1.1      28.9       0.0
+   2026-08        0.0       4.2       0.0       0.0       3.3       1.7       2.7       3.4       0.1       2.3       1.3       0.0
+   2026-09        0.0       4.2       0.0       0.1       3.4       1.6       2.6       3.5       0.2       8.9       1.4       0.0
+   2026-10        0.0       4.2       0.0       0.0       3.3       1.6       2.6       3.7       0.1      19.9       1.1       0.0
+[SEAMS coin] done  [293s]

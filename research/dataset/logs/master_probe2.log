@@ -1,0 +1,1 @@
+{'rows': (dtype('int64'), (59759,)), 'reach': (dtype('bool'), (59759,)), 'depth': (dtype('float64'), (59759,)), 'chance': (dtype('float64'), (59759,)), 'head': (dtype('float64'), (59759,)), 'liq_before': (dtype('bool'), (59759,)), 'liq_any': (dtype('bool'), (59759,)), 't_reach': (dtype('int64'), (59759,))}

@@ -1,0 +1,9 @@
+[RECOVERED EXCERPT, 2026-10-26; accepted without a full rerun by the user's decision of 2026-10-26, relayed by the planner pair-trading-f6, and by the checker pair-trading-78] This file is the transcript of the test lines printed by the master_tests_g8.py rerun of chain 21 (seeded, same trials as the first run plus the new miss-explanation lines). The original log file of that run was overwritten by a stale copy during a later sync; the lines below were captured from the run's output before that. A full rerun (about 43 minutes) was started and stopped to save time; the INVARIANTS line of the first run (chain 18) reads: [G8 INVARIANTS] PASS (crossed rows NaN, age in (0, 60], depth monotone in band, reach >= 0, imb in [-1, 1], trunc in {0,1}, d = a - b)
+[G8 INDEP] 159,300 comparisons (3000 events, rel_* on 300); mismatches 0 [2376s]
+[G8 INDEP] PASS
+[G8 POISON] 36 (coin, cutoff) trials, every minute row with exchange time >= t0 overwritten in the RAW table: features at or before the cutoff changed in 0 cases for the rule (must be 0)
+[G8 POISON] broken variant (row labelled t0 read instead of t0 - 1): the same poison changed the features in 34 of 36 trials (must be > 0: the test can see the bug)
+[G8 POISON] broken-variant miss: coin OGN, cutoff 7478: the raw table has a row labelled t0: False; a row labelled t0 - 1: False  -> the t0 row does not exist, so reading it gives NaN with or without the poison
+[G8 POISON] broken-variant miss: coin OGN, cutoff 22516: the raw table has a row labelled t0: False; a row labelled t0 - 1: False  -> the t0 row does not exist, so reading it gives NaN with or without the poison
+[G8 POISON/AS-OF] PASS
+[TESTS G8] ALL PASS [2570s]

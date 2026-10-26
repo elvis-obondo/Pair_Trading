@@ -1,0 +1,14 @@
+[INV pair] 6,697,756 events: event_id unique and identical in 15 group files; all entry times on the 30-minute UTC grid
+[INV pair] labels monotone in horizon (reach and depth, 2h <= 5h <= 10h); chance in [0,1]; fees >= 0
+[INV pair] r2 in [0,1] (events and g2)
+[INV pair] G6 push_total and nw nested over 30 <= 60 <= 360 <= 1440; G5 open/close shares in [0,1] with open + close <= 1
+[INV pair] OI never negative (observed and reconstructed); |funding| <= 0.04 per hour, the exchange cap (max seen 0.01832; 107 rows above 0.01 per hour, real spikes on new listings)
+[INV coin] 74,607 events: event_id unique and identical in 12 group files; all entry times on the 30-minute UTC grid
+[INV coin] labels monotone in horizon (reach and depth, 2h <= 5h <= 10h); chance in [0,1]; fees >= 0
+[INV coin] r2 in [0,1] (events and g2)
+[INV coin] G6 push_total and nw nested over 30 <= 60 <= 360 <= 1440; G5 open/close shares in [0,1] with open + close <= 1
+[INV coin] OI never negative (observed and reconstructed); |funding| <= 0.04 per hour, the exchange cap (max seen 0.01051; 1 rows above 0.01 per hour, real spikes on new listings)
+[REWALK pair] 2,000 events x 8 label columns = 16,000 comparisons; mismatches 0
+[REWALK pair] PASS
+[REWALK coin] the coin unit's labels use the index-of-all-coins benchmark leg built in master_coin.py; they were reproduced against build 4's 74,607 events there (master_coin.log), not re-walked from a feather file here
+[RELEASE CHECKS] ALL PASS [275s]

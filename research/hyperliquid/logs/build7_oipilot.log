@@ -1,0 +1,17 @@
+HL-MASTER1 G7 raw pass, pilot (c7g.2xlarge on-demand, 4 days in parallel); build7/oipilot2
+
+20250601: oi rows 178,632 (8.4 MB), vault rows 0; perp fills 3,163,535; wall 37.2s; RSS 1093.4 MB; dedupe 0
+  tids 1,581,768, unbalanced 1; sum |oi_delta_coin| 2.9000e+09; vault continuity pairs 0 violations 0 (max gap 0.00e+00)
+  taker open/close, position-based vs flow table (dir-based), relative difference, like-for-like (flow rule) / all taker fills: open_buy +0.0e+00/+1.8e-06, open_sell +0.0e+00/+1.8e-05, close_buy +0.0e+00/+2.8e-06, close_sell -1.2e-16/+2.8e-04
+
+20250727: oi rows 185,547 (9.4 MB), vault rows 0; perp fills 5,195,470; wall 54.1s; RSS 2263.1 MB; dedupe 0
+  tids 2,597,735, unbalanced 0; sum |oi_delta_coin| 1.7228e+10; vault continuity pairs 0 violations 0 (max gap 0.00e+00)
+  taker open/close, position-based vs flow table (dir-based), relative difference, like-for-like (flow rule) / all taker fills: open_buy +0.0e+00/+0.0e+00, open_sell +0.0e+00/+3.0e-05, close_buy +1.8e-16/+3.4e-06, close_sell +1.1e-16/+1.0e-04
+
+20251010: oi rows 225,926 (12.9 MB), vault rows 2,371; perp fills 17,629,682; wall 159.4s; RSS 5503.4 MB; dedupe 0
+  tids 8,814,841, unbalanced 0; sum |oi_delta_coin| 4.1798e+10; vault continuity pairs 2,202 violations 0 (max gap 3.73e-09)
+  taker open/close, position-based vs flow table (dir-based), relative difference, like-for-like (flow rule) / all taker fills: open_buy +1.1e-16/+2.6e-01, open_sell +2.3e-16/+2.0e-03, close_buy +1.2e-16/+5.5e-01, close_sell +0.0e+00/+4.6e-03
+
+20260708: oi rows 211,297 (10.7 MB), vault rows 0; perp fills 4,616,166; wall 62.2s; RSS 1615.6 MB; dedupe 0
+  tids 2,308,083, unbalanced 0; sum |oi_delta_coin| 1.0049e+10; vault continuity pairs 0 violations 0 (max gap 0.00e+00)
+  taker open/close, position-based vs flow table (dir-based), relative difference, like-for-like (flow rule) / all taker fills: open_buy -1.1e-16/-1.1e-16, open_sell +0.0e+00/+0.0e+00, close_buy +0.0e+00/+0.0e+00, close_sell +0.0e+00/+0.0e+00

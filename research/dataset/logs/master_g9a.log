@@ -1,0 +1,93 @@
+[G9a] raw loaded: 206 coins  [50s]
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+[G9a] bar table 24,307 cutoffs x 47 columns  [54s]; breadth recomputed vs ev_market.npz breadth_j: max |diff| 0.00e+00
+  ret_btc_1h                 NaN   0.05%  median +2.418e-05  p5 -0.006449  p95 +0.006325
+  ret_btc_6h                 NaN   0.09%  median +9.788e-05  p5 -0.01714  p95 +0.016
+  ret_btc_24h                NaN   0.24%  median +0.0003734  p5 -0.03339  p95 +0.03334
+  ret_btc_7d                 NaN   1.42%  median -0.00027  p5 -0.1045  p95 +0.08126
+  rv_btc_1h                  NaN   0.02%  median +0.0004153  p5 +0.0001565  p95 +0.00109
+  rv_btc_24h                 NaN   0.20%  median +0.0005067  p5 +0.0002267  p95 +0.0009383
+  rv_btc_7d                  NaN   1.38%  median +0.0005169  p5 +0.0003407  p95 +0.0009144
+  volratio_btc               NaN   1.38%  median +0.9795  p5 +0.4643  p95 +1.44
+  ret_eth_1h                 NaN   0.05%  median +5.294e-05  p5 -0.009468  p95 +0.009239
+  ret_eth_6h                 NaN   0.09%  median +0.0003057  p5 -0.02594  p95 +0.02441
+  ret_eth_24h                NaN   0.24%  median +0.0006779  p5 -0.05171  p95 +0.05478
+  ret_eth_7d                 NaN   1.42%  median +0.002195  p5 -0.1394  p95 +0.1511
+  rv_eth_1h                  NaN   0.02%  median +0.0006155  p5 +0.0002402  p95 +0.001568
+  rv_eth_24h                 NaN   0.20%  median +0.0007498  p5 +0.0003488  p95 +0.001337
+  rv_eth_7d                  NaN   1.38%  median +0.0007899  p5 +0.0005177  p95 +0.001284
+  volratio_eth               NaN   1.38%  median +0.9632  p5 +0.5112  p95 +1.428
+  ret_idx_1h                 NaN   0.14%  median +9.99e-05  p5 -0.01147  p95 +0.0107
+  ret_idx_6h                 NaN   0.69%  median +0.0003352  p5 -0.03103  p95 +0.026
+  ret_idx_24h                NaN   2.61%  median -0.0001996  p5 -0.06402  p95 +0.05325
+  ret_idx_7d                 NaN  17.60%  median -0.01565  p5 -0.1845  p95 +0.1349
+  rv_idx_1h                  NaN   0.02%  median +0.0005081  p5 +0.0002257  p95 +0.001337
+  rv_idx_24h                 NaN   0.20%  median +0.0006355  p5 +0.000302  p95 +0.001241
+  rv_idx_7d                  NaN   1.38%  median +0.0006683  p5 +0.0003784  p95 +0.001237
+  volratio_idx               NaN   1.38%  median +0.9416  p5 +0.5237  p95 +1.453
+  breadth_extreme_1h         NaN   0.63%  median +0.02186  p5 +0  p95 +0.2279
+  share_up_24h               NaN   0.22%  median +0.4463  p5 +0.0407  p95 +0.9533
+  xs_std_1h                  NaN   0.05%  median +0.007988  p5 +0.005139  p95 +0.01465
+  n_live_coins               NaN   0.00%  median +179  p5 +170  p95 +190
+  coherence_7d               NaN   0.59%  median +0.7071  p5 +0.5435  p95 +0.824
+  mkt_liq_1h                 NaN   0.72%  median +1.01  p5 +0.0002636  p95 +103.5
+  mkt_liq_24h                NaN   3.39%  median +0.9024  p5 +0.09109  p95 +5.823
+  mkt_liq_ratio_7d_28d       NaN   5.53%  median +0.9074  p5 +0.3741  p95 +2.09
+  adl_usd_24h                NaN   2.60%  median +0  p5 +0  p95 +0
+  mkt_backstop_usd_24h       NaN   2.60%  median +0  p5 +0  p95 +9.846e+05
+  mkt_taker_1h_rel           NaN   0.72%  median +0.9908  p5 +0.3459  p95 +3.695
+  ret_idx_1h_seg             NaN   0.07%  median +9.99e-05  p5 -0.01146  p95 +0.01069
+  ret_idx_6h_seg             NaN   0.28%  median +0.0003273  p5 -0.03096  p95 +0.026
+  ret_idx_24h_seg            NaN   1.02%  median -5.879e-05  p5 -0.06357  p95 +0.0534
+  ret_idx_7d_seg             NaN   6.94%  median -0.0164  p5 -0.18  p95 +0.136
+  rv_idx_24h_seg             NaN   0.19%  median +0.004465  p5 +0.002045  p95 +0.00892
+  rv_idx_7d_seg              NaN   1.38%  median +0.004775  p5 +0.002735  p95 +0.007867
+  volratio_idx_seg           NaN   1.38%  median +0.9368  p5 +0.5224  p95 +1.503
+  rank90_idx_rv_24h_seg      NaN  17.77%  median +0.4509  p5 +0.02824  p95 +0.9505
+  rank90_idx_abs_ret_7d_seg  NaN  19.28%  median +0.4808  p5 +0.04605  p95 +0.9686
+  rank90_idx_rv_24h          NaN  17.77%  median +0.4442  p5 +0.03125  p95 +0.9597
+  rank90_idx_abs_ret_7d      NaN  38.18%  median +0.4727  p5 +0.04236  p95 +0.9694
+  rank90_mkt_liq_24h         NaN  18.91%  median +0.4458  p5 +0.0379  p95 +0.9481
+[G9a pair] 6,697,756 rows x 49 columns; NaN share by month of rank90_idx_rv_24h / coherence_7d / mkt_liq_24h:
+         rank90_idx_rv_24h  coherence_7d  mkt_liq_24h  ret_idx_7d
+m                                                                
+2025-06             1.0000           0.0       0.0000      0.0007
+2025-07             1.0000           0.0       0.0000      0.0007
+2025-08             0.7782           0.0       0.1216      0.9998
+2025-09             0.0000           0.0       0.1402      0.9683
+2025-10             0.0000           0.0       0.0000      0.0004
+2025-11             0.0000           0.0       0.0000      0.0000
+2025-12             0.0000           0.0       0.0000      0.0000
+2026-01             0.0000           0.0       0.0000      0.0000
+2026-02             0.0000           0.0       0.0000      0.0000
+2026-03             0.0000           0.0       0.0000      0.0000
+2026-04             0.0000           0.0       0.0000      0.0000
+2026-05             0.0000           0.0       0.0000      0.0000
+2026-06             0.0000           0.0       0.0000      0.0000
+2026-07             0.0000           0.0       0.0000      0.0000
+2026-08             0.0000           0.0       0.0000      0.0000
+2026-09             0.0000           0.0       0.0000      0.0000
+2026-10             0.0000           0.0       0.0000      0.0000
+[G9a coin] 74,607 rows x 49 columns; NaN share by month of rank90_idx_rv_24h / coherence_7d / mkt_liq_24h:
+         rank90_idx_rv_24h  coherence_7d  mkt_liq_24h  ret_idx_7d
+m                                                                
+2025-05             1.0000           0.0       0.0000      1.0000
+2025-06             1.0000           0.0       0.0000      0.0583
+2025-07             1.0000           0.0       0.0100      0.0502
+2025-08             0.7475           0.0       0.1484      0.9998
+2025-09             0.0000           0.0       0.1298      0.9644
+2025-10             0.0000           0.0       0.0000      0.0496
+2025-11             0.0000           0.0       0.0000      0.0000
+2025-12             0.0000           0.0       0.0000      0.0000
+2026-01             0.0000           0.0       0.0000      0.0000
+2026-02             0.0000           0.0       0.0000      0.0000
+2026-03             0.0000           0.0       0.0000      0.0000
+2026-04             0.0000           0.0       0.0000      0.0000
+2026-05             0.0000           0.0       0.0000      0.0000
+2026-06             0.0000           0.0       0.0000      0.0000
+2026-07             0.0000           0.0       0.0000      0.0000
+2026-08             0.0000           0.0       0.0000      0.0000
+2026-09             0.0000           0.0       0.0000      0.0000
+2026-10             0.0000           0.0       0.0000      0.0000
+  [99s]

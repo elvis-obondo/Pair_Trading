@@ -1,0 +1,34 @@
+[COIN] 74,607 events over 204 coins 2025-05-31 14:30:00 -> 2026-10-13 23:00:00  [3s]
+  paths: coin 40  [9s]
+  paths: coin 80  [14s]
+  paths: coin 120  [18s]
+  paths: coin 160  [23s]
+  paths: coin 200  [28s]
+[COIN] max |1-minute path at t = 0 - z| 2.84e-13 (must be < 1e-9)
+[COIN LABELS] 74,607 events; label_gap 640 (0.86%); reach 2h/5h/10h 0.0724 / 0.1887 / 0.3223; mean chance 0.4374  [52s]
+[REPRODUCE build 4] finite-path events 73,967: reach differs on 0; first minute at mu differs on 0; max |depth diff| 0.00e+00; master finite but build 4 not: 0
+[COIN G2] 74,607 rows x 24 columns; sandwich NaN by definition (no analogue)  [73s]
+  r2_2d                  NaN   0.00%  p5 +0.0295  median +0.7667
+  r2_7d                  NaN   1.04%  p5 +0.02796  median +0.7375
+  corr_30m_2d            NaN   0.00%  p5 +0.2535  median +0.7811
+  corr_30m_7d            NaN   1.06%  p5 +0.2525  median +0.7454
+  corr_1m_24h            NaN   0.00%  p5 +0.1231  median +0.5072
+  n_1m_24h               NaN   0.00%  p5 +1440  median +1440
+  both_traded_share_24h  NaN   0.00%  p5 +0.3681  median +0.8326
+  beta                   NaN   0.00%  p5 -1.041  median +1.182
+  abs_beta               NaN   0.00%  p5 +0.609  median +1.238
+  sign_beta              NaN   0.00%  p5 -1  median +1
+  neutrality             NaN   0.00%  p5 +0.01383  median +0.1567
+  beta_stab              NaN   3.21%  p5 +0.1258  median +0.3662
+  beta_chg_24h           NaN   0.00%  p5 -1.707  median +0.04426
+  beta_chg_7d            NaN   3.23%  p5 -3.135  median -0.01305
+  vol_ratio_2d           NaN   0.00%  p5 +0.8151  median +1.324
+  vol_ratio_7d           NaN   1.06%  p5 +0.8587  median +1.387
+  crossings_7d           NaN   1.04%  p5 +3  median +18
+  halflife_h             NaN   1.90%  p5 +4.211  median +14.49
+  phi_7d                 NaN   1.04%  p5 +0.9212  median +0.9766
+  vratio                 NaN   0.00%  p5 +0.9946  median +1.703
+  vol_slope              NaN   0.00%  p5 +0.5911  median +1.124
+  sandwich               NaN 100.00%  p5 +nan  median +nan
+  g2_nan_1m              NaN   0.00%  p5 +0  median +0
+  seg_bars               NaN   0.00%  p5 +527  median +6611

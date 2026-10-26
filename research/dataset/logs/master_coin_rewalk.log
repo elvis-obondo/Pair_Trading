@@ -1,0 +1,44 @@
+[REWALK coin] raw 1m closes of 206 coins loaded  [9s]
+[REWALK coin] the 38 coin-bars finite in one price file only (coin, 30m bar label T, 30m close, 1m close at T+29, 1m row exists at T+29, 30m row exists):
+   REQ        2025-05-25 15:00:00  30m close nan  1m close 0.14252  1m row True  30m row False
+   SOPH       2025-05-28 14:30:00  30m close nan  1m close 0.066006  1m row True  30m row False
+   RESOLV     2025-06-10 14:00:00  30m close nan  1m close 0.20984  1m row True  30m row False
+   SYRUP      2025-06-26 05:00:00  30m close nan  1m close 0.591  1m row True  30m row False
+   PUMP       2025-07-10 03:30:00  30m close nan  1m close 0.00568  1m row True  30m row False
+   PROVE      2025-08-06 03:00:00  30m close nan  1m close 1.3196  1m row True  30m row False
+   YZY        2025-08-21 03:00:00  30m close nan  1m close 1.9818  1m row True  30m row False
+   XPL        2025-08-22 09:00:00  30m close nan  1m close 0.426  1m row True  30m row False
+   WLFI       2025-08-23 10:30:00  30m close nan  1m close 0.39815  1m row True  30m row False
+   LINEA      2025-09-01 09:00:00  30m close nan  1m close 0.052724  1m row True  30m row False
+   SKY        2025-09-17 05:30:00  30m close nan  1m close 0.075152  1m row True  30m row False
+   ASTER      2025-09-19 10:30:00  30m close nan  1m close 0.59894  1m row True  30m row False
+   AVNT       2025-09-21 07:00:00  30m close nan  1m close 2.3002  1m row True  30m row False
+   STBL       2025-09-22 03:00:00  30m close nan  1m close 0.36957  1m row True  30m row False
+   0G         2025-09-22 10:00:00  30m close nan  1m close 3.1736  1m row True  30m row False
+   HEMI       2025-09-24 07:00:00  30m close nan  1m close 0.16551  1m row True  30m row False
+   APEX       2025-09-27 06:00:00  30m close nan  1m close 2.3364  1m row True  30m row False
+   2Z         2025-10-02 13:00:00  30m close nan  1m close 0.63578  1m row True  30m row False
+   ZEC        2025-10-02 13:00:00  30m close nan  1m close 152.27  1m row True  30m row False
+   MON        2025-10-08 04:00:00  30m close nan  1m close 0.41373  1m row True  30m row False
+   MET        2025-10-10 10:30:00  30m close nan  1m close 1.5442  1m row True  30m row False
+   MEGA       2025-10-22 15:00:00  30m close nan  1m close 0.26538  1m row True  30m row False
+   CC         2025-10-31 12:00:00  30m close nan  1m close 0.12047  1m row True  30m row False
+   ICP        2025-11-08 03:30:00  30m close nan  1m close 8.71  1m row True  30m row False
+   AERO       2025-11-11 06:30:00  30m close nan  1m close 1.2393  1m row True  30m row False
+   STABLE     2025-12-08 13:00:00  30m close nan  1m close 0.022939  1m row True  30m row False
+   FOGO       2025-12-11 02:30:00  30m close nan  1m close 0.09  1m row True  30m row False
+   LIT        2025-12-22 15:30:00  30m close nan  1m close 3.642  1m row True  30m row False
+   XMR        2026-01-15 08:30:00  30m close nan  1m close 697.77  1m row True  30m row False
+   AXS        2026-01-18 03:30:00  30m close nan  1m close 2.048  1m row True  30m row False
+   DASH       2026-01-18 03:30:00  30m close nan  1m close 74.625  1m row True  30m row False
+   SKR        2026-01-22 02:30:00  30m close nan  1m close 0.041113  1m row True  30m row False
+   AZTEC      2026-02-12 08:00:00  30m close nan  1m close 0.019735  1m row True  30m row False
+   CHIP       2026-04-22 02:30:00  30m close nan  1m close 0.060575  1m row True  30m row False
+   GRAM       2026-07-02 09:00:00  30m close nan  1m close 1.6589  1m row True  30m row False
+   CASHCAT    2026-07-11 04:30:00  30m close nan  1m close 0.2013  1m row True  30m row False
+   PONS       2026-08-31 03:30:00  30m close nan  1m close 0.3264  1m row True  30m row False
+   USELESS    2026-09-08 16:00:00  30m close nan  1m close 0.28555  1m row True  30m row False
+[REWALK coin] 30m closes from the 30m bar files vs the 1m close labelled T + 29: max |diff| where both finite 0.00e+00; finite in one only: 38 coin-bars (the independent benchmark uses the 30m bar files, as the panel does)
+[REWALK coin] 30m panel (24305, 206) rebuilt  [16s]
+[REWALK coin independent benchmark] 600 events (500 with finite path): label_gap agrees on 600; 500 paths x 8 labels = 4,000 comparisons; mismatches 0  [25s]
+[REWALK coin independent benchmark] PASS

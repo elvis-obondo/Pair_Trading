@@ -1,0 +1,23 @@
+[1m  ] loaded 204 instruments, 1041 MB of dense float64 minute grids (NaN where a minute did not trade)
+[LABELS] 6,697,756 events, 335 chunks of 20,000, 204 coins; 1-minute series loaded [11s]
+  20/335 chunks  [75s]
+  40/335 chunks  [117s]
+  60/335 chunks  [179s]
+  80/335 chunks  [222s]
+  100/335 chunks  [284s]
+  120/335 chunks  [325s]
+  140/335 chunks  [388s]
+  160/335 chunks  [430s]
+  180/335 chunks  [492s]
+  200/335 chunks  [534s]
+  220/335 chunks  [598s]
+  240/335 chunks  [644s]
+  260/335 chunks  [709s]
+  280/335 chunks  [755s]
+  300/335 chunks  [816s]
+  320/335 chunks  [875s]
+[CHECK] max |P[:,0] - z| 0.000e+00; max |1-minute path at the 30-minute marks - y00..y20| 7.587e-06
+[DONE] 6,697,756 events; label_gap 27,049 (0.40%); reach 2h/5h/10h 0.0758 / 0.1955 / 0.3288; mean chance 0.1589 / 0.3149 / 0.4503; adverse 0.3202  [941s]
+[REPRODUCE] build 3 rows 59,759: max |depth_10h - depth| 4.610e-07; reach differs on 0; first minute at mu differs on 0; label_gap among them 0
+  (depth differs only by the float32 rounding of build 3's entry z: max |depth diff| 4.61e-07 < 1e-6; reach and first minute identical)
+[CHANCE vs build 3] mean chance_10h new 0.4465, build 3 0.4464; mean difference +0.00005 [-0.00062,+0.00074] (day-clustered); per-row correlation 0.8939; a 50-seed Monte-Carlo value has sd up to 0.07 per row, so exact equality is not expected (different random draws)

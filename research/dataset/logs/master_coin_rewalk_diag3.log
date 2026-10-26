@@ -1,0 +1,16 @@
+[REWALK coin] raw 1m closes of 206 coins loaded  [9s]
+[REWALK coin] 30m closes from the 30m bar files vs the 1m close labelled T + 29: max |diff| where both finite 0.00e+00; finite in one only: 38 coin-bars (the independent benchmark uses the 30m bar files, as the panel does)
+[REWALK coin] 30m panel (24305, 206) rebuilt  [12s]
+  DETAIL event 54012 SNX bar 5695 T 2025-09-21 06:30:00: stored label_nan_minutes 1; my path finite; fr[b..b+21] [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]; n30[b..b+21] min 175; lc NaN minutes in window 0; idx1 NaN minutes in window 5
+  DETAIL event 50147 REZ bar 5316 T 2025-09-13 09:00:00: stored label_nan_minutes 1; my path finite; fr[b..b+21] [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]; n30[b..b+21] min 173; lc NaN minutes in window 0; idx1 NaN minutes in window 6
+  DETAIL event 34750 MAVIA bar 4307 T 2025-08-23 08:30:00: stored label_nan_minutes 1; my path finite; fr[b..b+21] [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]; n30[b..b+21] min 139; lc NaN minutes in window 0; idx1 NaN minutes in window 13
+[REWALK coin independent benchmark] 600 events (500 with finite path, 100 gap events): label_gap agrees on 597; 500 paths x 8 labels = 4,000 comparisons; mismatches 3  [18s]
+   MISMATCH (np.int64(54012), 'label_gap', 0, np.float64(1.0))
+   MISMATCH (np.int64(50147), 'label_gap', 0, np.float64(1.0))
+   MISMATCH (np.int64(34750), 'label_gap', 0, np.float64(1.0))
+Traceback (most recent call last):
+  File "/home/elvisobondo/Pair_Trading/research/dataset/master_coin_rewalk_diag3.py", line 178, in <module>
+    main()
+  File "/home/elvisobondo/Pair_Trading/research/dataset/master_coin_rewalk_diag3.py", line 173, in main
+    assert not bad
+AssertionError

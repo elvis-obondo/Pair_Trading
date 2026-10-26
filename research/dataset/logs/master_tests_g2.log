@@ -1,0 +1,21 @@
+[TESTS] G2 on 6,697,756 events; inputs loaded [24s]
+/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/numpy/lib/_function_base_impl.py:3023: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[:, None]
+[KNOWN] proportional (b = +2a) and anti-proportional (b = -2a) legs: r2 = 1, |corr| = 1 with the right sign, beta = +-0.5, neutrality = 1/3, vol ratio = 0.5: PASS
+[KNOWN] alternating spread: 335 crossings, phi = -1, half-life NaN; geometric 0.9^t: 0 crossings, phi = 0.9, half-life 3.2894 h: PASS
+[SWAP] 1000 real events. Exactly symmetric columns (equal) and reciprocal columns (product 1): failures 0
+  worst |difference| per asserted column: r2_2d 0.0e+00, r2_7d 0.0e+00, corr_30m_2d 0.0e+00, corr_30m_7d 0.0e+00, corr_1m_24h 1.1e-16, n_1m_24h 0.0e+00, both_traded_share_24h 0.0e+00, neutrality 1.7e-16, g2_nan_1m 0.0e+00, seg_bars 0.0e+00, beta 2.2e-16, abs_beta 2.2e-16, vol_ratio_2d 2.2e-16, vol_ratio_7d 2.2e-16
+  FINDING, not asserted: the entry z is not leg-symmetric. |z'|/|z| quantiles 5/25/50/75/95%: 0.24 / 0.65 / 0.88 / 1.04 / 1.35; correlation of z with the sign-corrected z' 0.922
+  crossings_7d  swapped vs original: correlation 0.830, median |difference| 2.0000 over 1000 events
+  halflife_h    swapped vs original: correlation 1.000, median |difference| 0.0000 over 996 events
+  phi_7d        swapped vs original: correlation 1.000, median |difference| 0.0000 over 1000 events
+  vratio        swapped vs original: correlation 1.000, median |difference| 0.0000 over 1000 events
+  vol_slope     swapped vs original: correlation 1.000, median |difference| 0.0000 over 1000 events
+  sandwich      swapped vs original: correlation 0.784, median |difference| 0.1537 over 1000 events
+[SWAP] PASS (symmetric columns exact; spread-based columns reported)
+[FLIP] 500 real events with negated log prices (highs/lows swapped): z flips, every column identical: failures 0
+[FLIP] PASS
+[POISON] 1000 events x 2 variants (random overwrite, truncation) x 24 columns: features changed in 0 cases [63s]
+[POISON labels] 100 events: label path after t = 0 changed in 100 of 100 finite events; the path at t = 0 unchanged: True
+[POISON] PASS
+[TESTS] ALL PASS  [160s]

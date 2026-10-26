@@ -1,0 +1,13 @@
+[1m  ] loaded 204 instruments, 1041 MB of dense float64 minute grids (NaN where a minute did not trade)
+[LABELS] 6,697,756 events, 335 chunks of 20,000, 204 coins; 1-minute series loaded [11s]
+  20/335 chunks  [74s]
+  40/335 chunks  [116s]
+total 2154544
+drwxrwxr-x 2 elvisobondo elvisobondo       4096 Oct 24 17:06 .
+drwxrwxr-x 4 elvisobondo elvisobondo       4096 Oct 24 16:50 ..
+-rw-rw-r-- 1 elvisobondo elvisobondo  573569797 Oct 24 16:50 events.parquet
+-rw-rw-r-- 1 elvisobondo elvisobondo  518900676 Oct 24 16:51 events_y.npz
+-rw-rw-r-- 1 elvisobondo elvisobondo 1113759422 Oct 24 17:24 labels.parquet
+               total        used        free      shared  buff/cache   available
+Mem:              62           0          55           0           6          61
+ 17:31:17 up 51 min,  0 users,  load average: 0.07, 2.28, 4.71

@@ -1,0 +1,11 @@
+[TESTS G2b] 6,697,756 events [9s]
+[G2b SWAP] 1000 real events: z_sym' = -sign(beta) z_sym, sigma_sym' = sigma_sym/|beta|, |z_sym'| = |z_sym|, threshold and trig unchanged: failures 0
+[G2b SWAP] PASS
+[G2b FLIP] 500 real events with negated log prices: z_sym flips, the rest unchanged: failures 0
+[G2b FLIP] PASS
+[G2b POISON] 1000 events, future overwritten and truncated: columns changed in 0 events
+[G2b POISON] PASS
+[G2b INDEP] 2000 events x 5 columns: mismatches 0; worst error / tolerance 0.000
+[G2b INDEP] PASS
+[G2b CLOSED FORM] sigma_sym equals the std of the frozen-geometry window (beta_i, alpha_i) on 1,000 events: worst relative difference 4.10e-09; window mean 0
+[TESTS G2b] ALL PASS [160s]

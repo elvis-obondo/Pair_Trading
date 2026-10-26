@@ -57,7 +57,8 @@ sync_up() {
   # receipts on the machine are not overwritten before `pull`.
   local EX=(--exclude .env --exclude '.env.*' --exclude 'user_data/config*.json'
             --exclude .venv/ --exclude attic/ --exclude user_data/data/ --exclude research/datasets/
-            --exclude research/hyperliquid/flow/ --exclude __pycache__/ --exclude .git/ --exclude .gcp_pull/)
+            --exclude research/hyperliquid/flow/ --exclude __pycache__/ --exclude .git/ --exclude .gcp_pull/
+            --exclude 'research/**/logs/')   # logs are PULL-ONLY: a push must never replace a log the machine wrote (two receipts were lost that way, 2026-10-26)
   rsync -az "${EX[@]}" --filter=':- .gitignore' \
     --exclude research/dislocation_model/NUMBERS.md \
     -e ssh "$ROOT/" "$HOST:Pair_Trading/"

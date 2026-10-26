@@ -1,0 +1,21 @@
+[G2b pair] 6,697,756 events in 72,938 segments  [9s]
+  5000 segments  [20s]
+  10000 segments  [29s]
+  15000 segments  [40s]
+  20000 segments  [49s]
+  25000 segments  [58s]
+  30000 segments  [68s]
+  35000 segments  [77s]
+  40000 segments  [85s]
+  45000 segments  [95s]
+  50000 segments  [104s]
+  55000 segments  [114s]
+  60000 segments  [122s]
+  65000 segments  [132s]
+  70000 segments  [141s]
+[DONE pair] 6,697,756 events  [150s]
+  NaN: sigma_sym 0.000%, z_sym 0.000%, z_ratio 0.000%, threshold_sym 0.000%, trig_sym 0.000%
+  share of current events with trig_sym = 1: 35.84% (trig_sym defined for 100.00%)
+  corr(z, z_sym) 0.9445; same sign 98.44%
+  z_ratio quantiles 1/5/25/50/75/95/99%: 0.060 / 0.256 / 0.739 / 0.976 / 1.155 / 1.515 / 1.898
+  |z_sym| > threshold_sym at the event bar for 43.34% of events

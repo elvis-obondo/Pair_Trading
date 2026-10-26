@@ -1,0 +1,38 @@
+[META] 234 coins in the current universe, snapshot 2026-10-24 18:49:37.780498+00:00
+  markets page 1: 250 coins  [14:49:39]
+  markets page 2: 250 coins  [14:49:43]
+  markets page 3: 250 coins  [14:49:47]
+  markets page 4: 250 coins  [14:49:52]
+  markets page 5: 250 coins  [14:49:56]
+  markets page 6: 250 coins  [14:51:00]
+  markets page 7: 250 coins  [14:51:04]
+  markets page 8: 250 coins  [14:51:09]
+  markets page 9: 250 coins  [14:51:13]
+  markets page 10: 250 coins  [14:51:17]
+  markets page 11: 250 coins  [14:52:21]
+  markets page 12: 250 coins  [14:52:25]
+  20/234 coins  [14:57:47]
+  40/234 coins  [15:03:14]
+  60/234 coins  [15:09:43]
+  80/234 coins  [15:13:50]
+  120/234 coins  [15:38:37]
+  140/234 coins  [16:07:54]
+  180/234 coins  [16:17:23]
+  200/234 coins  [16:23:50]
+  220/234 coins  [16:28:13]
+[SECTOR] 234 coins: ok 208, ambiguous 4, unmapped 22
+sector
+meme                       40
+layer 1                    38
+decentralized finance      37
+other                      26
+unmapped                   22
+layer 2                    19
+artificial intelligence    17
+gaming                     16
+real world assets          12
+infrastructure              5
+privacy                     2
+k-prefixed names mapped: kBONK->BONK, kDOGS->DOGS, kFLOKI->FLOKI, kLUNC->LUNC, kNEIRO->NEIRO, kPEPE->PEPE, kSHIB->SHIB
+ambiguous: AI(artificial-inu-3, 3), BABY(babylon, 2), MEME(memetoon, 2), XAI(sideshift-token, 2)
+unmapped: AI16Z, FRIEND, FTM, FTT, FXS, HPOS, IP, JELLY, LAUNCHCOIN, LOOM, MATIC, MKR, NEIROETH, NFTI, NTRN, OMNI, OX, PANDORA, RDNT, RNDR, SHIA, UNIBOT
