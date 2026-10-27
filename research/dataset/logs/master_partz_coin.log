@@ -1,0 +1,66 @@
+[PART Z coin] sha256 master_partz.py: 3f3421e81459d06fa9ed6bd473640218f7d278e65c64c7c94ce3a5891bf4d17a
+[PART Z coin] sha256 master_colreport.py: c93f165e48cd1864fcdb15f5b366798f567544a1018c256e91eef8ff6d3c9560
+[PART Z coin] sha256 master_manifest.py: 9ec12057ab23a797cb2a9dde1eae204c9c2e5775b02399cccb6d146f9afea3fe
+[PART Z coin] git_head ad9c6121b4e27a677e4d74dcbc8c5ab2af4468eb (43 uncommitted paths at last laptop snapshot); start 2026-10-27T02:18:03Z UTC; pid 10595
+[PART Z coin] 13 v1 files re-hashed against MANIFEST.json (sha256): all match  [1s]
+[PART Z coin] events 74,607, usable 73,967, reach_10h share 32.23%; 599 numeric columns, 9 categorical; AUC > 0.5 = higher values go with reaching mu; rows are not independent, no interval attached; orientation, not selection
+[PART Z coin] usable events with NaN chance_10h (excluded from every stratum and every adjusted AUC): 0
+   chance_10h deciles (decile, chance range, events, reach rate): 0: 0.00-0.12, 6,803, 0.098; 1: 0.14-0.22, 7,441, 0.184; 2: 0.24-0.30, 7,485, 0.231; 3: 0.32-0.36, 6,344, 0.273; 4: 0.38-0.42, 6,959, 0.299; 5: 0.44-0.48, 7,172, 0.326; 6: 0.50-0.54, 7,230, 0.357; 7: 0.56-0.62, 9,269, 0.406; 8: 0.64-0.70, 7,706, 0.461; 9: 0.72-1.00, 7,558, 0.533
+  200/599 columns  [4s]
+  400/599 columns  [6s]
+
+[PART Z coin] columns with a chance-adjusted AUC: 590 of 599; constant columns 4; stable sign across months (>= 6 months, all one side): 92; NaN-gap flags (> 5 points): 0; unexplained-drift columns: 58
+[PART Z coin] duplicate columns (same name in two group files; n exact, auc/auc_adj within 1e-6 -- the g2.parquet copy is stored as float32 against events.parquet's float64, which moves rank-AUC ties at about 1e-10; counted twice in every figure above and below): 1 ['beta']
+   |AUC - 0.5| quantiles over columns 50/90/99/max:  raw 0.0045 / 0.0324 / 0.0703 / 0.1044   adjusted 0.0019 / 0.0133 / 0.0328 / 0.0535
+   correlation of the raw and the adjusted deviation over columns: 0.446; columns whose AUC falls by more than half when adjusted: 129 of 146 with a raw deviation above 0.02
+   the 40 largest |auc_adj - 0.5| (column, auc raw, auc adjusted, deciles on the same side, stable sign, months pos/neg; (drift?) = unexplained jump in its monthly mean, (date-like) = listing age):
+     vratio@g2.parquet                                          raw 0.5981  adj 0.5535  10/10  stable 1  17/0
+     threshold@events.parquet (drift?)                          raw 0.3956  adj 0.4468  10/10  stable 1  0/17
+     neutrality@g2.parquet                                      raw 0.4938  adj 0.5433  9/10  stable 0  7/10
+     corr_30m_2d@g2.parquet                                     raw 0.5248  adj 0.4593  9/10  stable 0  15/2
+     corr_30m_7d@g2.parquet                                     raw 0.5183  adj 0.4625  9/10  stable 0  14/3
+     crossings_7d@g2.parquet                                    raw 0.5620  adj 0.5362  10/10  stable 1  17/0
+     z@events.parquet                                           raw 0.4709  adj 0.4676  7/10  stable 0  1/16
+     threshold_sym@g2b.parquet                                  raw 0.4229  adj 0.4690  10/10  stable 1  0/17
+     beta_stab@g2.parquet (drift?)                              raw 0.4760  adj 0.5294  9/10  stable 0  3/14
+     corr_1m_24h@g2.parquet                                     raw 0.4997  adj 0.4738  9/10  stable 0  10/7
+     rv_idx_24h_seg@g9a.parquet                                 raw 0.4864  adj 0.4744  9/10  stable 0  4/13
+     seg_bars@g2.parquet                                        raw 0.5010  adj 0.5251  9/10  stable 0  7/10
+     bars_into_segment@events.parquet                           raw 0.5010  adj 0.5251  9/10  stable 0  7/10
+     z_sym@g2b.parquet                                          raw 0.4754  adj 0.4750  5/10  stable 0  1/16
+     rv_idx_24h@g9a.parquet                                     raw 0.4900  adj 0.4769  9/10  stable 0  4/13
+     n_prev_resolved@g3.parquet                                 raw 0.5044  adj 0.5226  10/10  stable 0  10/7
+     abs_beta@g2.parquet                                        raw 0.4801  adj 0.5225  9/10  stable 0  2/15
+     n_prev_triggers@g3.parquet                                 raw 0.5045  adj 0.5223  10/10  stable 0  10/7
+     rv_eth_24h@g9a.parquet                                     raw 0.4951  adj 0.4786  9/10  stable 0  6/11
+     a_snapshot_age_s@g8.parquet                                raw 0.4945  adj 0.4796  10/10  stable 0  6/11
+     contrib_b@g5_shape.parquet                                 raw 0.4881  adj 0.5201  9/10  stable 0  7/10
+     volratio_idx_seg@g9a.parquet                               raw 0.4778  adj 0.4803  10/10  stable 0  3/14
+     a_volume_ratio_360@g5_a.parquet                            raw 0.4660  adj 0.4808  8/10  stable 0  1/16
+     net_volume_ratio_360@g5_net.parquet                        raw 0.4660  adj 0.4808  8/10  stable 0  1/16
+     mkt_liq_24h@g9a.parquet (drift?)                           raw 0.4838  adj 0.4814  9/10  stable 0  4/13
+     ps_realized_var@g5_shape.parquet                           raw 0.5836  adj 0.5182  10/10  stable 1  17/0
+     vol_ratio_2d@g2.parquet                                    raw 0.4765  adj 0.5176  8/10  stable 1  0/17
+     coherence_7d@g9a.parquet                                   raw 0.5047  adj 0.4825  9/10  stable 0  8/9
+     ps_max_step@g5_shape.parquet                               raw 0.5695  adj 0.5175  10/10  stable 1  17/0
+     n_triggers_prev_24h@g9a.parquet                            raw 0.5181  adj 0.5173  9/10  stable 0  13/4
+     days_since_last_trigger@g3.parquet                         raw 0.5275  adj 0.5170  10/10  stable 0  16/1
+     rank90_idx_rv_24h_seg@g9a.parquet                          raw 0.4864  adj 0.4835  9/10  stable 0  4/11
+     vol_ratio_7d@g2.parquet                                    raw 0.4808  adj 0.5164  9/10  stable 0  2/15
+     a_oi_over_taker_24h@g7.parquet (drift?)                    raw 0.5279  adj 0.5163  8/10  stable 1  17/0
+     volratio_idx@g9a.parquet                                   raw 0.4823  adj 0.4841  10/10  stable 0  4/13
+     sign_beta@g2.parquet                                       raw 0.4972  adj 0.4841  10/10  stable 0  8/9
+     a_bid_d50@g8.parquet                                       raw 0.4855  adj 0.4842  10/10  stable 0  1/16
+     rv_btc_24h@g9a.parquet                                     raw 0.4928  adj 0.4843  9/10  stable 0  6/11
+     rv_eth_7d@g9a.parquet                                      raw 0.5043  adj 0.4844  9/10  stable 0  7/10
+     n_other_triggers_same_bar@g9a.parquet                      raw 0.4996  adj 0.5156  9/10  stable 0  6/11
+   categorical columns (9): reach rate by category (categories with >= 500 events):
+     a_cg_status                  3 categories, reach rate 0.321 .. 0.349
+     a_listing_src                1 categories, reach rate 0.322 .. 0.322
+     a_margin_table_id            4 categories, reach rate 0.302 .. 0.338
+     a_sector                     11 categories, reach rate 0.280 .. 0.354
+     ticker_b                     1 categories, reach rate 0.322 .. 0.322
+     utc_hour                     24 categories, reach rate 0.297 .. 0.361
+     weekday                      7 categories, reach rate 0.297 .. 0.347
+   PNG /home/elvisobondo/Pair_Trading/research/dataset/logs/partz_coin_top_auc_adj.png
+[PART Z coin] done  [8s]
