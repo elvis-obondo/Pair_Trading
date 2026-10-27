@@ -51,7 +51,26 @@ ensure_up() {
   for i in $(seq 1 30); do ssh -o ConnectTimeout=5 -o BatchMode=yes "$HOST" true 2>/dev/null && return; sleep 5; done
   echo "ssh to $VM not ready"; exit 1
 }
+write_git_state() {
+  # Refreshes research/dataset/GIT_STATE.json on the LAPTOP right before every sync (planner ruling
+  # 2026-10-27: B5's logs carried a stale git_head because this file was never kept current). master_
+  # manifest.py and every B5 profiling/proof script read it for their provenance header; the receipts
+  # themselves rest on file sha256 values, never on this field, but it should still be fresh.
+  python3 - "$ROOT" "$ROOT/research/dataset/GIT_STATE.json" <<'PYEOF'
+import json, subprocess, sys
+root, out = sys.argv[1], sys.argv[2]
+head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=root, text=True).strip()
+porcelain = subprocess.check_output(["git", "status", "--porcelain"], cwd=root, text=True).splitlines()
+# GIT_STATE.json is itself tracked, so from the second sync onward it would show up in its own
+# porcelain list as " M research/dataset/GIT_STATE.json" -- noise in every log's uncommitted-paths
+# count (checker's finding). Drop that one path; still tracked, so .gitignore stays untouched and
+# rsync's .gitignore filter keeps syncing it.
+porcelain = [p for p in porcelain if not p.endswith("research/dataset/GIT_STATE.json")]
+json.dump({"head": head, "porcelain": porcelain}, open(out, "w"), indent=1)
+PYEOF
+}
 sync_up() {
+  write_git_state
   # no --delete: files the machine made (logs, outputs) are never removed by a sync.
   # NUMBERS.md goes up only when the laptop copy is newer (--update), so a run's
   # receipts on the machine are not overwritten before `pull`.
