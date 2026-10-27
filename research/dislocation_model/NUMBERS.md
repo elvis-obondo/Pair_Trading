@@ -4299,3 +4299,10 @@ Code: research/model/harness.py (sha256 423328afc950252fe37d5fbc7fb4c25d97475b36
 | git_head in this log (19adc081a8ba71d56bcf5064c110d720b2cd8a77) equals the actual HEAD -- the gcp_run.sh GIT_STATE.json refresh (committed separately, 19adc08) is confirmed working | M (log line 8); A (HEAD equality, confirmed independently by the checker at sync time) | log line 8 |
 
 Checker (Code Checker) verdict: FINAL PASS, 2026-10-27, after 1 review round (3 fixes: the "root cause" framing was overstated -- the VmHWM-only diagnostic was shown to hide the memory state, not to cause the OOM, and an ~18 GB gap stays unexplained; the dmesg evidence was cited but not saved as a file, fixed by saving build_cache_v1_pair_crash1_dmesg.log; a tag fix on the git_head row). The virtio_balloon "Out of puff" lines found in the same dmesg window are recorded as adjacent context only, not drawn into any conclusion.
+
+### B5 Step 2 (iv): B3 proofs rerun on the revised 1,091-column list
+| number | M/A | where |
+|---|---|---|
+| proofs_v1_pair.py rerun against harness.py 423328af... and inputs_v1_pair.csv 91cb311c... (1,091 IN), no code changes to either proofs_v1_pair.py or run_proofs.sh. Diff against the committed log (955469b) is exactly 6 lines: the 2 shas, git_head+pid, load time (6s->17s, page-cache variance), check_inputs's column count (1,094->1,092, expected: 1,091 IN + 1 planted), and total wall (109s->222s, not chased, not a result). Every actual proof number is byte-identical: leak lift 0.5919; planted/null lift 0.0889/0.0799/0.0795 CI[0.0776,0.0816] 8/8 and -0.0006 CI[-0.0025,0.0015] 3/8; 0 hazard mismatches, 14/14 broken-variant boundaries; all 3 proof-5 raises plus the monkeypatched-off non-raises; proof 6's 1 tie / 19,622 / 14,943 / 0.044413. ALL PASS: True both before and after | M | research/model/logs/proofs_v1_pair.log; `git diff` against the 955469b version |
+
+Checker (Code Checker) verdict: FINAL PASS, 2026-10-27 -- git diff independently confirmed exactly 6 lines changed, all expected; every proof number unchanged; header shas and git_head verified against the files and HEAD.

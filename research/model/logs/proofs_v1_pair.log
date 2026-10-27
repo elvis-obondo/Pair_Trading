@@ -1,13 +1,13 @@
 [PROOFS] sha256 research/model/proofs_v1_pair.py: c4e2ec942f443619412b5d442430e84c5f427d6ebf3ec18e265ec4f98b0ba63b
-[PROOFS] sha256 research/model/harness.py: c06484599c879d050f30af898aaf078f754266208f29f3a82c2580f51c75548a
-[PROOFS] sha256 research/model/inputs_v1_pair.csv: bb2721ee107aa07f82250fd65cec68b61400c3a3e9223c5d286ec56ab2f77331
+[PROOFS] sha256 research/model/harness.py: 423328afc950252fe37d5fbc7fb4c25d97475b36abe3860542357e5481ce56c7
+[PROOFS] sha256 research/model/inputs_v1_pair.csv: 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf
 [PROOFS] sha256 research/dataset/master_manifest.py: 9ec12057ab23a797cb2a9dde1eae204c9c2e5775b02399cccb6d146f9afea3fe
-[PROOFS] git_head 2c7372dc3fee71a9104909c2e6ff48db142d01e7 (32 uncommitted paths); start 2026-10-27T19:34:47Z UTC; pid 5828
+[PROOFS] git_head b421246fe56410d59a2126ead1d973f9ceb8ca0d (64 uncommitted paths); start 2026-10-27T23:17:43Z UTC; pid 51992
 [PROOFS] seeds used: proof1=1 (and +1 for score_fold's tie-break); proof3=3 (and +100 for the bootstrap, +k per fold's score_fold tie-break); proof4=4 (sample selection); proof5=none (no randomness); proof6=6 (score_fold tie-break, irrelevant when scores are distinct)
 [HARNESS] load_search_events: 6,697,756 merged rows -> 5,405,478 after the date/gap-day filter -> 5,378,429 after dropping 27,049 label_gap=1 rows
-[PROOFS] loaded 5,378,429 search events  [6s]
+[PROOFS] loaded 5,378,429 search events  [17s]
 [PROOF 1] leak check by planted future column
-[HARNESS] check_inputs: 1094 columns checked against inputs_v1_pair.csv (sha256 bb2721ee107aa07f82250fd65cec68b61400c3a3e9223c5d286ec56ab2f77331); 1 not IN
+[HARNESS] check_inputs: 1092 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 1 not IN
    (a) check_inputs correctly raised with the planted column included: columns not in the frozen IN list (inputs_v1_pair.csv): ['__planted_leak_column__']
    (b) broken variant: skip check_inputs, score the planted column through the real fold-0 path
    broken-variant lift on fold 0's test block: 0.5919 (must be >= 0.5)
@@ -40,4 +40,4 @@
    lift: independent 0.044413 vs harness 0.044413, equal (1e-9): True
 [PROOF 6] PASS
 [PROOFS] summary: {'proof1_leak_check': True, 'proof3_planted_signal': True, 'proof4_hazard_round_trip': True, 'proof5_vault_boundary_assert': True, 'proof6_independent_recompute': True}
-[PROOFS] ALL PASS: True  [109s]
+[PROOFS] ALL PASS: True  [222s]

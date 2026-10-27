@@ -12,8 +12,12 @@ if [ -f "$L/b5_profile_startup.log" ]; then
   echo "research/model/logs/b5_profile_startup.log already exists: refusing to overwrite an existing log" >&2
   exit 1
 fi
+# planner ruling 2026-10-27: a stale done-marker from an earlier run nearly caused a false "finished"
+# report more than once. Remove it before launch, write it only after the job actually exits.
+rm -f "$L/b5_profile_startup_done.log"
 # load_search_events + build_folds alone are a tiny fraction of a full load_features call (the slow
 # part is the group files, not events/labels); budget is generous but short on purpose.
 timeout 600 python -u research/model/b5_profile_startup.py > "$L/b5_profile_startup.log" 2>&1
-echo "exit_code=$?" >> "$L/b5_profile_startup.log"
-echo "b5_profile_startup done" > "$L/b5_profile_startup_done.log"
+EXIT=$?
+echo "exit_code=$EXIT" >> "$L/b5_profile_startup.log"
+echo "pid=$$ exit_code=$EXIT finished_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)" > "$L/b5_profile_startup_done.log"
