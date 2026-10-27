@@ -1,0 +1,17 @@
+[REGATE] sha256 regate_v1_pair.py: 9d66f2135a51b289f00832b495bdc906ce5a5f3cb1f8e450bba14e69ee01b4d9
+[REGATE] sha256 dup_audit_v1_pair.py (gate imported from): 79e7478ea3678e8f83d3fc1bca1911e9ea7782f40e10ec291a27ec2cc8508342
+[REGATE] sha256 dup_audit_v1_pair.csv (as read, pre-regate): baba9b39f290a6034d37a102a5daba99aa887bd5e587acfe34564c7792a85905
+[REGATE] sha256 inputs_v1_pair.csv (as read): 08ff834dea2a1eee8d2511770f6067fb10b62b75f0c130a884749e933cac7bde
+[REGATE] git_head ae43814ed2f98e71950ff238471a1ccd3cd989b4 (29 uncommitted paths); start 2026-10-27T12:03:39Z UTC; pid 4273
+[REGATE] read 239 flagged pairs from dup_audit_v1_pair.csv
+[REGATE] saved the pre-regate file to /home/elvisobondo/Pair_Trading/research/model/dup_audit_v1_pair.csv.orig
+[REGATE] 0 of 239 pairs reclassified under the corrected tolerance
+[REGATE] wrote 239 rows to dup_audit_v1_pair.csv (re-gated)
+[REGATE] 12 columns in exact-hash groups (from /home/elvisobondo/Pair_Trading/research/model/logs/dup_audit_v1_pair.log's EXACT: lines, unaffected by the affine-tolerance fix); 8 of the original keep rows are exact-hash drops and are kept as-is
+[REGATE] skipped 2 correlation edge(s) already fully covered by an exact-hash decision (both endpoints are exact-hash nodes)
+[REGATE] keep rule: 1 connected correlation-based duplicate component(s) after re-gating
+   KEEP events.parquet/r2  DROP ['g2.parquet/r2_2d']
+[REGATE] wrote 9 keep/drop decisions (8 exact-hash, unaffected by the gate; 1 correlation-based, rebuilt) to dup_audit_keep_v1_pair.csv
+[REGATE] sha256 dup_audit_v1_pair.csv (as written): baba9b39f290a6034d37a102a5daba99aa887bd5e587acfe34564c7792a85905
+[REGATE] sha256 dup_audit_keep_v1_pair.csv (as written): e57963027fbc8de26cc66209ca7de90213f13447b3b9e27bd4a93296b08c4364
+[REGATE] note: this script does not write inputs_v1_pair.csv itself -- that is a separate step (build_inputs_v1_pair.py, rerun by hand using this file's DUP_DROP additions), reported alongside this log, not inside it.  [106s]

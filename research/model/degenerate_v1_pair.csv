@@ -1,0 +1,5 @@
+file,column,kind,n_finite,value_if_constant
+g4.parquet,a_listing_src,constant,6697756,0.0
+g5_net.parquet,net_max_abs_imb_5m_bin,all_nan,0,
+g8.parquet,a_crossed,constant,6228891,0.0
+g8.parquet,b_crossed,constant,6262084,0.0

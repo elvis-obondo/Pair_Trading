@@ -1,0 +1,40 @@
+[CROSSMASK] sha256 check_crossed_mask_v1_pair.py: 574f1e645d1e97fe016ca820aef7c8a5107360d207ab76ff716cfc66a0994e59
+[CROSSMASK] sha256 inputs_v1_pair.csv: 78a0439c9334c0a4969383596c5164f93f57666a6f7d0d4d949d1bac3ec8ced8
+[CROSSMASK] git_head ae43814ed2f98e71950ff238471a1ccd3cd989b4 (29 uncommitted paths); start 2026-10-27T13:32:42Z UTC; pid 2609
+[CROSSMASK] 112 current IN columns in g8.parquet
+[CROSSMASK] pair/g8.parquet re-hashed against MANIFEST.json: match  [14s]
+[CROSSMASK] a_crossed: n_finite 6,228,891 of 6,697,756 (NaN 468,865)
+   MATCH a_ask_d10 (IN, stays IN): n_finite 6,228,891 -- identical NaN mask to a_crossed
+   MATCH a_ask_d25 (IN, stays IN): n_finite 6,228,891 -- identical NaN mask to a_crossed
+   MATCH a_ask_d50 (IN, stays IN): n_finite 6,228,891 -- identical NaN mask to a_crossed
+   MATCH a_bid_d10 (IN, stays IN): n_finite 6,228,891 -- identical NaN mask to a_crossed
+   MATCH a_bid_d25 (IN, stays IN): n_finite 6,228,891 -- identical NaN mask to a_crossed
+   MATCH a_bid_d50 (IN, stays IN): n_finite 6,228,891 -- identical NaN mask to a_crossed
+   MATCH a_book_reach_ask_bp (IN, stays IN): n_finite 6,228,891 -- identical NaN mask to a_crossed
+   MATCH a_book_reach_bid_bp (IN, stays IN): n_finite 6,228,891 -- identical NaN mask to a_crossed
+   MATCH a_mid (IN, stays IN): n_finite 6,228,891 -- identical NaN mask to a_crossed
+   MATCH a_spread_bp (IN, stays IN): n_finite 6,228,891 -- identical NaN mask to a_crossed
+   MATCH a_trunc_ask_10 (IN, stays IN): n_finite 6,228,891 -- identical NaN mask to a_crossed
+   MATCH a_trunc_ask_25 (IN, stays IN): n_finite 6,228,891 -- identical NaN mask to a_crossed
+   MATCH a_trunc_ask_50 (IN, stays IN): n_finite 6,228,891 -- identical NaN mask to a_crossed
+   MATCH a_trunc_bid_10 (IN, stays IN): n_finite 6,228,891 -- identical NaN mask to a_crossed
+   MATCH a_trunc_bid_25 (IN, stays IN): n_finite 6,228,891 -- identical NaN mask to a_crossed
+   MATCH a_trunc_bid_50 (IN, stays IN): n_finite 6,228,891 -- identical NaN mask to a_crossed
+[CROSSMASK] b_crossed: n_finite 6,262,084 of 6,697,756 (NaN 435,672)
+   MATCH b_ask_d10 (IN, stays IN): n_finite 6,262,084 -- identical NaN mask to b_crossed
+   MATCH b_ask_d25 (IN, stays IN): n_finite 6,262,084 -- identical NaN mask to b_crossed
+   MATCH b_ask_d50 (IN, stays IN): n_finite 6,262,084 -- identical NaN mask to b_crossed
+   MATCH b_bid_d10 (IN, stays IN): n_finite 6,262,084 -- identical NaN mask to b_crossed
+   MATCH b_bid_d25 (IN, stays IN): n_finite 6,262,084 -- identical NaN mask to b_crossed
+   MATCH b_bid_d50 (IN, stays IN): n_finite 6,262,084 -- identical NaN mask to b_crossed
+   MATCH b_book_reach_ask_bp (IN, stays IN): n_finite 6,262,084 -- identical NaN mask to b_crossed
+   MATCH b_book_reach_bid_bp (IN, stays IN): n_finite 6,262,084 -- identical NaN mask to b_crossed
+   MATCH b_mid (IN, stays IN): n_finite 6,262,084 -- identical NaN mask to b_crossed
+   MATCH b_spread_bp (IN, stays IN): n_finite 6,262,084 -- identical NaN mask to b_crossed
+   MATCH b_trunc_ask_10 (IN, stays IN): n_finite 6,262,084 -- identical NaN mask to b_crossed
+   MATCH b_trunc_ask_25 (IN, stays IN): n_finite 6,262,084 -- identical NaN mask to b_crossed
+   MATCH b_trunc_ask_50 (IN, stays IN): n_finite 6,262,084 -- identical NaN mask to b_crossed
+   MATCH b_trunc_bid_10 (IN, stays IN): n_finite 6,262,084 -- identical NaN mask to b_crossed
+   MATCH b_trunc_bid_25 (IN, stays IN): n_finite 6,262,084 -- identical NaN mask to b_crossed
+   MATCH b_trunc_bid_50 (IN, stays IN): n_finite 6,262,084 -- identical NaN mask to b_crossed
+[CROSSMASK] done  [21s]

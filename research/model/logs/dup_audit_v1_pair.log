@@ -1,0 +1,598 @@
+[DUP] sha256 research/model/dup_audit_v1_pair.py: f879c1f3056c313f7229928c6552bb9a8a869a2d1ab7738b80160a42f3c39f45
+[DUP] sha256 research/model/inputs_v1_pair.csv: ba21c8d99b1ffc0380c1690b314da10c53c0ead8263a288b00e7e6a7359331b9
+[DUP] sha256 research/dataset/master_manifest.py: 9ec12057ab23a797cb2a9dde1eae204c9c2e5775b02399cccb6d146f9afea3fe
+[DUP] git_head ae43814ed2f98e71950ff238471a1ccd3cd989b4 (29 uncommitted paths at last laptop snapshot); start 2026-10-27T03:30:22Z UTC; pid 1281
+[DUP] IN set: 1,104 numeric columns, 2 string columns
+[DUP] resource plan: X0/M as float64 chunks of 200,000 rows x 1104 columns (1.77 GB per chunk buffer, well under 64 GB); 1104x1104 accumulators x4 = 39 MB; ~65.3 TFLOP total across the 4 matrix products
+[DUP] 15 v1 pair files re-hashed against MANIFEST.json: all match  [118s]
+[DUP] categorical bijections:
+   ticker_a <-> a_coin_code: max distinct a_coin_code per ticker_a = 1, max distinct ticker_a per a_coin_code = 1 (BIJECTIVE)
+   ticker_b <-> b_coin_code: max distinct b_coin_code per ticker_b = 1, max distinct ticker_b per b_coin_code = 1 (BIJECTIVE)
+[DUP] pass 1: stats + hash over 1106 columns  [121s]
+   200/1106  [158s]
+   400/1106  [197s]
+   600/1106  [236s]
+   800/1106  [274s]
+   1000/1106  [312s]
+[DUP] exact-hash duplicate groups: 4
+   EXACT: ['events.parquet/mins_since_trade_a', 'g4.parquet/a_mins_since_trade']
+   EXACT: ['events.parquet/mins_since_trade_b', 'g4.parquet/b_mins_since_trade']
+   EXACT: ['g4.parquet/a_listing_src [CONSTANT]', 'g4.parquet/b_listing_src [CONSTANT]', 'g7.parquet/a_vault_leader_usd [CONSTANT]', 'g7.parquet/b_vault_leader_usd [CONSTANT]', 'g7.parquet/d_vault_leader_usd [CONSTANT]']
+   EXACT: ['g5_net.parquet/net_max_abs_imb_5m_bin [ALL-NAN]', 'g5_net.parquet/net_mins_since_forced_any [ALL-NAN]', 'g5_net.parquet/net_mins_since_forced_spike [ALL-NAN]']
+[DUP] event_id row order confirmed identical across 15 files  [337s]
+[DUP] pass 2: full 1104x1104 pairwise-finite Pearson, chunked (15 file readers, 1104 columns)  [337s]
+   200,000/6,697,756 rows  [381s]
+   400,000/6,697,756 rows  [420s]
+   600,000/6,697,756 rows  [458s]
+   800,000/6,697,756 rows  [496s]
+   1,000,000/6,697,756 rows  [534s]
+   1,200,000/6,697,756 rows  [580s]
+   1,400,000/6,697,756 rows  [637s]
+   1,600,000/6,697,756 rows  [687s]
+   1,800,000/6,697,756 rows  [729s]
+   2,000,000/6,697,756 rows  [768s]
+   2,200,000/6,697,756 rows  [814s]
+   2,400,000/6,697,756 rows  [856s]
+   2,600,000/6,697,756 rows  [897s]
+   2,800,000/6,697,756 rows  [937s]
+   3,000,000/6,697,756 rows  [977s]
+   3,200,000/6,697,756 rows  [1022s]
+   3,400,000/6,697,756 rows  [1061s]
+   3,600,000/6,697,756 rows  [1100s]
+   3,800,000/6,697,756 rows  [1139s]
+   4,000,000/6,697,756 rows  [1179s]
+   4,200,000/6,697,756 rows  [1222s]
+   4,400,000/6,697,756 rows  [1261s]
+   4,600,000/6,697,756 rows  [1317s]
+   4,800,000/6,697,756 rows  [1392s]
+   5,000,000/6,697,756 rows  [1437s]
+   5,200,000/6,697,756 rows  [1481s]
+   5,400,000/6,697,756 rows  [1531s]
+   5,600,000/6,697,756 rows  [1571s]
+   5,800,000/6,697,756 rows  [1610s]
+   6,000,000/6,697,756 rows  [1649s]
+   6,200,000/6,697,756 rows  [1687s]
+   6,400,000/6,697,756 rows  [1727s]
+   6,600,000/6,697,756 rows  [1766s]
+   6,697,756/6,697,756 rows  [1784s]
+[DUP] full screen done  [1784s]; re-verifying every flagged pair directly
+   DUPLICATE       r2@events.parquet  vs  r2_2d@g2.parquet: pearson 1.000000 spearman 1.000000 n_a 6,697,756 n_b 6,697,756 n_overlap 6,697,756 affine_ok=True same_nan=True a=7.0885519676266995e-12 b=0.9999999999701412
+   DUPLICATE       mins_since_trade_a@events.parquet  vs  a_mins_since_trade@g4.parquet: pearson 1.000000 spearman 1.000000 n_a 6,697,756 n_b 6,697,756 n_overlap 6,697,756 affine_ok=True same_nan=True a=-4.218847493575595e-15 b=1.0000000000000056
+   DUPLICATE       mins_since_trade_b@events.parquet  vs  b_mins_since_trade@g4.parquet: pearson 1.000000 spearman 1.000000 n_a 6,697,756 n_b 6,697,756 n_overlap 6,697,756 affine_ok=True same_nan=True a=2.55351295663786e-15 b=0.9999999999999973
+   NEAR_DUPLICATE  n_prev_triggers@g3.parquet  vs  n_prev_resolved@g3.parquet: pearson 0.999878 spearman 0.999886 n_a 6,697,756 n_b 6,697,756 n_overlap 6,697,756 affine_ok=False same_nan=True a=-1.2172994276063491 b=0.9960134040816054
+   NEAR_DUPLICATE  a_imb_30@g5_a.parquet  vs  a_imb_30m_11@g5_a.parquet: pearson 1.000000 spearman 1.000000 n_a 6,671,394 n_b 6,651,887 n_overlap 6,651,887 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  a_forced_share_30@g5_a.parquet  vs  a_forced_30m_11@g5_a.parquet: pearson 1.000000 spearman 1.000000 n_a 6,671,394 n_b 6,651,887 n_overlap 6,651,887 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  a_twap_share_30@g5_a.parquet  vs  a_twap_all_30@g6_a.parquet: pearson 1.000000 spearman 1.000000 n_a 6,142,239 n_b 6,115,662 n_overlap 6,115,662 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  a_twap_share_30@g5_a.parquet  vs  a_twap_human_30@g6_a.parquet: pearson 1.000000 spearman 1.000000 n_a 6,142,239 n_b 6,115,662 n_overlap 6,115,662 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  a_twap_share_60@g5_a.parquet  vs  a_twap_all_60@g6_a.parquet: pearson 1.000000 spearman 1.000000 n_a 6,154,911 n_b 6,140,708 n_overlap 6,140,708 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  a_twap_share_60@g5_a.parquet  vs  a_twap_human_60@g6_a.parquet: pearson 1.000000 spearman 1.000000 n_a 6,154,911 n_b 6,140,708 n_overlap 6,140,708 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  a_twap_share_360@g5_a.parquet  vs  a_twap_all_360@g6_a.parquet: pearson 1.000000 spearman 1.000000 n_a 6,145,843 n_b 6,143,629 n_overlap 6,143,629 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  a_twap_share_360@g5_a.parquet  vs  a_twap_human_360@g6_a.parquet: pearson 1.000000 spearman 1.000000 n_a 6,145,843 n_b 6,143,629 n_overlap 6,143,629 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  a_twap_share_1440@g5_a.parquet  vs  a_twap_all_1440@g6_a.parquet: pearson 1.000000 spearman 1.000000 n_a 6,080,302 n_b 6,079,160 n_overlap 6,079,160 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  a_twap_share_1440@g5_a.parquet  vs  a_twap_human_1440@g6_a.parquet: pearson 1.000000 spearman 1.000000 n_a 6,080,302 n_b 6,079,160 n_overlap 6,079,160 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  a_imb_30m_0@g5_a.parquet  vs  a_imb_30m_pre_2@g5_a.parquet: pearson 1.000000 spearman 1.000000 n_a 6,636,420 n_b 6,637,083 n_overlap 6,632,795 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  a_imb_30m_1@g5_a.parquet  vs  a_imb_30m_pre_3@g5_a.parquet: pearson 1.000000 spearman 1.000000 n_a 6,637,881 n_b 6,638,544 n_overlap 6,634,256 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  a_imb_30m_2@g5_a.parquet  vs  a_imb_30m_pre_4@g5_a.parquet: pearson 1.000000 spearman 1.000000 n_a 6,638,351 n_b 6,639,014 n_overlap 6,634,726 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  a_imb_30m_3@g5_a.parquet  vs  a_imb_30m_pre_5@g5_a.parquet: pearson 1.000000 spearman 1.000000 n_a 6,638,410 n_b 6,639,073 n_overlap 6,634,785 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  a_imb_30m_4@g5_a.parquet  vs  a_imb_30m_pre_6@g5_a.parquet: pearson 1.000000 spearman 1.000000 n_a 6,638,980 n_b 6,639,643 n_overlap 6,635,355 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  a_imb_30m_5@g5_a.parquet  vs  a_imb_30m_pre_7@g5_a.parquet: pearson 1.000000 spearman 1.000000 n_a 6,639,525 n_b 6,640,188 n_overlap 6,635,900 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  a_imb_30m_6@g5_a.parquet  vs  a_imb_30m_pre_8@g5_a.parquet: pearson 1.000000 spearman 1.000000 n_a 6,638,019 n_b 6,638,682 n_overlap 6,634,394 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  a_imb_30m_7@g5_a.parquet  vs  a_imb_30m_pre_9@g5_a.parquet: pearson 1.000000 spearman 1.000000 n_a 6,640,321 n_b 6,640,984 n_overlap 6,636,696 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  a_imb_30m_8@g5_a.parquet  vs  a_imb_30m_pre_10@g5_a.parquet: pearson 1.000000 spearman 1.000000 n_a 6,641,021 n_b 6,641,684 n_overlap 6,637,396 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  a_imb_30m_9@g5_a.parquet  vs  a_imb_30m_pre_11@g5_a.parquet: pearson 1.000000 spearman 1.000000 n_a 6,642,433 n_b 6,643,096 n_overlap 6,638,808 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  a_forced_30m_0@g5_a.parquet  vs  a_forced_30m_pre_2@g5_a.parquet: pearson 1.000000 spearman 1.000000 n_a 6,636,420 n_b 6,637,083 n_overlap 6,632,795 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  a_forced_30m_1@g5_a.parquet  vs  a_forced_30m_pre_3@g5_a.parquet: pearson 1.000000 spearman 1.000000 n_a 6,637,881 n_b 6,638,544 n_overlap 6,634,256 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  a_forced_30m_2@g5_a.parquet  vs  a_forced_30m_pre_4@g5_a.parquet: pearson 1.000000 spearman 1.000000 n_a 6,638,351 n_b 6,639,014 n_overlap 6,634,726 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  a_forced_30m_3@g5_a.parquet  vs  a_forced_30m_pre_5@g5_a.parquet: pearson 1.000000 spearman 1.000000 n_a 6,638,410 n_b 6,639,073 n_overlap 6,634,785 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  a_forced_30m_4@g5_a.parquet  vs  a_forced_30m_pre_6@g5_a.parquet: pearson 1.000000 spearman 1.000000 n_a 6,638,980 n_b 6,639,643 n_overlap 6,635,355 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  a_forced_30m_5@g5_a.parquet  vs  a_forced_30m_pre_7@g5_a.parquet: pearson 1.000000 spearman 1.000000 n_a 6,639,525 n_b 6,640,188 n_overlap 6,635,900 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  a_forced_30m_6@g5_a.parquet  vs  a_forced_30m_pre_8@g5_a.parquet: pearson 1.000000 spearman 1.000000 n_a 6,638,019 n_b 6,638,682 n_overlap 6,634,394 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  a_forced_30m_7@g5_a.parquet  vs  a_forced_30m_pre_9@g5_a.parquet: pearson 1.000000 spearman 1.000000 n_a 6,640,321 n_b 6,640,984 n_overlap 6,636,696 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  a_forced_30m_8@g5_a.parquet  vs  a_forced_30m_pre_10@g5_a.parquet: pearson 1.000000 spearman 1.000000 n_a 6,641,021 n_b 6,641,684 n_overlap 6,637,396 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  a_forced_30m_9@g5_a.parquet  vs  a_forced_30m_pre_11@g5_a.parquet: pearson 1.000000 spearman 1.000000 n_a 6,642,433 n_b 6,643,096 n_overlap 6,638,808 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_imb_30@g5_b.parquet  vs  b_imb_30m_11@g5_b.parquet: pearson 1.000000 spearman 1.000000 n_a 6,668,659 n_b 6,649,152 n_overlap 6,649,152 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_forced_share_30@g5_b.parquet  vs  b_forced_30m_11@g5_b.parquet: pearson 1.000000 spearman 1.000000 n_a 6,668,659 n_b 6,649,152 n_overlap 6,649,152 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_twap_share_30@g5_b.parquet  vs  b_twap_all_30@g6_b.parquet: pearson 1.000000 spearman 1.000000 n_a 6,141,267 n_b 6,109,903 n_overlap 6,109,903 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_twap_share_30@g5_b.parquet  vs  b_twap_human_30@g6_b.parquet: pearson 1.000000 spearman 1.000000 n_a 6,141,267 n_b 6,109,902 n_overlap 6,109,902 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_twap_share_60@g5_b.parquet  vs  b_twap_all_60@g6_b.parquet: pearson 1.000000 spearman 1.000000 n_a 6,154,669 n_b 6,138,396 n_overlap 6,138,396 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_twap_share_60@g5_b.parquet  vs  b_twap_human_60@g6_b.parquet: pearson 1.000000 spearman 1.000000 n_a 6,154,669 n_b 6,138,395 n_overlap 6,138,395 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_twap_share_360@g5_b.parquet  vs  b_twap_all_360@g6_b.parquet: pearson 1.000000 spearman 1.000000 n_a 6,145,840 n_b 6,143,021 n_overlap 6,143,021 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_twap_share_360@g5_b.parquet  vs  b_twap_human_360@g6_b.parquet: pearson 0.999999 spearman 1.000000 n_a 6,145,840 n_b 6,143,021 n_overlap 6,143,021 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_twap_share_1440@g5_b.parquet  vs  b_twap_all_1440@g6_b.parquet: pearson 1.000000 spearman 1.000000 n_a 6,080,302 n_b 6,079,374 n_overlap 6,079,374 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_twap_share_1440@g5_b.parquet  vs  b_twap_human_1440@g6_b.parquet: pearson 0.999997 spearman 1.000000 n_a 6,080,302 n_b 6,079,374 n_overlap 6,079,374 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_imb_30m_0@g5_b.parquet  vs  b_imb_30m_pre_2@g5_b.parquet: pearson 1.000000 spearman 1.000000 n_a 6,629,942 n_b 6,630,605 n_overlap 6,626,317 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_imb_30m_1@g5_b.parquet  vs  b_imb_30m_pre_3@g5_b.parquet: pearson 1.000000 spearman 1.000000 n_a 6,630,437 n_b 6,631,100 n_overlap 6,626,812 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_imb_30m_2@g5_b.parquet  vs  b_imb_30m_pre_4@g5_b.parquet: pearson 1.000000 spearman 1.000000 n_a 6,629,547 n_b 6,630,210 n_overlap 6,625,922 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_imb_30m_3@g5_b.parquet  vs  b_imb_30m_pre_5@g5_b.parquet: pearson 1.000000 spearman 1.000000 n_a 6,630,312 n_b 6,630,975 n_overlap 6,626,687 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_imb_30m_4@g5_b.parquet  vs  b_imb_30m_pre_6@g5_b.parquet: pearson 1.000000 spearman 1.000000 n_a 6,631,348 n_b 6,632,011 n_overlap 6,627,723 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_imb_30m_5@g5_b.parquet  vs  b_imb_30m_pre_7@g5_b.parquet: pearson 1.000000 spearman 1.000000 n_a 6,632,029 n_b 6,632,692 n_overlap 6,628,404 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_imb_30m_6@g5_b.parquet  vs  b_imb_30m_pre_8@g5_b.parquet: pearson 1.000000 spearman 1.000000 n_a 6,631,423 n_b 6,632,086 n_overlap 6,627,798 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_imb_30m_7@g5_b.parquet  vs  b_imb_30m_pre_9@g5_b.parquet: pearson 1.000000 spearman 1.000000 n_a 6,633,136 n_b 6,633,799 n_overlap 6,629,511 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_imb_30m_8@g5_b.parquet  vs  b_imb_30m_pre_10@g5_b.parquet: pearson 1.000000 spearman 1.000000 n_a 6,634,513 n_b 6,635,176 n_overlap 6,630,888 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_imb_30m_9@g5_b.parquet  vs  b_imb_30m_pre_11@g5_b.parquet: pearson 1.000000 spearman 1.000000 n_a 6,634,370 n_b 6,635,033 n_overlap 6,630,745 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_forced_30m_0@g5_b.parquet  vs  b_forced_30m_pre_2@g5_b.parquet: pearson 1.000000 spearman 1.000000 n_a 6,629,942 n_b 6,630,605 n_overlap 6,626,317 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_forced_30m_1@g5_b.parquet  vs  b_forced_30m_pre_3@g5_b.parquet: pearson 1.000000 spearman 1.000000 n_a 6,630,437 n_b 6,631,100 n_overlap 6,626,812 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_forced_30m_2@g5_b.parquet  vs  b_forced_30m_pre_4@g5_b.parquet: pearson 1.000000 spearman 1.000000 n_a 6,629,547 n_b 6,630,210 n_overlap 6,625,922 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_forced_30m_3@g5_b.parquet  vs  b_forced_30m_pre_5@g5_b.parquet: pearson 1.000000 spearman 1.000000 n_a 6,630,312 n_b 6,630,975 n_overlap 6,626,687 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_forced_30m_4@g5_b.parquet  vs  b_forced_30m_pre_6@g5_b.parquet: pearson 1.000000 spearman 1.000000 n_a 6,631,348 n_b 6,632,011 n_overlap 6,627,723 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_forced_30m_5@g5_b.parquet  vs  b_forced_30m_pre_7@g5_b.parquet: pearson 1.000000 spearman 1.000000 n_a 6,632,029 n_b 6,632,692 n_overlap 6,628,404 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_forced_30m_6@g5_b.parquet  vs  b_forced_30m_pre_8@g5_b.parquet: pearson 1.000000 spearman 1.000000 n_a 6,631,423 n_b 6,632,086 n_overlap 6,627,798 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_forced_30m_7@g5_b.parquet  vs  b_forced_30m_pre_9@g5_b.parquet: pearson 1.000000 spearman 1.000000 n_a 6,633,136 n_b 6,633,799 n_overlap 6,629,511 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_forced_30m_8@g5_b.parquet  vs  b_forced_30m_pre_10@g5_b.parquet: pearson 1.000000 spearman 1.000000 n_a 6,634,513 n_b 6,635,176 n_overlap 6,630,888 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_forced_30m_9@g5_b.parquet  vs  b_forced_30m_pre_11@g5_b.parquet: pearson 1.000000 spearman 1.000000 n_a 6,634,370 n_b 6,635,033 n_overlap 6,630,745 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_imb_30@g5_net.parquet  vs  net_imb_30m_11@g5_net.parquet: pearson 1.000000 spearman 1.000000 n_a 6,677,704 n_b 6,658,197 n_overlap 6,658,197 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_forced_share_30@g5_net.parquet  vs  net_forced_30m_11@g5_net.parquet: pearson 1.000000 spearman 1.000000 n_a 6,677,704 n_b 6,658,197 n_overlap 6,658,197 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_twap_share_30@g5_net.parquet  vs  net_twap_all_30@g6_net.parquet: pearson 1.000000 spearman 1.000000 n_a 6,148,029 n_b 6,111,745 n_overlap 6,111,745 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_twap_share_30@g5_net.parquet  vs  net_twap_human_30@g6_net.parquet: pearson 1.000000 spearman 1.000000 n_a 6,148,029 n_b 6,111,744 n_overlap 6,111,744 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_twap_share_60@g5_net.parquet  vs  net_twap_all_60@g6_net.parquet: pearson 1.000000 spearman 1.000000 n_a 6,162,413 n_b 6,144,859 n_overlap 6,144,859 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_twap_share_60@g5_net.parquet  vs  net_twap_human_60@g6_net.parquet: pearson 1.000000 spearman 1.000000 n_a 6,162,413 n_b 6,144,858 n_overlap 6,144,858 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_twap_share_360@g5_net.parquet  vs  net_twap_all_360@g6_net.parquet: pearson 1.000000 spearman 1.000000 n_a 6,145,850 n_b 6,142,536 n_overlap 6,142,536 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_twap_share_360@g5_net.parquet  vs  net_twap_human_360@g6_net.parquet: pearson 1.000000 spearman 1.000000 n_a 6,145,850 n_b 6,142,536 n_overlap 6,142,536 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_twap_share_1440@g5_net.parquet  vs  net_twap_all_1440@g6_net.parquet: pearson 1.000000 spearman 1.000000 n_a 6,080,302 n_b 6,078,991 n_overlap 6,078,991 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_twap_share_1440@g5_net.parquet  vs  net_twap_human_1440@g6_net.parquet: pearson 0.999999 spearman 1.000000 n_a 6,080,302 n_b 6,078,991 n_overlap 6,078,991 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_imb_30m_0@g5_net.parquet  vs  net_imb_30m_pre_2@g5_net.parquet: pearson 1.000000 spearman 1.000000 n_a 6,614,889 n_b 6,615,552 n_overlap 6,611,264 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_imb_30m_1@g5_net.parquet  vs  net_imb_30m_pre_3@g5_net.parquet: pearson 1.000000 spearman 1.000000 n_a 6,616,853 n_b 6,617,516 n_overlap 6,613,228 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_imb_30m_2@g5_net.parquet  vs  net_imb_30m_pre_4@g5_net.parquet: pearson 1.000000 spearman 1.000000 n_a 6,617,000 n_b 6,617,663 n_overlap 6,613,375 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_imb_30m_3@g5_net.parquet  vs  net_imb_30m_pre_5@g5_net.parquet: pearson 1.000000 spearman 1.000000 n_a 6,617,473 n_b 6,618,136 n_overlap 6,613,848 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_imb_30m_4@g5_net.parquet  vs  net_imb_30m_pre_6@g5_net.parquet: pearson 1.000000 spearman 1.000000 n_a 6,619,275 n_b 6,619,938 n_overlap 6,615,650 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_imb_30m_5@g5_net.parquet  vs  net_imb_30m_pre_7@g5_net.parquet: pearson 1.000000 spearman 1.000000 n_a 6,619,863 n_b 6,620,526 n_overlap 6,616,238 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_imb_30m_6@g5_net.parquet  vs  net_imb_30m_pre_8@g5_net.parquet: pearson 1.000000 spearman 1.000000 n_a 6,618,208 n_b 6,618,871 n_overlap 6,614,583 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_imb_30m_7@g5_net.parquet  vs  net_imb_30m_pre_9@g5_net.parquet: pearson 1.000000 spearman 1.000000 n_a 6,621,789 n_b 6,622,452 n_overlap 6,618,164 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_imb_30m_8@g5_net.parquet  vs  net_imb_30m_pre_10@g5_net.parquet: pearson 1.000000 spearman 1.000000 n_a 6,622,744 n_b 6,623,407 n_overlap 6,619,119 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_imb_30m_9@g5_net.parquet  vs  net_imb_30m_pre_11@g5_net.parquet: pearson 1.000000 spearman 1.000000 n_a 6,623,521 n_b 6,624,184 n_overlap 6,619,896 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_forced_30m_0@g5_net.parquet  vs  net_forced_30m_pre_2@g5_net.parquet: pearson 1.000000 spearman 1.000000 n_a 6,614,889 n_b 6,615,552 n_overlap 6,611,264 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_forced_30m_1@g5_net.parquet  vs  net_forced_30m_pre_3@g5_net.parquet: pearson 1.000000 spearman 1.000000 n_a 6,616,853 n_b 6,617,516 n_overlap 6,613,228 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_forced_30m_2@g5_net.parquet  vs  net_forced_30m_pre_4@g5_net.parquet: pearson 1.000000 spearman 1.000000 n_a 6,617,000 n_b 6,617,663 n_overlap 6,613,375 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_forced_30m_3@g5_net.parquet  vs  net_forced_30m_pre_5@g5_net.parquet: pearson 1.000000 spearman 1.000000 n_a 6,617,473 n_b 6,618,136 n_overlap 6,613,848 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_forced_30m_4@g5_net.parquet  vs  net_forced_30m_pre_6@g5_net.parquet: pearson 1.000000 spearman 1.000000 n_a 6,619,275 n_b 6,619,938 n_overlap 6,615,650 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_forced_30m_5@g5_net.parquet  vs  net_forced_30m_pre_7@g5_net.parquet: pearson 1.000000 spearman 1.000000 n_a 6,619,863 n_b 6,620,526 n_overlap 6,616,238 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_forced_30m_6@g5_net.parquet  vs  net_forced_30m_pre_8@g5_net.parquet: pearson 1.000000 spearman 1.000000 n_a 6,618,208 n_b 6,618,871 n_overlap 6,614,583 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_forced_30m_7@g5_net.parquet  vs  net_forced_30m_pre_9@g5_net.parquet: pearson 1.000000 spearman 1.000000 n_a 6,621,789 n_b 6,622,452 n_overlap 6,618,164 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_forced_30m_8@g5_net.parquet  vs  net_forced_30m_pre_10@g5_net.parquet: pearson 1.000000 spearman 1.000000 n_a 6,622,744 n_b 6,623,407 n_overlap 6,619,119 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_forced_30m_9@g5_net.parquet  vs  net_forced_30m_pre_11@g5_net.parquet: pearson 1.000000 spearman 1.000000 n_a 6,623,521 n_b 6,624,184 n_overlap 6,619,896 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  a_top1_all_30@g6_a.parquet  vs  a_top1_human_30@g6_a.parquet: pearson 0.999989 spearman 0.999987 n_a 6,642,420 n_b 6,642,420 n_overlap 6,642,420 affine_ok=False same_nan=True a=4.302003063449966e-06 b=0.9999907030911173
+   NEAR_DUPLICATE  a_top3_all_30@g6_a.parquet  vs  a_top3_human_30@g6_a.parquet: pearson 0.999989 spearman 0.999996 n_a 6,642,420 n_b 6,642,420 n_overlap 6,642,420 affine_ok=False same_nan=True a=-1.2257433266160689e-05 b=1.0000128853978971
+   NEAR_DUPLICATE  a_hhi_all_30@g6_a.parquet  vs  a_hhi_human_30@g6_a.parquet: pearson 0.999994 spearman 0.999990 n_a 6,642,420 n_b 6,642,420 n_overlap 6,642,420 affine_ok=False same_nan=True a=6.130894298905787e-07 b=0.9999968840256267
+   NEAR_DUPLICATE  a_nw_all_30@g6_a.parquet  vs  a_nw_human_30@g6_a.parquet: pearson 1.000000 spearman 1.000000 n_a 6,696,050 n_b 6,696,050 n_overlap 6,696,050 affine_ok=False same_nan=True a=0.0005062471522805367 b=0.9999456769118084
+   NEAR_DUPLICATE  a_pers_all_30@g6_a.parquet  vs  a_pers_human_30@g6_a.parquet: pearson 0.999986 spearman 0.999987 n_a 6,642,420 n_b 6,642,420 n_overlap 6,642,420 affine_ok=False same_nan=True a=3.302439053898265e-05 b=0.9999621243521485
+   NEAR_DUPLICATE  a_twap_all_30@g6_a.parquet  vs  a_twap_human_30@g6_a.parquet: pearson 1.000000 spearman 1.000000 n_a 6,115,662 n_b 6,115,662 n_overlap 6,115,662 affine_ok=False same_nan=True a=2.17620678175795e-07 b=1.0000013762931614
+   NEAR_DUPLICATE  a_skill_mean_all_30@g6_a.parquet  vs  a_skill_mean_human_30@g6_a.parquet: pearson 0.999994 spearman 0.999948 n_a 6,634,961 n_b 6,634,961 n_overlap 6,634,961 affine_ok=False same_nan=True a=-7.848075076811491e-08 b=0.9999907119763131
+   NEAR_DUPLICATE  a_skill_cov_all_30@g6_a.parquet  vs  a_skill_cov_human_30@g6_a.parquet: pearson 0.999894 spearman 0.999982 n_a 6,642,420 n_b 6,642,420 n_overlap 6,642,420 affine_ok=False same_nan=True a=0.0002605597005065352 b=0.9997467244217806
+   NEAR_DUPLICATE  a_bot_all_30@g6_a.parquet  vs  a_bot_human_30@g6_a.parquet: pearson 0.999999 spearman 0.999999 n_a 6,642,420 n_b 6,642,420 n_overlap 6,642,420 affine_ok=False same_nan=True a=3.42520037893701e-06 b=0.9999979311495154
+   NEAR_DUPLICATE  a_topd_all_30@g6_a.parquet  vs  a_topd_human_30@g6_a.parquet: pearson 0.999990 spearman 0.999996 n_a 6,642,420 n_b 6,642,420 n_overlap 6,642,420 affine_ok=False same_nan=True a=2.8559519429094404e-06 b=1.000014399913662
+   NEAR_DUPLICATE  a_prior_forced_all_30@g6_a.parquet  vs  a_prior_forced_human_30@g6_a.parquet: pearson 0.999994 spearman 0.999998 n_a 6,642,420 n_b 6,642,420 n_overlap 6,642,420 affine_ok=False same_nan=True a=2.7011875814164643e-06 b=0.9999980554922322
+   NEAR_DUPLICATE  a_push_total_all_30@g6_a.parquet  vs  a_push_total_human_30@g6_a.parquet: pearson 0.999955 spearman 1.000000 n_a 6,696,050 n_b 6,696,050 n_overlap 6,696,050 affine_ok=False same_nan=True a=34.754214734304696 b=0.9990042618280554
+   NEAR_DUPLICATE  a_top1_all_60@g6_a.parquet  vs  a_top1_human_60@g6_a.parquet: pearson 0.999992 spearman 0.999990 n_a 6,669,777 n_b 6,669,777 n_overlap 6,669,777 affine_ok=False same_nan=True a=2.7752919303236645e-06 b=0.9999941777617473
+   NEAR_DUPLICATE  a_top3_all_60@g6_a.parquet  vs  a_top3_human_60@g6_a.parquet: pearson 0.999993 spearman 0.999996 n_a 6,669,777 n_b 6,669,777 n_overlap 6,669,777 affine_ok=False same_nan=True a=-2.251908323924745e-06 b=1.0000027428106903
+   NEAR_DUPLICATE  a_hhi_all_60@g6_a.parquet  vs  a_hhi_human_60@g6_a.parquet: pearson 0.999996 spearman 0.999992 n_a 6,669,777 n_b 6,669,777 n_overlap 6,669,777 affine_ok=False same_nan=True a=1.2337232292991551e-06 b=0.9999968504983889
+   NEAR_DUPLICATE  a_nw_all_60@g6_a.parquet  vs  a_nw_human_60@g6_a.parquet: pearson 1.000000 spearman 1.000000 n_a 6,693,468 n_b 6,693,468 n_overlap 6,693,468 affine_ok=False same_nan=True a=0.0004578660207918972 b=0.9999559303098213
+   NEAR_DUPLICATE  a_pers_all_60@g6_a.parquet  vs  a_pers_human_60@g6_a.parquet: pearson 0.999989 spearman 0.999989 n_a 6,669,777 n_b 6,669,777 n_overlap 6,669,777 affine_ok=False same_nan=True a=3.061490462408223e-05 b=0.9999638312892325
+   NEAR_DUPLICATE  a_twap_all_60@g6_a.parquet  vs  a_twap_human_60@g6_a.parquet: pearson 1.000000 spearman 1.000000 n_a 6,140,708 n_b 6,140,708 n_overlap 6,140,708 affine_ok=False same_nan=True a=1.917061596586056e-07 b=1.0000008564335354
+   NEAR_DUPLICATE  a_skill_mean_all_60@g6_a.parquet  vs  a_skill_mean_human_60@g6_a.parquet: pearson 0.999994 spearman 0.999961 n_a 6,665,003 n_b 6,665,003 n_overlap 6,665,003 affine_ok=False same_nan=True a=-7.190896017473993e-08 b=0.9999912220867795
+   NEAR_DUPLICATE  a_skill_cov_all_60@g6_a.parquet  vs  a_skill_cov_human_60@g6_a.parquet: pearson 0.999911 spearman 0.999975 n_a 6,669,777 n_b 6,669,777 n_overlap 6,669,777 affine_ok=False same_nan=True a=0.0002376594758798367 b=0.999770564029923
+   NEAR_DUPLICATE  a_bot_all_60@g6_a.parquet  vs  a_bot_human_60@g6_a.parquet: pearson 0.999999 spearman 0.999999 n_a 6,669,777 n_b 6,669,777 n_overlap 6,669,777 affine_ok=False same_nan=True a=3.5340366832947723e-06 b=0.9999976321342492
+   NEAR_DUPLICATE  a_topd_all_60@g6_a.parquet  vs  a_topd_human_60@g6_a.parquet: pearson 0.999992 spearman 0.999996 n_a 6,669,777 n_b 6,669,777 n_overlap 6,669,777 affine_ok=False same_nan=True a=2.4483840740663343e-06 b=1.0000165719423173
+   NEAR_DUPLICATE  a_prior_forced_all_60@g6_a.parquet  vs  a_prior_forced_human_60@g6_a.parquet: pearson 0.999996 spearman 0.999999 n_a 6,669,777 n_b 6,669,777 n_overlap 6,669,777 affine_ok=False same_nan=True a=2.8810518297589516e-06 b=0.9999984915965405
+   NEAR_DUPLICATE  a_push_total_all_60@g6_a.parquet  vs  a_push_total_human_60@g6_a.parquet: pearson 0.999955 spearman 1.000000 n_a 6,693,468 n_b 6,693,468 n_overlap 6,693,468 affine_ok=False same_nan=True a=217.41660861315904 b=0.9985910481966258
+   NEAR_DUPLICATE  a_top1_all_360@g6_a.parquet  vs  a_top1_human_360@g6_a.parquet: pearson 0.999985 spearman 0.999976 n_a 6,673,966 n_b 6,673,966 n_overlap 6,673,966 affine_ok=False same_nan=True a=5.689931596164488e-06 b=0.9999834569624985
+   NEAR_DUPLICATE  a_top3_all_360@g6_a.parquet  vs  a_top3_human_360@g6_a.parquet: pearson 0.999990 spearman 0.999990 n_a 6,673,966 n_b 6,673,966 n_overlap 6,673,966 affine_ok=False same_nan=True a=3.926080606064808e-06 b=0.9999941171285345
+   NEAR_DUPLICATE  a_hhi_all_360@g6_a.parquet  vs  a_hhi_human_360@g6_a.parquet: pearson 0.999993 spearman 0.999983 n_a 6,673,966 n_b 6,673,966 n_overlap 6,673,966 affine_ok=False same_nan=True a=9.223437000549506e-07 b=0.999996064809048
+   NEAR_DUPLICATE  a_nw_all_360@g6_a.parquet  vs  a_nw_human_360@g6_a.parquet: pearson 1.000000 spearman 1.000000 n_a 6,676,543 n_b 6,676,543 n_overlap 6,676,543 affine_ok=False same_nan=True a=-0.000263600669512698 b=0.9999862805216718
+   NEAR_DUPLICATE  a_pers_all_360@g6_a.parquet  vs  a_pers_human_360@g6_a.parquet: pearson 0.999981 spearman 0.999980 n_a 6,673,966 n_b 6,673,966 n_overlap 6,673,966 affine_ok=False same_nan=True a=5.318030033651944e-05 b=0.9999301747721201
+   NEAR_DUPLICATE  a_twap_all_360@g6_a.parquet  vs  a_twap_human_360@g6_a.parquet: pearson 1.000000 spearman 1.000000 n_a 6,143,629 n_b 6,143,629 n_overlap 6,143,629 affine_ok=False same_nan=True a=3.2951820090262873e-07 b=1.0000030766201675
+   NEAR_DUPLICATE  a_skill_mean_all_360@g6_a.parquet  vs  a_skill_mean_human_360@g6_a.parquet: pearson 0.999989 spearman 0.999958 n_a 6,673,802 n_b 6,673,802 n_overlap 6,673,802 affine_ok=False same_nan=True a=-1.5704640216870685e-07 b=1.0000169292266654
+   NEAR_DUPLICATE  a_skill_cov_all_360@g6_a.parquet  vs  a_skill_cov_human_360@g6_a.parquet: pearson 0.999888 spearman 0.999939 n_a 6,673,966 n_b 6,673,966 n_overlap 6,673,966 affine_ok=False same_nan=True a=0.00030433167691401586 b=0.9997002029242998
+   NEAR_DUPLICATE  a_bot_all_360@g6_a.parquet  vs  a_bot_human_360@g6_a.parquet: pearson 0.999998 spearman 0.999998 n_a 6,673,966 n_b 6,673,966 n_overlap 6,673,966 affine_ok=False same_nan=True a=4.8916092607043105e-06 b=0.9999980805343073
+   NEAR_DUPLICATE  a_topd_all_360@g6_a.parquet  vs  a_topd_human_360@g6_a.parquet: pearson 0.999989 spearman 0.999993 n_a 6,673,966 n_b 6,673,966 n_overlap 6,673,966 affine_ok=False same_nan=True a=4.094698646261996e-07 b=1.0000174320939499
+   NEAR_DUPLICATE  a_prior_forced_all_360@g6_a.parquet  vs  a_prior_forced_human_360@g6_a.parquet: pearson 0.999992 spearman 0.999998 n_a 6,673,966 n_b 6,673,966 n_overlap 6,673,966 affine_ok=False same_nan=True a=4.791570236487019e-06 b=0.9999721047780139
+   NEAR_DUPLICATE  a_push_total_all_360@g6_a.parquet  vs  a_push_total_human_360@g6_a.parquet: pearson 0.999986 spearman 1.000000 n_a 6,676,543 n_b 6,676,543 n_overlap 6,676,543 affine_ok=False same_nan=True a=635.8351621713955 b=0.9991176723120315
+   NEAR_DUPLICATE  a_top1_all_1440@g6_a.parquet  vs  a_top1_human_1440@g6_a.parquet: pearson 0.999991 spearman 0.999985 n_a 6,609,642 n_b 6,609,642 n_overlap 6,609,642 affine_ok=False same_nan=True a=5.5989669473510695e-06 b=0.9999870659662408
+   NEAR_DUPLICATE  a_top3_all_1440@g6_a.parquet  vs  a_top3_human_1440@g6_a.parquet: pearson 0.999993 spearman 0.999991 n_a 6,609,642 n_b 6,609,642 n_overlap 6,609,642 affine_ok=False same_nan=True a=5.260905112602909e-06 b=0.9999908421922584
+   NEAR_DUPLICATE  a_hhi_all_1440@g6_a.parquet  vs  a_hhi_human_1440@g6_a.parquet: pearson 0.999996 spearman 0.999991 n_a 6,609,642 n_b 6,609,642 n_overlap 6,609,642 affine_ok=False same_nan=True a=7.287254944199351e-07 b=0.999998287107839
+   NEAR_DUPLICATE  a_nw_all_1440@g6_a.parquet  vs  a_nw_human_1440@g6_a.parquet: pearson 1.000000 spearman 1.000000 n_a 6,610,995 n_b 6,610,995 n_overlap 6,610,995 affine_ok=False same_nan=True a=-0.0008689256601712714 b=0.9999952396808377
+   NEAR_DUPLICATE  a_pers_all_1440@g6_a.parquet  vs  a_pers_human_1440@g6_a.parquet: pearson 0.999990 spearman 0.999990 n_a 6,609,642 n_b 6,609,642 n_overlap 6,609,642 affine_ok=False same_nan=True a=5.518853639108201e-05 b=0.9999261294987637
+   NEAR_DUPLICATE  a_twap_all_1440@g6_a.parquet  vs  a_twap_human_1440@g6_a.parquet: pearson 1.000000 spearman 1.000000 n_a 6,079,160 n_b 6,079,160 n_overlap 6,079,160 affine_ok=False same_nan=True a=4.3980257746767393e-07 b=1.0000051239968504
+   NEAR_DUPLICATE  a_skill_mean_all_1440@g6_a.parquet  vs  a_skill_mean_human_1440@g6_a.parquet: pearson 0.999992 spearman 0.999978 n_a 6,609,626 n_b 6,609,626 n_overlap 6,609,626 affine_ok=False same_nan=True a=-1.8626585676645305e-07 b=1.0000374187220453
+   NEAR_DUPLICATE  a_skill_cov_all_1440@g6_a.parquet  vs  a_skill_cov_human_1440@g6_a.parquet: pearson 0.999850 spearman 0.999924 n_a 6,609,642 n_b 6,609,642 n_overlap 6,609,642 affine_ok=False same_nan=True a=0.0004106708499190814 b=0.9995878655474738
+   NEAR_DUPLICATE  a_bot_all_1440@g6_a.parquet  vs  a_bot_human_1440@g6_a.parquet: pearson 0.999998 spearman 0.999998 n_a 6,609,642 n_b 6,609,642 n_overlap 6,609,642 affine_ok=False same_nan=True a=4.903675211082037e-06 b=0.9999993292643355
+   NEAR_DUPLICATE  a_topd_all_1440@g6_a.parquet  vs  a_topd_human_1440@g6_a.parquet: pearson 0.999989 spearman 0.999994 n_a 6,609,642 n_b 6,609,642 n_overlap 6,609,642 affine_ok=False same_nan=True a=-3.0738473748570527e-06 b=1.0000280893359024
+   NEAR_DUPLICATE  a_prior_forced_all_1440@g6_a.parquet  vs  a_prior_forced_human_1440@g6_a.parquet: pearson 0.999991 spearman 0.999998 n_a 6,609,642 n_b 6,609,642 n_overlap 6,609,642 affine_ok=False same_nan=True a=6.218874078645076e-06 b=0.9999560911084482
+   NEAR_DUPLICATE  a_push_total_all_1440@g6_a.parquet  vs  a_push_total_human_1440@g6_a.parquet: pearson 0.999996 spearman 1.000000 n_a 6,610,995 n_b 6,610,995 n_overlap 6,610,995 affine_ok=False same_nan=True a=479.79687141720206 b=0.9996680417048877
+   NEAR_DUPLICATE  b_top1_all_30@g6_b.parquet  vs  b_top1_human_30@g6_b.parquet: pearson 0.999984 spearman 0.999983 n_a 6,633,533 n_b 6,633,532 n_overlap 6,633,532 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_top3_all_30@g6_b.parquet  vs  b_top3_human_30@g6_b.parquet: pearson 0.999984 spearman 0.999996 n_a 6,633,533 n_b 6,633,532 n_overlap 6,633,532 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_hhi_all_30@g6_b.parquet  vs  b_hhi_human_30@g6_b.parquet: pearson 0.999992 spearman 0.999989 n_a 6,633,533 n_b 6,633,532 n_overlap 6,633,532 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_nw_all_30@g6_b.parquet  vs  b_nw_human_30@g6_b.parquet: pearson 1.000000 spearman 1.000000 n_a 6,696,050 n_b 6,696,050 n_overlap 6,696,050 affine_ok=False same_nan=True a=0.0004318061289119157 b=0.999951877218395
+   NEAR_DUPLICATE  b_pers_all_30@g6_b.parquet  vs  b_pers_human_30@g6_b.parquet: pearson 0.999991 spearman 0.999991 n_a 6,633,533 n_b 6,633,532 n_overlap 6,633,532 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_twap_all_30@g6_b.parquet  vs  b_twap_human_30@g6_b.parquet: pearson 1.000000 spearman 1.000000 n_a 6,109,903 n_b 6,109,902 n_overlap 6,109,902 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_skill_mean_all_30@g6_b.parquet  vs  b_skill_mean_human_30@g6_b.parquet: pearson 0.999996 spearman 0.999951 n_a 6,625,476 n_b 6,625,476 n_overlap 6,625,476 affine_ok=False same_nan=True a=-7.288340168350562e-08 b=0.9999969667799604
+   NEAR_DUPLICATE  b_skill_cov_all_30@g6_b.parquet  vs  b_skill_cov_human_30@g6_b.parquet: pearson 0.999841 spearman 0.999983 n_a 6,633,533 n_b 6,633,532 n_overlap 6,633,532 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_bot_all_30@g6_b.parquet  vs  b_bot_human_30@g6_b.parquet: pearson 0.999999 spearman 0.999998 n_a 6,633,533 n_b 6,633,532 n_overlap 6,633,532 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_topd_all_30@g6_b.parquet  vs  b_topd_human_30@g6_b.parquet: pearson 0.999990 spearman 0.999996 n_a 6,633,533 n_b 6,633,532 n_overlap 6,633,532 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_prior_forced_all_30@g6_b.parquet  vs  b_prior_forced_human_30@g6_b.parquet: pearson 0.999992 spearman 0.999996 n_a 6,633,533 n_b 6,633,532 n_overlap 6,633,532 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_push_total_all_30@g6_b.parquet  vs  b_push_total_human_30@g6_b.parquet: pearson 0.999952 spearman 1.000000 n_a 6,696,050 n_b 6,696,050 n_overlap 6,696,050 affine_ok=False same_nan=True a=-2.47378156054765 b=0.9991437607783302
+   NEAR_DUPLICATE  b_top1_all_60@g6_b.parquet  vs  b_top1_human_60@g6_b.parquet: pearson 0.999987 spearman 0.999984 n_a 6,664,169 n_b 6,664,168 n_overlap 6,664,168 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_top3_all_60@g6_b.parquet  vs  b_top3_human_60@g6_b.parquet: pearson 0.999989 spearman 0.999995 n_a 6,664,169 n_b 6,664,168 n_overlap 6,664,168 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_hhi_all_60@g6_b.parquet  vs  b_hhi_human_60@g6_b.parquet: pearson 0.999994 spearman 0.999987 n_a 6,664,169 n_b 6,664,168 n_overlap 6,664,168 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_nw_all_60@g6_b.parquet  vs  b_nw_human_60@g6_b.parquet: pearson 1.000000 spearman 1.000000 n_a 6,693,468 n_b 6,693,468 n_overlap 6,693,468 affine_ok=False same_nan=True a=0.0003182196379682978 b=0.9999632608255309
+   NEAR_DUPLICATE  b_pers_all_60@g6_b.parquet  vs  b_pers_human_60@g6_b.parquet: pearson 0.999993 spearman 0.999993 n_a 6,664,169 n_b 6,664,168 n_overlap 6,664,168 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_twap_all_60@g6_b.parquet  vs  b_twap_human_60@g6_b.parquet: pearson 1.000000 spearman 1.000000 n_a 6,138,396 n_b 6,138,395 n_overlap 6,138,395 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_skill_mean_all_60@g6_b.parquet  vs  b_skill_mean_human_60@g6_b.parquet: pearson 0.999996 spearman 0.999960 n_a 6,658,866 n_b 6,658,866 n_overlap 6,658,866 affine_ok=False same_nan=True a=-6.814816432790683e-08 b=0.9999961948475704
+   NEAR_DUPLICATE  b_skill_cov_all_60@g6_b.parquet  vs  b_skill_cov_human_60@g6_b.parquet: pearson 0.999873 spearman 0.999983 n_a 6,664,169 n_b 6,664,168 n_overlap 6,664,168 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_bot_all_60@g6_b.parquet  vs  b_bot_human_60@g6_b.parquet: pearson 0.999999 spearman 0.999999 n_a 6,664,169 n_b 6,664,168 n_overlap 6,664,168 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_topd_all_60@g6_b.parquet  vs  b_topd_human_60@g6_b.parquet: pearson 0.999992 spearman 0.999996 n_a 6,664,169 n_b 6,664,168 n_overlap 6,664,168 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_prior_forced_all_60@g6_b.parquet  vs  b_prior_forced_human_60@g6_b.parquet: pearson 0.999994 spearman 0.999998 n_a 6,664,169 n_b 6,664,168 n_overlap 6,664,168 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  b_push_total_all_60@g6_b.parquet  vs  b_push_total_human_60@g6_b.parquet: pearson 0.999960 spearman 1.000000 n_a 6,693,468 n_b 6,693,468 n_overlap 6,693,468 affine_ok=False same_nan=True a=111.0296750474372 b=0.9990466697358941
+   NEAR_DUPLICATE  b_top1_all_360@g6_b.parquet  vs  b_top1_human_360@g6_b.parquet: pearson 0.999977 spearman 0.999965 n_a 6,670,770 n_b 6,670,770 n_overlap 6,670,770 affine_ok=False same_nan=True a=3.1010462522851334e-06 b=0.9999837218128337
+   NEAR_DUPLICATE  b_top3_all_360@g6_b.parquet  vs  b_top3_human_360@g6_b.parquet: pearson 0.999987 spearman 0.999987 n_a 6,670,770 n_b 6,670,770 n_overlap 6,670,770 affine_ok=False same_nan=True a=-4.648232874271407e-06 b=1.0000042254589692
+   NEAR_DUPLICATE  b_hhi_all_360@g6_b.parquet  vs  b_hhi_human_360@g6_b.parquet: pearson 0.999989 spearman 0.999978 n_a 6,670,770 n_b 6,670,770 n_overlap 6,670,770 affine_ok=False same_nan=True a=-2.698548184631999e-07 b=0.9999961481421996
+   NEAR_DUPLICATE  b_nw_all_360@g6_b.parquet  vs  b_nw_human_360@g6_b.parquet: pearson 1.000000 spearman 1.000000 n_a 6,676,543 n_b 6,676,543 n_overlap 6,676,543 affine_ok=False same_nan=True a=-0.0003748019710059225 b=0.9999900290726608
+   NEAR_DUPLICATE  b_pers_all_360@g6_b.parquet  vs  b_pers_human_360@g6_b.parquet: pearson 0.999986 spearman 0.999985 n_a 6,670,770 n_b 6,670,770 n_overlap 6,670,770 affine_ok=False same_nan=True a=5.004167108946245e-05 b=0.9999358672364591
+   NEAR_DUPLICATE  b_twap_all_360@g6_b.parquet  vs  b_twap_human_360@g6_b.parquet: pearson 0.999999 spearman 1.000000 n_a 6,143,021 n_b 6,143,021 n_overlap 6,143,021 affine_ok=False same_nan=True a=5.195142116637408e-07 b=1.000005106186437
+   NEAR_DUPLICATE  b_skill_mean_all_360@g6_b.parquet  vs  b_skill_mean_human_360@g6_b.parquet: pearson 0.999994 spearman 0.999972 n_a 6,670,345 n_b 6,670,345 n_overlap 6,670,345 affine_ok=False same_nan=True a=-1.0351820781834015e-07 b=1.0000155558763975
+   NEAR_DUPLICATE  b_skill_cov_all_360@g6_b.parquet  vs  b_skill_cov_human_360@g6_b.parquet: pearson 0.999859 spearman 0.999971 n_a 6,670,770 n_b 6,670,770 n_overlap 6,670,770 affine_ok=False same_nan=True a=0.0005034797327873042 b=0.999492421125412
+   NEAR_DUPLICATE  b_bot_all_360@g6_b.parquet  vs  b_bot_human_360@g6_b.parquet: pearson 0.999998 spearman 0.999997 n_a 6,670,770 n_b 6,670,770 n_overlap 6,670,770 affine_ok=False same_nan=True a=5.729991638114829e-06 b=0.9999969590988153
+   NEAR_DUPLICATE  b_topd_all_360@g6_b.parquet  vs  b_topd_human_360@g6_b.parquet: pearson 0.999993 spearman 0.999993 n_a 6,670,770 n_b 6,670,770 n_overlap 6,670,770 affine_ok=False same_nan=True a=4.588203105948541e-06 b=1.0000042776573956
+   NEAR_DUPLICATE  b_prior_forced_all_360@g6_b.parquet  vs  b_prior_forced_human_360@g6_b.parquet: pearson 0.999992 spearman 0.999997 n_a 6,670,770 n_b 6,670,770 n_overlap 6,670,770 affine_ok=False same_nan=True a=3.841055054507048e-06 b=0.9999958047347306
+   NEAR_DUPLICATE  b_push_total_all_360@g6_b.parquet  vs  b_push_total_human_360@g6_b.parquet: pearson 0.999988 spearman 1.000000 n_a 6,676,543 n_b 6,676,543 n_overlap 6,676,543 affine_ok=False same_nan=True a=797.635996474186 b=0.999209172317025
+   NEAR_DUPLICATE  b_top1_all_1440@g6_b.parquet  vs  b_top1_human_1440@g6_b.parquet: pearson 0.999979 spearman 0.999967 n_a 6,608,323 n_b 6,608,323 n_overlap 6,608,323 affine_ok=False same_nan=True a=4.647016753067668e-06 b=0.9999806747308422
+   NEAR_DUPLICATE  b_top3_all_1440@g6_b.parquet  vs  b_top3_human_1440@g6_b.parquet: pearson 0.999982 spearman 0.999978 n_a 6,608,323 n_b 6,608,323 n_overlap 6,608,323 affine_ok=False same_nan=True a=5.208068929229981e-06 b=0.9999789918215534
+   NEAR_DUPLICATE  b_hhi_all_1440@g6_b.parquet  vs  b_hhi_human_1440@g6_b.parquet: pearson 0.999991 spearman 0.999977 n_a 6,608,323 n_b 6,608,323 n_overlap 6,608,323 affine_ok=False same_nan=True a=-5.383928281255113e-07 b=0.9999928811144773
+   NEAR_DUPLICATE  b_nw_all_1440@g6_b.parquet  vs  b_nw_human_1440@g6_b.parquet: pearson 1.000000 spearman 1.000000 n_a 6,610,995 n_b 6,610,995 n_overlap 6,610,995 affine_ok=False same_nan=True a=-0.0008611740052515415 b=0.9999961501499098
+   NEAR_DUPLICATE  b_pers_all_1440@g6_b.parquet  vs  b_pers_human_1440@g6_b.parquet: pearson 0.999981 spearman 0.999980 n_a 6,608,323 n_b 6,608,323 n_overlap 6,608,323 affine_ok=False same_nan=True a=5.85010625245852e-05 b=0.9999137878515211
+   NEAR_DUPLICATE  b_twap_all_1440@g6_b.parquet  vs  b_twap_human_1440@g6_b.parquet: pearson 0.999997 spearman 1.000000 n_a 6,079,374 n_b 6,079,374 n_overlap 6,079,374 affine_ok=False same_nan=True a=1.1064305106799066e-06 b=1.0000221157502052
+   NEAR_DUPLICATE  b_skill_mean_all_1440@g6_b.parquet  vs  b_skill_mean_human_1440@g6_b.parquet: pearson 0.999996 spearman 0.999987 n_a 6,608,281 n_b 6,608,281 n_overlap 6,608,281 affine_ok=False same_nan=True a=-1.1045350070920494e-07 b=1.0000301533805156
+   NEAR_DUPLICATE  b_skill_cov_all_1440@g6_b.parquet  vs  b_skill_cov_human_1440@g6_b.parquet: pearson 0.999809 spearman 0.999960 n_a 6,608,323 n_b 6,608,323 n_overlap 6,608,323 affine_ok=False same_nan=True a=0.0009504707003199497 b=0.9990227515739077
+   NEAR_DUPLICATE  b_bot_all_1440@g6_b.parquet  vs  b_bot_human_1440@g6_b.parquet: pearson 0.999997 spearman 0.999996 n_a 6,608,323 n_b 6,608,323 n_overlap 6,608,323 affine_ok=False same_nan=True a=8.561170533188944e-06 b=0.9999891976957151
+   NEAR_DUPLICATE  b_topd_all_1440@g6_b.parquet  vs  b_topd_human_1440@g6_b.parquet: pearson 0.999993 spearman 0.999992 n_a 6,608,323 n_b 6,608,323 n_overlap 6,608,323 affine_ok=False same_nan=True a=6.030057830674895e-06 b=1.0000003639221395
+   NEAR_DUPLICATE  b_prior_forced_all_1440@g6_b.parquet  vs  b_prior_forced_human_1440@g6_b.parquet: pearson 0.999993 spearman 0.999996 n_a 6,608,323 n_b 6,608,323 n_overlap 6,608,323 affine_ok=False same_nan=True a=4.463315891323205e-06 b=0.9999921056314028
+   NEAR_DUPLICATE  b_push_total_all_1440@g6_b.parquet  vs  b_push_total_human_1440@g6_b.parquet: pearson 0.999996 spearman 0.999999 n_a 6,610,995 n_b 6,610,995 n_overlap 6,610,995 affine_ok=False same_nan=True a=800.3480462711304 b=0.9996855104273366
+   NEAR_DUPLICATE  net_top1_all_30@g6_net.parquet  vs  net_top1_human_30@g6_net.parquet: pearson 0.999977 spearman 0.999973 n_a 6,637,193 n_b 6,637,192 n_overlap 6,637,192 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_top3_all_30@g6_net.parquet  vs  net_top3_human_30@g6_net.parquet: pearson 0.999978 spearman 0.999992 n_a 6,637,193 n_b 6,637,192 n_overlap 6,637,192 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_hhi_all_30@g6_net.parquet  vs  net_hhi_human_30@g6_net.parquet: pearson 0.999989 spearman 0.999980 n_a 6,637,193 n_b 6,637,192 n_overlap 6,637,192 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_pers_all_30@g6_net.parquet  vs  net_pers_human_30@g6_net.parquet: pearson 0.999984 spearman 0.999983 n_a 6,637,193 n_b 6,637,192 n_overlap 6,637,192 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_twap_all_30@g6_net.parquet  vs  net_twap_human_30@g6_net.parquet: pearson 1.000000 spearman 1.000000 n_a 6,111,745 n_b 6,111,744 n_overlap 6,111,744 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_skill_mean_all_30@g6_net.parquet  vs  net_skill_mean_human_30@g6_net.parquet: pearson 0.999990 spearman 0.999918 n_a 6,626,179 n_b 6,626,179 n_overlap 6,626,179 affine_ok=False same_nan=True a=-1.2556734884999147e-07 b=0.9999865045217194
+   NEAR_DUPLICATE  net_skill_cov_all_30@g6_net.parquet  vs  net_skill_cov_human_30@g6_net.parquet: pearson 0.999754 spearman 0.999951 n_a 6,637,193 n_b 6,637,192 n_overlap 6,637,192 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_bot_all_30@g6_net.parquet  vs  net_bot_human_30@g6_net.parquet: pearson 0.999998 spearman 0.999997 n_a 6,637,193 n_b 6,637,192 n_overlap 6,637,192 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_topd_all_30@g6_net.parquet  vs  net_topd_human_30@g6_net.parquet: pearson 0.999981 spearman 0.999990 n_a 6,637,193 n_b 6,637,192 n_overlap 6,637,192 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_prior_forced_all_30@g6_net.parquet  vs  net_prior_forced_human_30@g6_net.parquet: pearson 0.999986 spearman 0.999992 n_a 6,637,193 n_b 6,637,192 n_overlap 6,637,192 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_top1_all_60@g6_net.parquet  vs  net_top1_human_60@g6_net.parquet: pearson 0.999981 spearman 0.999976 n_a 6,672,975 n_b 6,672,974 n_overlap 6,672,974 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_top3_all_60@g6_net.parquet  vs  net_top3_human_60@g6_net.parquet: pearson 0.999984 spearman 0.999990 n_a 6,672,975 n_b 6,672,974 n_overlap 6,672,974 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_hhi_all_60@g6_net.parquet  vs  net_hhi_human_60@g6_net.parquet: pearson 0.999990 spearman 0.999979 n_a 6,672,975 n_b 6,672,974 n_overlap 6,672,974 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_pers_all_60@g6_net.parquet  vs  net_pers_human_60@g6_net.parquet: pearson 0.999988 spearman 0.999987 n_a 6,672,975 n_b 6,672,974 n_overlap 6,672,974 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_twap_all_60@g6_net.parquet  vs  net_twap_human_60@g6_net.parquet: pearson 1.000000 spearman 1.000000 n_a 6,144,859 n_b 6,144,858 n_overlap 6,144,858 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_skill_mean_all_60@g6_net.parquet  vs  net_skill_mean_human_60@g6_net.parquet: pearson 0.999993 spearman 0.999938 n_a 6,666,134 n_b 6,666,134 n_overlap 6,666,134 affine_ok=False same_nan=True a=-1.074975650701502e-07 b=0.9999915115320686
+   NEAR_DUPLICATE  net_skill_cov_all_60@g6_net.parquet  vs  net_skill_cov_human_60@g6_net.parquet: pearson 0.999795 spearman 0.999947 n_a 6,672,975 n_b 6,672,974 n_overlap 6,672,974 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_bot_all_60@g6_net.parquet  vs  net_bot_human_60@g6_net.parquet: pearson 0.999998 spearman 0.999998 n_a 6,672,975 n_b 6,672,974 n_overlap 6,672,974 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_topd_all_60@g6_net.parquet  vs  net_topd_human_60@g6_net.parquet: pearson 0.999985 spearman 0.999991 n_a 6,672,975 n_b 6,672,974 n_overlap 6,672,974 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_prior_forced_all_60@g6_net.parquet  vs  net_prior_forced_human_60@g6_net.parquet: pearson 0.999990 spearman 0.999996 n_a 6,672,975 n_b 6,672,974 n_overlap 6,672,974 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  net_top1_all_360@g6_net.parquet  vs  net_top1_human_360@g6_net.parquet: pearson 0.999974 spearman 0.999965 n_a 6,671,780 n_b 6,671,780 n_overlap 6,671,780 affine_ok=False same_nan=True a=8.790383309920102e-06 b=0.9999715038680531
+   NEAR_DUPLICATE  net_top3_all_360@g6_net.parquet  vs  net_top3_human_360@g6_net.parquet: pearson 0.999984 spearman 0.999982 n_a 6,671,780 n_b 6,671,780 n_overlap 6,671,780 affine_ok=False same_nan=True a=-8.464353882242648e-07 b=1.0000004651305512
+   NEAR_DUPLICATE  net_hhi_all_360@g6_net.parquet  vs  net_hhi_human_360@g6_net.parquet: pearson 0.999987 spearman 0.999973 n_a 6,671,780 n_b 6,671,780 n_overlap 6,671,780 affine_ok=False same_nan=True a=1.647196328141698e-06 b=0.9999893228735269
+   NEAR_DUPLICATE  net_pers_all_360@g6_net.parquet  vs  net_pers_human_360@g6_net.parquet: pearson 0.999987 spearman 0.999986 n_a 6,671,780 n_b 6,671,780 n_overlap 6,671,780 affine_ok=False same_nan=True a=6.0811531869431334e-05 b=0.9999188195953518
+   NEAR_DUPLICATE  net_twap_all_360@g6_net.parquet  vs  net_twap_human_360@g6_net.parquet: pearson 1.000000 spearman 1.000000 n_a 6,142,536 n_b 6,142,536 n_overlap 6,142,536 affine_ok=False same_nan=True a=4.1895352489648707e-07 b=1.0000017686925118
+   NEAR_DUPLICATE  net_skill_mean_all_360@g6_net.parquet  vs  net_skill_mean_human_360@g6_net.parquet: pearson 0.999993 spearman 0.999951 n_a 6,671,451 n_b 6,671,451 n_overlap 6,671,451 affine_ok=False same_nan=True a=-1.460949761242095e-07 b=1.0000078995170751
+   NEAR_DUPLICATE  net_skill_cov_all_360@g6_net.parquet  vs  net_skill_cov_human_360@g6_net.parquet: pearson 0.999785 spearman 0.999911 n_a 6,671,780 n_b 6,671,780 n_overlap 6,671,780 affine_ok=False same_nan=True a=0.0006377040684725221 b=0.9993605658762793
+   NEAR_DUPLICATE  net_bot_all_360@g6_net.parquet  vs  net_bot_human_360@g6_net.parquet: pearson 0.999998 spearman 0.999997 n_a 6,671,780 n_b 6,671,780 n_overlap 6,671,780 affine_ok=False same_nan=True a=7.4655345141116936e-06 b=0.9999952874741266
+   NEAR_DUPLICATE  net_topd_all_360@g6_net.parquet  vs  net_topd_human_360@g6_net.parquet: pearson 0.999987 spearman 0.999989 n_a 6,671,780 n_b 6,671,780 n_overlap 6,671,780 affine_ok=False same_nan=True a=2.8604231406825775e-06 b=1.0000243778471196
+   NEAR_DUPLICATE  net_prior_forced_all_360@g6_net.parquet  vs  net_prior_forced_human_360@g6_net.parquet: pearson 0.999988 spearman 0.999995 n_a 6,671,780 n_b 6,671,780 n_overlap 6,671,780 affine_ok=False same_nan=True a=5.638477473618453e-06 b=0.9999880049037367
+   NEAR_DUPLICATE  net_top1_all_1440@g6_net.parquet  vs  net_top1_human_1440@g6_net.parquet: pearson 0.999989 spearman 0.999982 n_a 6,608,732 n_b 6,608,732 n_overlap 6,608,732 affine_ok=False same_nan=True a=3.764486715962523e-06 b=0.9999915132245599
+   NEAR_DUPLICATE  net_top3_all_1440@g6_net.parquet  vs  net_top3_human_1440@g6_net.parquet: pearson 0.999992 spearman 0.999990 n_a 6,608,732 n_b 6,608,732 n_overlap 6,608,732 affine_ok=False same_nan=True a=4.7600106126699515e-06 b=0.9999908450228732
+   NEAR_DUPLICATE  net_hhi_all_1440@g6_net.parquet  vs  net_hhi_human_1440@g6_net.parquet: pearson 0.999995 spearman 0.999990 n_a 6,608,732 n_b 6,608,732 n_overlap 6,608,732 affine_ok=False same_nan=True a=5.226202947350433e-07 b=0.9999983223625202
+   NEAR_DUPLICATE  net_pers_all_1440@g6_net.parquet  vs  net_pers_human_1440@g6_net.parquet: pearson 0.999990 spearman 0.999991 n_a 6,608,732 n_b 6,608,732 n_overlap 6,608,732 affine_ok=False same_nan=True a=6.384496474010071e-05 b=0.9999120727092561
+   NEAR_DUPLICATE  net_twap_all_1440@g6_net.parquet  vs  net_twap_human_1440@g6_net.parquet: pearson 0.999999 spearman 1.000000 n_a 6,078,991 n_b 6,078,991 n_overlap 6,078,991 affine_ok=False same_nan=True a=6.396410338477265e-07 b=1.0000066947422064
+   NEAR_DUPLICATE  net_skill_mean_all_1440@g6_net.parquet  vs  net_skill_mean_human_1440@g6_net.parquet: pearson 0.999995 spearman 0.999979 n_a 6,608,693 n_b 6,608,693 n_overlap 6,608,693 affine_ok=False same_nan=True a=-1.433456000028005e-07 b=1.0000197463180478
+   NEAR_DUPLICATE  net_skill_cov_all_1440@g6_net.parquet  vs  net_skill_cov_human_1440@g6_net.parquet: pearson 0.999823 spearman 0.999907 n_a 6,608,732 n_b 6,608,732 n_overlap 6,608,732 affine_ok=False same_nan=True a=0.0006571565116844091 b=0.9993334117907205
+   NEAR_DUPLICATE  net_bot_all_1440@g6_net.parquet  vs  net_bot_human_1440@g6_net.parquet: pearson 0.999998 spearman 0.999998 n_a 6,608,732 n_b 6,608,732 n_overlap 6,608,732 affine_ok=False same_nan=True a=6.873902559989542e-06 b=0.9999942204129524
+   NEAR_DUPLICATE  net_topd_all_1440@g6_net.parquet  vs  net_topd_human_1440@g6_net.parquet: pearson 0.999991 spearman 0.999993 n_a 6,608,732 n_b 6,608,732 n_overlap 6,608,732 affine_ok=False same_nan=True a=-2.7914436984133317e-08 b=1.0000245787898132
+   NEAR_DUPLICATE  net_prior_forced_all_1440@g6_net.parquet  vs  net_prior_forced_human_1440@g6_net.parquet: pearson 0.999992 spearman 0.999996 n_a 6,608,732 n_b 6,608,732 n_overlap 6,608,732 affine_ok=False same_nan=True a=5.595710209013727e-06 b=0.9999773869936788
+   NEAR_DUPLICATE  a_oi_obs_usd@g7.parquet  vs  a_oi_rec_usd@g7.parquet: pearson 1.000000 spearman 0.999993 n_a 6,428,912 n_b 6,697,756 n_overlap 6,428,912 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  a_vault_net_usd@g7.parquet  vs  a_vault_net_chg_24h@g7.parquet: pearson 0.999986 spearman 0.987739 n_a 6,697,756 n_b 6,697,756 n_overlap 6,697,756 affine_ok=False same_nan=True a=-0.7077672513697735 b=0.9999946748016707
+   NEAR_DUPLICATE  b_oi_obs_usd@g7.parquet  vs  b_oi_rec_usd@g7.parquet: pearson 1.000000 spearman 0.999977 n_a 6,428,912 n_b 6,697,756 n_overlap 6,428,912 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  d_oi_obs_usd@g7.parquet  vs  d_oi_rec_usd@g7.parquet: pearson 1.000000 spearman 0.999995 n_a 6,428,912 n_b 6,697,756 n_overlap 6,428,912 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  ret_idx_1h@g9a.parquet  vs  ret_idx_1h_seg@g9a.parquet: pearson 0.999988 spearman 0.999965 n_a 6,693,468 n_b 6,697,756 n_overlap 6,693,468 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  ret_idx_6h@g9a.parquet  vs  ret_idx_6h_seg@g9a.parquet: pearson 0.999980 spearman 0.999968 n_a 6,676,543 n_b 6,697,756 n_overlap 6,676,543 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  ret_idx_24h@g9a.parquet  vs  ret_idx_24h_seg@g9a.parquet: pearson 0.999960 spearman 0.999954 n_a 6,610,995 n_b 6,697,756 n_overlap 6,610,995 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  ret_idx_7d@g9a.parquet  vs  ret_idx_7d_seg@g9a.parquet: pearson 0.999935 spearman 0.999915 n_a 6,047,142 n_b 6,696,817 n_overlap 6,047,010 affine_ok=False same_nan=False a=nan b=nan
+   NEAR_DUPLICATE  rank90_idx_abs_ret_7d_seg@g9a.parquet  vs  rank90_idx_abs_ret_7d@g9a.parquet: pearson 0.999771 spearman 0.999753 n_a 5,917,751 n_b 4,621,290 n_overlap 4,621,290 affine_ok=False same_nan=False a=nan b=nan
+[DUP] pre-screen cross-check (47 pairs)  [2503s]
+   r2@events.parquet  vs  r2_2d@g2.parquet: pearson 1.0, spearman 0.99999999999999, n_overlap 6,697,756 (also in full screen)
+   mins_since_trade_a@events.parquet  vs  a_mins_since_trade@g4.parquet: pearson 1.0, spearman 1.0, n_overlap 6,697,756 (also in full screen)
+   mins_since_trade_b@events.parquet  vs  b_mins_since_trade@g4.parquet: pearson 1.0, spearman 1.0, n_overlap 6,697,756 (also in full screen)
+   a_vault_leader_usd@g7.parquet  vs  b_vault_leader_usd@g7.parquet: pearson nan, spearman nan, n_overlap 6,697,756
+   a_vault_leader_usd@g7.parquet  vs  d_vault_leader_usd@g7.parquet: pearson nan, spearman nan, n_overlap 6,697,756
+   b_vault_leader_usd@g7.parquet  vs  d_vault_leader_usd@g7.parquet: pearson nan, spearman nan, n_overlap 6,697,756
+   a_vault_share_of_oi@g7.parquet  vs  a_vault_gross_usd@g7.parquet: pearson 0.4291521289949854, spearman 0.9999999970104656, n_overlap 6,697,756
+   b_vault_share_of_oi@g7.parquet  vs  b_vault_gross_usd@g7.parquet: pearson 0.23859795663631111, spearman 0.9999999789246844, n_overlap 6,697,756
+   net_max_abs_imb_5m_bin@g5_net.parquet  vs  net_mins_since_forced_any@g5_net.parquet: pearson nan, spearman nan, n_overlap 0
+   net_max_abs_imb_5m_bin@g5_net.parquet  vs  net_mins_since_forced_spike@g5_net.parquet: pearson nan, spearman nan, n_overlap 0
+   net_mins_since_forced_any@g5_net.parquet  vs  net_mins_since_forced_spike@g5_net.parquet: pearson nan, spearman nan, n_overlap 0
+   a_backstop_ratio_30@g5_a.parquet  vs  a_backstop_share_30@g5_a.parquet: pearson 0.9072200243162345, spearman 1.0, n_overlap 6,671,394
+   a_adl_ratio_30@g5_a.parquet  vs  a_adl_share_30@g5_a.parquet: pearson 0.9041254507026428, spearman 0.9999999999999998, n_overlap 6,671,394
+   a_backstop_ratio_60@g5_a.parquet  vs  a_backstop_share_60@g5_a.parquet: pearson 0.9052250660363488, spearman 0.9999999999999998, n_overlap 6,684,949
+   a_adl_ratio_60@g5_a.parquet  vs  a_adl_share_60@g5_a.parquet: pearson 0.8978369183700279, spearman 1.0, n_overlap 6,684,949
+   a_backstop_ratio_360@g5_a.parquet  vs  a_backstop_share_360@g5_a.parquet: pearson 0.9349553207377092, spearman 1.0, n_overlap 6,676,420
+   a_adl_ratio_360@g5_a.parquet  vs  a_adl_share_360@g5_a.parquet: pearson 0.9297131732900628, spearman 1.0, n_overlap 6,676,420
+   a_backstop_ratio_1440@g5_a.parquet  vs  a_backstop_share_1440@g5_a.parquet: pearson 0.9426064145764976, spearman 1.0, n_overlap 6,610,984
+   a_adl_ratio_1440@g5_a.parquet  vs  a_adl_share_1440@g5_a.parquet: pearson 0.9382180637411839, spearman 1.0, n_overlap 6,610,984
+   b_backstop_ratio_30@g5_b.parquet  vs  b_backstop_share_30@g5_b.parquet: pearson 0.9363275209774413, spearman 1.0, n_overlap 6,668,659
+   b_adl_ratio_30@g5_b.parquet  vs  b_adl_share_30@g5_b.parquet: pearson 0.9324823170192176, spearman 1.0, n_overlap 6,668,659
+   b_backstop_ratio_60@g5_b.parquet  vs  b_backstop_share_60@g5_b.parquet: pearson 0.9349803456748326, spearman 1.0, n_overlap 6,682,890
+   b_adl_ratio_60@g5_b.parquet  vs  b_adl_share_60@g5_b.parquet: pearson 0.9276822895180526, spearman 1.0, n_overlap 6,682,890
+   b_backstop_ratio_360@g5_b.parquet  vs  b_backstop_share_360@g5_b.parquet: pearson 0.9547711031682031, spearman 1.0, n_overlap 6,675,684
+   b_adl_ratio_360@g5_b.parquet  vs  b_adl_share_360@g5_b.parquet: pearson 0.9489274421625237, spearman 1.0, n_overlap 6,675,684
+   b_backstop_ratio_1440@g5_b.parquet  vs  b_backstop_share_1440@g5_b.parquet: pearson 0.9580286036115494, spearman 0.9999999999999999, n_overlap 6,610,783
+   b_adl_ratio_1440@g5_b.parquet  vs  b_adl_share_1440@g5_b.parquet: pearson 0.9507801518798996, spearman 1.0, n_overlap 6,610,783
+   net_backstop_ratio_30@g5_net.parquet  vs  net_backstop_share_30@g5_net.parquet: pearson 0.8925632098537767, spearman 0.9999999999660754, n_overlap 6,677,704
+   net_adl_ratio_30@g5_net.parquet  vs  net_adl_share_30@g5_net.parquet: pearson 0.894155328173533, spearman 0.9999999999634108, n_overlap 6,677,704
+   net_backstop_ratio_60@g5_net.parquet  vs  net_backstop_share_60@g5_net.parquet: pearson 0.8899999896099628, spearman 0.9999999999427179, n_overlap 6,693,027
+   net_adl_ratio_60@g5_net.parquet  vs  net_adl_share_60@g5_net.parquet: pearson 0.8854976029857891, spearman 0.9999999999537621, n_overlap 6,693,027
+   net_backstop_ratio_360@g5_net.parquet  vs  net_backstop_share_360@g5_net.parquet: pearson 0.9281466694013578, spearman 0.9999999993032765, n_overlap 6,676,511
+   net_adl_ratio_360@g5_net.parquet  vs  net_adl_share_360@g5_net.parquet: pearson 0.9225061621474518, spearman 0.9999999992599055, n_overlap 6,676,511
+   net_backstop_ratio_1440@g5_net.parquet  vs  net_backstop_share_1440@g5_net.parquet: pearson 0.9351423968225484, spearman 0.9999999991305488, n_overlap 6,610,984
+   net_adl_ratio_1440@g5_net.parquet  vs  net_adl_share_1440@g5_net.parquet: pearson 0.9298774462315766, spearman 0.9999999992200844, n_overlap 6,610,984
+   a_vault_absorb_ratio_30@g6_a.parquet  vs  a_vault_absorb_share_30@g6_a.parquet: pearson 0.8843502603717851, spearman 1.0, n_overlap 6,642,420
+   a_vault_absorb_ratio_60@g6_a.parquet  vs  a_vault_absorb_share_60@g6_a.parquet: pearson 0.8781481679684129, spearman 1.0, n_overlap 6,669,777
+   a_vault_absorb_ratio_360@g6_a.parquet  vs  a_vault_absorb_share_360@g6_a.parquet: pearson 0.9056550845727233, spearman 0.9999999999999998, n_overlap 6,673,966
+   a_vault_absorb_ratio_1440@g6_a.parquet  vs  a_vault_absorb_share_1440@g6_a.parquet: pearson 0.9147619342993323, spearman 1.0, n_overlap 6,609,642
+   b_vault_absorb_ratio_30@g6_b.parquet  vs  b_vault_absorb_share_30@g6_b.parquet: pearson 0.8891617748733084, spearman 1.0, n_overlap 6,633,533
+   b_vault_absorb_ratio_60@g6_b.parquet  vs  b_vault_absorb_share_60@g6_b.parquet: pearson 0.8878647542075147, spearman 1.0, n_overlap 6,664,169
+   b_vault_absorb_ratio_360@g6_b.parquet  vs  b_vault_absorb_share_360@g6_b.parquet: pearson 0.9189003590521297, spearman 1.0, n_overlap 6,670,770
+   b_vault_absorb_ratio_1440@g6_b.parquet  vs  b_vault_absorb_share_1440@g6_b.parquet: pearson 0.9289547516893042, spearman 1.0, n_overlap 6,608,323
+   net_vault_absorb_ratio_30@g6_net.parquet  vs  net_vault_absorb_share_30@g6_net.parquet: pearson 0.881516086434007, spearman 0.9999999999212834, n_overlap 6,637,193
+   net_vault_absorb_ratio_60@g6_net.parquet  vs  net_vault_absorb_share_60@g6_net.parquet: pearson 0.8769240504557545, spearman 0.9999999998787303, n_overlap 6,672,975
+   net_vault_absorb_ratio_360@g6_net.parquet  vs  net_vault_absorb_share_360@g6_net.parquet: pearson 0.8963555419111529, spearman 0.999999998107202, n_overlap 6,671,780
+   net_vault_absorb_ratio_1440@g6_net.parquet  vs  net_vault_absorb_share_1440@g6_net.parquet: pearson 0.9054707744765383, spearman 0.9999999979974138, n_overlap 6,608,732
+[DUP] pre-screen cross-check: 0 mismatches (0 expected)
+[DUP] wrote 239 flagged pairs to dup_audit_v1_pair.csv  [2531s]
+[DUP] keep rule: 5 connected duplicate component(s), including anti-duplicates (planner ruling 2026-10-27: a sign flip is a duplicate too). Keep = earliest file in GROUP_ORDER, then column name -- mechanical rule, brief B1 lines 123-133, no sign-off needed.
+   KEEP events.parquet/r2  DROP ['g2.parquet/r2_2d']
+   KEEP g4.parquet/a_listing_src  DROP ['g4.parquet/b_listing_src', 'g7.parquet/a_vault_leader_usd', 'g7.parquet/b_vault_leader_usd', 'g7.parquet/d_vault_leader_usd']
+   KEEP g5_net.parquet/net_max_abs_imb_5m_bin  DROP ['g5_net.parquet/net_mins_since_forced_any', 'g5_net.parquet/net_mins_since_forced_spike']
+   KEEP events.parquet/mins_since_trade_a  DROP ['g4.parquet/a_mins_since_trade']
+   KEEP events.parquet/mins_since_trade_b  DROP ['g4.parquet/b_mins_since_trade']
+[DUP] wrote 9 keep/drop decisions to dup_audit_keep_v1_pair.csv
+[DUP] near-duplicates (|corr| >= 0.9995 but failed the exact-affine/identical-NaN-pattern gate): 236, kept
+   NEAR n_prev_triggers@g3.parquet  vs  n_prev_resolved@g3.parquet: pearson 0.999878, same_nan_pattern=True
+   NEAR a_imb_30@g5_a.parquet  vs  a_imb_30m_11@g5_a.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR a_forced_share_30@g5_a.parquet  vs  a_forced_30m_11@g5_a.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR a_twap_share_30@g5_a.parquet  vs  a_twap_all_30@g6_a.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR a_twap_share_30@g5_a.parquet  vs  a_twap_human_30@g6_a.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR a_twap_share_60@g5_a.parquet  vs  a_twap_all_60@g6_a.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR a_twap_share_60@g5_a.parquet  vs  a_twap_human_60@g6_a.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR a_twap_share_360@g5_a.parquet  vs  a_twap_all_360@g6_a.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR a_twap_share_360@g5_a.parquet  vs  a_twap_human_360@g6_a.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR a_twap_share_1440@g5_a.parquet  vs  a_twap_all_1440@g6_a.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR a_twap_share_1440@g5_a.parquet  vs  a_twap_human_1440@g6_a.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR a_imb_30m_0@g5_a.parquet  vs  a_imb_30m_pre_2@g5_a.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR a_imb_30m_1@g5_a.parquet  vs  a_imb_30m_pre_3@g5_a.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR a_imb_30m_2@g5_a.parquet  vs  a_imb_30m_pre_4@g5_a.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR a_imb_30m_3@g5_a.parquet  vs  a_imb_30m_pre_5@g5_a.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR a_imb_30m_4@g5_a.parquet  vs  a_imb_30m_pre_6@g5_a.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR a_imb_30m_5@g5_a.parquet  vs  a_imb_30m_pre_7@g5_a.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR a_imb_30m_6@g5_a.parquet  vs  a_imb_30m_pre_8@g5_a.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR a_imb_30m_7@g5_a.parquet  vs  a_imb_30m_pre_9@g5_a.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR a_imb_30m_8@g5_a.parquet  vs  a_imb_30m_pre_10@g5_a.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR a_imb_30m_9@g5_a.parquet  vs  a_imb_30m_pre_11@g5_a.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR a_forced_30m_0@g5_a.parquet  vs  a_forced_30m_pre_2@g5_a.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR a_forced_30m_1@g5_a.parquet  vs  a_forced_30m_pre_3@g5_a.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR a_forced_30m_2@g5_a.parquet  vs  a_forced_30m_pre_4@g5_a.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR a_forced_30m_3@g5_a.parquet  vs  a_forced_30m_pre_5@g5_a.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR a_forced_30m_4@g5_a.parquet  vs  a_forced_30m_pre_6@g5_a.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR a_forced_30m_5@g5_a.parquet  vs  a_forced_30m_pre_7@g5_a.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR a_forced_30m_6@g5_a.parquet  vs  a_forced_30m_pre_8@g5_a.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR a_forced_30m_7@g5_a.parquet  vs  a_forced_30m_pre_9@g5_a.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR a_forced_30m_8@g5_a.parquet  vs  a_forced_30m_pre_10@g5_a.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR a_forced_30m_9@g5_a.parquet  vs  a_forced_30m_pre_11@g5_a.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR b_imb_30@g5_b.parquet  vs  b_imb_30m_11@g5_b.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR b_forced_share_30@g5_b.parquet  vs  b_forced_30m_11@g5_b.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR b_twap_share_30@g5_b.parquet  vs  b_twap_all_30@g6_b.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR b_twap_share_30@g5_b.parquet  vs  b_twap_human_30@g6_b.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR b_twap_share_60@g5_b.parquet  vs  b_twap_all_60@g6_b.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR b_twap_share_60@g5_b.parquet  vs  b_twap_human_60@g6_b.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR b_twap_share_360@g5_b.parquet  vs  b_twap_all_360@g6_b.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR b_twap_share_360@g5_b.parquet  vs  b_twap_human_360@g6_b.parquet: pearson 0.999999, same_nan_pattern=False
+   NEAR b_twap_share_1440@g5_b.parquet  vs  b_twap_all_1440@g6_b.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR b_twap_share_1440@g5_b.parquet  vs  b_twap_human_1440@g6_b.parquet: pearson 0.999997, same_nan_pattern=False
+   NEAR b_imb_30m_0@g5_b.parquet  vs  b_imb_30m_pre_2@g5_b.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR b_imb_30m_1@g5_b.parquet  vs  b_imb_30m_pre_3@g5_b.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR b_imb_30m_2@g5_b.parquet  vs  b_imb_30m_pre_4@g5_b.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR b_imb_30m_3@g5_b.parquet  vs  b_imb_30m_pre_5@g5_b.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR b_imb_30m_4@g5_b.parquet  vs  b_imb_30m_pre_6@g5_b.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR b_imb_30m_5@g5_b.parquet  vs  b_imb_30m_pre_7@g5_b.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR b_imb_30m_6@g5_b.parquet  vs  b_imb_30m_pre_8@g5_b.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR b_imb_30m_7@g5_b.parquet  vs  b_imb_30m_pre_9@g5_b.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR b_imb_30m_8@g5_b.parquet  vs  b_imb_30m_pre_10@g5_b.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR b_imb_30m_9@g5_b.parquet  vs  b_imb_30m_pre_11@g5_b.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR b_forced_30m_0@g5_b.parquet  vs  b_forced_30m_pre_2@g5_b.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR b_forced_30m_1@g5_b.parquet  vs  b_forced_30m_pre_3@g5_b.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR b_forced_30m_2@g5_b.parquet  vs  b_forced_30m_pre_4@g5_b.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR b_forced_30m_3@g5_b.parquet  vs  b_forced_30m_pre_5@g5_b.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR b_forced_30m_4@g5_b.parquet  vs  b_forced_30m_pre_6@g5_b.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR b_forced_30m_5@g5_b.parquet  vs  b_forced_30m_pre_7@g5_b.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR b_forced_30m_6@g5_b.parquet  vs  b_forced_30m_pre_8@g5_b.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR b_forced_30m_7@g5_b.parquet  vs  b_forced_30m_pre_9@g5_b.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR b_forced_30m_8@g5_b.parquet  vs  b_forced_30m_pre_10@g5_b.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR b_forced_30m_9@g5_b.parquet  vs  b_forced_30m_pre_11@g5_b.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR net_imb_30@g5_net.parquet  vs  net_imb_30m_11@g5_net.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR net_forced_share_30@g5_net.parquet  vs  net_forced_30m_11@g5_net.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR net_twap_share_30@g5_net.parquet  vs  net_twap_all_30@g6_net.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR net_twap_share_30@g5_net.parquet  vs  net_twap_human_30@g6_net.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR net_twap_share_60@g5_net.parquet  vs  net_twap_all_60@g6_net.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR net_twap_share_60@g5_net.parquet  vs  net_twap_human_60@g6_net.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR net_twap_share_360@g5_net.parquet  vs  net_twap_all_360@g6_net.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR net_twap_share_360@g5_net.parquet  vs  net_twap_human_360@g6_net.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR net_twap_share_1440@g5_net.parquet  vs  net_twap_all_1440@g6_net.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR net_twap_share_1440@g5_net.parquet  vs  net_twap_human_1440@g6_net.parquet: pearson 0.999999, same_nan_pattern=False
+   NEAR net_imb_30m_0@g5_net.parquet  vs  net_imb_30m_pre_2@g5_net.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR net_imb_30m_1@g5_net.parquet  vs  net_imb_30m_pre_3@g5_net.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR net_imb_30m_2@g5_net.parquet  vs  net_imb_30m_pre_4@g5_net.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR net_imb_30m_3@g5_net.parquet  vs  net_imb_30m_pre_5@g5_net.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR net_imb_30m_4@g5_net.parquet  vs  net_imb_30m_pre_6@g5_net.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR net_imb_30m_5@g5_net.parquet  vs  net_imb_30m_pre_7@g5_net.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR net_imb_30m_6@g5_net.parquet  vs  net_imb_30m_pre_8@g5_net.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR net_imb_30m_7@g5_net.parquet  vs  net_imb_30m_pre_9@g5_net.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR net_imb_30m_8@g5_net.parquet  vs  net_imb_30m_pre_10@g5_net.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR net_imb_30m_9@g5_net.parquet  vs  net_imb_30m_pre_11@g5_net.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR net_forced_30m_0@g5_net.parquet  vs  net_forced_30m_pre_2@g5_net.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR net_forced_30m_1@g5_net.parquet  vs  net_forced_30m_pre_3@g5_net.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR net_forced_30m_2@g5_net.parquet  vs  net_forced_30m_pre_4@g5_net.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR net_forced_30m_3@g5_net.parquet  vs  net_forced_30m_pre_5@g5_net.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR net_forced_30m_4@g5_net.parquet  vs  net_forced_30m_pre_6@g5_net.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR net_forced_30m_5@g5_net.parquet  vs  net_forced_30m_pre_7@g5_net.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR net_forced_30m_6@g5_net.parquet  vs  net_forced_30m_pre_8@g5_net.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR net_forced_30m_7@g5_net.parquet  vs  net_forced_30m_pre_9@g5_net.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR net_forced_30m_8@g5_net.parquet  vs  net_forced_30m_pre_10@g5_net.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR net_forced_30m_9@g5_net.parquet  vs  net_forced_30m_pre_11@g5_net.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR a_top1_all_30@g6_a.parquet  vs  a_top1_human_30@g6_a.parquet: pearson 0.999989, same_nan_pattern=True
+   NEAR a_top3_all_30@g6_a.parquet  vs  a_top3_human_30@g6_a.parquet: pearson 0.999989, same_nan_pattern=True
+   NEAR a_hhi_all_30@g6_a.parquet  vs  a_hhi_human_30@g6_a.parquet: pearson 0.999994, same_nan_pattern=True
+   NEAR a_nw_all_30@g6_a.parquet  vs  a_nw_human_30@g6_a.parquet: pearson 1.000000, same_nan_pattern=True
+   NEAR a_pers_all_30@g6_a.parquet  vs  a_pers_human_30@g6_a.parquet: pearson 0.999986, same_nan_pattern=True
+   NEAR a_twap_all_30@g6_a.parquet  vs  a_twap_human_30@g6_a.parquet: pearson 1.000000, same_nan_pattern=True
+   NEAR a_skill_mean_all_30@g6_a.parquet  vs  a_skill_mean_human_30@g6_a.parquet: pearson 0.999994, same_nan_pattern=True
+   NEAR a_skill_cov_all_30@g6_a.parquet  vs  a_skill_cov_human_30@g6_a.parquet: pearson 0.999894, same_nan_pattern=True
+   NEAR a_bot_all_30@g6_a.parquet  vs  a_bot_human_30@g6_a.parquet: pearson 0.999999, same_nan_pattern=True
+   NEAR a_topd_all_30@g6_a.parquet  vs  a_topd_human_30@g6_a.parquet: pearson 0.999990, same_nan_pattern=True
+   NEAR a_prior_forced_all_30@g6_a.parquet  vs  a_prior_forced_human_30@g6_a.parquet: pearson 0.999994, same_nan_pattern=True
+   NEAR a_push_total_all_30@g6_a.parquet  vs  a_push_total_human_30@g6_a.parquet: pearson 0.999955, same_nan_pattern=True
+   NEAR a_top1_all_60@g6_a.parquet  vs  a_top1_human_60@g6_a.parquet: pearson 0.999992, same_nan_pattern=True
+   NEAR a_top3_all_60@g6_a.parquet  vs  a_top3_human_60@g6_a.parquet: pearson 0.999993, same_nan_pattern=True
+   NEAR a_hhi_all_60@g6_a.parquet  vs  a_hhi_human_60@g6_a.parquet: pearson 0.999996, same_nan_pattern=True
+   NEAR a_nw_all_60@g6_a.parquet  vs  a_nw_human_60@g6_a.parquet: pearson 1.000000, same_nan_pattern=True
+   NEAR a_pers_all_60@g6_a.parquet  vs  a_pers_human_60@g6_a.parquet: pearson 0.999989, same_nan_pattern=True
+   NEAR a_twap_all_60@g6_a.parquet  vs  a_twap_human_60@g6_a.parquet: pearson 1.000000, same_nan_pattern=True
+   NEAR a_skill_mean_all_60@g6_a.parquet  vs  a_skill_mean_human_60@g6_a.parquet: pearson 0.999994, same_nan_pattern=True
+   NEAR a_skill_cov_all_60@g6_a.parquet  vs  a_skill_cov_human_60@g6_a.parquet: pearson 0.999911, same_nan_pattern=True
+   NEAR a_bot_all_60@g6_a.parquet  vs  a_bot_human_60@g6_a.parquet: pearson 0.999999, same_nan_pattern=True
+   NEAR a_topd_all_60@g6_a.parquet  vs  a_topd_human_60@g6_a.parquet: pearson 0.999992, same_nan_pattern=True
+   NEAR a_prior_forced_all_60@g6_a.parquet  vs  a_prior_forced_human_60@g6_a.parquet: pearson 0.999996, same_nan_pattern=True
+   NEAR a_push_total_all_60@g6_a.parquet  vs  a_push_total_human_60@g6_a.parquet: pearson 0.999955, same_nan_pattern=True
+   NEAR a_top1_all_360@g6_a.parquet  vs  a_top1_human_360@g6_a.parquet: pearson 0.999985, same_nan_pattern=True
+   NEAR a_top3_all_360@g6_a.parquet  vs  a_top3_human_360@g6_a.parquet: pearson 0.999990, same_nan_pattern=True
+   NEAR a_hhi_all_360@g6_a.parquet  vs  a_hhi_human_360@g6_a.parquet: pearson 0.999993, same_nan_pattern=True
+   NEAR a_nw_all_360@g6_a.parquet  vs  a_nw_human_360@g6_a.parquet: pearson 1.000000, same_nan_pattern=True
+   NEAR a_pers_all_360@g6_a.parquet  vs  a_pers_human_360@g6_a.parquet: pearson 0.999981, same_nan_pattern=True
+   NEAR a_twap_all_360@g6_a.parquet  vs  a_twap_human_360@g6_a.parquet: pearson 1.000000, same_nan_pattern=True
+   NEAR a_skill_mean_all_360@g6_a.parquet  vs  a_skill_mean_human_360@g6_a.parquet: pearson 0.999989, same_nan_pattern=True
+   NEAR a_skill_cov_all_360@g6_a.parquet  vs  a_skill_cov_human_360@g6_a.parquet: pearson 0.999888, same_nan_pattern=True
+   NEAR a_bot_all_360@g6_a.parquet  vs  a_bot_human_360@g6_a.parquet: pearson 0.999998, same_nan_pattern=True
+   NEAR a_topd_all_360@g6_a.parquet  vs  a_topd_human_360@g6_a.parquet: pearson 0.999989, same_nan_pattern=True
+   NEAR a_prior_forced_all_360@g6_a.parquet  vs  a_prior_forced_human_360@g6_a.parquet: pearson 0.999992, same_nan_pattern=True
+   NEAR a_push_total_all_360@g6_a.parquet  vs  a_push_total_human_360@g6_a.parquet: pearson 0.999986, same_nan_pattern=True
+   NEAR a_top1_all_1440@g6_a.parquet  vs  a_top1_human_1440@g6_a.parquet: pearson 0.999991, same_nan_pattern=True
+   NEAR a_top3_all_1440@g6_a.parquet  vs  a_top3_human_1440@g6_a.parquet: pearson 0.999993, same_nan_pattern=True
+   NEAR a_hhi_all_1440@g6_a.parquet  vs  a_hhi_human_1440@g6_a.parquet: pearson 0.999996, same_nan_pattern=True
+   NEAR a_nw_all_1440@g6_a.parquet  vs  a_nw_human_1440@g6_a.parquet: pearson 1.000000, same_nan_pattern=True
+   NEAR a_pers_all_1440@g6_a.parquet  vs  a_pers_human_1440@g6_a.parquet: pearson 0.999990, same_nan_pattern=True
+   NEAR a_twap_all_1440@g6_a.parquet  vs  a_twap_human_1440@g6_a.parquet: pearson 1.000000, same_nan_pattern=True
+   NEAR a_skill_mean_all_1440@g6_a.parquet  vs  a_skill_mean_human_1440@g6_a.parquet: pearson 0.999992, same_nan_pattern=True
+   NEAR a_skill_cov_all_1440@g6_a.parquet  vs  a_skill_cov_human_1440@g6_a.parquet: pearson 0.999850, same_nan_pattern=True
+   NEAR a_bot_all_1440@g6_a.parquet  vs  a_bot_human_1440@g6_a.parquet: pearson 0.999998, same_nan_pattern=True
+   NEAR a_topd_all_1440@g6_a.parquet  vs  a_topd_human_1440@g6_a.parquet: pearson 0.999989, same_nan_pattern=True
+   NEAR a_prior_forced_all_1440@g6_a.parquet  vs  a_prior_forced_human_1440@g6_a.parquet: pearson 0.999991, same_nan_pattern=True
+   NEAR a_push_total_all_1440@g6_a.parquet  vs  a_push_total_human_1440@g6_a.parquet: pearson 0.999996, same_nan_pattern=True
+   NEAR b_top1_all_30@g6_b.parquet  vs  b_top1_human_30@g6_b.parquet: pearson 0.999984, same_nan_pattern=False
+   NEAR b_top3_all_30@g6_b.parquet  vs  b_top3_human_30@g6_b.parquet: pearson 0.999984, same_nan_pattern=False
+   NEAR b_hhi_all_30@g6_b.parquet  vs  b_hhi_human_30@g6_b.parquet: pearson 0.999992, same_nan_pattern=False
+   NEAR b_nw_all_30@g6_b.parquet  vs  b_nw_human_30@g6_b.parquet: pearson 1.000000, same_nan_pattern=True
+   NEAR b_pers_all_30@g6_b.parquet  vs  b_pers_human_30@g6_b.parquet: pearson 0.999991, same_nan_pattern=False
+   NEAR b_twap_all_30@g6_b.parquet  vs  b_twap_human_30@g6_b.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR b_skill_mean_all_30@g6_b.parquet  vs  b_skill_mean_human_30@g6_b.parquet: pearson 0.999996, same_nan_pattern=True
+   NEAR b_skill_cov_all_30@g6_b.parquet  vs  b_skill_cov_human_30@g6_b.parquet: pearson 0.999841, same_nan_pattern=False
+   NEAR b_bot_all_30@g6_b.parquet  vs  b_bot_human_30@g6_b.parquet: pearson 0.999999, same_nan_pattern=False
+   NEAR b_topd_all_30@g6_b.parquet  vs  b_topd_human_30@g6_b.parquet: pearson 0.999990, same_nan_pattern=False
+   NEAR b_prior_forced_all_30@g6_b.parquet  vs  b_prior_forced_human_30@g6_b.parquet: pearson 0.999992, same_nan_pattern=False
+   NEAR b_push_total_all_30@g6_b.parquet  vs  b_push_total_human_30@g6_b.parquet: pearson 0.999952, same_nan_pattern=True
+   NEAR b_top1_all_60@g6_b.parquet  vs  b_top1_human_60@g6_b.parquet: pearson 0.999987, same_nan_pattern=False
+   NEAR b_top3_all_60@g6_b.parquet  vs  b_top3_human_60@g6_b.parquet: pearson 0.999989, same_nan_pattern=False
+   NEAR b_hhi_all_60@g6_b.parquet  vs  b_hhi_human_60@g6_b.parquet: pearson 0.999994, same_nan_pattern=False
+   NEAR b_nw_all_60@g6_b.parquet  vs  b_nw_human_60@g6_b.parquet: pearson 1.000000, same_nan_pattern=True
+   NEAR b_pers_all_60@g6_b.parquet  vs  b_pers_human_60@g6_b.parquet: pearson 0.999993, same_nan_pattern=False
+   NEAR b_twap_all_60@g6_b.parquet  vs  b_twap_human_60@g6_b.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR b_skill_mean_all_60@g6_b.parquet  vs  b_skill_mean_human_60@g6_b.parquet: pearson 0.999996, same_nan_pattern=True
+   NEAR b_skill_cov_all_60@g6_b.parquet  vs  b_skill_cov_human_60@g6_b.parquet: pearson 0.999873, same_nan_pattern=False
+   NEAR b_bot_all_60@g6_b.parquet  vs  b_bot_human_60@g6_b.parquet: pearson 0.999999, same_nan_pattern=False
+   NEAR b_topd_all_60@g6_b.parquet  vs  b_topd_human_60@g6_b.parquet: pearson 0.999992, same_nan_pattern=False
+   NEAR b_prior_forced_all_60@g6_b.parquet  vs  b_prior_forced_human_60@g6_b.parquet: pearson 0.999994, same_nan_pattern=False
+   NEAR b_push_total_all_60@g6_b.parquet  vs  b_push_total_human_60@g6_b.parquet: pearson 0.999960, same_nan_pattern=True
+   NEAR b_top1_all_360@g6_b.parquet  vs  b_top1_human_360@g6_b.parquet: pearson 0.999977, same_nan_pattern=True
+   NEAR b_top3_all_360@g6_b.parquet  vs  b_top3_human_360@g6_b.parquet: pearson 0.999987, same_nan_pattern=True
+   NEAR b_hhi_all_360@g6_b.parquet  vs  b_hhi_human_360@g6_b.parquet: pearson 0.999989, same_nan_pattern=True
+   NEAR b_nw_all_360@g6_b.parquet  vs  b_nw_human_360@g6_b.parquet: pearson 1.000000, same_nan_pattern=True
+   NEAR b_pers_all_360@g6_b.parquet  vs  b_pers_human_360@g6_b.parquet: pearson 0.999986, same_nan_pattern=True
+   NEAR b_twap_all_360@g6_b.parquet  vs  b_twap_human_360@g6_b.parquet: pearson 0.999999, same_nan_pattern=True
+   NEAR b_skill_mean_all_360@g6_b.parquet  vs  b_skill_mean_human_360@g6_b.parquet: pearson 0.999994, same_nan_pattern=True
+   NEAR b_skill_cov_all_360@g6_b.parquet  vs  b_skill_cov_human_360@g6_b.parquet: pearson 0.999859, same_nan_pattern=True
+   NEAR b_bot_all_360@g6_b.parquet  vs  b_bot_human_360@g6_b.parquet: pearson 0.999998, same_nan_pattern=True
+   NEAR b_topd_all_360@g6_b.parquet  vs  b_topd_human_360@g6_b.parquet: pearson 0.999993, same_nan_pattern=True
+   NEAR b_prior_forced_all_360@g6_b.parquet  vs  b_prior_forced_human_360@g6_b.parquet: pearson 0.999992, same_nan_pattern=True
+   NEAR b_push_total_all_360@g6_b.parquet  vs  b_push_total_human_360@g6_b.parquet: pearson 0.999988, same_nan_pattern=True
+   NEAR b_top1_all_1440@g6_b.parquet  vs  b_top1_human_1440@g6_b.parquet: pearson 0.999979, same_nan_pattern=True
+   NEAR b_top3_all_1440@g6_b.parquet  vs  b_top3_human_1440@g6_b.parquet: pearson 0.999982, same_nan_pattern=True
+   NEAR b_hhi_all_1440@g6_b.parquet  vs  b_hhi_human_1440@g6_b.parquet: pearson 0.999991, same_nan_pattern=True
+   NEAR b_nw_all_1440@g6_b.parquet  vs  b_nw_human_1440@g6_b.parquet: pearson 1.000000, same_nan_pattern=True
+   NEAR b_pers_all_1440@g6_b.parquet  vs  b_pers_human_1440@g6_b.parquet: pearson 0.999981, same_nan_pattern=True
+   NEAR b_twap_all_1440@g6_b.parquet  vs  b_twap_human_1440@g6_b.parquet: pearson 0.999997, same_nan_pattern=True
+   NEAR b_skill_mean_all_1440@g6_b.parquet  vs  b_skill_mean_human_1440@g6_b.parquet: pearson 0.999996, same_nan_pattern=True
+   NEAR b_skill_cov_all_1440@g6_b.parquet  vs  b_skill_cov_human_1440@g6_b.parquet: pearson 0.999809, same_nan_pattern=True
+   NEAR b_bot_all_1440@g6_b.parquet  vs  b_bot_human_1440@g6_b.parquet: pearson 0.999997, same_nan_pattern=True
+   NEAR b_topd_all_1440@g6_b.parquet  vs  b_topd_human_1440@g6_b.parquet: pearson 0.999993, same_nan_pattern=True
+   NEAR b_prior_forced_all_1440@g6_b.parquet  vs  b_prior_forced_human_1440@g6_b.parquet: pearson 0.999993, same_nan_pattern=True
+   NEAR b_push_total_all_1440@g6_b.parquet  vs  b_push_total_human_1440@g6_b.parquet: pearson 0.999996, same_nan_pattern=True
+   NEAR net_top1_all_30@g6_net.parquet  vs  net_top1_human_30@g6_net.parquet: pearson 0.999977, same_nan_pattern=False
+   NEAR net_top3_all_30@g6_net.parquet  vs  net_top3_human_30@g6_net.parquet: pearson 0.999978, same_nan_pattern=False
+   NEAR net_hhi_all_30@g6_net.parquet  vs  net_hhi_human_30@g6_net.parquet: pearson 0.999989, same_nan_pattern=False
+   NEAR net_pers_all_30@g6_net.parquet  vs  net_pers_human_30@g6_net.parquet: pearson 0.999984, same_nan_pattern=False
+   NEAR net_twap_all_30@g6_net.parquet  vs  net_twap_human_30@g6_net.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR net_skill_mean_all_30@g6_net.parquet  vs  net_skill_mean_human_30@g6_net.parquet: pearson 0.999990, same_nan_pattern=True
+   NEAR net_skill_cov_all_30@g6_net.parquet  vs  net_skill_cov_human_30@g6_net.parquet: pearson 0.999754, same_nan_pattern=False
+   NEAR net_bot_all_30@g6_net.parquet  vs  net_bot_human_30@g6_net.parquet: pearson 0.999998, same_nan_pattern=False
+   NEAR net_topd_all_30@g6_net.parquet  vs  net_topd_human_30@g6_net.parquet: pearson 0.999981, same_nan_pattern=False
+   NEAR net_prior_forced_all_30@g6_net.parquet  vs  net_prior_forced_human_30@g6_net.parquet: pearson 0.999986, same_nan_pattern=False
+   NEAR net_top1_all_60@g6_net.parquet  vs  net_top1_human_60@g6_net.parquet: pearson 0.999981, same_nan_pattern=False
+   NEAR net_top3_all_60@g6_net.parquet  vs  net_top3_human_60@g6_net.parquet: pearson 0.999984, same_nan_pattern=False
+   NEAR net_hhi_all_60@g6_net.parquet  vs  net_hhi_human_60@g6_net.parquet: pearson 0.999990, same_nan_pattern=False
+   NEAR net_pers_all_60@g6_net.parquet  vs  net_pers_human_60@g6_net.parquet: pearson 0.999988, same_nan_pattern=False
+   NEAR net_twap_all_60@g6_net.parquet  vs  net_twap_human_60@g6_net.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR net_skill_mean_all_60@g6_net.parquet  vs  net_skill_mean_human_60@g6_net.parquet: pearson 0.999993, same_nan_pattern=True
+   NEAR net_skill_cov_all_60@g6_net.parquet  vs  net_skill_cov_human_60@g6_net.parquet: pearson 0.999795, same_nan_pattern=False
+   NEAR net_bot_all_60@g6_net.parquet  vs  net_bot_human_60@g6_net.parquet: pearson 0.999998, same_nan_pattern=False
+   NEAR net_topd_all_60@g6_net.parquet  vs  net_topd_human_60@g6_net.parquet: pearson 0.999985, same_nan_pattern=False
+   NEAR net_prior_forced_all_60@g6_net.parquet  vs  net_prior_forced_human_60@g6_net.parquet: pearson 0.999990, same_nan_pattern=False
+   NEAR net_top1_all_360@g6_net.parquet  vs  net_top1_human_360@g6_net.parquet: pearson 0.999974, same_nan_pattern=True
+   NEAR net_top3_all_360@g6_net.parquet  vs  net_top3_human_360@g6_net.parquet: pearson 0.999984, same_nan_pattern=True
+   NEAR net_hhi_all_360@g6_net.parquet  vs  net_hhi_human_360@g6_net.parquet: pearson 0.999987, same_nan_pattern=True
+   NEAR net_pers_all_360@g6_net.parquet  vs  net_pers_human_360@g6_net.parquet: pearson 0.999987, same_nan_pattern=True
+   NEAR net_twap_all_360@g6_net.parquet  vs  net_twap_human_360@g6_net.parquet: pearson 1.000000, same_nan_pattern=True
+   NEAR net_skill_mean_all_360@g6_net.parquet  vs  net_skill_mean_human_360@g6_net.parquet: pearson 0.999993, same_nan_pattern=True
+   NEAR net_skill_cov_all_360@g6_net.parquet  vs  net_skill_cov_human_360@g6_net.parquet: pearson 0.999785, same_nan_pattern=True
+   NEAR net_bot_all_360@g6_net.parquet  vs  net_bot_human_360@g6_net.parquet: pearson 0.999998, same_nan_pattern=True
+   NEAR net_topd_all_360@g6_net.parquet  vs  net_topd_human_360@g6_net.parquet: pearson 0.999987, same_nan_pattern=True
+   NEAR net_prior_forced_all_360@g6_net.parquet  vs  net_prior_forced_human_360@g6_net.parquet: pearson 0.999988, same_nan_pattern=True
+   NEAR net_top1_all_1440@g6_net.parquet  vs  net_top1_human_1440@g6_net.parquet: pearson 0.999989, same_nan_pattern=True
+   NEAR net_top3_all_1440@g6_net.parquet  vs  net_top3_human_1440@g6_net.parquet: pearson 0.999992, same_nan_pattern=True
+   NEAR net_hhi_all_1440@g6_net.parquet  vs  net_hhi_human_1440@g6_net.parquet: pearson 0.999995, same_nan_pattern=True
+   NEAR net_pers_all_1440@g6_net.parquet  vs  net_pers_human_1440@g6_net.parquet: pearson 0.999990, same_nan_pattern=True
+   NEAR net_twap_all_1440@g6_net.parquet  vs  net_twap_human_1440@g6_net.parquet: pearson 0.999999, same_nan_pattern=True
+   NEAR net_skill_mean_all_1440@g6_net.parquet  vs  net_skill_mean_human_1440@g6_net.parquet: pearson 0.999995, same_nan_pattern=True
+   NEAR net_skill_cov_all_1440@g6_net.parquet  vs  net_skill_cov_human_1440@g6_net.parquet: pearson 0.999823, same_nan_pattern=True
+   NEAR net_bot_all_1440@g6_net.parquet  vs  net_bot_human_1440@g6_net.parquet: pearson 0.999998, same_nan_pattern=True
+   NEAR net_topd_all_1440@g6_net.parquet  vs  net_topd_human_1440@g6_net.parquet: pearson 0.999991, same_nan_pattern=True
+   NEAR net_prior_forced_all_1440@g6_net.parquet  vs  net_prior_forced_human_1440@g6_net.parquet: pearson 0.999992, same_nan_pattern=True
+   NEAR a_oi_obs_usd@g7.parquet  vs  a_oi_rec_usd@g7.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR a_vault_net_usd@g7.parquet  vs  a_vault_net_chg_24h@g7.parquet: pearson 0.999986, same_nan_pattern=True
+   NEAR b_oi_obs_usd@g7.parquet  vs  b_oi_rec_usd@g7.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR d_oi_obs_usd@g7.parquet  vs  d_oi_rec_usd@g7.parquet: pearson 1.000000, same_nan_pattern=False
+   NEAR ret_idx_1h@g9a.parquet  vs  ret_idx_1h_seg@g9a.parquet: pearson 0.999988, same_nan_pattern=False
+   NEAR ret_idx_6h@g9a.parquet  vs  ret_idx_6h_seg@g9a.parquet: pearson 0.999980, same_nan_pattern=False
+   NEAR ret_idx_24h@g9a.parquet  vs  ret_idx_24h_seg@g9a.parquet: pearson 0.999960, same_nan_pattern=False
+   NEAR ret_idx_7d@g9a.parquet  vs  ret_idx_7d_seg@g9a.parquet: pearson 0.999935, same_nan_pattern=False
+   NEAR rank90_idx_abs_ret_7d_seg@g9a.parquet  vs  rank90_idx_abs_ret_7d@g9a.parquet: pearson 0.999771, same_nan_pattern=False
+[DUP] of the dropped columns above, 6 are all-NaN or constant (degenerate, not a real duplicate feature, but dropped by the same rule since they are 'equal on all rows'):
+   g4.parquet/b_listing_src [constant] -> kept g4.parquet/a_listing_src
+   g7.parquet/a_vault_leader_usd [constant] -> kept g4.parquet/a_listing_src
+   g7.parquet/b_vault_leader_usd [constant] -> kept g4.parquet/a_listing_src
+   g7.parquet/d_vault_leader_usd [constant] -> kept g4.parquet/a_listing_src
+   g5_net.parquet/net_mins_since_forced_any [all_nan] -> kept g5_net.parquet/net_max_abs_imb_5m_bin
+   g5_net.parquet/net_mins_since_forced_spike [all_nan] -> kept g5_net.parquet/net_max_abs_imb_5m_bin

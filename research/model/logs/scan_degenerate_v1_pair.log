@@ -1,0 +1,16 @@
+[DEGEN] sha256 scan_degenerate_v1_pair.py: 5f5fc4808cdf8d689fbf8b4375cd72a1af39d3fa6dc23685363cffff53764599
+[DEGEN] sha256 inputs_v1_pair.csv: 08ff834dea2a1eee8d2511770f6067fb10b62b75f0c130a884749e933cac7bde
+[DEGEN] git_head ae43814ed2f98e71950ff238471a1ccd3cd989b4 (29 uncommitted paths); start 2026-10-27T12:05:26Z UTC; pid 5077
+[DEGEN] scanning 1097 current IN columns (string columns checked for a single distinct non-null value)  [0s]
+[DEGEN] 15 v1 pair files re-hashed against MANIFEST.json: all match  [113s]
+   200/1097  [242s]
+   400/1097  [395s]
+   600/1097  [550s]
+   800/1097  [680s]
+   1000/1097  [857s]
+[DEGEN] 4 degenerate columns found of 1097  [950s]
+   CONSTANT  g4.parquet/a_listing_src  n_finite=6697756  value=0.0
+   ALL_NAN   g5_net.parquet/net_max_abs_imb_5m_bin  n_finite=0  value=''
+   CONSTANT  g8.parquet/a_crossed  n_finite=6228891  value=0.0
+   CONSTANT  g8.parquet/b_crossed  n_finite=6262084  value=0.0
+[DEGEN] wrote 4 rows to degenerate_v1_pair.csv  [950s]

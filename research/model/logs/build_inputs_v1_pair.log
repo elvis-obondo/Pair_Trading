@@ -1,0 +1,12 @@
+[B1] 1,195 (file, column) rows across 16 files; IN 1,093, OUT 102
+   IN  feature              1093
+   OUT archive_age            15
+   OUT artefact_key           20
+   OUT degenerate             10
+   OUT duplicate_dropped       6
+   OUT future_label           34
+   OUT future_single           2
+   OUT hindsight_static       13
+   OUT snapshot_age            2
+[B1] UNVERIFIED IN columns (no as-of citation line, per B1 rule): 0
+[B1] wrote /Users/elvisobondo/Pair_Trading/research/model/inputs_v1_pair.csv

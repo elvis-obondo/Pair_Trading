@@ -1,0 +1,4 @@
+dropped_file,dropped_col,kept_file,kept_col,reason
+g4.parquet,a_mins_since_trade,events.parquet,mins_since_trade_a,"earlier file in GROUP_ORDER (mechanical rule, brief B1 lines 123-133)"
+g4.parquet,b_mins_since_trade,events.parquet,mins_since_trade_b,"earlier file in GROUP_ORDER (mechanical rule, brief B1 lines 123-133)"
+g2.parquet,r2_2d,events.parquet,r2,"earlier file in GROUP_ORDER (mechanical rule, brief B1 lines 123-133)"
