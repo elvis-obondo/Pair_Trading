@@ -1,0 +1,13 @@
+[B5-STARTUP] sha256 b5_profile_startup.py: 373972df7c2f3f405ef2c3df907c95816b902d1aab96d9b9772c2bc35322ec2a
+[B5-STARTUP] sha256 harness.py: c06484599c879d050f30af898aaf078f754266208f29f3a82c2580f51c75548a
+[B5-STARTUP] sha256 master_manifest.py: 9ec12057ab23a797cb2a9dde1eae204c9c2e5775b02399cccb6d146f9afea3fe
+[B5-STARTUP] sha256 inputs_v1_pair.csv: bb2721ee107aa07f82250fd65cec68b61400c3a3e9223c5d286ec56ab2f77331
+[B5-STARTUP] sha256 b5_profile.py: 633cfdf46b596f454de691e3ed0b01563f9fe76383e0ebbb4d85840dabdb6e27
+[B5-STARTUP] git_head 2c7372dc3fee71a9104909c2e6ff48db142d01e7 (32 uncommitted paths); start 2026-10-27T20:36:02Z UTC; pid 32211; host pt-research; has_proc_status=True
+[B5-STARTUP] NOTE: no instrumentation/monkeypatching anywhere in this script; H.load_search_events and H.build_folds are called directly, unmodified. No optimisation, no AWS, no further runs chained off this result (B5 Step 1 follow-up, user-approved scope).
+[B5-STARTUP] (1) after imports: VmRSS=0.11GB VmHWM=0.11GB (since this reset) pool=0.000GB pool_backend=mimalloc  [0s]
+[HARNESS] load_search_events: 6,697,756 merged rows -> 5,405,478 after the date/gap-day filter -> 5,378,429 after dropping 27,049 label_gap=1 rows
+[B5-STARTUP] (2) load_search_events: 13.55s, 5,378,429 events; VmRSS 0.11GB -> 1.00GB; VmHWM (this call's own peak, reset just before it) = 1.62GB; pool_after=0.000GB pool_max=0.553GB  [14s]
+[B5-STARTUP] (3) build_folds: 16.84s, 8 folds; VmRSS 1.00GB -> 1.44GB; VmHWM (this call's own peak, reset just before it) = 1.80GB; pool_after=0.000GB pool_max=0.553GB  [30s]
+[B5-STARTUP] TOTAL startup (load_search_events + build_folds): 30.39s; VmRSS 0.11GB -> 1.44GB; max(VmHWM_events, VmHWM_folds) = 1.80GB; ru_maxrss (B4's own lifetime-high-water-mark measure, for direct comparison to its 52.9 GB figure) = 1.80GB  [30s]
+exit_code=0

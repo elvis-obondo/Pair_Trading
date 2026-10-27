@@ -1,0 +1,31 @@
+[B5-PROFILE] sha256 b5_profile.py: f71bbb17f1f94b40ed68bd2db603444ca4bc131b1290ae2ad132b520a6b8a9c0
+[B5-PROFILE] sha256 harness.py: c06484599c879d050f30af898aaf078f754266208f29f3a82c2580f51c75548a
+[B5-PROFILE] sha256 inputs_v1_pair.csv: bb2721ee107aa07f82250fd65cec68b61400c3a3e9223c5d286ec56ab2f77331
+[B5-PROFILE] sha256 master_manifest.py: 9ec12057ab23a797cb2a9dde1eae204c9c2e5775b02399cccb6d146f9afea3fe
+[B5-PROFILE] git_head 2c7372dc3fee71a9104909c2e6ff48db142d01e7 (32 uncommitted paths); start 2026-10-27T20:00:11Z UTC; pid 16987; pyarrow 24.0.0; pool_backend=mimalloc; has_proc_status=True
+[B5-PROFILE] NOTE: this script does not modify harness.py. It monkeypatches, by module-attribute name only, master_manifest.verify, pyarrow.parquet.read_table, pyarrow.compute.cast, harness.check_inputs and harness._assert_positional_row_order with timing wrappers that call the original and return its exact result -- load_features's behaviour and output are unchanged. No optimisation of any kind happens in this script (B5 Step 1 rule).
+[B5-PROFILE] 1093 IN columns  [0s]
+Traceback (most recent call last):
+  File "/home/elvisobondo/Pair_Trading/research/model/b5_profile.py", line 458, in <module>
+    main()
+  File "/home/elvisobondo/Pair_Trading/research/model/b5_profile.py", line 444, in main
+    events = H.load_search_events()
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/elvisobondo/Pair_Trading/research/model/harness.py", line 75, in load_search_events
+    ev = MF.open_version(VERSION, UNIT, "events.parquet", columns=sorted(events_cols))
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/elvisobondo/Pair_Trading/research/dataset/master_manifest.py", line 49, in open_version
+    return pd.read_parquet(os.path.join(base or WORK, rel), columns=columns)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/pandas/io/parquet.py", line 669, in read_parquet
+    return impl.read(
+           ^^^^^^^^^^
+  File "/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/pandas/io/parquet.py", line 265, in read
+    pa_table = self.api.parquet.read_table(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/elvisobondo/Pair_Trading/research/model/b5_profile.py", line 221, in wrapped
+    _record(stage, t0, nested, path=os.path.basename(path), column=columns[0] if columns else None,
+                                    ^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen posixpath>", line 171, in basename
+TypeError: expected str, bytes or os.PathLike object, not BufferedReader
+exit_code=1

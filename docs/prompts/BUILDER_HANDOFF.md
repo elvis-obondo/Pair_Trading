@@ -31,8 +31,9 @@ Part A = the user's fixed rules (do not change them). Part B = the build. Read i
   trip 0 mismatches on 5,378,429 events; vault asserts; independent recompute equal to 1e-9). The
   ORIGINAL run's log (113s) was overwritten in place by this rerun -- `run_proofs.sh` hardcodes the
   log path, so only this rerun log survives; that's fine, it's the receipt that matters now.
-- **B4: CLOSE EARLY (user, 2026-10-27). IN PROGRESS, checker review not yet final.** Only the random
-  survival forest verdict, no new runs beyond cheap lookups/reruns the checker explicitly asked for:
+- **B4: CLOSE EARLY (user, 2026-10-27). DONE, checker FINAL PASS (round 3, 2026-10-27).** Only the
+  random survival forest verdict, no new runs beyond cheap lookups/reruns the checker explicitly
+  asked for:
   - The timing run `b4_rsf_feasibility.py` (launcher `run_b4_rsf.sh`) ended 2026-10-27 15:22 UTC with
     exit_code=124 (shell timeout). It loaded fold 7 (train 3,979,894 / val 1,057,348 / test 311,654
     x 1,093 float32, 219 s, peak RSS 52.9 GB), then fitting RandomSurvivalForest(n_estimators=8,
@@ -59,9 +60,18 @@ Part A = the user's fixed rules (do not change them). Part B = the build. Read i
     **Corrected verdict resent to the checker; final PASS not yet received as of this handoff edit.**
     Don't commit or report B4 done before it lands.
   - SKIP logistic and boosted-tree sizing: they move to after B5.
-- **B5 next (after B4 closes): speed and memory optimisation with IDENTICAL outputs.** The planner
-  sends a brief. Then the B4 sizing spec runs on the optimised code, then the user approves the AWS
-  machine, then the scoring build (logistic first).
+- **B5 Step 1 (measure first): DONE, checker FINAL PASS, 2026-10-27.** `research/model/b5_profile.py`
+  (sha256 633cfdf4...) profiled fold 7 and fold 0's load_features stage by stage; a user-approved
+  follow-up (`b5_profile_startup.py`, sha256 373972df...) measured load_search_events/build_folds alone.
+  Key results: loading train/val/test as 3 separate calls costs ~3x a single combined call's
+  manifest_verify time (cleanly shown on fold 0, cache-matched); every column read pulls in the file's
+  FULL row count before any take-by-position, every time; Arrow's own memory pool and allocator
+  retention are both ruled out as RSS causes. **The 52.9 GB vs 23.4 GB memory gap from B4 is NOT
+  explained** -- neither load_features (peaks at baseline+matrix, ~24.5 GB for fold 7) nor startup
+  (peaks at 1.80 GB) reproduces it, even read as one sequence. This is now open with the planner/user,
+  not decided here. Full numbers: `research/dislocation_model/NUMBERS.md` tag `[HL-MODEL1-B5]`.
+- **B5 Step 2 (optimise): WAITING ON THE PLANNER.** Do not start without a go-ahead -- the memory-gap
+  question above may change what Step 2 needs to look at. Brief: `docs/prompts/HL_MODEL1_B5_SPEED_MEMORY.md`.
 - **Owed to the planner (low priority, after B5):** an inventory of everything on the GCP VM disk that
   is NOT in S3 (path, size). The user wants everything off GCP before the trial ends (~2026-11-08).
 
@@ -116,4 +126,4 @@ Part A = the user's fixed rules (do not change them). Part B = the build. Read i
 ## First actions
 1. `ListAgents`; tell the planner and the checker your session name.
 2. Read CLAUDE.md, this file, the brief, and the tail of `research/dislocation_model/NUMBERS.md`.
-3. Close B4 as above.
+3. Start B5 (brief above).

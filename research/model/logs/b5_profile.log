@@ -1,0 +1,249 @@
+[B5-PROFILE] sha256 b5_profile.py: 633cfdf46b596f454de691e3ed0b01563f9fe76383e0ebbb4d85840dabdb6e27
+[B5-PROFILE] sha256 harness.py: c06484599c879d050f30af898aaf078f754266208f29f3a82c2580f51c75548a
+[B5-PROFILE] sha256 inputs_v1_pair.csv: bb2721ee107aa07f82250fd65cec68b61400c3a3e9223c5d286ec56ab2f77331
+[B5-PROFILE] sha256 master_manifest.py: 9ec12057ab23a797cb2a9dde1eae204c9c2e5775b02399cccb6d146f9afea3fe
+[B5-PROFILE] git_head 2c7372dc3fee71a9104909c2e6ff48db142d01e7 (32 uncommitted paths); start 2026-10-27T20:05:00Z UTC; pid 18629; pyarrow 24.0.0; pool_backend=mimalloc; has_proc_status=True
+[B5-PROFILE] NOTE: this script does not modify harness.py. It monkeypatches, by module-attribute name only, master_manifest.verify, pyarrow.parquet.read_table, pyarrow.compute.cast, harness.check_inputs and harness._assert_positional_row_order with timing wrappers that call the original and return its exact result -- load_features's behaviour and output are unchanged. No optimisation of any kind happens in this script (B5 Step 1 rule).
+[B5-PROFILE] 1093 IN columns  [0s]
+[HARNESS] load_search_events: 6,697,756 merged rows -> 5,405,478 after the date/gap-day filter -> 5,378,429 after dropping 27,049 label_gap=1 rows
+[B5-PROFILE] ===== fold 7: train=3,979,894 val=1,057,348 test=311,654 =====
+[B5-PROFILE] fold 7 baseline VmRSS before any load this fold: 1.45GB
+[B5-PROFILE] --- fold 7: ONE COMBINED load_features call (train+val+test ids), FIRST ---
+[HARNESS] check_inputs: 1093 columns checked against inputs_v1_pair.csv (sha256 bb2721ee107aa07f82250fd65cec68b61400c3a3e9223c5d286ec56ab2f77331); 0 not IN
+[B5-PROFILE] fold7.combined: n_events=5,348,896 n_cols=1093 wall=226.75s top_level_instrumented=149.01s uninstrumented_remainder=77.73s (remainder = to_pandas/factorize or to_numpy, plus the strided per-column write into the preallocated n_events x 1093 matrix -- pyarrow's Array.take is a compiled method, not independently hookable, and is part of this remainder too) rss_before=1.49GB rss_after=24.39GB rss_after_gc=1.55GB retained_gb=0.06GB (retained_gb well above 0 while pool_after is near 0 is the signal that memory is held by something other than Arrow's own pool after X and cols are freed; rss_after_gc alone dropping below rss_after is just X being freed to the OS as normal) hwm_before=1.49GB hwm_this_block=24.48GB pool_before=0.000GB pool_after=0.000GB pool_max=0.553GB pool_backend=mimalloc X.nbytes=23.39GB
+[B5-PROFILE] fold7.combined: 2230 instrumented calls, 149.01s top-level instrumented total (nested calls excluded from this sum -- their time is already inside their parent's own elapsed)
+[B5-PROFILE]   check_inputs: n=1 top_level_sum=0.01s nested_sum=0.00s mean=5.9ms
+[B5-PROFILE]   column_read.in_row_order: n=15 top_level_sum=0.00s nested_sum=2.57s mean=171.0ms
+[B5-PROFILE]   row_order_assert: n=15 top_level_sum=2.95s nested_sum=0.00s mean=196.6ms
+[B5-PROFILE]   manifest_verify: n=15 top_level_sum=110.96s nested_sum=0.00s mean=7397.6ms
+[B5-PROFILE]   column_read: n=1093 top_level_sum=34.97s nested_sum=0.00s mean=32.0ms
+[B5-PROFILE]   cast: n=1091 top_level_sum=0.13s nested_sum=0.00s mean=0.1ms
+[B5-PROFILE]   column_read rows_returned: min=6,697,756 max=6,697,756 (the file's full row count is read before any take-by-position, every single call)
+[B5-PROFILE]   column_read pool_delta_gb: sum=30.735 min=0.0067 max=0.0584 pool_after_gb trajectory: start=0.053 end=0.077 pool_max_gb=0.553
+[B5-PROFILE]   cast pool_delta_gb: sum=0.640 (covers all 1091 pc.cast calls, 1091 top-level + 0 nested/pyarrow-internal -- the sum is not restricted to top-level only, unlike the time totals)
+[B5-PROFILE]   manifest_verify: ['pair/events.parquet'] 0.57GB in 0.43s (1324 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g2.parquet'] 0.61GB in 3.20s (191 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g2b.parquet'] 0.25GB in 1.26s (198 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g3.parquet'] 0.24GB in 1.10s (222 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g4.parquet'] 0.74GB in 4.09s (182 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g9a.parquet'] 0.61GB in 3.16s (192 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g5_a.parquet'] 1.80GB in 9.91s (181 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g5_b.parquet'] 2.28GB in 12.65s (180 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g5_net.parquet'] 2.34GB in 13.02s (180 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g5_shape.parquet'] 0.23GB in 1.06s (221 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g6_a.parquet'] 1.92GB in 10.70s (180 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g6_b.parquet'] 2.42GB in 13.46s (180 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g6_net.parquet'] 2.19GB in 12.15s (180 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g7.parquet'] 1.90GB in 10.53s (181 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g8.parquet'] 2.56GB in 14.25s (180 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   row_order_assert cached hits: 0/15
+[B5-PROFILE] --- fold 7: THREE SEPARATE load_features calls (train, val, test) ---
+[HARNESS] check_inputs: 1093 columns checked against inputs_v1_pair.csv (sha256 bb2721ee107aa07f82250fd65cec68b61400c3a3e9223c5d286ec56ab2f77331); 0 not IN
+[B5-PROFILE] fold7.separate.train: n_events=3,979,894 n_cols=1093 wall=154.89s top_level_instrumented=87.36s uninstrumented_remainder=67.53s (remainder = to_pandas/factorize or to_numpy, plus the strided per-column write into the preallocated n_events x 1093 matrix -- pyarrow's Array.take is a compiled method, not independently hookable, and is part of this remainder too) rss_before=1.55GB rss_after=18.62GB rss_after_gc=1.63GB retained_gb=0.08GB (retained_gb well above 0 while pool_after is near 0 is the signal that memory is held by something other than Arrow's own pool after X and cols are freed; rss_after_gc alone dropping below rss_after is just X being freed to the OS as normal) hwm_before=1.55GB hwm_this_block=18.77GB pool_before=0.000GB pool_after=0.000GB pool_max=0.553GB pool_backend=mimalloc X.nbytes=17.40GB
+[B5-PROFILE] fold7.separate.train: 2230 instrumented calls, 87.36s top-level instrumented total (nested calls excluded from this sum -- their time is already inside their parent's own elapsed)
+[B5-PROFILE]   check_inputs: n=1 top_level_sum=0.01s nested_sum=0.00s mean=6.9ms
+[B5-PROFILE]   column_read.in_row_order: n=15 top_level_sum=0.00s nested_sum=2.47s mean=164.5ms
+[B5-PROFILE]   row_order_assert: n=15 top_level_sum=2.81s nested_sum=0.00s mean=187.1ms
+[B5-PROFILE]   manifest_verify: n=15 top_level_sum=38.24s nested_sum=0.00s mean=2549.0ms
+[B5-PROFILE]   column_read: n=1093 top_level_sum=46.17s nested_sum=0.00s mean=42.2ms
+[B5-PROFILE]   cast: n=1091 top_level_sum=0.14s nested_sum=0.00s mean=0.1ms
+[B5-PROFILE]   column_read rows_returned: min=6,697,756 max=6,697,756 (the file's full row count is read before any take-by-position, every single call)
+[B5-PROFILE]   column_read pool_delta_gb: sum=31.043 min=0.0067 max=0.0573 pool_after_gb trajectory: start=0.053 end=0.072 pool_max_gb=0.553
+[B5-PROFILE]   cast pool_delta_gb: sum=0.476 (covers all 1091 pc.cast calls, 1091 top-level + 0 nested/pyarrow-internal -- the sum is not restricted to top-level only, unlike the time totals)
+[B5-PROFILE]   manifest_verify: ['pair/events.parquet'] 0.57GB in 0.43s (1348 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g2.parquet'] 0.61GB in 0.67s (914 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g2b.parquet'] 0.25GB in 0.28s (901 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g3.parquet'] 0.24GB in 0.27s (890 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g4.parquet'] 0.74GB in 0.84s (887 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g9a.parquet'] 0.61GB in 0.73s (828 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g5_a.parquet'] 1.80GB in 2.01s (891 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g5_b.parquet'] 2.28GB in 2.67s (853 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g5_net.parquet'] 2.34GB in 2.61s (897 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g5_shape.parquet'] 0.23GB in 1.07s (218 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g6_a.parquet'] 1.92GB in 10.62s (181 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g6_b.parquet'] 2.42GB in 11.04s (219 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g6_net.parquet'] 2.19GB in 1.65s (1331 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g7.parquet'] 1.90GB in 1.42s (1340 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g8.parquet'] 2.56GB in 1.92s (1333 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   row_order_assert cached hits: 0/15
+[HARNESS] check_inputs: 1093 columns checked against inputs_v1_pair.csv (sha256 bb2721ee107aa07f82250fd65cec68b61400c3a3e9223c5d286ec56ab2f77331); 0 not IN
+[B5-PROFILE] fold7.separate.val: n_events=1,057,348 n_cols=1093 wall=76.04s top_level_instrumented=55.26s uninstrumented_remainder=20.78s (remainder = to_pandas/factorize or to_numpy, plus the strided per-column write into the preallocated n_events x 1093 matrix -- pyarrow's Array.take is a compiled method, not independently hookable, and is part of this remainder too) rss_before=1.63GB rss_after=6.20GB rss_after_gc=1.68GB retained_gb=0.06GB (retained_gb well above 0 while pool_after is near 0 is the signal that memory is held by something other than Arrow's own pool after X and cols are freed; rss_after_gc alone dropping below rss_after is just X being freed to the OS as normal) hwm_before=1.63GB hwm_this_block=6.20GB pool_before=0.000GB pool_after=0.000GB pool_max=0.553GB pool_backend=mimalloc X.nbytes=4.62GB
+[B5-PROFILE] fold7.separate.val: 2215 instrumented calls, 55.26s top-level instrumented total (nested calls excluded from this sum -- their time is already inside their parent's own elapsed)
+[B5-PROFILE]   check_inputs: n=1 top_level_sum=0.01s nested_sum=0.00s mean=9.4ms
+[B5-PROFILE]   row_order_assert: n=15 top_level_sum=0.00s nested_sum=0.00s mean=0.0ms
+[B5-PROFILE]   manifest_verify: n=15 top_level_sum=19.46s nested_sum=0.00s mean=1297.2ms
+[B5-PROFILE]   column_read: n=1093 top_level_sum=35.73s nested_sum=0.00s mean=32.7ms
+[B5-PROFILE]   cast: n=1091 top_level_sum=0.06s nested_sum=0.00s mean=0.1ms
+[B5-PROFILE]   column_read rows_returned: min=6,697,756 max=6,697,756 (the file's full row count is read before any take-by-position, every single call)
+[B5-PROFILE]   column_read pool_delta_gb: sum=30.926 min=0.0067 max=0.0574 pool_after_gb trajectory: start=0.053 end=0.060 pool_max_gb=0.553
+[B5-PROFILE]   cast pool_delta_gb: sum=0.126 (covers all 1091 pc.cast calls, 1091 top-level + 0 nested/pyarrow-internal -- the sum is not restricted to top-level only, unlike the time totals)
+[B5-PROFILE]   manifest_verify: ['pair/events.parquet'] 0.57GB in 3.15s (182 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g2.parquet'] 0.61GB in 1.08s (563 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g2b.parquet'] 0.25GB in 0.21s (1178 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g3.parquet'] 0.24GB in 0.20s (1199 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g4.parquet'] 0.74GB in 0.73s (1019 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g9a.parquet'] 0.61GB in 0.49s (1243 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g5_a.parquet'] 1.80GB in 1.38s (1304 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g5_b.parquet'] 2.28GB in 1.74s (1306 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g5_net.parquet'] 2.34GB in 1.79s (1309 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g5_shape.parquet'] 0.23GB in 0.20s (1181 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g6_a.parquet'] 1.92GB in 1.56s (1230 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g6_b.parquet'] 2.42GB in 1.90s (1276 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g6_net.parquet'] 2.19GB in 1.65s (1328 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g7.parquet'] 1.90GB in 1.44s (1323 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g8.parquet'] 2.56GB in 1.93s (1325 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   row_order_assert cached hits: 15/15
+[HARNESS] check_inputs: 1093 columns checked against inputs_v1_pair.csv (sha256 bb2721ee107aa07f82250fd65cec68b61400c3a3e9223c5d286ec56ab2f77331); 0 not IN
+[B5-PROFILE] fold7.separate.test: n_events=311,654 n_cols=1093 wall=61.74s top_level_instrumented=51.29s uninstrumented_remainder=10.45s (remainder = to_pandas/factorize or to_numpy, plus the strided per-column write into the preallocated n_events x 1093 matrix -- pyarrow's Array.take is a compiled method, not independently hookable, and is part of this remainder too) rss_before=1.68GB rss_after=3.01GB rss_after_gc=1.68GB retained_gb=0.00GB (retained_gb well above 0 while pool_after is near 0 is the signal that memory is held by something other than Arrow's own pool after X and cols are freed; rss_after_gc alone dropping below rss_after is just X being freed to the OS as normal) hwm_before=1.68GB hwm_this_block=3.01GB pool_before=0.000GB pool_after=0.000GB pool_max=0.553GB pool_backend=mimalloc X.nbytes=1.36GB
+[B5-PROFILE] fold7.separate.test: 2215 instrumented calls, 51.29s top-level instrumented total (nested calls excluded from this sum -- their time is already inside their parent's own elapsed)
+[B5-PROFILE]   check_inputs: n=1 top_level_sum=0.01s nested_sum=0.00s mean=5.8ms
+[B5-PROFILE]   row_order_assert: n=15 top_level_sum=0.00s nested_sum=0.00s mean=0.0ms
+[B5-PROFILE]   manifest_verify: n=15 top_level_sum=15.72s nested_sum=0.00s mean=1047.9ms
+[B5-PROFILE]   column_read: n=1093 top_level_sum=35.51s nested_sum=0.00s mean=32.5ms
+[B5-PROFILE]   cast: n=1091 top_level_sum=0.05s nested_sum=0.00s mean=0.0ms
+[B5-PROFILE]   column_read rows_returned: min=6,697,756 max=6,697,756 (the file's full row count is read before any take-by-position, every single call)
+[B5-PROFILE]   column_read pool_delta_gb: sum=30.834 min=0.0067 max=0.0572 pool_after_gb trajectory: start=0.053 end=0.057 pool_max_gb=0.553
+[B5-PROFILE]   cast pool_delta_gb: sum=0.037 (covers all 1091 pc.cast calls, 1091 top-level + 0 nested/pyarrow-internal -- the sum is not restricted to top-level only, unlike the time totals)
+[B5-PROFILE]   manifest_verify: ['pair/events.parquet'] 0.57GB in 0.45s (1265 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g2.parquet'] 0.61GB in 0.48s (1284 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g2b.parquet'] 0.25GB in 0.19s (1307 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g3.parquet'] 0.24GB in 0.19s (1296 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g4.parquet'] 0.74GB in 0.57s (1302 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g9a.parquet'] 0.61GB in 0.47s (1302 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g5_a.parquet'] 1.80GB in 1.37s (1307 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g5_b.parquet'] 2.28GB in 1.72s (1326 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g5_net.parquet'] 2.34GB in 1.77s (1323 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g5_shape.parquet'] 0.23GB in 0.19s (1232 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g6_a.parquet'] 1.92GB in 1.49s (1287 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g6_b.parquet'] 2.42GB in 1.83s (1319 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g6_net.parquet'] 2.19GB in 1.65s (1329 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g7.parquet'] 1.90GB in 1.43s (1332 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g8.parquet'] 2.56GB in 1.92s (1336 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   row_order_assert cached hits: 15/15
+[B5-PROFILE] fold 7 separate-calls total: wall=292.66s manifest_verify=73.41s
+[B5-PROFILE] fold 7 SEPARATE vs COMBINED: wall 292.66s vs 226.75s (1.29x); manifest_verify 73.41s vs 110.96s (0.66x) -- NOTE: throughput (MB/s, logged per call above) can differ between these because of page-cache warmth, not just call count; read the MB/s lines before attributing the ratio to the extra calls alone.
+[B5-PROFILE] fold 7 done  [541s]
+[B5-PROFILE] ===== fold 0: train=1,401,515 val=416,440 test=428,849 =====
+[B5-PROFILE] fold 0 baseline VmRSS before any load this fold: 1.64GB
+[B5-PROFILE] --- fold 0: ONE COMBINED load_features call (train+val+test ids), FIRST ---
+[HARNESS] check_inputs: 1093 columns checked against inputs_v1_pair.csv (sha256 bb2721ee107aa07f82250fd65cec68b61400c3a3e9223c5d286ec56ab2f77331); 0 not IN
+[B5-PROFILE] fold0.combined: n_events=2,246,804 n_cols=1093 wall=91.71s top_level_instrumented=52.89s uninstrumented_remainder=38.82s (remainder = to_pandas/factorize or to_numpy, plus the strided per-column write into the preallocated n_events x 1093 matrix -- pyarrow's Array.take is a compiled method, not independently hookable, and is part of this remainder too) rss_before=1.64GB rss_after=11.20GB rss_after_gc=1.60GB retained_gb=-0.04GB (retained_gb well above 0 while pool_after is near 0 is the signal that memory is held by something other than Arrow's own pool after X and cols are freed; rss_after_gc alone dropping below rss_after is just X being freed to the OS as normal) hwm_before=1.64GB hwm_this_block=11.30GB pool_before=0.000GB pool_after=0.000GB pool_max=0.553GB pool_backend=mimalloc X.nbytes=9.82GB
+[B5-PROFILE] fold0.combined: 2230 instrumented calls, 52.89s top-level instrumented total (nested calls excluded from this sum -- their time is already inside their parent's own elapsed)
+[B5-PROFILE]   check_inputs: n=1 top_level_sum=0.01s nested_sum=0.00s mean=6.3ms
+[B5-PROFILE]   column_read.in_row_order: n=15 top_level_sum=0.00s nested_sum=1.79s mean=119.6ms
+[B5-PROFILE]   row_order_assert: n=15 top_level_sum=2.05s nested_sum=0.00s mean=136.6ms
+[B5-PROFILE]   manifest_verify: n=15 top_level_sum=15.72s nested_sum=0.00s mean=1048.1ms
+[B5-PROFILE]   column_read: n=1093 top_level_sum=35.03s nested_sum=0.00s mean=32.0ms
+[B5-PROFILE]   cast: n=1091 top_level_sum=0.08s nested_sum=0.00s mean=0.1ms
+[B5-PROFILE]   column_read rows_returned: min=6,697,756 max=6,697,756 (the file's full row count is read before any take-by-position, every single call)
+[B5-PROFILE]   column_read pool_delta_gb: sum=30.804 min=0.0067 max=0.0556 pool_after_gb trajectory: start=0.053 end=0.065 pool_max_gb=0.553
+[B5-PROFILE]   cast pool_delta_gb: sum=0.269 (covers all 1091 pc.cast calls, 1091 top-level + 0 nested/pyarrow-internal -- the sum is not restricted to top-level only, unlike the time totals)
+[B5-PROFILE]   manifest_verify: ['pair/events.parquet'] 0.57GB in 0.43s (1320 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g2.parquet'] 0.61GB in 0.47s (1301 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g2b.parquet'] 0.25GB in 0.19s (1293 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g3.parquet'] 0.24GB in 0.18s (1318 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g4.parquet'] 0.74GB in 0.57s (1311 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g9a.parquet'] 0.61GB in 0.46s (1319 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g5_a.parquet'] 1.80GB in 1.36s (1321 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g5_b.parquet'] 2.28GB in 1.72s (1323 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g5_net.parquet'] 2.34GB in 1.77s (1327 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g5_shape.parquet'] 0.23GB in 0.19s (1233 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g6_a.parquet'] 1.92GB in 1.49s (1288 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g6_b.parquet'] 2.42GB in 1.87s (1298 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g6_net.parquet'] 2.19GB in 1.65s (1327 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g7.parquet'] 1.90GB in 1.44s (1324 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g8.parquet'] 2.56GB in 1.93s (1325 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   row_order_assert cached hits: 0/15
+[B5-PROFILE] --- fold 0: THREE SEPARATE load_features calls (train, val, test) ---
+[HARNESS] check_inputs: 1093 columns checked against inputs_v1_pair.csv (sha256 bb2721ee107aa07f82250fd65cec68b61400c3a3e9223c5d286ec56ab2f77331); 0 not IN
+[B5-PROFILE] fold0.separate.train: n_events=1,401,515 n_cols=1093 wall=77.66s top_level_instrumented=53.29s uninstrumented_remainder=24.37s (remainder = to_pandas/factorize or to_numpy, plus the strided per-column write into the preallocated n_events x 1093 matrix -- pyarrow's Array.take is a compiled method, not independently hookable, and is part of this remainder too) rss_before=1.60GB rss_after=7.59GB rss_after_gc=1.61GB retained_gb=0.00GB (retained_gb well above 0 while pool_after is near 0 is the signal that memory is held by something other than Arrow's own pool after X and cols are freed; rss_after_gc alone dropping below rss_after is just X being freed to the OS as normal) hwm_before=1.60GB hwm_this_block=7.72GB pool_before=0.000GB pool_after=0.000GB pool_max=0.553GB pool_backend=mimalloc X.nbytes=6.13GB
+[B5-PROFILE] fold0.separate.train: 2230 instrumented calls, 53.29s top-level instrumented total (nested calls excluded from this sum -- their time is already inside their parent's own elapsed)
+[B5-PROFILE]   check_inputs: n=1 top_level_sum=0.01s nested_sum=0.00s mean=6.6ms
+[B5-PROFILE]   column_read.in_row_order: n=15 top_level_sum=0.00s nested_sum=1.80s mean=119.9ms
+[B5-PROFILE]   row_order_assert: n=15 top_level_sum=2.12s nested_sum=0.00s mean=141.5ms
+[B5-PROFILE]   manifest_verify: n=15 top_level_sum=15.82s nested_sum=0.00s mean=1054.9ms
+[B5-PROFILE]   column_read: n=1093 top_level_sum=35.27s nested_sum=0.00s mean=32.3ms
+[B5-PROFILE]   cast: n=1091 top_level_sum=0.07s nested_sum=0.00s mean=0.1ms
+[B5-PROFILE]   column_read rows_returned: min=6,697,756 max=6,697,756 (the file's full row count is read before any take-by-position, every single call)
+[B5-PROFILE]   column_read pool_delta_gb: sum=30.691 min=0.0067 max=0.0544 pool_after_gb trajectory: start=0.053 end=0.061 pool_max_gb=0.553
+[B5-PROFILE]   cast pool_delta_gb: sum=0.168 (covers all 1091 pc.cast calls, 1091 top-level + 0 nested/pyarrow-internal -- the sum is not restricted to top-level only, unlike the time totals)
+[B5-PROFILE]   manifest_verify: ['pair/events.parquet'] 0.57GB in 0.46s (1245 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g2.parquet'] 0.61GB in 0.47s (1288 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g2b.parquet'] 0.25GB in 0.19s (1308 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g3.parquet'] 0.24GB in 0.19s (1315 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g4.parquet'] 0.74GB in 0.57s (1305 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g9a.parquet'] 0.61GB in 0.46s (1317 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g5_a.parquet'] 1.80GB in 1.37s (1315 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g5_b.parquet'] 2.28GB in 1.73s (1318 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g5_net.parquet'] 2.34GB in 1.77s (1321 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g5_shape.parquet'] 0.23GB in 0.19s (1208 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g6_a.parquet'] 1.92GB in 1.51s (1273 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g6_b.parquet'] 2.42GB in 1.87s (1297 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g6_net.parquet'] 2.19GB in 1.66s (1321 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g7.parquet'] 1.90GB in 1.44s (1324 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g8.parquet'] 2.56GB in 1.95s (1313 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   row_order_assert cached hits: 0/15
+[HARNESS] check_inputs: 1093 columns checked against inputs_v1_pair.csv (sha256 bb2721ee107aa07f82250fd65cec68b61400c3a3e9223c5d286ec56ab2f77331); 0 not IN
+[B5-PROFILE] fold0.separate.val: n_events=416,440 n_cols=1093 wall=63.41s top_level_instrumented=51.39s uninstrumented_remainder=12.02s (remainder = to_pandas/factorize or to_numpy, plus the strided per-column write into the preallocated n_events x 1093 matrix -- pyarrow's Array.take is a compiled method, not independently hookable, and is part of this remainder too) rss_before=1.61GB rss_after=3.42GB rss_after_gc=1.64GB retained_gb=0.03GB (retained_gb well above 0 while pool_after is near 0 is the signal that memory is held by something other than Arrow's own pool after X and cols are freed; rss_after_gc alone dropping below rss_after is just X being freed to the OS as normal) hwm_before=1.61GB hwm_this_block=3.42GB pool_before=0.000GB pool_after=0.000GB pool_max=0.553GB pool_backend=mimalloc X.nbytes=1.82GB
+[B5-PROFILE] fold0.separate.val: 2215 instrumented calls, 51.39s top-level instrumented total (nested calls excluded from this sum -- their time is already inside their parent's own elapsed)
+[B5-PROFILE]   check_inputs: n=1 top_level_sum=0.01s nested_sum=0.00s mean=6.4ms
+[B5-PROFILE]   row_order_assert: n=15 top_level_sum=0.00s nested_sum=0.00s mean=0.0ms
+[B5-PROFILE]   manifest_verify: n=15 top_level_sum=15.78s nested_sum=0.00s mean=1052.2ms
+[B5-PROFILE]   column_read: n=1093 top_level_sum=35.55s nested_sum=0.00s mean=32.5ms
+[B5-PROFILE]   cast: n=1091 top_level_sum=0.05s nested_sum=0.00s mean=0.0ms
+[B5-PROFILE]   column_read rows_returned: min=6,697,756 max=6,697,756 (the file's full row count is read before any take-by-position, every single call)
+[B5-PROFILE]   column_read pool_delta_gb: sum=30.754 min=0.0067 max=0.0584 pool_after_gb trajectory: start=0.053 end=0.057 pool_max_gb=0.553
+[B5-PROFILE]   cast pool_delta_gb: sum=0.050 (covers all 1091 pc.cast calls, 1091 top-level + 0 nested/pyarrow-internal -- the sum is not restricted to top-level only, unlike the time totals)
+[B5-PROFILE]   manifest_verify: ['pair/events.parquet'] 0.57GB in 0.46s (1242 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g2.parquet'] 0.61GB in 0.47s (1292 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g2b.parquet'] 0.25GB in 0.19s (1303 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g3.parquet'] 0.24GB in 0.19s (1310 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g4.parquet'] 0.74GB in 0.57s (1309 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g9a.parquet'] 0.61GB in 0.46s (1321 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g5_a.parquet'] 1.80GB in 1.36s (1317 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g5_b.parquet'] 2.28GB in 1.73s (1317 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g5_net.parquet'] 2.34GB in 1.79s (1310 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g5_shape.parquet'] 0.23GB in 0.19s (1226 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g6_a.parquet'] 1.92GB in 1.49s (1291 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g6_b.parquet'] 2.42GB in 1.86s (1298 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g6_net.parquet'] 2.19GB in 1.65s (1330 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g7.parquet'] 1.90GB in 1.43s (1327 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g8.parquet'] 2.56GB in 1.94s (1322 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   row_order_assert cached hits: 15/15
+[HARNESS] check_inputs: 1093 columns checked against inputs_v1_pair.csv (sha256 bb2721ee107aa07f82250fd65cec68b61400c3a3e9223c5d286ec56ab2f77331); 0 not IN
+[B5-PROFILE] fold0.separate.test: n_events=428,849 n_cols=1093 wall=63.74s top_level_instrumented=51.63s uninstrumented_remainder=12.11s (remainder = to_pandas/factorize or to_numpy, plus the strided per-column write into the preallocated n_events x 1093 matrix -- pyarrow's Array.take is a compiled method, not independently hookable, and is part of this remainder too) rss_before=1.64GB rss_after=3.47GB rss_after_gc=1.64GB retained_gb=0.00GB (retained_gb well above 0 while pool_after is near 0 is the signal that memory is held by something other than Arrow's own pool after X and cols are freed; rss_after_gc alone dropping below rss_after is just X being freed to the OS as normal) hwm_before=1.64GB hwm_this_block=3.47GB pool_before=0.000GB pool_after=0.000GB pool_max=0.553GB pool_backend=mimalloc X.nbytes=1.87GB
+[B5-PROFILE] fold0.separate.test: 2215 instrumented calls, 51.63s top-level instrumented total (nested calls excluded from this sum -- their time is already inside their parent's own elapsed)
+[B5-PROFILE]   check_inputs: n=1 top_level_sum=0.01s nested_sum=0.00s mean=5.9ms
+[B5-PROFILE]   row_order_assert: n=15 top_level_sum=0.00s nested_sum=0.00s mean=0.0ms
+[B5-PROFILE]   manifest_verify: n=15 top_level_sum=15.85s nested_sum=0.00s mean=1056.4ms
+[B5-PROFILE]   column_read: n=1093 top_level_sum=35.73s nested_sum=0.00s mean=32.7ms
+[B5-PROFILE]   cast: n=1091 top_level_sum=0.05s nested_sum=0.00s mean=0.0ms
+[B5-PROFILE]   column_read rows_returned: min=6,697,756 max=6,697,756 (the file's full row count is read before any take-by-position, every single call)
+[B5-PROFILE]   column_read pool_delta_gb: sum=30.847 min=0.0067 max=0.0573 pool_after_gb trajectory: start=0.053 end=0.057 pool_max_gb=0.553
+[B5-PROFILE]   cast pool_delta_gb: sum=0.051 (covers all 1091 pc.cast calls, 1091 top-level + 0 nested/pyarrow-internal -- the sum is not restricted to top-level only, unlike the time totals)
+[B5-PROFILE]   manifest_verify: ['pair/events.parquet'] 0.57GB in 0.44s (1308 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g2.parquet'] 0.61GB in 0.47s (1303 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g2b.parquet'] 0.25GB in 0.19s (1317 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g3.parquet'] 0.24GB in 0.19s (1310 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g4.parquet'] 0.74GB in 0.58s (1293 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g9a.parquet'] 0.61GB in 0.46s (1309 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g5_a.parquet'] 1.80GB in 1.36s (1318 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g5_b.parquet'] 2.28GB in 1.73s (1318 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g5_net.parquet'] 2.34GB in 1.80s (1305 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g5_shape.parquet'] 0.23GB in 0.19s (1221 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g6_a.parquet'] 1.92GB in 1.51s (1270 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g6_b.parquet'] 2.42GB in 1.88s (1285 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g6_net.parquet'] 2.19GB in 1.67s (1308 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g7.parquet'] 1.90GB in 1.44s (1323 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   manifest_verify: ['pair/g8.parquet'] 2.56GB in 1.94s (1321 MB/s -- low means cold page cache, high means warm)
+[B5-PROFILE]   row_order_assert cached hits: 15/15
+[B5-PROFILE] fold 0 separate-calls total: wall=204.81s manifest_verify=47.45s
+[B5-PROFILE] fold 0 SEPARATE vs COMBINED: wall 204.81s vs 91.71s (2.23x); manifest_verify 47.45s vs 15.72s (3.02x) -- NOTE: throughput (MB/s, logged per call above) can differ between these because of page-cache warmth, not just call count; read the MB/s lines before attributing the ratio to the extra calls alone.
+[B5-PROFILE] fold 0 done  [838s]
+[B5-PROFILE] --- hazard-row build (full search set) ---
+[B5-PROFILE] build_hazard_rows: 5,378,429 events -> 88,797,506 rows in 1.17s; VmRSS 1.64GB -> 3.11GB (block VmHWM 5.49GB)
+[B5-PROFILE] --- scoring timing (RANDOM dummy scores -- TIMING ONLY, not a real result) ---
+[B5-PROFILE] score_fold: n=311,654 in 89.3ms (dummy lift=0.0015, meaningless -- random scores)
+[B5-PROFILE] day_block_bootstrap: n_resamples=2000 in 0.68s (dummy point=0.0015 CI=[-0.0044,0.0076], meaningless -- random scores)
+[B5-PROFILE] all done  [840s]; final VmRSS 1.64GB VmHWM since last reset (hazard/scoring block) 5.49GB
+exit_code=0
