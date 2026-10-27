@@ -253,6 +253,95 @@ def load_features(event_ids, columns):
     return X, columns
 
 
+CACHE_DIR = os.path.join(ROOT, "research", "datasets", "model_cache")
+CACHE_FORMAT = "float32_fixed_coin_codes_v1"  # bumped whenever the cast/encoding rules change, independent
+                                               # of v1 or the input list (checker's finding, round 1)
+_CACHE_FILE_SHA = None  # (npy_path, sha256) -- ONLY the expensive 29 GB file hash is cached per process;
+                         # the small shas (inputs csv, v1 manifest, coins.csv) are re-checked on every
+                         # _cache_info() call, the same discipline as _verify_once re-hashing MANIFEST.json
+                         # (checker's finding, round 1: caching the WHOLE verdict would miss a change to a
+                         # small file between calls in the same process)
+
+
+def _cache_info():
+    """B5 Step 2 (iii): validity check for the cached IN-matrix (research/datasets/model_cache/). A cache
+    is trusted ONLY if its manifest's v1 MANIFEST.json sha, inputs_v1_pair.csv sha, coins.csv sha and
+    CACHE_FORMAT all match CURRENT values (checked fresh on every call -- these are small files, cheap to
+    rehash), and the cache FILE's own sha matches what its manifest recorded at build time (this one IS
+    cached per process, in _CACHE_FILE_SHA, since it means hashing a 29 GB file). Any mismatch on the small
+    shas -> returns False (load_features_cached then refuses to serve from it, caller falls back). A
+    mismatch on the big file's own sha -> RAISES (a tampered or corrupted cache is never silently trusted)."""
+    global _CACHE_FILE_SHA
+    import csv
+    rows = list(csv.DictReader(open(os.path.join(HERE, "inputs_v1_pair.csv"))))
+    n_in = sum(1 for r in rows if r["in_out"] == "IN")
+    manifest_path = os.path.join(CACHE_DIR, f"ivq_pair_v1_{n_in}.manifest.json")
+    npy_path = os.path.join(CACHE_DIR, f"ivq_pair_v1_{n_in}.npy")
+    if not (os.path.exists(manifest_path) and os.path.exists(npy_path)):
+        return False
+    import json
+    man = json.load(open(manifest_path))
+    current_inputs_sha = MF.sha(os.path.join(HERE, "inputs_v1_pair.csv"))
+    current_v1_sha = _manifest_sha()
+    current_coins_sha = MF.sha(COINS_CSV)
+    if (man.get("inputs_sha256") != current_inputs_sha or man.get("v1_manifest_sha256") != current_v1_sha
+            or man.get("coins_sha256") != current_coins_sha or man.get("cache_format") != CACHE_FORMAT):
+        return False
+    if _CACHE_FILE_SHA is None or _CACHE_FILE_SHA[0] != npy_path:
+        _CACHE_FILE_SHA = (npy_path, MF.sha(npy_path))
+    actual_npy_sha = _CACHE_FILE_SHA[1]
+    if actual_npy_sha != man.get("cache_sha256"):
+        raise RuntimeError(f"model_cache/{os.path.basename(npy_path)}: file sha {actual_npy_sha[:12]}... does "
+                            f"not match its own manifest's cache_sha256 {man.get('cache_sha256', '?')[:12]}... "
+                            f"-- refusing to trust a tampered or corrupted cache, not falling back silently")
+    man["_npy_path"] = npy_path
+    return man
+
+
+def load_features_cached(event_ids, columns):
+    """B5 Step 2 (iii): reads `columns` for `event_ids` from the cached IN-matrix instead of parquet, IF a
+    valid cache exists for the CURRENT v1 manifest, input list, coins.csv and cache format (see
+    _cache_info) -- otherwise raises, rather than silently falling back to the slow path (a caller that
+    wants the fallback should catch this and call load_features itself; B5's equivalence proof always
+    compares the two explicitly, never lets one function's behaviour depend on cache presence). Proven
+    byte-identical to load_features on fold 7 and fold 0 in build_cache_v1_pair.py's own run, and on commit
+    in the B5 NUMBERS section. Returns (X, columns), same contract as load_features.
+
+    ONE fancy index (checker's finding, round 1): mm[event_ids][:, idx] would make two full-width copies
+    (every row, all columns, THEN the column-selected copy) -- on fold 7 that's 23.3 GB of throwaway data
+    on top of the 23.3 GB result. np.ix_ selects rows and columns in the SAME indexing op, one copy; when
+    the requested columns are already the cache's full column set in order, skip the column index
+    entirely (plain row selection, still one copy)."""
+    check_inputs(columns)
+    man = _cache_info()
+    if not man:
+        raise RuntimeError("no valid cached IN-matrix for the current v1 manifest / input list -- build one "
+                            "with build_cache_v1_pair.py, or call load_features (the parquet path) instead")
+    col_pos = {c: j for j, c in enumerate(man["columns"])}
+    missing = [c for c in columns if c not in col_pos]
+    assert not missing, f"columns not present in the cache: {missing}"
+    event_ids = np.asarray(event_ids)
+    assert np.all((event_ids >= 0) & (event_ids < man["n_rows"])), "an event_id is outside the cache's row range"
+    mm = np.load(man["_npy_path"], mmap_mode="r")
+    if list(columns) == man["columns"]:
+        X = np.ascontiguousarray(mm[event_ids])
+    else:
+        idx = [col_pos[c] for c in columns]
+        X = np.ascontiguousarray(mm[np.ix_(event_ids, idx)])
+    return X, columns
+
+
+def load_fold_features_cached(fold, columns):
+    """Same contract as load_fold_features, but reads from the cache (load_features_cached) instead of
+    parquet -- B5's "folds then index rows by position from the memory map." Returns (X_train, X_val,
+    X_test, columns)."""
+    train_ids, val_ids, test_ids = fold["train_ids"], fold["val_ids"], fold["test_ids"]
+    all_ids = np.concatenate([train_ids, val_ids, test_ids])
+    X_all, cols = load_features_cached(all_ids, columns)
+    n_train, n_val = len(train_ids), len(val_ids)
+    return X_all[:n_train], X_all[n_train:n_train + n_val], X_all[n_train + n_val:], cols
+
+
 def load_fold_features(fold, columns):
     """B5 Step 2: 'load each fold once' -- reads the union of train/val/test rows in ONE load_features
     call (so every file is verified and read ONCE for the whole fold, not three times), then splits the

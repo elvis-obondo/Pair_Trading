@@ -1,0 +1,36 @@
+host: pt-research
+saved_utc: 2026-10-27T23:14:54Z
+---
+[Tue Oct 27 21:01:41 2026] sda: detected capacity change from 209715200 to 335544320
+[Tue Oct 27 21:01:55 2026] EXT4-fs (sda1): resizing filesystem from 26185979 to 41914619 blocks
+[Tue Oct 27 21:01:55 2026] EXT4-fs (sda1): resized filesystem to 41914619
+[Tue Oct 27 22:09:29 2026] google_osconfig invoked oom-killer: gfp_mask=0x140cca(GFP_HIGHUSER_MOVABLE|__GFP_COMP), order=0, oom_score_adj=0
+[Tue Oct 27 22:09:29 2026] CPU: 4 PID: 577 Comm: google_osconfig Not tainted 6.8.0-1070-gcp #78~22.04.1-Ubuntu
+[Tue Oct 27 22:09:29 2026] Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/07/2026
+[Tue Oct 27 22:09:29 2026] Call Trace:
+--
+[Tue Oct 27 22:09:29 2026] [  32464]     0 32464     3659      256       64      192         0    57344        0             0 sshd
+[Tue Oct 27 22:09:29 2026] [  32465]     0 32465     3659      160        0      160         0    57344        0             0 sshd
+[Tue Oct 27 22:09:29 2026] [  32466]     0 32466     3861      554      394      160         0    69632        0         -1000 sshd
+[Tue Oct 27 22:09:29 2026] oom-kill:constraint=CONSTRAINT_NONE,nodemask=(null),cpuset=google-osconfig-agent.service,mems_allowed=0,global_oom,task_memcg=/user.slice/user-1001.slice/session-467.scope,task=python,pid=29109,uid=1001
+[Tue Oct 27 22:09:29 2026] Out of memory: Killed process 29109 (python) total-vm:89400472kB, anon-rss:64971896kB, file-rss:2408kB, shmem-rss:0kB, UID:1001 pgtables:130524kB oom_score_adj:0
+[Tue Oct 27 22:31:22 2026] workqueue: update_balloon_size_func [virtio_balloon] hogged CPU for >10000us 4 times, consider switching to WQ_UNBOUND
+[Tue Oct 27 22:32:03 2026] virtio_balloon virtio2: Out of puff! Can't get 1 pages
+[Tue Oct 27 22:32:06 2026] virtio_balloon virtio2: Out of puff! Can't get 1 pages
+[Tue Oct 27 22:32:09 2026] virtio_balloon virtio2: Out of puff! Can't get 1 pages
+[Tue Oct 27 22:32:11 2026] virtio_balloon virtio2: Out of puff! Can't get 1 pages
+[Tue Oct 27 22:42:53 2026] workqueue: update_balloon_size_func [virtio_balloon] hogged CPU for >10000us 8 times, consider switching to WQ_UNBOUND
+[Tue Oct 27 22:42:58 2026] virtio_balloon virtio2: Out of puff! Can't get 1 pages
+[Tue Oct 27 22:42:59 2026] virtio_balloon virtio2: Out of puff! Can't get 1 pages
+[Tue Oct 27 22:54:20 2026] workqueue: update_balloon_size_func [virtio_balloon] hogged CPU for >10000us 16 times, consider switching to WQ_UNBOUND
+[Tue Oct 27 22:54:31 2026] virtio_balloon virtio2: Out of puff! Can't get 1 pages
+[Tue Oct 27 22:54:40 2026] virtio_balloon virtio2: Out of puff! Can't get 1 pages
+[Tue Oct 27 22:54:41 2026] virtio_balloon virtio2: Out of puff! Can't get 1 pages
+[Tue Oct 27 22:54:43 2026] virtio_balloon virtio2: Out of puff! Can't get 1 pages
+[Tue Oct 27 23:06:19 2026] virtio_balloon virtio2: Out of puff! Can't get 1 pages
+[Tue Oct 27 23:06:21 2026] virtio_balloon virtio2: Out of puff! Can't get 1 pages
+[Tue Oct 27 23:06:22 2026] virtio_balloon virtio2: Out of puff! Can't get 1 pages
+[Tue Oct 27 23:06:23 2026] workqueue: update_balloon_size_func [virtio_balloon] hogged CPU for >10000us 32 times, consider switching to WQ_UNBOUND
+[Tue Oct 27 23:06:23 2026] virtio_balloon virtio2: Out of puff! Can't get 1 pages
+[Tue Oct 27 23:06:24 2026] virtio_balloon virtio2: Out of puff! Can't get 1 pages
+[Tue Oct 27 23:06:26 2026] virtio_balloon virtio2: Out of puff! Can't get 1 pages
