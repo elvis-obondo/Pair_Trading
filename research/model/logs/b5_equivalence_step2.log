@@ -1,0 +1,59 @@
+[B5-EQUIV] sha256 b5_equivalence_step2.py: 7467f87871a31b492844601b58ef4bc8df30a2829dffda774cc249364b08e204
+[B5-EQUIV] sha256 harness.py (NEW): 4e1fb5dcd75cb1265cf743feb5da838e74d5e7595dccda0524ad770eeb522a4f
+[B5-EQUIV] sha256 _frozen_harness_pre_b5step2.py (OLD): c06484599c879d050f30af898aaf078f754266208f29f3a82c2580f51c75548a (must equal c06484599c879d050f30af898aaf078f754266208f29f3a82c2580f51c75548a)
+[B5-EQUIV] sha256 inputs_v1_pair.csv: bb2721ee107aa07f82250fd65cec68b61400c3a3e9223c5d286ec56ab2f77331 (current 1,093-column list -- step (i), before the a_/b_coin_code revision)
+[B5-EQUIV] git_head 2c7372dc3fee71a9104909c2e6ff48db142d01e7 (32 uncommitted paths); start 2026-10-27T21:14:40Z UTC; pid 10658
+[B5-EQUIV] 1093 IN columns
+[HARNESS] load_search_events: 6,697,756 merged rows -> 5,405,478 after the date/gap-day filter -> 5,378,429 after dropping 27,049 label_gap=1 rows
+[B5-EQUIV] BROKEN VARIANT -- columns_match (shared by PROOF 1 and PROOF 3) catches one changed cell: PASS -- reported bad cols: ['b']
+[HARNESS] check_inputs: 1093 columns checked against inputs_v1_pair.csv (sha256 bb2721ee107aa07f82250fd65cec68b61400c3a3e9223c5d286ec56ab2f77331); 0 not IN
+[HARNESS] check_inputs: 1093 columns checked against inputs_v1_pair.csv (sha256 bb2721ee107aa07f82250fd65cec68b61400c3a3e9223c5d286ec56ab2f77331); 0 not IN
+[B5-EQUIV] fold7: n=5,348,896 n_cols=1093 old_load_s=250.3 new_load_s=103.8 (CACHE-BIASED, not a before/after timing -- NEW ran right after OLD warmed the page cache for these exact columns; Step 3 does the real timing with matched cache states)
+[B5-EQUIV] fold7: column order identical: PASS
+[B5-EQUIV] fold7: PROOF 1 -- every non-ticker column identical OLD vs NEW (1091 columns): PASS
+[B5-EQUIV] fold7: PROOF 2c -- null ticker_a/ticker_b count is 0: PASS -- null_a=0 null_b=0
+[B5-EQUIV] fold7: PROOF 2a -- NEW ticker_a matches independent sorted(coins.csv) ground truth: PASS
+[B5-EQUIV] fold7: PROOF 2a -- NEW ticker_b matches independent sorted(coins.csv) ground truth: PASS
+[B5-EQUIV] fold7: PROOF 2a -- NEW ticker_a matches a_coin_code (g4.parquet): PASS
+[B5-EQUIV] fold7: PROOF 2a -- NEW ticker_b matches b_coin_code (g4.parquet): PASS
+[B5-EQUIV] fold7: PROOF 2b -- OLD and NEW ticker_a induce the SAME row partition (same rows grouped as the same ticker, even though code VALUES differ): PASS
+[B5-EQUIV] fold7: PROOF 2b -- OLD and NEW ticker_b induce the SAME row partition: PASS
+[B5-EQUIV] fold7 PROOF 1+2 memory: rss_before=1.45GB VmHWM_this_block=48.54GB
+[HARNESS] check_inputs: 1093 columns checked against inputs_v1_pair.csv (sha256 bb2721ee107aa07f82250fd65cec68b61400c3a3e9223c5d286ec56ab2f77331); 0 not IN
+[HARNESS] check_inputs: 1093 columns checked against inputs_v1_pair.csv (sha256 bb2721ee107aa07f82250fd65cec68b61400c3a3e9223c5d286ec56ab2f77331); 0 not IN
+[HARNESS] check_inputs: 1093 columns checked against inputs_v1_pair.csv (sha256 bb2721ee107aa07f82250fd65cec68b61400c3a3e9223c5d286ec56ab2f77331); 0 not IN
+[HARNESS] check_inputs: 1093 columns checked against inputs_v1_pair.csv (sha256 bb2721ee107aa07f82250fd65cec68b61400c3a3e9223c5d286ec56ab2f77331); 0 not IN
+[B5-EQUIV] fold7: PROOF 3 -- load_fold_features == 3 separate load_features calls, bitwise (ALL columns including ticker, since both sides go through the SAME new ticker code -- not OLD vs NEW here): PASS -- bad cols: train=[] val=[] test=[]
+[B5-EQUIV] fold7 PROOF 3 memory: rss_before=2.07GB VmHWM_this_block=48.53GB
+[HARNESS] check_inputs: 1093 columns checked against inputs_v1_pair.csv (sha256 bb2721ee107aa07f82250fd65cec68b61400c3a3e9223c5d286ec56ab2f77331); 0 not IN
+[HARNESS] check_inputs: 1093 columns checked against inputs_v1_pair.csv (sha256 bb2721ee107aa07f82250fd65cec68b61400c3a3e9223c5d286ec56ab2f77331); 0 not IN
+[B5-EQUIV] fold0: n=2,246,804 n_cols=1093 old_load_s=127.6 new_load_s=36.4 (CACHE-BIASED, not a before/after timing -- NEW ran right after OLD warmed the page cache for these exact columns; Step 3 does the real timing with matched cache states)
+[B5-EQUIV] fold0: column order identical: PASS
+[B5-EQUIV] fold0: PROOF 1 -- every non-ticker column identical OLD vs NEW (1091 columns): PASS
+[B5-EQUIV] fold0: PROOF 2c -- null ticker_a/ticker_b count is 0: PASS -- null_a=0 null_b=0
+[B5-EQUIV] fold0: PROOF 2a -- NEW ticker_a matches independent sorted(coins.csv) ground truth: PASS
+[B5-EQUIV] fold0: PROOF 2a -- NEW ticker_b matches independent sorted(coins.csv) ground truth: PASS
+[B5-EQUIV] fold0: PROOF 2a -- NEW ticker_a matches a_coin_code (g4.parquet): PASS
+[B5-EQUIV] fold0: PROOF 2a -- NEW ticker_b matches b_coin_code (g4.parquet): PASS
+[B5-EQUIV] fold0: PROOF 2b -- OLD and NEW ticker_a induce the SAME row partition (same rows grouped as the same ticker, even though code VALUES differ): PASS
+[B5-EQUIV] fold0: PROOF 2b -- OLD and NEW ticker_b induce the SAME row partition: PASS
+[B5-EQUIV] fold0 PROOF 1+2 memory: rss_before=1.88GB VmHWM_this_block=22.25GB
+[HARNESS] check_inputs: 1093 columns checked against inputs_v1_pair.csv (sha256 bb2721ee107aa07f82250fd65cec68b61400c3a3e9223c5d286ec56ab2f77331); 0 not IN
+[HARNESS] check_inputs: 1093 columns checked against inputs_v1_pair.csv (sha256 bb2721ee107aa07f82250fd65cec68b61400c3a3e9223c5d286ec56ab2f77331); 0 not IN
+[HARNESS] check_inputs: 1093 columns checked against inputs_v1_pair.csv (sha256 bb2721ee107aa07f82250fd65cec68b61400c3a3e9223c5d286ec56ab2f77331); 0 not IN
+[HARNESS] check_inputs: 1093 columns checked against inputs_v1_pair.csv (sha256 bb2721ee107aa07f82250fd65cec68b61400c3a3e9223c5d286ec56ab2f77331); 0 not IN
+[B5-EQUIV] fold0: PROOF 3 -- load_fold_features == 3 separate load_features calls, bitwise (ALL columns including ticker, since both sides go through the SAME new ticker code -- not OLD vs NEW here): PASS -- bad cols: train=[] val=[] test=[]
+[B5-EQUIV] fold0 PROOF 3 memory: rss_before=2.23GB VmHWM_this_block=22.26GB
+[HARNESS] check_inputs: 1093 columns checked against inputs_v1_pair.csv (sha256 bb2721ee107aa07f82250fd65cec68b61400c3a3e9223c5d286ec56ab2f77331); 0 not IN
+[HARNESS] check_inputs: 1093 columns checked against inputs_v1_pair.csv (sha256 bb2721ee107aa07f82250fd65cec68b61400c3a3e9223c5d286ec56ab2f77331); 0 not IN
+[HARNESS] check_inputs: 1093 columns checked against inputs_v1_pair.csv (sha256 bb2721ee107aa07f82250fd65cec68b61400c3a3e9223c5d286ec56ab2f77331); 0 not IN
+[B5-EQUIV] PROOF 4a -- MF.verify called 0 times on 2 more load_features calls after warm-up: PASS -- actual calls: 0
+[HARNESS] check_inputs: 1093 columns checked against inputs_v1_pair.csv (sha256 bb2721ee107aa07f82250fd65cec68b61400c3a3e9223c5d286ec56ab2f77331); 0 not IN
+[B5-EQUIV] PROOF 4b (failing variant) -- after clearing the cache, MF.verify IS called again, 15 times (not a dead counter): PASS -- actual calls: 15, expected 15
+[HARNESS] check_inputs: 1093 columns checked against inputs_v1_pair.csv (sha256 bb2721ee107aa07f82250fd65cec68b61400c3a3e9223c5d286ec56ab2f77331); 0 not IN
+[B5-EQUIV] PROOF 4c (failing variant) -- a corrupted cached manifest sha makes the next load_features call RAISE (stale verify caught, not trusted): PASS
+[B5-EQUIV] BROKEN VARIANT setup -- tampered coin 'ACE' is present in the tested ids: PASS -- affects 25541 rows
+[HARNESS] check_inputs: 1093 columns checked against inputs_v1_pair.csv (sha256 bb2721ee107aa07f82250fd65cec68b61400c3a3e9223c5d286ec56ab2f77331); 0 not IN
+[B5-EQUIV] BROKEN VARIANT -- tampered coin-code map makes PROOF 2a's ground-truth check FAIL as expected: PASS -- tampered coin: ACE, 25541 rows affected
+[B5-EQUIV] all done [1553s]: 26/26 checks PASS
+exit_code=0

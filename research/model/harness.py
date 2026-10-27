@@ -27,6 +27,8 @@ import master_manifest as MF  # noqa: E402
 
 UNIT = "pair"
 VERSION = "v1"
+COINS_CSV = os.path.join(ROOT, "research", "hyperliquid", "coins.csv")
+_COIN_CODE = None  # lazy, built once per process (B5 Step 2)
 VAULT_START = pd.Timestamp("2026-07-13T00:00:00Z")   # A4: vault = t0 >= this
 GAP_DAY = pd.Timestamp("2026-07-12T00:00:00Z")        # A4: events with t0 on this UTC day are used nowhere
 SEARCH_END = GAP_DAY                                   # A4: search period = t0 before 2026-07-12 00:00 UTC
@@ -113,6 +115,47 @@ def check_inputs(columns):
 
 
 _ROW_ORDER_CHECKED = set()  # files already confirmed to have event_id == row position 0..N-1
+_VERIFIED_FILES = {}  # (ver, file) -> the manifest sha256 recorded at first verify (checker's fix, B5 Step
+                       # 2 round 1: the brief says "cache the result keyed by the manifest sha256, assert
+                       # it on later calls" -- keying on VERSION alone and asserting nothing was NOT that;
+                       # this re-checks the manifest sha on every call, so a manifest that changed mid-
+                       # process is still caught, not blindly trusted)
+
+
+def _manifest_sha():
+    return MF.sha(os.path.join(MF.VERS, VERSION, "MANIFEST.json"))
+
+
+def _verify_once(file):
+    """MF.verify(VERSION, [f"{UNIT}/{file}"]) the first time this process sees this file; every later call
+    re-hashes MANIFEST.json (tiny, cheap -- not one of the 21 GB group files) and ASSERTS it still matches
+    what was cached at first verify, rather than trusting the cache blindly. load_features called the real
+    MF.verify on every single call before B5 (B5 Step 1 measured this: 111s cold / 16s warm PER CALL,
+    re-paid even for a file just verified moments before)."""
+    key = (VERSION, file)
+    current = _manifest_sha()
+    if key in _VERIFIED_FILES:
+        cached = _VERIFIED_FILES[key]
+        assert cached == current, (
+            f"{file}: cached verification was keyed to manifest sha {cached[:12]}..., but the manifest is "
+            f"now {current[:12]}... -- refusing to trust a stale verify")
+        return
+    MF.verify(VERSION, [f"{UNIT}/{file}"])
+    _VERIFIED_FILES[key] = current
+
+
+def _coin_code_map():
+    """B5 Step 2 ticker-encoding fix: fixed sorted(coins.csv) index per ticker, built once per process --
+    NOT per-call factorize (which gave the same coin different codes in train, val and test; a correctness
+    bug, planner ruling 2026-10-27). Same convention master_g4.py already uses for a_coin_code/b_coin_code
+    (verified against it directly before this fix was written: 6,697,756/6,697,756 pair-unit rows, both
+    legs, zero mismatches, zero tickers missing from coins.csv)."""
+    global _COIN_CODE
+    if _COIN_CODE is None:
+        import pandas as pd_
+        coins_all = sorted(pd_.read_csv(COINS_CSV).coin.tolist())
+        _COIN_CODE = {c: i for i, c in enumerate(coins_all)}
+    return _COIN_CODE
 
 
 def _assert_positional_row_order(file):
@@ -134,10 +177,14 @@ def load_features(event_ids, columns):
     position in every v1 pair file (asserted in _assert_positional_row_order, once per file), so each
     column is read once, cast to float32, and written directly into its slice of the matrix by positional
     (not joined) indexing -- memory stays O(n_events x n_columns), never O(6,697,756 x n_columns) for a
-    merged intermediate frame. The two string IN columns (ticker_a, ticker_b) are factorised to integer
-    category codes here (not left as strings), since this loader's only consumer is numeric model fitting;
-    no other preprocessing (imputation, scaling) is done -- that is model-fitting code's job, done on the
-    fold's TRAIN rows only, per A4.
+    merged intermediate frame. The two string IN columns (ticker_a, ticker_b) are mapped to a FIXED integer
+    code from sorted(coins.csv) here (B5 Step 2, planner ruling 2026-10-27 -- replaces the earlier per-call
+    pd.factorize, which gave the same coin different codes across train/val/test, a correctness bug), since
+    this loader's only consumer is numeric model fitting; no other preprocessing (imputation, scaling) is
+    done -- that is model-fitting code's job, done on the fold's TRAIN rows only, per A4. Per-file reads run
+    in a thread pool (B5 Step 2: files write disjoint column slices of X, so this is safe, real parallelism
+    -- pyarrow releases the GIL during read/decompress). MF.verify is cached per (VERSION, file) for the
+    life of the process (B5 Step 2: was re-paid on every call before, even for a file just verified).
 
     Round 1's version resolved a column's file from ALL csv rows (IN and OUT), so a column dropped as a
     duplicate in one file but kept IN in another (beta, beta_stab: IN in events.parquet, OUT/duplicate_
@@ -173,19 +220,51 @@ def load_features(event_ids, columns):
     by_file = {}
     for j, c in enumerate(columns):
         by_file.setdefault(file_for_col[c], []).append((j, c))
-    for f, items in by_file.items():
+
+    def _load_one_file(f, items):
+        # B5 Step 2: verify once per process (was once per CALL -- B5 Step 1 measured 111s cold / 16s warm
+        # PAID AGAIN on every call even for a file just verified moments before). Each file writes only
+        # its OWN columns' slices of X (disjoint j's across files), so running files in parallel threads
+        # is safe: no two threads ever write the same memory, and pyarrow's read/decompress releases the
+        # GIL, so this is real parallelism, not just concurrency.
         _assert_positional_row_order(f)
-        MF.verify(VERSION, [f"{UNIT}/{f}"])
+        _verify_once(f)
         for j, c in items:
             arr = pq.read_table(os.path.join(MF.WORK, UNIT, f), columns=[c]).column(0)
             sliced = arr.take(pa.array(event_ids))   # select rows BY POSITION first, never materialise the full column as a copy
             if pa.types.is_string(arr.type) or pa.types.is_large_string(arr.type):
-                import pandas as pd_
-                codes, _ = pd_.factorize(sliced.to_pandas().to_numpy())
-                X[:, j] = codes.astype(np.float32)
+                # B5 Step 2 ticker-encoding fix (planner ruling 2026-10-27): per-call factorize gave the
+                # same coin different codes in train/val/test. Fixed codes from sorted(coins.csv) instead
+                # -- the SAME convention master_g4.py already uses for a_coin_code/b_coin_code (verified
+                # equal to it on all 6,697,756 rows, both legs, before this fix was written).
+                code_map = _coin_code_map()
+                codes = sliced.to_pandas().map(code_map)
+                bad = codes.isna()
+                assert not bad.any(), f"{c}: {int(bad.sum())} ticker value(s) not in coins.csv (first: {sliced.to_pandas()[bad].iloc[0]!r})"
+                X[:, j] = codes.to_numpy(dtype=np.float32)
             else:
                 X[:, j] = pc.cast(sliced, pa.float32()).to_numpy(zero_copy_only=False)
+
+    import concurrent.futures
+    with concurrent.futures.ThreadPoolExecutor(max_workers=min(len(by_file), os.cpu_count() or 1)) as pool:
+        futures = [pool.submit(_load_one_file, f, items) for f, items in by_file.items()]
+        for fut in futures:
+            fut.result()  # re-raise any worker exception on the main thread; never swallow a bad load
     return X, columns
+
+
+def load_fold_features(fold, columns):
+    """B5 Step 2: 'load each fold once' -- reads the union of train/val/test rows in ONE load_features
+    call (so every file is verified and read ONCE for the whole fold, not three times), then splits the
+    result by POSITION (cheap numpy slicing, no copy, no second read) -- the exact pattern B4's own timing
+    script already used (b4_rsf_feasibility.py) for the same reason. Returns (X_train, X_val, X_test,
+    columns). Equivalent to calling load_features separately on fold['train_ids'], ['val_ids'], ['test_ids']
+    -- proven in b5_equivalence_step2.py, not assumed here."""
+    train_ids, val_ids, test_ids = fold["train_ids"], fold["val_ids"], fold["test_ids"]
+    all_ids = np.concatenate([train_ids, val_ids, test_ids])
+    X_all, cols = load_features(all_ids, columns)
+    n_train, n_val = len(train_ids), len(val_ids)
+    return X_all[:n_train], X_all[n_train:n_train + n_val], X_all[n_train + n_val:], cols
 
 
 def build_folds(events):
