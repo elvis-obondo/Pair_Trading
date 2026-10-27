@@ -1,0 +1,7 @@
+[B4-VM-SWAP] host pt-research.us-central1-a.project-0671be06-e22a-44d8-83c; UTC 2026-10-27T19:42:29Z
+[B4-VM-SWAP] swapon --show:
+[B4-VM-SWAP] (empty above means no swap devices active)
+[B4-VM-SWAP] free -h:
+               total        used        free      shared  buff/cache   available
+Mem:            62Gi       523Mi        60Gi       0.0Ki       2.2Gi        61Gi
+Swap:             0B          0B          0B

@@ -1,0 +1,12 @@
+[B4-FOLD-COUNTS] sha256 harness.py: c06484599c879d050f30af898aaf078f754266208f29f3a82c2580f51c75548a
+[B4-FOLD-COUNTS] sha256 inputs_v1_pair.csv: bb2721ee107aa07f82250fd65cec68b61400c3a3e9223c5d286ec56ab2f77331
+[B4-FOLD-COUNTS] start 2026-10-27T19:41:52Z UTC; pid 9118; build_folds only, no fitting
+[HARNESS] load_search_events: 6,697,756 merged rows -> 5,405,478 after the date/gap-day filter -> 5,378,429 after dropping 27,049 label_gap=1 rows
+fold 0: train=1,401,515 val=416,440 test=428,849
+fold 1: train=1,742,072 val=511,899 test=463,203
+fold 2: train=2,100,263 val=619,044 test=481,419
+fold 3: train=2,451,459 val=735,241 test=476,768
+fold 4: train=2,816,283 val=844,257 test=477,137
+fold 5: train=3,205,004 val=937,391 test=465,201
+fold 6: train=3,595,542 val=1,028,723 test=421,678
+fold 7: train=3,979,894 val=1,057,348 test=311,654

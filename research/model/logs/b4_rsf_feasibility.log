@@ -1,0 +1,13 @@
+[B4-RSF] sha256 b4_rsf_feasibility.py: dddd7189f5ec2839850a39df768a1c41caad3b051bf514dcda409090b75cef45
+[B4-RSF] sha256 harness.py: c06484599c879d050f30af898aaf078f754266208f29f3a82c2580f51c75548a
+[B4-RSF] sha256 inputs_v1_pair.csv: bb2721ee107aa07f82250fd65cec68b61400c3a3e9223c5d286ec56ab2f77331
+[B4-RSF] git_head unavailable (unavailable uncommitted paths); start 2026-10-27T14:37:45Z UTC; pid 10875
+[B4-RSF] N_TREES_TEST=8 (= this machine's core count, one tree per core so fit_s approximates one tree's wall time), depth settings=[{'max_depth': 8, 'min_samples_leaf': 1}, {'max_depth': None, 'min_samples_leaf': 1000}], nproc=8, launched under shell `timeout` (see run_b4_rsf.sh), in-script alarm 1200s for the loading/matrix-build steps only
+[B4-RSF] NOTE: NaN->0 and factorised ticker columns (done inside harness.load_features) are for TIMING REALISM ONLY. The real preprocessing -- imputation fitted on the fold's TRAIN rows, per A4 -- is UNTIMED here and is not claimed to match this.
+[HARNESS] load_search_events: 6,697,756 merged rows -> 5,405,478 after the date/gap-day filter -> 5,378,429 after dropping 27,049 label_gap=1 rows
+[B4-RSF] fold 7: train=3,979,894 val=1,057,348 test=311,654 events (FULL, no subsampling)  [32s]
+[B4-RSF] loading 1093 IN columns for train+val+test (5,348,896 events)  [32s]
+[HARNESS] check_inputs: 1093 columns checked against inputs_v1_pair.csv (sha256 bb2721ee107aa07f82250fd65cec68b61400c3a3e9223c5d286ec56ab2f77331); 0 not IN
+[B4-RSF] loaded train (3979894, 1093), val (1057348, 1093), test (311654, 1093) in 219s (float32, 17.4+4.6+1.4 GB); peak RSS so far 52.9 GB  [251s]
+[B4-RSF] fitting RandomSurvivalForest(n_estimators=8, max_depth=8,min_samples_leaf=1, n_jobs=-1) on 3,979,894 x 1093 ...  [256s]
+exit_code=124

@@ -1,0 +1,43 @@
+[PROOFS] sha256 research/model/proofs_v1_pair.py: c4e2ec942f443619412b5d442430e84c5f427d6ebf3ec18e265ec4f98b0ba63b
+[PROOFS] sha256 research/model/harness.py: c06484599c879d050f30af898aaf078f754266208f29f3a82c2580f51c75548a
+[PROOFS] sha256 research/model/inputs_v1_pair.csv: bb2721ee107aa07f82250fd65cec68b61400c3a3e9223c5d286ec56ab2f77331
+[PROOFS] sha256 research/dataset/master_manifest.py: 9ec12057ab23a797cb2a9dde1eae204c9c2e5775b02399cccb6d146f9afea3fe
+[PROOFS] git_head 2c7372dc3fee71a9104909c2e6ff48db142d01e7 (32 uncommitted paths); start 2026-10-27T19:34:47Z UTC; pid 5828
+[PROOFS] seeds used: proof1=1 (and +1 for score_fold's tie-break); proof3=3 (and +100 for the bootstrap, +k per fold's score_fold tie-break); proof4=4 (sample selection); proof5=none (no randomness); proof6=6 (score_fold tie-break, irrelevant when scores are distinct)
+[HARNESS] load_search_events: 6,697,756 merged rows -> 5,405,478 after the date/gap-day filter -> 5,378,429 after dropping 27,049 label_gap=1 rows
+[PROOFS] loaded 5,378,429 search events  [6s]
+[PROOF 1] leak check by planted future column
+[HARNESS] check_inputs: 1094 columns checked against inputs_v1_pair.csv (sha256 bb2721ee107aa07f82250fd65cec68b61400c3a3e9223c5d286ec56ab2f77331); 1 not IN
+   (a) check_inputs correctly raised with the planted column included: columns not in the frozen IN list (inputs_v1_pair.csv): ['__planted_leak_column__']
+   (b) broken variant: skip check_inputs, score the planted column through the real fold-0 path
+   broken-variant lift on fold 0's test block: 0.5919 (must be >= 0.5)
+[PROOF 1] PASS
+[PROOF 3] planted real signal of known size (target lift 0.08), run through the real 8-fold path
+   pooled top fraction across all 8 folds' test blocks: 0.1000 (352,594 of 3,525,909)
+   solved delta = 0.0889; realised expected lift over TEST rows only (target 0.08): 0.0799
+   null (delta=0) realised expected lift: 0.000000000 (must be exactly 0 -- p = chance exactly, no clipping possible)
+   [planted] measured pooled lift 0.0795, 98.75% interval [0.0776, 0.0816], positive folds 8/8
+   target 0.08 inside interval: True
+   [null] measured pooled lift -0.0006, 98.75% interval [-0.0025, 0.0015], positive folds 3/8
+   null interval contains 0: True
+[PROOF 3] PASS
+[PROOF 4] hazard round trip
+   reach_10h vs reconstructed-from-true-labels mismatches: 0 of 5,378,429
+   step-boundary hand-check on 2,000 events (independent formula 1+(mtm-1)//30): 0 bad boundaries, 0 non-integer/out-of-range minutes_to_mu
+   broken-variant check on 14 exact-multiple-of-30 events: 14 bad boundaries (must be > 0, proving the hand-check can fail)
+[PROOF 4] PASS
+[PROOF 5] vault and boundary asserts
+   build_folds: correctly raised (build_folds: 1 row(s) with t0 >= SEARCH_END (gap day or vault), max t0 = 2026-07-13 00:00:00+00:00)
+   build_hazard_rows: correctly raised (build_hazard_rows: 1 row(s) with t0 >= SEARCH_END (gap day or vault), max t0 = 2026-07-13 00:00:00+00:00)
+   score_fold: correctly raised (score_fold: 1 row(s) with t0 >= SEARCH_END (gap day or vault), max t0 = 2026-07-13 00:00:00+00:00)
+   with assert_search_only monkeypatched off: ['build_folds', 'build_hazard_rows', 'score_fold'] raised = {'build_folds': False, 'build_hazard_rows': False, 'score_fold': False} (all should be False, proving assert_search_only was the thing catching it)
+[PROOF 5] PASS
+[PROOF 6] independent recompute (fold 0, from scratch, no harness.py calls)
+   rows tied at the top-10% cut value (0.564784): 1
+   train/val/test id sets equal: True
+   embargo drops before test: independent 19,622 vs harness 19,622, equal: True
+   embargo drops before val: independent 14,943 vs harness 14,943, equal: True
+   lift: independent 0.044413 vs harness 0.044413, equal (1e-9): True
+[PROOF 6] PASS
+[PROOFS] summary: {'proof1_leak_check': True, 'proof3_planted_signal': True, 'proof4_hazard_round_trip': True, 'proof5_vault_boundary_assert': True, 'proof6_independent_recompute': True}
+[PROOFS] ALL PASS: True  [109s]
