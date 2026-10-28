@@ -1,0 +1,124 @@
+[S1-NEWTON-PROOF] sha256 s1_newton_proof.py: e9c20ff9a8516c4a100dc394b2f12549e44b09cdb1b2062c2a72b6da43180c1a
+[S1-NEWTON-PROOF] sha256 s1_newton.py: ab55106a166a8b745a7c3426e6834b6bf8b6688eee0a5d9de2c6195086251a98
+[S1-NEWTON-PROOF] sha256 s1_model.py: a788db640277e9f850193a907116dcbc63dd45d8cbd4cc3cf77979e10c744c8a
+[S1-NEWTON-PROOF] sha256 s1_preprocess.py: 9e867b5c7bbe8d0a28413a5d69b0a19a1d7880c83c17435354a7d88cb4e9343b
+[S1-NEWTON-PROOF] sha256 hazard_logistic.py: bd9fe582d5af74cb19f7d25210deef66cfb1bcc0c3a1b221a2934f95eb843a78
+[S1-NEWTON-PROOF] sha256 harness.py: 423328afc950252fe37d5fbc7fb4c25d97475b36abe3860542357e5481ce56c7
+[S1-NEWTON-PROOF] git_head 5f8e7e25889063087ccac0d476fb13aaf569a6c6 (93 uncommitted paths); start 2026-10-28T14:41:08Z UTC; pid 13147
+[HARNESS] load_search_events: 6,697,756 merged rows -> 5,405,478 after the date/gap-day filter -> 5,378,429 after dropping 27,049 label_gap=1 rows
+[S1-NEWTON-PROOF] smoke subset: 20000 events (seed 20261028), 328,460 hazard rows  [34s]
+[S1-NEWTON-PROOF] label=1 rows per step: [216, 442, 502, 452, 430, 475, 426, 388, 330, 332, 347, 319, 328, 298, 254, 256, 244, 234, 217, 201]
+[HARNESS] check_inputs: 5 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[S1-PREPROCESS] degenerate-on-raw-fit-rows columns dropped: 0 of 5
+[S1-PREPROCESS] SD-0-after-clip columns dropped: 0 of 5
+[HARNESS] check_inputs: 2 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 5 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 2 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[S1-NEWTON-PROOF] preprocessed: n_features=371  [90s]
+[S1-NEWTON-PROOF] lambda_max=3755.95 grid=[1877.9745  772.8986  318.0939  130.9147   53.8792   22.1745    9.1261
+    3.7559]
+ outer=1 cd_sweeps=8/200
+ outer=2 cd_sweeps=8/200
+ outer=3 cd_sweeps=8/200
+ outer=4 cd_sweeps=8/200
+ outer=5 cd_sweeps=8/200
+ outer=6 cd_sweeps=7/200
+ outer=7 cd_sweeps=5/200
+[S1-NEWTON-PROOF] MIDDLE penalty idx=4 (lam=53.8792, break_cross=False, break_grad=False): newton: n_outer=7 converged=True time=2.22s | tight L-BFGS-B: converged=True time=4.39s
+[S1-NEWTON-PROOF] MIDDLE penalty idx=4: exact-obj(newton)=32234.181831 exact-obj(tight)=32234.181831 rel|diff|=3.160e-15
+[S1-NEWTON-PROOF] MIDDLE penalty idx=4: KKT (exact gradient) newton=1.213e-11 tight=3.448e-10 bound=max(10xtight,1e-4)=1.000e-04
+[S1-NEWTON-PROOF] MIDDLE penalty idx=4: predictions max|p_10h diff|=4.459e-07 top-10% overlap=1.0000
+[S1-NEWTON-PROOF] MIDDLE penalty idx=4: max|w diff|=8.221e-07 (REPORTED ONLY, not gated)
+[S1-NEWTON-PROOF] MIDDLE penalty idx=4 (break_cross=False, break_grad=False) -- objective rel|diff|<1e-06 [True], KKT bound [True], predictions [True]: PASS
+ outer=1 cd_sweeps=52/200
+ outer=2 cd_sweeps=52/200
+ outer=3 cd_sweeps=47/200
+ outer=4 cd_sweeps=45/200
+ outer=5 cd_sweeps=40/200
+ outer=6 cd_sweeps=31/200
+ outer=7 cd_sweeps=21/200
+[S1-NEWTON-PROOF] LOWEST penalty idx=7 (lam=3.75595, break_cross=False, break_grad=False): newton: n_outer=7 converged=True time=2.59s | tight L-BFGS-B: converged=True time=16.30s
+[S1-NEWTON-PROOF] LOWEST penalty idx=7: exact-obj(newton)=32026.365808 exact-obj(tight)=32026.365808 rel|diff|=1.113e-14
+[S1-NEWTON-PROOF] LOWEST penalty idx=7: KKT (exact gradient) newton=1.688e-11 tight=2.383e-10 bound=max(10xtight,1e-4)=1.000e-04
+[S1-NEWTON-PROOF] LOWEST penalty idx=7: predictions max|p_10h diff|=2.491e-06 top-10% overlap=1.0000
+[S1-NEWTON-PROOF] LOWEST penalty idx=7: max|w diff|=8.409e-06 (REPORTED ONLY, not gated)
+[S1-NEWTON-PROOF] LOWEST penalty idx=7 (break_cross=False, break_grad=False) -- objective rel|diff|<1e-06 [True], KKT bound [True], predictions [True]: PASS
+ outer=1 cd_sweeps=188/200
+ outer=2 cd_sweeps=23/200
+ outer=3 cd_sweeps=30/200
+ outer=4 cd_sweeps=20/200
+ outer=5 cd_sweeps=21/200
+ outer=6 cd_sweeps=13/200
+ outer=7 cd_sweeps=12/200
+ outer=8 cd_sweeps=9/200
+ outer=9 cd_sweeps=7/200
+ outer=10 cd_sweeps=8/200
+ outer=11 cd_sweeps=8/200
+ outer=12 cd_sweeps=8/200
+ outer=13 cd_sweeps=7/200
+ outer=14 cd_sweeps=7/200
+[S1-NEWTON-PROOF] MIDDLE penalty idx=4 (break_cross, informational) (lam=53.8792, break_cross=True, break_grad=False): newton: n_outer=14 converged=True time=4.36s | tight L-BFGS-B: converged=True time=3.97s
+[S1-NEWTON-PROOF] MIDDLE penalty idx=4 (break_cross, informational): exact-obj(newton)=32234.181877 exact-obj(tight)=32234.181831 rel|diff|=1.421e-09
+[S1-NEWTON-PROOF] MIDDLE penalty idx=4 (break_cross, informational): KKT (exact gradient) newton=6.562e-07 tight=3.448e-10 bound=max(10xtight,1e-4)=1.000e-04
+[S1-NEWTON-PROOF] MIDDLE penalty idx=4 (break_cross, informational): predictions max|p_10h diff|=8.288e-05 top-10% overlap=0.9995
+[S1-NEWTON-PROOF] MIDDLE penalty idx=4 (break_cross, informational): max|w diff|=1.892e-04 (REPORTED ONLY, not gated)
+[S1-NEWTON-PROOF] (not gated, reported only) MIDDLE penalty idx=4 (break_cross, informational) (break_cross=True, break_grad=False) -- objective rel|diff|<1e-06 [True], KKT bound [True], predictions [True]: would PASS
+ outer=1 cd_sweeps=200/200 CD-CAPPED
+ outer=2 cd_sweeps=200/200 CD-CAPPED
+ outer=3 cd_sweeps=200/200 CD-CAPPED
+ outer=4 cd_sweeps=200/200 CD-CAPPED
+ outer=5 cd_sweeps=200/200 CD-CAPPED
+ outer=6 cd_sweeps=200/200 CD-CAPPED
+ outer=7 cd_sweeps=200/200 CD-CAPPED
+ outer=8 cd_sweeps=200/200 CD-CAPPED
+ outer=9 cd_sweeps=200/200 CD-CAPPED
+ outer=10 cd_sweeps=200/200 CD-CAPPED
+ outer=11 cd_sweeps=200/200 CD-CAPPED
+ outer=12 cd_sweeps=200/200 CD-CAPPED
+ outer=13 cd_sweeps=200/200 CD-CAPPED
+ outer=14 cd_sweeps=200/200 CD-CAPPED
+ outer=15 cd_sweeps=200/200 CD-CAPPED
+ outer=16 cd_sweeps=200/200 CD-CAPPED
+ outer=17 cd_sweeps=200/200 CD-CAPPED
+ outer=18 cd_sweeps=200/200 CD-CAPPED
+ outer=19 cd_sweeps=200/200 CD-CAPPED
+ outer=20 cd_sweeps=200/200 CD-CAPPED
+ outer=21 cd_sweeps=200/200 CD-CAPPED
+ outer=22 cd_sweeps=200/200 CD-CAPPED
+ outer=23 cd_sweeps=200/200 CD-CAPPED
+ outer=24 cd_sweeps=200/200 CD-CAPPED
+ outer=25 cd_sweeps=200/200 CD-CAPPED
+ outer=26 cd_sweeps=200/200 CD-CAPPED
+ outer=27 cd_sweeps=200/200 CD-CAPPED
+ outer=28 cd_sweeps=200/200 CD-CAPPED
+ outer=29 cd_sweeps=200/200 CD-CAPPED
+ outer=30 cd_sweeps=200/200 CD-CAPPED
+ outer=31 cd_sweeps=200/200 CD-CAPPED
+ outer=32 cd_sweeps=200/200 CD-CAPPED
+ outer=33 cd_sweeps=200/200 CD-CAPPED
+ outer=34 cd_sweeps=200/200 CD-CAPPED
+ outer=35 cd_sweeps=200/200 CD-CAPPED
+ outer=36 cd_sweeps=200/200 CD-CAPPED
+ outer=37 cd_sweeps=200/200 CD-CAPPED
+ outer=38 cd_sweeps=200/200 CD-CAPPED
+ outer=39 cd_sweeps=200/200 CD-CAPPED
+ outer=40 cd_sweeps=200/200 CD-CAPPED
+ outer=41 cd_sweeps=200/200 CD-CAPPED
+ outer=42 cd_sweeps=200/200 CD-CAPPED
+ outer=43 cd_sweeps=200/200 CD-CAPPED
+ outer=44 cd_sweeps=200/200 CD-CAPPED
+ outer=45 cd_sweeps=200/200 CD-CAPPED
+ outer=46 cd_sweeps=200/200 CD-CAPPED
+ outer=47 cd_sweeps=200/200 CD-CAPPED
+ outer=48 cd_sweeps=200/200 CD-CAPPED
+ outer=49 cd_sweeps=200/200 CD-CAPPED
+ outer=50 cd_sweeps=200/200 CD-CAPPED
+[S1-NEWTON-PROOF] MIDDLE penalty idx=4 (BROKEN VARIANT, break_grad) (lam=53.8792, break_cross=False, break_grad=True): newton: n_outer=50 converged=False time=72.70s | tight L-BFGS-B: converged=True time=4.16s
+[S1-NEWTON-PROOF] MIDDLE penalty idx=4 (BROKEN VARIANT, break_grad): exact-obj(newton)=227686.442441 exact-obj(tight)=32234.181831 rel|diff|=6.064e+00
+[S1-NEWTON-PROOF] MIDDLE penalty idx=4 (BROKEN VARIANT, break_grad): KKT (exact gradient) newton=3.515e-02 tight=3.448e-10 bound=max(10xtight,1e-4)=1.000e-04
+[S1-NEWTON-PROOF] MIDDLE penalty idx=4 (BROKEN VARIANT, break_grad): predictions max|p_10h diff|=9.317e-01 top-10% overlap=0.0985
+[S1-NEWTON-PROOF] MIDDLE penalty idx=4 (BROKEN VARIANT, break_grad): max|w diff|=3.056e-01 (REPORTED ONLY, not gated)
+[S1-NEWTON-PROOF] (not gated, reported only) MIDDLE penalty idx=4 (BROKEN VARIANT, break_grad) (break_cross=False, break_grad=True) -- objective rel|diff|<1e-06 [False], KKT bound [False], predictions [False]: would FAIL
+[S1-NEWTON-PROOF] BROKEN VARIANT -- Newton with break_grad=True correctly FAILS the check: PASS
+[S1-NEWTON-PROOF] all done [202s]: 3/3 checks PASS
+exit_code=0
