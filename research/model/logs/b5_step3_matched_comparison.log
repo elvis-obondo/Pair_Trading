@@ -1,0 +1,20 @@
+[B5-STEP3] sha256 b5_step3_matched_comparison.py: 3e0b8e50774c4602378ea5a8c679a3f601b6c292c7da8fc206302902275f6416
+[B5-STEP3] sha256 harness.py (NEW): 423328afc950252fe37d5fbc7fb4c25d97475b36abe3860542357e5481ce56c7
+[B5-STEP3] sha256 _frozen_harness_step3.py (OLD): c06484599c879d050f30af898aaf078f754266208f29f3a82c2580f51c75548a (must equal c06484599c879d050f30af898aaf078f754266208f29f3a82c2580f51c75548a)
+[B5-STEP3] git_head 41279708b4b9ab7310c7e30c30b0c80fab81513e (75 uncommitted paths); start 2026-10-28T04:32:21Z UTC; pid 8636
+[B5-STEP3] 1091 IN columns
+[HARNESS] load_search_events: 6,697,756 merged rows -> 5,405,478 after the date/gap-day filter -> 5,378,429 after dropping 27,049 label_gap=1 rows
+[B5-STEP3] fold 7: n=5,348,896  [30s]
+[B5-STEP3] warm-up call (result discarded, warms the page cache for both OLD and NEW)
+[HARNESS] check_inputs: 1091 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[B5-STEP3] warm-up done  [152s]
+[HARNESS] check_inputs: 1091 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[B5-STEP3] OLD (fold 7, warm page cache, fresh verify): wall=137.17s manifest_verify=15.80s row_order_assert=2.34s column_read=37.10s cast=0.14s remainder=81.79s rss_before=1.73GB VmHWM_this_block=25.09GB X.nbytes=23.34GB
+[HARNESS] check_inputs: 1091 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[B5-STEP3] NEW (fold 7, warm page cache, fresh verify): wall=63.94s manifest_verify=0.00s row_order_assert=1.13s column_read=4.32s cast=0.01s remainder=58.47s rss_before=2.09GB VmHWM_this_block=25.91GB X.nbytes=23.34GB (column_read/cast SUMMED ACROSS THREADS -- can exceed wall time, checker's finding 2; compare OLD vs NEW on wall= only)
+[HARNESS] check_inputs: 1091 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[B5-STEP3] NEW (fold 7, warm page cache, OWN verify-cache already warm -- within-process repeat, not matched against OLD): wall=88.37s manifest_verify=0.00s row_order_assert=2.12s column_read=5.97s cast=0.03s remainder=80.25s rss_before=1.76GB VmHWM_this_block=25.99GB X.nbytes=23.34GB (column_read/cast SUMMED ACROSS THREADS -- can exceed wall time, checker's finding 2; compare OLD vs NEW on wall= only)
+[B5-STEP3] speedup (matched warm page cache, fresh verify for both): wall 2.15x, manifest_verify 15802497386.93x
+[B5-STEP3] NEW's own within-process verify-cache benefit: wall 0.72x vs its own prior call (not compared to OLD, which has no such cache)
+[B5-STEP3] all done  [443s]
+exit_code=0
