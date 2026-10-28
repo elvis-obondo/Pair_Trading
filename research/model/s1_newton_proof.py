@@ -19,20 +19,58 @@ must make the check FAIL. break_cross=True (zeroing the w/b cross-Hessian block)
 but not gated on -- the checker found it changes the trajectory (14 outer iterations instead of 7) without
 changing the final answer on real data, so it is not a reliable failing variant here even though it is a
 genuine code difference; kept as a reported finding, not the proof's failing case.
+
+fit_hazard_elastic_net_lbfgsb lives HERE, not in s1_model.py (planner's ruling, S1 review round 6,
+after Newton was proven): it is retired from the real run path and kept only as this proof's own tight
+reference optimiser, so the real-run code has a single solver path (Newton).
 """
 import os
 import sys
 import time
 
 import numpy as np
+import scipy.optimize as opt
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import harness as H  # noqa: E402
 from hazard_logistic import hazard_nll_grad  # noqa: E402
 from s1_preprocess import fit_preprocessing, apply_preprocessing  # noqa: E402
-from s1_model import lambda_max, build_grid, fit_hazard_elastic_net_lbfgsb, kkt_violation  # noqa: E402
+from s1_model import lambda_max, build_grid, kkt_violation  # noqa: E402
 from s1_newton import fit_hazard_elastic_net_newton, elastic_net_penalty  # noqa: E402
+
+
+def fit_hazard_elastic_net_lbfgsb(X, row_event_pos, row_step, row_label, n_events, lam, l1_ratio,
+                                   w0=None, b0=None, n_steps=20, max_iter=2000, tol=1e-7):
+    """Split-weight (w = u - v, u,v >= 0) L-BFGS-B fit of the SAME penalised objective as the proven
+    Newton solver -- this proof's TIGHT reference optimiser only, retired from the real run path. L1 term
+    lambda*l1_ratio*|w_j| becomes the LINEAR lambda*l1_ratio*(u_j+v_j) (exact at any optimum, since u_j
+    and v_j are never both positive there); the L2 term stays the smooth quadratic. Reuses hazard_nll_grad
+    (the proven core) unchanged, only the wrapping differs."""
+    n_feat = X.shape[1]
+    w_start = np.zeros(n_feat) if w0 is None else np.asarray(w0, dtype=np.float64)
+    b_start = np.zeros(n_steps) if b0 is None else np.asarray(b0, dtype=np.float64)
+    u0 = np.maximum(w_start, 0.0)
+    v0 = np.maximum(-w_start, 0.0)
+    theta0 = np.concatenate([u0, v0, b_start])
+    bounds = [(0, None)] * (2 * n_feat) + [(None, None)] * n_steps
+
+    def obj_grad(theta):
+        u, v, b = theta[:n_feat], theta[n_feat:2 * n_feat], theta[2 * n_feat:]
+        w = u - v
+        nll, gw, gb = hazard_nll_grad(w, b, X, row_event_pos, row_step, row_label, n_events)
+        obj = nll + lam * l1_ratio * np.sum(u + v) + 0.5 * lam * (1 - l1_ratio) * np.sum(w ** 2)
+        l2_term = lam * (1 - l1_ratio) * w
+        g_u = gw + lam * l1_ratio + l2_term
+        g_v = -gw + lam * l1_ratio - l2_term
+        return obj, np.concatenate([g_u, g_v, gb])
+
+    res = opt.minimize(obj_grad, theta0, jac=True, method="L-BFGS-B", bounds=bounds,
+                        options={"maxiter": max_iter, "maxfun": max_iter * 4, "ftol": tol, "gtol": 1e-10})
+    u, v, b = res.x[:n_feat], res.x[n_feat:2 * n_feat], res.x[2 * n_feat:]
+    w = u - v
+    converged = bool(res.success) and res.nit < max_iter
+    return {"w": w, "b": b, "n_iter": int(res.nit), "converged": converged, "obj_final": float(res.fun)}
 
 SEED = 20261028
 N_SMOKE_EVENTS = 20_000
