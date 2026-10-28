@@ -1,0 +1,10 @@
+[S1-PREPROCESS-PROOF] sha256 s1_preprocess_proof.py: f02b4a51ed8abb8125112bef6d19b9e2766de61ac09d89802543dccad2ce3908
+[S1-PREPROCESS-PROOF] sha256 s1_preprocess.py: 9e867b5c7bbe8d0a28413a5d69b0a19a1d7880c83c17435354a7d88cb4e9343b
+[S1-PREPROCESS-PROOF] sha256 harness.py: 423328afc950252fe37d5fbc7fb4c25d97475b36abe3860542357e5481ce56c7
+[S1-PREPROCESS] degenerate-on-raw-fit-rows columns dropped: 3 of 6 (['all_nan', 'one_value', 'one_value_plus_nan'])
+[HARNESS] fold train-set degenerate columns dropped: 3 of 6 (['all_nan', 'one_value', 'one_value_plus_nan'])
+[S1-PREPROCESS-PROOF] same dropped set: PASS -- numpy=['all_nan', 'one_value', 'one_value_plus_nan'] harness=['all_nan', 'one_value', 'one_value_plus_nan']
+[S1-PREPROCESS-PROOF] same kept set, same order: PASS -- numpy=['two_values', 'varied', 'varied_with_nan'] harness=['two_values', 'varied', 'varied_with_nan']
+[S1-PREPROCESS-PROOF] dropped is exactly {all_nan, one_value, one_value_plus_nan}: PASS
+[S1-PREPROCESS-PROOF] kept is exactly {two_values, varied, varied_with_nan}: PASS
+[S1-PREPROCESS-PROOF] all done: 4/4 checks PASS

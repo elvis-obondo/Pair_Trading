@@ -4371,3 +4371,14 @@ AWS probe (user-approved 2026-10-28, "a test of about an hour on one large AWS m
 | All AWS resources confirmed cleaned up after every attempt: instances terminated (confirmed via describe-instances state), EBS volumes gone with them (DeleteOnTermination=true, never verified as a separate step since the volume has no independent lifecycle once its instance is gone), S3 `tmp/probe/` deleted entirely after attempt 3 and confirmed empty via `aws s3 ls --recursive` (3 objects removed: the payload tarball + both log files) | M | this session's own aws cli output, each step |
 
 Checker (Code Checker) verdict: pending this entry's review.
+
+**Receipts follow-up (checker's finding, S1 review round 6, after the first commit landed):** the commit above's "checker PASS" covered the NUMBERS text only -- the checker required, and this session had not yet produced, a committed proof that the SHIPPED threaded hazard_nll_grad (sha bd9fe582...) is bit-identical to the pre-threading, B5-proven exact kernel. Fixed in a follow-up commit:
+- `b5_hazard_logistic_proof.py` rerun on hazard_logistic.py sha bd9fe582...: 4/4 PASS (research/model/logs/b5_hazard_logistic_proof_rerun3.log).
+- New `research/model/s1_hazard_threaded_proof.py`: OLD = `git show bdddaf1:research/model/hazard_logistic.py` (sha be657a4c..., the B5-CLOSED exact serial kernel, extracted on the laptop -- the VM has no `.git`, same established pattern as b5_equivalence_step2.py) vs NEW (bd9fe582...), on real smoke data, 5 random (w,b): NLL and both gradients match within rtol=1e-10 at every point, plus NEW's own break_intercept=True correctly FAILS the match. 2/2 PASS (research/model/logs/s1_hazard_threaded_proof.log). The frozen OLD snapshot is deleted after the run, never committed (same precedent as every other frozen-OLD comparison this project has used).
+- `research/model/logs/s1_preprocess_proof.log` and `s1_model_proof.log` (both already run earlier in this session, 4/4 PASS each, but never saved/committed as receipts) are now committed.
+
+| number | M/A | where |
+|---|---|---|
+| hazard_logistic.py (sha bd9fe582..., the threaded kernel every S1 fit will actually call) is bit-identical to the B5-proven exact kernel: 4/4 PASS against the naive expanded-row baseline, and 2/2 PASS (incl. a working broken variant) against the B5-committed exact serial kernel directly, on real smoke data, rtol=1e-10 | M | research/model/logs/b5_hazard_logistic_proof_rerun3.log; research/model/logs/s1_hazard_threaded_proof.log |
+
+Checker (Code Checker) verdict: pending.

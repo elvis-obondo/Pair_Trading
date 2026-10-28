@@ -1,0 +1,29 @@
+[S1-MODEL-PROOF] sha256 s1_model_proof.py: 3cd3ef1eac6b7b8df69431eddc632a38627a3b709d25eb57ddaa7e246592ea18
+[S1-MODEL-PROOF] sha256 s1_model.py: 8a0abf5c5690b522450d14a91a64e3959959434953fa48f2965a27f1e9902424
+[S1-MODEL-PROOF] sha256 s1_preprocess.py: 0b1deb938be385d413551d4ef75b54ef12f9e9ec2a2dab88db165b79906e918c
+[S1-MODEL-PROOF] sha256 hazard_logistic.py: 303b94aacbfe6c23fb4f70c97c52eb718a9eddd9f8a9c15eaebd7bccdeaee4b3
+[S1-MODEL-PROOF] sha256 harness.py: 423328afc950252fe37d5fbc7fb4c25d97475b36abe3860542357e5481ce56c7
+[S1-MODEL-PROOF] git_head bdddaf15e9da9bed3f8eac623848a436dc1bf76f (80 uncommitted paths); start 2026-10-28T05:54:14Z UTC; pid 12104
+[HARNESS] load_search_events: 6,697,756 merged rows -> 5,405,478 after the date/gap-day filter -> 5,378,429 after dropping 27,049 label_gap=1 rows
+[HARNESS] check_inputs: 7 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[S1-MODEL-PROOF] smoke subset: 20000 events (seed 20261028), columns ['z', 'threshold', 'beta', 'beta_stab', 'r2', 'ticker_a', 'ticker_b'], 328,460 hazard rows  [215s]
+[S1-MODEL-PROOF] label=1 rows per step: [216, 442, 502, 452, 430, 475, 426, 388, 330, 332, 347, 319, 328, 298, 254, 256, 244, 234, 217, 201]
+[S1-PREPROCESS] degenerate-on-raw-fit-rows columns dropped: 0 of 5
+[S1-PREPROCESS] SD-0-after-clip columns dropped: 0 of 5
+[S1-MODEL-PROOF] preprocessed: n_features=371 degenerate_dropped=0 sd0_dropped=0 ticker_a_levels=183 ticker_b_levels=182  [215s]
+[S1-MODEL-PROOF] lambda_max=3755.95 grid=[1877.9745  772.8986  318.0939  130.9147   53.8792   22.1745    9.1261
+    3.7559]
+[S1-MODEL-PROOF] MIDDLE penalty (idx=4, lam=53.8792):
+   FISTA:  n_iter=157/2000 converged=True obj=32234.215121 kkt_max=5.964e-06 time=41.65s
+   LBFGSB: n_iter=82/2000 converged=True obj=32234.181831 kkt_max=1.777e-08 time=6.39s
+   rel|obj diff|=1.033e-06  max|w diff|=5.293e-03
+[S1-MODEL-PROOF] MIDDLE penalty -- FISTA and LBFGSB reach the same optimum (rel|obj diff|=1.03e-06 < 1e-03): PASS
+[S1-MODEL-PROOF] MIDDLE penalty -- LBFGSB's own KKT violation is small (<=1e-4): PASS
+[S1-MODEL-PROOF] LOWEST penalty (idx=7, lam=3.75595):
+   FISTA:  n_iter=640/2000 converged=True obj=32026.610537 kkt_max=7.352e-06 time=170.76s
+   LBFGSB: n_iter=147/2000 converged=True obj=32027.893516 kkt_max=1.799e-05 time=11.98s
+   rel|obj diff|=4.006e-05  max|w diff|=1.741e-01
+[S1-MODEL-PROOF] LOWEST penalty -- FISTA and LBFGSB reach the same optimum (rel|obj diff|=4.01e-05 < 1e-03): PASS
+[S1-MODEL-PROOF] LOWEST penalty -- LBFGSB's own KKT violation is small (<=1e-4): PASS
+[S1-MODEL-PROOF] all done [446s]: 4/4 checks PASS
+exit_code=0

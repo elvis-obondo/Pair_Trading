@@ -1,0 +1,22 @@
+[S1-THREADED-PROOF] sha256 s1_hazard_threaded_proof.py: db25dc89305f5257f938263fbf7cb79d96e6ca45e0758c4bb3304ec698c51b84
+[S1-THREADED-PROOF] sha256 hazard_logistic.py (NEW, threaded): bd9fe582d5af74cb19f7d25210deef66cfb1bcc0c3a1b221a2934f95eb843a78
+[S1-THREADED-PROOF] git_head e030f1e857a92b0b79b399349026f2a6f92b9d91 (93 uncommitted paths); start 2026-10-28T14:21:22Z UTC; pid 3357
+[S1-THREADED-PROOF] sha256 OLD (git show bdddaf1:research/model/hazard_logistic.py): be657a4ca3d33ec94ae29a1a9132b61ea47966a46f5adedfddc2d34fdd028e58
+[HARNESS] load_search_events: 6,697,756 merged rows -> 5,405,478 after the date/gap-day filter -> 5,378,429 after dropping 27,049 label_gap=1 rows
+[S1-THREADED-PROOF] smoke subset: 20000 events (seed 20261028), 328,460 hazard rows  [25s]
+[HARNESS] check_inputs: 5 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[S1-PREPROCESS] degenerate-on-raw-fit-rows columns dropped: 0 of 5
+[S1-PREPROCESS] SD-0-after-clip columns dropped: 0 of 5
+[HARNESS] check_inputs: 2 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 5 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 2 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[S1-THREADED-PROOF] preprocessed: n_features=371  [49s]
+[S1-THREADED-PROOF]   trial 0: nll_old=302717.885838 nll_new=302717.885838 max|gw diff|=8.73e-11 max|gb diff|=0.00e+00: OK
+[S1-THREADED-PROOF]   trial 1: nll_old=249400.408228 nll_new=249400.408228 max|gw diff|=2.18e-11 max|gb diff|=0.00e+00: OK
+[S1-THREADED-PROOF]   trial 2: nll_old=242827.904445 nll_new=242827.904445 max|gw diff|=7.28e-11 max|gb diff|=0.00e+00: OK
+[S1-THREADED-PROOF]   trial 3: nll_old=266230.074459 nll_new=266230.074459 max|gw diff|=5.82e-11 max|gb diff|=0.00e+00: OK
+[S1-THREADED-PROOF]   trial 4: nll_old=241979.090636 nll_new=241979.090636 max|gw diff|=2.91e-11 max|gb diff|=0.00e+00: OK
+[S1-THREADED-PROOF] threaded NEW matches serial OLD (git bdddaf1) exactly at 5 random (w,b), rtol=1e-10: PASS
+[S1-THREADED-PROOF] BROKEN VARIANT -- NEW's own break_intercept=True correctly FAILS the match: PASS -- nll_old=247634.0552 nll_broken=235560.1341
+[S1-THREADED-PROOF] all done [50s]: 2/2 checks PASS
+exit_code=0
