@@ -1,0 +1,53 @@
+# HL-MODEL1 S1 Step 2, real 2-machine run. NOT YET LAUNCHED -- for Checker review, then the user's own
+# direct approval in-session, same as every prior AWS step this run.
+#
+# Before either launch: build the payload tarball from the current commit (9209a96 or later, once this
+# script itself is committed), upload it to s3://pair-trading-hl-289869684922/s1_run/<sha>.tar.gz, and
+# substitute __PAYLOAD_SHA__, __FOLDS__ and __MACHINE_ROLE__ ("A" or "B") in
+# aws_s1_run_userdata_template.sh for each machine's copy. MACHINE_ROLE keys the S3 log/output prefix
+# (s1_run/logs/A/, s1_run/logs/B/) -- NOT instance-id, so a manual relaunch after a spot reclaim restores
+# that role's already-finished folds instead of redoing them (checker's blocking fix). A reclaim still
+# needs a MANUAL relaunch of that machine; nothing here relaunches automatically.
+#
+# Fold split (balanced by real train-event count, ~10.64M each; biggest fold first on each machine so the
+# Gram-build speed tripwire in s1_newton.py fires early rather than hours in):
+#   Machine A: folds 7,4,3,0  (train events: 3,979,894 + 2,816,283 + 2,451,459 + 1,401,515 = 10,649,151)
+#   Machine B: folds 6,5,2,1  (train events: 3,595,542 + 3,205,004 + 2,100,263 + 1,742,072 = 10,642,881)
+
+# Machine A (folds 7,4,3,0):
+aws ec2 run-instances \
+  --region ap-northeast-1 \
+  --image-id ami-0c0af60eae4cc564b \
+  --instance-type r7i.16xlarge \
+  --instance-market-options '{"MarketType":"spot","SpotOptions":{"MaxPrice":"3.00","SpotInstanceType":"one-time","InstanceInterruptionBehavior":"terminate"}}' \
+  --iam-instance-profile Name=hl-build2-ec2 \
+  --security-group-ids sg-0f7e004024e90ac9a \
+  --subnet-id subnet-02bca146fcb943179 \
+  --instance-initiated-shutdown-behavior terminate \
+  --block-device-mappings '[{"DeviceName":"/dev/sda1","Ebs":{"DeleteOnTermination":true,"VolumeSize":100,"VolumeType":"gp3","Throughput":1000,"Iops":16000}}]' \
+  --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=s1-run-A},{Key=Project,Value=pair-trading},{Key=Purpose,Value=S1-real-run-folds-7-4-3-0}]' \
+  --user-data file://research/model/aws_s1_run_userdata_A.sh \
+  --count 1
+
+# Machine B (folds 6,5,2,1):
+aws ec2 run-instances \
+  --region ap-northeast-1 \
+  --image-id ami-0c0af60eae4cc564b \
+  --instance-type r7i.16xlarge \
+  --instance-market-options '{"MarketType":"spot","SpotOptions":{"MaxPrice":"3.00","SpotInstanceType":"one-time","InstanceInterruptionBehavior":"terminate"}}' \
+  --iam-instance-profile Name=hl-build2-ec2 \
+  --security-group-ids sg-0f7e004024e90ac9a \
+  --subnet-id subnet-02bca146fcb943179 \
+  --instance-initiated-shutdown-behavior terminate \
+  --block-device-mappings '[{"DeviceName":"/dev/sda1","Ebs":{"DeleteOnTermination":true,"VolumeSize":100,"VolumeType":"gp3","Throughput":1000,"Iops":16000}}]' \
+  --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=s1-run-B},{Key=Project,Value=pair-trading},{Key=Purpose,Value=S1-real-run-folds-6-5-2-1}]' \
+  --user-data file://research/model/aws_s1_run_userdata_B.sh \
+  --count 1
+
+# Cost note (for the user, before approval): r7i.16xlarge spot, MaxPrice $3.00/hr, 2 machines.
+# Worst-case projection (checker's +25%-or-more-adjusted figure, NUMBERS.md): ~29h on 1 machine for a
+# full 8-fold run -- each machine here does ~half the folds (4 each), so worst case per machine is roughly
+# half that, call it ~14.5h; best case ~6h. At $3/hr x 2 machines: ~$87 worst case, ~$36 best case, NOT
+# counting spot often pricing well under the $3 cap. The 36h outer safety net (shutdown -h +2160 in the
+# user-data) caps the absolute worst case (a hung job neither finishing nor tripping the tripwire) at
+# ~$216 across both machines.
