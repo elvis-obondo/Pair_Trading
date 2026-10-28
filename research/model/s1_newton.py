@@ -19,9 +19,25 @@ full (w, b) step -- standard proximal-Newton safeguard against a quadratic model
 the second-order pieces, in the SAME chunked, serial-Python/threaded-BLAS style as s1_gram_timing.py's
 build_gram_ww (checker's "one parallel layer" principle, S1 review round 6).
 """
+import time
+
 import numpy as np
+import threadpoolctl
 
 from hazard_logistic import hazard_nll_grad, sigmoid
+
+GRAM_BLAS_THREADS = 64   # measured on the r7i.16xlarge probe: 1.51s/chunk at 64 BLAS threads
+GRAM_BUILD_BUDGET_S = 120.0   # 2x the probe's ~60s/outer-iteration -- checker's tripwire
+_threadpool_info_logged = False
+_first_gram_checked = False
+
+
+class GramBuildTooSlow(RuntimeError):
+    """Raised once, on the very first Gram build of the process, if it took more than
+    GRAM_BUILD_BUDGET_S -- the checker's tripwire: the 24h/2-machine sizing assumed BLAS actually
+    multithreads inside this scope (the r7i probe's measured ~60s/outer-iteration); if the machine isn't
+    giving BLAS that speed (wrong instance type, BLAS not actually threaded, thermal throttling, ...),
+    stop here rather than burn hours finding out fold by fold."""
 
 
 def elastic_net_penalty(w, lam, l1_ratio):
@@ -35,12 +51,21 @@ def _prox(z, step, lam, l1_ratio):
 
 
 def build_hessian_blocks(X, w, b, row_event_pos, row_step, row_label, n_events, n_steps=20,
-                          chunk_size=100_000):
+                          chunk_size=100_000, gram_blas_threads=GRAM_BLAS_THREADS, log_prefix=""):
     """Returns (nll, grad_w, grad_b, H_ww, H_wb, H_bb) at the given (w, b). nll/grad_w/grad_b come
     straight from the proven hazard_nll_grad -- this function adds ONLY H_ww (n_feat x n_feat), H_wb
     (n_feat x n_steps) and H_bb (n_steps,), the exact Hessian of the unpenalised NLL. d_row = p_row(1-
     p_row) per hazard row; H_ww's per-event weight is the SAME per-event aggregation as the gradient's
-    own per_event_resid_sum, just with d_row instead of resid as the bincount weight."""
+    own per_event_resid_sum, just with d_row instead of resid as the bincount weight.
+
+    Checker's finding (S1 review, launch-script round): hazard_nll_grad above is its OWN parallel layer
+    (a Python ThreadPoolExecutor over chunks, expecting BLAS pinned to 1 thread by the process-wide env
+    vars) -- that call stays OUTSIDE any BLAS thread-count override, or the two layers nest. The H_ww/H_wb
+    loop below is the OTHER established pattern (serial Python chunks, BLAS itself threaded) -- same as
+    s1_gram_timing.py's build_gram_ww and s1_aws_thread_timing.py's Gram-chunk sample -- so ONLY that loop
+    is scoped up to `gram_blas_threads` via threadpoolctl, overriding the env-var baseline just for this
+    block."""
+    global _threadpool_info_logged, _first_gram_checked
     nll, grad_w, grad_b = hazard_nll_grad(w, b, X, row_event_pos, row_step, row_label, n_events)
 
     n_feat = X.shape[1]
@@ -63,11 +88,26 @@ def build_hessian_blocks(X, w, b, row_event_pos, row_step, row_label, n_events, 
 
     H_ww = np.zeros((n_feat, n_feat), dtype=np.float64)
     H_wb = np.zeros((n_feat, n_steps), dtype=np.float64)
-    for s in range(0, n_events, chunk_size):
-        e = min(s + chunk_size, n_events)
-        Xc = X[s:e].astype(np.float64, copy=False)
-        H_ww += (Xc * d_event[s:e, None]).T @ Xc
-        H_wb += Xc.T @ D_step[s:e]
+    t_gram0 = time.time()
+    with threadpoolctl.threadpool_limits(limits=gram_blas_threads, user_api="blas"):
+        if not _threadpool_info_logged:
+            for info in threadpoolctl.threadpool_info():
+                print(f"{log_prefix} threadpool_info (inside the Gram scope): {info}", flush=True)
+            _threadpool_info_logged = True
+        for s in range(0, n_events, chunk_size):
+            e = min(s + chunk_size, n_events)
+            Xc = X[s:e].astype(np.float64, copy=False)
+            H_ww += (Xc * d_event[s:e, None]).T @ Xc
+            H_wb += Xc.T @ D_step[s:e]
+    gram_s = time.time() - t_gram0
+    print(f"{log_prefix} Gram build: {gram_s:.2f}s", flush=True)
+    if not _first_gram_checked:
+        _first_gram_checked = True
+        if gram_s > GRAM_BUILD_BUDGET_S:
+            raise GramBuildTooSlow(
+                f"first Gram build took {gram_s:.1f}s, over the {GRAM_BUILD_BUDGET_S:.0f}s budget "
+                f"(2x the r7i probe's ~60s/outer-iteration) -- stopping before the remaining folds "
+                f"burn hours on a machine that isn't delivering the sized BLAS speed")
 
     return nll, grad_w, grad_b, H_ww, H_wb, H_bb
 
@@ -126,7 +166,8 @@ def fit_hazard_elastic_net_newton(X, row_event_pos, row_step, row_label, n_event
     n_outer = 0
     for it in range(1, max_outer + 1):
         nll, grad_w, grad_b, H_ww, H_wb, H_bb = build_hessian_blocks(
-            X, w, b, row_event_pos, row_step, row_label, n_events, n_steps, chunk_size)
+            X, w, b, row_event_pos, row_step, row_label, n_events, n_steps, chunk_size,
+            log_prefix=f"{log_prefix} outer={it}")
         if break_cross:
             # FAILING VARIANT candidate, S1 review round 6 (checker's finding): zeroing H_wb turned out
             # NOT to be decisive on real smoke data -- the line search's own safeguard and the fresh
