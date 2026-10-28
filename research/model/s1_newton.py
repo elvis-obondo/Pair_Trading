@@ -175,4 +175,4 @@ def fit_hazard_elastic_net_newton(X, row_event_pos, row_step, row_label, n_event
             converged = True
             break
     return {"w": w, "b": b, "n_iter": n_outer, "n_calls": n_outer, "converged": converged,
-            "obj_final": obj_prev}
+            "obj_final": obj_prev, "rel_change": rel_change}
