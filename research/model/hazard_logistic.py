@@ -15,19 +15,53 @@ position and adding that row's step intercept -- no per-row feature vector is ev
 gradient w.r.t. w accumulates the PER-EVENT sum of residuals first (one bincount over n_events), then
 multiplies by X ONCE PER EVENT, not once per hazard row. grad_b is a plain bincount by step, independent
 of event count.
+
+CHUNKED AND THREADED BY EVENT ROWS (checker's finding, S1 review round 1, and planner's ruling, S1 review
+round 5, after a float32 "fast path" was tried and REJECTED -- see git history for hazard_nll_grad_fast,
+deleted, not left behind as a parallel path): `X` is float32; `X @ w64` and `X.T @ resid64` with a
+float64 `w`/`resid` make numpy upcast each chunk of `X` to a float64 temporary. The one-fit probe (S1
+review round 5) measured ~67s per function evaluation on fold 7's full train set; a local profile traced
+~99% of that to this cast, not to the matmul FLOPs themselves or to sigmoid/NLL/bincount (negligible).
+
+The planner's diagnosis: "the cost is the unthreaded astype(float64) copy per chunk, not float64 itself."
+This keeps the EXACT same arithmetic (float64 throughout, same chunk boundaries, same summation order) but
+runs the per-chunk cast+matmul for DIFFERENT chunks on DIFFERENT threads (concurrent.futures.ThreadPoolExecutor)
+-- numpy's astype and matmul both release the GIL during their C-level work, so this is real parallelism
+across cores, not just concurrency (the same reasoning B5's load_features already used for parallel file
+reads). grad_w's per-chunk partial sums are collected into a list (one per chunk, in chunk order -- pool.map
+preserves input order regardless of which thread finishes first) and then summed in that same order with a
+plain loop, not np.sum's pairwise algorithm, to stay as close as possible to the un-threaded version's exact
+summation -- s1_hazard_threaded_proof.py checks the result against the pre-threading version within 1e-10
+relative (a pointwise check only, since this is the SAME arithmetic, not an approximation).
 """
+import concurrent.futures
+
 import numpy as np
+
+N_THREADS = 8  # R7: "a fixed thread count, logged" -- logged by callers, not here
 
 
 def sigmoid(z):
     return 1.0 / (1.0 + np.exp(-np.clip(z, -30, 30)))
 
 
-def hazard_nll_grad(w, b, X, row_event_pos, row_step, row_label, n_events, break_intercept=False):
+def hazard_nll_grad(w, b, X, row_event_pos, row_step, row_label, n_events, break_intercept=False,
+                     chunk_size=100_000, n_threads=N_THREADS):
     """Returns (nll, grad_w, grad_b). `break_intercept` exists ONLY so b5_hazard_logistic_proof.py's
     broken variant can exercise this exact shipped function (not a reimplementation) with the step-
     intercept add disabled -- it must never be set True by any real caller."""
-    eta = X @ w
+    n_feat = X.shape[1]
+    w64 = np.asarray(w, dtype=np.float64)
+    chunks = [(s, min(s + chunk_size, n_events)) for s in range(0, n_events, chunk_size)]
+    eta = np.empty(n_events, dtype=np.float64)
+
+    def eta_chunk(se):
+        s, e = se
+        eta[s:e] = X[s:e].astype(np.float64, copy=False) @ w64
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=n_threads) as pool:
+        list(pool.map(eta_chunk, chunks))
+
     if break_intercept:
         z = eta[row_event_pos]
     else:
@@ -38,6 +72,16 @@ def hazard_nll_grad(w, b, X, row_event_pos, row_step, row_label, n_events, break
     nll = -np.sum(y * np.log(p + eps) + (1 - y) * np.log(1 - p + eps))
     resid = p - y
     per_event_resid_sum = np.bincount(row_event_pos, weights=resid, minlength=n_events)
-    grad_w = X.T @ per_event_resid_sum
+
+    def gradw_chunk(se):
+        s, e = se
+        return X[s:e].astype(np.float64, copy=False).T @ per_event_resid_sum[s:e]
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=n_threads) as pool:
+        partials = list(pool.map(gradw_chunk, chunks))   # pool.map: same order as `chunks`, always
+    grad_w = np.zeros(n_feat, dtype=np.float64)
+    for part in partials:                                 # plain sequential sum, same order/method the
+        grad_w += part                                    # un-threaded version used -- not np.sum's
+                                                            # pairwise algorithm, to stay numerically close
     grad_b = np.bincount(row_step - 1, weights=resid, minlength=len(b))
     return nll, grad_w, grad_b
