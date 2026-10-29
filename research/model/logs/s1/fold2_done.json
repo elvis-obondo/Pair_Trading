@@ -1,0 +1,23 @@
+{
+ "fold": 2,
+ "selected_l1_ratio": 1.0,
+ "selected_lam": 642.4093896912855,
+ "selected_rel_change": 2.5894859863870605e-08,
+ "selected_kkt": {
+  "b_violation": 9.221449877434556e-11,
+  "w_violation_nonzero": 1.781260105051626e-07,
+  "w_violation_zero": 2.4279311689873374e-08,
+  "max_violation": 1.781260105051626e-07
+ },
+ "refit_n_iter": 8,
+ "refit_converged": true,
+ "refit_rel_change": 1.810228993504715e-08,
+ "refit_kkt": {
+  "b_violation": 1.3981621721626495e-11,
+  "w_violation_nonzero": 1.2830828440188972e-07,
+  "w_violation_zero": 0.0,
+  "max_violation": 1.2830828440188972e-07
+ },
+ "test_lift": 0.05087333449766401,
+ "finished_utc": "2026-10-29T09:12:31Z"
+}

@@ -4430,3 +4430,32 @@ research/model/aws_s1_run_userdata_template.sh + aws_s1_run_launch_cmds.txt: sam
 | Cost, worst/best case, 2 machines, r7i.16xlarge spot $3/hr cap: worst ~14.5h/machine (~$87 total), best ~6h/machine (~$36 total); hard cap via the 36h outer safety net ~$216 if a legitimately-slow-but-still-running job never finishes and never trips the (independent) GramBuildTooSlow tripwire | A (projected, not measured on these 2 machines yet) | research/model/aws_s1_run_launch_cmds.txt |
 
 Checker (Code Checker) verdict: PASS. NOT YET LAUNCHED -- payload not yet uploaded to S3, instances not yet launched. Needs the user's own direct approval in-session before either `aws s3 cp` (the payload upload) or `aws ec2 run-instances` (either machine).
+
+## [HL-MODEL1-S1] Real 2-machine run: both machines finished; Step 3 report
+
+User's own direct "launch" approved both instances (machine A then, after a spot-quota block, machine B sequentially per the user's "run B later sequentially"). Machine A (folds 7,4,3,0): 30,214s (~8.4h) wall, exit_code=0, all 4 done markers. Machine B (folds 6,5,2,1): 29,085s (~8.1h) wall, exit_code=0, all 4 done markers. First Gram build on each: A 59.28s, B 55.74s, both well under the 120s tripwire -- the BLAS-scoping fix held on real full-scale folds, not just the proof's smoke data | M | research/model/logs/s1/fold*_done.json; S3 s1_run/logs/{A,B}/s1-run_*.log |
+
+research/model/s1_report.py: reads the 8 folds' saved outputs (pulled from S3 into research/model/logs/s1/), computes Part A's gate through harness.score_fold/pooled_lift/day_block_bootstrap/pass_search and nothing else, then M1-M6. Report-time scoring (every top-k% ranking, the gate's lift/bootstrap) uses its OWN seed (REPORT_SEED=20261029), not a replay of training-time rng state -- flagged to the checker as a design choice, not assumed. M6's group rollup maps inputs_v1_pair.csv's 15 raw group files to the brief's "events, G2..G9" naming (g5_*/g6_* variants folded into G5/G6; g2b kept distinct from g2, a different raw file).
+
+**Part A gate (A5, computed with harness functions only):**
+
+| number | M/A | where |
+|---|---|---|
+| Per-fold lift: fold0=0.0326 fold1=0.0401 fold2=0.0509 fold3=0.0505 fold4=0.0430 fold5=0.0332 fold6=0.0306 fold7=0.0292. Pooled lift (concatenated top-10% sets and block populations) = 0.0394. 98.75% day-bootstrap interval (2,000 resamples) = (0.0316, 0.0475). Folds with lift > 0: 8/8 | M | research/model/logs/s1/report.json |
+| **VERDICT: FAIL** -- pooled lift 0.0394 < 0.05 (checked first, per pass_search's own ordering, regardless of the fold-count result). The interval's lower end (0.0316) is itself > 0, and 8/8 folds are positive -- the model has a real, consistently positive signal, it just does not clear A5's 0.05 pooled-lift bar. No vault touched, per the gate's own rule (FAIL or not) | M | research/model/logs/s1/report.json |
+
+**Use-case metrics (descriptive only, not a gate):**
+
+| number | M/A | where |
+|---|---|---|
+| M1 Hit rate, pooled, top 10% vs all: 2h reach 0.234 (chance 0.355) vs all 0.075 (chance 0.158); 5h reach 0.436 (chance 0.547) vs all 0.195 (chance 0.315); 10h reach 0.585 (chance 0.668) vs all 0.328 (chance 0.451) | M | research/model/logs/s1/report.json |
+| M2 Selectivity, pooled lift (10h) with 98.75% bootstrap CI: top1%=0.084 (0.070,0.099); top5%=0.053 (0.044,0.063); top10%=0.039 (0.032,0.047); top20%=0.026 (0.020,0.032) -- lift falls off as the slice widens, as expected. top10% EXACTLY equals the gate's own pooled lift (0.039447 both, asserted in the script) -- they are the same quantity, computed the same way (per-fold top-10% masks concatenated, never a single rank across all folds) | M | research/model/logs/s1/report.json |
+| M3 Calibration: per-fold test log-loss 0.577-0.600, Brier 0.199-0.206 across all 8 folds -- tight range, no fold an outlier. 10-bin pooled reliability table (mean p_10h vs actual reach_10h) in report.json | M | research/model/logs/s1/report.json |
+| M4 Speed: top-10% reach_10h_rate=0.585 vs rest 0.300; median minutes-to-mu among reachers 158min (top10) vs 267min (rest); share reaching within 2h 0.234 (top10) vs 0.058 (rest) -- the top decile both hits more AND hits faster | M | research/model/logs/s1/report.json |
+| M5 Breadth: 191 coins with >=200 top-10% picks (by either leg, pooled); top-10-coins share of all top-10% picks = 0.100 (not concentrated in a handful of coins). By test block, lift ranges 0.029-0.051 across the 8 30-day blocks -- same pattern as the per-fold gate lift, no block materially different | M | research/model/logs/s1/report.json |
+| Checker's finding, round 2: M1/M2/M4/M5's pooled figures were ranking ALL folds together (a single top_k_mask over the whole pooled df), not A5's own pooling (each test block's own top-k%, concatenated) -- this is why M2's pooled top-10% first came out as 0.0376, not matching the gate's 0.0394. Fixed: a new `pooled_top_mask` helper builds every pooled mask from per-fold masks, same as the gate. An assert now checks M2's pooled top-10% point equals the gate's pooled lift exactly (0.039447 both) -- it is the identical quantity under two names, so they must agree, not just correlate. The numbers above are the CORRECTED ones (M1/M2/M4/M5 all moved slightly; the gate itself was already correct and unchanged) | M | research/model/logs/s1_report.py |
+| M6 Drivers: top-column share of validation permutation importance ranges 0.20 (fold 0) to 0.48 (fold 6) across folds -- NOT pruned (HL-MODEL1 rule), reported as-is. The 95 unexplained-drift IN columns' share of importance ranges 0.09-0.39 across folds, growing in the LATER folds (5,6,7) -- worth the planner's attention as a possible regime-drift signal, not acted on here. A6 watch-rule hits (a drift column appearing in a fold's own top 20): vol_48 in all 8 folds, net_volume_ratio_30 in fold 2, vratio in folds 5 and 6 | M | research/model/logs/s1/report.json |
+
+One bug found and fixed during this script's own dry run (local, before sending to the checker): `load_unexplained_drift_columns` iterated over `load_column_group_map()` (a dict) as if it were a list of CSV rows -- `TypeError: string indices must be integers`. Fixed to `set(load_column_group_map().keys())`. Caught before any checker review, not after.
+
+Checker (Code Checker) verdict: pending.
