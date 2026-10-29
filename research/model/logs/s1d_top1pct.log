@@ -1,0 +1,26 @@
+[S1D] seed=20261029
+[HARNESS] load_search_events: 6,697,756 merged rows -> 5,405,478 after the date/gap-day filter -> 5,378,429 after dropping 27,049 label_gap=1 rows
+[S1D] load_data: 7 driver column(s) not in events.parquet, pulling from the cached IN-matrix: ['sigma_sym', 'sandwich', 'weekend', 'ret_btc_7d', 'ret_idx_7d_seg', 'rv_eth_24h', 'abs_beta']
+[HARNESS] check_inputs: 7 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[S1D] total test events across 8 folds: 3,525,909
+[S1D] item1 top1%: n_positive=8/8 pooled_lift=0.0841 (0.0710,0.0976)
+[S1D] item1 top2%: n_positive=8/8 pooled_lift=0.0699 (0.0583,0.0821)
+[S1D] item1 top5%: n_positive=8/8 pooled_lift=0.0531 (0.0440,0.0620)
+[S1D] item2: distinct pairs=11878 coins=192 days=233 share_busiest10days=0.1477 lift_excl_busiest10=0.0895
+[S1D] item3: medians computed for 10 columns (top1% vs rest)
+[S1D] item4: top1 reach_10h=0.6868 rest=0.3245
+[S1D] item5: top10 driver columns ['threshold', 'vol_48', 'sigma', 'sigma_sym', 'sandwich', 'weekend', 'ret_btc_7d', 'ret_idx_7d_seg', 'rv_eth_24h', 'abs_beta']
+[S1D] item5: original top1% lift=0.0841, excl top-decile vol_48 (n removed=30534) lift=0.0906 share_left=1.077306978055958
+
+[S1D] === 10-LINE SUMMARY ===
+1. Top 1% pooled lift=0.0841 (0.0710,0.0976), 8/8 folds positive.
+2. Top 2%=0.0699, top 5%=0.0531 -- edge rises as the slice narrows.
+3. 11878 distinct pairs, 192 coins, 233 days in the top 1%.
+4. 14.8% of top-1% picks fall on its 10 busiest days; lift excluding those days = 0.0895.
+5. Busiest pair: HMSTR-NEO (n=29, gap=0.0262).
+6. Top-1% outcomes: reach_10h=0.6868 vs rest 0.3245; median minutes-to-mu=110.0.
+7. Share reaching within 30/60 min (top1%): 0.1059 / 0.2167.
+8. Top driver columns (M6, summed across folds): ['threshold', 'vol_48', 'sigma', 'sigma_sym', 'sandwich']...
+9. Excluding top-decile vol_48 events from the top 1%: lift 0.0841 -> 0.0906 (108% of the lift left).
+10. Gate verdict is still FAIL (NUMBERS [HL-MODEL1-S1]) -- this is a lead, not a pass.
+[S1D] ALL DONE
