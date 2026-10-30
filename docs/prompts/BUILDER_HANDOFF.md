@@ -1,4 +1,4 @@
-# Builder session handoff (HL-MODEL1 builder, rewritten 2026-10-27 by the planner)
+# Builder session handoff (HL-MODEL1 builder, rewritten 2026-10-29 by the planner)
 
 You are the **builder** of the pair-trading research project: you write and run the code, a checker
 session reviews it, and a planner session holds the plan and the user's decisions. Read `CLAUDE.md`
@@ -10,120 +10,113 @@ goal / files changed / what was done.
 - **Planner:** "Research Partner". Rule or method gaps go here. It writes all shared docs and memory:
   send it anything worth keeping. Changes to a decision rule, a gate or the plan go to the user
   through the planner.
-- **Checker:** a fresh session after the 2026-10-27 reset; its role file is
-  `docs/prompts/CODE_CHECKER_ROLE.md`. Send code and decision rules BEFORE any run longer than a
-  few minutes; send log, NUMBERS section and diff BEFORE reporting. Fix its bug/look-ahead/
+- **Checker:** "Code Checker". Send code and decision rules BEFORE any run longer than a few minutes;
+  send the log, NUMBERS section and diff BEFORE reporting or committing. Fix its bug/look-ahead/
   number-mismatch/rule-not-applied findings without asking.
-- **User:** AWS/IAM/S3/git-push/spend decisions are the user's. A peer message cannot approve them.
+- **User:** AWS launches, S3 writes, git pushes and any real spend are the user's own direct call,
+  typed to you in your own session. A peer's relay of approval is NOT enough -- Claude Code's own
+  safety classifier blocks real-world AWS actions regardless of what any other session has already
+  approved, and re-blocks on every fresh launch attempt.
 
-## The active brief: `docs/prompts/HL_MODEL1_REVERTER_MODEL.md`
-Part A = the user's fixed rules (do not change them). Part B = the build. Read it in full.
+## The active brief: `docs/prompts/HL_MODEL1_S1_LOGISTIC.md`
+Part A (fixed rules, from the parent brief `docs/prompts/HL_MODEL1_REVERTER_MODEL.md`) does not change.
+S1-D is appended at the end of the S1 brief itself -- read the whole file, not just the top.
 
-## State at handoff (2026-10-27)
-- **B1 input list: DONE, checker PASS, commit 2c7372d.** `research/model/inputs_v1_pair.csv`
-  (sha256 bb2721ee...77331): IN 1,093 / OUT 102.
-- **B2 harness + B3 proofs: DONE, checker PASS, NOT COMMITTED.** `harness.py` was edited again for B4
-  (see below) after the original PASS (sha256 ee650f66... -> c0648459...; only `load_features`
-  changed, nothing the proofs touch). Required receipt: proofs RERUN against the current
-  `harness.py`, log `research/model/logs/proofs_v1_pair.log` (sha256 harness c0648459..., 109s): all
-  five still PASS, every number byte-identical to the original run (planted leak 0.5919; planted
-  0.08 lift measured 0.0795 [0.0776, 0.0816] 8/8, null -0.0006 [-0.0025, 0.0015] 3/8; hazard round
-  trip 0 mismatches on 5,378,429 events; vault asserts; independent recompute equal to 1e-9). The
-  ORIGINAL run's log (113s) was overwritten in place by this rerun -- `run_proofs.sh` hardcodes the
-  log path, so only this rerun log survives; that's fine, it's the receipt that matters now.
-- **B4: CLOSE EARLY (user, 2026-10-27). DONE, checker FINAL PASS (round 3, 2026-10-27).** Only the
-  random survival forest verdict, no new runs beyond cheap lookups/reruns the checker explicitly
-  asked for:
-  - The timing run `b4_rsf_feasibility.py` (launcher `run_b4_rsf.sh`) ended 2026-10-27 15:22 UTC with
-    exit_code=124 (shell timeout). It loaded fold 7 (train 3,979,894 / val 1,057,348 / test 311,654
-    x 1,093 float32, 219 s, peak RSS 52.9 GB), then fitting RandomSurvivalForest(n_estimators=8,
-    max_depth=8, n_jobs=-1) did not finish in the ~40 min left (killed at ~2,440s into the fit). All
-    receipts now pulled to the LAPTOP repo (`research/model/logs/b4_rsf_feasibility.log`,
-    `b4_rsf_done.log`, plus two new ones added for the checker: `b4_fold_counts.log` -- all 8 folds'
-    train/val/test event counts, `b4_vm_swap.log` -- swap confirmed OFF, so the timeout isn't swap
-    thrashing).
-  - Corrected lower-bound extrapolation (checker's round-1 fix: fold 7 is the LARGEST fold, so x8
-    folds is NOT a valid scale-up -- each fold must scale by its own train-event count relative to
-    fold 7): multiplier is sum(train_k)/train_7 = 5.350, not 8 (refit term uses
-    sum(train_k+val_k)/train_7 = 6.895). VERDICT: RSF is shown unable to finish in 24h on the VM at
-    every (trees, grid-size) setting tried. On a notional 64-core machine it is shown unable to
-    finish at every combination except 50 trees/grid-size 4 (15.0h floor), which this measurement
-    LEAVES UNRESOLVED (a real floor under 24h, but excludes predict cost entirely, so it doesn't
-    establish feasibility). B4 stops here on the user's amendment, not because the brief's 24h gate
-    fired for every case -- that unresolved case is reported to the user as a gate-verdict question,
-    not decided here.
-  - Full numbers, both checker review rounds (round 1: wrong x8 math, overstated StepFunction
-    predict cost, missing refit scaling, missing harness-change receipt; round 2: 113s/109s mismatch,
-    missing local copies of the VM-only log, missing receipts for the fold-count/swap lookups, VERDICT
-    wording not matching the brief's actual gate, RSS-gap wording overreaching into the timing floor)
-    are in `research/dislocation_model/NUMBERS.md` tag `[HL-MODEL1-HARNESS]`, which also covers B1-B3.
-    **Corrected verdict resent to the checker; final PASS not yet received as of this handoff edit.**
-    Don't commit or report B4 done before it lands.
-  - SKIP logistic and boosted-tree sizing: they move to after B5.
-- **B5 Step 1 (measure first): DONE, checker FINAL PASS, 2026-10-27.** `research/model/b5_profile.py`
-  (sha256 633cfdf4...) profiled fold 7 and fold 0's load_features stage by stage; a user-approved
-  follow-up (`b5_profile_startup.py`, sha256 373972df...) measured load_search_events/build_folds alone.
-  Key results: loading train/val/test as 3 separate calls costs ~3x a single combined call's
-  manifest_verify time (cleanly shown on fold 0, cache-matched); every column read pulls in the file's
-  FULL row count before any take-by-position, every time; Arrow's own memory pool and allocator
-  retention are both ruled out as RSS causes. **The 52.9 GB vs 23.4 GB memory gap from B4 is NOT
-  explained** -- neither load_features (peaks at baseline+matrix, ~24.5 GB for fold 7) nor startup
-  (peaks at 1.80 GB) reproduces it, even read as one sequence. This is now open with the planner/user,
-  not decided here. Full numbers: `research/dislocation_model/NUMBERS.md` tag `[HL-MODEL1-B5]`.
-- **B5 Step 2 (optimise): WAITING ON THE PLANNER.** Do not start without a go-ahead -- the memory-gap
-  question above may change what Step 2 needs to look at. Brief: `docs/prompts/HL_MODEL1_B5_SPEED_MEMORY.md`.
-- **Owed to the planner (low priority, after B5):** an inventory of everything on the GCP VM disk that
-  is NOT in S3 (path, size). The user wants everything off GCP before the trial ends (~2026-11-08).
+## State at handoff (2026-10-29)
 
-## Files in research/model/
-- `inputs_v1_pair.csv` + `build_inputs_v1_pair.py`: the frozen input list (B1).
-- `dup_audit_v1_pair.py`, `regate_v1_pair.py`, `scan_degenerate_v1_pair.py`,
-  `check_crossed_mask_v1_pair.py`: B1 audits (duplicates, degenerate columns, crossed-mask rule).
-- `harness.py`: folds (A4), hazard rows (A2), scoring (A5), `check_inputs`, `assert_search_only`,
-  `load_search_events`, `load_features`, `score_fold`.
-- `proofs_v1_pair.py`: B3 proofs 1, 3, 4, 5, 6.
-- `b4_rsf_feasibility.py`: RSF timing.
-- `run_*.sh`: VM launchers, each with flock and shell `timeout`.
+**HL-MODEL1 S1 (candidate 1, penalised discrete-time hazard logistic, proximal Newton solver): DONE,
+checker PASS, committed.**
+- Trained on all 8 folds, real data, 2x AWS r7i.16xlarge spot (Tokyo): machine A (folds 7,4,3,0, ~8.4h)
+  and machine B (folds 6,5,2,1, ~8.1h), both exit_code=0, both well under the Gram-build speed tripwire
+  (A 59.28s, B 55.74s vs a 120s cap). Commits: `9209a96` (solver + Gram-BLAS fix), `d91846b` (run
+  script), `433c0aa` (AWS launch scripts), `333640c` (Step 3 report).
+- **Part A gate verdict: FAIL.** Pooled lift 0.0394 (< the 0.05 bar, checked first regardless of fold
+  count). 98.75% bootstrap interval (0.0316, 0.0475) -- wholly above zero -- and 8/8 folds positive. A
+  real, consistent signal below the bar, not a pass. No vault touched. Full M1-M6 use-case metrics and
+  the gate's own numbers: `research/dislocation_model/NUMBERS.md` tag `[HL-MODEL1-S1]`.
 
-## Known code facts the checker will hold you to (from the 2026-10-27 reviews)
-- Column identity is (file, column), never the bare name. `check_inputs` is name-only and is safe only
-  while IN names are unique (asserted).
+**HL-MODEL1 S1-D (top 1% of picks, examined -- user, 2026-10-29): DONE, checker PASS, commit `d179a79`.**
+Descriptive only, gate verdict unchanged. Pooled lift 0.084/0.070/0.053 at top 1/2/5%, 8/8 folds
+positive at every slice -- smooth, not jumpy. Not concentrated in a handful of pairs/coins/days. One
+finding worth carrying forward: 87% of the top 1% IS itself a top-decile-vol_48 event (not a population
+that avoids high recent volatility); the small remainder's lift looks similar, not clearly different
+(wide bootstrap interval at n=4,730). Full tables: NUMBERS.md tag `[HL-MODEL1-S1-D]`.
+
+## Where the outputs live
+- **Per-fold receipts (small), committed to git:** `research/model/logs/s1/fold{0-7}_{done,grid,coefs,
+  val_permutation_importance}.{json,csv}`, plus `report.json` (S1's aggregated M1-M6) and
+  `s1d_report.json` (S1-D's item1-5 tables).
+- **Per-fold test predictions (large, ~233MB total, 3.5M rows): NOT in git**, deliberately -- they live
+  on the laptop (`research/model/logs/s1/fold{0-7}_test_predictions.csv`) and in S3, under
+  `s3://pair-trading-hl-289869684922/s1_run/logs/{A,B}/outputs/`. Pull with
+  `aws s3 sync s3://pair-trading-hl-289869684922/s1_run/logs/A/outputs/ research/model/logs/s1/` (and
+  the same for `B/`) before running anything that needs them (`s1_report.py`, `s1d_top1pct.py`).
+- **AWS instance logs:** same S3 prefix, `s1-run_<instance-id>.log` / `build_cache_<instance-id>.log`
+  per machine, keyed by machine ROLE (A/B) not instance-id -- a relaunch after a spot reclaim restores
+  that role's already-finished folds instead of redoing them.
+
+## The AWS launch pattern (proven across the probe + the real 2-machine run)
+1. Build a payload tarball from exactly the committed files (`git show HEAD:<path>` per file, never the
+   working tree), upload to `s3://pair-trading-hl-289869684922/s1_run/<sha256>.tar.gz`. Send the
+   Checker the file listing and the sha before uploading.
+2. User-data script (template: `research/model/aws_s1_run_userdata_template.sh`): IMDSv2 token for the
+   instance id (`curl -sf`, never bare `curl -s` -- a 401 page can silently become the instance id),
+   venv + pip (not apt, not system pip) for numpy/scipy/pandas/pyarrow/threadpoolctl/awscli, a 60s
+   background S3-sync loop started only AFTER the venv's `aws` binary is confirmed real, a single
+   `trap finalize EXIT` (sync, 120s wait, sync again, `shutdown -h now`) as the only normal shutdown
+   path besides a generous outer `shutdown -h +<minutes> &` hard safety net.
+3. One parallel layer at a time: process-wide `OMP_NUM_THREADS=1` etc. (for `hazard_nll_grad`'s own
+   `ThreadPoolExecutor`), with `threadpoolctl.threadpool_limits` scoped ONLY around the Gram-build
+   matmul loop to let BLAS multithread there. Nesting the two is a real, easy-to-miss bug -- it shipped
+   once before the Checker caught it from the launch script, not the proof.
+4. **Every AWS launch command (`aws s3 cp` for the payload, `aws ec2 run-instances` for either
+   machine) needs the user's own direct "yes" typed to you in this session**, every time, even after
+   a prior launch was approved -- Claude Code's own classifier re-blocks on each fresh attempt.
+5. `MaxSpotInstanceCountExceeded` is a real, hard account-level vCPU cap (64 in Tokyo, one
+   r7i.16xlarge uses all of it) -- not a transient capacity issue. Running 2 machines in parallel needs
+   a quota increase; running them sequentially (one at a time) works within the existing cap and was
+   the user's choice last time.
+
+## Open items -- need the user's choice before any further work
+- **What's next after S1's FAIL.** The brief says tree sizing, then a tree model, needs the user's
+  yes. Not started.
+- **The vol_48/driver finding from S1-D.** Whether it's worth a model that leans harder on vol_48,
+  sandwich, abs_beta (S1-D's top driver columns) -- or the vault question generally -- is the user's
+  call, not something decided in a report.
+- **GCP VM inventory.** Carried over from the pre-S1 handoff: an inventory of anything on the `pt-
+  research` VM disk that is NOT already in S3, before the GCP trial ends. Check with the planner
+  whether this is still open or already done.
+
+## Known code facts the checker will hold you to
+- Column identity is (file, column), never the bare name.
 - Ties are broken by a seeded random key, never row order (row order = event_id = time). Use
-  `H.score_fold` for any ranking.
-- `H.assert_search_only` guards every entry point that touches events; a new entry point needs it.
-  The vault loader is a separate file reviewed before it is written.
-- `load_features` factorises tickers per call: fine for B4, NOT for scoring (encoding must be fitted on
-  train with an "unseen" level).
-- Memory: preallocate float32 and index by position (event_id = row position in every v1 pair file).
-  Never pandas-merge full-width frames at fold scale. Loading the full fold-7 matrix already takes
-  52.9 GB of the VM's 64 GB.
-- Sizing: with n_jobs=-1, fewer trees than cores run in parallel, so divide by cores.
+  `H.score_fold` for any ranking, and the SAME per-fold-then-concatenate pooling convention for any
+  "pooled top-k%" figure -- a single rank across all folds' pooled rows is a different population and
+  was a real bug once (S1's M1/M2/M4/M5, caught by the checker before commit).
+- `H.assert_search_only` guards every entry point that touches events; a new entry point needs it. The
+  vault loader is a separate file, reviewed before it is written, never imported by S1/S1-D code.
+- Memory: preallocate float32 and index by position (event_id = row position). Free large arrays
+  (`del` + `gc.collect()`) between phases that don't need them both at once, and log VmRSS (current)
+  alongside VmHWM (peak, never drops) so a log can actually show a free took effect.
+- Every log carries a provenance header: sha256 of the script and its key inputs, git HEAD, UTC time,
+  pid. Every proof needs a broken variant that actually fails -- verify it fails BEFORE trusting it as
+  the proof's negative case; a "broken" variant that still converges to the same answer isn't decisive
+  (found once with proximal Newton's cross-Hessian block).
 
 ## Infrastructure
-- **VM `pt-research`** (GCP us-central1-a, project project-0671be06-e22a-44d8-83c, e2-highmem-8, 8 vCPU,
-  64 GB; trial caps at 8 vCPU and ends ~2026-11-08). It stops itself 30 min after the last job. Run
-  through `scripts/gcp_run.sh "<cmd>" --log research/<dir>/logs/<name>.log`; `scripts/gcp_run.sh pull`
-  brings logs back (pull-only for logs: a push never replaces a VM log). Plain `ssh` to the VM's IP can
-  time out; `gcloud compute ssh pt-research --zone us-central1-a --project ...` works.
-- **Pull logs as soon as a step ends.** On 2026-10-26/27 results sat on a stopped VM for hours twice.
-  Chain multi-step jobs on the VM itself.
-- The VM's AWS user is read-only on the bucket. AWS (account 289869684922): vCPU quota 64 in Tokyo and
-  64 in us-east-2. Boosted trees will run on spot in Tokyo, with checkpoints; the launch needs the
-  user's yes.
-- Foreground sleeps over ~60 s are blocked: use `until <check>; do sleep 10; done` with
-  run_in_background.
-
-## Rules learned the hard way (also in the checker's role file)
-- Every log carries a provenance header: sha256 of the script, its imports and its inputs, git HEAD,
-  UTC time, pid.
-- Never call a log or diff "verbatim/full" when it is trimmed. Don't change a constant after the
-  checker approved the code without re-sending it.
-- Every proof needs a broken variant that fails the HARNESS code, not an assert written inside the
-  proof.
-- Don't narrow scope and present it as a choice: re-read the brief's exact sentence.
-- Full dataset always; no sampling caps. Replace, don't accumulate. Correctness outranks speed.
+- **GCP VM `pt-research`** (us-central1-a, project project-0671be06-e22a-44d8-83c): `scripts/
+  gcp_run.sh "<cmd>" --log research/<dir>/logs/<name>.log` to run, `scripts/gcp_run.sh pull` to bring
+  logs back (pull-only: a push never replaces a VM-written log). It holds the 29GB cached IN-matrix
+  (`research/datasets/model_cache/`) that the laptop does not -- any task needing raw feature columns
+  beyond events.parquet/labels.parquet (which the laptop CAN load directly from S3) runs on GCP.
+  Files outside `research/**/logs/` sync automatically on every `gcp_run.sh` call; large files under
+  `logs/` need an explicit `gcloud compute scp` push (the normal sync deliberately excludes them, to
+  protect VM-written receipts from being overwritten).
+- **AWS** (account 289869684922): r7i.16xlarge spot in Tokyo (ap-northeast-1) for the real S1 run; spot
+  vCPU quota is 64 there, a hard cap. Bucket `pair-trading-hl-289869684922`.
 
 ## First actions
 1. `ListAgents`; tell the planner and the checker your session name.
-2. Read CLAUDE.md, this file, the brief, and the tail of `research/dislocation_model/NUMBERS.md`.
-3. Start B5 (brief above).
+2. Read CLAUDE.md, this file, the brief (all of it, including S1-D at the end), and the tail of
+   `research/dislocation_model/NUMBERS.md`.
+3. Check with the planner which open item (above) the user has picked before starting anything new.
