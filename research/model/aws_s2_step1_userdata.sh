@@ -47,20 +47,24 @@ shutdown -h +240 &   # outer hard safety net (4h): a sizing run on one fold, not
 
 export DEBIAN_FRONTEND=noninteractive
 apt-get update -qq
-apt-get install -qq -y python3-venv python3-pip curl
+apt-get install -qq -y python3-venv python3-pip curl libgomp1
 
 python3 -m venv /opt/v
 /opt/v/bin/pip install -q numpy scipy pandas pyarrow threadpoolctl awscli lightgbm==4.7.0
 AWS_BIN=/opt/v/bin/aws
 PY=/opt/v/bin/python
-echo "[S2-STEP1-AWS] python: $($PY --version) numpy: $($PY -c 'import numpy; print(numpy.__version__)') lightgbm: $($PY -c 'import lightgbm; print(lightgbm.__version__)')"
+echo "[S2-STEP1-AWS] python: $($PY --version) numpy: $($PY -c 'import numpy; print(numpy.__version__)')"
+# checker's fix round 1 (launch review): a failed import inside $(...) does not stop the script under
+# set -e -- this runs on its own line so a broken lightgbm install fails loudly HERE, before the data
+# pull and cache build, not partway through the real run.
+$PY -c 'import lightgbm; print("[S2-STEP1-AWS] lightgbm:", lightgbm.__version__)'
 
 ( trap - EXIT; while true; do sleep 60; sync_logs; done ) &
 
 mkdir -p /root/Pair_Trading
 cd /root/Pair_Trading
 
-EXPECTED_SHA="14668c1de74e52502a7709c5238734fc5fd382146806c85a068f2f1736b51261"
+EXPECTED_SHA="fdd2f50481a92539addb0cb9f32bcf916192a7d14c54143eab1774af020b35df"
 $AWS_BIN s3 cp "s3://pair-trading-hl-289869684922/s2_step1/${EXPECTED_SHA}.tar.gz" /tmp/payload.tar.gz
 ACTUAL_SHA=$(sha256sum /tmp/payload.tar.gz | awk '{print $1}')
 echo "[S2-STEP1-AWS] payload sha256: $ACTUAL_SHA (expected $EXPECTED_SHA)"
