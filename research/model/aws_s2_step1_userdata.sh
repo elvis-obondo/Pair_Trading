@@ -64,7 +64,7 @@ $PY -c 'import lightgbm; print("[S2-STEP1-AWS] lightgbm:", lightgbm.__version__)
 mkdir -p /root/Pair_Trading
 cd /root/Pair_Trading
 
-EXPECTED_SHA="fdd2f50481a92539addb0cb9f32bcf916192a7d14c54143eab1774af020b35df"
+EXPECTED_SHA="bff0d700b41a0a54414a899669d0b809201590e7a76024cd606c53791e64bae8"
 $AWS_BIN s3 cp "s3://pair-trading-hl-289869684922/s2_step1/${EXPECTED_SHA}.tar.gz" /tmp/payload.tar.gz
 ACTUAL_SHA=$(sha256sum /tmp/payload.tar.gz | awk '{print $1}')
 echo "[S2-STEP1-AWS] payload sha256: $ACTUAL_SHA (expected $EXPECTED_SHA)"
