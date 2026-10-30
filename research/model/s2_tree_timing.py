@@ -49,10 +49,47 @@ Per-fold load and hazard-row-build time (measured, both folds' worth) and a stat
 scoring/bootstrap are added to the per-fold total. The proposed machine size scales the measured TRAIN
 peak RSS by the larger of B5's refit/train binned-store ratio (90.82/71.75) and this run's own
 train+val hazard-row ratio, for headroom at the refit scale this script does not itself measure.
+
+OOM INCIDENT, 2026-10-30 (i-0387674b2d2b7334e, exit 137, killed ~153s into lgb.train(), before any tree
+was timed -- train and val Datasets both built fine, peak RSS 102.83 GB logged after the train build,
+consistent with B5's own ~71.75 GB train-store estimate plus the resident event matrices).
+
+LIKELY CAUSE (planner + checker, round 2 -- UNCONFIRMED: arithmetic and timing match, no measurement;
+this run's sampler thread is what will confirm or refute it): `force_row_wise=True` makes LightGBM build
+a SECOND, row-major copy of the binned data at the start of training. Total bins = 1,092 x 255 = 278,460,
+over 65,536, so each cell of that row-major copy needs 4 bytes (uint32): 65.6M hazard rows x 1,092 x 4
+bytes = ~287 GB, on top of the ~103-120 GB already resident from the column-wise store
+Dataset.construct() builds (what B5's 71.75 GB estimate covers) -- fits both the size (past 512 GB) and
+the timing (the copy is built once, at the START of train(), before any tree, matching the "killed
+before any tree was timed" symptom). FIX: `force_col_wise=True` instead -- trains directly on the
+column-wise store already built at construct() time, no second copy. Still deterministic with a fixed,
+logged thread count (T7 unaffected).
+
+Local reproduction of the row-wise/col-wise memory difference was attempted (both by this session and
+separately by the checker) and found INCONCLUSIVE on this machine: macOS's memory compression makes a
+live RSS sample unreliable at the row counts needed to see a ~GB-scale allocation clearly, and this
+machine cannot hold the ~100+ GB of resident data the real run starts from in any case. The fix above
+rests on the arithmetic (278,460 bins -> 4-byte cells -> ~287 GB at full scale) and the timing match, not
+on a confirmed local repro -- said plainly, not claimed as ruled out by measurement.
+
+`free_raw_data=True` (changed from False) does NOT reclaim memory by itself: a `Sequence`-backed Dataset
+holds a REFERENCE to the raw array, not a copy, so `free_raw_data=False` was never duplicating memory on
+its own. What `free_raw_data=True` does is let LightGBM drop that reference once the binned store is
+built, so THIS script's own explicit `del X_train, train_seq, ref_seq, ...` right after the val Dataset
+is built can actually free the ~17.4 GB (otherwise the Dataset's lingering reference would keep it alive
+regardless of the `del`). Kept because it is correct and cheap, not because it explains the OOM -- 17 GB
+does not account for the ~400 GB gap between the 102.83 GB measured peak and a 512 GB machine.
+
+DIAGNOSTICS (checker's fix round 2): the row-wise copy, if it recurs under any future setting, is built
+BEFORE round 0, so a per-round callback (checker's round-1 suggestion) would still print nothing before a
+repeat kill. Replaced with a background thread sampling rss/VmHWM every 10s for the lifetime of
+lgb.train(), independent of boosting rounds. `verbose` is set to 1 for this run (not -1) so the log shows
+LightGBM's own Total Bins and row/col-wise choice directly, not just this script's inference of it.
 """
 import gc
 import os
 import sys
+import threading
 import time
 
 import numpy as np
@@ -217,10 +254,15 @@ def main():
     val_seq = HazardSequence(X_val, row_event_pos_val, row_step_val)
     ref_seq = EventRefSequence(X_train)
 
+    # force_col_wise=True (planner + checker's fix round 2, replacing force_row_wise after the OOM kill):
+    # trains on the column-wise store Dataset.construct() already builds, instead of row-wise's second,
+    # row-major copy (the OOM's LIKELY cause, unconfirmed -- see the docstring). Still deterministic with a fixed,
+    # logged thread count (T7 unaffected). verbose=1, not -1, for THIS run only: shows LightGBM's own
+    # Total Bins and row/col-wise choice directly in the log (checker's fix round 2).
     params = dict(objective="binary", num_leaves=NUM_LEAVES, min_data_in_leaf=MIN_DATA_IN_LEAF,
                   learning_rate=LEARNING_RATE, max_bin=MAX_BIN, feature_fraction=FEATURE_FRACTION,
                   lambda_l2=LAMBDA_L2, bagging_fraction=1.0, bagging_freq=0, feature_pre_filter=False,
-                  force_row_wise=True, deterministic=True, seed=SEED, num_threads=N_THREADS, verbose=-1)
+                  force_col_wise=True, deterministic=True, seed=SEED, num_threads=N_THREADS, verbose=1)
     print(f"[S2-TREE] params: {params}  [{time.time()-t0:.0f}s]", flush=True)
 
     # T5 (checker's fix round 1): bin edges from fold 7's train EVENT rows, not from the hazard rows.
@@ -230,9 +272,15 @@ def main():
     # binned store counts toward every later peak too -- conservative, which is fine.
     clear_peak_rss()
     t_ref = time.time()
+    # free_raw_data=True (checker's wording fix round 2): a Sequence-backed Dataset holds a REFERENCE to
+    # the raw array, not a copy, so free_raw_data=False was never duplicating memory by itself. True lets
+    # LightGBM drop that reference once the binned store is built, so THIS script's own explicit del
+    # (below, after the val Dataset is built) can actually reclaim X_train -- otherwise the Dataset's
+    # lingering reference would keep it alive regardless of the del. Correct and cheap either way, but
+    # NOT the OOM's cause (17 GB does not explain a ~400 GB gap) -- see the docstring's OOM INCIDENT note.
     ref_label = np.zeros(X_train.shape[0], dtype=np.int8)
     ref_set = lgb.Dataset(ref_seq, label=ref_label, feature_name=feature_name,
-                           categorical_feature=cat_idx, params=params, free_raw_data=False)
+                           categorical_feature=cat_idx, params=params, free_raw_data=True)
     ref_set.construct()
     ref_s = time.time() - t_ref
     rss_ref, hwm_ref = rss_gb()
@@ -244,7 +292,7 @@ def main():
     t_build = time.time()
     train_set = lgb.Dataset(train_seq, label=row_label_train, feature_name=feature_name,
                              categorical_feature=cat_idx, reference=ref_set, params=params,
-                             free_raw_data=False)
+                             free_raw_data=True)
     train_set.construct()
     build_s = time.time() - t_build
     rss_build, hwm_build = rss_gb()
@@ -252,17 +300,51 @@ def main():
           f"num_feature={train_set.num_feature()} (kept_cols+step={n_feat}); "
           f"rss={rss_build:.2f}GB VmHWM={hwm_build:.2f}GB  [{time.time()-t0:.0f}s]", flush=True)
 
+    clear_peak_rss()
+    t_val_build = time.time()
     val_set = lgb.Dataset(val_seq, label=row_label_val, feature_name=feature_name,
                            categorical_feature=cat_idx, reference=train_set, params=params,
-                           free_raw_data=False)
+                           free_raw_data=True)
     val_set.construct()
-    print(f"[S2-TREE] val Dataset constructed ({n_val_hazard:,} hazard rows)  [{time.time()-t0:.0f}s]",
+    val_build_s = time.time() - t_val_build
+    rss_val_build, hwm_val_build = rss_gb()
+    print(f"[S2-TREE] val Dataset constructed ({n_val_hazard:,} hazard rows): {val_build_s:.1f}s; "
+          f"rss={rss_val_build:.2f}GB VmHWM={hwm_val_build:.2f}GB  [{time.time()-t0:.0f}s]",
           flush=True)
 
+    # Fix after the OOM kill: X_train (17.4 GB) and the Sequences wrapping it are not needed past this
+    # point -- every Dataset that needed them (ref_set, train_set) is already built. X_val/val_seq stay
+    # (the predict block below still needs X_val). free_raw_data=True above already dropped LightGBM's
+    # OWN reference to these; this drops OUR last references so gc can actually reclaim the memory.
+    del X_train, train_seq, ref_seq, row_event_pos_train, row_step_train
+    gc.collect()
+    rss_after_free, _ = rss_gb()
+    print(f"[S2-TREE] freed X_train/train_seq/ref_seq after val Dataset construction: rss={rss_after_free:.2f}GB "
+          f"[{time.time()-t0:.0f}s]", flush=True)
+
+    # Diagnostic replacing the per-round callback (checker's fix round 2): the row-wise copy that caused
+    # the kill was built BEFORE round 0, so a per-boosting-round callback would print nothing before a
+    # repeat failure. A background thread samples rss/VmHWM every 10s for lgb.train()'s whole lifetime,
+    # independent of boosting rounds, so a kill at any point -- including before round 0 -- leaves a
+    # trail. Daemon thread: it must never block process exit if lgb.train() itself raises.
+    stop_sampler = threading.Event()
+
+    def _sample_rss():
+        while not stop_sampler.wait(10):
+            rss, hwm = rss_gb()
+            print(f"[S2-TREE]   [sampler] rss={rss:.2f}GB VmHWM={hwm:.2f}GB  [{time.time()-t0:.0f}s]",
+                  flush=True)
+
+    sampler_thread = threading.Thread(target=_sample_rss, daemon=True)
     clear_peak_rss()
     t_train = time.time()
-    booster = lgb.train(params, train_set, num_boost_round=N_TREES_TIME,
-                         valid_sets=[val_set], callbacks=[lgb.log_evaluation(period=50)])
+    sampler_thread.start()
+    try:
+        booster = lgb.train(params, train_set, num_boost_round=N_TREES_TIME, valid_sets=[val_set],
+                             callbacks=[lgb.log_evaluation(period=50)])
+    finally:
+        stop_sampler.set()
+        sampler_thread.join(timeout=15)
     train_s = time.time() - t_train
     rss_train, hwm_train = rss_gb()
     s_per_tree = train_s / N_TREES_TIME
@@ -291,10 +373,11 @@ def main():
     # checker's fix round 1, blocking 4: clear_peak_rss() resets VmHWM between blocks, so the single
     # post-hoc read here only ever covered the LAST block (predict). The real overall peak is the max of
     # every block's own labelled peak, each already printed above.
-    hwm_overall = max(hwm_load, hwm_ref, hwm_build, hwm_train, hwm_pred)
+    hwm_overall = max(hwm_load, hwm_ref, hwm_build, hwm_val_build, hwm_train, hwm_pred)
     print(f"[S2-TREE] overall peak RSS this run (max of load={hwm_load:.2f}, ref_dataset={hwm_ref:.2f}, "
-          f"build={hwm_build:.2f}, train={hwm_train:.2f}, predict={hwm_pred:.2f} GB): {hwm_overall:.2f}GB "
-          f"(rss at process start: {rss0:.2f}GB)", flush=True)
+          f"build={hwm_build:.2f}, val_build={hwm_val_build:.2f}, train={hwm_train:.2f}, "
+          f"predict={hwm_pred:.2f} GB): {hwm_overall:.2f}GB (rss at process start: {rss0:.2f}GB)",
+          flush=True)
 
     # ---- Projection (arithmetic on this one measurement; fold 7 is the largest, used as a conservative
     # per-fold upper bound, same convention as b4_rsf_feasibility.py / s1_gram_timing.py) ----
