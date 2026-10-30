@@ -1,0 +1,26 @@
+Upload (run this first; needs the user's yes):
+aws s3 cp /tmp/s2_step1_payload.tar.gz s3://pair-trading-hl-289869684922/s2_step1/14668c1de74e52502a7709c5238734fc5fd382146806c85a068f2f1736b51261.tar.gz --region ap-northeast-1
+
+Launch (run after the upload; needs the user's yes, same as every AWS launch command):
+aws ec2 run-instances \
+  --region ap-northeast-1 \
+  --image-id ami-0c0af60eae4cc564b \
+  --instance-type r7i.16xlarge \
+  --instance-market-options '{"MarketType":"spot","SpotOptions":{"MaxPrice":"3.00","SpotInstanceType":"one-time","InstanceInterruptionBehavior":"terminate"}}' \
+  --iam-instance-profile Name=hl-build2-ec2 \
+  --security-group-ids sg-0f7e004024e90ac9a \
+  --subnet-id subnet-02bca146fcb943179 \
+  --instance-initiated-shutdown-behavior terminate \
+  --block-device-mappings '[{"DeviceName":"/dev/sda1","Ebs":{"DeleteOnTermination":true,"VolumeSize":100,"VolumeType":"gp3","Throughput":1000,"Iops":16000}}]' \
+  --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=s2-step1-tree-sizing},{Key=Project,Value=pair-trading},{Key=Purpose,Value=S2-Step1-boosted-tree-sizing-2026-10-30}]' \
+  --user-data file://research/model/aws_s2_step1_userdata.sh \
+  --count 1
+
+Pull logs back (after the run, or to check progress):
+aws s3 sync s3://pair-trading-hl-289869684922/s2_step1/logs/ research/model/logs/s2_step1_aws/ --region ap-northeast-1
+
+Same AMI, IAM profile, security group and subnet as S1's launches (aws_s1_probe_launch_cmd.txt /
+aws_s1_run_launch_cmds.txt) -- reused, not re-chosen. Same $3.00 spot MaxPrice bid for ap-northeast-1.
+us-east-2 is the brief's stated fallback if Tokyo capacity/quota blocks this (would need its own AMI id,
+security group and subnet -- not looked up here since Tokyo is the brief's first choice and this is a
+small, short sizing run).
