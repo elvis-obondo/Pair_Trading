@@ -1,12 +1,10 @@
 {
- "head": "a5cdbc478511418401a0756cb568efc8f87036bd",
+ "head": "959ca20c36a1d1b33b382f2057bae16fe30b1775",
  "porcelain": [
   " M CLAUDE.md",
   " M docs/HYPERLIQUID_HANDOFF.md",
   " M docs/PLANNER_HANDOFF.md",
   " M docs/prompts/HL_MODEL1_REVERTER_MODEL.md",
-  "A  research/model/aws_s2_step1_launch_cmd.txt",
-  "A  research/model/aws_s2_step1_userdata.sh",
   "?? docs/prompts/CODE_CHECKER_ROLE.md",
   "?? docs/prompts/HL_MODEL1_B5_SPEED_MEMORY.md",
   "?? docs/prompts/HL_MODEL1_S1_LOGISTIC.md",
@@ -109,6 +107,7 @@
   "?? research/model/logs/s1_sizing.log",
   "?? research/model/logs/s1_sizing_done.log",
   "?? research/model/logs/s1_sizing_wrapper.log",
+  "?? research/model/logs/s2_step1_aws/",
   "?? research/model/logs/sync_only.log",
   "?? research/model/logs/sync_only2.log",
   "?? research/model/logs/sync_only3.log",
