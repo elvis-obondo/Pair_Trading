@@ -1,0 +1,60 @@
+[B5-CACHE] sha256 build_cache_v1_pair.py: 2cc8ac0dc984738e2ba93e3067c44c8e6f09b918e8f0e690d4176c2a53a5af46
+[B5-CACHE] sha256 harness.py: 423328afc950252fe37d5fbc7fb4c25d97475b36abe3860542357e5481ce56c7
+[B5-CACHE] sha256 b5_profile.py: 633cfdf46b596f454de691e3ed0b01563f9fe76383e0ebbb4d85840dabdb6e27
+[B5-CACHE] sha256 master_manifest.py: 9ec12057ab23a797cb2a9dde1eae204c9c2e5775b02399cccb6d146f9afea3fe
+[B5-CACHE] sha256 inputs_v1_pair.csv: 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf (must be 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf)
+[B5-CACHE] sha256 coins.csv: 1f34fce7beb0dcbcae0c306eca34ea69f67dbcc48466ca191a746abb10b6e333
+[B5-CACHE] sha256 v1 MANIFEST.json: ecc630c38c4b5cff50c11e9b41b4651a2017e703f1ae7fbb9d0800dcd06fd837
+[B5-CACHE] git_head a5cdbc478511418401a0756cb568efc8f87036bd (117 uncommitted paths); start 2026-10-30T14:03:19Z UTC; pid 3540
+[B5-CACHE] BROKEN VARIANT -- arrays_match (shared by the real fold checks) catches one changed cell: PASS
+[B5-CACHE] 1091 IN columns (expected 1,091)
+[HARNESS] check_inputs: 1091 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[B5-CACHE] full load_features call: 6,697,756 rows x 1091 cols, 21.4s, X.nbytes=29.23GB, rss_before=0.11GB VmHWM=32.34GB  [21s]
+[B5-CACHE] disk free at /root/Pair_Trading/research/datasets/model_cache: 78.3GB; need 34.6GB (29.2GB file + 5GB margin)
+[B5-CACHE] saved /root/Pair_Trading/research/datasets/model_cache/ivq_pair_v1_1091.npy in 11.1s  [32s]
+[B5-CACHE] after del X + gc.collect: VmRSS (current, not a high-water mark) 2.04GB
+[B5-CACHE] manifest /root/Pair_Trading/research/datasets/model_cache/ivq_pair_v1_1091.manifest.json: cache_sha256=bd5dc2549374d0a80c8b042425e34119289b17b753a49213ac28c1831c6ca544
+[HARNESS] load_search_events: 6,697,756 merged rows -> 5,405,478 after the date/gap-day filter -> 5,378,429 after dropping 27,049 label_gap=1 rows
+[HARNESS] check_inputs: 1091 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 1091 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 1091 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 1091 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 1091 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 1091 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 1091 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 1091 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 1091 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 1091 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 1091 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 1091 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 1091 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 1091 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 1091 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 1091 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 1091 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 1091 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 1091 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 1091 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 1091 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 1091 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[B5-CACHE] fold 7 equivalence -- load_features_cached vs load_features (n=5,348,896, 500,000 rows/chunk, 11 chunks): PASS
+[B5-CACHE] fold 7 memory: rss_before=2.85GB VmHWM_this_block=13.27GB
+[HARNESS] check_inputs: 1091 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[B5-CACHE] fold 7 -- load_fold_features_cached shapes match the fold's train/val/test sizes: PASS -- ((3979894, 1091), (1057348, 1091), (311654, 1091)) vs ((3979894, 1091), (1057348, 1091), (311654, 1091))
+[HARNESS] check_inputs: 1091 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 1091 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 1091 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 1091 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 1091 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 1091 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 1091 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 1091 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 1091 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 1091 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[B5-CACHE] fold 0 equivalence -- load_features_cached vs load_features (n=2,246,804, 500,000 rows/chunk, 5 chunks): PASS
+[B5-CACHE] fold 0 memory: rss_before=3.19GB VmHWM_this_block=12.80GB
+[HARNESS] check_inputs: 1091 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[B5-CACHE] fold 0 -- load_fold_features_cached shapes match the fold's train/val/test sizes: PASS -- ((1401515, 1091), (416440, 1091), (428849, 1091)) vs ((1401515, 1091), (416440, 1091), (428849, 1091))
+[B5-CACHE] BROKEN VARIANT (a) -- a stale inputs_sha256 makes _cache_info() report invalid (not raise): PASS
+[B5-CACHE] BROKEN VARIANT (b) -- a tampered cache_sha256 makes _cache_info() RAISE (not silently trust it): PASS
+[B5-CACHE] all done [260s]: 7/7 checks PASS
