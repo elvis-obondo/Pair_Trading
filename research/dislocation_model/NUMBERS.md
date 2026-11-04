@@ -4513,3 +4513,232 @@ PASS on the code (959ca20) and launch files (6b50365).
 | AWS cleanup: i-0a1d798aed2607db9 confirmed terminated (T8b watcher log). S3 payload tarball and the `s2_step1/` logs prefix deleted after the checker's PASS on this section, per the launch file's own cleanup step | M | T8b watcher output; `aws s3 ls` confirmation after deletion |
 
 Checker (Code Checker) verdict: PASS, 2026-10-30 (4 small wording/reference fixes applied in this commit: line refs on the retry row, dtype/two-copy mechanism retagged A not M on the predict row, the intro's review-round count replaced with the two commit shas; every 3+-digit number cross-checked against both logs).
+
+
+## [HL-MODEL1-S1-F] Two follow-up checks on the S1 logistic results (user, 2026-10-31) -- gate verdict unchanged
+
+Per the brief (docs/prompts/HL_MODEL1_S1_FOLLOWUPS.md): descriptive only, no refit, no vault, no profit.
+Run on the GCP VM (`research/model/s1f_followups.py`), reading the 8 folds' saved test predictions,
+`report.json` and `val_permutation_importance.csv`, plus v1 events/labels and the cached IN-matrix. Those
+S1 receipts are excluded from the laptop<->VM sync (logs/ is pull-only there, by design); pushed via
+`gcloud compute scp` before the run. F1's in-block ("the S1 way") lift was cross-checked against
+report.json's own saved values at every fold and target -- exact match (max |diff| = 0.00e+00), asserted
+in the script and confirmed in the log, since continuous p_10h scores make the top-q% mask independent
+of this script's own RNG. Code Checker: script PASS (1 review round, 5 fixes: shared `top_k_mask`
+import, the cross-check assert above, a 94-drift-column assert, a per-fold n_block cross-check between
+`harness.build_folds` and the saved CSVs, a shift=None count per fold). This log/NUMBERS section went
+through 2 review rounds: round 1 found 3 missing brief items (the full F1 per-fold table, the F2 main
+table's event count/reach/chance(all), every top-20 column's shift listed) and 8 overclaim/wording
+issues, all fixed below; round 2 found 2 small label/receipt fixes, also applied. Final verdict at the
+end of this entry.
+
+**Receipt check (checker's fix):** sha256 of `report.json` and all 16 per-fold CSVs matches, laptop
+vs the VM, on every one of the 17 files -- the scp push did not alter anything, on top of the exact
+in-block cross-check above. Full laptop/VM sha256 pairs: `research/model/logs/s1f_input_shas.log`.
+
+### F1: fixed cut-off test (what a live system would actually have)
+
+Folds 1-7 (fold 0 has no earlier block, not scored). Rule A = cutoff from the immediately previous
+block; Rule B = cutoff pooled over all earlier blocks; "in-block" = S1's own hindsight ranking on the
+same fold, included only for comparison over the same months. No (rule, fold, target) cell had 0 picks.
+
+| target | rule | pooled lift (folds 1-7) | 98.75% CI |
+|---|---|---|---|
+| top 1% | Rule A (previous block) | 0.0782 | (0.0619, 0.0928) |
+| top 1% | Rule B (all earlier blocks) | 0.0767 | (0.0589, 0.0938) |
+| top 1% | in-block (S1's own ranking) | 0.0830 | (0.0670, 0.0986) |
+| top 10% | Rule A (previous block) | 0.0385 | (0.0297, 0.0469) |
+| top 10% | Rule B (all earlier blocks) | 0.0370 | (0.0279, 0.0459) |
+| top 10% | in-block (S1's own ranking) | 0.0404 | (0.0328, 0.0487) |
+
+**checker's fix (overclaim):** the point estimates are lower for both fixed rules than for in-block at
+both targets. The 98.75% intervals overlap heavily between every rule pair above, and this entry does
+not test the difference between them -- "loses a bit of edge, as expected" is not shown by this table;
+only "the point estimate is lower" is.
+
+#### F1 full per-fold tables (folds 1-7; no cell had n=0; checker's fix -- the brief's own table, not just a pointer to the JSON)
+
+**top 1%, Rule A (cutoff = previous block's quantile):**
+
+| fold | c_k | n | picks/active-day | share | reach_10h | chance_10h | gap | lift |
+|---|---|---|---|---|---|---|---|---|
+| 1 | 0.7432 | 9622 | 320.7 | 0.0208 | 0.6407 | 0.6998 | -0.0591 | 0.0583 |
+| 2 | 0.8045 | 8070 | 269.0 | 0.0168 | 0.6978 | 0.7437 | -0.0459 | 0.0948 |
+| 3 | 0.8416 | 1598 | 53.3 | 0.0034 | 0.6984 | 0.7502 | -0.0518 | 0.0898 |
+| 4 | 0.7576 | 3892 | 129.7 | 0.0082 | 0.6745 | 0.7062 | -0.0318 | 0.0839 |
+| 5 | 0.7405 | 7175 | 239.2 | 0.0154 | 0.6903 | 0.7251 | -0.0348 | 0.0770 |
+| 6 | 0.7772 | 2240 | 74.7 | 0.0053 | 0.7045 | 0.7449 | -0.0405 | 0.0883 |
+| 7 | 0.7321 | 3032 | 131.8 | 0.0097 | 0.6768 | 0.7116 | -0.0348 | 0.0595 |
+
+**top 1%, Rule B (cutoff = all earlier blocks pooled):**
+
+| fold | c_k | n | picks/active-day | share | reach_10h | chance_10h | gap | lift |
+|---|---|---|---|---|---|---|---|---|
+| 1 | 0.7432 | 9622 | 320.7 | 0.0208 | 0.6407 | 0.6998 | -0.0591 | 0.0583 |
+| 2 | 0.7814 | 10600 | 353.3 | 0.0220 | 0.6857 | 0.7384 | -0.0528 | 0.0879 |
+| 3 | 0.8098 | 2452 | 81.7 | 0.0051 | 0.6937 | 0.7470 | -0.0533 | 0.0883 |
+| 4 | 0.7994 | 2254 | 75.1 | 0.0047 | 0.6788 | 0.7074 | -0.0286 | 0.0870 |
+| 5 | 0.7903 | 3891 | 129.7 | 0.0084 | 0.7283 | 0.7397 | -0.0114 | 0.1004 |
+| 6 | 0.7883 | 1878 | 62.6 | 0.0045 | 0.7103 | 0.7472 | -0.0369 | 0.0919 |
+| 7 | 0.7822 | 1528 | 66.4 | 0.0049 | 0.6904 | 0.7239 | -0.0335 | 0.0608 |
+
+**top 1%, in-block (S1's own hindsight ranking, same fold -- for comparison only):**
+
+| fold | n | picks/active-day | share | reach_10h | chance_10h | gap | lift |
+|---|---|---|---|---|---|---|---|
+| 1 | 4633 | 154.4 | 0.0100 | 0.6724 | 0.7121 | -0.0397 | 0.0777 |
+| 2 | 4815 | 160.5 | 0.0100 | 0.7159 | 0.7518 | -0.0359 | 0.1048 |
+| 3 | 4768 | 158.9 | 0.0100 | 0.6768 | 0.7354 | -0.0586 | 0.0830 |
+| 4 | 4772 | 159.1 | 0.0100 | 0.6660 | 0.7038 | -0.0378 | 0.0778 |
+| 5 | 4653 | 155.1 | 0.0100 | 0.7191 | 0.7361 | -0.0170 | 0.0948 |
+| 6 | 4217 | 140.6 | 0.0100 | 0.6803 | 0.7354 | -0.0551 | 0.0738 |
+| 7 | 3117 | 135.5 | 0.0100 | 0.6760 | 0.7105 | -0.0345 | 0.0598 |
+
+**top 10%, Rule A (cutoff = previous block's quantile):**
+
+| fold | c_k | n | picks/active-day | share | reach_10h | chance_10h | gap | lift |
+|---|---|---|---|---|---|---|---|---|
+| 1 | 0.4988 | 84285 | 2809.5 | 0.1820 | 0.5437 | 0.6308 | -0.0871 | 0.0303 |
+| 2 | 0.5768 | 67362 | 2245.4 | 0.1399 | 0.5839 | 0.6821 | -0.0982 | 0.0425 |
+| 3 | 0.6209 | 20015 | 667.2 | 0.0420 | 0.6348 | 0.7075 | -0.0726 | 0.0690 |
+| 4 | 0.5222 | 45326 | 1510.9 | 0.0950 | 0.5889 | 0.6606 | -0.0717 | 0.0439 |
+| 5 | 0.5164 | 61876 | 2062.5 | 0.1330 | 0.5675 | 0.6517 | -0.0843 | 0.0275 |
+| 6 | 0.5506 | 29699 | 990.0 | 0.0704 | 0.5934 | 0.6857 | -0.0923 | 0.0365 |
+| 7 | 0.5126 | 29546 | 1284.6 | 0.0948 | 0.5837 | 0.6485 | -0.0648 | 0.0295 |
+
+**top 10%, Rule B (cutoff = all earlier blocks pooled):**
+
+| fold | c_k | n | picks/active-day | share | reach_10h | chance_10h | gap | lift |
+|---|---|---|---|---|---|---|---|---|
+| 1 | 0.4988 | 84285 | 2809.5 | 0.1820 | 0.5437 | 0.6308 | -0.0871 | 0.0303 |
+| 2 | 0.5446 | 84424 | 2814.1 | 0.1754 | 0.5694 | 0.6714 | -0.1020 | 0.0387 |
+| 3 | 0.5752 | 30399 | 1013.3 | 0.0638 | 0.6119 | 0.6954 | -0.0835 | 0.0581 |
+| 4 | 0.5629 | 31257 | 1041.9 | 0.0655 | 0.6094 | 0.6735 | -0.0641 | 0.0515 |
+| 5 | 0.5538 | 45319 | 1510.6 | 0.0974 | 0.5884 | 0.6667 | -0.0783 | 0.0335 |
+| 6 | 0.5532 | 28978 | 965.9 | 0.0687 | 0.5947 | 0.6866 | -0.0919 | 0.0369 |
+| 7 | 0.5481 | 21338 | 927.7 | 0.0685 | 0.6013 | 0.6607 | -0.0594 | 0.0350 |
+
+**top 10%, in-block (S1's own hindsight ranking, same fold -- for comparison only):**
+
+| fold | n | picks/active-day | share | reach_10h | chance_10h | gap | lift |
+|---|---|---|---|---|---|---|---|
+| 1 | 46321 | 1544.0 | 0.1000 | 0.5807 | 0.6580 | -0.0773 | 0.0401 |
+| 2 | 48142 | 1604.7 | 0.1000 | 0.6064 | 0.6963 | -0.0898 | 0.0509 |
+| 3 | 47677 | 1589.2 | 0.1000 | 0.5883 | 0.6794 | -0.0912 | 0.0505 |
+| 4 | 47714 | 1590.5 | 0.1000 | 0.5858 | 0.6584 | -0.0726 | 0.0430 |
+| 5 | 46521 | 1550.7 | 0.1000 | 0.5869 | 0.6655 | -0.0785 | 0.0332 |
+| 6 | 42168 | 1405.6 | 0.1000 | 0.5738 | 0.6721 | -0.0983 | 0.0306 |
+| 7 | 31166 | 1355.0 | 0.1000 | 0.5810 | 0.6461 | -0.0651 | 0.0292 |
+
+"picks/active-day" = picks / (days with >=1 event in the block), not calendar days -- the brief's n_days
+is `df["day"].nunique()` within the block, not the block's full calendar span (which is up to 30 days,
+or 23 for fold 7).
+
+### F2: why are folds 5-7 weaker?
+
+Columns marked READ come straight from S1's saved `report.json` (training-time numbers, not
+recomputed). COMPUTED columns are new to this check: `gap_all` = reach_10h_all - chance_10h_all; the
+vol_48-vs-other-94-drift split re-reads each fold's `val_permutation_importance.csv` with the SAME
+positive-importance-only, same-total convention `s1_report.py`'s own `drift_share_by_fold` uses --
+cross-checked to equal that saved total exactly, all 8 folds (the log's `check_ok=True` on every line).
+
+#### F2 main table, in full (checker's fix: event count and reach/chance(all) added -- n_block is COMPUTED (harness.build_folds' test_ids, cross-checked against the saved CSV row counts), reach/chance(all) are READ from report.json's m1_hit_rate)
+
+| fold | n_block (COMPUTED) | reach_10h(all) (READ) | chance_10h(all) (READ) | gap(all) (COMPUTED) | lift@10% (READ) | lift@1% (READ) | drift share vol_48 (COMPUTED) | drift share other 94 (COMPUTED) | top column (READ) | top-col share (READ) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 0 | 428849 | 0.3296 | 0.4507 | -0.1211 | 0.0326 | 0.0922 | 0.0722 | 0.0151 | sigma | 0.1986 |
+| 1 | 463203 | 0.3295 | 0.4469 | -0.1174 | 0.0401 | 0.0777 | 0.1385 | 0.0092 | threshold | 0.2644 |
+| 2 | 481419 | 0.3424 | 0.4831 | -0.1407 | 0.0509 | 0.1048 | 0.1605 | 0.0166 | threshold | 0.2866 |
+| 3 | 476768 | 0.3259 | 0.4675 | -0.1416 | 0.0505 | 0.0830 | 0.1838 | 0.0063 | threshold | 0.3386 |
+| 4 | 477137 | 0.3251 | 0.4408 | -0.1156 | 0.0430 | 0.0778 | 0.2258 | 0.0025 | threshold | 0.3810 |
+| 5 | 465201 | 0.3275 | 0.4393 | -0.1118 | 0.0332 | 0.0948 | 0.3211 | 0.0024 | threshold | 0.4456 |
+| 6 | 421678 | 0.3151 | 0.4439 | -0.1288 | 0.0306 | 0.0738 | 0.3902 | 0.0012 | threshold | 0.4819 |
+| 7 | 311654 | 0.3284 | 0.4227 | -0.0943 | 0.0292 | 0.0598 | 0.3372 | 0.0007 | threshold | 0.4348 |
+
+**checker's fix (overclaim):** "vol_48 ... overwhelmingly the dominant driver column by the later
+folds" is wrong -- `threshold` is the top column in every one of folds 1-7 (0.26-0.48), above vol_48's
+own 0.14-0.39 over the same folds. Corrected below: vol_48 is second only to `threshold`, and rising.
+
+**Shift check** (event-level, refit = train+val per R1, vs that fold's test block; mean |shift| over the
+drift and non-drift columns in each fold's own top 20):
+
+| fold | drift cols in this fold's top 20 | mean \|shift\| drift cols | mean \|shift\| non-drift cols | top-20 cols with shift=None (zero IQR on the refit rows) |
+|---|---|---|---|---|
+| 0 | vol_48 (1 col) | 0.0502 | 0.2190 | 3/20 |
+| 1 | vol_48 (1 col) | 0.0071 | 0.1504 | 2/20 |
+| 2 | vol_48, net_volume_ratio_30 (2 cols) | 0.0352 | 0.2622 | 1/20 |
+| 3 | vol_48 (1 col) | 0.0146 | 0.1226 | 2/20 |
+| 4 | vol_48 (1 col) | 0.0052 | 0.1355 | 2/20 |
+| 5 | vol_48, vratio (2 cols) | 0.0344 | 0.0634 | 2/20 |
+| 6 | vol_48, vratio (2 cols) | 0.0261 | 0.1520 | 2/20 |
+| 7 | vol_48 (1 col) | 0.0265 | 0.1275 | 2/20 |
+
+**checker's fix (overclaim):** the "drift cols" mean above is over only 1-2 columns against roughly 17
+non-drift columns per fold -- "non-drift shift larger at every fold" mostly says "vol_48's (and, in 3
+folds, one other drift column's) own median barely moved," not that drift columns as a class move less.
+vol_48's own median shift specifically is small in every fold (between 0.0052 and 0.0502 in absolute
+value, fold 0 the largest) -- see the full per-column list below for the second drift column where one
+exists (net_volume_ratio_30 in fold 2, vratio in folds 5-6).
+
+#### F2 shift check: every top-20 column's shift, per fold (checker's fix -- the brief's own requirement; DRIFT columns marked)
+
+**Fold 0** (3/20 columns had shift=None, zero IQR on the refit rows):
+
+sigma=0.1391, threshold=-0.0105, DRIFT:vol_48=-0.0502, sigma_sym=0.1519, rv_eth_24h=0.2872, ret_btc_7d=-0.1443, ret_idx_7d_seg=-0.2234, ret_idx_24h=-0.1709, sandwich=-0.2009, volratio_eth=0.0210, weekend=None, ret_idx_24h_seg=-0.1745, abs_beta=0.0067, net_backstop_share_60=None, share_up_24h=-0.1887, rv_btc_1h=0.4473, rv_btc_7d=1.1512, z_ratio=-0.0018, net_adl_ratio_60=None, rank90_idx_abs_ret_7d_seg=-0.1841
+
+**Fold 1** (2/20 columns had shift=None, zero IQR on the refit rows):
+
+threshold=0.0013, sigma=0.0315, DRIFT:vol_48=-0.0071, sigma_sym=0.0312, sandwich=-0.3121, weekend=None, rank90_idx_rv_24h_seg=-0.5856, ret_btc_7d=0.2887, ret_idx_7d_seg=0.3884, ret_btc_1h=0.0215, abs_beta=0.0246, sess_europe=0.0000, volratio_btc=-0.2147, rv_btc_24h=-0.1477, sign_beta=None, rv_btc_7d=-0.2083, ps_efficiency=0.1561, ret_idx_24h_seg=-0.0126, trig_sym=0.0000, b_fund_mean_7d=-0.1324
+
+**Fold 2** (1/20 columns had shift=None, zero IQR on the refit rows):
+
+threshold=-0.0051, sigma=0.0911, DRIFT:vol_48=0.0496, sigma_sym=0.0813, sandwich=-0.0176, weekend=0.0000, abs_beta=0.0119, rank90_idx_abs_ret_7d_seg=0.5842, ps_efficiency=0.0026, ret_idx_7d_seg=-0.7114, sign_beta=None, ret_btc_1h=-0.1305, DRIFT:net_volume_ratio_30=-0.0208, coherence_7d=-0.1584, rv_btc_24h=1.1103, rv_eth_1h=0.4490, ret_btc_7d=-1.0873, z_ratio=-0.0165, trig_sym=0.0000, sess_europe=0.0000
+
+**Fold 3** (2/20 columns had shift=None, zero IQR on the refit rows):
+
+threshold=0.0059, DRIFT:vol_48=0.0146, sigma=-0.0049, sandwich=-0.1890, sigma_sym=-0.0037, weekend=0.0000, volratio_btc=0.2289, rv_btc_24h=0.8299, rank90_idx_rv_24h_seg=-0.0421, abs_beta=0.0032, ret_btc_7d=0.2583, ps_efficiency=0.0511, ret_idx_7d_seg=0.2250, z_ratio=-0.0068, trig_sym=0.0000, sign_beta=None, mkt_liq_ratio_7d_28d=-0.2202, sess_europe=0.0000, mins_since_trade_b=None, ret_eth_1h=0.0148
+
+**Fold 4** (2/20 columns had shift=None, zero IQR on the refit rows):
+
+threshold=0.0158, DRIFT:vol_48=-0.0052, sigma=-0.0051, sandwich=-0.3195, weekend=0.0000, sigma_sym=-0.0075, ps_efficiency=0.1373, mins_since_trade_a=None, rv_btc_24h=0.1783, ret_btc_7d=0.1696, z_ratio=-0.0049, mins_since_trade_b=None, ret_idx_7d_seg=0.2189, trig_sym=0.0000, mkt_liq_ratio_7d_28d=0.1891, sess_europe=0.0000, abs_beta=0.0221, vol_slope=-0.0012, volratio_btc=0.0538, rv_idx_7d=-0.9804
+
+**Fold 5** (2/20 columns had shift=None, zero IQR on the refit rows):
+
+threshold=-0.0441, DRIFT:vol_48=-0.0397, sigma=0.0173, sandwich=-0.2796, ps_efficiency=0.1330, mins_since_trade_a=None, n_other_triggers_same_bar=0.0508, weekend=0.0000, trig_sym=0.0000, abs_beta=-0.0173, mins_since_trade_b=None, sess_europe=0.0000, z_ratio=-0.0128, n_triggers_prev_24h=0.2412, volratio_idx_seg=-0.1100, threshold_sym=0.0271, vol_slope=-0.0187, crossings_7d=0.0000, DRIFT:vratio=-0.0291, rank90_idx_abs_ret_7d_seg=0.0618
+
+**Fold 6** (2/20 columns had shift=None, zero IQR on the refit rows):
+
+threshold=0.0300, DRIFT:vol_48=0.0108, sigma=0.1107, sandwich=-0.0323, abs_beta=0.0015, ps_efficiency=0.0655, volratio_btc=-0.0945, rank90_idx_rv_24h_seg=0.8466, mins_since_trade_a=None, rank90_idx_abs_ret_7d_seg=0.3638, trig_sym=0.0000, mins_since_trade_b=None, ps_max_step=-0.0702, crossings_7d=0.0000, b_ctx_impact_spread_bp=0.4270, corr_1m_24h=0.0041, z_ratio=-0.0273, a_slip_buy_1k=0.3191, vol_slope=-0.0390, DRIFT:vratio=-0.0413
+
+**Fold 7** (2/20 columns had shift=None, zero IQR on the refit rows):
+
+threshold=-0.0288, DRIFT:vol_48=-0.0265, sigma=0.1450, sandwich=-0.2118, abs_beta=0.0375, sigma_sym=0.1352, trig_sym=0.0000, ps_efficiency=0.1504, volratio_idx_seg=-0.4847, rv_btc_24h=0.1003, corr_1m_24h=-0.2069, z_ratio=-0.0133, volratio_btc=-0.0586, mins_since_trade_b=None, mins_since_trade_a=None, vol_slope=-0.0367, neutrality=0.0876, mkt_liq_ratio_7d_28d=-0.2689, n_other_triggers_same_bar=-0.1262, rank90_idx_rv_24h_seg=0.0759
+
+| number | M/A | where |
+|---|---|---|
+| vol_48's OWN drift share rises sharply and close to monotonically from fold 0 (0.072) to fold 6 (0.390), then dips slightly at fold 7 (0.337) -- it is second only to `threshold` by the later folds (threshold 0.43-0.48, vol_48 0.32-0.39), and the gap between them narrows a lot over the window. The other 94 drift columns' combined share, by contrast, SHRINKS across the same folds (0.015 at fold 0 down to 0.0007 at fold 7) | M | table above; research/model/logs/s1f_followups.log F2 print lines |
+| **checker's fix (overclaim):** per-fold lift is a point estimate with no per-fold interval here. lift@10% peaks at folds 2-3 (0.0509, 0.0505) and is lowest at fold 7 (0.0292). lift@1% is uneven -- fold 5 is 0.0948, close to fold 2's peak of 0.1048 -- and is also lowest at fold 7 (0.0598). Neither "the weakening is real" nor "genuinely weakens" is shown by point estimates alone | M | table above |
+| The shift check does not show the drift columns in a fold's own top 20 moving systematically more than the non-drift columns: the drift-column mean is over only 1-2 columns per fold (vol_48 alone, or vol_48 plus one other), and vol_48's own median shift is small (0.0052-0.0502 in absolute value) in every fold, including 5-7. It does not track the rising drift-share trend either -- fold 0's shift (0.0502) is the largest of all 8, not the smallest | M | table above |
+| 1-3 of each fold's top-20 columns had shift=None (zero IQR on the refit rows) -- small denominators for the non-drift mean in particular (roughly 17-19 columns, not a clean 20), noted here so the means above aren't read as over a full top 20 everywhere | M | table above |
+
+**checker's fix (overclaim, median/IQR's own limit):** the median/IQR shift only detects a move in the
+median. It cannot see a change in spread, in the tails, or in a column's relationship to the label --
+**what the tables show, no cause claimed beyond them:** the model leans increasingly hard on `threshold`
+and, second to it, specifically on vol_48 (not the drift group broadly) as the folds progress, and the
+lift is lowest at fold 7 of all 8 (point estimates, not tested against each other) -- but the top-20
+columns show no larger median shift in folds 5-7 than in the earlier folds. This check does not test
+changes in spread, tails or the column-to-label relationship, so it cannot rule those out as a cause;
+it only shows that a median shift in the top-20 columns is not the visible story here.
+
+**10-line summary** (also at the end of the log): fixed cutoffs' point estimates are lower than S1's own
+hindsight ranking at both targets, with heavily overlapping intervals (not tested against each other);
+Rule A and Rule B are close to each other; no (rule,fold) cell had 0 picks; lift@10% peaks at folds 2-3
+and is lowest at fold 7; lift@1% is uneven (fold 5 near the peak) and also lowest at fold 7; `threshold`
+is the top driver column in every one of folds 1-7, with vol_48 second and rising (0.14 to 0.39 of
+folds 1-7); the other 94 drift columns' combined share shrinks across the same folds; the shift check's
+drift-column mean is over only 1-2 columns per fold, vol_48's own median shift stays small throughout
+(largest at fold 0, not folds 5-7), and this check cannot see spread/tail/label-relationship changes;
+gate verdict is still FAIL (NUMBERS [HL-MODEL1-S1]).
+
+Code Checker: script PASS; log/NUMBERS PASS (round 2, after 2 small label/receipt fixes: n_block
+relabelled COMPUTED not READ, and the laptop/VM sha256 pairs moved to their own committed log).
