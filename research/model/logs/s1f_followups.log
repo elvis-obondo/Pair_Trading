@@ -1,0 +1,42 @@
+[S1F] sha256 s1f_followups.py: 0e8615e0f1fa454b589e4ffe1ea54184ea9c90f8a35e4157ac09104b4a82b050
+[S1F] sha256 harness.py: 423328afc950252fe37d5fbc7fb4c25d97475b36abe3860542357e5481ce56c7
+[S1F] sha256 s1_report.py: 9bf92f20c90f954dd1f61668d928672ded2e1cebeb24c3edfe3b411918ea54f9
+[S1F] sha256 inputs_v1_pair.csv: 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf
+[S1F] cache manifest cache_sha256: bd5dc2549374d0a80c8b042425e34119289b17b753a49213ac28c1831c6ca544 (must be bd5dc2549374d0a80c8b042425e34119289b17b753a49213ac28c1831c6ca544)
+[S1F] git_head 64508fa8a610f99afa2124f3de779f2c5b745625 (120 uncommitted paths); start 2026-11-04T13:09:07Z UTC; pid 5000; seed=20261031
+[HARNESS] load_search_events: 6,697,756 merged rows -> 5,405,478 after the date/gap-day filter -> 5,378,429 after dropping 27,049 label_gap=1 rows
+[S1F] loaded 3,525,909 test-predictions rows across 8 folds  [108s]
+[S1F] F1 q=0.01: in-block lift vs S1's saved value, max |diff| across folds 1-7 = 0.00e+00
+[S1F] F1 q=0.01: folds 1-7 pooled -- RuleA lift=0.0782 (0.0619,0.0928); RuleB lift=0.0767 (0.0589,0.0938); in-block (S1 way) lift=0.0830 (0.0670,0.0986)
+[S1F] F1 q=0.1: in-block lift vs S1's saved value, max |diff| across folds 1-7 = 0.00e+00
+[S1F] F1 q=0.1: folds 1-7 pooled -- RuleA lift=0.0385 (0.0297,0.0469); RuleB lift=0.0370 (0.0279,0.0459); in-block (S1 way) lift=0.0404 (0.0328,0.0487)
+[S1-REPORT] unexplained-drift IN columns: 95 (brief says 95)
+[HARNESS] check_inputs: 20 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[S1F] F2 fold 0: lift10=0.0326 lift1=0.0922 gap_all=-0.1211 drift_share vol48=0.0722 other94=0.0151 (check_ok=True) top_col=sigma(0.1986) 3/20 top-20 columns had shift=None mean|shift| drift=0.05022884998513457 nondrift=0.21896831515209747
+[HARNESS] check_inputs: 20 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[S1F] F2 fold 1: lift10=0.0401 lift1=0.0777 gap_all=-0.1174 drift_share vol48=0.1385 other94=0.0092 (check_ok=True) top_col=threshold(0.2644) 2/20 top-20 columns had shift=None mean|shift| drift=0.00709221887449653 nondrift=0.1504045887249156
+[HARNESS] check_inputs: 20 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[S1F] F2 fold 2: lift10=0.0509 lift1=0.1048 gap_all=-0.1407 drift_share vol48=0.1605 other94=0.0166 (check_ok=True) top_col=threshold(0.2866) 1/20 top-20 columns had shift=None mean|shift| drift=0.0352253761883961 nondrift=0.26218541701492587
+[HARNESS] check_inputs: 20 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[S1F] F2 fold 3: lift10=0.0505 lift1=0.0830 gap_all=-0.1416 drift_share vol48=0.1838 other94=0.0063 (check_ok=True) top_col=threshold(0.3386) 2/20 top-20 columns had shift=None mean|shift| drift=0.014586386140595882 nondrift=0.12257826275349286
+[HARNESS] check_inputs: 20 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[S1F] F2 fold 4: lift10=0.0430 lift1=0.0778 gap_all=-0.1156 drift_share vol48=0.2258 other94=0.0025 (check_ok=True) top_col=threshold(0.3810) 2/20 top-20 columns had shift=None mean|shift| drift=0.005215321507367612 nondrift=0.1354970590268098
+[HARNESS] check_inputs: 20 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[S1F] F2 fold 5: lift10=0.0332 lift1=0.0948 gap_all=-0.1118 drift_share vol48=0.3211 other94=0.0024 (check_ok=True) top_col=threshold(0.4456) 2/20 top-20 columns had shift=None mean|shift| drift=0.03436744167512225 nondrift=0.06336148391823987
+[HARNESS] check_inputs: 20 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[S1F] F2 fold 6: lift10=0.0306 lift1=0.0738 gap_all=-0.1288 drift_share vol48=0.3902 other94=0.0012 (check_ok=True) top_col=threshold(0.4819) 2/20 top-20 columns had shift=None mean|shift| drift=0.026062598573969382 nondrift=0.15198540940689384
+[HARNESS] check_inputs: 20 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[S1F] F2 fold 7: lift10=0.0292 lift1=0.0598 gap_all=-0.0943 drift_share vol48=0.3372 other94=0.0007 (check_ok=True) top_col=threshold(0.4348) 2/20 top-20 columns had shift=None mean|shift| drift=0.0264886583125067 nondrift=0.1275179118650501
+
+[S1F] === 10-LINE SUMMARY ===
+1. F1 top 1%, folds 1-7 pooled: Rule A (previous block) lift=0.0782 (0.0619,0.0928); Rule B (all earlier) lift=0.0767 (0.0589,0.0938); in-block (S1 way) lift=0.0830 (0.0670,0.0986).
+2. F1 top 10%, folds 1-7 pooled: Rule A lift=0.0385 (0.0297,0.0469); Rule B lift=0.0370 (0.0279,0.0459); in-block lift=0.0404 (0.0328,0.0487).
+3. 0 (rule,fold) cell(s) across both targets had 0 picks (reported as n=0, not dropped).
+4. F2 per-fold lift@10%: f0=0.0326, f1=0.0401, f2=0.0509, f3=0.0505, f4=0.0430, f5=0.0332, f6=0.0306, f7=0.0292.
+5. F2 per-fold lift@1%: f0=0.0922, f1=0.0777, f2=0.1048, f3=0.0830, f4=0.0778, f5=0.0948, f6=0.0738, f7=0.0598.
+6. F2 per-fold total drift share: f0=0.0872, f1=0.1477, f2=0.1771, f3=0.1901, f4=0.2282, f5=0.3234, f6=0.3914, f7=0.3379 (vol_48 alone vs the other 94 -- see the table).
+7. F2 per-fold top-column share: f0=0.1986, f1=0.2644, f2=0.2866, f3=0.3386, f4=0.3810, f5=0.4456, f6=0.4819, f7=0.4348.
+8. F2 mean |shift| (drift columns) by fold: f0=0.05022884998513457, f1=0.00709221887449653, f2=0.0352253761883961, f3=0.014586386140595882, f4=0.005215321507367612, f5=0.03436744167512225, f6=0.026062598573969382, f7=0.0264886583125067.
+9. F2 mean |shift| (non-drift columns) by fold: f0=0.21896831515209747, f1=0.1504045887249156, f2=0.26218541701492587, f3=0.12257826275349286, f4=0.1354970590268098, f5=0.06336148391823987, f6=0.15198540940689384, f7=0.1275179118650501.
+10. Descriptive only -- the gate verdict stays FAIL (NUMBERS [HL-MODEL1-S1]); no cause is claimed beyond what these tables show.
+[S1F] ALL DONE  [217s]
