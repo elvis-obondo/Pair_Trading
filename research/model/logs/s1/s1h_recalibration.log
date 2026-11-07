@@ -1,0 +1,189 @@
+[S1H] sha256 s1h_recalibration.py: 6e6a5ae53bfd517ccb37646ab70b8d1e949d99cc0f09edcaf44a126a2d844db5
+[S1H] sha256 harness.py: 423328afc950252fe37d5fbc7fb4c25d97475b36abe3860542357e5481ce56c7
+[S1H] sklearn.__version__=1.9.1
+[S1H] git_head 946549801e8eca4418ca03d5ccc5735ad09204f9 (115 uncommitted paths); start 2026-11-07T20:29:23Z UTC; pid 7772; seed=20261107
+[HARNESS] load_search_events: 6,697,756 merged rows -> 5,405,478 after the date/gap-day filter -> 5,378,429 after dropping 27,049 label_gap=1 rows
+[S1H] loaded 3,525,909 test-predictions rows across 8 folds  [30s]
+[S1H] picks cross-checked against S1-G's saved per-fold n, every (fold,q): OK
+[S1H] q=0.01: n=35,629
+[S1H] q=0.005: n=17,699
+[S1H] q=0.001: n=3,638
+[S1H] fold 1 h=2h: n_fit_pool=428,849 n_dropped(guard)=872 n_fit_used=427,977 platt_intercept=0.672160 platt_slope=1.213372 platt_valid=True iso_tied_groups=103
+[S1H] fold 1 h=2h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.1262, 0.2:0.2741, 0.3:0.3897, 0.4:0.4474, 0.5:0.4727, 0.6:0.6667, 0.7:0.6667, 0.8:0.6667, 0.9:0.6667
+[S1H] fold 1 h=2h: iso saturated (0 or 1) on test=183, of which contradicted by the label=1; distinct iso levels on this test block=229
+[S1H] fold 1 h=5h: n_fit_pool=428,849 n_dropped(guard)=2,398 n_fit_used=426,451 platt_intercept=0.137143 platt_slope=0.986245 platt_valid=True iso_tied_groups=120
+[S1H] fold 1 h=5h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.1094, 0.2:0.2337, 0.3:0.3502, 0.4:0.4276, 0.5:0.4941, 0.6:0.5565, 0.7:0.6358, 0.8:0.7321, 0.9:0.7590
+[S1H] fold 1 h=5h: iso saturated (0 or 1) on test=28, of which contradicted by the label=0; distinct iso levels on this test block=282
+[S1H] fold 1 h=10h: n_fit_pool=428,849 n_dropped(guard)=5,448 n_fit_used=423,401 platt_intercept=0.039595 platt_slope=0.821220 platt_valid=True iso_tied_groups=130
+[S1H] fold 1 h=10h: Spearman(raw p_10h, platt p_10h)=1.000000000000
+[S1H] fold 1 h=10h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.1244, 0.2:0.2508, 0.3:0.3516, 0.4:0.4411, 0.5:0.5201, 0.6:0.5835, 0.7:0.6062, 0.8:0.6842, 0.9:0.7685
+[S1H] fold 1 h=10h: iso saturated (0 or 1) on test=18, of which contradicted by the label=0; distinct iso levels on this test block=281
+[S1H] fold 2 h=2h: n_fit_pool=892,052 n_dropped(guard)=492 n_fit_used=891,560 platt_intercept=0.560216 platt_slope=1.266256 platt_valid=True iso_tied_groups=136
+[S1H] fold 2 h=2h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.1021, 0.2:0.2500, 0.3:0.3462, 0.4:0.3882, 0.5:0.4228, 0.6:0.5690, 0.7:0.5690, 0.8:0.6012, 0.9:0.7500
+[S1H] fold 2 h=2h: iso saturated (0 or 1) on test=89, of which contradicted by the label=0; distinct iso levels on this test block=228
+[S1H] fold 2 h=5h: n_fit_pool=892,052 n_dropped(guard)=1,502 n_fit_used=890,550 platt_intercept=-0.008834 platt_slope=1.001981 platt_valid=True iso_tied_groups=178
+[S1H] fold 2 h=5h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.0924, 0.2:0.2025, 0.3:0.3185, 0.4:0.3951, 0.5:0.4658, 0.6:0.5000, 0.7:0.5458, 0.8:0.6534, 0.9:0.7143
+[S1H] fold 2 h=5h: iso saturated (0 or 1) on test=2, of which contradicted by the label=0; distinct iso levels on this test block=291
+[S1H] fold 2 h=10h: n_fit_pool=892,052 n_dropped(guard)=3,760 n_fit_used=888,292 platt_intercept=-0.108148 platt_slope=0.812738 platt_valid=True iso_tied_groups=173
+[S1H] fold 2 h=10h: Spearman(raw p_10h, platt p_10h)=1.000000000000
+[S1H] fold 2 h=10h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.1118, 0.2:0.2162, 0.3:0.3142, 0.4:0.4045, 0.5:0.4821, 0.6:0.5523, 0.7:0.5987, 0.8:0.6400, 0.9:0.7026
+[S1H] fold 2 h=10h: iso saturated (0 or 1) on test=3, of which contradicted by the label=1; distinct iso levels on this test block=263
+[S1H] fold 3 h=2h: n_fit_pool=1,373,471 n_dropped(guard)=1,126 n_fit_used=1,372,345 platt_intercept=0.566078 platt_slope=1.286989 platt_valid=True iso_tied_groups=154
+[S1H] fold 3 h=2h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.0969, 0.2:0.2454, 0.3:0.3563, 0.4:0.4123, 0.5:0.4383, 0.6:0.5918, 0.7:0.5918, 0.8:0.6200, 0.9:0.7500
+[S1H] fold 3 h=2h: iso saturated (0 or 1) on test=51, of which contradicted by the label=0; distinct iso levels on this test block=201
+[S1H] fold 3 h=5h: n_fit_pool=1,373,471 n_dropped(guard)=3,785 n_fit_used=1,369,686 platt_intercept=-0.062509 platt_slope=1.003520 platt_valid=True iso_tied_groups=192
+[S1H] fold 3 h=5h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.0882, 0.2:0.1922, 0.3:0.3043, 0.4:0.3923, 0.5:0.4631, 0.6:0.5181, 0.7:0.5699, 0.8:0.6461, 0.9:0.6774
+[S1H] fold 3 h=5h: iso saturated (0 or 1) on test=2, of which contradicted by the label=2; distinct iso levels on this test block=237
+[S1H] fold 3 h=10h: n_fit_pool=1,373,471 n_dropped(guard)=9,444 n_fit_used=1,364,027 platt_intercept=-0.167524 platt_slope=0.807720 platt_valid=True iso_tied_groups=209
+[S1H] fold 3 h=10h: Spearman(raw p_10h, platt p_10h)=1.000000000000
+[S1H] fold 3 h=10h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.1070, 0.2:0.2030, 0.3:0.3005, 0.4:0.3937, 0.5:0.4732, 0.6:0.5396, 0.7:0.5950, 0.8:0.6436, 0.9:0.7100
+[S1H] fold 3 h=10h: iso saturated (0 or 1) on test=2, of which contradicted by the label=2; distinct iso levels on this test block=269
+[S1H] fold 4 h=2h: n_fit_pool=1,850,239 n_dropped(guard)=948 n_fit_used=1,849,291 platt_intercept=0.730179 platt_slope=1.348595 platt_valid=True iso_tied_groups=178
+[S1H] fold 4 h=2h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.1018, 0.2:0.2527, 0.3:0.3664, 0.4:0.4125, 0.5:0.4532, 0.6:0.6029, 0.7:0.6029, 0.8:0.6029, 0.9:0.6029
+[S1H] fold 4 h=2h: iso saturated (0 or 1) on test=32, of which contradicted by the label=0; distinct iso levels on this test block=227
+[S1H] fold 4 h=5h: n_fit_pool=1,850,239 n_dropped(guard)=3,251 n_fit_used=1,846,988 platt_intercept=0.017463 platt_slope=1.042076 platt_valid=True iso_tied_groups=204
+[S1H] fold 4 h=5h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.0848, 0.2:0.2018, 0.3:0.3137, 0.4:0.4039, 0.5:0.4749, 0.6:0.5245, 0.7:0.5807, 0.8:0.6333, 0.9:0.6933
+[S1H] fold 4 h=5h: iso saturated (0 or 1) on test=0, of which contradicted by the label=0; distinct iso levels on this test block=260
+[S1H] fold 4 h=10h: n_fit_pool=1,850,239 n_dropped(guard)=8,418 n_fit_used=1,841,821 platt_intercept=-0.133563 platt_slope=0.833762 platt_valid=True iso_tied_groups=219
+[S1H] fold 4 h=10h: Spearman(raw p_10h, platt p_10h)=1.000000000000
+[S1H] fold 4 h=10h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.1040, 0.2:0.2018, 0.3:0.3091, 0.4:0.4002, 0.5:0.4812, 0.6:0.5437, 0.7:0.5985, 0.8:0.6461, 0.9:0.7102
+[S1H] fold 4 h=10h: iso saturated (0 or 1) on test=0, of which contradicted by the label=0; distinct iso levels on this test block=257
+[S1H] fold 5 h=2h: n_fit_pool=2,327,376 n_dropped(guard)=1,475 n_fit_used=2,325,901 platt_intercept=0.811562 platt_slope=1.380150 platt_valid=True iso_tied_groups=177
+[S1H] fold 5 h=2h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.1034, 0.2:0.2528, 0.3:0.3665, 0.4:0.4195, 0.5:0.4507, 0.6:0.5844, 0.7:0.5844, 0.8:0.5844, 0.9:0.5844
+[S1H] fold 5 h=2h: iso saturated (0 or 1) on test=2, of which contradicted by the label=0; distinct iso levels on this test block=219
+[S1H] fold 5 h=5h: n_fit_pool=2,327,376 n_dropped(guard)=3,127 n_fit_used=2,324,249 platt_intercept=0.066424 platt_slope=1.075942 platt_valid=True iso_tied_groups=225
+[S1H] fold 5 h=5h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.0808, 0.2:0.2045, 0.3:0.3223, 0.4:0.4116, 0.5:0.4810, 0.6:0.5265, 0.7:0.5789, 0.8:0.6255, 0.9:0.6835
+[S1H] fold 5 h=5h: iso saturated (0 or 1) on test=0, of which contradicted by the label=0; distinct iso levels on this test block=258
+[S1H] fold 5 h=10h: n_fit_pool=2,327,376 n_dropped(guard)=7,110 n_fit_used=2,320,266 platt_intercept=-0.108903 platt_slope=0.859223 platt_valid=True iso_tied_groups=235
+[S1H] fold 5 h=10h: Spearman(raw p_10h, platt p_10h)=1.000000000000
+[S1H] fold 5 h=10h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.1015, 0.2:0.1992, 0.3:0.3129, 0.4:0.4070, 0.5:0.4869, 0.6:0.5491, 0.7:0.6057, 0.8:0.6487, 0.9:0.7143
+[S1H] fold 5 h=10h: iso saturated (0 or 1) on test=0, of which contradicted by the label=0; distinct iso levels on this test block=260
+[S1H] fold 6 h=2h: n_fit_pool=2,792,577 n_dropped(guard)=627 n_fit_used=2,791,950 platt_intercept=0.890837 platt_slope=1.420327 platt_valid=True iso_tied_groups=189
+[S1H] fold 6 h=2h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.1027, 0.2:0.2586, 0.3:0.3715, 0.4:0.4337, 0.5:0.4709, 0.6:0.5761, 0.7:0.5761, 0.8:0.5761, 0.9:0.5761
+[S1H] fold 6 h=2h: iso saturated (0 or 1) on test=1, of which contradicted by the label=0; distinct iso levels on this test block=215
+[S1H] fold 6 h=5h: n_fit_pool=2,792,577 n_dropped(guard)=1,648 n_fit_used=2,790,929 platt_intercept=0.085091 platt_slope=1.100050 platt_valid=True iso_tied_groups=252
+[S1H] fold 6 h=5h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.0786, 0.2:0.2011, 0.3:0.3207, 0.4:0.4141, 0.5:0.4830, 0.6:0.5331, 0.7:0.5863, 0.8:0.6274, 0.9:0.7192
+[S1H] fold 6 h=5h: iso saturated (0 or 1) on test=0, of which contradicted by the label=0; distinct iso levels on this test block=275
+[S1H] fold 6 h=10h: n_fit_pool=2,792,577 n_dropped(guard)=4,211 n_fit_used=2,788,366 platt_intercept=-0.113332 platt_slope=0.866983 platt_valid=True iso_tied_groups=236
+[S1H] fold 6 h=10h: Spearman(raw p_10h, platt p_10h)=1.000000000000
+[S1H] fold 6 h=10h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.1012, 0.2:0.1973, 0.3:0.3070, 0.4:0.4021, 0.5:0.4857, 0.6:0.5500, 0.7:0.6080, 0.8:0.6535, 0.9:0.7090
+[S1H] fold 6 h=10h: iso saturated (0 or 1) on test=0, of which contradicted by the label=0; distinct iso levels on this test block=256
+[S1H] fold 7 h=2h: n_fit_pool=3,214,255 n_dropped(guard)=716 n_fit_used=3,213,539 platt_intercept=0.938721 platt_slope=1.443715 platt_valid=True iso_tied_groups=211
+[S1H] fold 7 h=2h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.1027, 0.2:0.2618, 0.3:0.3701, 0.4:0.4329, 0.5:0.4724, 0.6:0.5761, 0.7:0.5761, 0.8:0.5761, 0.9:0.5761
+[S1H] fold 7 h=2h: iso saturated (0 or 1) on test=2, of which contradicted by the label=0; distinct iso levels on this test block=227
+[S1H] fold 7 h=5h: n_fit_pool=3,214,255 n_dropped(guard)=2,165 n_fit_used=3,212,090 platt_intercept=0.106263 platt_slope=1.117314 platt_valid=True iso_tied_groups=257
+[S1H] fold 7 h=5h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.0774, 0.2:0.2008, 0.3:0.3212, 0.4:0.4155, 0.5:0.4854, 0.6:0.5353, 0.7:0.5844, 0.8:0.6320, 0.9:0.7192
+[S1H] fold 7 h=5h: iso saturated (0 or 1) on test=0, of which contradicted by the label=0; distinct iso levels on this test block=272
+[S1H] fold 7 h=10h: n_fit_pool=3,214,255 n_dropped(guard)=6,598 n_fit_used=3,207,657 platt_intercept=-0.104422 platt_slope=0.882790 platt_valid=True iso_tied_groups=257
+[S1H] fold 7 h=10h: Spearman(raw p_10h, platt p_10h)=1.000000000000
+[S1H] fold 7 h=10h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.0987, 0.2:0.1956, 0.3:0.3077, 0.4:0.4025, 0.5:0.4883, 0.6:0.5518, 0.7:0.6122, 0.8:0.6559, 0.9:0.7073
+[S1H] fold 7 h=10h: iso saturated (0 or 1) on test=0, of which contradicted by the label=0; distinct iso levels on this test block=278
+[S1H] all fits done  [66s]
+[S1H] R2 h=2h fold 1: n=463,203 logloss raw/platt/iso=0.2351/0.23819023372115156/0.2380 brier raw/platt/iso=0.0627/0.06344492864726912/0.0634
+[S1H] R2 h=2h fold 2: n=481,419 logloss raw/platt/iso=0.2682/0.266600457365195/0.2665 brier raw/platt/iso=0.0743/0.07405245119439446/0.0740
+[S1H] R2 h=2h fold 3: n=476,768 logloss raw/platt/iso=0.2405/0.23789628812295185/0.2376 brier raw/platt/iso=0.0656/0.06525398275803247/0.0652
+[S1H] R2 h=2h fold 4: n=477,137 logloss raw/platt/iso=0.2390/0.23624051532919543/0.2356 brier raw/platt/iso=0.0644/0.06405999054748762/0.0639
+[S1H] R2 h=2h fold 5: n=465,201 logloss raw/platt/iso=0.2428/0.23886734689392555/0.2384 brier raw/platt/iso=0.0658/0.06513135067705615/0.0651
+[S1H] R2 h=2h fold 6: n=421,678 logloss raw/platt/iso=0.2243/0.22037382483202547/0.2199 brier raw/platt/iso=0.0593/0.05876388655889597/0.0587
+[S1H] R2 h=2h fold 7: n=311,654 logloss raw/platt/iso=0.2325/0.22920496934809198/0.2289 brier raw/platt/iso=0.0621/0.061716049724460105/0.0616
+[S1H] R2 h=2h POOLED (months 2-8, ALL events): n=3,097,060 n_platt_valid_folds=7/7 logloss raw/platt/iso=0.2411/0.23903255104524723/0.2387 brier raw/platt/iso=0.0651/0.06490904348986445/0.0648
+[S1H] R2 h=2h: all 7 folds had a valid Platt fit -- the ALL-events and MATCHED baselines are identical, nothing further to print.
+[S1H] R2 h=5h fold 1: n=463,203 logloss raw/platt/iso=0.4508/0.4564001857935112/0.4561 brier raw/platt/iso=0.1430/0.1447609961321604/0.1447
+[S1H] R2 h=5h fold 2: n=481,419 logloss raw/platt/iso=0.4705/0.4702356738493079/0.4699 brier raw/platt/iso=0.1511/0.15099841261437613/0.1509
+[S1H] R2 h=5h fold 3: n=476,768 logloss raw/platt/iso=0.4522/0.45311588156819793/0.4523 brier raw/platt/iso=0.1443/0.14475913153473324/0.1444
+[S1H] R2 h=5h fold 4: n=477,137 logloss raw/platt/iso=0.4436/0.44321824316353/0.4419 brier raw/platt/iso=0.1405/0.14051472214443586/0.1401
+[S1H] R2 h=5h fold 5: n=465,201 logloss raw/platt/iso=0.4480/0.44691753346165897/0.4463 brier raw/platt/iso=0.1419/0.14164285452840739/0.1416
+[S1H] R2 h=5h fold 6: n=421,678 logloss raw/platt/iso=0.4361/0.4348170383768617/0.4339 brier raw/platt/iso=0.1371/0.13684207051368746/0.1366
+[S1H] R2 h=5h fold 7: n=311,654 logloss raw/platt/iso=0.4494/0.44869396311875376/0.4475 brier raw/platt/iso=0.1429/0.14288199199296744/0.1425
+[S1H] R2 h=5h POOLED (months 2-8, ALL events): n=3,097,060 n_platt_valid_folds=7/7 logloss raw/platt/iso=0.4504/0.4508759370548789/0.4501 brier raw/platt/iso=0.1431/0.1433404453285708/0.1431
+[S1H] R2 h=5h: all 7 folds had a valid Platt fit -- the ALL-events and MATCHED baselines are identical, nothing further to print.
+[S1H] R2 h=10h fold 1: n=463,203 logloss raw/platt/iso=0.5919/0.5969745907645518/0.5964 brier raw/platt/iso=0.2028/0.20480380779921567/0.2048
+[S1H] R2 h=10h fold 2: n=481,419 logloss raw/platt/iso=0.5999/0.597641929007303/0.5969 brier raw/platt/iso=0.2062/0.20527797946607865/0.2051
+[S1H] R2 h=10h fold 3: n=476,768 logloss raw/platt/iso=0.5838/0.5848574318255294/0.5833 brier raw/platt/iso=0.1994/0.1999460555411034/0.1993
+[S1H] R2 h=10h fold 4: n=477,137 logloss raw/platt/iso=0.5835/0.5846033265455943/0.5828 brier raw/platt/iso=0.1993/0.19977968169435742/0.1991
+[S1H] R2 h=10h fold 5: n=465,201 logloss raw/platt/iso=0.5906/0.5900578826443028/0.5896 brier raw/platt/iso=0.2021/0.20185046040845167/0.2017
+[S1H] R2 h=10h fold 6: n=421,678 logloss raw/platt/iso=0.5774/0.5782311513896495/0.5769 brier raw/platt/iso=0.1966/0.19682348996800209/0.1963
+[S1H] R2 h=10h fold 7: n=311,654 logloss raw/platt/iso=0.5865/0.5875182754579897/0.5856 brier raw/platt/iso=0.2009/0.2013069972836185/0.2006
+[S1H] R2 h=10h POOLED (months 2-8, ALL events): n=3,097,060 n_platt_valid_folds=7/7 logloss raw/platt/iso=0.5879/0.5887645314590418/0.5876 brier raw/platt/iso=0.2011/0.20147362961649104/0.2011
+[S1H] R2 h=10h: all 7 folds had a valid Platt fit -- the ALL-events and MATCHED baselines are identical, nothing further to print.
+[S1H] R3 h=2h bin 0: n=309706 mean_raw=0.0254 mean_platt=0.01609751242589874 (nan=0) mean_iso=0.0173 actual_reach=0.0111
+[S1H] R3 h=2h bin 1: n=309706 mean_raw=0.0381 mean_platt=0.027268208544974647 (nan=0) mean_iso=0.0257 actual_reach=0.0184
+[S1H] R3 h=2h bin 2: n=309706 mean_raw=0.0470 mean_platt=0.03627083477812179 (nan=0) mean_iso=0.0335 actual_reach=0.0252
+[S1H] R3 h=2h bin 3: n=309706 mean_raw=0.0555 mean_platt=0.045407854922558825 (nan=0) mean_iso=0.0423 actual_reach=0.0345
+[S1H] R3 h=2h bin 4: n=309706 mean_raw=0.0643 mean_platt=0.05551703696291669 (nan=0) mean_iso=0.0517 actual_reach=0.0451
+[S1H] R3 h=2h bin 5: n=309706 mean_raw=0.0742 mean_platt=0.06731520321618863 (nan=0) mean_iso=0.0644 actual_reach=0.0590
+[S1H] R3 h=2h bin 6: n=309706 mean_raw=0.0858 mean_platt=0.08197088086750724 (nan=0) mean_iso=0.0819 actual_reach=0.0773
+[S1H] R3 h=2h bin 7: n=309706 mean_raw=0.1009 mean_platt=0.1019280745480989 (nan=0) mean_iso=0.1053 actual_reach=0.1031
+[S1H] R3 h=2h bin 8: n=309706 mean_raw=0.1239 mean_platt=0.133705681795342 (nan=0) mean_iso=0.1427 actual_reach=0.1416
+[S1H] R3 h=2h bin 9: n=309706 mean_raw=0.1884 mean_platt=0.22825181130788683 (nan=0) mean_iso=0.2295 actual_reach=0.2342
+[S1H] R3 h=5h bin 0: n=309706 mean_raw=0.0693 mean_platt=0.06517384920886114 (nan=0) mean_iso=0.0604 actual_reach=0.0456
+[S1H] R3 h=5h bin 1: n=309706 mean_raw=0.1028 mean_platt=0.09800767143213412 (nan=0) mean_iso=0.0901 actual_reach=0.0739
+[S1H] R3 h=5h bin 2: n=309706 mean_raw=0.1259 mean_platt=0.12140950482283738 (nan=0) mean_iso=0.1152 actual_reach=0.0984
+[S1H] R3 h=5h bin 3: n=309706 mean_raw=0.1475 mean_platt=0.14345441279973392 (nan=0) mean_iso=0.1396 actual_reach=0.1265
+[S1H] R3 h=5h bin 4: n=309706 mean_raw=0.1695 mean_platt=0.16632565216253262 (nan=0) mean_iso=0.1655 actual_reach=0.1550
+[S1H] R3 h=5h bin 5: n=309706 mean_raw=0.1936 mean_platt=0.1914101341994298 (nan=0) mean_iso=0.1949 actual_reach=0.1874
+[S1H] R3 h=5h bin 6: n=309706 mean_raw=0.2216 mean_platt=0.22066723859088674 (nan=0) mean_iso=0.2292 actual_reach=0.2240
+[S1H] R3 h=5h bin 7: n=309706 mean_raw=0.2570 mean_platt=0.25781490409533386 (nan=0) mean_iso=0.2704 actual_reach=0.2687
+[S1H] R3 h=5h bin 8: n=309706 mean_raw=0.3086 mean_platt=0.31198585290621494 (nan=0) mean_iso=0.3278 actual_reach=0.3285
+[S1H] R3 h=5h bin 9: n=309706 mean_raw=0.4362 mean_platt=0.44422256520322634 (nan=0) mean_iso=0.4296 actual_reach=0.4353
+[S1H] R3 h=10h bin 0: n=309706 mean_raw=0.1260 mean_platt=0.15059906450262214 (nan=0) mean_iso=0.1356 actual_reach=0.1139
+[S1H] R3 h=10h bin 1: n=309706 mean_raw=0.1844 mean_platt=0.2055561578686334 (nan=0) mean_iso=0.1934 actual_reach=0.1709
+[S1H] R3 h=10h bin 2: n=309706 mean_raw=0.2235 mean_platt=0.24087432552117416 (nan=0) mean_iso=0.2345 actual_reach=0.2137
+[S1H] R3 h=10h bin 3: n=309706 mean_raw=0.2592 mean_platt=0.2722725074527653 (nan=0) mean_iso=0.2717 actual_reach=0.2565
+[S1H] R3 h=10h bin 4: n=309706 mean_raw=0.2949 mean_platt=0.3032956769803778 (nan=0) mean_iso=0.3105 actual_reach=0.2980
+[S1H] R3 h=10h bin 5: n=309706 mean_raw=0.3329 mean_platt=0.33584979060997877 (nan=0) mean_iso=0.3470 actual_reach=0.3389
+[S1H] R3 h=10h bin 6: n=309706 mean_raw=0.3757 mean_platt=0.3721671483973518 (nan=0) mean_iso=0.3888 actual_reach=0.3812
+[S1H] R3 h=10h bin 7: n=309706 mean_raw=0.4281 mean_platt=0.4161998836336055 (nan=0) mean_iso=0.4334 actual_reach=0.4317
+[S1H] R3 h=10h bin 8: n=309706 mean_raw=0.5005 mean_platt=0.4769264955821232 (nan=0) mean_iso=0.4915 actual_reach=0.4899
+[S1H] R3 h=10h bin 9: n=309706 mean_raw=0.6536 mean_platt=0.6100065719350265 (nan=0) mean_iso=0.5824 actual_reach=0.5844
+[S1H] R4 q=0.01 fold 1: n=9622 2h: raw=0.2865394331183684 platt=0.3904426744942261 iso=0.35778707140027405 actual=0.2956765745167325, 5h: raw=0.6002494225705443 platt=0.6306600392274665 iso=0.55178628032903 actual=0.49854500103928495, 10h: raw=0.8166554081460691 platt=0.7825557140656934 iso=0.6896511486065183 actual=0.640719185200582
+[S1H] R4 q=0.01 fold 2: n=8070 2h: raw=0.3212337616951194 platt=0.4030231872281051 iso=0.34165925452212803 actual=0.36059479553903345, 5h: raw=0.6562792609572837 platt=0.6545990488185375 iso=0.5461878435246271 actual=0.5633209417596035, 10h: raw=0.8631806790144826 platt=0.8030711531847733 iso=0.6847936613688552 actual=0.6977695167286245
+[S1H] R4 q=0.01 fold 3: n=1598 2h: raw=0.3561079261586505 platt=0.4486609524100901 iso=0.3813773885825509 actual=0.42803504380475593, 5h: raw=0.6981282658549578 platt=0.6856955874876335 iso=0.5790968120228462 actual=0.6157697121401752, 10h: raw=0.8913327194057793 platt=0.8254719962094481 iso=0.7114602616963588 actual=0.6983729662077597
+[S1H] R4 q=0.01 fold 4: n=3892 2h: raw=0.2876356091659596 platt=0.37761549339697714 iso=0.33290899127707296 actual=0.3473792394655704, 5h: raw=0.606522000331462 platt=0.6146370448399832 iso=0.5337841261308766 actual=0.5475334018499486, 10h: raw=0.8221857990202834 platt=0.7607918949266541 iso=0.6682928781905615 actual=0.6744604316546763
+[S1H] R4 q=0.01 fold 5: n=7175 2h: raw=0.27926261078349407 platt=0.37639829608762365 iso=0.32495257400389627 actual=0.3735191637630662, 5h: raw=0.5935699593767654 platt=0.6154138106006629 iso=0.5268542286936758 actual=0.5743554006968641, 10h: raw=0.8113663976625757 platt=0.7608558422642976 iso=0.6626329013391069 actual=0.6903135888501742
+[S1H] R4 q=0.01 fold 6: n=2240 2h: raw=0.2937262014731751 platt=0.4106385975829378 iso=0.3488435096280885 actual=0.37098214285714287, 5h: raw=0.6165700263920747 platt=0.6466179179035493 iso=0.5479444119138442 actual=0.5700892857142857, 10h: raw=0.8320443872256362 platt=0.7828912267429782 iso=0.6784924563004701 actual=0.7044642857142858
+[S1H] R4 q=0.01 fold 7: n=3032 2h: raw=0.2666094172097245 platt=0.37083638783813155 iso=0.3222346899544799 actual=0.3469656992084433, 5h: raw=0.5761465312314367 platt=0.6093311027035182 iso=0.5262737096690446 actual=0.537269129287599, 10h: raw=0.7978082167973481 platt=0.7533044207142918 iso=0.6610470782482573 actual=0.6767810026385225
+[S1H] R4 q=0.01 POOLED (ALL picks): n=35629 2h: raw=0.2949 platt=0.3913 iso=0.3423 actual=0.3467, 5h: raw=0.6156 platt=0.6329 iso=0.5423 actual=0.5469, 10h: raw=0.8294 platt=0.7799 iso=0.6786 actual=0.6770
+[S1H] R4 q=0.005 fold 1: n=4900 2h: raw=0.32630615673675056 platt=0.4451987351044254 iso=0.39628455419945746 actual=0.3218367346938775, 5h: raw=0.6574129251229556 platt=0.6851122435851708 iso=0.5908766187108782 actual=0.5281632653061225, 10h: raw=0.8622356453699315 platt=0.8266445834679185 iso=0.7197875562589591 actual=0.67
+[S1H] R4 q=0.005 fold 2: n=3951 2h: raw=0.3611750490803161 platt=0.4579440129609534 iso=0.3676173342816103 actual=0.395849152113389, 5h: raw=0.7093115738446962 platt=0.7078679098744305 iso=0.5771475203325243 actual=0.5876993166287016, 10h: raw=0.9002437173615196 platt=0.8450874308326977 iso=0.7109809094217485 actual=0.7139964565932675
+[S1H] R4 q=0.005 fold 3: n=782 2h: raw=0.4001089681455322 platt=0.5081094328868813 iso=0.4074999329308583 actual=0.41815856777493604, 5h: raw=0.7504063396634343 platt=0.7394750420817825 iso=0.6082197186334826 actual=0.618925831202046, 10h: raw=0.9235577067617418 platt=0.8663372229272592 iso=0.7315077105850318 actual=0.6930946291560103
+[S1H] R4 q=0.005 fold 4: n=1864 2h: raw=0.32566113495133475 platt=0.43517497913918074 iso=0.36572359348990047 actual=0.3648068669527897, 5h: raw=0.6612836429165331 platt=0.671011045851911 iso=0.5643513054520976 actual=0.5659871244635193, 10h: raw=0.8653519336000979 platt=0.8073262680220091 iso=0.6925741125019317 actual=0.6824034334763949
+[S1H] R4 q=0.005 fold 5: n=3641 2h: raw=0.31575198893785184 platt=0.4338717339022115 iso=0.3571045460991323 actual=0.4122493820379017, 5h: raw=0.6475906580750352 platt=0.6719189711119118 iso=0.5562068000561077 actual=0.61521560010986, 10h: raw=0.8553954560089395 platt=0.8071894203051091 iso=0.6856904184166077 actual=0.7286459763801153
+[S1H] R4 q=0.005 fold 6: n=1011 2h: raw=0.32882438197252756 platt=0.46769637885670096 iso=0.37924061246988955 actual=0.42136498516320475, 5h: raw=0.6670301016334723 platt=0.6997242321904018 iso=0.5774755279437135 actual=0.6003956478733927, 10h: raw=0.8712701814344131 platt=0.8253078848446779 iso=0.7004197570946862 actual=0.7210682492581603
+[S1H] R4 q=0.005 fold 7: n=1550 2h: raw=0.29835627759536915 platt=0.42448473681273374 iso=0.3535811473786625 actual=0.38129032258064516, 5h: raw=0.6250211379012085 platt=0.6619415436045106 iso=0.5537052184402953 actual=0.5606451612903226, 10h: raw=0.8393174843843632 platt=0.7964435795770618 iso=0.6842899776767758 actual=0.6916129032258065
+[S1H] R4 q=0.005 POOLED (ALL picks): n=17699 2h: raw=0.3328 platt=0.4469 iso=0.3744 actual=0.3766, 5h: raw=0.6692 platt=0.6872 iso=0.5746 actual=0.5743, 10h: raw=0.8709 platt=0.8238 iso=0.7042 actual=0.6990
+[S1H] R4 q=0.001 fold 1: n=1142 2h: raw=0.4188783730896818 platt=0.5642002884791188 iso=0.4609589445605181 actual=0.38003502626970226, 5h: raw=0.7692642223827276 platt=0.7896898859642681 iso=0.6749727064395864 actual=0.5998248686514887, 10h: raw=0.9337987906723686 platt=0.9032122266732451 iso=0.7990289110726772 actual=0.7224168126094571
+[S1H] R4 q=0.001 fold 2: n=686 2h: raw=0.45525323718315297 platt=0.5807521393484126 iso=0.429161918874844 actual=0.4620991253644315, 5h: raw=0.8129675190293347 platt=0.8120667053449636 iso=0.6542008230121291 actual=0.6501457725947521, 10h: raw=0.9568255028673566 platt=0.9187030174944847 iso=0.7813445838369742 actual=0.7521865889212828
+[S1H] R4 q=0.001 fold 3: n=190 2h: raw=0.4944791653000809 platt=0.6276153249086959 iso=0.46205601662237017 actual=0.5052631578947369, 5h: raw=0.8426415750343976 platt=0.835084869246248 iso=0.6650036854656087 actual=0.6578947368421053, 10h: raw=0.9677027811920871 platt=0.9311491170134077 iso=0.7792676922487456 actual=0.7052631578947368
+[S1H] R4 q=0.001 fold 4: n=324 2h: raw=0.42191473194267315 platt=0.5724420938615641 iso=0.4259888420075176 actual=0.41358024691358025, 5h: raw=0.7774800732007168 platt=0.7889647245738454 iso=0.6296275382017709 actual=0.5987654320987654, 10h: raw=0.9384268654341159 platt=0.8960843143784497 iso=0.7374707980588853 actual=0.7067901234567902
+[S1H] R4 q=0.001 fold 5: n=813 2h: raw=0.3986833685771073 platt=0.5577009499202439 iso=0.409368744654629 actual=0.5018450184501845, 5h: raw=0.753095567604155 platt=0.7793531853733976 iso=0.6111919138585786 actual=0.6678966789667896, 10h: raw=0.925860891840164 platt=0.8883170428625541 iso=0.7265544318951711 actual=0.7699876998769988
+[S1H] R4 q=0.001 fold 6: n=130 2h: raw=0.41115810868445196 platt=0.5926001940346933 iso=0.43324746180817175 actual=0.5769230769230769, 5h: raw=0.7684232802264681 platt=0.8024877848349258 iso=0.6280605108352675 actual=0.7076923076923077, 10h: raw=0.9353854442118846 platt=0.9011184387609528 iso=0.7364411514362855 actual=0.8153846153846154
+[S1H] R4 q=0.001 fold 7: n=353 2h: raw=0.3700087107007273 platt=0.5400943500353675 iso=0.4083066562636613 actual=0.39660056657223797, 5h: raw=0.7221236886465252 platt=0.7628537944203764 iso=0.606287361415733 actual=0.5694050991501416, 10h: raw=0.908834014701549 platt=0.8736906714702423 iso=0.7225458677507771 actual=0.7082152974504249
+[S1H] R4 q=0.001 POOLED (ALL picks): n=3638 2h: raw=0.4204 platt=0.5686 iso=0.4343 actual=0.4409, 5h: raw=0.7739 platt=0.7918 iso=0.6439 actual=0.6284, 10h: raw=0.9362 platt=0.9007 iso=0.7633 actual=0.7383
+[S1H] R5 fold 1: c_k(raw)=0.743175 c_k(Platt)=0.7134443984864642 c_k(isotonic)=0.647363
+[S1H] R5 fold 2: c_k(raw)=0.804502 c_k(Platt)=0.7391610214261373 c_k(isotonic)=0.640000
+[S1H] R5 fold 3: c_k(raw)=0.841632 c_k(Platt)=0.7652548467813913 c_k(isotonic)=0.674074
+[S1H] R5 fold 4: c_k(raw)=0.757590 c_k(Platt)=0.6934968890282378 c_k(isotonic)=0.629032
+[S1H] R5 fold 5: c_k(raw)=0.740481 c_k(Platt)=0.6882535419062646 c_k(isotonic)=0.625019
+[S1H] R5 fold 6: c_k(raw)=0.777188 c_k(Platt)=0.7250871130803681 c_k(isotonic)=0.653468
+[S1H] R5 fold 7: c_k(raw)=0.732131 c_k(Platt)=0.6863673194833234 c_k(isotonic)=0.625932
+[S1H] R6 method=raw: n_scored=3,097,060 n_excluded(nan)=0 n(p2h>p5h)=0 n(p5h>p10h)=0
+[S1H] R6 method=platt: n_scored=3,097,060 n_excluded(nan)=0 n(p2h>p5h)=0 n(p5h>p10h)=0
+[S1H] R6 method=isotonic: n_scored=3,097,060 n_excluded(nan)=0 n(p2h>p5h)=0 n(p5h>p10h)=0
+
+[S1H] === 10-LINE SUMMARY ===
+1. Platt fits: 0 of 21 (fold,horizon) pairs had slope<=0 (reported, not used).
+2. Look-ahead guard dropped at most 9444 events from any one (fold,horizon) fit pool.
+3. R2 h=2h pooled: logloss raw=0.2411 platt=0.23903255104524723 iso=0.2387; brier raw=0.0651 platt=0.06490904348986445 iso=0.0648.
+3. R2 h=5h pooled: logloss raw=0.4504 platt=0.4508759370548789 iso=0.4501; brier raw=0.1431 platt=0.1433404453285708 iso=0.1431.
+3. R2 h=10h pooled: logloss raw=0.5879 platt=0.5887645314590418 iso=0.5876; brier raw=0.2011 platt=0.20147362961649104 iso=0.2011.
+4. R4 q=0.01 pooled n=35629: 10h raw=0.8294 platt=0.7799 iso=0.6786 actual=0.6770.
+4. R4 q=0.005 pooled n=17699: 10h raw=0.8709 platt=0.8238 iso=0.7042 actual=0.6990.
+4. R4 q=0.001 pooled n=3638: 10h raw=0.9362 platt=0.9007 iso=0.7633 actual=0.7383.
+5. R6: n(p2h>p5h) raw=0 platt=0 iso=0; n(p5h>p10h) raw=0 platt=0 iso=0.
+6. Picks are never re-selected -- Rule A per-fold n matches S1-G's saved values exactly in every (fold,q).
+7. Spearman(raw p_10h, Platt p_10h)=1 asserted and held in every fold with a valid Platt fit.
+8. Descriptive only -- no S1 refit, no vault, no fees/profit.
+9. Gate verdict is still FAIL (NUMBERS [HL-MODEL1-S1]); no cause claimed beyond the tables.
+10. Full fitted maps, decile tables, picks tables and cut-offs are in s1h_report.json and the per-fold/per-bin log lines above.
+[S1H] ALL DONE  [76s]

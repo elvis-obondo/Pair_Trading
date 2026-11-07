@@ -1,0 +1,12 @@
+3c3
+< [S1H] loaded 3,525,909 test-predictions rows across 8 folds  [29s]
+---
+> [S1H] loaded 3,525,909 test-predictions rows across 8 folds  [30s]
+78c78
+< [S1H] all fits done  [63s]
+---
+> [S1H] all fits done  [66s]
+186c186
+< [S1H] ALL DONE  [73s]
+---
+> [S1H] ALL DONE  [76s]
