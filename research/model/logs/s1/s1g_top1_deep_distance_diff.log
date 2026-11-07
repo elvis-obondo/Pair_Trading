@@ -1,0 +1,90 @@
+# research/model/s1g_top1_deep.py: diff between the two run-time versions, S1-G (2026-11-07)
+#
+# v1 (main run, s1g_top1_deep.log line 1): sha256 8407acc1294db2c5227786acf0d8afc25e6b7fa4f66e1031aa30208f78168a7a
+# v2 (distance patch run, s1g_distance_patch.log line 2): sha256 736e762efd8cf6c42db9364dec3900e831e50169ccec2bda68650b17b4864579
+#
+# Neither version was ever committed to git (both ran from an uncommitted working tree), so this is not
+# a `git diff` -- it is reconstructed exactly from this session's own edit transcript (two Edit calls
+# applied to the file between the two runs, each with its literal old_string/new_string). The two edits
+# below are the ONLY change between v1 and v2; everything else in the file (G1/G2/G3/G4/G5/G6/G7
+# pipeline, provenance header, main()) is byte-identical between the two shas.
+
+--- v1 (sha 8407acc1...)
++++ v2 (sha 736e762e...)
+
+@@ function _distance_to_mu (and new helper _quartiles) @@
+-def _distance_to_mu(sub):
+-    if len(sub) == 0:
+-        return {"median": None, "q25": None, "q75": None, "n": 0}
+-    dist = np.abs(sub["z"].to_numpy()) * sub["sigma"].to_numpy()
+-    q25, q50, q75 = np.percentile(dist, [25, 50, 75])
+-    return {"median": float(q50), "q25": float(q25), "q75": float(q75), "n": len(sub)}
++def _quartiles(vals):
++    q25, q50, q75 = np.percentile(vals, [25, 50, 75])
++    return {"median": float(q50), "q25": float(q25), "q75": float(q75)}
++
++
++def _distance_to_mu(sub):
++    """Size, in sigma (user, 2026-11-07, brief amendment): |z| and |z|-threshold, median+quartiles --
++    these are the report. |z| x sigma (price-percent distance) is kept for the JSON only, not the report."""
++    if len(sub) == 0:
++        empty = {"median": None, "q25": None, "q75": None}
++        return {"abs_z": empty, "abs_z_minus_threshold": empty, "abs_z_times_sigma_json_only": empty, "n": 0}
++    abs_z = np.abs(sub["z"].to_numpy())
++    abs_z_minus_thresh = abs_z - sub["threshold"].to_numpy()
++    dist_sigma = abs_z * sub["sigma"].to_numpy()
++    return {"abs_z": _quartiles(abs_z), "abs_z_minus_threshold": _quartiles(abs_z_minus_thresh),
++            "abs_z_times_sigma_json_only": _quartiles(dist_sigma), "n": len(sub)}
+
+@@ g7_tighter_cutoffs' per-q print line @@
+-        print(f"[S1G] G7 (q={q}): n_picks={len(picks):,} median_dist_to_mu={distance_by_q[q]['picks']['median']} "
+-              f"reach_10h={outcomes_by_q[q]['picks']['reach_10h']}", flush=True)
++        print(f"[S1G] G7 (q={q}): n_picks={len(picks):,} "
++              f"median_abs_z={distance_by_q[q]['picks']['abs_z']['median']} "
++              f"median_abs_z_minus_thresh={distance_by_q[q]['picks']['abs_z_minus_threshold']['median']} "
++              f"reach_10h={outcomes_by_q[q]['picks']['reach_10h']}", flush=True)
+
+# Evidence this changed nothing else: s1g_distance_patch.py (run under v2) recomputed the SAME pick
+# sets via compute_picks() -- asserted identical to S1-F's saved per-fold n/c_k, same as the main run --
+# and its |z| x sigma medians (now the JSON-only field abs_z_times_sigma_json_only) are:
+#   q=0.01: 0.014631021265703885   q=0.005: 0.014909197308448955   q=0.001: 0.016512494590753046
+# These match the MAIN run's own G7 log lines exactly (s1g_top1_deep.log, "median_dist_to_mu=" on the
+# three G7 per-q summary lines). Only g7_tighter_cutoffs.distance_by_q in s1g_report.json was rewritten
+# by this v2 pass (in place, same file); g1_trade_count, g2_same_chance, g3_contributions, g4_slices,
+# g5_misses, g6_calibration, and every other field of g7_tighter_cutoffs are the main run's untouched
+# output.
+#
+# NOTE (Checker's finding, round 2): the v2 pass's own log, s1g_distance_patch.log, was OVERWRITTEN by
+# the later G8 pass below -- it no longer shows v2's sha256 (736e762e...) or that run's own timestamp.
+# The numbers quoted above are preserved separately (this diff log, and the NUMBERS.md receipts
+# paragraph), but the literal v2 log file itself is gone; a fresh v2-only run would be needed to
+# reproduce it byte-for-byte, though it would print the same numbers (deterministic, no RNG).
+#
+# v3 (G8 pass, same script re-run after adding g8_distance_vs_probability): research/model/s1g_top1_deep.py
+# sha256 8f0dfa08e90fe0d3da88472df19c4e69f0e51238c872f7a0f78333cced6b220c; research/model/s1g_distance_patch.py
+# sha256 9b54e4e08b8d3f44b4c29df560b5a00a413bd4b91ce9dbbe11235d7a78129908. This pass ran on the LAPTOP, not
+# the VM (s1g_distance_patch.log's own path line shows /Users/elvisobondo/Pair_Trading/research/model/
+# logs/s1/s1g_report.json, not /home/elvisobondo/...) -- G8 needs only the saved test predictions and
+# events.parquet, both laptop-reachable, no cache.
+#
+# @@ diff v2 (736e762e...) -> v3 (8f0dfa08...) @@
+# +def g8_distance_vs_probability(block_df):
+#     """... (full function, ~25 lines) -- bins all block events into 10 |z| deciles (edges printed),
+#     reports n + p_10h mean/median/q25/q75 per bin for all events and, on the same edges, for Rule A
+#     picks at each q in TIGHT_QS; actual_reach_10h is a side column only; no chance_10h, no
+#     picks-minus-rest column."""
+# No other function in s1g_top1_deep.py changed between v2 and v3 -- g8_distance_vs_probability is a
+# new, self-contained addition; G1-G7's code is byte-identical to v2.
+#
+# research/model/s1g_distance_patch.py also changed, v2's version -> the version that produced v3:
+# @@ diff, s1g_distance_patch.py @@
+#      out["g7_tighter_cutoffs"]["distance_by_q"] = new_distance
+# +
+# +    g8 = S.g8_distance_vs_probability(block_df)
+# +    out["g8_distance_vs_probability"] = g8
+# +    print(f"[S1G-PATCH] G8 computed  [{time.time()-t0:.0f}s]", flush=True)
+# +
+#      with open(report_path, "w") as f:
+#          json.dump(out, f, indent=1, default=str)
+# No other change to s1g_distance_patch.py (the distance_by_q block above it is unchanged, just re-run
+# in the same pass -- idempotent, same numbers as v2's run).

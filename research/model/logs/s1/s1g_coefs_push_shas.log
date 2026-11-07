@@ -1,0 +1,14 @@
+# S1-G: fold*_coefs.csv laptop/VM sha256 receipts (pushed via gcloud compute scp before the real run,
+# 2026-11-07). Needed because research/**/logs/ is pull-only in scripts/gcp_run.sh's sync (same gap
+# S1-F hit before) -- fold*_coefs.csv is an INPUT G3 needs and was never pushed by the normal sync.
+
+fold0_coefs.csv laptop=1923d768213a81e2c95a2fcbceed119b8cd1da9f1ce0fd8af1289bb89c0087bc vm=1923d768213a81e2c95a2fcbceed119b8cd1da9f1ce0fd8af1289bb89c0087bc MATCH
+fold1_coefs.csv laptop=64bd1c07ac64bade54d396196f8ea249348d5dfbbad71bae517bfd7ce3dc3c2d vm=64bd1c07ac64bade54d396196f8ea249348d5dfbbad71bae517bfd7ce3dc3c2d MATCH
+fold2_coefs.csv laptop=7ceff84fa398b1c10bf6a82e78615a155d37cc7e3e26bfb890aa35442359c908 vm=7ceff84fa398b1c10bf6a82e78615a155d37cc7e3e26bfb890aa35442359c908 MATCH
+fold3_coefs.csv laptop=ccbe560e1e74313f519dd3784fa408cccf723f4601aa1d775c68ee2feb341ac7 vm=ccbe560e1e74313f519dd3784fa408cccf723f4601aa1d775c68ee2feb341ac7 MATCH
+fold4_coefs.csv laptop=3f67cd42766608e438a0aec64802f534ddec9104a8c6ffe9f3be35139e83e33f vm=3f67cd42766608e438a0aec64802f534ddec9104a8c6ffe9f3be35139e83e33f MATCH
+fold5_coefs.csv laptop=c802d858f3a2d94fbfcec16e08ded02fa8b1f40932bbd42d870ea85073f7ca8a vm=c802d858f3a2d94fbfcec16e08ded02fa8b1f40932bbd42d870ea85073f7ca8a MATCH
+fold6_coefs.csv laptop=9ba68619e6c49e3d587ae94ac2f31132102f5162b0224135cdb58730b05bbc77 vm=9ba68619e6c49e3d587ae94ac2f31132102f5162b0224135cdb58730b05bbc77 MATCH
+fold7_coefs.csv laptop=40e04d2043c5d835b72bcdbf682b51d5a2da4747b86195cde7dd578e215a6015 vm=40e04d2043c5d835b72bcdbf682b51d5a2da4747b86195cde7dd578e215a6015 MATCH
+
+All 8 of 8 match. Pushed via: gcloud compute scp research/model/logs/s1/fold{0..7}_coefs.csv pt-research:~/Pair_Trading/research/model/logs/s1/ --zone=us-central1-a

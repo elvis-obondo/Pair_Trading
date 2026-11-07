@@ -1,0 +1,24 @@
+[S1G-PATCH] sha256 s1g_distance_patch.py: 9b54e4e08b8d3f44b4c29df560b5a00a413bd4b91ce9dbbe11235d7a78129908
+[S1G-PATCH] sha256 s1g_top1_deep.py: 8f0dfa08e90fe0d3da88472df19c4e69f0e51238c872f7a0f78333cced6b220c
+[S1G-PATCH] start 2026-11-07T19:52:22Z UTC; pid 44202
+[HARNESS] load_search_events: 6,697,756 merged rows -> 5,405,478 after the date/gap-day filter -> 5,378,429 after dropping 27,049 label_gap=1 rows
+[S1G] pick sets, folds 1-7: q=0.01: n=35,629, q=0.005: n=17,699, q=0.001: n=3,638 (q=0.01 matches S1-F's saved per-fold n and c_k exactly)
+[S1G-PATCH] pick sets recomputed and cross-checked (same as the main run)  [16s]
+[S1G-PATCH] old distance_by_q keys (pre-amendment, |z|xsigma only): ['abs_z', 'abs_z_minus_threshold', 'abs_z_times_sigma_json_only', 'n']
+[S1G-PATCH] q=0.01: picks median |z|=2.0389 median |z|-threshold=0.3456 (JSON-only |z|xsigma median=0.014631)
+[S1G-PATCH] q=0.005: picks median |z|=2.0486 median |z|-threshold=0.3576 (JSON-only |z|xsigma median=0.014909)
+[S1G-PATCH] q=0.001: picks median |z|=2.0531 median |z|-threshold=0.3671 (JSON-only |z|xsigma median=0.016512)
+[S1G] G8: |z| decile edges = [np.float64(1.6693), np.float64(1.9228), np.float64(2.1187), np.float64(2.2942), np.float64(2.4679), np.float64(2.653), np.float64(2.8665), np.float64(3.1422), np.float64(3.5866)]
+[S1G] G8 bin 0: n=309706 mean_p10h=0.45501874341943127 median_p10h=0.4390573377684935 q25=0.34798047092011364 q75=0.5470821283059277 actual_reach_10h=0.48557664365559594
+[S1G] G8 bin 1: n=309706 mean_p10h=0.4112576989318543 median_p10h=0.3907689578271256 q25=0.3053982907443573 q75=0.49720838791324756 actual_reach_10h=0.4137730621944683
+[S1G] G8 bin 2: n=309706 mean_p10h=0.3843351803909326 median_p10h=0.3615625474514522 q25=0.28030695510754955 q75=0.46615475498872916 actual_reach_10h=0.3783782038449368
+[S1G] G8 bin 3: n=309706 mean_p10h=0.3617333419667078 median_p10h=0.3375199399842169 q25=0.2594135003569006 q75=0.4391269389026811 actual_reach_10h=0.3487856224935907
+[S1G] G8 bin 4: n=309706 mean_p10h=0.3423476917744794 median_p10h=0.3167297105239357 q25=0.2417300914800316 q75=0.4163293206026193 actual_reach_10h=0.32728135715807893
+[S1G] G8 bin 5: n=309706 mean_p10h=0.3233410760495077 median_p10h=0.29604360632796856 q25=0.22419657529817105 q75=0.3946044348542056 actual_reach_10h=0.3064519253743873
+[S1G] G8 bin 6: n=309706 mean_p10h=0.30517956102701627 median_p10h=0.2762613682728491 q25=0.20686769409620434 q75=0.37405317203752453 actual_reach_10h=0.28689466784628004
+[S1G] G8 bin 7: n=309706 mean_p10h=0.28602596733062347 median_p10h=0.25518538496569815 q25=0.1887045438502603 q75=0.3518930514059512 actual_reach_10h=0.26777007871981817
+[S1G] G8 bin 8: n=309706 mean_p10h=0.2648159586037823 median_p10h=0.2318676765984105 q25=0.16667284288860992 q75=0.3293304575022697 actual_reach_10h=0.24432526331423995
+[S1G] G8 bin 9: n=309706 mean_p10h=0.2447615133084689 median_p10h=0.20939522921122317 q25=0.1383934285347755 q75=0.316159186079613 actual_reach_10h=0.21984075219724514
+[S1G-PATCH] G8 computed  [18s]
+[S1G-PATCH] rewrote /Users/elvisobondo/Pair_Trading/research/model/logs/s1/s1g_report.json with the sigma-based distance_by_q and g8_distance_vs_probability [18s]
+[S1G-PATCH] ALL DONE

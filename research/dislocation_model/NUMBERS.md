@@ -4742,3 +4742,587 @@ gate verdict is still FAIL (NUMBERS [HL-MODEL1-S1]).
 
 Code Checker: script PASS; log/NUMBERS PASS (round 2, after 2 small label/receipt fixes: n_block
 relabelled COMPUTED not READ, and the laptop/VM sha256 pairs moved to their own committed log).
+
+
+## [HL-MODEL1-S1-G] Top 1% deep dive: why it works and where it fails (user, 2026-11-06/07)
+
+Brief: `docs/prompts/HL_MODEL1_S1_TOP1_DEEP.md` (amended by the planner: G3's proof 2026-11-06; G7
+added 2026-11-06; distance-to-mu switched to sigma 2026-11-07; G8 added 2026-11-07, then corrected the
+same day to "distance vs the model's probability," not reversion). Descriptive only -- the gate verdict
+(FAIL, NUMBERS [HL-MODEL1-S1]) does not change; every slice here was chosen after seeing results, so a
+good number is a lead, not a pass.
+
+**Receipts.** Main run: `research/model/s1g_top1_deep.py` sha256
+`8407acc1294db2c5227786acf0d8afc25e6b7fa4f66e1031aa30208f78168a7a`, on the GCP VM
+(`research/model/logs/s1/s1g_top1_deep.log`), git_head 41a5f2f (120 uncommitted paths at run time --
+this script and its brief were among them, now committed), cache manifest cache_sha256
+`bd5dc254...831b` (matches the frozen v1 cache). Runtime 3,054s (~51 min). `fold*_coefs.csv` (G3's
+input) was pushed to the VM via `gcloud compute scp` before this run, sha256-verified laptop vs VM for
+all 8 files -- the pairs are in `research/model/logs/s1/s1g_coefs_push_shas.log`.
+
+The file was edited twice after that run, to the version now being committed, sha256
+`8f0dfa08e90fe0d3da88472df19c4e69f0e51238c872f7a0f78333cced6b220c`. Both edits ran as separate small
+follow-up passes (`research/model/s1g_distance_patch.py`) rather than re-running the whole script (G3's
+preprocessing alone is ~41 of the 51 minutes):
+- **Edit 1** (sha256 `736e762efd8cf6c42db9364dec3900e831e50169ccec2bda68650b17b4864579`, size-in-sigma):
+  changed only `_distance_to_mu` (added `_quartiles` helper) and one print line. Exact diff in
+  `research/model/logs/s1/s1g_top1_deep_distance_diff.log` -- reconstructed precisely from this
+  session's own edit transcript (neither version was ever committed to git, so no `git diff` exists,
+  but the two edits applied are known exactly). Evidence this changed nothing else: the patch run
+  recomputed the SAME pick sets (cross-checked against S1-F's saved per-fold n/c_k, same as the main
+  run), and its |z| x sigma medians -- now the JSON-only field `abs_z_times_sigma_json_only` -- are
+  0.014631 / 0.014909 / 0.016512 at q=0.01/0.005/0.001, matching the main run's own log lines exactly.
+  `s1g_report.json` was rewritten in place by this pass; only `g7_tighter_cutoffs.distance_by_q`
+  changed, nothing else in the file.
+- **Edit 2** (G8, this NUMBERS section): added the `g8_distance_vs_probability` function; no change to
+  any G1-G7 code. Run via the same follow-up script, which also added the new top-level
+  `g8_distance_vs_probability` key to `s1g_report.json` (`distance_by_q` was recomputed again in the
+  same pass -- idempotent, identical numbers to Edit 1's run). This pass ran on the LAPTOP, not the VM,
+  and in doing so it overwrote Edit 1's own `s1g_distance_patch.log` (that log no longer shows Edit 1's
+  sha or timestamp) -- see `research/model/logs/s1/s1g_top1_deep_distance_diff.log` for the full
+  v1->v2->v3 chain.
+
+**Pick set** = S1-F Rule A, q=1%, folds 1-7 (in test block k, events with p_10h >= the 99th percentile
+of block k-1's p_10h): **n=35,629**, cross-checked (assert) against S1-F's own saved per-fold n and
+c_k, not just the 35,629 total -- exact match, every fold. **Rest** = that block's other usable events.
+G7/G8 repeat this at q=0.5% (n=17,699) and q=0.1% (n=3,638), same rule, same code path, no prior saved
+value to check against for those two.
+
+### G1. Trade count
+
+"Day" below is the UTC day of t0 (entry_time + 30 min), the harness's own event-day convention.
+
+| fold | median | mean | p10 | p90 | max | n_days |
+|---|---|---|---|---|---|---|
+| 1 | 241.5 | 320.7 | 86.8 | 669.4 | 799 | 30 |
+| 2 | 153.0 | 269.0 | 49.1 | 586.3 | 1058 | 30 |
+| 3 | 30.5 | 53.3 | 8.5 | 119.8 | 289 | 30 |
+| 4 | 96.0 | 129.7 | 45.1 | 231.3 | 375 | 30 |
+| 5 | 207.0 | 239.2 | 96.2 | 399.2 | 795 | 30 |
+| 6 | 64.0 | 74.7 | 17.9 | 134.3 | 172 | 30 |
+| 7 | 103.0 | 131.8 | 55.6 | 252.2 | 405 | 23 |
+| pooled | 110.0 | 175.5 | 24.0 | 403.2 | 1058 | 203 |
+
+| fold | peak | median | p90 |
+|---|---|---|---|
+| 1 | 346 | 49.00 | 160.00 |
+| 2 | 326 | 30.00 | 138.00 |
+| 3 | 138 | 5.00 | 20.00 |
+| 4 | 177 | 20.00 | 60.00 |
+| 5 | 295 | 36.00 | 96.00 |
+| 6 | 63 | 13.00 | 31.00 |
+| 7 | 111 | 22.00 | 57.00 |
+| pooled | 346 | 22.00 | 94.00 |
+
+peak per single coin: ZRO = 129; n_coins traded = 192
+
+Convention (Checker-reviewed, accepted): "open at once" is time-weighted over the span from the first
+pick's open to the last pick's close within the scope shown (not the full calendar) -- a day with zero
+picks contributes nothing to this span by construction. The peak does not depend on this choice; the
+median/p90 do.
+
+### G2. Same starting chance, different result
+
+Pooled folds 1-7, chance_10h cut into 10 bins by its own deciles (all usable block events, not just
+picks).
+
+| decile | chance_10h range | n_picks | reach_picks | n_rest | reach_rest | diff |
+|---|---|---|---|---|---|---|
+| 0 | 0.000-0.160 | 24 | 0.2083 | 290679 | 0.0934 | 0.1150 |
+| 1 | 0.180-0.240 | 44 | 0.3182 | 257674 | 0.1688 | 0.1494 |
+| 2 | 0.260-0.320 | 128 | 0.3750 | 333242 | 0.2218 | 0.1532 |
+| 3 | 0.340-0.380 | 255 | 0.4667 | 294450 | 0.2669 | 0.1998 |
+| 4 | 0.400-0.440 | 499 | 0.4870 | 321090 | 0.3059 | 0.1811 |
+| 5 | 0.460-0.500 | 1040 | 0.5385 | 336127 | 0.3451 | 0.1934 |
+| 6 | 0.520-0.560 | 1840 | 0.5679 | 330094 | 0.3864 | 0.1816 |
+| 7 | 0.580-0.620 | 3302 | 0.6127 | 301638 | 0.4274 | 0.1853 |
+| 8 | 0.640-0.680 | 5180 | 0.6556 | 248988 | 0.4662 | 0.1894 |
+| 9 | 0.700-1.000 | 23317 | 0.7148 | 347449 | 0.5225 | 0.1923 |
+
+In every decile, picks reach more often than the rest of that same decile -- the gap (diff column) is
+roughly flat at 0.149-0.200 across deciles 1-9, lowest in decile 0 (thin, n=24 picks). 23,317 of the
+35,629 picks (65%) sit in decile 9 alone (chance_10h 0.70-1.00), so the "same starting position"
+comparison is weakest exactly where most of the picks are.
+
+### G3. Why the model picked them (exact for a linear model)
+
+**Proof (amended by the planner, see the brief):** the refit's step intercepts `b` were never saved by
+`s1_run.py` -- checked directly against `fold*_coefs.csv`, `fold*_grid.json`, `fold*_done.json`; not
+present in any of them. p_10h is strictly increasing in eta=X.w within a fold (same b's for every row),
+so the proof is: the rebuilt eta separates picks from rest perfectly, and Spearman(eta, saved p_10h) >=
+0.999999 over the block. **Both held in every one of folds 1-7** (separated=True, spearman=1.000000
+everywhere, to 6 decimals, each with a real margin -- e.g. fold 1: min_eta_picks=1.347395 >
+max_eta_rest=1.347322) -- the rebuilt eta orders every test event exactly as the saved p_10h does.
+
+**Not covered by this proof:** the proof is about ranking (eta's order), not about the absolute
+contribution levels below. A constant shift added to every event's eta would still pass both checks
+but would move every "mean contribution" number here by that same constant -- so the per-column/
+per-group **levels** are not proven exact, only the **pick-minus-rest differences** are the load-bearing
+result.
+
+**Fold 1** (n_test=463,203, n_picks=9,622): top 20 columns by |diff| --
+| column | group | picks | rest | diff |
+|---|---|---|---|---|
+| vol_48 | events | +0.5091 | -0.0126 | +0.5217 |
+| threshold | events | +0.3190 | -0.0064 | +0.3254 |
+| sandwich | G2 | +0.0844 | -0.0605 | +0.1449 |
+| sigma | events | +0.0784 | -0.0080 | +0.0864 |
+| abs_beta | G2 | +0.0655 | +0.0043 | +0.0612 |
+| mins_since_trade_b | events | +0.0390 | +0.0011 | +0.0379 |
+| vratio | G2 | +0.0374 | -0.0003 | +0.0376 |
+| mins_since_trade_a | events | +0.0391 | +0.0016 | +0.0375 |
+| ps_efficiency | G5 | +0.0111 | -0.0122 | +0.0233 |
+| z_ratio | G2 | -0.0178 | +0.0026 | -0.0204 |
+| a_slip_buy_1k | G8 | +0.0209 | +0.0028 | +0.0181 |
+| ps_max_step | G5 | +0.0148 | -0.0028 | +0.0176 |
+| trig_sym | G2 | +0.0153 | -0.0000 | +0.0153 |
+| sigma_sym | G2 | +0.0168 | +0.0020 | +0.0148 |
+| sign_beta | G2 | +0.0274 | +0.0129 | +0.0146 |
+| volratio_btc | G9 | +0.0303 | +0.0158 | +0.0145 |
+| a_rv_7d | G4 | +0.0032 | -0.0105 | +0.0137 |
+| sess_europe | G4 | +0.0105 | -0.0031 | +0.0136 |
+| ret_btc_7d | G9 | -0.0402 | -0.0534 | +0.0131 |
+| rank90_idx_rv_24h_seg | G9 | +0.0800 | +0.0690 | +0.0111 |
+group totals (diff = picks - rest): G2 +0.2981, G3 +0.0070, G4 +0.0464, G5 +0.0531, G6 +0.0038, G7
++0.0115, G8 +0.0342, G9 +0.0606, coin_one_hot +0.0003, events +1.0148, missing_indicator -0.0031
+
+**Fold 2** (n_test=481,419, n_picks=8,070): top 20 --
+| column | group | picks | rest | diff |
+|---|---|---|---|---|
+| vol_48 | events | +0.5564 | +0.0059 | +0.5505 |
+| threshold | events | +0.2939 | -0.0011 | +0.2950 |
+| sandwich | G2 | +0.2224 | -0.0042 | +0.2266 |
+| sigma | events | +0.1578 | -0.0203 | +0.1780 |
+| mins_since_trade_a | events | +0.0526 | +0.0059 | +0.0468 |
+| vratio | G2 | +0.0389 | +0.0016 | +0.0372 |
+| sigma_sym | G2 | -0.0294 | +0.0072 | -0.0366 |
+| coherence_7d | G9 | +0.0380 | +0.0016 | +0.0364 |
+| mins_since_trade_b | events | +0.0375 | +0.0051 | +0.0324 |
+| ps_efficiency | G5 | +0.0295 | -0.0015 | +0.0310 |
+| ret_btc_1h | G9 | +0.0061 | -0.0197 | +0.0258 |
+| ret_btc_7d | G9 | +0.1259 | +0.1002 | +0.0256 |
+| volratio_btc | G9 | +0.0056 | -0.0157 | +0.0213 |
+| ps_max_step | G5 | +0.0195 | -0.0014 | +0.0209 |
+| rank90_idx_abs_ret_7d | G9 | +0.0907 | +0.0698 | +0.0208 |
+| ret_idx_7d_seg | G9 | -0.0903 | -0.0717 | -0.0186 |
+| rv_btc_24h | G9 | -0.1118 | -0.0938 | -0.0181 |
+| rank90_idx_abs_ret_7d_seg | G9 | +0.0639 | +0.0460 | +0.0179 |
+| rv_btc_7d | G9 | -0.0642 | -0.0468 | -0.0173 |
+| weekend | G4 | +0.0142 | -0.0012 | +0.0154 |
+group totals: G2 +0.2432, G3 +0.0041, G4 +0.0306, G5 +0.0487, G6 +0.0076, G7 +0.0093, G8 +0.0191, G9
++0.1225, coin_one_hot +0.0014, events +1.1108, missing_indicator -0.0002
+
+**Fold 3** (n_test=476,768, n_picks=1,598): top 20 --
+| column | group | picks | rest | diff |
+|---|---|---|---|---|
+| vol_48 | events | +0.7590 | +0.0032 | +0.7559 |
+| threshold | events | +0.3207 | -0.0017 | +0.3224 |
+| sandwich | G2 | +0.1334 | -0.0365 | +0.1699 |
+| abs_beta | G2 | +0.1201 | -0.0013 | +0.1214 |
+| sigma | events | +0.1046 | +0.0258 | +0.0788 |
+| mins_since_trade_a | events | +0.0848 | +0.0101 | +0.0746 |
+| mins_since_trade_b | events | +0.0748 | +0.0080 | +0.0668 |
+| vratio | G2 | +0.0564 | -0.0003 | +0.0567 |
+| rv_btc_24h | G9 | -0.0360 | -0.0663 | +0.0303 |
+| neutrality | G2 | +0.0235 | -0.0008 | +0.0243 |
+| ps_efficiency | G5 | +0.0195 | -0.0047 | +0.0242 |
+| ps_max_step | G5 | +0.0187 | -0.0010 | +0.0198 |
+| rank90_idx_rv_24h_seg | G9 | +0.0240 | +0.0056 | +0.0184 |
+| rank90_idx_abs_ret_7d | G9 | -0.0137 | -0.0318 | +0.0180 |
+| z_ratio | G2 | -0.0166 | +0.0003 | -0.0169 |
+| rank90_idx_abs_ret_7d_seg | G9 | -0.0126 | -0.0293 | +0.0166 |
+| crossings_7d | G2 | +0.0160 | +0.0007 | +0.0152 |
+| sign_beta | G2 | +0.0171 | +0.0020 | +0.0152 |
+| threshold_sym | G2 | +0.0130 | -0.0007 | +0.0137 |
+| corr_1m_24h | G2 | +0.0246 | +0.0110 | +0.0136 |
+group totals: G2 +0.4321, G3 +0.0063, G4 +0.0207, G5 +0.0543, G6 -0.0033, G7 +0.0047, G8 +0.0115, G9
++0.1191, coin_one_hot +0.0000, events +1.3011, missing_indicator +0.0053
+
+**Fold 4** (n_test=477,137, n_picks=3,892): top 20 --
+| column | group | picks | rest | diff |
+|---|---|---|---|---|
+| vol_48 | events | +0.6561 | -0.0090 | +0.6651 |
+| threshold | events | +0.3177 | -0.0085 | +0.3263 |
+| sandwich | G2 | +0.0876 | -0.0598 | +0.1474 |
+| sigma | events | +0.1227 | +0.0178 | +0.1050 |
+| mins_since_trade_b | events | +0.0727 | +0.0031 | +0.0696 |
+| abs_beta | G2 | +0.0699 | +0.0011 | +0.0688 |
+| mins_since_trade_a | events | +0.0672 | +0.0037 | +0.0635 |
+| vratio | G2 | +0.0413 | -0.0017 | +0.0430 |
+| z_ratio | G2 | -0.0166 | +0.0013 | -0.0179 |
+| ps_efficiency | G5 | +0.0066 | -0.0102 | +0.0167 |
+| threshold_sym | G2 | +0.0142 | -0.0020 | +0.0162 |
+| trig_sym | G2 | +0.0156 | +0.0013 | +0.0143 |
+| neutrality | G2 | +0.0149 | +0.0022 | +0.0128 |
+| crossings_7d | G2 | +0.0121 | +0.0002 | +0.0119 |
+| rank90_idx_abs_ret_7d_seg | G9 | +0.0060 | -0.0057 | +0.0118 |
+| ret_btc_7d | G9 | -0.0055 | -0.0165 | +0.0111 |
+| vol_slope | G2 | -0.0117 | -0.0009 | -0.0108 |
+| ps_max_step | G5 | +0.0096 | -0.0011 | +0.0107 |
+| rank90_idx_abs_ret_7d | G9 | +0.0075 | -0.0005 | +0.0079 |
+| ret_eth_24h | G9 | +0.0026 | -0.0049 | +0.0074 |
+group totals: G2 +0.2974, G3 +0.0043, G4 +0.0154, G5 +0.0489, G6 -0.0041, G7 +0.0058, G8 +0.0113, G9
++0.0435, coin_one_hot +0.0000, events +1.2390, missing_indicator -0.0031
+
+**Fold 5** (n_test=465,201, n_picks=7,175): top 20 --
+| column | group | picks | rest | diff |
+|---|---|---|---|---|
+| vol_48 | events | +0.6756 | -0.0232 | +0.6989 |
+| threshold | events | +0.3399 | +0.0136 | +0.3263 |
+| sandwich | G2 | +0.1040 | -0.0494 | +0.1535 |
+| sigma | events | +0.1007 | -0.0056 | +0.1063 |
+| mins_since_trade_a | events | +0.0419 | +0.0022 | +0.0397 |
+| vratio | G2 | +0.0371 | -0.0013 | +0.0385 |
+| abs_beta | G2 | +0.0286 | +0.0028 | +0.0259 |
+| mins_since_trade_b | events | +0.0258 | +0.0023 | +0.0235 |
+| ps_efficiency | G5 | +0.0117 | -0.0084 | +0.0201 |
+| crossings_7d | G2 | +0.0181 | +0.0002 | +0.0179 |
+| sigma_sym | G2 | -0.0169 | +0.0009 | -0.0178 |
+| threshold_sym | G2 | +0.0167 | -0.0009 | +0.0176 |
+| z_ratio | G2 | -0.0117 | +0.0012 | -0.0128 |
+| a_slip_buy_1k | G8 | +0.0121 | +0.0015 | +0.0106 |
+| trig_sym | G2 | +0.0119 | +0.0021 | +0.0098 |
+| sess_europe | G4 | +0.0085 | +0.0001 | +0.0084 |
+| ps_max_step | G5 | +0.0066 | -0.0015 | +0.0082 |
+| vol_slope | G2 | -0.0098 | -0.0017 | -0.0081 |
+| n_triggers_prev_24h | G9 | +0.0176 | +0.0100 | +0.0076 |
+| r2 | events | +0.0000 | -0.0071 | +0.0071 |
+group totals: G2 +0.2285, G3 +0.0028, G4 +0.0172, G5 +0.0308, G6 -0.0002, G7 +0.0121, G8 +0.0241, G9
++0.0181, coin_one_hot +0.0000, events +1.2014, missing_indicator -0.0014
+
+**Fold 6** (n_test=421,678, n_picks=2,240): top 20 --
+| column | group | picks | rest | diff |
+|---|---|---|---|---|
+| vol_48 | events | +0.8522 | -0.0003 | +0.8525 |
+| threshold | events | +0.3267 | -0.0140 | +0.3407 |
+| sandwich | G2 | +0.2251 | -0.0055 | +0.2306 |
+| sigma | events | +0.0653 | -0.0099 | +0.0753 |
+| vratio | G2 | +0.0220 | -0.0010 | +0.0231 |
+| ps_efficiency | G5 | +0.0190 | -0.0035 | +0.0225 |
+| mins_since_trade_a | events | +0.0175 | -0.0012 | +0.0187 |
+| abs_beta | G2 | +0.0181 | -0.0003 | +0.0184 |
+| crossings_7d | G2 | +0.0169 | -0.0012 | +0.0181 |
+| mins_since_trade_b | events | +0.0179 | +0.0005 | +0.0174 |
+| ps_max_step | G5 | +0.0142 | -0.0022 | +0.0164 |
+| threshold_sym | G2 | +0.0132 | -0.0005 | +0.0137 |
+| z_ratio | G2 | -0.0094 | -0.0006 | -0.0088 |
+| rank90_idx_abs_ret_7d_seg | G9 | +0.0303 | +0.0215 | +0.0088 |
+| sess_europe | G4 | +0.0067 | -0.0001 | +0.0069 |
+| vol_slope | G2 | -0.0085 | -0.0020 | -0.0065 |
+| trig_sym | G2 | +0.0073 | +0.0012 | +0.0061 |
+| b_wallets_per_musd_1440 | G5 | +0.0013 | -0.0016 | +0.0028 |
+| both_traded_share_24h | G2 | +0.0023 | -0.0003 | +0.0026 |
+| a_slip_buy_1k | G8 | +0.0036 | +0.0011 | +0.0024 |
+group totals: G2 +0.2966, G3 +0.0006, G4 +0.0081, G5 +0.0435, G6 +0.0002, G7 +0.0028, G8 +0.0064, G9
++0.0097, coin_one_hot +0.0000, events +1.3046, missing_indicator -0.0003
+
+**Fold 7** (n_test=311,654, n_picks=3,032): top 20 --
+| column | group | picks | rest | diff |
+|---|---|---|---|---|
+| vol_48 | events | +0.7667 | -0.0142 | +0.7809 |
+| threshold | events | +0.3322 | +0.0118 | +0.3203 |
+| sandwich | G2 | +0.1352 | -0.0402 | +0.1754 |
+| sigma | events | +0.0822 | -0.0169 | +0.0991 |
+| abs_beta | G2 | +0.0511 | +0.0015 | +0.0496 |
+| ps_efficiency | G5 | +0.0157 | -0.0102 | +0.0259 |
+| z_ratio | G2 | -0.0220 | +0.0011 | -0.0230 |
+| vratio | G2 | +0.0213 | -0.0006 | +0.0219 |
+| threshold_sym | G2 | +0.0187 | -0.0002 | +0.0189 |
+| trig_sym | G2 | +0.0160 | +0.0007 | +0.0153 |
+| mins_since_trade_a | events | +0.0129 | -0.0015 | +0.0144 |
+| crossings_7d | G2 | +0.0124 | +0.0008 | +0.0115 |
+| neutrality | G2 | +0.0114 | +0.0019 | +0.0095 |
+| vol_slope | G2 | -0.0111 | -0.0026 | -0.0086 |
+| ps_max_step | G5 | +0.0069 | -0.0010 | +0.0079 |
+| volratio_btc | G9 | +0.0081 | +0.0013 | +0.0069 |
+| mins_since_trade_b | events | +0.0064 | -0.0004 | +0.0068 |
+| volratio_idx_seg | G9 | +0.0119 | +0.0052 | +0.0067 |
+| b_wallets_per_musd_1440 | G5 | +0.0061 | -0.0003 | +0.0064 |
+| r2 | events | -0.0021 | -0.0079 | +0.0058 |
+group totals: G2 +0.2769, G3 +0.0013, G4 +0.0049, G5 +0.0392, G6 +0.0006, G7 +0.0006, G8 +0.0012, G9
++0.0302, coin_one_hot +0.0000, events +1.2272, missing_indicator -0.0019
+
+`vol_48` and `threshold` are the two largest positive diff columns in every one of folds 1-7, with
+`sandwich` (G2, hedge quality) consistently third. By group diff, `events` (vol_48, threshold, sigma
+and the other raw event-level columns) is the largest positive-diff group in every fold, `G2` (hedge
+quality) second; **`G9` (market regime -- BTC/ETH/index returns, realised vol, market liquidity,
+trigger counts, identical for every event of a 30-min bar; input group G8 is g8.parquet, order book,
+a different group) is positive in all 7 folds**, from +0.0097 (fold 6) to +0.1225 (fold 2).
+
+### G4. Fixed slices (q=1%, pooled folds 1-7)
+
+Lift is measured within each slice, against that slice's own events. Tercile cut points come from all
+block events, folds 1-7 pooled. `hour` and `weekend`/`weekday` come from entry_time (S1-D's own
+convention), not from t0.
+
+| slice | n_slice | n_picks | share | reach_10h | chance_10h | lift | lift_lo | lift_hi |
+|---|---|---|---|---|---|---|---|---|
+| side_z_pos | 1579364 | 17535 | 0.0111 | 0.6736 | 0.7238 | 0.0729 | 0.0530 | 0.0931 |
+| side_z_neg | 1517696 | 18094 | 0.0119 | 0.6802 | 0.7196 | 0.0833 | 0.0647 | 0.1020 |
+| yzy_in_leg | 24550 | 1827 | 0.0744 | 0.6519 | 0.6929 | 0.0417 | -0.0670 | 0.1516 |
+| yzy_not | 3072510 | 33802 | 0.0110 | 0.6783 | 0.7232 | 0.0783 | 0.0642 | 0.0922 |
+| vol_48_low | 1032354 | 160 | 0.0002 | 0.4063 | 0.5816 | -0.0409 | -0.1464 | 0.1509 |
+| vol_48_mid | 1032353 | 706 | 0.0007 | 0.6331 | 0.6788 | 0.0854 | 0.0253 | 0.1424 |
+| vol_48_high | 1032353 | 34763 | 0.0337 | 0.6791 | 0.7232 | 0.0591 | 0.0450 | 0.0726 |
+| r2_low | 1032354 | 8847 | 0.0086 | 0.6392 | 0.6822 | 0.0441 | 0.0112 | 0.0751 |
+| r2_mid | 1032353 | 9751 | 0.0094 | 0.6671 | 0.7124 | 0.0846 | 0.0567 | 0.1126 |
+| r2_high | 1032353 | 17031 | 0.0165 | 0.7022 | 0.7474 | 0.1064 | 0.0930 | 0.1204 |
+| sigma_low | 1032354 | 23938 | 0.0232 | 0.6975 | 0.7447 | 0.0995 | 0.0867 | 0.1129 |
+| sigma_mid | 1032353 | 7255 | 0.0070 | 0.6503 | 0.6869 | 0.0952 | 0.0679 | 0.1226 |
+| sigma_high | 1032353 | 4436 | 0.0043 | 0.6100 | 0.6540 | 0.0461 | 0.0071 | 0.0838 |
+| abs_z_minus_thresh_low | 1032354 | 8837 | 0.0086 | 0.7301 | 0.7619 | 0.0939 | 0.0792 | 0.1080 |
+| abs_z_minus_thresh_mid | 1032353 | 10717 | 0.0104 | 0.7027 | 0.7438 | 0.0839 | 0.0648 | 0.1035 |
+| abs_z_minus_thresh_high | 1032353 | 16075 | 0.0156 | 0.6306 | 0.6847 | 0.0638 | 0.0441 | 0.0842 |
+| hour_00_06 | 779466 | 7046 | 0.0090 | 0.6635 | 0.7089 | 0.0770 | 0.0511 | 0.1038 |
+| hour_06_12 | 723510 | 10756 | 0.0149 | 0.6777 | 0.7283 | 0.0814 | 0.0537 | 0.1049 |
+| hour_12_18 | 915928 | 11053 | 0.0121 | 0.6764 | 0.7228 | 0.0735 | 0.0472 | 0.1034 |
+| hour_18_24 | 678156 | 6774 | 0.0100 | 0.6909 | 0.7226 | 0.0859 | 0.0583 | 0.1143 |
+| weekend | 871778 | 9715 | 0.0111 | 0.6726 | 0.7206 | 0.0708 | 0.0407 | 0.1009 |
+| weekday | 2225282 | 25914 | 0.0116 | 0.6786 | 0.7220 | 0.0811 | 0.0640 | 0.0983 |
+| fold_1 | 463203 | 9622 | 0.0208 | 0.6407 | 0.6998 | 0.0583 | 0.0258 | 0.0912 |
+| fold_2 | 481419 | 8070 | 0.0168 | 0.6978 | 0.7437 | 0.0948 | 0.0626 | 0.1313 |
+| fold_3 | 476768 | 1598 | 0.0034 | 0.6984 | 0.7502 | 0.0898 | 0.0131 | 0.1978 |
+| fold_4 | 477137 | 3892 | 0.0082 | 0.6745 | 0.7062 | 0.0839 | 0.0505 | 0.1236 |
+| fold_5 | 465201 | 7175 | 0.0154 | 0.6903 | 0.7251 | 0.0770 | 0.0479 | 0.1062 |
+| fold_6 | 421678 | 2240 | 0.0053 | 0.7045 | 0.7449 | 0.0883 | 0.0486 | 0.1313 |
+| fold_7 | 311654 | 3032 | 0.0097 | 0.6768 | 0.7116 | 0.0595 | 0.0110 | 0.1012 |
+
+tercile cuts: vol_48 [0.3287, 0.4395]; r2 [0.2722, 0.6754]; sigma [0.00954, 0.01595]; abs_z_minus_thresh
+[0.1418, 0.3985]
+
+Side of the spread (z>0 vs z<0) and YZY-in-leg vs not show no sharp split (YZY's own interval is wide
+and crosses zero, n=1,827). `vol_48_low` is a point estimate of -0.04 on n=160 picks, with an interval
+of (-0.146, 0.151) that crosses zero -- this slice cannot tell whether the edge is absent or just small-n
+noise. `r2`'s point lift rises from low to high tercile (0.044 -> 0.085 -> 0.106); `sigma`'s point lift
+instead FALLS (0.0995 -> 0.0952 -> 0.0461) -- the two columns move in opposite directions across their
+own terciles. Fold-by-fold point lift ranges 0.058 (fold 1) to 0.095 (fold 2); every fold's interval sits
+above zero, but these are point estimates and folds are not tested against each other.
+
+### G5. Anatomy of the misses
+
+| column | reached | missed |
+|---|---|---|
+| z | -0.9971 | -0.9243 |
+| abs_z_minus_thresh | 0.3176 | 0.4188 |
+| sigma | 0.006986 | 0.007696 |
+| vol_48 | 0.7100 | 0.7194 |
+| r2 | 0.6703 | 0.6053 |
+| beta_stab | 0.7231 | 0.8703 |
+| mins_since_trade_a | 0.0 | 0.0 |
+| mins_since_trade_b | 0.0 | 0.0 |
+| bars_into_segment | 6889.0 | 6596.0 |
+| chance_10h | 0.74 | 0.72 |
+
+| column | side | n | q25 | median | q75 |
+|---|---|---|---|---|---|
+| depth_10h | picks_miss | 11509 | 0.6011 | 1.1600 | 1.7140 |
+| depth_10h | rest_miss | 2070001 | 0.5726 | 1.1288 | 1.7697 |
+| mae_sigma | picks_miss | 11509 | 2.9625 | 4.8636 | 7.8455 |
+| mae_sigma | rest_miss | 2070001 | 0.9670 | 1.9729 | 3.6274 |
+
+Caveat: medians and quartiles only -- they cannot see a change in spread, in the tails, or in a
+column's relationship to the label. Misses had a larger |z|-threshold median than reaches (0.419 vs
+0.318). For the misses themselves, picks' own misses go about as deep as the rest's misses (median
+depth_10h 1.16 vs 1.13) but travel much further against the trade (away from mu, in sigma) once they do
+miss: median mae_sigma 4.86 vs the rest's 1.97, and the gap widens at the 75th percentile (7.85 vs
+3.63). depth_10h and mae_sigma are both in each event's OWN sigma, and picks' own sigma is small
+(median 0.0070 reached, 0.0077 missed, from the table above) against the block's middle sigma tercile
+of 0.0095-0.0159 (G4's tercile cuts) -- part of the 4.86-vs-1.97 gap may come from the smaller unit
+picks are measured in, not from a larger move in price terms. Not computed further here.
+
+### G6. Overconfidence at the top
+
+| fold | n | mean p_10h | actual reach_10h |
+|---|---|---|---|
+| 1 | 9622 | 0.8167 | 0.6407 |
+| 2 | 8070 | 0.8632 | 0.6978 |
+| 3 | 1598 | 0.8913 | 0.6984 |
+| 4 | 3892 | 0.8222 | 0.6745 |
+| 5 | 7175 | 0.8114 | 0.6903 |
+| 6 | 2240 | 0.8320 | 0.7045 |
+| 7 | 3032 | 0.7978 | 0.6768 |
+
+| quintile | n | mean p_10h | actual reach_10h |
+|---|---|---|---|
+| 0 | 7126 | 0.7569 | 0.6339 |
+| 1 | 7126 | 0.7905 | 0.6569 |
+| 2 | 7125 | 0.8225 | 0.6724 |
+| 3 | 7126 | 0.8580 | 0.6953 |
+| 4 | 7126 | 0.9193 | 0.7264 |
+
+Mean p_10h (0.80-0.89 by fold) runs well above actual reach_10h (0.64-0.70) in every fold -- the model
+is overconfident at this cut, consistently. The pooled-quintile table shows the same pattern holds
+across the whole range of the picks' own p_10h: even the lowest quintile (mean p_10h 0.76) over-predicts
+its own actual reach (0.63).
+
+### G7. Tighter cut-offs: q=0.5% and q=0.1%, alongside q=1%
+
+Cutoff table (n, picks/active day, share, reach, chance, gap, pooled lift+interval):
+
+**q=0.01** -- per-fold n: 9622, 8070, 1598, 3892, 7175, 2240, 3032 (folds 1-7); reach_10h 0.641-0.705;
+gap -0.059 to -0.032; lift 0.058-0.095; **pooled lift = 0.0782 (0.0631, 0.0942)**.
+**q=0.005** -- per-fold n: 4900, 3951, 782, 1864, 3641, 1011, 1550; reach_10h 0.670-0.729; lift
+0.062-0.101; **pooled lift = 0.0899 (0.0717, 0.1080)**.
+**q=0.001** -- per-fold n: 1142, 686, 190, 324, 813, 130, 353; reach_10h 0.705-0.815; lift
+0.054-0.167; **pooled lift = 0.1092 (0.0817, 0.1380)**.
+
+Note: this run's own q=1% pooled interval, 0.0782 (0.0631, 0.0942), differs slightly from S1-F's saved
+value for the same 35,629 picks, 0.0782 (0.0619, 0.0928) -- the point estimate matches to 4 decimals,
+but the interval differs because this script's seed (and so its bootstrap resample order) differs from
+S1-F's.
+
+G1 items by q: q=0.01 picks/day median=110 max=1058, open-at-once peak=346; q=0.005 median=50 max=514
+peak=242; q=0.001 median=8 max=167 peak=93. Peak coin ZRO at all three q.
+
+Outcomes, **picks**: q=0.01 reach_2h/5h/10h=0.347/0.547/0.677 vs chance 0.433/0.614/0.722,
+median_min_to_mu=115, share_30/60min=0.102/0.205. q=0.005: 0.377/0.574/0.699 vs 0.449/0.627/0.732,
+median=104, 0.118/0.231. q=0.001: 0.441/0.628/0.738 vs 0.477/0.653/0.752, median=84, 0.156/0.293.
+
+Outcomes, **rest** (for comparison, same three q's since "rest" is defined against each q's own picks):
+reach_10h 0.324/0.326/0.327, chance_10h 0.448/0.449/0.450, median_min_to_mu 251/249/248 -- rest barely
+moves across the three q's (it is almost the whole population at every q).
+
+Distance to mu, IN SIGMA (the user's 2026-11-07 amendment -- this replaces price-percent as the report;
+|z| x sigma is JSON-only now, field `abs_z_times_sigma_json_only`), **picks**:
+q=0.01 median|z|=2.0389 (q25=1.6527, q75=2.5187), median|z|-threshold=0.3456 (0.1431, 0.7024);
+q=0.005 median|z|=2.0486 (1.6657, 2.5245), median|z|-threshold=0.3576 (0.1489, 0.7288);
+q=0.001 median|z|=2.0531 (1.6789, 2.5280), median|z|-threshold=0.3671 (0.1563, 0.7807).
+
+Distance to mu, **rest** (for comparison): median|z| ~2.47 and median|z|-threshold ~0.245 at all three
+q (rest is almost the whole population, so it barely differs by q).
+
+G5 miss measures (picks' misses, by q): depth_10h median 1.16/1.18/1.19 (q=0.01/0.005/0.001), mae_sigma
+median 4.86/5.25/6.09.
+
+G6 calibration by fold, by q (point estimates; no interval or test supports a trend claim): q=0.01
+already shown above; q=0.005 mean p_10h 0.86-0.92 vs actual 0.67-0.73 by fold; q=0.001 mean p_10h
+0.91-0.97 vs actual 0.71-0.82 by fold.
+
+G4 slices pooled, with n, by q: at q=0.001 several are very thin -- vol_48_low n=8 (point lift -0.32,
+interval undefined, see below), vol_48_mid n=24, yzy_in_leg n=360, fold_6 n=130. Reported as is, per the
+brief; nothing merged or dropped. Full tables in `s1g_report.json`.
+
+**Tightening q, as point estimates (intervals overlap heavily -- (0.063, 0.094), (0.072, 0.108) and
+(0.082, 0.138) -- the difference between q's is not tested):** pooled lift point estimate rises as q
+tightens (0.078 -> 0.090 -> 0.109), and so does reach_10h among picks (0.677 -> 0.699 -> 0.738). Median
+|z| barely moves (2.04 -> 2.05 -> 2.05); median |z|-threshold rises slightly (0.346 -> 0.358 -> 0.367).
+Trade count falls sharply and close to proportionally with q (pooled median picks/day: 110, 50, 8; peak
+open-at-once: 346, 242, 93). One slice (vol_48_low at q=0.001) hit harness.day_block_bootstrap's 0/0
+case (a resample drew no pick day) and its interval is reported as undefined (None/None with a note),
+not a silent NaN (Checker's blocking fix, verified before the real run).
+
+### G8. Distance from mu against the model's probability (user, 2026-11-07, corrected same day: "not
+distance vs reversion")
+
+|z| decile edges (folds 1-7 pooled, all block events): 1.6693, 1.9228, 2.1187, 2.2942, 2.4679, 2.6530,
+2.8665, 3.1422, 3.5866.
+
+**All events, per bin** (n, model's p_10h mean/median/q25/q75; actual reach_10h side column):
+
+| bin (|z| up to) | n | mean p_10h | median p_10h | q25 | q75 | actual reach_10h |
+|---|---|---|---|---|---|---|
+| 0 (<=1.669) | 309706 | 0.4550 | 0.4391 | 0.3480 | 0.5471 | 0.4856 |
+| 1 (<=1.923) | 309706 | 0.4113 | 0.3908 | 0.3054 | 0.4972 | 0.4138 |
+| 2 (<=2.119) | 309706 | 0.3843 | 0.3616 | 0.2803 | 0.4662 | 0.3784 |
+| 3 (<=2.294) | 309706 | 0.3617 | 0.3375 | 0.2594 | 0.4391 | 0.3488 |
+| 4 (<=2.468) | 309706 | 0.3423 | 0.3167 | 0.2417 | 0.4163 | 0.3273 |
+| 5 (<=2.653) | 309706 | 0.3233 | 0.2960 | 0.2242 | 0.3946 | 0.3065 |
+| 6 (<=2.867) | 309706 | 0.3052 | 0.2763 | 0.2069 | 0.3741 | 0.2869 |
+| 7 (<=3.142) | 309706 | 0.2860 | 0.2552 | 0.1887 | 0.3519 | 0.2678 |
+| 8 (<=3.587) | 309706 | 0.2648 | 0.2319 | 0.1667 | 0.3293 | 0.2443 |
+| 9 (>3.587) | 309706 | 0.2448 | 0.2094 | 0.1384 | 0.3162 | 0.2198 |
+
+All 10 bins have exactly n=309,706 (the decile edges are by construction). The model's p_10h falls
+steadily from bin 0 to bin 9 (mean 0.455 down to 0.245), and so does actual reach_10h (0.486 down to
+0.220) -- for the population as a whole, both the model's probability and the real outcome move the
+SAME direction with |z|: lower at larger entry distance from mu.
+
+**Correction (Checker's finding, round 2):** the first draft of this table gave per-bin pick counts
+that matched neither `s1g_report.json` nor an independent rebuild (and were never actually read from
+either) -- effectively invented, not measured. The table below is read directly from
+`s1g_report.json`'s `g8_distance_vs_probability.picks_by_q`.
+
+**Rule A picks on the same edges, by q** (n and p_10h stats per bin; actual reach_10h side column):
+
+**q=0.01**
+| bin | n | mean p_10h | median p_10h | q25 | q75 | actual reach_10h |
+|---|---|---|---|---|---|---|
+| 0 | 9261 | 0.8257 | 0.8171 | 0.7786 | 0.8637 | 0.7403 |
+| 1 | 5815 | 0.8303 | 0.8237 | 0.7819 | 0.8689 | 0.7011 |
+| 2 | 4476 | 0.8323 | 0.8250 | 0.7849 | 0.8706 | 0.6941 |
+| 3 | 3534 | 0.8320 | 0.8243 | 0.7850 | 0.8714 | 0.6777 |
+| 4 | 2893 | 0.8312 | 0.8247 | 0.7830 | 0.8710 | 0.6526 |
+| 5 | 2431 | 0.8301 | 0.8225 | 0.7814 | 0.8700 | 0.6503 |
+| 6 | 2135 | 0.8292 | 0.8212 | 0.7829 | 0.8662 | 0.6286 |
+| 7 | 1869 | 0.8299 | 0.8231 | 0.7807 | 0.8676 | 0.6132 |
+| 8 | 1635 | 0.8316 | 0.8255 | 0.7839 | 0.8702 | 0.5554 |
+| 9 | 1580 | 0.8281 | 0.8211 | 0.7804 | 0.8656 | 0.5190 |
+
+**q=0.005**
+| bin | n | mean p_10h | median p_10h | q25 | q75 | actual reach_10h |
+|---|---|---|---|---|---|---|
+| 0 | 4474 | 0.8681 | 0.8638 | 0.8290 | 0.9011 | 0.7637 |
+| 1 | 2909 | 0.8710 | 0.8671 | 0.8318 | 0.9035 | 0.7116 |
+| 2 | 2243 | 0.8733 | 0.8686 | 0.8340 | 0.9072 | 0.7231 |
+| 3 | 1817 | 0.8719 | 0.8686 | 0.8325 | 0.9053 | 0.6924 |
+| 4 | 1438 | 0.8722 | 0.8697 | 0.8340 | 0.9050 | 0.6815 |
+| 5 | 1212 | 0.8722 | 0.8692 | 0.8324 | 0.9055 | 0.6683 |
+| 6 | 1067 | 0.8698 | 0.8652 | 0.8324 | 0.9020 | 0.6626 |
+| 7 | 918 | 0.8725 | 0.8675 | 0.8334 | 0.9059 | 0.6699 |
+| 8 | 817 | 0.8728 | 0.8677 | 0.8353 | 0.9068 | 0.5851 |
+| 9 | 804 | 0.8696 | 0.8630 | 0.8293 | 0.9038 | 0.5162 |
+
+**q=0.001**
+| bin | n | mean p_10h | median p_10h | q25 | q75 | actual reach_10h |
+|---|---|---|---|---|---|---|
+| 0 | 889 | 0.9355 | 0.9369 | 0.9130 | 0.9566 | 0.7975 |
+| 1 | 598 | 0.9369 | 0.9385 | 0.9149 | 0.9571 | 0.7542 |
+| 2 | 498 | 0.9358 | 0.9360 | 0.9126 | 0.9565 | 0.7791 |
+| 3 | 360 | 0.9362 | 0.9352 | 0.9129 | 0.9595 | 0.7389 |
+| 4 | 295 | 0.9338 | 0.9322 | 0.9110 | 0.9537 | 0.7153 |
+| 5 | 252 | 0.9353 | 0.9379 | 0.9147 | 0.9543 | 0.6746 |
+| 6 | 207 | 0.9363 | 0.9373 | 0.9114 | 0.9565 | 0.6908 |
+| 7 | 197 | 0.9383 | 0.9355 | 0.9151 | 0.9617 | 0.7310 |
+| 8 | 175 | 0.9381 | 0.9391 | 0.9142 | 0.9586 | 0.6114 |
+| 9 | 167 | 0.9392 | 0.9386 | 0.9163 | 0.9610 | 0.5808 |
+
+Picks are MOST concentrated in bin 0, the smallest-|z| bin (9,261 of 35,629 at q=0.01, 26%), and thin
+out steadily through bin 9 (1,580, 4.4%) -- the opposite of the all-events population, where every bin
+has the same n=309,706 by construction. Within every bin, picks' own mean p_10h (0.826-0.833 at q=0.01)
+sits far above that bin's all-events mean p_10h (0.455 down to 0.245 across the same bins) -- picks are
+the high-p_10h tail of each |z| bin, not an average sample of it. Actual reach_10h among picks falls
+from 0.740 (bin 0) to 0.519 (bin 9) at q=0.01, and the same falling pattern holds at q=0.005 and
+q=0.001 -- picks at larger |z| have a similar (q=0.01: 0.826-0.832, roughly flat) model probability but
+a lower real reach, so the model's overconfidence (G6) is largest at the picks' own largest-|z| bins
+(point estimates, no interval).
+
+### 10-line summary
+1. Pick set (q=1%): folds 1-7, n=35,629, exact match to S1-F. q=0.5%/0.1% in G7/G8 (n=17,699 / 3,638).
+2. G1 (q=1%): pooled picks/day median 110 (range 24-403 at p10/p90), max 1,058 in one day. Open at once:
+   peak 346, median 22, 90th percentile 94; busiest single coin ZRO peaks at 129 concurrent positions.
+3. G2: picks beat the rest of their own chance_10h decile everywhere, by roughly a flat 0.149-0.200 in
+   reach_10h across deciles 1-9 -- though 65% of all picks sit in the single highest decile.
+4. G3: all 7 folds' rebuilt eta separate picks from rest perfectly and order every test event exactly as
+   the saved p_10h does (Spearman 1.000000, real margins). vol_48 and threshold are the two largest
+   positive contributors in every fold, `sandwich` (hedge quality) third, and the G9 market-regime group
+   is positive in every fold too; absolute levels are not proven, only the pick-vs-rest differences are.
+5. G4: `vol_48_low` (n=160) is a point estimate with an interval crossing zero -- can't tell if the edge
+   is absent there. `r2`'s lift rises across its terciles; `sigma`'s instead falls. Side of spread and
+   YZY-in-leg show no sharp split.
+6. G5: misses had a larger |z|-threshold gap than reaches. Picks' own misses go about as deep as the
+   rest's misses but travel much further against the trade once they do miss (median 4.86 sigma vs 1.97
+   sigma) -- medians/quartiles only, cannot see spread or tails directly.
+7. G6: the model is overconfident at this cut in every fold and across the whole range of its own
+   p_10h among picks -- mean p_10h runs 10-20 points above actual reach_10h everywhere checked.
+8. G7: as point estimates (intervals overlap heavily, not tested against each other), tightening q from
+   1% to 0.1% moves lift from 0.078 to 0.109 and reach from 0.68 to 0.74, while cutting trade count
+   sharply (median picks/day 110 to 8); |z| barely moves, |z|-threshold rises slightly.
+9. G8: across the whole population, both the model's p_10h and actual reach_10h fall steadily as |z|
+   grows. Picks concentrate MOST in the smallest-|z| bin and thin out steadily toward the largest; within
+   every bin their own mean p_10h is roughly flat (~0.83 at q=1%) while actual reach_10h among picks
+   falls from the smallest to the largest |z| bin -- the model is most overconfident at picks' own
+   largest-|z| end (point estimates, no interval).
+10. Descriptive only -- every slice was chosen after seeing results. Gate verdict stays FAIL (NUMBERS
+    [HL-MODEL1-S1]); no cause is claimed beyond what these tables show.
+
+Code Checker: script PASS; log/NUMBERS PASS (round 3).
