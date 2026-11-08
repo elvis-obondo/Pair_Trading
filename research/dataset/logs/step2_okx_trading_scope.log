@@ -1,0 +1,126 @@
+[STEP2-SCOPE] === Item 3: OKX data ===
+[STEP2-SCOPE] item-3 candidate: `attic/okx_data` | 56.7MB | `git grep -n -F "okx_data"` over the Hyperliquid path -> 46 hit(s)
+[STEP2-SCOPE]     HL-PATH HIT: docs/prompts/HL_BUILD1_BARS_AND_DISLOCATIONS.md:38:- Move `user_data/data/okx/` to `attic/okx_data/`, and OKX-built datasets in
+[STEP2-SCOPE]     HL-PATH HIT: docs/prompts/HL_BUILD1_BARS_AND_DISLOCATIONS.md:40:  else built from OKX bars — list them) to `attic/okx_datasets/`. Add both to
+[STEP2-SCOPE]     HL-PATH HIT: docs/prompts/HL_BUILD7_MASTER_DATASET.md:184:(`attic/okx_data/`, also on S3 `attic/`): 1-minute and 30-minute bars for 214 OKX coins through about
+[STEP2-SCOPE]     HL-PATH HIT: research/dislocation_model/NUMBERS.md:1:> **Results before 2026-10-14 are OKX.** OKX data (bars and the datasets built from them) is in attic/okx_data/ and attic/okx_datasets/. From [HL-BUILD1] on, the venue is Hyperliquid.
+[STEP2-SCOPE]     HL-PATH HIT: research/dislocation_model/NUMBERS.md:3832:| moved to attic/: 7 OKX scripts and 3 adapters (git mv), user_data/data/okx (2.3 GB) to attic/okx_data/, 24 research/datasets entries (297 MB) to attic/okx_datasets/; both gitignored | M |
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build1_a2_files.log:7:attic/okx_data/
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build1_a2_files.log:8:attic/okx_datasets/
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build1_a2_files.log:9:.gitignore:108:attic/okx_data/	attic/okx_data/x
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build1_a2_files.log:10:.gitignore:109:attic/okx_datasets/	attic/okx_datasets/x
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build1_a2_files.log:24:user_data/data/okx -> attic/okx_data
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build1_a2_files.log:49:research/datasets/breadth_counts.npz -> attic/okx_datasets/breadth_counts.npz
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build1_a2_files.log:50:research/datasets/breadth_signed.npz -> attic/okx_datasets/breadth_signed.npz
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build1_a2_files.log:51:research/datasets/delayed2_refresh.npz -> attic/okx_datasets/delayed2_refresh.npz
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build1_a2_files.log:52:research/datasets/delayed3_blocks.npz -> attic/okx_datasets/delayed3_blocks.npz
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build1_a2_files.log:53:research/datasets/delayed_paths.npz -> attic/okx_datasets/delayed_paths.npz
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build1_a2_files.log:54:research/datasets/disloc.npz -> attic/okx_datasets/disloc.npz
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build1_a2_files.log:55:research/datasets/disloc_meta.parquet -> attic/okx_datasets/disloc_meta.parquet
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build1_a2_files.log:56:research/datasets/envelope_preds_30m.npz -> attic/okx_datasets/envelope_preds_30m.npz
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build1_a2_files.log:57:research/datasets/envelope_preds_copula.npz -> attic/okx_datasets/envelope_preds_copula.npz
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build1_a2_files.log:58:research/datasets/envelope_preds_cqr.npz -> attic/okx_datasets/envelope_preds_cqr.npz
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build1_a2_files.log:59:research/datasets/envelope_preds_match1m.npz -> attic/okx_datasets/envelope_preds_match1m.npz
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build1_a2_files.log:60:research/datasets/envelope_preds_match1m_mae_vol1m.npz -> attic/okx_datasets/envelope_preds_match1m_mae_vol1m.npz
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build1_a2_files.log:61:research/datasets/envfeat.npz -> attic/okx_datasets/envfeat.npz
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build1_a2_files.log:62:research/datasets/market_vol.npz -> attic/okx_datasets/market_vol.npz
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build1_a2_files.log:63:research/datasets/meta_label_v2_state.npz -> attic/okx_datasets/meta_label_v2_state.npz
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build1_a2_files.log:64:research/datasets/newfeat.npz -> attic/okx_datasets/newfeat.npz
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build1_a2_files.log:65:research/datasets/oi -> attic/okx_datasets/oi
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build1_a2_files.log:66:research/datasets/open_interest.feather -> attic/okx_datasets/open_interest.feather
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build1_a2_files.log:67:research/datasets/reach_paths.npz -> attic/okx_datasets/reach_paths.npz
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build1_a2_files.log:68:research/datasets/reachfeat.npz -> attic/okx_datasets/reachfeat.npz
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build1_a2_files.log:69:research/datasets/reachfeat2.npz -> attic/okx_datasets/reachfeat2.npz
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build1_a2_files.log:70:research/datasets/vol48_1m.npz -> attic/okx_datasets/vol48_1m.npz
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build1_a2_files.log:71:research/datasets/vol_slope_1m.npz -> attic/okx_datasets/vol_slope_1m.npz
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build1_a2_files.log:72:research/datasets/whyfeat.npz -> attic/okx_datasets/whyfeat.npz
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build1_a2_files.log:77:2.3G	attic/okx_data
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build1_a2_files.log:78:297M	attic/okx_datasets
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build2_laptop_data.log:2:-- normalized store (OKX) -> attic/okx_data/normalized
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build2_laptop_data.log:5:.gitignore:108:attic/okx_data/	attic/okx_data/normalized/manifest.json
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/gcp_setup.log:39:-- local okx_data: files 1289 bytes 2475280364
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/gcp_setup.log:77:-- s3 okx_data: Total Objects: 1289    Total Size: 2475280364 
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/gcp_setup.log:78:-- local okx_datasets: files 30 bytes 309542659
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/gcp_setup.log:79:-- s3 okx_datasets: Total Objects: 30    Total Size: 309542659 
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/gcp_setup.log:80:okx_data: name+size diff lines = 0
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/gcp_setup.log:81:okx_datasets: name+size diff lines = 0
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/gcp_setup.log:95:2.3G	attic/okx_data
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/gcp_setup.log:96:295M	attic/okx_datasets
+[STEP2-SCOPE] item-3 candidate: `attic/vm_final` | 293.5MB | `git grep -n -F "vm_final"` over the Hyperliquid path -> 8 hit(s)
+[STEP2-SCOPE]     HL-PATH HIT: research/dislocation_model/NUMBERS.md:3865:| VM tree archived first: attic/vm_final/vm_final_20261014.tar.gz, 307,771,513 B, sha256 781b1004…578c65a equal on both sides; 22,273 files / 555,756,735 B equal (excluding 73 macOS `._*` files) | M |
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build2_c1_vm.log:153:-rw-rw-r-- 1 elvisobondo elvisobondo 307771513 Oct 14 19:17 /tmp/vm_final_20261014.tar.gz
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build2_c1_vm.log:154:781b1004759493332501169f4970c227cdde4198b19b60d92fbc93645578c65a  /tmp/vm_final_20261014.tar.gz
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build2_c1_vm.log:155:781b1004759493332501169f4970c227cdde4198b19b60d92fbc93645578c65a  attic/vm_final/vm_final_20261014.tar.gz
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build2_c1_vm.log:156:-rw-r--r--@ 1 elvisobondo  staff  307771513 Oct 14 15:18 attic/vm_final/vm_final_20261014.tar.gz
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build2_c1_vm.log:288:### C1 pull verification: excluding 73 AppleDouble ._* files (macOS metadata copied at deploy), VM real files 22,273 = local extract 22,273, names identical (comm diff 0), bytes 555,756,735 = 555,756,735; sha256 VM = local 781b1004...578c65a; archive attic/vm_final/vm_final_20261014.tar.gz (307,771,513 B) also holds crontab.bak.20261014 and install_docker.sh
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build2_c1_vm.log:359:.gitignore:110:attic/vm_final/	attic/vm_final/vm_final_20261014.tar.gz
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/gcp_setup.log:103:vm_final
+[STEP2-SCOPE] attic/okx_datasets (297MB per research/hyperliquid/logs/build1_a2_files.log, already S3-verified per gcp_setup.log) present on THIS machine: no -- not found locally, nothing more to delete here
+[STEP2-SCOPE] === Item 4: freqtrade/OKX trading mechanism ===
+[STEP2-SCOPE] item-4 candidate (freqtrade-only, no HL hit expected): `user_data/config.json` | 8.2KB | `git grep -n -F "config.json"` over the Hyperliquid path -> 1 hit(s)
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/gcp_setup.log:50:### sync filter dry run (local): 261 files, 20 MB; absent .env, user_data/config.json, user_data/config_backfill.json, .env.example; secret grep of sent tree: no hits; research/**/*.py 89 = 89; dislocation_model .py 26 = 26, logs 47 = 47. Exclude array: .env .env.* user_data/config*.json .venv/ attic/ user_data/data/ research/datasets/ research/hyperliquid/flow/ __pycache__/ .git/ .gcp_pull/ + :- .gitignore
+[STEP2-SCOPE] item-4 candidate (freqtrade-only, no HL hit expected): `user_data/config_backfill.json` | 804B | `git grep -n -F "config_backfill.json"` over the Hyperliquid path -> 2 hit(s)
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build1_a2_files.log:117:  .env.example, requirements.txt, user_data/config_backfill.json, .gitignore comments
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/gcp_setup.log:50:### sync filter dry run (local): 261 files, 20 MB; absent .env, user_data/config.json, user_data/config_backfill.json, .env.example; secret grep of sent tree: no hits; research/**/*.py 89 = 89; dislocation_model .py 26 = 26, logs 47 = 47. Exclude array: .env .env.* user_data/config*.json .venv/ attic/ user_data/data/ research/datasets/ research/hyperliquid/flow/ __pycache__/ .git/ .gcp_pull/ + :- .gitignore
+[STEP2-SCOPE] item-4 candidate (freqtrade-only, no HL hit expected): `user_data/config_slow.json` | 193B | `git grep -n -F "config_slow.json"` over the Hyperliquid path -> 0 hit(s)
+[STEP2-SCOPE] item-4 candidate (freqtrade-only, no HL hit expected): `user_data/strategies/sample_strategy.py` | 16.8KB | `git grep -n -F "sample_strategy"` over the Hyperliquid path -> 0 hit(s)
+[STEP2-SCOPE] item-4 candidate (freqtrade-only, no HL hit expected): `user_data/hyperopts/sample_hyperopt_loss.py` | 1.8KB | `git grep -n -F "sample_hyperopt_loss"` over the Hyperliquid path -> 0 hit(s)
+[STEP2-SCOPE] item-4 candidate (freqtrade-only, no HL hit expected): `user_data/notebooks/strategy_analysis_example.ipynb` | 14.0KB | `git grep -n -F "strategy_analysis_example"` over the Hyperliquid path -> 0 hit(s)
+[STEP2-SCOPE] item-4 candidate (freqtrade-only, no HL hit expected): `.github/scripts/wake_streamlit.py` | 1.4KB | `git grep -n -F "wake_streamlit"` over the Hyperliquid path -> 0 hit(s)
+[STEP2-SCOPE] item-4 candidate (empty freqtrade scaffold dir): `user_data/backtest_results` | 0B | 0 entries
+[STEP2-SCOPE] item-4 candidate (empty freqtrade scaffold dir): `user_data/freqaimodels` | 0B | 0 entries
+[STEP2-SCOPE] item-4 candidate (empty freqtrade scaffold dir): `user_data/hyperopt_results` | 0B | 0 entries
+[STEP2-SCOPE] item-4 candidate (empty freqtrade scaffold dir): `user_data/logs` | 0B | 0 entries
+[STEP2-SCOPE] item-4 candidate (empty freqtrade scaffold dir): `user_data/plot` | 0B | 0 entries
+[STEP2-SCOPE] === user_data/data and user_data/normalized: NOT item-4 candidates ===
+[STEP2-SCOPE] LIVE HYPERLIQUID DATA -- excluded from item 4: `user_data/data` | 179.9MB | `git grep -n -F "user_data/data"` over the Hyperliquid path -> 32 hit(s)
+[STEP2-SCOPE]     HL-PATH HIT: docs/prompts/HL_BUILD1_BARS_AND_DISLOCATIONS.md:38:- Move `user_data/data/okx/` to `attic/okx_data/`, and OKX-built datasets in
+[STEP2-SCOPE]     HL-PATH HIT: docs/prompts/HL_BUILD1_BARS_AND_DISLOCATIONS.md:44:  `adapters/okx_spot.py`, `adapters/lst_tokens.py` (check `user_data/data/lst/`
+[STEP2-SCOPE]     HL-PATH HIT: docs/prompts/HL_BUILD1_BARS_AND_DISLOCATIONS.md:120:  Bar files: `user_data/data/hyperliquid/futures/{COIN}-{1m,30m}.feather`
+[STEP2-SCOPE]     HL-PATH HIT: docs/prompts/HL_BUILD1_BARS_AND_DISLOCATIONS.md:133:  `user_data/data/hyperliquid/ctx/{COIN}-1m-ctx.feather`. Unused here.
+[STEP2-SCOPE]     HL-PATH HIT: docs/prompts/HL_BUILD2_TRADES_TO_BARS_AND_FLOW.md:49:- The asset_ctxs mid-price bar files in `user_data/data/hyperliquid/futures/`
+[STEP2-SCOPE]     HL-PATH HIT: docs/prompts/HL_BUILD2_TRADES_TO_BARS_AND_FLOW.md:52:  `user_data/data/hyperliquid/ctx/`; they are features, gaps stay NaN.
+[STEP2-SCOPE]     HL-PATH HIT: docs/prompts/HL_BUILD2_TRADES_TO_BARS_AND_FLOW.md:144:- Bring down to the laptop: bars as `user_data/data/hyperliquid/futures/`
+[STEP2-SCOPE]     HL-PATH HIT: research/dataset/master_labels.py:5:INPUT: research/datasets/master/work/pair/events.parquet (stage A) and the 1-minute closes of both legs (user_data/data/hyperliquid/futures/*-1m.feather).
+[STEP2-SCOPE]     HL-PATH HIT: research/dislocation_model/NUMBERS.md:3832:| moved to attic/: 7 OKX scripts and 3 adapters (git mv), user_data/data/okx (2.3 GB) to attic/okx_data/, 24 research/datasets entries (297 MB) to attic/okx_datasets/; both gitignored | M |
+[STEP2-SCOPE]     HL-PATH HIT: research/dislocation_model/REBUILD.md:12:`user_data/data/` must be populated — it is not tracked either. Refresh it with
+[STEP2-SCOPE]     HL-PATH HIT: research/dislocation_model/logs/master_probe.log:3:/home/elvisobondo/Pair_Trading/user_data/data/hyperliquid/futures/BTC-1m.feather True
+[STEP2-SCOPE]     HL-PATH HIT: research/dislocation_model/logs/master_probe.log:4:4.1G	/home/elvisobondo/Pair_Trading/user_data/data/hyperliquid/futures
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/build1_bars.py:59:OUTPUT (schema of the OKX bar files): user_data/data/hyperliquid/futures/
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/build1_bars.py:64:user_data/data/hyperliquid/ctx/{COIN}-1m-ctx.feather on the same 1m label grid,
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/build3_swap.sh:7:rm -rf research/hyperliquid/flow_d3 user_data/data/hyperliquid/futures_d3
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/build3_swap.sh:8:mkdir -p research/hyperliquid/flow_d3 user_data/data/hyperliquid/futures_d3
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/build3_swap.sh:10:aws s3 cp $B/futures/ user_data/data/hyperliquid/futures_d3/ --recursive --only-show-errors
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/build3_swap.sh:14:echo "futures_d3 local: $(ls user_data/data/hyperliquid/futures_d3 | wc -l) files $(cat user_data/data/hyperliquid/futures_d3/* | wc -c) B"
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/build3_swap.sh:17:    user_data/data/hyperliquid/futures user_data/data/hyperliquid/futures_d3
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/build3_swap.sh:19:rm -rf research/hyperliquid/flow user_data/data/hyperliquid/futures
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/build3_swap.sh:21:mv user_data/data/hyperliquid/futures_d3 user_data/data/hyperliquid/futures
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/build3_swap.sh:22:echo "SWAP-DONE flow: $(ls research/hyperliquid/flow | wc -l) files; futures: $(ls user_data/data/hyperliquid/futures | wc -l) files"
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build1_a2_files.log:2:user_data/data/lst exists? no
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build1_a2_files.log:23:2.3G	user_data/data/okx
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build1_a2_files.log:24:user_data/data/okx -> attic/okx_data
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build1_a2_files.log:79:user_data/data/okx absent
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build1_a2_files.log:102:  research/intrabar.py            1m/fine log prices for exit checks; reads user_data/data/okx/futures directly
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/gcp_setup.log:50:### sync filter dry run (local): 261 files, 20 MB; absent .env, user_data/config.json, user_data/config_backfill.json, .env.example; secret grep of sent tree: no hits; research/**/*.py 89 = 89; dislocation_model .py 26 = 26, logs 47 = 47. Exclude array: .env .env.* user_data/config*.json .venv/ attic/ user_data/data/ research/datasets/ research/hyperliquid/flow/ __pycache__/ .git/ .gcp_pull/ + :- .gitignore
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/gcp_setup.log:143:6.5G	user_data/data/hyperliquid/ctx
+[STEP2-SCOPE]     HL-PATH HIT: research/pair_analysis.py:74:    (see data_loader.py). This reads user_data/data/okx/futures/ directly,
+[STEP2-SCOPE]     HL-PATH HIT: scripts/gcp_run.sh:21:# user_data/config*.json, .venv, attic/, user_data/data/, research/datasets/,
+[STEP2-SCOPE]     HL-PATH HIT: scripts/gcp_run.sh:78:            --exclude .venv/ --exclude attic/ --exclude user_data/data/ --exclude research/datasets/
+[STEP2-SCOPE]   -> 32 Hyperliquid-path reference(s) found; KEEP, not OKX/trading-only.
+[STEP2-SCOPE] LIVE HYPERLIQUID DATA -- excluded from item 4: `user_data/normalized` | 49.5MB | `git grep -n -F "user_data/normalized"` over the Hyperliquid path -> 6 hit(s)
+[STEP2-SCOPE]     HL-PATH HIT: docs/prompts/HL_BUILD1_BARS_AND_DISLOCATIONS.md:75:  `sync_normalized_store` copies `[date, close]` into `user_data/normalized/`,
+[STEP2-SCOPE]     HL-PATH HIT: research/data_loader.py:102:    Source-blind: syncs the normalized per-instrument store (user_data/normalized/)
+[STEP2-SCOPE]     HL-PATH HIT: research/dislocation_model/envfeat.py:133:    The normalized store (user_data/normalized/) carries `close` only, so highs,
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build2_laptop_data.log:4: 57M	user_data/normalized
+[STEP2-SCOPE]     HL-PATH HIT: research/hyperliquid/logs/build2_laptop_data.log:6:user_data/normalized absent
+[STEP2-SCOPE]     HL-PATH HIT: research/pair_analysis.py:72:    NOT from get_price_levels()/the normalized store (user_data/normalized/)
+[STEP2-SCOPE]   -> 6 Hyperliquid-path reference(s) found; KEEP, not OKX/trading-only.
+[STEP2-SCOPE] === Dockerfile.trading / docker-compose*.yml / APE_DOGE_Spread_Trade.docx ===
+[STEP2-SCOPE] `Dockerfile.trading` present: False
+[STEP2-SCOPE] `docker-compose.trading.yml` present: False
+[STEP2-SCOPE] `docker-compose.yml` present: False
+[STEP2-SCOPE] `APE_DOGE_Spread_Trade.docx` present: False
+[STEP2-SCOPE] === logs/scanner.*.log (untracked, top-level) ===
+[STEP2-SCOPE] `logs/scanner.err.log` present: True, 0B
+[STEP2-SCOPE] `logs/scanner.out.log` present: True, 0B
+[STEP2-SCOPE] ALL DONE
