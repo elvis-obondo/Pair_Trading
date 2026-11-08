@@ -22,7 +22,33 @@ goal / files changed / what was done.
 Part A (fixed rules, from the parent brief `docs/prompts/HL_MODEL1_REVERTER_MODEL.md`) does not change.
 S1-D is appended at the end of the S1 brief itself -- read the whole file, not just the top.
 
-## State at handoff (2026-10-29)
+## State at handoff (2026-11-08)
+
+**Repo cleanup Step 1+2 (docs/prompts/REPO_CLEANUP.md): DONE, checker PASS, committed `3fe05f5`.**
+- Step 1: `docs/CLEANUP_INVENTORY.md` / `scripts/cleanup_inventory.py` -- full repo inventory, every
+  figure printed by the script (git/filesystem/S3 reads, nothing hand-typed). A citation annotates a
+  row with a `cited by <doc:line>` note, never hides it.
+- Step 2: `scripts/step2_okx_trading_scope.py` grep-proved the attic/ archive and the freqtrade/OKX
+  trading mechanism against the Hyperliquid research path before deleting. Deleted: all of `attic/`
+  (incl. `okx_data`/`vm_final`, 351MB untracked OKX data, user-approved as lost for good), the
+  freqtrade scaffold under `user_data/` (configs, sample strategy/hyperopt/notebook, 5 empty dirs),
+  `.github/scripts/wake_streamlit.py`, `logs/scanner.*.log`, the project's own `__pycache__` dirs, and
+  5 more loose trading-era files under `research/` found afterward (`open_positions.json`,
+  `paper_trades_archive_20260817_105807.csv`, `param_walkforward_folds.csv`,
+  `portfolio_backtest_trades.csv`, `retired_nautilus_paper/`).
+- **Kept, not OKX despite living under `user_data/`:** `user_data/data` and `user_data/normalized` --
+  live Hyperliquid data, read/written by `research/adapters/hyperliquid_futures.py`,
+  `research/data_loader.py`, `research/dataset/master_labels.py`,
+  `research/hyperliquid/build1_bars.py`/`build3_swap.sh`. Also kept: `.venv`, `research/datasets` (v1
+  dataset), `research/exit_study`, `research/live_archive`, both Hyperliquid pilot folders.
+  `research/dataset/logs/master_manifest_v1.log` (v1 freeze receipt) is now in git.
+- **Known leftover, left alone on purpose:** `research/dataset/master_release_checks.py:21` still has
+  a dead `sys.path.insert(...,"user_data","strategies")` entry -- nothing imports from it; the checker
+  ruled against editing a live HL file for this cleanup, so it stays.
+- **Destructive deletions on this machine need the user's own direct permission inside this session**
+  (Claude Code's own classifier blocks `rm -rf`/`rmdir` of untracked data as "Irreversible Local
+  Destruction" regardless of what a peer session has relayed as approved) -- same pattern as the AWS
+  launch rule below, just for local deletes instead of cloud spend.
 
 **HL-MODEL1 S1 (candidate 1, penalised discrete-time hazard logistic, proximal Newton solver): DONE,
 checker PASS, committed.**
