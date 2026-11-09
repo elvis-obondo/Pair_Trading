@@ -1,0 +1,2058 @@
+{
+  "runs": {
+    "q0.01_stopnone_feetaker": {
+      "q": 0.01,
+      "fee": "taker",
+      "n_trades": 8078,
+      "abs_z_quintiles": [
+        {
+          "quintile": 0,
+          "n": 1616,
+          "bin_lo": 0.519377641417528,
+          "bin_hi": 1.5183562128361785,
+          "win_rate": 0.7772277227722773,
+          "mean_return": 0.00030491290938647954,
+          "median_return": 0.0025945748639546714,
+          "profit_factor": 1.0900683789760721
+        },
+        {
+          "quintile": 1,
+          "n": 1615,
+          "bin_lo": 1.5183562128361785,
+          "bin_hi": 1.8285665853740352,
+          "win_rate": 0.7318885448916409,
+          "mean_return": 0.0005962514387392295,
+          "median_return": 0.0031967562072875862,
+          "profit_factor": 1.1295681356799931
+        },
+        {
+          "quintile": 2,
+          "n": 1616,
+          "bin_lo": 1.8285665853740352,
+          "bin_hi": 2.1310233399133,
+          "win_rate": 0.7147277227722773,
+          "mean_return": 0.0008884824582349959,
+          "median_return": 0.0037181797370479637,
+          "profit_factor": 1.2746490988902957
+        },
+        {
+          "quintile": 3,
+          "n": 1615,
+          "bin_lo": 2.1310233399133,
+          "bin_hi": 2.562968826993598,
+          "win_rate": 0.691640866873065,
+          "mean_return": 0.000598535534958035,
+          "median_return": 0.003975158503153936,
+          "profit_factor": 1.1014775236422347
+        },
+        {
+          "quintile": 4,
+          "n": 1616,
+          "bin_lo": 2.562968826993598,
+          "bin_hi": 8.107546420429955,
+          "win_rate": 0.6169554455445545,
+          "mean_return": 0.001317527418003159,
+          "median_return": 0.004973635742973127,
+          "profit_factor": 1.2292866664562254
+        }
+      ],
+      "p_cal_quintiles": [
+        {
+          "quintile": 0,
+          "n": 1785,
+          "bin_lo": 0.6250187265917607,
+          "bin_hi": 0.6559487896402032,
+          "win_rate": 0.6705882352941176,
+          "mean_return": 0.0006835347715022122,
+          "median_return": 0.0034431709964094547,
+          "profit_factor": 1.1590618532088302
+        },
+        {
+          "quintile": 1,
+          "n": 1636,
+          "bin_lo": 0.6559487896402032,
+          "bin_hi": 0.683177570093458,
+          "win_rate": 0.6992665036674817,
+          "mean_return": 0.0007330591761435776,
+          "median_return": 0.003492502027972001,
+          "profit_factor": 1.2089826095555525
+        },
+        {
+          "quintile": 2,
+          "n": 1474,
+          "bin_lo": 0.683177570093458,
+          "bin_hi": 0.6952649869678541,
+          "win_rate": 0.7130257801899593,
+          "mean_return": 0.0007524829894870773,
+          "median_return": 0.00352442629751014,
+          "profit_factor": 1.1906696359499984
+        },
+        {
+          "quintile": 3,
+          "n": 1655,
+          "bin_lo": 0.6952649869678541,
+          "bin_hi": 0.7176566314076486,
+          "win_rate": 0.7057401812688822,
+          "mean_return": 0.0005838350998650457,
+          "median_return": 0.0033690590042834492,
+          "profit_factor": 1.117906276551841
+        },
+        {
+          "quintile": 4,
+          "n": 1528,
+          "bin_lo": 0.7176566314076486,
+          "bin_hi": 0.896551724137931,
+          "win_rate": 0.7506544502617801,
+          "mean_return": 0.000976721719900227,
+          "median_return": 0.003456213722753428,
+          "profit_factor": 1.1765888660558668
+        }
+      ],
+      "grid": [
+        {
+          "z_quintile": 0,
+          "p_quintile": 0,
+          "n": 375,
+          "win_rate": 0.7573333333333333,
+          "mean_return": 0.00031532384155111347,
+          "median_return": 0.002651574156609373,
+          "profit_factor": 1.180183982355692
+        },
+        {
+          "z_quintile": 0,
+          "p_quintile": 1,
+          "n": 374,
+          "win_rate": 0.7700534759358288,
+          "mean_return": 0.00033101464572452086,
+          "median_return": 0.002700403584010363,
+          "profit_factor": 1.097641265663818
+        },
+        {
+          "z_quintile": 0,
+          "p_quintile": 2,
+          "n": 298,
+          "win_rate": 0.7818791946308725,
+          "mean_return": 0.00028404918496603346,
+          "median_return": 0.0026714503368682656,
+          "profit_factor": 1.0585706481068589
+        },
+        {
+          "z_quintile": 0,
+          "p_quintile": 3,
+          "n": 317,
+          "win_rate": 0.7823343848580442,
+          "mean_return": -0.00012812061695209354,
+          "median_return": 0.002560894732018055,
+          "profit_factor": 1.0024286447737871
+        },
+        {
+          "z_quintile": 0,
+          "p_quintile": 4,
+          "n": 252,
+          "win_rate": 0.8055555555555556,
+          "mean_return": 0.0008200830235708265,
+          "median_return": 0.002440234471902336,
+          "profit_factor": 1.0855178651848052
+        },
+        {
+          "z_quintile": 1,
+          "p_quintile": 0,
+          "n": 370,
+          "win_rate": 0.7486486486486487,
+          "mean_return": 0.0013017172445740851,
+          "median_return": 0.003686469488227419,
+          "profit_factor": 1.4628672293679275
+        },
+        {
+          "z_quintile": 1,
+          "p_quintile": 1,
+          "n": 332,
+          "win_rate": 0.7259036144578314,
+          "mean_return": 0.0006433624547069076,
+          "median_return": 0.0033865175478351214,
+          "profit_factor": 1.1644125970947956
+        },
+        {
+          "z_quintile": 1,
+          "p_quintile": 2,
+          "n": 292,
+          "win_rate": 0.7157534246575342,
+          "mean_return": 0.0002705125355460708,
+          "median_return": 0.003048304403861243,
+          "profit_factor": 1.0181850180285716
+        },
+        {
+          "z_quintile": 1,
+          "p_quintile": 3,
+          "n": 315,
+          "win_rate": 0.6984126984126984,
+          "mean_return": -0.00018377866954041945,
+          "median_return": 0.0029098274081752816,
+          "profit_factor": 0.9164062187790946
+        },
+        {
+          "z_quintile": 1,
+          "p_quintile": 4,
+          "n": 306,
+          "win_rate": 0.7679738562091504,
+          "mean_return": 0.0008059313027272232,
+          "median_return": 0.0029080597410357277,
+          "profit_factor": 1.0349628801515915
+        },
+        {
+          "z_quintile": 2,
+          "p_quintile": 0,
+          "n": 328,
+          "win_rate": 0.6859756097560976,
+          "mean_return": 0.0011015996693818707,
+          "median_return": 0.003691394651343373,
+          "profit_factor": 1.334860069364094
+        },
+        {
+          "z_quintile": 2,
+          "p_quintile": 1,
+          "n": 319,
+          "win_rate": 0.6959247648902821,
+          "mean_return": 0.0005261590977922014,
+          "median_return": 0.0034567652253304675,
+          "profit_factor": 1.1392984835814588
+        },
+        {
+          "z_quintile": 2,
+          "p_quintile": 2,
+          "n": 302,
+          "win_rate": 0.6920529801324503,
+          "mean_return": 0.00011413899650889763,
+          "median_return": 0.0036673247099198248,
+          "profit_factor": 1.063922127395042
+        },
+        {
+          "z_quintile": 2,
+          "p_quintile": 3,
+          "n": 335,
+          "win_rate": 0.7373134328358208,
+          "mean_return": 0.0018470026860754327,
+          "median_return": 0.003848907025799473,
+          "profit_factor": 1.8132119332110845
+        },
+        {
+          "z_quintile": 2,
+          "p_quintile": 4,
+          "n": 332,
+          "win_rate": 0.7590361445783133,
+          "mean_return": 0.000763260036065755,
+          "median_return": 0.003748025112454227,
+          "profit_factor": 1.1692872600692694
+        },
+        {
+          "z_quintile": 3,
+          "p_quintile": 0,
+          "n": 375,
+          "win_rate": 0.6026666666666667,
+          "mean_return": 0.00021908918442422405,
+          "median_return": 0.0036562748512977087,
+          "profit_factor": 0.9404262870453223
+        },
+        {
+          "z_quintile": 3,
+          "p_quintile": 1,
+          "n": 315,
+          "win_rate": 0.6761904761904762,
+          "mean_return": 0.0004510884220001902,
+          "median_return": 0.0043301593997791205,
+          "profit_factor": 1.1611653648956173
+        },
+        {
+          "z_quintile": 3,
+          "p_quintile": 2,
+          "n": 289,
+          "win_rate": 0.7058823529411765,
+          "mean_return": 0.0012754503195810314,
+          "median_return": 0.004033288431503666,
+          "profit_factor": 1.468687112180421
+        },
+        {
+          "z_quintile": 3,
+          "p_quintile": 3,
+          "n": 324,
+          "win_rate": 0.7222222222222222,
+          "mean_return": 0.000306469497648018,
+          "median_return": 0.0037933159313140413,
+          "profit_factor": 0.9865886238250723
+        },
+        {
+          "z_quintile": 3,
+          "p_quintile": 4,
+          "n": 312,
+          "win_rate": 0.7692307692307693,
+          "mean_return": 0.0008797510649718162,
+          "median_return": 0.004142124882156374,
+          "profit_factor": 1.183087591820348
+        },
+        {
+          "z_quintile": 4,
+          "p_quintile": 0,
+          "n": 337,
+          "win_rate": 0.5489614243323442,
+          "mean_return": 0.0005244647191128542,
+          "median_return": 0.0047304364126910066,
+          "profit_factor": 1.089797748737326
+        },
+        {
+          "z_quintile": 4,
+          "p_quintile": 1,
+          "n": 296,
+          "win_rate": 0.6081081081081081,
+          "mean_return": 0.0018647006573697862,
+          "median_return": 0.005129997822901735,
+          "profit_factor": 1.4316237114289603
+        },
+        {
+          "z_quintile": 4,
+          "p_quintile": 2,
+          "n": 293,
+          "win_rate": 0.6689419795221843,
+          "mean_return": 0.0018513600331058581,
+          "median_return": 0.005606933104889217,
+          "profit_factor": 1.3200933185983454
+        },
+        {
+          "z_quintile": 4,
+          "p_quintile": 3,
+          "n": 364,
+          "win_rate": 0.6016483516483516,
+          "mean_return": 0.0009524988727540355,
+          "median_return": 0.004634468532518186,
+          "profit_factor": 1.102946186233207
+        },
+        {
+          "z_quintile": 4,
+          "p_quintile": 4,
+          "n": 326,
+          "win_rate": 0.6656441717791411,
+          "mean_return": 0.0015683135680617517,
+          "median_return": 0.004887495266371378,
+          "profit_factor": 1.3279822873444336
+        }
+      ]
+    },
+    "q0.01_stopnone_feemaker": {
+      "q": 0.01,
+      "fee": "maker",
+      "n_trades": 8069,
+      "abs_z_quintiles": [
+        {
+          "quintile": 0,
+          "n": 1614,
+          "bin_lo": 0.519377641417528,
+          "bin_hi": 1.5125414532302415,
+          "win_rate": 0.7843866171003717,
+          "mean_return": 0.0010113588572525187,
+          "median_return": 0.0032360750159019566,
+          "profit_factor": 1.359856856336001
+        },
+        {
+          "quintile": 1,
+          "n": 1614,
+          "bin_lo": 1.5125414532302415,
+          "bin_hi": 1.822229282917643,
+          "win_rate": 0.7273853779429987,
+          "mean_return": 0.0012945458421273288,
+          "median_return": 0.0037803290926875202,
+          "profit_factor": 1.40064303465865
+        },
+        {
+          "quintile": 2,
+          "n": 1613,
+          "bin_lo": 1.822229282917643,
+          "bin_hi": 2.126205478496551,
+          "win_rate": 0.7241165530068195,
+          "mean_return": 0.0015796039638869515,
+          "median_return": 0.004320890922343844,
+          "profit_factor": 1.5206771498752483
+        },
+        {
+          "quintile": 3,
+          "n": 1614,
+          "bin_lo": 2.126205478496551,
+          "bin_hi": 2.5473074716781245,
+          "win_rate": 0.6951672862453532,
+          "mean_return": 0.0011708186484280705,
+          "median_return": 0.004630991435325383,
+          "profit_factor": 1.268844490380468
+        },
+        {
+          "quintile": 4,
+          "n": 1614,
+          "bin_lo": 2.5473074716781245,
+          "bin_hi": 8.107546420429955,
+          "win_rate": 0.6096654275092936,
+          "mean_return": 0.0016720755050217966,
+          "median_return": 0.005457243210237177,
+          "profit_factor": 1.3418453330146107
+        }
+      ],
+      "p_cal_quintiles": [
+        {
+          "quintile": 0,
+          "n": 1795,
+          "bin_lo": 0.6250187265917607,
+          "bin_hi": 0.6559487896402032,
+          "win_rate": 0.6813370473537604,
+          "mean_return": 0.0014490558651951537,
+          "median_return": 0.004101752383040613,
+          "profit_factor": 1.394193621684335
+        },
+        {
+          "quintile": 1,
+          "n": 1640,
+          "bin_lo": 0.6559487896402032,
+          "bin_hi": 0.683177570093458,
+          "win_rate": 0.7024390243902439,
+          "mean_return": 0.0012556645617665082,
+          "median_return": 0.004085009019713424,
+          "profit_factor": 1.4235988508653978
+        },
+        {
+          "quintile": 2,
+          "n": 1474,
+          "bin_lo": 0.683177570093458,
+          "bin_hi": 0.6952649869678541,
+          "win_rate": 0.7055630936227951,
+          "mean_return": 0.0012369992123121348,
+          "median_return": 0.004004971645041064,
+          "profit_factor": 1.3527182555171118
+        },
+        {
+          "quintile": 3,
+          "n": 1646,
+          "bin_lo": 0.6952649869678541,
+          "bin_hi": 0.7176566314076486,
+          "win_rate": 0.7047387606318347,
+          "mean_return": 0.00129367673632244,
+          "median_return": 0.003989638835245498,
+          "profit_factor": 1.3202958215088911
+        },
+        {
+          "quintile": 4,
+          "n": 1514,
+          "bin_lo": 0.7176566314076486,
+          "bin_hi": 1.0,
+          "win_rate": 0.7523117569352709,
+          "mean_return": 0.0014828194425096533,
+          "median_return": 0.004028816782753711,
+          "profit_factor": 1.3233565918866723
+        }
+      ],
+      "grid": [
+        {
+          "z_quintile": 0,
+          "p_quintile": 0,
+          "n": 372,
+          "win_rate": 0.7795698924731183,
+          "mean_return": 0.0010230438027872166,
+          "median_return": 0.0034568337912206032,
+          "profit_factor": 1.567483939186049
+        },
+        {
+          "z_quintile": 0,
+          "p_quintile": 1,
+          "n": 372,
+          "win_rate": 0.7741935483870968,
+          "mean_return": 0.001107236138982361,
+          "median_return": 0.0033308992258504104,
+          "profit_factor": 1.3643087224749633
+        },
+        {
+          "z_quintile": 0,
+          "p_quintile": 2,
+          "n": 296,
+          "win_rate": 0.7736486486486487,
+          "mean_return": 0.0007883794689645414,
+          "median_return": 0.003081490784193523,
+          "profit_factor": 1.2288100449982218
+        },
+        {
+          "z_quintile": 0,
+          "p_quintile": 3,
+          "n": 327,
+          "win_rate": 0.7737003058103975,
+          "mean_return": 0.0005270215104557701,
+          "median_return": 0.003161806685265295,
+          "profit_factor": 1.20037899040427
+        },
+        {
+          "z_quintile": 0,
+          "p_quintile": 4,
+          "n": 247,
+          "win_rate": 0.8340080971659919,
+          "mean_return": 0.0017577842126912605,
+          "median_return": 0.0029371017299496026,
+          "profit_factor": 1.3544978757690591
+        },
+        {
+          "z_quintile": 1,
+          "p_quintile": 0,
+          "n": 392,
+          "win_rate": 0.7397959183673469,
+          "mean_return": 0.002072521954715184,
+          "median_return": 0.004255362164920513,
+          "profit_factor": 1.7803358621930405
+        },
+        {
+          "z_quintile": 1,
+          "p_quintile": 1,
+          "n": 330,
+          "win_rate": 0.7333333333333333,
+          "mean_return": 0.0013745591560452646,
+          "median_return": 0.003866545277397389,
+          "profit_factor": 1.5418862714354695
+        },
+        {
+          "z_quintile": 1,
+          "p_quintile": 2,
+          "n": 295,
+          "win_rate": 0.7220338983050848,
+          "mean_return": 0.000929321874663172,
+          "median_return": 0.0037043571571833533,
+          "profit_factor": 1.2847856740665013
+        },
+        {
+          "z_quintile": 1,
+          "p_quintile": 3,
+          "n": 308,
+          "win_rate": 0.6753246753246753,
+          "mean_return": 0.0006890859916496105,
+          "median_return": 0.0034604503601460158,
+          "profit_factor": 1.1456672679810418
+        },
+        {
+          "z_quintile": 1,
+          "p_quintile": 4,
+          "n": 289,
+          "win_rate": 0.7647058823529411,
+          "mean_return": 0.0011660049238633341,
+          "median_return": 0.003479151014607218,
+          "profit_factor": 1.086082701105802
+        },
+        {
+          "z_quintile": 2,
+          "p_quintile": 0,
+          "n": 329,
+          "win_rate": 0.6990881458966566,
+          "mean_return": 0.0019137436588502169,
+          "median_return": 0.004131952877600278,
+          "profit_factor": 1.6526771318122222
+        },
+        {
+          "z_quintile": 2,
+          "p_quintile": 1,
+          "n": 331,
+          "win_rate": 0.7099697885196374,
+          "mean_return": 0.001517589821219099,
+          "median_return": 0.0042704357240028286,
+          "profit_factor": 1.3734881740156735
+        },
+        {
+          "z_quintile": 2,
+          "p_quintile": 2,
+          "n": 297,
+          "win_rate": 0.6902356902356902,
+          "mean_return": 0.0006112978855979274,
+          "median_return": 0.004150864359671676,
+          "profit_factor": 1.1771548615574878
+        },
+        {
+          "z_quintile": 2,
+          "p_quintile": 3,
+          "n": 319,
+          "win_rate": 0.7492163009404389,
+          "mean_return": 0.0020834388099269133,
+          "median_return": 0.004556904917210576,
+          "profit_factor": 2.180055316656944
+        },
+        {
+          "z_quintile": 2,
+          "p_quintile": 4,
+          "n": 337,
+          "win_rate": 0.7685459940652819,
+          "mean_return": 0.0016907562218846882,
+          "median_return": 0.004305583055688391,
+          "profit_factor": 1.4215887208348352
+        },
+        {
+          "z_quintile": 3,
+          "p_quintile": 0,
+          "n": 367,
+          "win_rate": 0.6294277929155313,
+          "mean_return": 0.0012151612562923486,
+          "median_return": 0.004459373732855052,
+          "profit_factor": 1.1442018063674921
+        },
+        {
+          "z_quintile": 3,
+          "p_quintile": 1,
+          "n": 322,
+          "win_rate": 0.6739130434782609,
+          "mean_return": 0.00047797143264879087,
+          "median_return": 0.005011182645108754,
+          "profit_factor": 1.2707640168305654
+        },
+        {
+          "z_quintile": 3,
+          "p_quintile": 2,
+          "n": 291,
+          "win_rate": 0.7044673539518901,
+          "mean_return": 0.001802248690203374,
+          "median_return": 0.004667825357183713,
+          "profit_factor": 1.832781559830541
+        },
+        {
+          "z_quintile": 3,
+          "p_quintile": 3,
+          "n": 325,
+          "win_rate": 0.7138461538461538,
+          "mean_return": 0.0012820233007582301,
+          "median_return": 0.004477657550755607,
+          "profit_factor": 1.1979705597576606
+        },
+        {
+          "z_quintile": 3,
+          "p_quintile": 4,
+          "n": 309,
+          "win_rate": 0.7669902912621359,
+          "mean_return": 0.0011285384291103435,
+          "median_return": 0.00448885867189481,
+          "profit_factor": 1.2161582250956435
+        },
+        {
+          "z_quintile": 4,
+          "p_quintile": 0,
+          "n": 335,
+          "win_rate": 0.5432835820895522,
+          "mean_return": 0.000992443380056988,
+          "median_return": 0.005223987035431097,
+          "profit_factor": 1.1953142728350115
+        },
+        {
+          "z_quintile": 4,
+          "p_quintile": 1,
+          "n": 285,
+          "win_rate": 0.5964912280701754,
+          "mean_return": 0.0018861911718044402,
+          "median_return": 0.005579572924597147,
+          "profit_factor": 1.5925435979031974
+        },
+        {
+          "z_quintile": 4,
+          "p_quintile": 2,
+          "n": 295,
+          "win_rate": 0.6372881355932203,
+          "mean_return": 0.00206717532961756,
+          "median_return": 0.005839986746584458,
+          "profit_factor": 1.3422183413512587
+        },
+        {
+          "z_quintile": 4,
+          "p_quintile": 3,
+          "n": 367,
+          "win_rate": 0.6212534059945504,
+          "mean_return": 0.0018080186254128318,
+          "median_return": 0.005272895882129482,
+          "profit_factor": 1.2211306320758015
+        },
+        {
+          "z_quintile": 4,
+          "p_quintile": 4,
+          "n": 332,
+          "win_rate": 0.6506024096385542,
+          "mean_return": 0.0016727026839100422,
+          "median_return": 0.005392890347689758,
+          "profit_factor": 1.514074683986478
+        }
+      ]
+    },
+    "q0.005_stopnone_feetaker": {
+      "q": 0.005,
+      "fee": "taker",
+      "n_trades": 6587,
+      "abs_z_quintiles": [
+        {
+          "quintile": 0,
+          "n": 1318,
+          "bin_lo": 0.519377641417528,
+          "bin_hi": 1.5282898768689348,
+          "win_rate": 0.791350531107739,
+          "mean_return": 0.0005974194399407621,
+          "median_return": 0.0025544408280516757,
+          "profit_factor": 1.2022206213561517
+        },
+        {
+          "quintile": 1,
+          "n": 1317,
+          "bin_lo": 1.5282898768689348,
+          "bin_hi": 1.8370747764867386,
+          "win_rate": 0.7304479878511769,
+          "mean_return": 0.00046920979857802424,
+          "median_return": 0.0031561161564404162,
+          "profit_factor": 1.0778937954882843
+        },
+        {
+          "quintile": 2,
+          "n": 1317,
+          "bin_lo": 1.8370747764867386,
+          "bin_hi": 2.1384685847262848,
+          "win_rate": 0.7365223993925588,
+          "mean_return": 0.0010874228629470938,
+          "median_return": 0.003766407063171103,
+          "profit_factor": 1.348404350717946
+        },
+        {
+          "quintile": 3,
+          "n": 1317,
+          "bin_lo": 2.1384685847262848,
+          "bin_hi": 2.5784663244288173,
+          "win_rate": 0.6940015186028854,
+          "mean_return": 0.0001236842895280301,
+          "median_return": 0.0038920738868617436,
+          "profit_factor": 1.0057353257807295
+        },
+        {
+          "quintile": 4,
+          "n": 1318,
+          "bin_lo": 2.5784663244288173,
+          "bin_hi": 7.5110437147595475,
+          "win_rate": 0.629742033383915,
+          "mean_return": 0.0016170763324665875,
+          "median_return": 0.005014414286258205,
+          "profit_factor": 1.2654560840372655
+        }
+      ],
+      "p_cal_quintiles": [
+        {
+          "quintile": 0,
+          "n": 1333,
+          "bin_lo": 0.6487037576463736,
+          "bin_hi": 0.6805555555555557,
+          "win_rate": 0.6999249812453113,
+          "mean_return": 0.000705734208008563,
+          "median_return": 0.003373913304715759,
+          "profit_factor": 1.1898429805594142
+        },
+        {
+          "quintile": 1,
+          "n": 1533,
+          "bin_lo": 0.6805555555555557,
+          "bin_hi": 0.6952649869678541,
+          "win_rate": 0.7031963470319634,
+          "mean_return": 0.0005764470231880476,
+          "median_return": 0.0034443349220646823,
+          "profit_factor": 1.1392853148955207
+        },
+        {
+          "quintile": 2,
+          "n": 1281,
+          "bin_lo": 0.6952649869678541,
+          "bin_hi": 0.7025527192008879,
+          "win_rate": 0.7033567525370804,
+          "mean_return": 0.0006624086594709636,
+          "median_return": 0.0035871430685792396,
+          "profit_factor": 1.1385120084979659
+        },
+        {
+          "quintile": 3,
+          "n": 1147,
+          "bin_lo": 0.7025527192008879,
+          "bin_hi": 0.7350498338870431,
+          "win_rate": 0.7244986922406277,
+          "mean_return": 0.0006318607170919538,
+          "median_return": 0.0032694915798038193,
+          "profit_factor": 1.107245394277301
+        },
+        {
+          "quintile": 4,
+          "n": 1293,
+          "bin_lo": 0.7350498338870431,
+          "bin_hi": 0.896551724137931,
+          "win_rate": 0.7548337200309359,
+          "mean_return": 0.0013410333576646676,
+          "median_return": 0.003554255721540536,
+          "profit_factor": 1.3225297252943762
+        }
+      ],
+      "grid": [
+        {
+          "z_quintile": 0,
+          "p_quintile": 0,
+          "n": 315,
+          "win_rate": 0.7904761904761904,
+          "mean_return": 0.0009349628044606997,
+          "median_return": 0.0025811422640124935,
+          "profit_factor": 1.424639253179991
+        },
+        {
+          "z_quintile": 0,
+          "p_quintile": 1,
+          "n": 311,
+          "win_rate": 0.797427652733119,
+          "mean_return": 0.0007931326635185439,
+          "median_return": 0.0025366408534345224,
+          "profit_factor": 1.303396709587285
+        },
+        {
+          "z_quintile": 0,
+          "p_quintile": 2,
+          "n": 260,
+          "win_rate": 0.7307692307692307,
+          "mean_return": -0.0008655027377552832,
+          "median_return": 0.002610429250081754,
+          "profit_factor": 0.7270305789450681
+        },
+        {
+          "z_quintile": 0,
+          "p_quintile": 3,
+          "n": 203,
+          "win_rate": 0.8226600985221675,
+          "mean_return": 0.0004945223089428178,
+          "median_return": 0.002407717334792733,
+          "profit_factor": 1.2084654200371165
+        },
+        {
+          "z_quintile": 0,
+          "p_quintile": 4,
+          "n": 229,
+          "win_rate": 0.8253275109170306,
+          "mean_return": 0.001619493289010997,
+          "median_return": 0.0025415762057708594,
+          "profit_factor": 1.577698192764712
+        },
+        {
+          "z_quintile": 1,
+          "p_quintile": 0,
+          "n": 275,
+          "win_rate": 0.7454545454545455,
+          "mean_return": 0.000602776214860463,
+          "median_return": 0.003463083381755296,
+          "profit_factor": 1.0749016820212047
+        },
+        {
+          "z_quintile": 1,
+          "p_quintile": 1,
+          "n": 317,
+          "win_rate": 0.7066246056782335,
+          "mean_return": -0.00019498725222217054,
+          "median_return": 0.0030671443753757985,
+          "profit_factor": 0.9481304711353991
+        },
+        {
+          "z_quintile": 1,
+          "p_quintile": 2,
+          "n": 263,
+          "win_rate": 0.7110266159695817,
+          "mean_return": 0.00026962618307458264,
+          "median_return": 0.003201714453203729,
+          "profit_factor": 1.0471512758367088
+        },
+        {
+          "z_quintile": 1,
+          "p_quintile": 3,
+          "n": 191,
+          "win_rate": 0.6963350785340314,
+          "mean_return": -4.421945871896996e-05,
+          "median_return": 0.0028036905991543947,
+          "profit_factor": 0.9465904765052523
+        },
+        {
+          "z_quintile": 1,
+          "p_quintile": 4,
+          "n": 271,
+          "win_rate": 0.7859778597785978,
+          "mean_return": 0.0016661661810397294,
+          "median_return": 0.003243131530058818,
+          "profit_factor": 1.5548533553580892
+        },
+        {
+          "z_quintile": 2,
+          "p_quintile": 0,
+          "n": 245,
+          "win_rate": 0.7142857142857143,
+          "mean_return": 0.001046277318392992,
+          "median_return": 0.003629641698029051,
+          "profit_factor": 1.355520778755437
+        },
+        {
+          "z_quintile": 2,
+          "p_quintile": 1,
+          "n": 301,
+          "win_rate": 0.6578073089700996,
+          "mean_return": -0.0004773806511491244,
+          "median_return": 0.0031534509545071143,
+          "profit_factor": 0.923688783073285
+        },
+        {
+          "z_quintile": 2,
+          "p_quintile": 2,
+          "n": 250,
+          "win_rate": 0.728,
+          "mean_return": 0.0015071815916285036,
+          "median_return": 0.003956694504525281,
+          "profit_factor": 1.6220727450509924
+        },
+        {
+          "z_quintile": 2,
+          "p_quintile": 3,
+          "n": 255,
+          "win_rate": 0.796078431372549,
+          "mean_return": 0.0020536334686375034,
+          "median_return": 0.003747508749315481,
+          "profit_factor": 1.7654691176822275
+        },
+        {
+          "z_quintile": 2,
+          "p_quintile": 4,
+          "n": 266,
+          "win_rate": 0.7969924812030075,
+          "mean_return": 0.0015752541769971302,
+          "median_return": 0.003954080293051344,
+          "profit_factor": 1.4333480922500832
+        },
+        {
+          "z_quintile": 3,
+          "p_quintile": 0,
+          "n": 258,
+          "win_rate": 0.6511627906976745,
+          "mean_return": -0.00026582292018403767,
+          "median_return": 0.004223030375139209,
+          "profit_factor": 0.9454446607363247
+        },
+        {
+          "z_quintile": 3,
+          "p_quintile": 1,
+          "n": 304,
+          "win_rate": 0.6776315789473685,
+          "mean_return": 0.0005706190843688315,
+          "median_return": 0.003915224218510019,
+          "profit_factor": 1.1633080550175863
+        },
+        {
+          "z_quintile": 3,
+          "p_quintile": 2,
+          "n": 238,
+          "win_rate": 0.7184873949579832,
+          "mean_return": 4.187478294985227e-05,
+          "median_return": 0.0040946387100676855,
+          "profit_factor": 1.0037972812367322
+        },
+        {
+          "z_quintile": 3,
+          "p_quintile": 3,
+          "n": 250,
+          "win_rate": 0.704,
+          "mean_return": 0.0001503487076871159,
+          "median_return": 0.003529287809162108,
+          "profit_factor": 0.9368306964004377
+        },
+        {
+          "z_quintile": 3,
+          "p_quintile": 4,
+          "n": 267,
+          "win_rate": 0.7228464419475655,
+          "mean_return": 3.914960975254171e-05,
+          "median_return": 0.003936912441475125,
+          "profit_factor": 0.9985409214552401
+        },
+        {
+          "z_quintile": 4,
+          "p_quintile": 0,
+          "n": 240,
+          "win_rate": 0.5666666666666667,
+          "mean_return": 0.0012196305299369394,
+          "median_return": 0.004445982950246826,
+          "profit_factor": 1.3087870899607448
+        },
+        {
+          "z_quintile": 4,
+          "p_quintile": 1,
+          "n": 300,
+          "win_rate": 0.6733333333333333,
+          "mean_return": 0.002230211204983999,
+          "median_return": 0.005867597574571929,
+          "profit_factor": 1.3790589686257368
+        },
+        {
+          "z_quintile": 4,
+          "p_quintile": 2,
+          "n": 270,
+          "win_rate": 0.6333333333333333,
+          "mean_return": 0.002281121934077304,
+          "median_return": 0.005112488290932878,
+          "profit_factor": 1.387223504961424
+        },
+        {
+          "z_quintile": 4,
+          "p_quintile": 3,
+          "n": 248,
+          "win_rate": 0.6129032258064516,
+          "mean_return": 0.00028846136685508066,
+          "median_return": 0.004089921260711147,
+          "profit_factor": 0.9791098947015009
+        },
+        {
+          "z_quintile": 4,
+          "p_quintile": 4,
+          "n": 260,
+          "win_rate": 0.65,
+          "mean_return": 0.0018541945243460175,
+          "median_return": 0.005103096116529712,
+          "profit_factor": 1.339864021215547
+        }
+      ]
+    },
+    "q0.005_stopnone_feemaker": {
+      "q": 0.005,
+      "fee": "maker",
+      "n_trades": 6595,
+      "abs_z_quintiles": [
+        {
+          "quintile": 0,
+          "n": 1319,
+          "bin_lo": 0.519377641417528,
+          "bin_hi": 1.5340020698375814,
+          "win_rate": 0.7869598180439727,
+          "mean_return": 0.0011755657414153117,
+          "median_return": 0.00315142922620616,
+          "profit_factor": 1.418562896121785
+        },
+        {
+          "quintile": 1,
+          "n": 1319,
+          "bin_lo": 1.5340020698375814,
+          "bin_hi": 1.8418557862559584,
+          "win_rate": 0.731614859742229,
+          "mean_return": 0.0008859745723122075,
+          "median_return": 0.003695248074177302,
+          "profit_factor": 1.2174739589764294
+        },
+        {
+          "quintile": 2,
+          "n": 1319,
+          "bin_lo": 1.8418557862559584,
+          "bin_hi": 2.141885299152623,
+          "win_rate": 0.7407126611068992,
+          "mean_return": 0.0019191755220689351,
+          "median_return": 0.004443154257940101,
+          "profit_factor": 1.7587525076452422
+        },
+        {
+          "quintile": 3,
+          "n": 1319,
+          "bin_lo": 2.141885299152623,
+          "bin_hi": 2.581447121524776,
+          "win_rate": 0.7065959059893859,
+          "mean_return": 0.0008760429252765134,
+          "median_return": 0.004604659560760648,
+          "profit_factor": 1.1773653437872822
+        },
+        {
+          "quintile": 4,
+          "n": 1319,
+          "bin_lo": 2.581447121524776,
+          "bin_hi": 7.5110437147595475,
+          "win_rate": 0.6322971948445792,
+          "mean_return": 0.0024283434847191523,
+          "median_return": 0.0056129159902642495,
+          "profit_factor": 1.5043603869421203
+        }
+      ],
+      "p_cal_quintiles": [
+        {
+          "quintile": 0,
+          "n": 1335,
+          "bin_lo": 0.6487037576463736,
+          "bin_hi": 0.6805555555555557,
+          "win_rate": 0.69812734082397,
+          "mean_return": 0.0011429150590623895,
+          "median_return": 0.0039800357843076065,
+          "profit_factor": 1.3463590220404822
+        },
+        {
+          "quintile": 1,
+          "n": 1535,
+          "bin_lo": 0.6805555555555557,
+          "bin_hi": 0.6952649869678541,
+          "win_rate": 0.704885993485342,
+          "mean_return": 0.0013398569088264754,
+          "median_return": 0.004101448982397028,
+          "profit_factor": 1.406919499983055
+        },
+        {
+          "quintile": 2,
+          "n": 1272,
+          "bin_lo": 0.6952649869678541,
+          "bin_hi": 0.7025527192008879,
+          "win_rate": 0.7051886792452831,
+          "mean_return": 0.0014551665386310995,
+          "median_return": 0.00422959911642089,
+          "profit_factor": 1.4296261644996162
+        },
+        {
+          "quintile": 3,
+          "n": 1150,
+          "bin_lo": 0.7025527192008879,
+          "bin_hi": 0.7350498338870431,
+          "win_rate": 0.7304347826086957,
+          "mean_return": 0.0013210345565071312,
+          "median_return": 0.00387009556957254,
+          "profit_factor": 1.299930974086784
+        },
+        {
+          "quintile": 4,
+          "n": 1303,
+          "bin_lo": 0.7350498338870431,
+          "bin_hi": 1.0,
+          "win_rate": 0.7636224098234843,
+          "mean_return": 0.002038692498987657,
+          "median_return": 0.004200859209232161,
+          "profit_factor": 1.595720908200321
+        }
+      ],
+      "grid": [
+        {
+          "z_quintile": 0,
+          "p_quintile": 0,
+          "n": 317,
+          "win_rate": 0.7760252365930599,
+          "mean_return": 0.0014251534605639923,
+          "median_return": 0.0031666967499808032,
+          "profit_factor": 1.6124291855832407
+        },
+        {
+          "z_quintile": 0,
+          "p_quintile": 1,
+          "n": 310,
+          "win_rate": 0.7870967741935484,
+          "mean_return": 0.0013210000585526342,
+          "median_return": 0.003121389956360793,
+          "profit_factor": 1.4628599952461858
+        },
+        {
+          "z_quintile": 0,
+          "p_quintile": 2,
+          "n": 261,
+          "win_rate": 0.7432950191570882,
+          "mean_return": 3.7182211210107635e-05,
+          "median_return": 0.003324698720168828,
+          "profit_factor": 0.9425515490771773
+        },
+        {
+          "z_quintile": 0,
+          "p_quintile": 3,
+          "n": 198,
+          "win_rate": 0.8282828282828283,
+          "mean_return": 0.0010612650027407083,
+          "median_return": 0.0030173428091294996,
+          "profit_factor": 1.4449741975073898
+        },
+        {
+          "z_quintile": 0,
+          "p_quintile": 4,
+          "n": 233,
+          "win_rate": 0.8154506437768241,
+          "mean_return": 0.0020148176828677913,
+          "median_return": 0.003100807342400697,
+          "profit_factor": 1.6739165292884008
+        },
+        {
+          "z_quintile": 1,
+          "p_quintile": 0,
+          "n": 276,
+          "win_rate": 0.7391304347826086,
+          "mean_return": 0.0011980596663924124,
+          "median_return": 0.004079933709519236,
+          "profit_factor": 1.2557907522824516
+        },
+        {
+          "z_quintile": 1,
+          "p_quintile": 1,
+          "n": 321,
+          "win_rate": 0.7040498442367601,
+          "mean_return": 0.0003118928746606283,
+          "median_return": 0.003665878993945503,
+          "profit_factor": 1.1390650365509323
+        },
+        {
+          "z_quintile": 1,
+          "p_quintile": 2,
+          "n": 254,
+          "win_rate": 0.7086614173228346,
+          "mean_return": 0.00033622543167798275,
+          "median_return": 0.003687255710609349,
+          "profit_factor": 1.1273743056833136
+        },
+        {
+          "z_quintile": 1,
+          "p_quintile": 3,
+          "n": 197,
+          "win_rate": 0.700507614213198,
+          "mean_return": 0.00040919359818550885,
+          "median_return": 0.003401848326274535,
+          "profit_factor": 1.0061649910586719
+        },
+        {
+          "z_quintile": 1,
+          "p_quintile": 4,
+          "n": 271,
+          "win_rate": 0.8007380073800738,
+          "mean_return": 0.002109985172327237,
+          "median_return": 0.0036889753435720867,
+          "profit_factor": 1.8013548165246698
+        },
+        {
+          "z_quintile": 2,
+          "p_quintile": 0,
+          "n": 243,
+          "win_rate": 0.7242798353909465,
+          "mean_return": 0.0018939047744301648,
+          "median_return": 0.0042264001372665436,
+          "profit_factor": 1.7799637050596
+        },
+        {
+          "z_quintile": 2,
+          "p_quintile": 1,
+          "n": 303,
+          "win_rate": 0.6765676567656765,
+          "mean_return": 0.000842636018285568,
+          "median_return": 0.004140937988067464,
+          "profit_factor": 1.4789056748209626
+        },
+        {
+          "z_quintile": 2,
+          "p_quintile": 2,
+          "n": 247,
+          "win_rate": 0.7165991902834008,
+          "mean_return": 0.002246804430608085,
+          "median_return": 0.0046429344257486365,
+          "profit_factor": 2.2001278728483094
+        },
+        {
+          "z_quintile": 2,
+          "p_quintile": 3,
+          "n": 261,
+          "win_rate": 0.7931034482758621,
+          "mean_return": 0.00256797564677484,
+          "median_return": 0.004207224571590583,
+          "profit_factor": 1.8766954054077722
+        },
+        {
+          "z_quintile": 2,
+          "p_quintile": 4,
+          "n": 265,
+          "win_rate": 0.8,
+          "mean_return": 0.00222887774231486,
+          "median_return": 0.004702746805579566,
+          "profit_factor": 1.658644393804485
+        },
+        {
+          "z_quintile": 3,
+          "p_quintile": 0,
+          "n": 259,
+          "win_rate": 0.640926640926641,
+          "mean_return": -0.0010445719044499795,
+          "median_return": 0.004730962289096121,
+          "profit_factor": 0.8783379461907358
+        },
+        {
+          "z_quintile": 3,
+          "p_quintile": 1,
+          "n": 298,
+          "win_rate": 0.6879194630872483,
+          "mean_return": 0.0014715914999712176,
+          "median_return": 0.004558543007289336,
+          "profit_factor": 1.4050814286443765
+        },
+        {
+          "z_quintile": 3,
+          "p_quintile": 2,
+          "n": 235,
+          "win_rate": 0.7489361702127659,
+          "mean_return": 0.0018498325026518794,
+          "median_return": 0.004958229200401284,
+          "profit_factor": 1.7031389028197004
+        },
+        {
+          "z_quintile": 3,
+          "p_quintile": 3,
+          "n": 250,
+          "win_rate": 0.728,
+          "mean_return": 0.0013224282876940863,
+          "median_return": 0.004403647658005218,
+          "profit_factor": 1.20904415848474
+        },
+        {
+          "z_quintile": 3,
+          "p_quintile": 4,
+          "n": 277,
+          "win_rate": 0.7328519855595668,
+          "mean_return": 0.0008021399445997478,
+          "median_return": 0.004600967146489679,
+          "profit_factor": 1.1873341754610751
+        },
+        {
+          "z_quintile": 4,
+          "p_quintile": 0,
+          "n": 240,
+          "win_rate": 0.5833333333333334,
+          "mean_return": 0.002306994799963387,
+          "median_return": 0.005093612095186472,
+          "profit_factor": 1.6375887048240427
+        },
+        {
+          "z_quintile": 4,
+          "p_quintile": 1,
+          "n": 303,
+          "win_rate": 0.6666666666666666,
+          "mean_return": 0.0028158407379515237,
+          "median_return": 0.0062821044821563385,
+          "profit_factor": 1.5481237773590415
+        },
+        {
+          "z_quintile": 4,
+          "p_quintile": 2,
+          "n": 275,
+          "win_rate": 0.6181818181818182,
+          "mean_return": 0.0027861625013939073,
+          "median_return": 0.005790440124774724,
+          "profit_factor": 1.4963962494655503
+        },
+        {
+          "z_quintile": 4,
+          "p_quintile": 3,
+          "n": 244,
+          "win_rate": 0.610655737704918,
+          "mean_return": 0.000932784487156723,
+          "median_return": 0.0048557750283480545,
+          "profit_factor": 1.1799949578435072
+        },
+        {
+          "z_quintile": 4,
+          "p_quintile": 4,
+          "n": 257,
+          "win_rate": 0.6731517509727627,
+          "mean_return": 0.0031218383579940563,
+          "median_return": 0.005575588706090352,
+          "profit_factor": 1.8465353604798291
+        }
+      ]
+    },
+    "q0.001_stopnone_feetaker": {
+      "q": 0.001,
+      "fee": "taker",
+      "n_trades": 2573,
+      "abs_z_quintiles": [
+        {
+          "quintile": 0,
+          "n": 515,
+          "bin_lo": 0.519377641417528,
+          "bin_hi": 1.5538416461949238,
+          "win_rate": 0.8077669902912621,
+          "mean_return": 0.0009131694174480729,
+          "median_return": 0.0025415762057708594,
+          "profit_factor": 1.2244164669898945
+        },
+        {
+          "quintile": 1,
+          "n": 514,
+          "bin_lo": 1.5538416461949238,
+          "bin_hi": 1.862176406550684,
+          "win_rate": 0.7607003891050583,
+          "mean_return": 0.001278082762299297,
+          "median_return": 0.0033034332165630047,
+          "profit_factor": 1.3258197758605423
+        },
+        {
+          "quintile": 2,
+          "n": 515,
+          "bin_lo": 1.862176406550684,
+          "bin_hi": 2.149979055635194,
+          "win_rate": 0.7844660194174757,
+          "mean_return": 0.0017198923806640482,
+          "median_return": 0.004076332047362326,
+          "profit_factor": 1.5322960216208632
+        },
+        {
+          "quintile": 3,
+          "n": 514,
+          "bin_lo": 2.149979055635194,
+          "bin_hi": 2.5885810408553085,
+          "win_rate": 0.7159533073929961,
+          "mean_return": 0.00029891850381272566,
+          "median_return": 0.003930832419662665,
+          "profit_factor": 1.0213095746142236
+        },
+        {
+          "quintile": 4,
+          "n": 515,
+          "bin_lo": 2.5885810408553085,
+          "bin_hi": 7.472708655715301,
+          "win_rate": 0.6504854368932039,
+          "mean_return": 0.001830398485106583,
+          "median_return": 0.005263541767942882,
+          "profit_factor": 1.3267393898583237
+        }
+      ],
+      "p_cal_quintiles": [
+        {
+          "quintile": 0,
+          "n": 615,
+          "bin_lo": 0.696169772256729,
+          "bin_hi": 0.7193220338983051,
+          "win_rate": 0.7268292682926829,
+          "mean_return": 0.0005643283804481522,
+          "median_return": 0.003346433108522357,
+          "profit_factor": 1.0740494297873717
+        },
+        {
+          "quintile": 1,
+          "n": 435,
+          "bin_lo": 0.7193220338983051,
+          "bin_hi": 0.7397660818713451,
+          "win_rate": 0.774712643678161,
+          "mean_return": 0.0014328252398697512,
+          "median_return": 0.003504590252731003,
+          "profit_factor": 1.3536795520644085
+        },
+        {
+          "quintile": 2,
+          "n": 730,
+          "bin_lo": 0.7397660818713451,
+          "bin_hi": 0.7685185185185186,
+          "win_rate": 0.7246575342465753,
+          "mean_return": 0.001433799838974206,
+          "median_return": 0.00348283688742102,
+          "profit_factor": 1.3608324833930407
+        },
+        {
+          "quintile": 3,
+          "n": 468,
+          "bin_lo": 0.7685185185185186,
+          "bin_hi": 0.7743431221020094,
+          "win_rate": 0.7478632478632479,
+          "mean_return": 0.0007350549212532797,
+          "median_return": 0.004179064020338201,
+          "profit_factor": 1.2394606018818022
+        },
+        {
+          "quintile": 4,
+          "n": 325,
+          "bin_lo": 0.7743431221020094,
+          "bin_hi": 0.896551724137931,
+          "win_rate": 0.7723076923076924,
+          "mean_return": 0.0023022774699155446,
+          "median_return": 0.0036808995487558733,
+          "profit_factor": 1.4580668449938305
+        }
+      ],
+      "grid": [
+        {
+          "z_quintile": 0,
+          "p_quintile": 0,
+          "n": 133,
+          "win_rate": 0.8345864661654135,
+          "mean_return": 0.0006784841431124647,
+          "median_return": 0.002647669727150429,
+          "profit_factor": 1.3782229151133085
+        },
+        {
+          "z_quintile": 0,
+          "p_quintile": 1,
+          "n": 77,
+          "win_rate": 0.8051948051948052,
+          "mean_return": 3.032882709780643e-05,
+          "median_return": 0.002370111950286971,
+          "profit_factor": 0.8194541373548702
+        },
+        {
+          "z_quintile": 0,
+          "p_quintile": 2,
+          "n": 142,
+          "win_rate": 0.795774647887324,
+          "mean_return": 0.001463654774768885,
+          "median_return": 0.0024913763249705444,
+          "profit_factor": 1.3008074179286289
+        },
+        {
+          "z_quintile": 0,
+          "p_quintile": 3,
+          "n": 102,
+          "win_rate": 0.7450980392156863,
+          "mean_return": -0.000610513952229808,
+          "median_return": 0.0025026932828554086,
+          "profit_factor": 0.8181902407057741
+        },
+        {
+          "z_quintile": 0,
+          "p_quintile": 4,
+          "n": 61,
+          "win_rate": 0.8852459016393442,
+          "mean_return": 0.0038056063012381525,
+          "median_return": 0.003098182743872042,
+          "profit_factor": 3.6675542429481913
+        },
+        {
+          "z_quintile": 1,
+          "p_quintile": 0,
+          "n": 112,
+          "win_rate": 0.7053571428571429,
+          "mean_return": -0.0001008692720651116,
+          "median_return": 0.0031646110543968376,
+          "profit_factor": 0.9817740359399504
+        },
+        {
+          "z_quintile": 1,
+          "p_quintile": 1,
+          "n": 82,
+          "win_rate": 0.7560975609756098,
+          "mean_return": -0.0003823778867857769,
+          "median_return": 0.00294228639725703,
+          "profit_factor": 0.8725266790980726
+        },
+        {
+          "z_quintile": 1,
+          "p_quintile": 2,
+          "n": 137,
+          "win_rate": 0.8102189781021898,
+          "mean_return": 0.0029734872849010293,
+          "median_return": 0.0035021994335998406,
+          "profit_factor": 2.729290361684147
+        },
+        {
+          "z_quintile": 1,
+          "p_quintile": 3,
+          "n": 99,
+          "win_rate": 0.7373737373737373,
+          "mean_return": 0.001301499721088089,
+          "median_return": 0.003493561799685199,
+          "profit_factor": 1.6751847668232045
+        },
+        {
+          "z_quintile": 1,
+          "p_quintile": 4,
+          "n": 84,
+          "win_rate": 0.7857142857142857,
+          "mean_return": 0.0019448887451238464,
+          "median_return": 0.0032989817327446613,
+          "profit_factor": 1.1994074559798478
+        },
+        {
+          "z_quintile": 2,
+          "p_quintile": 0,
+          "n": 118,
+          "win_rate": 0.7457627118644068,
+          "mean_return": 0.001538476241307427,
+          "median_return": 0.0038973154382469866,
+          "profit_factor": 1.4063036147785684
+        },
+        {
+          "z_quintile": 2,
+          "p_quintile": 1,
+          "n": 100,
+          "win_rate": 0.84,
+          "mean_return": 0.0018435853231777819,
+          "median_return": 0.0034905498388278257,
+          "profit_factor": 1.5079864064565498
+        },
+        {
+          "z_quintile": 2,
+          "p_quintile": 2,
+          "n": 144,
+          "win_rate": 0.7986111111111112,
+          "mean_return": 0.0026953621322219714,
+          "median_return": 0.004186032104432344,
+          "profit_factor": 2.1533630906556627
+        },
+        {
+          "z_quintile": 2,
+          "p_quintile": 3,
+          "n": 89,
+          "win_rate": 0.797752808988764,
+          "mean_return": 0.001177251929073727,
+          "median_return": 0.004612203304607974,
+          "profit_factor": 1.4328028443638658
+        },
+        {
+          "z_quintile": 2,
+          "p_quintile": 4,
+          "n": 64,
+          "win_rate": 0.71875,
+          "mean_return": 0.0004209106019125745,
+          "median_return": 0.003925824223635519,
+          "profit_factor": 0.9793390236636035
+        },
+        {
+          "z_quintile": 3,
+          "p_quintile": 0,
+          "n": 124,
+          "win_rate": 0.7016129032258065,
+          "mean_return": -0.0005266639422380565,
+          "median_return": 0.0039053217959429294,
+          "profit_factor": 0.8278828566940708
+        },
+        {
+          "z_quintile": 3,
+          "p_quintile": 1,
+          "n": 95,
+          "win_rate": 0.7368421052631579,
+          "mean_return": 0.0019647464818248,
+          "median_return": 0.004371852035940985,
+          "profit_factor": 1.626829599761116
+        },
+        {
+          "z_quintile": 3,
+          "p_quintile": 2,
+          "n": 150,
+          "win_rate": 0.6466666666666666,
+          "mean_return": -0.0013311174777286441,
+          "median_return": 0.003269635355258706,
+          "profit_factor": 0.727626211793555
+        },
+        {
+          "z_quintile": 3,
+          "p_quintile": 3,
+          "n": 92,
+          "win_rate": 0.782608695652174,
+          "mean_return": 0.0014303478555733975,
+          "median_return": 0.005001451977274987,
+          "profit_factor": 1.37847449061742
+        },
+        {
+          "z_quintile": 3,
+          "p_quintile": 4,
+          "n": 53,
+          "win_rate": 0.7924528301886793,
+          "mean_return": 0.0018938706220839277,
+          "median_return": 0.0035995108358637205,
+          "profit_factor": 1.3769169808427326
+        },
+        {
+          "z_quintile": 4,
+          "p_quintile": 0,
+          "n": 128,
+          "win_rate": 0.640625,
+          "mean_return": 0.0011866176076264913,
+          "median_return": 0.004526328210170957,
+          "profit_factor": 1.0603305504545513
+        },
+        {
+          "z_quintile": 4,
+          "p_quintile": 1,
+          "n": 81,
+          "win_rate": 0.7283950617283951,
+          "mean_return": 0.0034727061516309898,
+          "median_return": 0.005888667232340113,
+          "profit_factor": 1.9870807511236894
+        },
+        {
+          "z_quintile": 4,
+          "p_quintile": 2,
+          "n": 157,
+          "win_rate": 0.5923566878980892,
+          "mean_return": 0.0015477873950438235,
+          "median_return": 0.004857004576072236,
+          "profit_factor": 1.331567648573098
+        },
+        {
+          "z_quintile": 4,
+          "p_quintile": 3,
+          "n": 86,
+          "win_rate": 0.6744186046511628,
+          "mean_return": 0.0004774677847202348,
+          "median_return": 0.005857267665504375,
+          "profit_factor": 1.1638309900873944
+        },
+        {
+          "z_quintile": 4,
+          "p_quintile": 4,
+          "n": 63,
+          "win_rate": 0.6825396825396826,
+          "mean_return": 0.0035780018613296607,
+          "median_return": 0.005609272003765479,
+          "profit_factor": 1.542901933920775
+        }
+      ]
+    },
+    "q0.001_stopnone_feemaker": {
+      "q": 0.001,
+      "fee": "maker",
+      "n_trades": 2583,
+      "abs_z_quintiles": [
+        {
+          "quintile": 0,
+          "n": 517,
+          "bin_lo": 0.519377641417528,
+          "bin_hi": 1.5572203641850046,
+          "win_rate": 0.8085106382978723,
+          "mean_return": 0.0015620431392259515,
+          "median_return": 0.003151429226206161,
+          "profit_factor": 1.4809713178252297
+        },
+        {
+          "quintile": 1,
+          "n": 516,
+          "bin_lo": 1.5572203641850046,
+          "bin_hi": 1.8630429757948304,
+          "win_rate": 0.7713178294573644,
+          "mean_return": 0.0020224984488449267,
+          "median_return": 0.0038746488658463734,
+          "profit_factor": 1.6114640994434397
+        },
+        {
+          "quintile": 2,
+          "n": 517,
+          "bin_lo": 1.8630429757948304,
+          "bin_hi": 2.1519598775599267,
+          "win_rate": 0.7756286266924565,
+          "mean_return": 0.0021328571314550206,
+          "median_return": 0.004569492386777002,
+          "profit_factor": 1.7124710272117407
+        },
+        {
+          "quintile": 3,
+          "n": 516,
+          "bin_lo": 2.1519598775599267,
+          "bin_hi": 2.5828821061320744,
+          "win_rate": 0.7093023255813954,
+          "mean_return": 0.0008899249941401533,
+          "median_return": 0.00449842955705854,
+          "profit_factor": 1.1580711923342029
+        },
+        {
+          "quintile": 4,
+          "n": 517,
+          "bin_lo": 2.5828821061320744,
+          "bin_hi": 7.472708655715301,
+          "win_rate": 0.6595744680851063,
+          "mean_return": 0.002673582204185924,
+          "median_return": 0.0059767622304084935,
+          "profit_factor": 1.521183487319308
+        }
+      ],
+      "p_cal_quintiles": [
+        {
+          "quintile": 0,
+          "n": 620,
+          "bin_lo": 0.696169772256729,
+          "bin_hi": 0.7193220338983051,
+          "win_rate": 0.7258064516129032,
+          "mean_return": 0.0010904630639692104,
+          "median_return": 0.003909065518161007,
+          "profit_factor": 1.2053033664492039
+        },
+        {
+          "quintile": 1,
+          "n": 434,
+          "bin_lo": 0.7193220338983051,
+          "bin_hi": 0.7397660818713451,
+          "win_rate": 0.7741935483870968,
+          "mean_return": 0.0020082012220654197,
+          "median_return": 0.004119353305578914,
+          "profit_factor": 1.535090662004592
+        },
+        {
+          "quintile": 2,
+          "n": 733,
+          "bin_lo": 0.7397660818713451,
+          "bin_hi": 0.7685185185185186,
+          "win_rate": 0.7312414733969986,
+          "mean_return": 0.0021614991541195976,
+          "median_return": 0.004102284162353104,
+          "profit_factor": 1.65064583652841
+        },
+        {
+          "quintile": 3,
+          "n": 463,
+          "bin_lo": 0.7685185185185186,
+          "bin_hi": 0.7743431221020094,
+          "win_rate": 0.7473002159827213,
+          "mean_return": 0.0015016892281822407,
+          "median_return": 0.004758961510961409,
+          "profit_factor": 1.4987349739402351
+        },
+        {
+          "quintile": 4,
+          "n": 333,
+          "bin_lo": 0.7743431221020094,
+          "bin_hi": 0.896551724137931,
+          "win_rate": 0.7687687687687688,
+          "mean_return": 0.0029069324727661917,
+          "median_return": 0.00424758351796782,
+          "profit_factor": 1.721536484097967
+        }
+      ],
+      "grid": [
+        {
+          "z_quintile": 0,
+          "p_quintile": 0,
+          "n": 134,
+          "win_rate": 0.8432835820895522,
+          "mean_return": 0.0014607575416485778,
+          "median_return": 0.0032738266793059436,
+          "profit_factor": 1.828217501610942
+        },
+        {
+          "z_quintile": 0,
+          "p_quintile": 1,
+          "n": 77,
+          "win_rate": 0.8051948051948052,
+          "mean_return": 0.0006304707868259691,
+          "median_return": 0.0029728294508257723,
+          "profit_factor": 0.9685096438716458
+        },
+        {
+          "z_quintile": 0,
+          "p_quintile": 2,
+          "n": 147,
+          "win_rate": 0.7891156462585034,
+          "mean_return": 0.0017890640031860837,
+          "median_return": 0.0030699413871810542,
+          "profit_factor": 1.3888388050772045
+        },
+        {
+          "z_quintile": 0,
+          "p_quintile": 3,
+          "n": 99,
+          "win_rate": 0.7373737373737373,
+          "mean_return": 0.00022829071087136007,
+          "median_return": 0.003104256996037525,
+          "profit_factor": 1.0423660886552084
+        },
+        {
+          "z_quintile": 0,
+          "p_quintile": 4,
+          "n": 60,
+          "win_rate": 0.9,
+          "mean_return": 0.0046282558828114806,
+          "median_return": 0.004021810044427097,
+          "profit_factor": 5.980469554280897
+        },
+        {
+          "z_quintile": 1,
+          "p_quintile": 0,
+          "n": 111,
+          "win_rate": 0.7117117117117117,
+          "mean_return": 0.0006029810960573427,
+          "median_return": 0.00379023844804078,
+          "profit_factor": 1.1978763184113315
+        },
+        {
+          "z_quintile": 1,
+          "p_quintile": 1,
+          "n": 80,
+          "win_rate": 0.7625,
+          "mean_return": 0.00023677789042440747,
+          "median_return": 0.003377042873530675,
+          "profit_factor": 1.0334674091787535
+        },
+        {
+          "z_quintile": 1,
+          "p_quintile": 2,
+          "n": 139,
+          "win_rate": 0.8345323741007195,
+          "mean_return": 0.003981272678006416,
+          "median_return": 0.00410402921809768,
+          "profit_factor": 4.107169145546267
+        },
+        {
+          "z_quintile": 1,
+          "p_quintile": 3,
+          "n": 102,
+          "win_rate": 0.7254901960784313,
+          "mean_return": 0.0015004835124044107,
+          "median_return": 0.003923332151571337,
+          "profit_factor": 1.7627663342640911
+        },
+        {
+          "z_quintile": 1,
+          "p_quintile": 4,
+          "n": 84,
+          "win_rate": 0.8095238095238095,
+          "mean_return": 0.0029915457880895606,
+          "median_return": 0.003813223598879802,
+          "profit_factor": 1.6280416039444108
+        },
+        {
+          "z_quintile": 2,
+          "p_quintile": 0,
+          "n": 121,
+          "win_rate": 0.743801652892562,
+          "mean_return": 0.001976975407816327,
+          "median_return": 0.004447841946653008,
+          "profit_factor": 1.4819740667050512
+        },
+        {
+          "z_quintile": 2,
+          "p_quintile": 1,
+          "n": 100,
+          "win_rate": 0.84,
+          "mean_return": 0.002455158888315318,
+          "median_return": 0.004090634581245207,
+          "profit_factor": 1.748217782417141
+        },
+        {
+          "z_quintile": 2,
+          "p_quintile": 2,
+          "n": 143,
+          "win_rate": 0.7902097902097902,
+          "mean_return": 0.0030300975733472996,
+          "median_return": 0.004772313094780418,
+          "profit_factor": 2.4028143199012275
+        },
+        {
+          "z_quintile": 2,
+          "p_quintile": 3,
+          "n": 88,
+          "win_rate": 0.7727272727272727,
+          "mean_return": 0.0009297254020117804,
+          "median_return": 0.004980925486099181,
+          "profit_factor": 1.3473818743877608
+        },
+        {
+          "z_quintile": 2,
+          "p_quintile": 4,
+          "n": 65,
+          "win_rate": 0.7076923076923077,
+          "mean_return": 0.0015821143910651966,
+          "median_return": 0.004030915618204341,
+          "profit_factor": 1.6424987923983825
+        },
+        {
+          "z_quintile": 3,
+          "p_quintile": 0,
+          "n": 124,
+          "win_rate": 0.6935483870967742,
+          "mean_return": -0.00012591083608244776,
+          "median_return": 0.004418506907860673,
+          "profit_factor": 0.8854778792070116
+        },
+        {
+          "z_quintile": 3,
+          "p_quintile": 1,
+          "n": 96,
+          "win_rate": 0.7291666666666666,
+          "mean_return": 0.002417563682223884,
+          "median_return": 0.004806647699382828,
+          "profit_factor": 1.7726801133578964
+        },
+        {
+          "z_quintile": 3,
+          "p_quintile": 2,
+          "n": 148,
+          "win_rate": 0.6418918918918919,
+          "mean_return": -0.0005168384146086179,
+          "median_return": 0.003976269160219582,
+          "profit_factor": 0.8823249041799808
+        },
+        {
+          "z_quintile": 3,
+          "p_quintile": 3,
+          "n": 91,
+          "win_rate": 0.7802197802197802,
+          "mean_return": 0.0023426686501361454,
+          "median_return": 0.005629280870020493,
+          "profit_factor": 1.7067142670145983
+        },
+        {
+          "z_quintile": 3,
+          "p_quintile": 4,
+          "n": 57,
+          "win_rate": 0.7719298245614035,
+          "mean_return": 0.0018603046553813342,
+          "median_return": 0.004200859209232161,
+          "profit_factor": 1.4046315019716822
+        },
+        {
+          "z_quintile": 4,
+          "p_quintile": 0,
+          "n": 130,
+          "win_rate": 0.6307692307692307,
+          "mean_return": 0.0014601046672775679,
+          "median_return": 0.004993174885115239,
+          "profit_factor": 1.1234836669315817
+        },
+        {
+          "z_quintile": 4,
+          "p_quintile": 1,
+          "n": 81,
+          "win_rate": 0.7283950617283951,
+          "mean_return": 0.004030479583108831,
+          "median_return": 0.006490445029240627,
+          "profit_factor": 2.177414644168598
+        },
+        {
+          "z_quintile": 4,
+          "p_quintile": 2,
+          "n": 156,
+          "win_rate": 0.6153846153846154,
+          "mean_return": 0.0026357544976399407,
+          "median_return": 0.006075316521989633,
+          "profit_factor": 1.6645051381606297
+        },
+        {
+          "z_quintile": 4,
+          "p_quintile": 3,
+          "n": 83,
+          "win_rate": 0.7228915662650602,
+          "mean_return": 0.0027064256803305668,
+          "median_return": 0.006929471766086629,
+          "profit_factor": 1.7034155125023867
+        },
+        {
+          "z_quintile": 4,
+          "p_quintile": 4,
+          "n": 67,
+          "win_rate": 0.6567164179104478,
+          "mean_return": 0.0034350524401038224,
+          "median_return": 0.005391701827382659,
+          "profit_factor": 1.3886545581304346
+        }
+      ]
+    }
+  },
+  "monotonicity_checks": {
+    "abs_z_win_rate": {
+      "direction": "decreasing q0->q4",
+      "n_monotone": 2,
+      "n_runs": 6,
+      "n_top_quintile_highest": null
+    },
+    "abs_z_mean_return": {
+      "direction": "increasing q0->q4",
+      "n_monotone": 0,
+      "n_runs": 6,
+      "n_top_quintile_highest": 6
+    },
+    "abs_z_median_return": {
+      "direction": "increasing q0->q4",
+      "n_monotone": 4,
+      "n_runs": 6,
+      "n_top_quintile_highest": 6
+    },
+    "p_cal_win_rate": {
+      "direction": "increasing q0->q4",
+      "n_monotone": 2,
+      "n_runs": 6,
+      "n_top_quintile_highest": null
+    },
+    "p_cal_mean_return": {
+      "direction": "increasing q0->q4",
+      "n_monotone": 0,
+      "n_runs": 6,
+      "n_top_quintile_highest": 6
+    },
+    "p_cal_median_return": {
+      "direction": "increasing q0->q4",
+      "n_monotone": 0,
+      "n_runs": 6,
+      "n_top_quintile_highest": 0
+    }
+  }
+}
