@@ -52,7 +52,9 @@ split into "volatility in a new form" versus new information. The bar below is a
   event before its block.
 - **Embargo:** events in the 1 day before a test block, and in the 1 day before the validation
   block, are dropped from fitting (a 10 h label crosses the boundary otherwise).
-- **Validation inside each fold:** the last 20% of that fold's fit days, after the embargo. Every
+- **Validation inside each fold:** the last 20% of that fold's fit days, after the embargo (whole
+  UTC days; 20% of the count of distinct UTC days with events before the fit cutoff, rounded
+  UP; planner ruling 2026-10-27). Every
   setting (penalty, iterations, depth, leaf size, trees) is chosen on that fold's validation
   only. Nothing is carried back from a later fold.
 - **Normalisers, imputation and encodings** are fitted on the fold's fit rows only.
@@ -68,7 +70,11 @@ Per test block: rank the block's usable events by the model's P(reach within 10 
 - **Interval:** bootstrap by whole UTC day (2,000 resamples); one coin move lands on one day, so
   its many pair events move together. **98.75% level** (Bonferroni for four candidate models).
 - **PASS (search):** pooled lift >= 0.05 AND the lower end of the 98.75% interval > 0 AND lift > 0
-  in at least 6 of the 8 folds. Fewer folds = REGIME-DEPENDENT, reported, not a pass.
+  in at least 6 of the 8 folds.
+- **Verdict order (planner ruling 2026-10-27):** FAIL if pooled lift < 0.05 OR the interval's lower
+  end <= 0, whatever the fold count. REGIME-DEPENDENT only for a model that clears BOTH the lift
+  and the interval but has lift > 0 in fewer than 6 of 8 folds (reported, not a pass). PASS only
+  when all three hold.
 - **No permutation null / seed checks on results (user, 2026-10-27: "i dont want any seed
   checks"; the shuffled-label proof was removed too).** The guards are the remaining B3 proofs (run once, before real training), the 98.75%
   day-bootstrap interval, the 6-of-8 fold rule and the vault.
@@ -149,7 +155,7 @@ its source file and its dictionary entry. Every OUT reason quotes the rule. Then
   counts, embargo drops and reach rate.
 - Builds the hazard rows as A2, keyed by event_id, so all rows of one event fall in one fold and
   one side of every boundary (asserted).
-- Scoring exactly as A5, including the day-block bootstrap and the permutation null.
+- Scoring exactly as A5, including the day-block bootstrap. No permutation null (A5, user 2026-10-27).
 - Deterministic: fixed seeds, logged; a rerun reproduces every number.
 
 ### B3. Proofs (all must pass before any real model runs; each must be able to fail)
@@ -169,6 +175,10 @@ its source file and its dictionary entry. Every OUT reason quotes the rule. Then
    separate short script, numbers equal.
 
 ### B4. Sizing (report, then STOP)
+**Amended (user, 2026-10-27): B4 closes EARLY with only the RSF feasibility verdict and the
+handoff.** Logistic and boosted-tree sizing move to after a new step, B5 (speed and memory
+optimisation, identical outputs), because sizing on unoptimised code would be redone. The text
+below stays as the sizing spec for after B5.
 - Hazard rows expected (about 15 per event, about 100M rows) and memory for each model at full
   data. The VM has 64 GB; this will not fit as a dense matrix.
 - **Machines (user, 2026-10-27):** use the GCP VM fully while it lasts (trial ends ~2026-11-08;
@@ -182,6 +192,14 @@ its source file and its dictionary entry. Every OUT reason quotes the rule. Then
   machine, STOP and report the options. Do not subsample (standing rule: full dataset always).
 - No real-model scoring in this build. The scoring build follows after the checker passes B1-B4
   and the user approves the machine.
+
+### B5. Speed and memory optimisation (user, 2026-10-27; after the session reset)
+- Goal: make the harness and the model fitting as fast and as memory-efficient as possible
+  WITHOUT changing any result. Brief: docs/prompts/HL_MODEL1_B5_SPEED_MEMORY.md. RSF verdict parked
+  (user, 2026-10-27); RSF is re-measured after B5 with prediction timed.
+- Then the B4 sizing spec above runs on the optimised code, and the AWS approval goes to the user.
+- **Next: S1, the logistic scoring build** (brief `docs/prompts/HL_MODEL1_S1_LOGISTIC.md`, written 2026-10-27 at the
+  user's request): logistic sizing (the B4 spec) is its Step 1, then the full 8-fold run, the gate and the use-case metrics.
 
 ### Review and receipts
 - Checker: B1 file before B2; harness code and proof designs before any run over a few minutes;

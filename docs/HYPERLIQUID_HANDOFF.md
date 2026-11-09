@@ -176,6 +176,52 @@ expanding walk-forward (first test block ~2025-11-21, 30-day blocks, 1-day embar
 chosen per fold on that fold's validation, finding = pooled interval excludes zero AND same sign in
 >= 2/3 of folds); the single 2026-05-25 cut stays only for pass 1.
 
+HL-MODEL1 RULES (user, 2026-10-27; brief docs/prompts/HL_MODEL1_REVERTER_MODEL.md, Part A fixed):
+goal = pick reverters better than chance at the trigger, profit out of scope until answered; pair unit;
+hazard framing (20 half-hour steps, decision at the trigger only); candidates logistic, boosted trees,
+random survival forest, sequence net later (needs a raw-minute extract); NO volatility-only baseline;
+vault = last 3 months (t0 >= 2026-07-13), gap day 2026-07-12, 8 search folds from 2025-11-21;
+pass = top-10% LIFT (gap to chance minus the block's average gap; version B) >= 5 points, 98.75%
+day-clustered interval above 0, positive in >= 6 of 8 folds; drift columns kept and watched; coin
+identity kept as an input; deadline 2026-11-15. Part Z results (pre-checker): hedge quality and
+volatility structure only, best adjusted AUC 0.567, flow/wallet/OI/book columns near 0.5 singly.
+HL-MODEL1 S1-D (2026-10-29, d179a79, checker PASS, descriptive): lift 0.084 at the top 1%, 0.070 at 2%, 0.053 at 5%, 8/8 folds at each. Broad: 11,878 pairs, 192 coins, 233 days; the 10 busiest days hold 15%. Top 1%: reach 69% vs 32%, median 110 vs 250 min, bigger margin past the trigger, cleaner fit, higher vol_48 (87% are top-decile vol_48; the remaining 13% show similar lift, wide CI). Post-hoc; the verdict stays FAIL.
+HL-MODEL1 S1 RESULT (2026-10-29, commit 333640c, checker PASS): logistic FAIL. Pooled lift 0.0394 < 0.05; 98.75% CI (0.0316, 0.0475) wholly above 0; 8/8 folds positive. Top-10% reach 58.5% vs chance 66.8%; all events 32.8% vs 45.1%. M2 lift 0.084 at the top 1%, 0.026 at the top 20%. vol_48 (unexplained drift) in every fold's top 20; the drift share rises in folds 5-7. Vault untouched. Next (trees) is the user's call.
+HL-MODEL1 (user, 2026-10-30): "lets move to the boosted trees". The offered S1 follow-up checks are skipped. Brief docs/prompts/HL_MODEL1_S2_TREES.md drafted; rulings T1-T9 await the user's approval; AWS launches need the user's yes in the builder session.
+HL-MODEL1 S2 (user, 2026-10-30): "yes i approve" -- rulings T1-T9 approved. S1 follow-up checks run alongside the tree run, on saved S1 predictions, as the user picks them. A detailed report after S2, with a top-1% deep dive (S1-D items on tree predictions, plus distance to mu and overlap with S1's top 1%).
+S2 Step 1 (2026-10-30): killed, exit 137, at 14:26 UTC after the train (96.4 GB rss) and val Datasets were built, before any tree was timed; the cause goes to the builder. Unnoticed until 18:29. User ruling: every AWS launch gets a background shell watcher that wakes the builder when the instance stops, and the builder reports success or failure at once.
+S2 Step 1 retry (user, 2026-10-30: "okay lets go"): suspected cause is force_row_wise (a row-major uint32 MultiValBin, about 287 GB; planner and checker agree independently). Plan: local row- vs col-wise test, switch to force_col_wise, plus a memory sampler, checker PASS, then relaunch on the SAME r7i.16xlarge (no upsize to 768 GiB). The launch yes is still typed in the builder session.
+S2 Step 1 DONE (2026-10-30, checker PASS, NUMBERS [HL-MODEL1-S2]): col-wise fits (VmHWM 119.84 GB train+val; predict-in-one-piece peak 275 GB, to be chunked); 11.17 s/tree; worst case 307.8 machine-h, 153.9 h on 2 machines, about $923 Tokyo; the 24 h gate is tripped. Planner recommendation: lr 0.1 + 1,000 max trees + incremental checkpoint predict, 4 machines (about $410 worst case). User 2026-10-31: S2 PARKED until new AWS credits arrive; no option picked. Meanwhile, S1-F (brief docs/prompts/HL_MODEL1_S1_FOLLOWUPS.md): fixed cut-off test + why folds 5-7 are weaker.
+S1-F RESULT (2026-11-04, commits 20ffd51 + 41a5f2f, checker PASS, NUMBERS [HL-MODEL1-S1-F]): F1, folds 1-7 pooled: top 1% Rule A 0.0782 / Rule B 0.0767 vs in-block 0.0830; top 10% 0.0385 / 0.0370 vs 0.0404; intervals overlap, no fold with 0 picks. A live cut-off keeps most of the edge. F2: weakest fold is 7 (0.0292 at 10%, 0.0598 at 1%), not a steady decline. threshold is the top column in folds 1-7; vol_48's share rises 0.07 -> 0.39 (fold 6); the other 94 drift columns' share shrinks. Median shift of top-20 columns shows no larger move in folds 5-7 (vol_48 shift 0.005-0.050); spread, tails and the column-label link are not tested. Cause of the late weakness not found. Gate unchanged (FAIL).
+S1-G (user, 2026-11-06): focus on the live top 1% (Rule A). Rule A picks per active day by fold: 321, 269, 53, 130, 239, 75, 132 (mean of folds 174, median 132; 35,629 picks over 203 days, about 176 a day). Brief docs/prompts/HL_MODEL1_S1_TOP1_DEEP.md: trade count and overlap, same-chance comparison, exact linear contributions (with a reproduction proof), fixed slices, anatomy of the misses (depth_10h, mae_sigma: path measures, not profit), calibration at the top. No credits; the user is exploring a compute cluster for S2.
+S1-G RESULT (2026-11-07, checker PASS at round 3, NUMBERS [HL-MODEL1-S1-G]): live top-1% picks/day median 110 (max 1,058), 0.5% 50, 0.1% 8. Lift 0.078 / 0.090 / 0.109. Same-chance picks reach 15-20 points more. vol_48, threshold and sandwich drive the picks. Overconfident in every fold (p 0.80-0.89 vs reach 0.64-0.70). Misses' mae_sigma median 4.86 vs 1.97 (in own sigma). G8: picks are most common at the smallest |z| (26%); their p_10h is flat at about 0.83 across |z| bins while actual reach falls 0.74 -> 0.52, so the model ignores distance where reversion depends on it. INCIDENT: round-2 G8 pick counts were typed by the builder, not read from data; the checker caught it. Proposed rule (every NUMBERS figure printed by a script from a log or JSON) put to the user.
+RULE (user, 2026-11-07): every number in NUMBERS.md or a report is printed by a script from a log or output file, never typed. Added to CLAUDE.md. VM check (builder): nothing from S1/S1-F/S1-G exists only on the VM; the VM is left running, and stopping it is the user's call.
+S1-G Word report delivered (2026-11-07, ~/Downloads/HL-MODEL1_top_picks_deep_dive.docx, checker PASS after 2 blocking fixes: vol_48 is the spread's own recent movement in sigma, not market activity; section 11 softened to 'consistent with model form plus selection; missing inputs not ruled out'). S1-H (user, 2026-11-07, "yes"): recalibration, brief docs/prompts/HL_MODEL1_S1_RECALIBRATION.md. Platt + isotonic per horizon, fitted on earlier test months (expanding), picks unchanged (raw Rule A), no |z| version yet.
+S1-H: clean run; the checker held the write-up for hand-typed figures (the second breach). Headline: isotonic top-1% at 10 h 67.9% predicted vs 67.7% actual. DECISIONS (user, 2026-11-07): profit work starts on the logistic model's live picks (Rule A, isotonic-corrected), lifting the profit-waits rule for that scope, in new sessions; whole-repo cleanup first (inventory, user approval, then delete).
+S1-H RESULT (2026-11-07, 3826fb3, checker PASS round 2; NUMBERS written by the generator research/model/s1h_numbers_gen.py): top-1% at 10 h: raw 82.9%, isotonic 67.9%, Platt 78.0%, actual 67.7%. The raw q=1% cut-off 0.73-0.84 is 0.62-0.67 isotonic. 0 horizon-order breaks. Ranking unchanged. Isotonic is the correction for profit work.
+CLEANUP (user, 2026-11-08): approved group A (tracked/rebuildable), the small untracked logs, ALL OKX data (attic/okx_data, attic/vm_final; lost for good, accepted), and the whole freqtrade/OKX trading mechanism (user_data/, trading code, configs, Docker, dashboards, workflows). Held: the build5/build7 pilot data, exit_study and live_archive, pending the S3 check. Spec: REPO_CLEANUP.md Step 2 approval.
+CLEANUP DONE (2026-11-08, 3fe05f5, checker PASS): deleted attic/ (OKX data and the vm_final archive included), the freqtrade scaffold and configs, wake_streamlit.py, the scanner logs and the project __pycache__. KEPT user_data/data and normalized (live HL data), all HL paths, exit_study, live_archive and the pilots. master_manifest_v1.log is now in git. Open: 5 loose trading-era files under research/ (open_positions.json, paper_trades_archive_*.csv, param_walkforward_folds.csv, portfolio_backtest_trades.csv, retired_nautilus_paper/), for the user's call.
+2026-11-08: the 5 loose trading-era files were deleted (untracked; user yes). Profit brief HL_PROFIT1_LIVE_PICKS.md written, for new sessions.
+HL-MODEL1 S1 (user, 2026-10-28): "yes newton on 2 machines": proximal Newton solver, 2 x r7i.16xlarge spot in Tokyo (~$25-60 est.). The user wants to discuss the report metrics before the run.
+HL-MODEL1 S1 AWS probe (2026-10-28): try 1 died in 59 s (no CLI installed, output hidden; ~$0.03); try 2 set up fine, then went silent at the cache build and shut down with no log (~$1). Try 3: logs stream to s3 tmp/probe/logs/ (planner lifted read-only for that prefix only). A third failure is a STOP to the user.
+HL-MODEL1 S1 (user, 2026-10-28): AWS timing probe APPROVED ("yes"): 1 x r7i.16xlarge spot in Tokyo, ~1 h, under $10, self-terminate at 90 min, read-only S3, no IAM changes. The full AWS run needs a separate yes.
+HL-MODEL1 S1 SIZING (2026-10-28): exact L-BFGS-B, threaded (bit-identical), ~26 s/eval on fold 7, ~1 h+ per fit, ~150 h for the full run. Proximal Newton: one Gram build = 23 min, 182-498 h. Both far over the 24 h gate. STOP for the user: AWS machine (spend) or grid; planner recommends AWS.
+HL-MODEL1 S1 (planner, under the overnight delegation, 2026-10-28): the sizing probe ran at ~68 s/iteration on fold 7 because hazard_nll_grad upcasts X to float64 (99% of the cost). The float32 hot-loop path hazard_nll_grad_fast is APPROVED, on the checker's condition: fits reach the same optimum under the EXACT objective within 1e-4 relative at the middle and lowest penalties, with KKT on the exact function and a failing variant. The exact function stays for lambda_max and KKT. POST-HOC GATE (set after a local dry run showed w differing by 7.7e-3 at the middle penalty with the objective equal to 4e-6): the exact objective agrees within 1e-4 relative; KKT_fast <= max(10 x KKT_exact, 1e-4 x n_rows); max |p_10h diff| <= 1e-3 and top-10% overlap >= 99%; the coefficient difference is reported, not gated.
+  RESULT: the fast path FAILED the gate (p_10h max diff 2.8e-3 at the middle penalty; 4.1e-2 and overlap 0.976 at the lowest). REJECTED and deleted. Replacement: the exact float64 arithmetic made faster (no float64 copy of X, all 8 threads), proved pointwise within 1e-10 relative.
+HL-MODEL1 (user, 2026-10-28 ~03:20 UTC, going to sleep): "I trust you to make the right calls that need me when I'm away". Planner takes in-plan calls overnight; spend, vault, deletions and Part A changes still wait for the user.
+HL-MODEL1 B5 (user, 2026-10-28): logistic core PROOF 2 (coefficients) failed at 1e-4 because the solver stopped early (PROOF 1, objective/gradient, passed). Option (a) approved ("yeah"): same tolerance, both fits driven to the true optimum; a second fail is a STOP.
+HL-MODEL1 S1 (user, 2026-10-27): logistic scoring brief docs/prompts/HL_MODEL1_S1_LOGISTIC.md APPROVED ("yes i approve") with planner rulings R1-R7 (refit on train+val; select on validation lift; 2 l1_ratios x 8 penalties; clip 0.1/99.9%, standardise, NaN->0 + missing flags; coins one-hot with unseen level; permutation importance on validation) and metrics M1-M6. Starts automatically when B5 closes; >24 h projection stops for the user.
+HL-MODEL1 B5 (user, 2026-10-27): input list 1,093 -> 1,091 APPROVED ("yes drop the duplicates"); amends B5's "no change to the input list".
+HL-MODEL1 B5 (planner ruling, 2026-10-27): a_/b_coin_code == fixed_code(ticker_a/b) on all 6,697,756 rows (builder). After the ticker fix, B1's duplicate rule applies as written: ticker_a/b (events) kept, a_/b_coin_code OUT -> 1,091 IN. Separate input-list commit AFTER the bitwise before/after on 1,093; cache built on 1,091. Disk resize done 2026-10-27 (74 GB free).
+HL-MODEL1 B5 (user, 2026-10-27): pt-research disk 100 -> 160 GB pd-balanced approved ("yes lets grow it if we will still be using credits"; ~$6/mo from trial credits) for the 29 GB cached IN-matrix (only 15 GB was free). Nothing deleted.
+HL-MODEL1 B5 (user, 2026-10-27): Step 2 GO as briefed ("okay yeah do it"), Arrow-memory item dropped (pool <= 0.55 GB in Step 1). B4's 52.9 GB stays unexplained, not chased.
+HL-MODEL1 B5 (user, 2026-10-27): one extra Step 1 run approved ("yes run it") to measure startup peak RSS (load_search_events + build_folds); load_features shown NOT to cause B4's 52.9 GB.
+HL-MODEL1 (user, 2026-10-27): committing B1 (2c7372d) approved after the fact ("yeah sure"); closes the open question.
+HL-MODEL1 (user, 2026-10-27): RSF verdict PARKED (one 64-core case unresolved, 15.0 h floor with predict unmeasured); re-measure after B5 with predict timed. B5 brief: docs/prompts/HL_MODEL1_B5_SPEED_MEMORY.md. B4 closed at 955469b.
+HL-MODEL1 (user, 2026-10-27): B4 closes early (RSF verdict + handoff only); sessions reset; then B5 speed/memory optimisation with identical outputs; sizing redone on the optimised code.
+HL-MODEL1 (user, 2026-10-27): NO permutation/seed checks on results, and the B3 shuffled-label proof removed too; logistic + proofs on the GCP VM while it lasts; boosted trees on AWS spot Tokyo; get everything off GCP before the move.
+HL-MODEL1 A6 amended again (user, 2026-10-27): near_seam and a_/b_oi_rec_in_gap OUT (archive-gap flags).
+HL-MODEL1 A6 amended (user, 2026-10-27): archive-age stamps (oi_obs_age, oi_rec_age, fund_age_h, ctx_age_min, a_/b_/d_) are OUT, like snapshot_age_s.
 G10 OKX CROSS-VENUE REMOVED from version 1 (user, 2026-10-25).
 User decisions 2026-10-25/26: G8 runs on EC2 us-east-2 with a read-only inline policy on hl-build2-ec2;
 book_reach_bp added; slippage at $1k only (no position will exceed $1k); G6 poison at 400 events accepted;
@@ -210,6 +256,7 @@ docs/prompts/HL_BUILD6_FULL_POPULATION.md, results to [HL-FULL1]. Pending user d
 KEPT reading in [HL-EVENT1] (planner recommends: ALL = help, KEPT = logistic-only, not a pass);
 the leaf-size grid at N ~ 8M (closed decision 2026-10-13; build 6 reports both grids).
 
+ORDER SUPERSEDED 2026-10-27 (user): HL-MODEL1 (logistic, trees, survival forest in a hazard framing) comes first; the items below wait for its go/stop decision.
 MODEL PLAN -- KEEP AT THE FOREFRONT (user, 2026-10-15; scope after build 4 Part A results):
 the models are not the bottleneck (trees found nothing beyond volatility on OKX and in
 build 3), so match the model to the question, in this order: (1) GBDT / L1 logistic with
@@ -326,7 +373,12 @@ control across hypotheses.
 
 ## Decisions waiting on the user
 
-- 2026-11-01 reminder — GCP trial credits end ~2026-11-08: upgrade GCP or move `pt-research` to AWS. (Also deactivate the AWS key of IAM user `pt-gcp-reader` if pt-research goes.)
+- User decisions 2026-10-26: (1) MOVE `pt-research` to AWS before the GCP trial ends
+  ~2026-11-08 (not upgrade GCP). Includes the OI collector and live paper book. Deactivate
+  the AWS key of IAM user `pt-gcp-reader` once pt-research is gone. Brief to follow; do not
+  disturb Part Z on GCP. (2) Push feat/hyperliquid-build2 and open a PR to main: DONE, PR #1.
+  (3) Raise AWS vCPU quota: us-east-2 16 -> 64 APPROVED 2026-10-26 (Tokyo already 64).
+  (4) Hourly external-research loop: NOT for now (overrides the working rule below).
 
 - AWS budget: pair-trading-monthly, $30/month, emails at 50/80/100% actual and
   100% forecast to elvisodangaobondo@gmail.com (warns, does not stop spend).
@@ -351,8 +403,8 @@ control across hypotheses.
 - Test all models and all horizons. "Clears" = 95% interval excludes zero.
 - Verify every assumption against code and data before writing a builder
   prompt.
-- External research **every hour** (user's instruction). Cron jobs are
-  session-only, so the new session must create it at start:
+- External research loop: OFF since 2026-10-26 (user: "not for now"). The old
+  wording, kept for if it is restarted:
   `/loop 1h research check: search external literature and existing techniques
   relevant to the current open question(s) in the Pair_Trading research (right
   now: forced-vs-deliberate flow as the source of reversion edge -- Hyperliquid

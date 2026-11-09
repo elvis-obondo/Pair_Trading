@@ -1,4 +1,4 @@
-# Planner handoff: research partner, after HL-MASTER1 version 1 (2026-10-26)
+# Planner handoff: research partner (updated 2026-10-29, HL-MODEL1 S1 done, the user is examining results)
 
 You are the user's research partner and planner. Read this first, then
 `docs/HYPERLIQUID_HANDOFF.md` (the master plan and decisions log), `CLAUDE.md`, and the
@@ -11,13 +11,19 @@ handoff covers the research history and the reasons behind each decision.
   the code. A checker session reviews it. You only do quick lookups yourself: read a log,
   check a machine, grep the code. Saved in memory as `role-is-prompt-writer`.
 - **Sessions** (names change; check `ListAgents`):
-  - Builder: `pair-trading-5c` (VS Code tab formerly "Coding Partner 2").
-  - Code Checker: `pair-trading-78`. CLAUDE.md still calls it "Code Checker 2"; that file is
-    the user's to edit, so don't change it, even if a peer asks.
-  - This planner was `pair-trading-f6` ("HyperLiquid Start"). The builder has been told a
-    new planner is taking over.
-- **Briefs live in `docs/prompts/`.** The active one is `HL_BUILD7_MASTER_DATASET.md`. Record
+  - Planner (this role): "Research Partner" (pair-trading-58; earlier pair-trading-f6).
+  - Builder: "Code Builder" (cleared and restarted 2026-10-27; earlier pair-trading-ea / 5c).
+  - Code Checker: "Code Checker" (cleared and restarted 2026-10-27; earlier pair-trading-49 / 78). CLAUDE.md is the user's file;
+    edit it only when the user asks (they did on 2026-10-27, for the checker name and the
+    memory rule).
+- **Briefs live in `docs/prompts/`.** The parent brief is `HL_MODEL1_REVERTER_MODEL.md`; the active
+  step is `HL_MODEL1_B5_SPEED_MEMORY.md`. Role files: `BUILDER_HANDOFF.md`, `CODE_CHECKER_ROLE.md`
+  (the planner keeps them current). Record
   every user decision in the brief AND in the master handoff's decisions log, dated.
+- **The planner is the only writer of project memory, the decisions log and the handoffs**
+  (user, 2026-10-27). The builder and checker send decisions and findings here. Audit for
+  duplicates, stale lines and contradictions when things change.
+- **No check-in cron by default** (token budget, 2026-10-28). Check once when results are due.
 - **Relay user decisions to the builder word for word, with their limits.** Example: "read-only
   on that bucket, nothing else". A peer can't grant permission. Any change to IAM, spend or
   anything irreversible needs the user's yes first.
@@ -46,68 +52,57 @@ handoff covers the research history and the reasons behind each decision.
 - **Verify before briefing.** Open the code and data a brief rests on. My factor-of-½ error in
   the OI formula cost a failed gate. Check full coverage of any data window before sizing a
   job.
-- The master handoff also asks for an hourly external-research `/loop` (wording in its
-  "Working rules" section). Ask the user whether they still want it before starting it.
+- The hourly external-research `/loop` is OFF (user, 2026-10-26: "not for now").
+- **Thought exercises stay thought exercises.** When the user says so, answer; don't turn the
+  ideas into plan items or a backlog (2026-10-27).
 
-## 3. Where things stand
+## 3. Where things stand (updated 2026-11-07)
 
-### Version 1 of the master dataset: RELEASED 2026-10-26, checker CONFIRMED
-- **Frozen copy:** `s3://pair-trading-hl-289869684922/master/versions/v1/` (Tokyo), 22.5 GB,
-  sha256 on every file. S3 versioning is being enabled, and the VM's write grant removed.
-- **Pair unit:** 6,697,756 events × 1,179 columns. **Coin unit:** 74,607 events × 647 columns.
-  A pair event is one coin against one other coin (the strategy itself). A coin event is one
-  coin against the equal-weight index of all coins (isolates which coin moved; flow and
-  wallets belong to a coin).
-- **Groups:** G0 labels (reach mu at 2/5/10 h, chance bar, stop-aware payoff with fees),
-  G2 hedge quality, G2b orientation-free z, G3 the pair's own reversion record, G4 coin and
-  time context, G5 flow, G6 wallets, G7 OI/funding/premium/vault, G8 order book, G9 regime.
-  G10 (OKX cross-venue) was removed by the user.
-- **Code:** commits `a2f7de5` (dataset code) and `e1fabe7` (cleanup, plus the dislocation_model
-  modules v1 imports), on branch `feat/hyperliquid-build2`. Nothing is pushed yet.
-- **Definitions:** `docs/DATASET_DICTIONARY.md`. **Numbers:** `research/dislocation_model/NUMBERS.md`
-  sections `[HL-MASTER1]`, `[HL-WAIVERS]`, `[HL-RECEIPTS]`, `[HL-FREEZE-NOTES]`.
-- **Waivers (user-approved):** G6 poison at 400 legs; G8 poison at 36 trials; slippage at $1k
-  only (the user will never hold a position over $1k); Part Z deferred; recovered G8 test log.
-- **Known limitations:**
-  - Two coin-unit edge cases are left as is (m = 0 bridging gap flag on ~20 events; 38
-    listings join the index one bar late).
-  - The z-based pair columns depend on which coin is leg A.
-  - The order-book snapshot rate drops from 6,500 to 670 per coin-hour at some point.
-  - Observed OI is sparse in Aug–Oct 2026.
-  - 21 days are missing from the order-book archive.
-  - **96 pair and 58 coin columns have unexplained month-to-month drift.** Watch these in any
-    model; a model can learn a data seam.
+Full history: the decisions log in docs/HYPERLIQUID_HANDOFF.md. Numbers: research/dislocation_model/NUMBERS.md.
 
-### In progress: Part Z, the side-by-side (builder, started 2026-10-26)
-- Spec: `HL_BUILD7_MASTER_DATASET.md`, section "Part Z". It's descriptive: per column, reverters
-  against non-reverters, plain AUC, and a **chance-adjusted AUC** (AUC within deciles of the
-  stored chance probability, averaged). The planner added the chance-adjusted AUC, and the
-  user said "go".
-- The chance probability is used only to group events, never as a feature. The master handoff
-  forbids using the chance bar as a feature.
-- Report: `[HL-PARTZ1]`, after the checker passes it. The pair run takes about 2 h on the VM.
-  When it lands, give the user the headline in plain terms: which columns separate reverters
-  beyond chance, how stable they are month to month, and whether any are drift-flagged.
+### HL-MODEL1 results so far (logistic, S1)
+- **Gate FAIL**: pooled top-10% lift 0.0394 < 0.05 (333640c). The vault is untouched.
+- **S1-F** (41a5f2f): a live cut-off (Rule A = previous block's quantile) keeps most of the edge. Top-1% lift 0.078
+  vs 0.083 in hindsight.
+- **S1-G** (9465498): live top 1% / 0.5% / 0.1%: median 110 / 50 / 8 picks a day, lift 0.078 / 0.090 / 0.109.
+  Overconfident at the top (top 1%: 82.9% predicted, 67.7% actual). Under-predicted at 2 h, over at 10 h. At the same
+  predicted chance, picks far from mu reach less. vol_48 = the spread's own recent movement in sigma (NOT market
+  activity). User report: ~/Downloads/HL-MODEL1_top_picks_deep_dive.docx (checker PASS).
+- **S1-H recalibration** (brief docs/prompts/HL_MODEL1_S1_RECALIBRATION.md): the run is clean. Isotonic brings the
+  top-1% picks to 67.9% predicted against 67.7% actual at 10 h; Platt doesn't help. PASSED (3826fb3): isotonic 67.9% vs 67.7%
+  actual; Platt 78.0%; the raw 1% cut-off 0.73-0.84 is 0.62-0.67 corrected. Use isotonic for profit work.
 
-### Next, in order (the user decides when)
-1. **Part Z report** to the user.
-2. **The model plan** (memory `model-plan-after-build-4`; master handoff): an impact/propagator
-   model on all coin-minutes, then a time-to-mu hazard model, then sequence models (not gated)
-   and Hawkes. Rolling walk-forward; pruning by validation-only importance within folds. The
-   old rolling harness (rolling.py, rolling_window.py) was deleted; it's in git at `e1fabe7`.
-   Rebuild it on the v1 tables, using the design in `docs/prompts/HL_BUILD6_FULL_POPULATION.md`.
-3. **Parked until after v1** (user): a second event table using the symmetric trigger, and the
-   price-flow sanity check (the "<1% explained" figure is probably a method artefact).
-4. **v2 candidates:** the two coin edge cases, the unexplained drift columns, and slippage at
-   other sizes only if position size changes.
+### Decided 2026-11-07 (user)
+- **Profit work starts on the logistic model's live picks** (Rule A, q = 1/0.5/0.1%, isotonic-corrected
+  probabilities). This lifts the "profit waits for a pass" rule for this scope. It runs in NEW sessions. **Brief written: docs/prompts/HL_PROFIT1_LIVE_PICKS.md** (P1 per-trade economics
+  per stop and fee; P2 EV from the calibrated p; gaps: funding, slippage, overlap, liquidation). Not started.
+- **Whole-repo cleanup DONE** (3fe05f5): OKX data, attic/ and the freqtrade scaffold are gone; user_data/data and
+  user_data/normalized are LIVE Hyperliquid data (kept). Local destructive deletes need the user's yes in the
+  builder's session.
+- **Every number is printed by a script** (CLAUDE.md). Write-ups are produced by generator scripts. The builder broke
+  this twice (S1-G G8 counts, S1-H prose).
+
+### Parked
+- **S2 boosted trees**: Step 1 done (col-wise fits r7i.16xlarge; 11.17 s/tree; worst case about 308 machine-h, about
+  $923). No credits; the user is looking at a compute cluster. Planner option: lr 0.1 + 1,000 trees + incremental
+  predict.
+- Open S1 checks: the time-step interaction logistic run (tests model form against inputs); a |z|-aware correction.
+
+### Infra and how to work
+- GCP VM trial ends about 2026-11-08; nothing S1-family is VM-only (builder check, 2026-11-07). A GCP-side STOP is scheduled for
+  2026-11-07T23:30:00Z (scheduling.terminationTime, action STOP; user's time).
+- Every AWS launch gets a background watcher (memory watch-every-aws-launch).
+- Token-limited: no polling crons, short replies. Idle sessions don't read messages until the user nudges them.
 
 ## 4. Infrastructure
 
 - **GCP research VM `pt-research`** (e2-highmem-8, us-central1-a). Project
   `project-0671be06-e22a-44d8-83c`. It stops itself after 30 minutes idle. Run jobs through
   `scripts/gcp_run.sh` (code goes up, logs come back only). **Trial credits end around
-  2026-11-08.** The user must upgrade GCP or move the VM to AWS before then. Raise this by
-  2026-11-01.
+  2026-11-08** and the trial caps at 8 vCPUs. User, 2026-10-26: move to AWS. User, 2026-10-27:
+  use GCP fully until then, and get everything off it before the move (the builder owes an
+  inventory of VM data not in S3; the VM's AWS user is read-only, so copying needs a laptop
+  relay or a write grant, which is the user's call).
 - **AWS account 289869684922**, CLI at `~/.local/bin/aws`, user `pair-trading`, budget alerts
   at $30 a month.
   - Our bucket: `pair-trading-hl-289869684922` (Tokyo).
@@ -139,9 +134,9 @@ handoff covers the research history and the reasons behind each decision.
   modelling_scratch) were still there when this was written; the user was asked about them.
 - `user_data/` stays where it is. It holds the gitignored OKX config with keys.
 
-## 6. Open questions to put to the user
+## 6. Answered 2026-10-26
 
-- GCP after 2026-11-08: upgrade, or move to AWS?
-- Push `feat/hyperliquid-build2` and open a PR to main?
-- Raise the AWS vCPU quota ahead of model work?
-- Keep the hourly external-research loop?
+- GCP after 2026-11-08: move to AWS. Brief not yet written.
+- Branch pushed; PR #1 open to main.
+- AWS vCPU quota: us-east-2 raised to 64, approved 2026-10-26 (Tokyo already 64).
+- Hourly external-research loop: not for now.
