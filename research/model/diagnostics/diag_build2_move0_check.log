@@ -1,0 +1,17 @@
+[S1H] fold 6 h=10h: iso saturated (0 or 1) on test=0, of which contradicted by the label=0; distinct iso levels on this test block=256
+[S1H] fold 7 h=10h: n_fit_pool=3,214,255 n_dropped(guard)=6,598 n_fit_used=3,207,657 platt_intercept=-0.104422 platt_slope=0.882790 platt_valid=True iso_tied_groups=257
+[S1H] fold 7 h=10h: Spearman(raw p_10h, platt p_10h)=1.000000000000
+[S1H] fold 7 h=10h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.0987, 0.2:0.1956, 0.3:0.3077, 0.4:0.4025, 0.5:0.4883, 0.6:0.5518, 0.7:0.6122, 0.8:0.6559, 0.9:0.7073
+[S1H] fold 7 h=10h: iso saturated (0 or 1) on test=0, of which contradicted by the label=0; distinct iso levels on this test block=278
+[PROFIT1] p_cal cross-check OK: pooled top-1% mean p_cal_10h = 0.6786192846 (S1-H reported 0.6786192845636108 / NUMBERS.md '67.9%')
+[PROFIT1] q=0.01: n=35,629
+[PROFIT1] q=0.005: n=17,699
+[PROFIT1] q=0.001: n=3,638
+[HARNESS] load_search_events: 6,697,756 merged rows -> 5,405,478 after the date/gap-day filter -> 5,378,429 after dropping 27,049 label_gap=1 rows
+[PROFIT1] build2 1m cache: 0/192 coins already cached, pulling 192
+coins without build2 1m: []
+[PROFIT1] move paths: 35,629 ok, 0 with a true gap, 0 no data at all (of 35,629 picks checked)
+[PROFIT1] move[0] check (status=ok events only): max |move[0]| = 2.705e-13
+Counter({'ok': 35629})
+
+[exited with code 0]

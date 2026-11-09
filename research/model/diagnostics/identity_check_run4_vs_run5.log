@@ -1,0 +1,47 @@
+=== report.json: everything except coverage_by_fold ===
+  build2_price_diag: SAME
+  cleaned_series_manifest: DIFFERENT
+  cleaned_series_s3_sync_ok: SAME
+  coins_without_build2_1m: SAME
+  coins_without_fundinghist: SAME
+  config: SAME
+  failed_ctxs_days: SAME
+  impact_offminute_dropped: SAME
+  runs: SAME
+ALL NON-COVERAGE FIELDS SAME: False
+
+=== coverage_by_fold: ref (bug) vs new (fixed) ===
+  fold 1: covered 5782822->11565644, total 11565644->11565644, share 0.500000->1.000000
+  fold 2: covered 4850070->9700140, total 9700140->9700140, share 0.500000->1.000000
+  fold 3: covered 960398->1920796, total 1920796->1920796, share 0.500000->1.000000
+  fold 4: covered 2339092->4678184, total 4678184->4678184, share 0.500000->1.000000
+  fold 5: covered 4312175->8624350, total 8624350->8624350, share 0.500000->1.000000
+  fold 6: covered 1346240->2692480, total 2692480->2692480, share 0.500000->1.000000
+  fold 7: covered 1822232->3644464, total 3644464->3644464, share 0.500000->1.000000
+
+=== trades_*.parquet: row-for-row match ===
+  trades_q0.001_stop0p5_feemaker.parquet: MATCH (ref n=1575, new n=1575)
+  trades_q0.001_stop0p5_feetaker.parquet: MATCH (ref n=1498, new n=1498)
+  trades_q0.001_stop1p0_feemaker.parquet: MATCH (ref n=1557, new n=1557)
+  trades_q0.001_stop1p0_feetaker.parquet: MATCH (ref n=1479, new n=1479)
+  trades_q0.001_stop2p0_feemaker.parquet: MATCH (ref n=1554, new n=1554)
+  trades_q0.001_stop2p0_feetaker.parquet: MATCH (ref n=1471, new n=1471)
+  trades_q0.001_stopnone_feemaker.parquet: MATCH (ref n=1639, new n=1639)
+  trades_q0.001_stopnone_feetaker.parquet: MATCH (ref n=1542, new n=1542)
+  trades_q0.005_stop0p5_feemaker.parquet: MATCH (ref n=2275, new n=2275)
+  trades_q0.005_stop0p5_feetaker.parquet: MATCH (ref n=2095, new n=2095)
+  trades_q0.005_stop1p0_feemaker.parquet: MATCH (ref n=2129, new n=2129)
+  trades_q0.005_stop1p0_feetaker.parquet: MATCH (ref n=1937, new n=1937)
+  trades_q0.005_stop2p0_feemaker.parquet: MATCH (ref n=2210, new n=2210)
+  trades_q0.005_stop2p0_feetaker.parquet: MATCH (ref n=1996, new n=1996)
+  trades_q0.005_stopnone_feemaker.parquet: MATCH (ref n=2731, new n=2731)
+  trades_q0.005_stopnone_feetaker.parquet: MATCH (ref n=2495, new n=2495)
+  trades_q0.01_stop0p5_feemaker.parquet: MATCH (ref n=2927, new n=2927)
+  trades_q0.01_stop0p5_feetaker.parquet: MATCH (ref n=2662, new n=2662)
+  trades_q0.01_stop1p0_feemaker.parquet: MATCH (ref n=2733, new n=2733)
+  trades_q0.01_stop1p0_feetaker.parquet: MATCH (ref n=2488, new n=2488)
+  trades_q0.01_stop2p0_feemaker.parquet: MATCH (ref n=2658, new n=2658)
+  trades_q0.01_stop2p0_feetaker.parquet: MATCH (ref n=2419, new n=2419)
+  trades_q0.01_stopnone_feemaker.parquet: MATCH (ref n=3351, new n=3351)
+  trades_q0.01_stopnone_feetaker.parquet: MATCH (ref n=2940, new n=2940)
+ALL TRADES PARQUETS MATCH: True
