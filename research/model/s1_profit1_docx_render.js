@@ -297,7 +297,7 @@ if (data.method_data.pooled_cost_share_diagnostic) {
   body.push(p(`${d.label}: n_trades=${int(d.n_trades)}, gross=${money(d.gross)}, fee=${money(d.fee)}, funding_net=${money(d.funding_net)}, net=${money(d.net)}, fee_share_of_gross=${pct(d.fee_share_of_gross)}.`));
 }
 body.push(h2("Account rules"));
-body.push(bullets([
+body.push(...bullets([
   S.account_rules_start,
   "1:|beta| leg split per pair; cross-margin liquidation via account_value/maintenance ratio.",
   "Admission ordering: existing positions processed before new admissions; ties broken by p_cal with a seeded tie-break.",

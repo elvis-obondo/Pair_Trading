@@ -1,4 +1,4 @@
-[DOCXCHECK] extracted 67900 chars to /Users/elvisobondo/Pair_Trading/research/model/diagnostics/docx_extracted_text.txt
+[DOCXCHECK] extracted 68321 chars to /Users/elvisobondo/Pair_Trading/research/model/diagnostics/docx_extracted_text.txt
 [DOCXCHECK] 3408 distinct numbers found in docx_data.json (9757 decimal-rounding variants, 5864 %-conversion variants)
 [DOCXCHECK] 2426 distinct numbers found in the extracted docx text
 [DOCXCHECK] matched via decimal rounding only: 1918

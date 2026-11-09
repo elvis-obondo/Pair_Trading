@@ -6671,3 +6671,8 @@ Costs model
 slippage_spread_share = 0 for this reported run (slippage excluded by the user's choice -- the legs are small). Fees and funding are applied as described in the per-run cost tables above.
 cost-share diagnostic (OVERLAPPING accounts across the 24 runs, not a combined P&L): n_trades=229,151, gross=$43,937.08, fee=$25,541.23, funding_net=$221.80, net=$18,174.04, fee_share_of_gross=58.13%.
 Account rules
+$1,000 starting cross-margin account; margin_frac x current equity x leverage sizing.
+1:|beta| leg split per pair; cross-margin liquidation via account_value/maintenance ratio.
+Admission ordering: existing positions processed before new admissions; ties broken by p_cal with a seeded tie-break.
+A liquidating minute admits nothing new.
+Taker-rate forced liquidation; funding applied hourly from realized funding history.
