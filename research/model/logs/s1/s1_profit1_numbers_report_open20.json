@@ -1,0 +1,4634 @@
+{
+  "runs": {
+    "q0.01_stop0p5_feetaker": {
+      "q": 0.01,
+      "stop": "0p5",
+      "fee": "taker",
+      "n_trades": 22681,
+      "final_equity": 130.72511439884585,
+      "total_return": -0.8692748856011542,
+      "cagr": -0.9746882594256142,
+      "cagr_n_days": 202,
+      "daily_pnl_mean": -4.282142293601744,
+      "daily_pnl_median": -1.2178805246162199,
+      "share_positive_days": 0.2019704433497537,
+      "worst_day": -74.86373453204283,
+      "best_day": 18.653676097049157,
+      "max_drawdown": {
+        "max_dd_usd": -869.2748856011542,
+        "max_dd_pct": -0.8692748856011542,
+        "start": "2025-12-20",
+        "bottom": "2026-07-11",
+        "recovery": null,
+        "longest_underwater_days": 203
+      },
+      "sharpe": -9.820748585799995,
+      "sortino": -11.41903269817076,
+      "sharpe_sortino_n_days": 203,
+      "monthly": {
+        "1": {
+          "n_days": 30,
+          "total_pnl_usd": -484.863802880698,
+          "total_pnl_pct": -0.48486380288069797
+        },
+        "2": {
+          "n_days": 30,
+          "total_pnl_usd": -215.05869939222288,
+          "total_pnl_pct": -0.4174793008040488
+        },
+        "3": {
+          "n_days": 30,
+          "total_pnl_usd": -26.791559443834956,
+          "total_pnl_pct": -0.08928213427120057
+        },
+        "4": {
+          "n_days": 30,
+          "total_pnl_usd": -58.93004555107717,
+          "total_pnl_pct": -0.21563511800596113
+        },
+        "5": {
+          "n_days": 30,
+          "total_pnl_usd": -36.79579426999666,
+          "total_pnl_pct": -0.17165748886582843
+        },
+        "6": {
+          "n_days": 30,
+          "total_pnl_usd": -28.48221491033948,
+          "total_pnl_pct": -0.1604088708950998
+        },
+        "7": {
+          "n_days": 23,
+          "total_pnl_usd": -18.35276915298499,
+          "total_pnl_pct": -0.1231085974372863
+        },
+        "outside": {
+          "n_days": 0,
+          "total_pnl_usd": 0.0,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 0,
+      "win_rate": 0.2804550063930162,
+      "stop_share": 0.7172523257351968,
+      "timeout_share": 0.002292667871786958,
+      "liquidation_share": 0.0,
+      "mean_net": -0.038326126960943036,
+      "median_net": -0.11229635682025296,
+      "mean_return_on_margin": -0.0017744498040386024,
+      "median_return_on_margin": -0.007819853671678227,
+      "mean_win": 0.4292126305781101,
+      "mean_loss": -0.2224741049026706,
+      "profit_factor": 0.7598753588638476,
+      "mean_holding_minutes": 46.81477888981967,
+      "total_fee": 1390.3312189665062,
+      "fee_share_of_gross": 2.670320146378315,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 13.027094487315892,
+      "funding_paid_share_of_gross": 0.025020306228980348,
+      "total_funding_received": 13.422554716477926,
+      "funding_received_share_of_gross": 0.025779841368965002,
+      "total_gross": 520.6608731361953,
+      "peak_margin_used": 998.5418205555109,
+      "distance_to_liquidation_ratio": {
+        "min": 2.1086247989070337,
+        "median": 4.385509819035228,
+        "date_of_min": "2025-12-28"
+      },
+      "mean_open_positions": 5.163773063717623,
+      "max_open_positions": 20,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "min_order": 7560,
+        "margin": 4006,
+        "book_full": 1382
+      },
+      "by_fold": {
+        "1": {
+          "n": 6424,
+          "mean_net": -0.07547693070994599
+        },
+        "2": {
+          "n": 5764,
+          "mean_net": -0.037691911939456965
+        },
+        "3": {
+          "n": 1063,
+          "mean_net": -0.023207456701410424
+        },
+        "4": {
+          "n": 2689,
+          "mean_net": -0.021754678625369634
+        },
+        "5": {
+          "n": 4689,
+          "mean_net": -0.007928303181661347
+        },
+        "6": {
+          "n": 1387,
+          "mean_net": -0.020517997283643133
+        },
+        "7": {
+          "n": 665,
+          "mean_net": -0.027598149102232464
+        }
+      },
+      "top10_pairs": {
+        "HMSTR/MEGA": 9.42816883339557,
+        "FXS/MEGA": 8.593323699163266,
+        "HMSTR/MEW": 7.876716518690122,
+        "MEGA/SYRUP": 7.80803111573528,
+        "CRV/HMSTR": 6.905864561709133,
+        "FOGO/MAVIA": 6.805816451164788,
+        "NOT/OP": 6.700405565928682,
+        "MEGA/TNSR": 6.420543987584185,
+        "ACE/MEGA": 6.218062953900323,
+        "BLAST/FOGO": 6.213673206226698
+      },
+      "bottom10_pairs": {
+        "MEGA/PROMPT": -3.3298279150662276,
+        "FOGO/PUMP": -3.346175916793185,
+        "DOOD/FTT": -3.3575383641059995,
+        "FOGO/SAGA": -3.3901785122327897,
+        "FOGO/PROMPT": -3.5563329434170177,
+        "AIXBT/FOGO": -3.9084332630066285,
+        "ACE/HMSTR": -4.012792789905238,
+        "FOGO/VINE": -4.105161157206959,
+        "FOGO/OM": -6.048322447155211,
+        "FOGO/MELANIA": -6.781205526483145
+      },
+      "top10_coins": {
+        "HMSTR": 78.43285641846961,
+        "MEGA": 61.69407474479991,
+        "NOT": 38.797604033534554,
+        "MEW": 13.769532145756926,
+        "STABLE": 8.391620964735477,
+        "ZEREBRO": 6.743553533698964,
+        "ZETA": 6.6077689838807565,
+        "POLYX": 4.832283042558072,
+        "YZY": 4.46838915513919,
+        "LDO": 3.453530575653893
+      },
+      "bottom10_coins": {
+        "ETC": -21.90335388303421,
+        "LTC": -22.290249283459577,
+        "OM": -22.326821629221143,
+        "LINK": -22.630476312975766,
+        "COMP": -22.884342358777758,
+        "VINE": -23.002195425795005,
+        "AVNT": -23.644585840547848,
+        "DYDX": -24.107279453675275,
+        "MORPHO": -24.426129687676934,
+        "FOGO": -56.409244445128714
+      }
+    },
+    "q0.01_stop0p5_feemaker": {
+      "q": 0.01,
+      "stop": "0p5",
+      "fee": "maker",
+      "n_trades": 28556,
+      "final_equity": 1207.3636002492347,
+      "total_return": 0.20736360024923473,
+      "cagr": 0.4032895272809225,
+      "cagr_n_days": 203,
+      "daily_pnl_mean": 1.016488236515856,
+      "daily_pnl_median": -0.7887110921355429,
+      "share_positive_days": 0.46568627450980393,
+      "worst_day": -48.21031810205909,
+      "best_day": 124.24452651609886,
+      "max_drawdown": {
+        "max_dd_usd": -244.3524290512364,
+        "max_dd_pct": -0.1683197155086735,
+        "start": "2026-05-04",
+        "bottom": "2026-07-12",
+        "recovery": null,
+        "longest_underwater_days": 71
+      },
+      "sharpe": 1.0811978693912363,
+      "sortino": 1.9570752359258141,
+      "sharpe_sortino_n_days": 204,
+      "monthly": {
+        "1": {
+          "n_days": 30,
+          "total_pnl_usd": -24.557448425353755,
+          "total_pnl_pct": -0.02455744842535379
+        },
+        "2": {
+          "n_days": 30,
+          "total_pnl_usd": 17.914382777079936,
+          "total_pnl_pct": 0.018365389892168293
+        },
+        "3": {
+          "n_days": 30,
+          "total_pnl_usd": 4.760195934931971,
+          "total_pnl_pct": 0.00479202970283632
+        },
+        "4": {
+          "n_days": 30,
+          "total_pnl_usd": -27.197168740286997,
+          "total_pnl_pct": -0.027248474066842276
+        },
+        "5": {
+          "n_days": 30,
+          "total_pnl_usd": 408.3650014141598,
+          "total_pnl_pct": 0.4205959477481154
+        },
+        "6": {
+          "n_days": 30,
+          "total_pnl_usd": -84.08917763093291,
+          "total_pnl_pct": -0.06096577566570571
+        },
+        "7": {
+          "n_days": 23,
+          "total_pnl_usd": -86.59482745267746,
+          "total_pnl_pct": -0.06685848458859911
+        },
+        "outside": {
+          "n_days": 1,
+          "total_pnl_usd": -1.237357627685924,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 3,
+      "win_rate": 0.2765793528505393,
+      "stop_share": 0.7212844936265583,
+      "timeout_share": 0.0021361535229023672,
+      "liquidation_share": 0.0,
+      "mean_net": 0.007261647298264502,
+      "median_net": -0.3122809460396332,
+      "mean_return_on_margin": 0.00015146910022375678,
+      "median_return_on_margin": -0.005807377985842862,
+      "mean_win": 1.2408112940820992,
+      "mean_loss": -0.46906898908663935,
+      "profit_factor": 1.0214589021968232,
+      "mean_holding_minutes": 47.37463230144278,
+      "total_fee": 1603.4334783174982,
+      "fee_share_of_gross": 0.8857695975456229,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 46.41803535758345,
+      "funding_paid_share_of_gross": 0.025642276435869586,
+      "total_funding_received": 47.00003907816803,
+      "funding_received_share_of_gross": 0.025963787248961253,
+      "total_gross": 1810.2150748461547,
+      "peak_margin_used": 1415.2473159111428,
+      "distance_to_liquidation_ratio": {
+        "min": 2.028091988442775,
+        "median": 3.2225165826624247,
+        "date_of_min": "2026-04-28"
+      },
+      "mean_open_positions": 5.806237016944497,
+      "max_open_positions": 20,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "margin": 3604,
+        "book_full": 3012,
+        "min_order": 457
+      },
+      "by_fold": {
+        "1": {
+          "n": 6501,
+          "mean_net": -0.0037774878365414728
+        },
+        "2": {
+          "n": 5931,
+          "mean_net": 0.0018907311268964867
+        },
+        "3": {
+          "n": 1406,
+          "mean_net": 0.007987380768265514
+        },
+        "4": {
+          "n": 3571,
+          "mean_net": -0.007054550677357775
+        },
+        "5": {
+          "n": 6053,
+          "mean_net": 0.06750941245436164
+        },
+        "6": {
+          "n": 2226,
+          "mean_net": -0.0386943499713609
+        },
+        "7": {
+          "n": 2868,
+          "mean_net": -0.03062489019538504
+        }
+      },
+      "top10_pairs": {
+        "HMSTR/MEW": 20.999124223566255,
+        "CRV/HMSTR": 20.106475543284173,
+        "YZY/ZETA": 19.048548372802017,
+        "BOME/HMSTR": 17.76577988214083,
+        "NOT/OP": 17.73672376139961,
+        "GRASS/YZY": 16.718135969764802,
+        "MAVIA/YZY": 15.710348854869206,
+        "HMSTR/VIRTUAL": 14.952913621203956,
+        "HMSTR/WCT": 14.697402373686328,
+        "MAV/ZEREBRO": 13.985944273151796
+      },
+      "bottom10_pairs": {
+        "WIF/XAI": -6.358547326263837,
+        "TST/USUAL": -6.491367325803897,
+        "TST/XAI": -6.536125505902914,
+        "TST/ZK": -7.03697097991935,
+        "FOGO/OM": -7.068071655227806,
+        "JUP/ZEC": -7.3813082491544435,
+        "BCH/JUP": -8.264116885142435,
+        "REZ/ZEREBRO": -9.257879331408345,
+        "FTT/TST": -9.495099476065533,
+        "ACE/HMSTR": -9.73654451022842
+      },
+      "top10_coins": {
+        "HMSTR": 532.6945120562341,
+        "YZY": 197.76742723681772,
+        "NOT": 162.63455199561938,
+        "MEW": 124.5586592456979,
+        "BOME": 93.43499487745004,
+        "MEGA": 88.98295680467932,
+        "FTT": 84.96345859376929,
+        "ZETA": 68.84772463131347,
+        "POLYX": 47.129825430476075,
+        "RSR": 44.688358826787145
+      },
+      "bottom10_coins": {
+        "kLUNC": -31.75810191078425,
+        "EIGEN": -33.47138191792555,
+        "CELO": -33.7283937116442,
+        "DYM": -34.05633239248755,
+        "PURR": -38.52281886000038,
+        "VINE": -40.09060941831034,
+        "TON": -42.117969562922106,
+        "AVNT": -42.60475458638358,
+        "kPEPE": -44.25704077962837,
+        "FOGO": -52.84759481823551
+      }
+    },
+    "q0.01_stop1p0_feetaker": {
+      "q": 0.01,
+      "stop": "1p0",
+      "fee": "taker",
+      "n_trades": 24169,
+      "final_equity": 270.9005202465884,
+      "total_return": -0.7290994797534116,
+      "cagr": -0.9044621801856938,
+      "cagr_n_days": 203,
+      "daily_pnl_mean": -3.5740170576147623,
+      "daily_pnl_median": -2.2310776667161463,
+      "share_positive_days": 0.3431372549019608,
+      "worst_day": -77.5241734611044,
+      "best_day": 51.77685635069565,
+      "max_drawdown": {
+        "max_dd_usd": -729.0994797534115,
+        "max_dd_pct": -0.7290994797534115,
+        "start": "2025-12-20",
+        "bottom": "2026-07-12",
+        "recovery": null,
+        "longest_underwater_days": 204
+      },
+      "sharpe": -5.187245056435389,
+      "sortino": -7.2014565898554865,
+      "sharpe_sortino_n_days": 204,
+      "monthly": {
+        "1": {
+          "n_days": 30,
+          "total_pnl_usd": -271.0648352511637,
+          "total_pnl_pct": -0.27106483525116365
+        },
+        "2": {
+          "n_days": 30,
+          "total_pnl_usd": -115.22572052605892,
+          "total_pnl_pct": -0.15807403195558745
+        },
+        "3": {
+          "n_days": 30,
+          "total_pnl_usd": -50.554849336679695,
+          "total_pnl_pct": -0.08237586990486045
+        },
+        "4": {
+          "n_days": 30,
+          "total_pnl_usd": -125.51051695361934,
+          "total_pnl_pct": -0.22287044817419066
+        },
+        "5": {
+          "n_days": 30,
+          "total_pnl_usd": -14.069734166797161,
+          "total_pnl_pct": -0.03214880510497364
+        },
+        "6": {
+          "n_days": 30,
+          "total_pnl_usd": -74.72402695683502,
+          "total_pnl_pct": -0.17641301475561488
+        },
+        "7": {
+          "n_days": 23,
+          "total_pnl_usd": -77.67700338712035,
+          "total_pnl_pct": -0.22266570974531674
+        },
+        "outside": {
+          "n_days": 1,
+          "total_pnl_usd": -0.27279317513739443,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 0,
+      "win_rate": 0.40353345194257106,
+      "stop_share": 0.5886052381149406,
+      "timeout_share": 0.007861309942488312,
+      "liquidation_share": 0.0,
+      "mean_net": -0.03016672099604475,
+      "median_net": -0.23685054920202986,
+      "mean_return_on_margin": -0.0010432070270894953,
+      "median_return_on_margin": -0.009794085136733797,
+      "mean_win": 0.6128080711128148,
+      "mean_loss": -0.4742893580917341,
+      "profit_factor": 0.8924626702342012,
+      "mean_holding_minutes": 81.1918573379122,
+      "total_fee": 2132.805462191687,
+      "fee_share_of_gross": 1.5155723269054784,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 41.0229585897569,
+      "funding_paid_share_of_gross": 0.029150929097178525,
+      "total_funding_received": 37.46818261442585,
+      "funding_received_share_of_gross": 0.02662490401328554,
+      "total_gross": 1407.2607584136126,
+      "peak_margin_used": 1001.9232884163741,
+      "distance_to_liquidation_ratio": {
+        "min": 2.043756950710932,
+        "median": 2.6977015917422333,
+        "date_of_min": "2026-02-17"
+      },
+      "mean_open_positions": 7.715638282395775,
+      "max_open_positions": 20,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "margin": 6045,
+        "book_full": 3521,
+        "min_order": 1894
+      },
+      "by_fold": {
+        "1": {
+          "n": 5321,
+          "mean_net": -0.051355052015554965
+        },
+        "2": {
+          "n": 4880,
+          "mean_net": -0.023503900632693822
+        },
+        "3": {
+          "n": 1269,
+          "mean_net": -0.03912202358648924
+        },
+        "4": {
+          "n": 3148,
+          "mean_net": -0.0393970206351396
+        },
+        "5": {
+          "n": 5027,
+          "mean_net": -0.002624275565660345
+        },
+        "6": {
+          "n": 2101,
+          "mean_net": -0.03633056362188675
+        },
+        "7": {
+          "n": 2423,
+          "mean_net": -0.03217077860596735
+        }
+      },
+      "top10_pairs": {
+        "FOGO/STABLE": 19.66593623655769,
+        "FOGO/GRIFFAIN": 12.590399465020019,
+        "HMSTR/MEGA": 11.937754596423781,
+        "AR/ZK": 11.744831026328605,
+        "MEGA/TNSR": 10.514576290451792,
+        "FXS/MEGA": 10.213775306589616,
+        "BOME/HMSTR": 9.993368440203469,
+        "FOGO/MEGA": 9.890657296149605,
+        "FOGO/NEAR": 9.058551723589463,
+        "CRV/HMSTR": 8.141827163420782
+      },
+      "bottom10_pairs": {
+        "FOGO/VINE": -5.707915869512735,
+        "AIXBT/FOGO": -6.027027911346706,
+        "MEGA/ZEREBRO": -6.055634117366792,
+        "FOGO/MELANIA": -6.215323203105571,
+        "HMSTR/TAO": -6.375555611462504,
+        "FOGO/kLUNC": -6.630999103996569,
+        "HMSTR/NOT": -6.740906259801676,
+        "AERO/MEGA": -6.774224538594742,
+        "FTT/TST": -7.349939081283598,
+        "HMSTR/kNEIRO": -7.844039221074811
+      },
+      "top10_coins": {
+        "HMSTR": 184.1725220273248,
+        "MEGA": 110.60577725691273,
+        "NOT": 100.27805004753283,
+        "BOME": 63.49162909282534,
+        "MEW": 55.8892291125801,
+        "YZY": 38.45044007948634,
+        "FTT": 31.049083257548435,
+        "STABLE": 20.35170341068552,
+        "MANTA": 16.08437097022498,
+        "REZ": 13.279951933312502
+      },
+      "bottom10_coins": {
+        "COMP": -27.91946208057456,
+        "LINK": -28.152579206716894,
+        "EIGEN": -28.651131572424422,
+        "SOPH": -29.081252751336805,
+        "HYPE": -29.691524386660564,
+        "BLUR": -31.51744289887915,
+        "PURR": -33.33494251479089,
+        "VINE": -33.837716986704685,
+        "AVNT": -35.67732710948243,
+        "LTC": -40.182273624845536
+      }
+    },
+    "q0.01_stop1p0_feemaker": {
+      "q": 0.01,
+      "stop": "1p0",
+      "fee": "maker",
+      "n_trades": 25127,
+      "final_equity": 3525.196850348258,
+      "total_return": 2.5251968503482582,
+      "cagr": 8.635003534772206,
+      "cagr_n_days": 203,
+      "daily_pnl_mean": 12.378415933079696,
+      "daily_pnl_median": 1.424452214810799,
+      "share_positive_days": 0.5196078431372549,
+      "worst_day": -114.51122600425015,
+      "best_day": 316.3291934358299,
+      "max_drawdown": {
+        "max_dd_usd": -515.2563746473788,
+        "max_dd_pct": -0.12752440034692772,
+        "start": "2026-06-29",
+        "bottom": "2026-07-12",
+        "recovery": null,
+        "longest_underwater_days": 42
+      },
+      "sharpe": 5.274042375093746,
+      "sortino": 12.70921851046278,
+      "sharpe_sortino_n_days": 204,
+      "monthly": {
+        "1": {
+          "n_days": 30,
+          "total_pnl_usd": 286.1246817725737,
+          "total_pnl_pct": 0.2861246817725738
+        },
+        "2": {
+          "n_days": 30,
+          "total_pnl_usd": 492.5450644478883,
+          "total_pnl_pct": 0.38296836335420337
+        },
+        "3": {
+          "n_days": 30,
+          "total_pnl_usd": 137.62028480087133,
+          "total_pnl_pct": 0.0773725898769595
+        },
+        "4": {
+          "n_days": 30,
+          "total_pnl_usd": 172.6444750175308,
+          "total_pnl_pct": 0.09009308206102595
+        },
+        "5": {
+          "n_days": 30,
+          "total_pnl_usd": 1376.387928668089,
+          "total_pnl_pct": 0.658894725846652
+        },
+        "6": {
+          "n_days": 30,
+          "total_pnl_usd": 53.5729210419172,
+          "total_pnl_pct": 0.015459721873311905
+        },
+        "7": {
+          "n_days": 23,
+          "total_pnl_usd": 15.86188513329671,
+          "total_pnl_pct": 0.004507631949720592
+        },
+        "outside": {
+          "n_days": 1,
+          "total_pnl_usd": -9.560390533908958,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 7,
+      "win_rate": 0.40522147490747007,
+      "stop_share": 0.5868189596848012,
+      "timeout_share": 0.007959565407728738,
+      "liquidation_share": 0.0,
+      "mean_net": 0.1004973474886907,
+      "median_net": -0.6538103947934591,
+      "mean_return_on_margin": 0.0010381161003438668,
+      "median_return_on_margin": -0.0078094248418260955,
+      "mean_win": 2.4354096815246113,
+      "mean_loss": -1.5276639619042305,
+      "profit_factor": 1.1116576103296125,
+      "mean_holding_minutes": 81.97536514506308,
+      "total_fee": 2889.755085483077,
+      "fee_share_of_gross": 0.5327501291984515,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 157.1398495713584,
+      "funding_paid_share_of_gross": 0.028970024339405803,
+      "total_funding_received": 147.86957107716134,
+      "funding_received_share_of_gross": 0.02726097221581952,
+      "total_gross": 5424.222214325605,
+      "peak_margin_used": 4006.7077594914654,
+      "distance_to_liquidation_ratio": {
+        "min": 2.0311806474693963,
+        "median": 2.544934224019977,
+        "date_of_min": "2026-03-27"
+      },
+      "mean_open_positions": 8.02619684063686,
+      "max_open_positions": 20,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "book_full": 5243,
+        "margin": 5112,
+        "min_order": 147
+      },
+      "by_fold": {
+        "1": {
+          "n": 5340,
+          "mean_net": 0.05287791429998311
+        },
+        "2": {
+          "n": 4929,
+          "mean_net": 0.10048712739704203
+        },
+        "3": {
+          "n": 1400,
+          "mean_net": 0.09747639042701113
+        },
+        "4": {
+          "n": 3338,
+          "mean_net": 0.05351270165490147
+        },
+        "5": {
+          "n": 5215,
+          "mean_net": 0.2658602509628204
+        },
+        "6": {
+          "n": 2194,
+          "mean_net": 0.018082355949865656
+        },
+        "7": {
+          "n": 2711,
+          "mean_net": 0.0023244170414647523
+        }
+      },
+      "top10_pairs": {
+        "YZY/ZETA": 45.8627593591123,
+        "MAVIA/SKR": 45.16287844194986,
+        "LDO/LIT": 41.3099264704246,
+        "GRASS/YZY": 39.982797774700764,
+        "APT/WLD": 39.3376363208031,
+        "MAVIA/YZY": 37.96828352867624,
+        "BOME/HMSTR": 37.268628222767354,
+        "MAV/ZEREBRO": 35.20561674776483,
+        "HMSTR/TST": 33.77338120166818,
+        "PENDLE/XLM": 33.21613783598495
+      },
+      "bottom10_pairs": {
+        "DOGE/INJ": -17.228720421437487,
+        "EIGEN/FTT": -17.59881518011343,
+        "AVAX/JUP": -18.311584514927777,
+        "APT/ENA": -18.642812748075606,
+        "BCH/JUP": -18.651580946328565,
+        "EIGEN/ENS": -19.335030303259373,
+        "CFX/ZRO": -21.673226313246765,
+        "NEAR/ONDO": -21.692240473792133,
+        "REZ/ZEREBRO": -23.329617321313556,
+        "FTT/TST": -33.307878005968085
+      },
+      "top10_coins": {
+        "HMSTR": 1240.7236075346445,
+        "YZY": 555.9031480749192,
+        "NOT": 382.05056982492,
+        "BOME": 352.07713785896135,
+        "MEW": 348.27124299274965,
+        "FTT": 245.15958025096631,
+        "TNSR": 177.0916912296312,
+        "MAVIA": 169.5819247931094,
+        "RSR": 158.14136836608546,
+        "BLAST": 146.1683816866708
+      },
+      "bottom10_coins": {
+        "COMP": -64.24984957758492,
+        "AVNT": -67.18081392679451,
+        "BABY": -68.65054090314244,
+        "LTC": -72.40268521310055,
+        "CELO": -77.09650495766905,
+        "CFX": -77.22451286041364,
+        "BLUR": -77.80687878560566,
+        "ORDI": -84.16648390991544,
+        "ARB": -96.03634428504361,
+        "EIGEN": -117.7900984270857
+      }
+    },
+    "q0.01_stop2p0_feetaker": {
+      "q": 0.01,
+      "stop": "2p0",
+      "fee": "taker",
+      "n_trades": 20432,
+      "final_equity": 1132.5396600768104,
+      "total_return": 0.13253966007681028,
+      "cagr": 0.2508051067210797,
+      "cagr_n_days": 203,
+      "daily_pnl_mean": 0.6497042160627959,
+      "daily_pnl_median": -1.0191463840235429,
+      "share_positive_days": 0.47058823529411764,
+      "worst_day": -111.3192130136083,
+      "best_day": 162.16618781333636,
+      "max_drawdown": {
+        "max_dd_usd": -745.3848576079672,
+        "max_dd_pct": -0.39691949840823426,
+        "start": "2026-05-06",
+        "bottom": "2026-07-12",
+        "recovery": null,
+        "longest_underwater_days": 67
+      },
+      "sharpe": 0.6917290518835584,
+      "sortino": 1.2608964350596217,
+      "sharpe_sortino_n_days": 204,
+      "monthly": {
+        "1": {
+          "n_days": 30,
+          "total_pnl_usd": 30.954623548138443,
+          "total_pnl_pct": 0.030954623548138382
+        },
+        "2": {
+          "n_days": 30,
+          "total_pnl_usd": 235.4612790607075,
+          "total_pnl_pct": 0.2283915059717594
+        },
+        "3": {
+          "n_days": 30,
+          "total_pnl_usd": 37.68474824903524,
+          "total_pnl_pct": 0.029757008081945147
+        },
+        "4": {
+          "n_days": 30,
+          "total_pnl_usd": -175.6030327621918,
+          "total_pnl_pct": -0.1346545089496537
+        },
+        "5": {
+          "n_days": 30,
+          "total_pnl_usd": 474.04632060433073,
+          "total_pnl_pct": 0.4200685167632623
+        },
+        "6": {
+          "n_days": 30,
+          "total_pnl_usd": -193.01790007843465,
+          "total_pnl_pct": -0.12044468511422557
+        },
+        "7": {
+          "n_days": 23,
+          "total_pnl_usd": -272.4704280745227,
+          "total_pnl_pct": -0.19330641691513484
+        },
+        "outside": {
+          "n_days": 1,
+          "total_pnl_usd": -4.515950470252392,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 4,
+      "win_rate": 0.5518794048551292,
+      "stop_share": 0.4177760375880971,
+      "timeout_share": 0.030344557556773687,
+      "liquidation_share": 0.0,
+      "mean_net": 0.006486866683475883,
+      "median_net": 0.4744017494027182,
+      "mean_return_on_margin": 0.00017414064157513415,
+      "median_return_on_margin": 0.007683223217213429,
+      "mean_win": 1.2458523416118459,
+      "mean_loss": -1.6086979214629433,
+      "profit_factor": 1.0092874988394085,
+      "mean_holding_minutes": 138.5419929522318,
+      "total_fee": 3947.240353749937,
+      "fee_share_of_gross": 0.9655430605580846,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 132.13493085879148,
+      "funding_paid_share_of_gross": 0.03232181324525213,
+      "total_funding_received": 123.81104234019975,
+      "funding_received_share_of_gross": 0.03028568874415606,
+      "total_gross": 4088.1039023453077,
+      "peak_margin_used": 1883.7382586094172,
+      "distance_to_liquidation_ratio": {
+        "min": 2.017690656277024,
+        "median": 2.3890496790151428,
+        "date_of_min": "2026-03-19"
+      },
+      "mean_open_positions": 10.394719447708578,
+      "max_open_positions": 20,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "margin": 8412,
+        "book_full": 6515,
+        "min_order": 270
+      },
+      "by_fold": {
+        "1": {
+          "n": 4034,
+          "mean_net": 0.008077295564023548
+        },
+        "2": {
+          "n": 3703,
+          "mean_net": 0.06445043969987288
+        },
+        "3": {
+          "n": 1264,
+          "mean_net": 0.022094878578675748
+        },
+        "4": {
+          "n": 2868,
+          "mean_net": -0.0581809121732378
+        },
+        "5": {
+          "n": 4100,
+          "mean_net": 0.11731098847596164
+        },
+        "6": {
+          "n": 2099,
+          "mean_net": -0.09789346735785211
+        },
+        "7": {
+          "n": 2364,
+          "mean_net": -0.11644072064933692
+        }
+      },
+      "top10_pairs": {
+        "GRASS/YZY": 25.902297011085757,
+        "YZY/ZETA": 23.82012659200189,
+        "FOGO/STABLE": 23.048317344901474,
+        "AR/ZK": 21.745008233287734,
+        "MAVIA/YZY": 21.193233883557593,
+        "LDO/LIT": 20.764238160443806,
+        "HMSTR/MOODENG": 19.800078413494713,
+        "YZY/kSHIB": 19.38874575334083,
+        "MAV/ZEREBRO": 18.651204185442595,
+        "FOGO/GRIFFAIN": 18.365933476110587
+      },
+      "bottom10_pairs": {
+        "EIGEN/ENS": -11.193790316277095,
+        "DYM/HMSTR": -11.266575992928017,
+        "HYPER/TNSR": -11.272983472116906,
+        "MORPHO/S": -11.930870372277973,
+        "CFX/DASH": -12.278511344536003,
+        "NEO/VINE": -12.544070299283337,
+        "REZ/ZEREBRO": -13.643839592774627,
+        "WLD/kBONK": -13.756934976454865,
+        "ARB/ZK": -14.327484912011226,
+        "FTT/TST": -18.607893644056006
+      },
+      "top10_coins": {
+        "HMSTR": 577.3534932350459,
+        "MEW": 235.23012816216664,
+        "BOME": 220.79172500807422,
+        "YZY": 200.59105864219015,
+        "MAVIA": 163.33969501399073,
+        "NOT": 163.22782724034312,
+        "FOGO": 137.42087727594316,
+        "TNSR": 104.53985378849755,
+        "RSR": 92.78532524662702,
+        "TRB": 87.95445244854513
+      },
+      "bottom10_coins": {
+        "EIGEN": -50.86374782566519,
+        "COMP": -51.39780313713911,
+        "MORPHO": -52.68416185366123,
+        "ZRO": -54.0310681151976,
+        "PAXG": -55.60159799216356,
+        "SOPH": -57.86668842645486,
+        "VINE": -59.57312969411714,
+        "LTC": -61.86435303634039,
+        "CFX": -64.41882885410999,
+        "HYPE": -77.9019856851284
+      }
+    },
+    "q0.01_stop2p0_feemaker": {
+      "q": 0.01,
+      "stop": "2p0",
+      "fee": "maker",
+      "n_trades": 20508,
+      "final_equity": 9270.444138624953,
+      "total_return": 8.270444138624953,
+      "cagr": 53.811963204375616,
+      "cagr_n_days": 203,
+      "daily_pnl_mean": 40.541392836396824,
+      "daily_pnl_median": 18.257410143991592,
+      "share_positive_days": 0.6519607843137255,
+      "worst_day": -367.50468392536277,
+      "best_day": 795.7482682076397,
+      "max_drawdown": {
+        "max_dd_usd": -993.5591102031685,
+        "max_dd_pct": -0.09680035032301912,
+        "start": "2026-06-29",
+        "bottom": "2026-07-12",
+        "recovery": null,
+        "longest_underwater_days": 15
+      },
+      "sharpe": 8.036050106569682,
+      "sortino": 20.307986244962514,
+      "sharpe_sortino_n_days": 204,
+      "monthly": {
+        "1": {
+          "n_days": 30,
+          "total_pnl_usd": 638.0060523223142,
+          "total_pnl_pct": 0.6380060523223141
+        },
+        "2": {
+          "n_days": 30,
+          "total_pnl_usd": 1332.7987433318972,
+          "total_pnl_pct": 0.8136714400061564
+        },
+        "3": {
+          "n_days": 30,
+          "total_pnl_usd": 518.518355540677,
+          "total_pnl_pct": 0.17453800946436537
+        },
+        "4": {
+          "n_days": 30,
+          "total_pnl_usd": 557.4988780018198,
+          "total_pnl_pct": 0.15977278510616277
+        },
+        "5": {
+          "n_days": 30,
+          "total_pnl_usd": 4360.971566221295,
+          "total_pnl_pct": 1.077628700930776
+        },
+        "6": {
+          "n_days": 30,
+          "total_pnl_usd": 766.6364125342043,
+          "total_pnl_pct": 0.09118164044274324
+        },
+        "7": {
+          "n_days": 23,
+          "total_pnl_usd": 130.8751491984458,
+          "total_pnl_pct": 0.014265207657043089
+        },
+        "outside": {
+          "n_days": 1,
+          "total_pnl_usd": -34.861018525700274,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 7,
+      "win_rate": 0.5517359079383655,
+      "stop_share": 0.4179344645991808,
+      "timeout_share": 0.030329627462453677,
+      "liquidation_share": 0.0,
+      "mean_net": 0.40327892230470236,
+      "median_net": 1.1568427217932693,
+      "mean_return_on_margin": 0.0022235412746157974,
+      "median_return_on_margin": 0.009606254062538391,
+      "mean_win": 4.924302935946623,
+      "mean_loss": -5.534485611348189,
+      "profit_factor": 1.1685671056811742,
+      "mean_holding_minutes": 138.77998829724984,
+      "total_fee": 4991.7137153054755,
+      "fee_share_of_gross": 0.37628166802314683,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 447.4321428800184,
+      "funding_paid_share_of_gross": 0.03372799856967783,
+      "total_funding_received": 443.69335738538837,
+      "funding_received_share_of_gross": 0.033446164209268395,
+      "total_gross": 13265.896639424942,
+      "peak_margin_used": 10234.535787154451,
+      "distance_to_liquidation_ratio": {
+        "min": 2.021133363707995,
+        "median": 2.373612368660017,
+        "date_of_min": "2026-03-19"
+      },
+      "mean_open_positions": 10.44628208375084,
+      "max_open_positions": 20,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "book_full": 7875,
+        "margin": 7143,
+        "min_order": 103
+      },
+      "by_fold": {
+        "1": {
+          "n": 4035,
+          "mean_net": 0.15879603203609144
+        },
+        "2": {
+          "n": 3719,
+          "mean_net": 0.3590437675624586
+        },
+        "3": {
+          "n": 1276,
+          "mean_net": 0.39305289436339647
+        },
+        "4": {
+          "n": 2884,
+          "mean_net": 0.2027109712397203
+        },
+        "5": {
+          "n": 4103,
+          "mean_net": 1.072486634528873
+        },
+        "6": {
+          "n": 2105,
+          "mean_net": 0.3330407108418235
+        },
+        "7": {
+          "n": 2386,
+          "mean_net": 0.04476156149931763
+        }
+      },
+      "top10_pairs": {
+        "YZY/ZETA": 104.17053118621419,
+        "GRASS/YZY": 97.0841680077871,
+        "LDO/LIT": 96.81237609647661,
+        "MAVIA/YZY": 93.67361111159882,
+        "YZY/kSHIB": 87.10269703077817,
+        "UNI/WLD": 84.15893976619016,
+        "MAV/ZEREBRO": 81.7718519793588,
+        "HYPE/ONDO": 73.4352536587179,
+        "TNSR/TURBO": 73.27369401027518,
+        "STRK/YZY": 72.42069893733242
+      },
+      "bottom10_pairs": {
+        "SNX/XLM": -52.81878120786557,
+        "DOGE/INJ": -53.529182293430296,
+        "CFX/DASH": -53.76790686261495,
+        "REZ/ZEREBRO": -55.15818594516739,
+        "GMX/RESOLV": -55.525087601648515,
+        "WIF/kPEPE": -57.32862161922523,
+        "FTT/TST": -63.79066004842209,
+        "ARB/ZK": -64.11962668154531,
+        "NEO/VINE": -65.6589882385089,
+        "EIGEN/ENS": -71.79294717121496
+      },
+      "top10_coins": {
+        "HMSTR": 2386.347895087597,
+        "YZY": 1178.7562342158074,
+        "MEW": 920.157986461787,
+        "BOME": 888.5440421705969,
+        "MAVIA": 840.5126847630344,
+        "TNSR": 787.7569893683959,
+        "RSR": 633.7764764834197,
+        "NOT": 600.4146762271656,
+        "FTT": 538.5675854026404,
+        "TRB": 532.2660927058561
+      },
+      "bottom10_coins": {
+        "PUMP": -142.0406407657136,
+        "JUP": -148.93674243392582,
+        "KAS": -170.75469769082423,
+        "POL": -172.23339457493125,
+        "RESOLV": -176.62057423089067,
+        "FET": -182.77196516643698,
+        "ZRO": -193.08086921375687,
+        "APE": -204.166000295823,
+        "EIGEN": -280.23589124689636,
+        "CFX": -284.62261023886316
+      }
+    },
+    "q0.01_stopnone_feetaker": {
+      "q": 0.01,
+      "stop": "none",
+      "fee": "taker",
+      "n_trades": 13699,
+      "final_equity": 4036.0496396839953,
+      "total_return": 3.0360496396839958,
+      "cagr": 11.289315539535112,
+      "cagr_n_days": 203,
+      "daily_pnl_mean": 14.882596272960761,
+      "daily_pnl_median": 13.288366093551417,
+      "share_positive_days": 0.6323529411764706,
+      "worst_day": -226.877559032926,
+      "best_day": 318.18007465485425,
+      "max_drawdown": {
+        "max_dd_usd": -432.70396375364,
+        "max_dd_pct": -0.1626651309262806,
+        "start": "2026-05-04",
+        "bottom": "2026-05-09",
+        "recovery": "2026-06-06",
+        "longest_underwater_days": 32
+      },
+      "sharpe": 4.644427528150464,
+      "sortino": 8.130089283935174,
+      "sharpe_sortino_n_days": 204,
+      "monthly": {
+        "1": {
+          "n_days": 30,
+          "total_pnl_usd": 240.88373154453575,
+          "total_pnl_pct": 0.2408837315445358
+        },
+        "2": {
+          "n_days": 30,
+          "total_pnl_usd": 515.8873530165047,
+          "total_pnl_pct": 0.41574189418566765
+        },
+        "3": {
+          "n_days": 30,
+          "total_pnl_usd": 159.67995806707404,
+          "total_pnl_pct": 0.0908940040454802
+        },
+        "4": {
+          "n_days": 30,
+          "total_pnl_usd": 433.6133886257562,
+          "total_pnl_pct": 0.226258526297193
+        },
+        "5": {
+          "n_days": 30,
+          "total_pnl_usd": 1178.7253993758522,
+          "total_pnl_pct": 0.5015715244653725
+        },
+        "6": {
+          "n_days": 30,
+          "total_pnl_usd": 311.3076152496428,
+          "total_pnl_pct": 0.08821936986654966
+        },
+        "7": {
+          "n_days": 23,
+          "total_pnl_usd": 203.56194860322466,
+          "total_pnl_pct": 0.053009578916195954
+        },
+        "outside": {
+          "n_days": 1,
+          "total_pnl_usd": -7.609754798595077,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 7,
+      "win_rate": 0.6996131104460179,
+      "stop_share": 0.0,
+      "timeout_share": 0.300386889553982,
+      "liquidation_share": 0.0,
+      "mean_net": 0.22162563980465866,
+      "median_net": 1.136078582879097,
+      "mean_return_on_margin": 0.0021445405371073967,
+      "median_return_on_margin": 0.011403524986869187,
+      "mean_win": 2.214903014715663,
+      "mean_loss": -5.272321213117035,
+      "profit_factor": 1.1578960418398283,
+      "mean_holding_minutes": 290.3604642674648,
+      "total_fee": 5036.801114056952,
+      "fee_share_of_gross": 0.619818473839857,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 417.1493961346117,
+      "funding_paid_share_of_gross": 0.051333554019788404,
+      "total_funding_received": 363.7481476509523,
+      "funding_received_share_of_gross": 0.04476210527945395,
+      "total_gross": 8126.25200222463,
+      "peak_margin_used": 4464.043383394958,
+      "distance_to_liquidation_ratio": {
+        "min": 1.9769553568533518,
+        "median": 2.2900993416807824,
+        "date_of_min": "2026-04-18"
+      },
+      "mean_open_positions": 13.973918664455748,
+      "max_open_positions": 20,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "book_full": 11686,
+        "margin": 10140,
+        "min_order": 104
+      },
+      "by_fold": {
+        "1": {
+          "n": 2392,
+          "mean_net": 0.09607349424434412
+        },
+        "2": {
+          "n": 2299,
+          "mean_net": 0.22955444124016686
+        },
+        "3": {
+          "n": 1085,
+          "mean_net": 0.1404336241549051
+        },
+        "4": {
+          "n": 2060,
+          "mean_net": 0.2200889116746061
+        },
+        "5": {
+          "n": 2578,
+          "mean_net": 0.45909095671453953
+        },
+        "6": {
+          "n": 1696,
+          "mean_net": 0.18021296288702535
+        },
+        "7": {
+          "n": 1589,
+          "mean_net": 0.11552225885221236
+        }
+      },
+      "top10_pairs": {
+        "YZY/ZETA": 47.10947313337586,
+        "MAVIA/YZY": 43.45385225761293,
+        "MAV/ZEREBRO": 40.67676155542884,
+        "YZY/kSHIB": 38.11484932610246,
+        "GRASS/YZY": 34.514610085463445,
+        "BRETT/PENDLE": 30.709034809445942,
+        "HYPE/ONDO": 29.64111473858907,
+        "APT/HMSTR": 28.540909809961597,
+        "HMSTR/SUSHI": 28.461634906827697,
+        "YZY/ZRO": 27.96331866431005
+      },
+      "bottom10_pairs": {
+        "MORPHO/S": -48.95926258860362,
+        "BOME/INIT": -49.26912149718963,
+        "RUNE/ZK": -51.24990101657809,
+        "ORDI/TNSR": -51.624482770692566,
+        "ADA/VVV": -51.992377180066875,
+        "2Z/DASH": -53.72092174801505,
+        "GMX/RESOLV": -53.97664917335412,
+        "APE/ZK": -59.80338779024056,
+        "PUMP/TRX": -63.845889513445,
+        "HYPER/SAGA": -132.01010015926866
+      },
+      "top10_coins": {
+        "HMSTR": 996.2745234438495,
+        "YZY": 642.4213950408571,
+        "BOME": 330.3799687605903,
+        "MAVIA": 318.37571213901964,
+        "MEW": 314.6691932483208,
+        "NOT": 308.54949981196165,
+        "FTT": 292.8238972106603,
+        "TNSR": 274.56383093274303,
+        "RSR": 254.01126941615271,
+        "kSHIB": 172.8546543601808
+      },
+      "bottom10_coins": {
+        "KAS": -109.8915966790875,
+        "WCT": -137.99202329133865,
+        "APE": -139.16456630042518,
+        "INIT": -166.71450474757236,
+        "COMP": -171.11482141967005,
+        "HYPER": -172.473097794702,
+        "SAGA": -175.23560113063436,
+        "TRX": -184.36669175041078,
+        "ZK": -192.99506922070572,
+        "HYPE": -213.47812696580286
+      }
+    },
+    "q0.01_stopnone_feemaker": {
+      "q": 0.01,
+      "stop": "none",
+      "fee": "maker",
+      "n_trades": 13735,
+      "final_equity": 16935.92374526008,
+      "total_return": 15.93592374526008,
+      "cagr": 160.97004503701032,
+      "cagr_n_days": 203,
+      "daily_pnl_mean": 78.11727326107882,
+      "daily_pnl_median": 45.73126182993974,
+      "share_positive_days": 0.7009803921568627,
+      "worst_day": -580.8237162887563,
+      "best_day": 982.0395161231245,
+      "max_drawdown": {
+        "max_dd_usd": -1089.3989662587373,
+        "max_dd_pct": -0.17488768921151962,
+        "start": "2026-07-09",
+        "bottom": "2026-07-12",
+        "recovery": null,
+        "longest_underwater_days": 10
+      },
+      "sharpe": 8.681255847030053,
+      "sortino": 16.610584092902723,
+      "sharpe_sortino_n_days": 204,
+      "monthly": {
+        "1": {
+          "n_days": 30,
+          "total_pnl_usd": 690.2730449486392,
+          "total_pnl_pct": 0.6902730449486392
+        },
+        "2": {
+          "n_days": 30,
+          "total_pnl_usd": 1338.1830255567818,
+          "total_pnl_pct": 0.7916963650079647
+        },
+        "3": {
+          "n_days": 30,
+          "total_pnl_usd": 699.9013573469824,
+          "total_pnl_pct": 0.2311083076830549
+        },
+        "4": {
+          "n_days": 30,
+          "total_pnl_usd": 1815.6464789860888,
+          "total_pnl_pct": 0.48698294466685077
+        },
+        "5": {
+          "n_days": 30,
+          "total_pnl_usd": 5153.120328315721,
+          "total_pnl_pct": 0.9294943537033553
+        },
+        "6": {
+          "n_days": 30,
+          "total_pnl_usd": 3164.842994378705,
+          "total_pnl_pct": 0.2958592351370479
+        },
+        "7": {
+          "n_days": 23,
+          "total_pnl_usd": 3113.8668054359478,
+          "total_pnl_pct": 0.22463383110601032
+        },
+        "outside": {
+          "n_days": 1,
+          "total_pnl_usd": -39.91028970878688,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 7,
+      "win_rate": 0.7004004368401893,
+      "stop_share": 0.0,
+      "timeout_share": 0.2995995631598107,
+      "liquidation_share": 0.0,
+      "mean_net": 1.1602419909180997,
+      "median_net": 2.302393973836453,
+      "mean_return_on_margin": 0.004236627186864826,
+      "median_return_on_margin": 0.013433132300698617,
+      "mean_win": 6.473459342119993,
+      "mean_loss": -14.135702001782295,
+      "profit_factor": 1.3183713178007592,
+      "mean_holding_minutes": 290.1209319257372,
+      "total_fee": 4576.514759678837,
+      "fee_share_of_gross": 0.22247772460860205,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 1021.2191615655462,
+      "funding_paid_share_of_gross": 0.04964444065460656,
+      "total_funding_received": 962.9925910226375,
+      "funding_received_share_of_gross": 0.04681387730970485,
+      "total_gross": 20570.665075481844,
+      "peak_margin_used": 18198.726813681442,
+      "distance_to_liquidation_ratio": {
+        "min": 1.9759247706971348,
+        "median": 2.2729732808402865,
+        "date_of_min": "2026-04-18"
+      },
+      "mean_open_positions": 13.999083078047272,
+      "max_open_positions": 20,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "book_full": 13169,
+        "margin": 8666,
+        "min_order": 59
+      },
+      "by_fold": {
+        "1": {
+          "n": 2394,
+          "mean_net": 0.28265606325862425
+        },
+        "2": {
+          "n": 2316,
+          "mean_net": 0.5883479272372529
+        },
+        "3": {
+          "n": 1096,
+          "mean_net": 0.6193876282218875
+        },
+        "4": {
+          "n": 2047,
+          "mean_net": 0.9095113326909694
+        },
+        "5": {
+          "n": 2580,
+          "mean_net": 2.0038083616453504
+        },
+        "6": {
+          "n": 1713,
+          "mean_net": 1.8458074887917795
+        },
+        "7": {
+          "n": 1589,
+          "mean_net": 1.9032844496177144
+        }
+      },
+      "top10_pairs": {
+        "GRASS/YZY": 143.58923978725747,
+        "HYPE/ONDO": 131.4832287085737,
+        "YZY/ZETA": 129.37338095251098,
+        "MAVIA/YZY": 120.29672148580565,
+        "CFX/SEI": 114.54375145348153,
+        "NOT/ORDI": 110.57806889512337,
+        "MAV/ZEREBRO": 107.96021350121516,
+        "BCH/TNSR": 100.35441897240004,
+        "MORPHO/UNI": 99.21004064112903,
+        "APT/HMSTR": 96.14900048238462
+      },
+      "bottom10_pairs": {
+        "MON/PENGU": -158.73734262905882,
+        "2Z/DASH": -165.18776368510305,
+        "BCH/SOL": -167.5682994104584,
+        "ETHFI/XLM": -174.1787831384457,
+        "NEAR/TRX": -195.20088309162094,
+        "GMX/RESOLV": -201.32587001828296,
+        "PUMP/TRX": -202.34820424990465,
+        "ADA/VVV": -209.90594049015178,
+        "CFX/KAITO": -298.3021744203196,
+        "HYPER/SAGA": -328.7268368041292
+      },
+      "top10_coins": {
+        "HMSTR": 2582.705153679606,
+        "YZY": 1996.6465691179849,
+        "TNSR": 1198.9443342744191,
+        "NOT": 1159.2002321845123,
+        "BOME": 1036.4405383549774,
+        "MEW": 919.4190200612165,
+        "RSR": 919.3270349129543,
+        "FTT": 839.7675427293829,
+        "USUAL": 664.869327927966,
+        "MAVIA": 638.8379570246987
+      },
+      "bottom10_coins": {
+        "AVNT": -347.69509146257366,
+        "SAGA": -368.42136971825977,
+        "HYPER": -369.2896708114044,
+        "HYPE": -380.31559013621194,
+        "WCT": -383.5697149580405,
+        "COMP": -384.1739910957719,
+        "KAS": -408.0334203613755,
+        "MEGA": -440.75907992607597,
+        "ZK": -460.972790437818,
+        "TRX": -498.8781394817125
+      }
+    },
+    "q0.005_stop0p5_feetaker": {
+      "q": 0.005,
+      "stop": "0p5",
+      "fee": "taker",
+      "n_trades": 15108,
+      "final_equity": 282.29230145838676,
+      "total_return": -0.7177076985416133,
+      "cagr": -0.8982694890956006,
+      "cagr_n_days": 202,
+      "daily_pnl_mean": -3.5355059041458787,
+      "daily_pnl_median": -1.624479920042063,
+      "share_positive_days": 0.2660098522167488,
+      "worst_day": -45.98534579284262,
+      "best_day": 38.423668247806006,
+      "max_drawdown": {
+        "max_dd_usd": -717.7076985416132,
+        "max_dd_pct": -0.7177076985416132,
+        "start": "2025-12-20",
+        "bottom": "2026-07-11",
+        "recovery": null,
+        "longest_underwater_days": 203
+      },
+      "sharpe": -7.0711974256767585,
+      "sortino": -9.031979442803076,
+      "sharpe_sortino_n_days": 203,
+      "monthly": {
+        "1": {
+          "n_days": 30,
+          "total_pnl_usd": -338.2353572253601,
+          "total_pnl_pct": -0.33823535722536
+        },
+        "2": {
+          "n_days": 30,
+          "total_pnl_usd": -175.12656340669997,
+          "total_pnl_pct": -0.2646357210509632
+        },
+        "3": {
+          "n_days": 30,
+          "total_pnl_usd": -26.930144089987834,
+          "total_pnl_pct": -0.055339163192830054
+        },
+        "4": {
+          "n_days": 30,
+          "total_pnl_usd": -76.82317014538887,
+          "total_pnl_pct": -0.16711299555649273
+        },
+        "5": {
+          "n_days": 30,
+          "total_pnl_usd": -20.982070756894245,
+          "total_pnl_pct": -0.05479996246293528
+        },
+        "6": {
+          "n_days": 30,
+          "total_pnl_usd": -31.409660026016127,
+          "total_pnl_pct": -0.08679034589726398
+        },
+        "7": {
+          "n_days": 23,
+          "total_pnl_usd": -48.200732891266114,
+          "total_pnl_pct": -0.14584492827849138
+        },
+        "outside": {
+          "n_days": 0,
+          "total_pnl_usd": 0.0,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 0,
+      "win_rate": 0.2798517341805666,
+      "stop_share": 0.7183611331744771,
+      "timeout_share": 0.0017871326449563146,
+      "liquidation_share": 0.0,
+      "mean_net": -0.047505142874080676,
+      "median_net": -0.1824743046536526,
+      "mean_return_on_margin": -0.0016543006229162874,
+      "median_return_on_margin": -0.00760414149849319,
+      "mean_win": 0.57702886644187,
+      "mean_loss": -0.2920380777181542,
+      "profit_factor": 0.7736407294189341,
+      "mean_holding_minutes": 43.711940693672226,
+      "total_fee": 1246.3784794105973,
+      "fee_share_of_gross": 2.3550418562516517,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 12.080701170421744,
+      "funding_paid_share_of_gross": 0.022826579068234213,
+      "total_funding_received": 11.513126422932203,
+      "funding_received_share_of_gross": 0.021754142156838383,
+      "total_gross": 529.2383556164759,
+      "peak_margin_used": 998.7448521071963,
+      "distance_to_liquidation_ratio": {
+        "min": 2.134056160017718,
+        "median": 6.053719326934136,
+        "date_of_min": "2026-01-02"
+      },
+      "mean_open_positions": 3.714035048253211,
+      "max_open_positions": 20,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "min_order": 1487,
+        "margin": 861,
+        "book_full": 243
+      },
+      "by_fold": {
+        "1": {
+          "n": 4107,
+          "mean_net": -0.08235582109212577
+        },
+        "2": {
+          "n": 3518,
+          "mean_net": -0.0501543454390176
+        },
+        "3": {
+          "n": 544,
+          "mean_net": -0.047084044562907594
+        },
+        "4": {
+          "n": 1510,
+          "mean_net": -0.050548220394230604
+        },
+        "5": {
+          "n": 3208,
+          "mean_net": -0.00672658458742873
+        },
+        "6": {
+          "n": 955,
+          "mean_net": -0.03278346049899368
+        },
+        "7": {
+          "n": 1266,
+          "mean_net": -0.03807324872927817
+        }
+      },
+      "top10_pairs": {
+        "HMSTR/MEGA": 10.796705967499978,
+        "HMSTR/MEW": 9.254283315878647,
+        "FOGO/STABLE": 8.04269176147984,
+        "FOGO/MAVIA": 7.786998677985444,
+        "MEGA/UMA": 7.357611694343438,
+        "NOT/OP": 6.917009602267646,
+        "USUAL/ZEREBRO": 6.817852158533409,
+        "CRV/HMSTR": 6.71484821989837,
+        "FOGO/RENDER": 6.084920584773495,
+        "2Z/MEGA": 6.072042232008485
+      },
+      "bottom10_pairs": {
+        "HYPE/NOT": -3.1334007737019385,
+        "FOGO/LAYER": -3.1338181757727606,
+        "FOGO/SAGA": -3.2602338893879055,
+        "AERO/MEGA": -3.334583897239949,
+        "HMSTR/LIT": -3.5788755447712104,
+        "MEGA/MOODENG": -3.6767801406284373,
+        "FOGO/VINE": -4.139538232451962,
+        "MEGA/MET": -4.149583507683092,
+        "HMSTR/NOT": -4.340444723093301,
+        "kBONK/kSHIB": -4.347149966182855
+      },
+      "top10_coins": {
+        "HMSTR": 113.90073124473453,
+        "NOT": 33.4818262912688,
+        "MEW": 22.675985433040598,
+        "MEGA": 18.984318017720202,
+        "ZEREBRO": 18.8535437031558,
+        "YZY": 18.144402328354975,
+        "MANTA": 10.49152518354927,
+        "ZETA": 9.785337372338947,
+        "POL": 8.957955059731118,
+        "STABLE": 8.784559477271001
+      },
+      "bottom10_coins": {
+        "SPX": -20.618645539421927,
+        "XPL": -20.66477686188372,
+        "TAO": -20.741417455999898,
+        "SAGA": -21.53416592075191,
+        "FOGO": -22.719388675670796,
+        "LTC": -22.767339359545012,
+        "AVNT": -23.094555536266505,
+        "SOPH": -23.125469174515374,
+        "COMP": -25.621465486387777,
+        "VINE": -25.663791720168156
+      }
+    },
+    "q0.005_stop0p5_feemaker": {
+      "q": 0.005,
+      "stop": "0p5",
+      "fee": "maker",
+      "n_trades": 16106,
+      "final_equity": 1379.1953970958511,
+      "total_return": 0.37919539709585104,
+      "cagr": 0.7825893749842296,
+      "cagr_n_days": 203,
+      "daily_pnl_mean": 1.858800966156133,
+      "daily_pnl_median": -0.15633895101598227,
+      "share_positive_days": 0.49019607843137253,
+      "worst_day": -41.36258016600755,
+      "best_day": 143.34250276534567,
+      "max_drawdown": {
+        "max_dd_usd": -145.776892679331,
+        "max_dd_pct": -0.12105223881926724,
+        "start": "2026-05-04",
+        "bottom": "2026-05-18",
+        "recovery": null,
+        "longest_underwater_days": 74
+      },
+      "sharpe": 2.068760765234834,
+      "sortino": 4.2273522585874215,
+      "sharpe_sortino_n_days": 204,
+      "monthly": {
+        "1": {
+          "n_days": 30,
+          "total_pnl_usd": 19.270454126891536,
+          "total_pnl_pct": 0.019270454126891545
+        },
+        "2": {
+          "n_days": 30,
+          "total_pnl_usd": 47.42868220041828,
+          "total_pnl_pct": 0.04653198962884275
+        },
+        "3": {
+          "n_days": 30,
+          "total_pnl_usd": 3.942158760529537,
+          "total_pnl_pct": 0.0036956613409311334
+        },
+        "4": {
+          "n_days": 30,
+          "total_pnl_usd": -34.23441758441686,
+          "total_pnl_pct": -0.03197561848350727
+        },
+        "5": {
+          "n_days": 30,
+          "total_pnl_usd": 342.9358367877089,
+          "total_pnl_pct": 0.33088919441928
+        },
+        "6": {
+          "n_days": 30,
+          "total_pnl_usd": 1.5214926782923612,
+          "total_pnl_pct": 0.0011030563053897602
+        },
+        "7": {
+          "n_days": 23,
+          "total_pnl_usd": -1.1771183459043186,
+          "total_pnl_pct": -0.0008524504726555859
+        },
+        "outside": {
+          "n_days": 1,
+          "total_pnl_usd": -0.4916915276683085,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 5,
+      "win_rate": 0.2811995529616292,
+      "stop_share": 0.7171861418105054,
+      "timeout_share": 0.0016143052278653918,
+      "liquidation_share": 0.0,
+      "mean_net": 0.023543735073627392,
+      "median_net": -0.317304329452341,
+      "mean_return_on_margin": 0.00041916712533285295,
+      "median_return_on_margin": -0.00562830057814412,
+      "mean_win": 1.2992849233761414,
+      "mean_loss": -0.4793757049826095,
+      "profit_factor": 1.068474655625047,
+      "mean_holding_minutes": 44.387309077362474,
+      "total_fee": 937.6364882616787,
+      "fee_share_of_gross": 0.7114125391965048,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 27.102607566319115,
+      "funding_paid_share_of_gross": 0.020563550063359356,
+      "total_funding_received": 25.941856301664384,
+      "funding_received_share_of_gross": 0.019682853743515288,
+      "total_gross": 1317.9926366221762,
+      "peak_margin_used": 1456.901980832373,
+      "distance_to_liquidation_ratio": {
+        "min": 2.029643765226049,
+        "median": 5.741624629755538,
+        "date_of_min": "2026-03-27"
+      },
+      "mean_open_positions": 3.877203258381873,
+      "max_open_positions": 20,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "margin": 814,
+        "book_full": 491,
+        "min_order": 288
+      },
+      "by_fold": {
+        "1": {
+          "n": 4156,
+          "mean_net": 0.004636779145065247
+        },
+        "2": {
+          "n": 3577,
+          "mean_net": 0.012533695587432635
+        },
+        "3": {
+          "n": 680,
+          "mean_net": 0.009614429183381797
+        },
+        "4": {
+          "n": 1724,
+          "mean_net": -0.01900718039031637
+        },
+        "5": {
+          "n": 3437,
+          "mean_net": 0.09925665424529942
+        },
+        "6": {
+          "n": 1009,
+          "mean_net": 0.0018297029072209927
+        },
+        "7": {
+          "n": 1523,
+          "mean_net": -0.0010957385906560611
+        }
+      },
+      "top10_pairs": {
+        "GRASS/YZY": 19.593892542500505,
+        "YZY/ZETA": 17.574230182247057,
+        "HMSTR/MEW": 17.49390958571782,
+        "MAVIA/YZY": 17.333123375048945,
+        "LIT/YZY": 14.646120971759595,
+        "CRV/HMSTR": 14.500238745691394,
+        "BOME/HMSTR": 13.790517529164967,
+        "NOT/OP": 13.77785302427487,
+        "HMSTR/MEGA": 12.68304663684636,
+        "DOT/HMSTR": 11.646360303296856
+      },
+      "bottom10_pairs": {
+        "MEGA/MET": -4.947928212965842,
+        "kBONK/kSHIB": -4.962258740335894,
+        "FOGO/LAYER": -5.128747363205778,
+        "HYPE/NOT": -5.199458610459615,
+        "WIF/XAI": -6.1266614354570414,
+        "UNI/WLD": -6.168036254696225,
+        "TST/W": -6.452943676176398,
+        "TST/USUAL": -6.678265130385357,
+        "TST/ZK": -6.947535131917646,
+        "REZ/ZEREBRO": -9.909004403592816
+      },
+      "top10_coins": {
+        "HMSTR": 460.9274455981693,
+        "YZY": 189.4562977184915,
+        "NOT": 114.01646279087267,
+        "MEW": 89.39177143618403,
+        "BOME": 65.54158680355839,
+        "ZETA": 51.48409018832891,
+        "MEGA": 49.68813021729693,
+        "MANTA": 38.08027620014636,
+        "ZEREBRO": 35.68060363618552,
+        "POL": 34.757366182065134
+      },
+      "bottom10_coins": {
+        "COMP": -23.15012146994427,
+        "CFX": -23.65391722557747,
+        "kPEPE": -23.829704416721846,
+        "SAGA": -24.055876194193726,
+        "SPX": -24.3118420835772,
+        "DYM": -26.321019211362426,
+        "BABY": -29.942721878025484,
+        "SOPH": -31.039923433918787,
+        "XPL": -32.400720493066416,
+        "TST": -34.96706135831998
+      }
+    },
+    "q0.005_stop1p0_feetaker": {
+      "q": 0.005,
+      "stop": "1p0",
+      "fee": "taker",
+      "n_trades": 14755,
+      "final_equity": 616.2477762173762,
+      "total_return": -0.38375222378262375,
+      "cagr": -0.581231571393734,
+      "cagr_n_days": 203,
+      "daily_pnl_mean": -1.8811383518756069,
+      "daily_pnl_median": -1.8572699059728848,
+      "share_positive_days": 0.37254901960784315,
+      "worst_day": -61.00088851641419,
+      "best_day": 85.89254388985512,
+      "max_drawdown": {
+        "max_dd_usd": -383.7522237826238,
+        "max_dd_pct": -0.3837522237826238,
+        "start": "2025-12-20",
+        "bottom": "2026-07-12",
+        "recovery": null,
+        "longest_underwater_days": 204
+      },
+      "sharpe": -2.3679458540672753,
+      "sortino": -3.613500197998993,
+      "sharpe_sortino_n_days": 204,
+      "monthly": {
+        "1": {
+          "n_days": 30,
+          "total_pnl_usd": -220.65293026725976,
+          "total_pnl_pct": -0.22065293026725974
+        },
+        "2": {
+          "n_days": 30,
+          "total_pnl_usd": -35.72463207059707,
+          "total_pnl_pct": -0.045839181871624946
+        },
+        "3": {
+          "n_days": 30,
+          "total_pnl_usd": -22.04450366984713,
+          "total_pnl_pct": -0.029644753242186073
+        },
+        "4": {
+          "n_days": 30,
+          "total_pnl_usd": -62.03413350088283,
+          "total_pnl_pct": -0.0859701088109287
+        },
+        "5": {
+          "n_days": 30,
+          "total_pnl_usd": 73.97655776285899,
+          "total_pnl_pct": 0.11216322207522911
+        },
+        "6": {
+          "n_days": 30,
+          "total_pnl_usd": -52.22895912377044,
+          "total_pnl_pct": -0.07120314867343525
+        },
+        "7": {
+          "n_days": 23,
+          "total_pnl_usd": -64.26880504105088,
+          "total_pnl_pct": -0.09433379773041894
+        },
+        "outside": {
+          "n_days": 1,
+          "total_pnl_usd": -0.7748178720746637,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 1,
+      "win_rate": 0.41145374449339206,
+      "stop_share": 0.5815655709928838,
+      "timeout_share": 0.006980684513724161,
+      "liquidation_share": 0.0,
+      "mean_net": -0.026008283550160587,
+      "median_net": -0.34985420353379276,
+      "mean_return_on_margin": -0.0006212133519826352,
+      "median_return_on_margin": -0.00939887461572566,
+      "mean_win": 0.794849748674485,
+      "mean_loss": -0.6089240419461276,
+      "profit_factor": 0.9269571605977951,
+      "mean_holding_minutes": 76.81233480176212,
+      "total_fee": 1720.4601782377354,
+      "fee_share_of_gross": 1.28369894608473,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 32.65561216034252,
+      "funding_paid_share_of_gross": 0.02436555954286716,
+      "total_funding_received": 29.12706997804711,
+      "funding_received_share_of_gross": 0.021732783766988534,
+      "total_gross": 1340.2364966374112,
+      "peak_margin_used": 1001.872777104577,
+      "distance_to_liquidation_ratio": {
+        "min": 2.0525062033970096,
+        "median": 4.570396532049154,
+        "date_of_min": "2026-03-27"
+      },
+      "mean_open_positions": 5.265273887007382,
+      "max_open_positions": 20,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "margin": 1582,
+        "book_full": 702,
+        "min_order": 660
+      },
+      "by_fold": {
+        "1": {
+          "n": 3632,
+          "mean_net": -0.060752458774025145
+        },
+        "2": {
+          "n": 3225,
+          "mean_net": -0.011665493102776292
+        },
+        "3": {
+          "n": 624,
+          "mean_net": -0.032884147760507416
+        },
+        "4": {
+          "n": 1628,
+          "mean_net": -0.03735181405644395
+        },
+        "5": {
+          "n": 3201,
+          "mean_net": 0.022624239224543125
+        },
+        "6": {
+          "n": 996,
+          "mean_net": -0.051733116081422836
+        },
+        "7": {
+          "n": 1449,
+          "mean_net": -0.044888628649499426
+        }
+      },
+      "top10_pairs": {
+        "HMSTR/MEGA": 14.08496566457502,
+        "FOGO/GRIFFAIN": 12.363492688722589,
+        "GRASS/YZY": 12.104748838977898,
+        "YZY/ZETA": 10.040606651948414,
+        "MAVIA/YZY": 9.874927066622783,
+        "HMSTR/TST": 9.69889458567549,
+        "BOME/HMSTR": 9.22103844377072,
+        "FOGO/STABLE": 8.929363306128812,
+        "FOGO/RENDER": 8.76752337079175,
+        "HMSTR/PROVE": 8.462910158050782
+      },
+      "bottom10_pairs": {
+        "kBONK/kSHIB": -4.985504628023394,
+        "FOGO/kNEIRO": -5.003407986687444,
+        "TST/ZK": -5.026026973463515,
+        "FOGO/MON": -5.194286636780015,
+        "EIGEN/FTT": -5.20775487973891,
+        "HMSTR/PYTH": -5.432800787657138,
+        "FOGO/VINE": -5.718532880706864,
+        "REZ/ZEREBRO": -5.729425947306525,
+        "HMSTR/kNEIRO": -7.485997074080624,
+        "AERO/MEGA": -8.566135173309831
+      },
+      "top10_coins": {
+        "HMSTR": 275.81131284442256,
+        "YZY": 85.83142692513064,
+        "NOT": 74.78499855617164,
+        "MEW": 54.90216982235434,
+        "BOME": 52.168931645949506,
+        "ZEREBRO": 45.635292520936986,
+        "MEGA": 36.94892307364812,
+        "MANTA": 27.067068479541987,
+        "ZETA": 26.78815140527349,
+        "PROMPT": 25.604068770812905
+      },
+      "bottom10_coins": {
+        "BIO": -25.424017381192424,
+        "kNEIRO": -26.022723466453424,
+        "LINK": -26.966247961875457,
+        "SOPH": -27.404288698658764,
+        "DYM": -28.06402624122193,
+        "TON": -29.428125395513323,
+        "LTC": -30.097120263510845,
+        "BABY": -30.246782709830406,
+        "COMP": -31.988411871371824,
+        "TST": -35.46115142207416
+      }
+    },
+    "q0.005_stop1p0_feemaker": {
+      "q": 0.005,
+      "stop": "1p0",
+      "fee": "maker",
+      "n_trades": 15139,
+      "final_equity": 2768.9479286501864,
+      "total_return": 1.7689479286501864,
+      "cagr": 5.241587503463514,
+      "cagr_n_days": 203,
+      "daily_pnl_mean": 8.671313375736208,
+      "daily_pnl_median": 1.2776122338048594,
+      "share_positive_days": 0.553921568627451,
+      "worst_day": -96.81618168496425,
+      "best_day": 270.78288947350734,
+      "max_drawdown": {
+        "max_dd_usd": -196.07598083138828,
+        "max_dd_pct": -0.07227744843540229,
+        "start": "2026-05-04",
+        "bottom": "2026-05-18",
+        "recovery": "2026-06-20",
+        "longest_underwater_days": 46
+      },
+      "sharpe": 5.361973636204113,
+      "sortino": 12.652667821488608,
+      "sharpe_sortino_n_days": 204,
+      "monthly": {
+        "1": {
+          "n_days": 30,
+          "total_pnl_usd": 129.7163078656274,
+          "total_pnl_pct": 0.12971630786562738
+        },
+        "2": {
+          "n_days": 30,
+          "total_pnl_usd": 358.85081497479223,
+          "total_pnl_pct": 0.3176468397209995
+        },
+        "3": {
+          "n_days": 30,
+          "total_pnl_usd": 60.62427462577284,
+          "total_pnl_pct": 0.04072659787762345
+        },
+        "4": {
+          "n_days": 30,
+          "total_pnl_usd": 110.5961415126078,
+          "total_pnl_pct": 0.07138959181770255
+        },
+        "5": {
+          "n_days": 30,
+          "total_pnl_usd": 905.6159115946491,
+          "total_pnl_pct": 0.5456215872977561
+        },
+        "6": {
+          "n_days": 30,
+          "total_pnl_usd": 65.83598186600148,
+          "total_pnl_pct": 0.025663012907885863
+        },
+        "7": {
+          "n_days": 23,
+          "total_pnl_usd": 140.94203652717488,
+          "total_pnl_pct": 0.05356488458996145
+        },
+        "outside": {
+          "n_days": 1,
+          "total_pnl_usd": -3.233540316439303,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 7,
+      "win_rate": 0.4115199154501618,
+      "stop_share": 0.581412246515622,
+      "timeout_share": 0.0070678380342162625,
+      "liquidation_share": 0.0,
+      "mean_net": 0.11684707897815018,
+      "median_net": -0.5240040572029685,
+      "mean_return_on_margin": 0.0013795052849580327,
+      "median_return_on_margin": -0.007430465073201715,
+      "mean_win": 1.9086685105969723,
+      "mean_loss": -1.161316171756734,
+      "profit_factor": 1.1723887291548996,
+      "mean_holding_minutes": 77.56516282449303,
+      "total_fee": 1340.3573405009415,
+      "fee_share_of_gross": 0.4300200102618729,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 74.3383980186795,
+      "funding_paid_share_of_gross": 0.023849609139974935,
+      "total_funding_received": 66.67862248576995,
+      "funding_received_share_of_gross": 0.021392162417570023,
+      "total_gross": 3116.9650446840665,
+      "peak_margin_used": 2917.3458139680088,
+      "distance_to_liquidation_ratio": {
+        "min": 2.018134209730397,
+        "median": 4.407452537845643,
+        "date_of_min": "2026-03-27"
+      },
+      "mean_open_positions": 5.39916501524215,
+      "max_open_positions": 20,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "margin": 1303,
+        "book_full": 1106,
+        "min_order": 151
+      },
+      "by_fold": {
+        "1": {
+          "n": 3691,
+          "mean_net": 0.03514394686145353
+        },
+        "2": {
+          "n": 3258,
+          "mean_net": 0.10928835035634199
+        },
+        "3": {
+          "n": 680,
+          "mean_net": 0.09228769066699259
+        },
+        "4": {
+          "n": 1722,
+          "mean_net": 0.06597139657748624
+        },
+        "5": {
+          "n": 3266,
+          "mean_net": 0.27574080079990815
+        },
+        "6": {
+          "n": 1009,
+          "mean_net": 0.06792254622437688
+        },
+        "7": {
+          "n": 1513,
+          "mean_net": 0.09101685142811995
+        }
+      },
+      "top10_pairs": {
+        "GRASS/YZY": 38.69328372326635,
+        "MAVIA/YZY": 31.32027262790799,
+        "YZY/ZETA": 31.00015589694955,
+        "HMSTR/TST": 28.242401809646275,
+        "HMSTR/NIL": 24.45808033882129,
+        "BOME/HMSTR": 24.104342199855814,
+        "LIT/YZY": 22.8892080571798,
+        "HMSTR/PROVE": 22.027146876292218,
+        "HMSTR/NEO": 21.77901422833206,
+        "DOGE/HMSTR": 20.61209078526838
+      },
+      "bottom10_pairs": {
+        "EIGEN/ENS": -9.293038195391222,
+        "BIO/HEMI": -9.355552126080719,
+        "AERO/MEGA": -11.157553962524112,
+        "TST/W": -11.822439882624625,
+        "TST/USUAL": -11.966586075754243,
+        "EIGEN/FTT": -12.411861094712336,
+        "UNI/WLD": -12.462903766805383,
+        "TST/ZK": -12.975671337509574,
+        "TST/ZRO": -14.919710805176752,
+        "REZ/ZEREBRO": -18.073278485823813
+      },
+      "top10_coins": {
+        "HMSTR": 898.5469860177358,
+        "YZY": 396.3609926942199,
+        "MEW": 190.2364585651162,
+        "NOT": 183.5394559593297,
+        "BOME": 183.11447939619035,
+        "MAVIA": 119.24489718866593,
+        "ZETA": 97.87741321512343,
+        "FTT": 86.19282707988297,
+        "UMA": 82.42078203530949,
+        "NIL": 80.07481481852737
+      },
+      "bottom10_coins": {
+        "LTC": -30.216000766966417,
+        "kLUNC": -34.851711667844675,
+        "BIO": -36.90795513392154,
+        "DYM": -39.17139809397873,
+        "CFX": -46.339861390588595,
+        "COMP": -47.67346761302746,
+        "CELO": -50.29724580100438,
+        "TON": -51.64019198128614,
+        "BABY": -53.63148827214119,
+        "TST": -78.29294697773896
+      }
+    },
+    "q0.005_stop2p0_feetaker": {
+      "q": 0.005,
+      "stop": "2p0",
+      "fee": "taker",
+      "n_trades": 13241,
+      "final_equity": 1509.2796599417793,
+      "total_return": 0.5092796599417793,
+      "cagr": 1.0962025213873647,
+      "cagr_n_days": 203,
+      "daily_pnl_mean": 2.496468921283232,
+      "daily_pnl_median": 0.7539240118325097,
+      "share_positive_days": 0.5196078431372549,
+      "worst_day": -81.78035611684231,
+      "best_day": 168.59979161720048,
+      "max_drawdown": {
+        "max_dd_usd": -359.95726193661517,
+        "max_dd_pct": -0.19256909475921033,
+        "start": "2026-05-04",
+        "bottom": "2026-07-12",
+        "recovery": null,
+        "longest_underwater_days": 69
+      },
+      "sharpe": 2.0139270522541537,
+      "sortino": 3.467208973958794,
+      "sharpe_sortino_n_days": 204,
+      "monthly": {
+        "1": {
+          "n_days": 30,
+          "total_pnl_usd": 74.57683495318406,
+          "total_pnl_pct": 0.07457683495318412
+        },
+        "2": {
+          "n_days": 30,
+          "total_pnl_usd": 211.99098475672758,
+          "total_pnl_pct": 0.19727857316593211
+        },
+        "3": {
+          "n_days": 30,
+          "total_pnl_usd": 14.717063807372597,
+          "total_pnl_pct": 0.011439011284061884
+        },
+        "4": {
+          "n_days": 30,
+          "total_pnl_usd": -105.9738301935347,
+          "total_pnl_pct": -0.08143784004244692
+        },
+        "5": {
+          "n_days": 30,
+          "total_pnl_usd": 468.556064131026,
+          "total_pnl_pct": 0.3919950901718281
+        },
+        "6": {
+          "n_days": 30,
+          "total_pnl_usd": -67.68987597480373,
+          "total_pnl_pct": -0.04068226077954418
+        },
+        "7": {
+          "n_days": 23,
+          "total_pnl_usd": -82.5760387727396,
+          "total_pnl_pct": -0.05173362746118049
+        },
+        "outside": {
+          "n_days": 1,
+          "total_pnl_usd": -4.321542765452932,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 4,
+      "win_rate": 0.5609092968809002,
+      "stop_share": 0.41197794728494824,
+      "timeout_share": 0.0271127558341515,
+      "liquidation_share": 0.0,
+      "mean_net": 0.03846232610390367,
+      "median_net": 0.4816498366182567,
+      "mean_return_on_margin": 0.0006761429644830683,
+      "median_return_on_margin": 0.007599969902286721,
+      "mean_win": 1.2854842228474694,
+      "mean_loss": -1.6348937281220306,
+      "profit_factor": 1.0550948492852275,
+      "mean_holding_minutes": 131.32429574805528,
+      "total_fee": 2644.7245950997003,
+      "fee_share_of_gross": 0.8362782935492671,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 85.90365559663333,
+      "funding_paid_share_of_gross": 0.02716326782951413,
+      "total_funding_received": 77.41449726113959,
+      "funding_received_share_of_gross": 0.024478943397537267,
+      "total_gross": 3162.493413376983,
+      "peak_margin_used": 1859.8679884848207,
+      "distance_to_liquidation_ratio": {
+        "min": 2.031921235550058,
+        "median": 3.4959308662783126,
+        "date_of_min": "2026-03-19"
+      },
+      "mean_open_positions": 7.2010742401842025,
+      "max_open_positions": 20,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "margin": 2444,
+        "book_full": 1813,
+        "min_order": 201
+      },
+      "by_fold": {
+        "1": {
+          "n": 3026,
+          "mean_net": 0.024645351934297753
+        },
+        "2": {
+          "n": 2661,
+          "mean_net": 0.07925812495831897
+        },
+        "3": {
+          "n": 623,
+          "mean_net": 0.020532775832071
+        },
+        "4": {
+          "n": 1609,
+          "mean_net": -0.06103914265207048
+        },
+        "5": {
+          "n": 2913,
+          "mean_net": 0.16004081252115615
+        },
+        "6": {
+          "n": 1007,
+          "mean_net": -0.06959710990826254
+        },
+        "7": {
+          "n": 1402,
+          "mean_net": -0.06198115658929369
+        }
+      },
+      "top10_pairs": {
+        "GRASS/YZY": 26.123343604470364,
+        "YZY/ZETA": 21.014491041081843,
+        "MAVIA/YZY": 20.723268897479464,
+        "HMSTR/NEO": 19.567684842858828,
+        "HMSTR/TST": 18.82929125812918,
+        "FOGO/GRIFFAIN": 18.092947613352102,
+        "HMSTR/MOODENG": 17.02865123755336,
+        "YZY/kSHIB": 16.714940472404813,
+        "BOME/HMSTR": 15.534503169097093,
+        "CRV/HMSTR": 14.391216492217575
+      },
+      "bottom10_pairs": {
+        "SPX/STX": -9.548668798099772,
+        "TST/VINE": -9.667172929039399,
+        "HMSTR/SOPH": -9.703527987934779,
+        "EIGEN/FTT": -9.748827733497723,
+        "GMX/RESOLV": -9.855712540215709,
+        "FOGO/XPL": -10.974416699756372,
+        "FOGO/kNEIRO": -11.582015070140756,
+        "CFX/DASH": -12.197184402887574,
+        "REZ/ZEREBRO": -12.420570178311607,
+        "EIGEN/ENS": -12.647747252046717
+      },
+      "top10_coins": {
+        "HMSTR": 622.2444845215085,
+        "YZY": 228.38066343847436,
+        "BOME": 155.81191403379933,
+        "NOT": 148.30283433156447,
+        "MEW": 146.5855316432784,
+        "MAVIA": 92.45977872222957,
+        "FOGO": 88.59345692721811,
+        "TNSR": 72.16823441574945,
+        "ZETA": 54.49053822388555,
+        "ZEREBRO": 53.16709941568622
+      },
+      "bottom10_coins": {
+        "EIGEN": -40.26291909189836,
+        "TRUMP": -41.797313607509636,
+        "kNEIRO": -41.927664145434996,
+        "BIO": -42.196986310004874,
+        "RESOLV": -44.44577543612744,
+        "TON": -46.89262590953089,
+        "CFX": -46.93810634967508,
+        "BABY": -49.48606240870062,
+        "APEX": -51.48480817139151,
+        "TST": -60.934354179654505
+      }
+    },
+    "q0.005_stop2p0_feemaker": {
+      "q": 0.005,
+      "stop": "2p0",
+      "fee": "maker",
+      "n_trades": 13340,
+      "final_equity": 5736.340460973757,
+      "total_return": 4.736340460973757,
+      "cagr": 22.123203855300773,
+      "cagr_n_days": 203,
+      "daily_pnl_mean": 23.217355200851753,
+      "daily_pnl_median": 10.392224719771775,
+      "share_positive_days": 0.6470588235294118,
+      "worst_day": -199.28865969057188,
+      "best_day": 418.348437935535,
+      "max_drawdown": {
+        "max_dd_usd": -258.92341002757985,
+        "max_dd_pct": -0.0804520390620074,
+        "start": "2026-05-04",
+        "bottom": "2026-05-15",
+        "recovery": "2026-05-21",
+        "longest_underwater_days": 16
+      },
+      "sharpe": 7.540567209683057,
+      "sortino": 15.538051469898964,
+      "sharpe_sortino_n_days": 204,
+      "monthly": {
+        "1": {
+          "n_days": 30,
+          "total_pnl_usd": 452.1529411778838,
+          "total_pnl_pct": 0.45215294117788374
+        },
+        "2": {
+          "n_days": 30,
+          "total_pnl_usd": 860.679471929092,
+          "total_pnl_pct": 0.5926920281764327
+        },
+        "3": {
+          "n_days": 30,
+          "total_pnl_usd": 164.06926814899407,
+          "total_pnl_pct": 0.07093867554743816
+        },
+        "4": {
+          "n_days": 30,
+          "total_pnl_usd": 214.3443755110202,
+          "total_pnl_pct": 0.08653729662871879
+        },
+        "5": {
+          "n_days": 30,
+          "total_pnl_usd": 2238.44347263018,
+          "total_pnl_pct": 0.8317498383329676
+        },
+        "6": {
+          "n_days": 30,
+          "total_pnl_usd": 308.31386342045244,
+          "total_pnl_pct": 0.0625422476571571
+        },
+        "7": {
+          "n_days": 23,
+          "total_pnl_usd": 513.9851575051161,
+          "total_pnl_pct": 0.098126159713813
+        },
+        "outside": {
+          "n_days": 1,
+          "total_pnl_usd": -15.648089348981557,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 7,
+      "win_rate": 0.5610944527736131,
+      "stop_share": 0.4116941529235382,
+      "timeout_share": 0.027211394302848576,
+      "liquidation_share": 0.0,
+      "mean_net": 0.3550480105677469,
+      "median_net": 0.9403137052988296,
+      "mean_return_on_margin": 0.002674043764984765,
+      "median_return_on_margin": 0.009559114051330461,
+      "mean_win": 3.0774893529382945,
+      "mean_loss": -3.3367401608771603,
+      "profit_factor": 1.2506978789233267,
+      "mean_holding_minutes": 131.04722638680659,
+      "total_fee": 2004.510813264307,
+      "fee_share_of_gross": 0.2965203334548155,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 186.5953071259876,
+      "funding_paid_share_of_gross": 0.0276023967164332,
+      "total_funding_received": 167.33407943418405,
+      "funding_received_share_of_gross": 0.024753150097193515,
+      "total_gross": 6760.112501929853,
+      "peak_margin_used": 5845.770272159103,
+      "distance_to_liquidation_ratio": {
+        "min": 2.038351888070701,
+        "median": 3.522242298007323,
+        "date_of_min": "2026-03-19"
+      },
+      "mean_open_positions": 7.238529412982539,
+      "max_open_positions": 20,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "book_full": 2217,
+        "margin": 2042,
+        "min_order": 100
+      },
+      "by_fold": {
+        "1": {
+          "n": 3047,
+          "mean_net": 0.1483928261167963
+        },
+        "2": {
+          "n": 2693,
+          "mean_net": 0.3194937831953188
+        },
+        "3": {
+          "n": 629,
+          "mean_net": 0.25289428134977676
+        },
+        "4": {
+          "n": 1625,
+          "mean_net": 0.14208484163434743
+        },
+        "5": {
+          "n": 2922,
+          "mean_net": 0.765524923727838
+        },
+        "6": {
+          "n": 1007,
+          "mean_net": 0.2965556064917439
+        },
+        "7": {
+          "n": 1417,
+          "mean_net": 0.3516845929118687
+        }
+      },
+      "top10_pairs": {
+        "GRASS/YZY": 68.75587274873611,
+        "YZY/ZETA": 56.03550064397665,
+        "MAVIA/YZY": 54.734583118796394,
+        "HMSTR/NEO": 51.918958798718904,
+        "UNI/WLD": 51.60447538008058,
+        "HMSTR/TST": 48.22210464605142,
+        "YZY/kSHIB": 45.49470068756053,
+        "HYPE/ONDO": 44.06974450322479,
+        "NEAR/XLM": 40.88548372846877,
+        "LIT/YZY": 37.424690601283146
+      },
+      "bottom10_pairs": {
+        "TST/ZK": -23.00798450377966,
+        "ARB/ZK": -23.140316157590664,
+        "BIO/RESOLV": -24.750520948129356,
+        "LAYER/kLUNC": -24.89256024155515,
+        "BNB/EIGEN": -25.66692563512153,
+        "LIT/ZEN": -29.589418278057607,
+        "GMX/RESOLV": -31.584713796312656,
+        "CFX/DASH": -31.768991340938037,
+        "REZ/ZEREBRO": -33.2992033629098,
+        "EIGEN/ENS": -41.77293207285088
+      },
+      "top10_coins": {
+        "HMSTR": 1643.3072466830415,
+        "YZY": 751.1974936635538,
+        "MEW": 412.6536397756771,
+        "BOME": 366.5364249234038,
+        "NOT": 348.20936330520385,
+        "TNSR": 302.1606166179852,
+        "MAVIA": 301.1834023793195,
+        "UMA": 207.76693209610187,
+        "TRB": 175.3115600728879,
+        "FOGO": 169.76834814454523
+      },
+      "bottom10_coins": {
+        "kNEIRO": -59.248603634178295,
+        "PUMP": -63.54729074733386,
+        "TON": -71.60471160084131,
+        "BIO": -76.07565361818175,
+        "RESOLV": -78.35797927640691,
+        "EIGEN": -81.94087741604451,
+        "APEX": -88.50464618104833,
+        "BABY": -91.76599395925508,
+        "TST": -93.79071041582513,
+        "CFX": -136.57077565730967
+      }
+    },
+    "q0.005_stopnone_feetaker": {
+      "q": 0.005,
+      "stop": "none",
+      "fee": "taker",
+      "n_trades": 9965,
+      "final_equity": 3369.6703319550534,
+      "total_return": 2.3696703319550534,
+      "cagr": 7.884188497533859,
+      "cagr_n_days": 203,
+      "daily_pnl_mean": 11.61603103899536,
+      "daily_pnl_median": 10.045576441830121,
+      "share_positive_days": 0.6323529411764706,
+      "worst_day": -271.05158867203045,
+      "best_day": 329.93999549512046,
+      "max_drawdown": {
+        "max_dd_usd": -529.9448153572484,
+        "max_dd_pct": -0.16180967928658946,
+        "start": "2026-05-04",
+        "bottom": "2026-05-09",
+        "recovery": "2026-06-07",
+        "longest_underwater_days": 33
+      },
+      "sharpe": 4.262871921340407,
+      "sortino": 7.371030919882908,
+      "sharpe_sortino_n_days": 204,
+      "monthly": {
+        "1": {
+          "n_days": 30,
+          "total_pnl_usd": 272.2326686465228,
+          "total_pnl_pct": 0.27223266864652285
+        },
+        "2": {
+          "n_days": 30,
+          "total_pnl_usd": 433.76580309015867,
+          "total_pnl_pct": 0.34094848668807143
+        },
+        "3": {
+          "n_days": 30,
+          "total_pnl_usd": 89.28270100509508,
+          "total_pnl_pct": 0.05233457267649633
+        },
+        "4": {
+          "n_days": 30,
+          "total_pnl_usd": 331.4978399071779,
+          "total_pnl_pct": 0.18464953843464538
+        },
+        "5": {
+          "n_days": 30,
+          "total_pnl_usd": 818.131892591653,
+          "total_pnl_pct": 0.38468119523741673
+        },
+        "6": {
+          "n_days": 30,
+          "total_pnl_usd": 458.9955534428418,
+          "total_pnl_pct": 0.1558605907655941
+        },
+        "7": {
+          "n_days": 23,
+          "total_pnl_usd": -11.555559626298873,
+          "total_pnl_pct": -0.0033947935310678634
+        },
+        "outside": {
+          "n_days": 1,
+          "total_pnl_usd": -22.68056710209703,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 6,
+      "win_rate": 0.7120923231309584,
+      "stop_share": 0.0,
+      "timeout_share": 0.2879076768690417,
+      "liquidation_share": 0.0,
+      "mean_net": 0.2377993308534917,
+      "median_net": 1.0723025697506188,
+      "mean_return_on_margin": 0.002562146536972904,
+      "median_return_on_margin": 0.011335090202603149,
+      "mean_win": 1.978979673574717,
+      "mean_loss": -4.774956533204969,
+      "profit_factor": 1.1931765494953375,
+      "mean_holding_minutes": 281.5368790767687,
+      "total_fee": 3274.9889358164264,
+      "fee_share_of_gross": 0.5765863891778507,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 274.91244243705984,
+      "funding_paid_share_of_gross": 0.04840039940022963,
+      "total_funding_received": 239.6094403980976,
+      "funding_received_share_of_gross": 0.042185040853465826,
+      "total_gross": 5679.962269810433,
+      "peak_margin_used": 3811.0191895125445,
+      "distance_to_liquidation_ratio": {
+        "min": 2.032562692050475,
+        "median": 2.4921548499081565,
+        "date_of_min": "2026-03-19"
+      },
+      "mean_open_positions": 10.458154558433764,
+      "max_open_positions": 20,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "margin": 3967,
+        "book_full": 3662,
+        "min_order": 105
+      },
+      "by_fold": {
+        "1": {
+          "n": 1984,
+          "mean_net": 0.13389559973989845
+        },
+        "2": {
+          "n": 1802,
+          "mean_net": 0.247066198090533
+        },
+        "3": {
+          "n": 571,
+          "mean_net": 0.14957665260964267
+        },
+        "4": {
+          "n": 1379,
+          "mean_net": 0.24826142030371823
+        },
+        "5": {
+          "n": 2147,
+          "mean_net": 0.3812237783305833
+        },
+        "6": {
+          "n": 960,
+          "mean_net": 0.47471585766330626
+        },
+        "7": {
+          "n": 1122,
+          "mean_net": -0.03847350228121565
+        }
+      },
+      "top10_pairs": {
+        "GRASS/YZY": 44.27777968773485,
+        "MAVIA/YZY": 41.23027926084424,
+        "YZY/ZRO": 37.944371415936885,
+        "HMSTR/NEO": 36.695954340602945,
+        "YZY/ZETA": 36.45852739897131,
+        "YZY/kSHIB": 28.860520866208574,
+        "HMSTR/PROVE": 26.192005110999318,
+        "BOME/HMSTR": 25.71956133542381,
+        "FTT/HMSTR": 24.979199692881544,
+        "HMSTR/MANTA": 22.929085427205877
+      },
+      "bottom10_pairs": {
+        "0G/HMSTR": -43.95946478496464,
+        "ARB/COMP": -44.111895424424944,
+        "MORPHO/S": -44.11950908846435,
+        "GMX/RESOLV": -49.007018774932064,
+        "NEAR/TRX": -51.080567498206925,
+        "PUMP/TRX": -57.01082753266269,
+        "APE/ZK": -62.26338498104768,
+        "ORDI/ZK": -68.15944611548774,
+        "CFX/KAITO": -79.9389521418233,
+        "HYPER/SAGA": -117.72220997814726
+      },
+      "top10_coins": {
+        "HMSTR": 924.7280340386676,
+        "YZY": 585.0953860506095,
+        "MAVIA": 285.23692668886326,
+        "BOME": 269.8186277922535,
+        "FTT": 257.74310850362565,
+        "MEW": 230.23860085414634,
+        "NOT": 211.054785430979,
+        "TNSR": 197.49801190408266,
+        "FOGO": 171.5194029442125,
+        "PNUT": 141.0101400381915
+      },
+      "bottom10_coins": {
+        "ORDI": -89.06220433918007,
+        "TON": -89.99492268750386,
+        "JUP": -96.59928677079021,
+        "ZK": -112.80421561597272,
+        "DOGE": -118.26165011865125,
+        "KAITO": -124.18113328587444,
+        "HYPER": -128.8843259146899,
+        "INIT": -134.73502330006528,
+        "SAGA": -166.3008021558959,
+        "TRX": -170.9829054914671
+      }
+    },
+    "q0.005_stopnone_feemaker": {
+      "q": 0.005,
+      "stop": "none",
+      "fee": "maker",
+      "n_trades": 9992,
+      "final_equity": 9749.472125905233,
+      "total_return": 8.749472125905234,
+      "cagr": 59.00911919205002,
+      "cagr_n_days": 203,
+      "daily_pnl_mean": 42.88956924463349,
+      "daily_pnl_median": 27.988900902312025,
+      "share_positive_days": 0.7107843137254902,
+      "worst_day": -508.9184092863961,
+      "best_day": 750.5558317464611,
+      "max_drawdown": {
+        "max_dd_usd": -936.0011435570759,
+        "max_dd_pct": -0.13696424332276044,
+        "start": "2026-05-04",
+        "bottom": "2026-05-09",
+        "recovery": "2026-05-21",
+        "longest_underwater_days": 16
+      },
+      "sharpe": 7.383078153355346,
+      "sortino": 13.457425100143498,
+      "sharpe_sortino_n_days": 204,
+      "monthly": {
+        "1": {
+          "n_days": 30,
+          "total_pnl_usd": 554.0273747183173,
+          "total_pnl_pct": 0.5540273747183173
+        },
+        "2": {
+          "n_days": 30,
+          "total_pnl_usd": 995.3070419956675,
+          "total_pnl_pct": 0.6404694397201829
+        },
+        "3": {
+          "n_days": 30,
+          "total_pnl_usd": 281.04940309397944,
+          "total_pnl_pct": 0.11024422737611794
+        },
+        "4": {
+          "n_days": 30,
+          "total_pnl_usd": 1077.299658613967,
+          "total_pnl_pct": 0.3806196357803726
+        },
+        "5": {
+          "n_days": 30,
+          "total_pnl_usd": 2866.0271324518376,
+          "total_pnl_pct": 0.733433797357929
+        },
+        "6": {
+          "n_days": 30,
+          "total_pnl_usd": 1846.2819635889891,
+          "total_pnl_pct": 0.27256581652974243
+        },
+        "7": {
+          "n_days": 23,
+          "total_pnl_usd": 1186.3333361883415,
+          "total_pnl_pct": 0.1376257956071707
+        },
+        "outside": {
+          "n_days": 1,
+          "total_pnl_usd": -56.853784745866506,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 7,
+      "win_rate": 0.7136709367493995,
+      "stop_share": 0.0,
+      "timeout_share": 0.2863290632506005,
+      "liquidation_share": 0.0,
+      "mean_net": 0.8756477307751374,
+      "median_net": 1.8854568178619298,
+      "mean_return_on_margin": 0.004688142652672389,
+      "median_return_on_margin": 0.013376161224055431,
+      "mean_win": 4.230931177674649,
+      "mean_loss": -9.260413772594937,
+      "profit_factor": 1.3802113407502445,
+      "mean_holding_minutes": 281.1086869495596,
+      "total_fee": 2166.8959448969213,
+      "fee_share_of_gross": 0.19773621337663994,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 515.330648971752,
+      "funding_paid_share_of_gross": 0.047025576564751946,
+      "total_funding_received": 473.1802577584669,
+      "funding_received_share_of_gross": 0.043179218011870225,
+      "total_gross": 10958.51846201538,
+      "peak_margin_used": 10558.824624142737,
+      "distance_to_liquidation_ratio": {
+        "min": 2.0347603002931356,
+        "median": 2.498167335639468,
+        "date_of_min": "2026-03-19"
+      },
+      "mean_open_positions": 10.470073395384553,
+      "max_open_positions": 20,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "book_full": 4320,
+        "margin": 3321,
+        "min_order": 66
+      },
+      "by_fold": {
+        "1": {
+          "n": 1978,
+          "mean_net": 0.2762756502419675
+        },
+        "2": {
+          "n": 1820,
+          "mean_net": 0.5562526878799569
+        },
+        "3": {
+          "n": 575,
+          "mean_net": 0.47626074745030306
+        },
+        "4": {
+          "n": 1379,
+          "mean_net": 0.7962451482158958
+        },
+        "5": {
+          "n": 2155,
+          "mean_net": 1.3347179895568368
+        },
+        "6": {
+          "n": 959,
+          "mean_net": 1.916046862242438
+        },
+        "7": {
+          "n": 1126,
+          "mean_net": 0.9812973359022346
+        }
+      },
+      "top10_pairs": {
+        "GRASS/YZY": 92.37463563880854,
+        "MAVIA/YZY": 85.8543760065671,
+        "YZY/ZRO": 80.41326923668136,
+        "YZY/ZETA": 76.78612779669635,
+        "HMSTR/NEO": 75.76117779035602,
+        "CFX/SEI": 67.24708799095649,
+        "NOT/ORDI": 65.8197282329249,
+        "YZY/kSHIB": 62.04531557060404,
+        "BANANA/BOME": 58.15724245653894,
+        "ADA/LTC": 57.33457713899147
+      },
+      "bottom10_pairs": {
+        "MORPHO/S": -92.67469740504062,
+        "MON/PENGU": -94.25496309650339,
+        "IOTA/PYTH": -100.90034193914222,
+        "NEAR/TRX": -122.82750907844417,
+        "GMX/RESOLV": -124.78297308470206,
+        "APE/ZK": -126.19452005896022,
+        "PUMP/TRX": -129.59350242160082,
+        "ORDI/ZK": -180.4292378978417,
+        "CFX/KAITO": -191.67729444922216,
+        "HYPER/SAGA": -229.99662510763255
+      },
+      "top10_coins": {
+        "HMSTR": 2074.141877929323,
+        "YZY": 1365.6946970107986,
+        "BOME": 661.6264304425031,
+        "TNSR": 563.5285825946694,
+        "MAVIA": 559.0175484503001,
+        "FTT": 535.29708929113,
+        "MEW": 518.737910021779,
+        "NOT": 509.8713467651582,
+        "NEO": 360.86690387867145,
+        "NIL": 348.4453989550225
+      },
+      "bottom10_coins": {
+        "JUP": -177.0280716143968,
+        "APE": -182.59130051165982,
+        "CFX": -184.01761440274151,
+        "DOGE": -199.6751537025636,
+        "ZK": -200.42566437429792,
+        "HYPER": -218.64318176261727,
+        "KAITO": -237.94984229024502,
+        "INIT": -244.52261000838863,
+        "TRX": -315.30035322287216,
+        "SAGA": -332.86346570269365
+      }
+    },
+    "q0.001_stop0p5_feetaker": {
+      "q": 0.001,
+      "stop": "0p5",
+      "fee": "taker",
+      "n_trades": 3427,
+      "final_equity": 865.1054943335558,
+      "total_return": -0.13489450566644412,
+      "cagr": -0.23035904200676716,
+      "cagr_n_days": 202,
+      "daily_pnl_mean": -0.6645049540218925,
+      "daily_pnl_median": -0.4765318188683523,
+      "share_positive_days": 0.31527093596059114,
+      "worst_day": -19.25090095975213,
+      "best_day": 61.14171960636554,
+      "max_drawdown": {
+        "max_dd_usd": -138.73919898900283,
+        "max_dd_pct": -0.13873919898900283,
+        "start": "2025-12-20",
+        "bottom": "2026-04-17",
+        "recovery": null,
+        "longest_underwater_days": 203
+      },
+      "sharpe": -1.8880282761081195,
+      "sortino": -3.312584933449805,
+      "sharpe_sortino_n_days": 203,
+      "monthly": {
+        "1": {
+          "n_days": 30,
+          "total_pnl_usd": -39.19330101908383,
+          "total_pnl_pct": -0.039193301019083804
+        },
+        "2": {
+          "n_days": 30,
+          "total_pnl_usd": -48.725876144140784,
+          "total_pnl_pct": -0.05071350584443479
+        },
+        "3": {
+          "n_days": 30,
+          "total_pnl_usd": -8.198233287466337,
+          "total_pnl_pct": -0.008988494311247597
+        },
+        "4": {
+          "n_days": 30,
+          "total_pnl_usd": -39.70386476137537,
+          "total_pnl_pct": -0.04392590942721042
+        },
+        "5": {
+          "n_days": 30,
+          "total_pnl_usd": 38.82525194186792,
+          "total_pnl_pct": 0.04492734063939774
+        },
+        "6": {
+          "n_days": 30,
+          "total_pnl_usd": -4.74703249246204,
+          "total_pnl_pct": -0.005256934204933672
+        },
+        "7": {
+          "n_days": 23,
+          "total_pnl_usd": -33.151449903783714,
+          "total_pnl_pct": -0.03690642206159711
+        },
+        "outside": {
+          "n_days": 0,
+          "total_pnl_usd": 0.0,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 1,
+      "win_rate": 0.2970528158739422,
+      "stop_share": 0.7014881820834549,
+      "timeout_share": 0.0014590020426028597,
+      "liquidation_share": 0.0,
+      "mean_net": -0.03936227186064738,
+      "median_net": -0.3270686946909378,
+      "mean_return_on_margin": -0.0008250941564565874,
+      "median_return_on_margin": -0.0070137247895662525,
+      "mean_win": 0.9759035180847931,
+      "mean_loss": -0.46959538600453987,
+      "profit_factor": 0.8806577148029519,
+      "mean_holding_minutes": 37.891450248030345,
+      "total_fee": 481.3859688136906,
+      "fee_share_of_gross": 1.3847886812855892,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 4.995639508602645,
+      "funding_paid_share_of_gross": 0.014370807409165394,
+      "total_funding_received": 3.8629666997543683,
+      "funding_received_share_of_gross": 0.011112481269833928,
+      "total_gross": 347.62413595610036,
+      "peak_margin_used": 965.7350139093055,
+      "distance_to_liquidation_ratio": {
+        "min": 2.1323700744494722,
+        "median": 16.809685293217544,
+        "date_of_min": "2026-03-27"
+      },
+      "mean_open_positions": 1.9624597621242577,
+      "max_open_positions": 20,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "min_order": 174,
+        "margin": 35,
+        "book_full": 2
+      },
+      "by_fold": {
+        "1": {
+          "n": 1050,
+          "mean_net": -0.037326953351505175
+        },
+        "2": {
+          "n": 673,
+          "mean_net": -0.0735292708442794
+        },
+        "3": {
+          "n": 162,
+          "mean_net": -0.04591919847782324
+        },
+        "4": {
+          "n": 287,
+          "mean_net": -0.13834099219991472
+        },
+        "5": {
+          "n": 796,
+          "mean_net": 0.048775442138026266
+        },
+        "6": {
+          "n": 129,
+          "mean_net": -0.0367987014919525
+        },
+        "7": {
+          "n": 330,
+          "mean_net": -0.10045893910237035
+        }
+      },
+      "top10_pairs": {
+        "FOGO/MAVIA": 11.640159772617881,
+        "MAVIA/YZY": 11.028044084059617,
+        "FOGO/STABLE": 10.653016904030563,
+        "HMSTR/MEW": 10.347701267394395,
+        "HMSTR/MEGA": 8.433537587562084,
+        "BOME/HMSTR": 6.757000075352507,
+        "CAKE/FOGO": 6.471121522272174,
+        "FOGO/TON": 6.305648387005642,
+        "HMSTR/MANTA": 6.1422824090710435,
+        "HMSTR/JTO": 5.825675126391073
+      },
+      "bottom10_pairs": {
+        "ALGO/MORPHO": -2.257334104490214,
+        "ACE/HMSTR": -2.26645881610166,
+        "INIT/TAO": -2.389962744722516,
+        "HYPE/NOT": -2.6718366821559982,
+        "HMSTR/MAVIA": -2.742443867025538,
+        "POL/ZRO": -3.1421963771837254,
+        "FOGO/LAYER": -3.1803756008240236,
+        "SPX/STX": -3.335283021137861,
+        "TST/W": -4.322193298098347,
+        "TST/USUAL": -4.6827687684466035
+      },
+      "top10_coins": {
+        "HMSTR": 106.41373939376459,
+        "YZY": 41.466403103198324,
+        "FOGO": 31.280846162284647,
+        "NOT": 16.26356594274483,
+        "MEW": 14.9771306643607,
+        "MEGA": 13.241550079035221,
+        "STABLE": 11.1051270598157,
+        "BOME": 10.463451835869533,
+        "JTO": 9.447266603111144,
+        "PROMPT": 7.276756791125541
+      },
+      "bottom10_coins": {
+        "PUMP": -9.894048319827911,
+        "BRETT": -11.244975919073498,
+        "SPX": -11.326706437619167,
+        "ZEC": -11.368120355933074,
+        "MORPHO": -12.003777323500248,
+        "HYPE": -13.307383065407562,
+        "ZRO": -13.742535980018992,
+        "VINE": -14.466672928365401,
+        "FTT": -16.218126530276727,
+        "TST": -20.963050887332155
+      }
+    },
+    "q0.001_stop0p5_feemaker": {
+      "q": 0.001,
+      "stop": "0p5",
+      "fee": "maker",
+      "n_trades": 3469,
+      "final_equity": 1225.7064525270334,
+      "total_return": 0.22570645252703336,
+      "cagr": 0.4444690132199498,
+      "cagr_n_days": 202,
+      "daily_pnl_mean": 1.1118544459459776,
+      "daily_pnl_median": 0.0,
+      "share_positive_days": 0.4482758620689655,
+      "worst_day": -19.060779519357993,
+      "best_day": 90.94044409845537,
+      "max_drawdown": {
+        "max_dd_usd": -45.73704587220459,
+        "max_dd_pct": -0.03626784500767471,
+        "start": "2026-05-08",
+        "bottom": "2026-05-18",
+        "recovery": null,
+        "longest_underwater_days": 69
+      },
+      "sharpe": 2.6652895395349243,
+      "sortino": 7.743979415273052,
+      "sharpe_sortino_n_days": 203,
+      "monthly": {
+        "1": {
+          "n_days": 30,
+          "total_pnl_usd": 66.11438523656557,
+          "total_pnl_pct": 0.06611438523656554
+        },
+        "2": {
+          "n_days": 30,
+          "total_pnl_usd": 16.756454473639224,
+          "total_pnl_pct": 0.015717313925860843
+        },
+        "3": {
+          "n_days": 30,
+          "total_pnl_usd": 6.691178846660023,
+          "total_pnl_pct": 0.006179110750134109
+        },
+        "4": {
+          "n_days": 30,
+          "total_pnl_usd": -16.14477888624083,
+          "total_pnl_pct": -0.014817677756081005
+        },
+        "5": {
+          "n_days": 30,
+          "total_pnl_usd": 147.02687821823883,
+          "total_pnl_pct": 0.13697085605160741
+        },
+        "6": {
+          "n_days": 30,
+          "total_pnl_usd": 9.091649496045648,
+          "total_pnl_pct": 0.007449459883319021
+        },
+        "7": {
+          "n_days": 23,
+          "total_pnl_usd": -3.8293148578750333,
+          "total_pnl_pct": -0.003114439579110062
+        },
+        "outside": {
+          "n_days": 0,
+          "total_pnl_usd": 0.0,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 5,
+      "win_rate": 0.29979821274142404,
+      "stop_share": 0.6987604496973191,
+      "timeout_share": 0.0014413375612568463,
+      "liquidation_share": 0.0,
+      "mean_net": 0.06506383756904781,
+      "median_net": -0.28460029042556084,
+      "mean_return_on_margin": 0.0011942057392658335,
+      "median_return_on_margin": -0.005136604220861984,
+      "mean_win": 1.2487425824198801,
+      "mean_loss": -0.44452816639972287,
+      "profit_factor": 1.2093789163871507,
+      "mean_holding_minutes": 38.14153934851542,
+      "total_fee": 193.13587051479797,
+      "fee_share_of_gross": 0.45931442607508666,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 6.259649438048813,
+      "funding_paid_share_of_gross": 0.01488665612143932,
+      "total_funding_received": 4.614699382065513,
+      "funding_received_share_of_gross": 0.010974646980557015,
+      "total_gross": 420.48727309780816,
+      "peak_margin_used": 1085.7375226966085,
+      "distance_to_liquidation_ratio": {
+        "min": 2.019599998473282,
+        "median": 16.81111902719465,
+        "date_of_min": "2026-03-27"
+      },
+      "mean_open_positions": 1.9823657202786726,
+      "max_open_positions": 20,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "min_order": 123,
+        "margin": 30,
+        "book_full": 16
+      },
+      "by_fold": {
+        "1": {
+          "n": 1051,
+          "mean_net": 0.06290617053907448
+        },
+        "2": {
+          "n": 676,
+          "mean_net": 0.023598318641598677
+        },
+        "3": {
+          "n": 171,
+          "mean_net": 0.04383140303260155
+        },
+        "4": {
+          "n": 298,
+          "mean_net": -0.05417711035653123
+        },
+        "5": {
+          "n": 803,
+          "mean_net": 0.18309698408248998
+        },
+        "6": {
+          "n": 130,
+          "mean_net": 0.0699357653541857
+        },
+        "7": {
+          "n": 340,
+          "mean_net": -0.01126269075845075
+        }
+      },
+      "top10_pairs": {
+        "MAVIA/YZY": 15.262429448037562,
+        "FOGO/MAVIA": 12.743639326514327,
+        "HMSTR/MEW": 12.048815000448156,
+        "FOGO/STABLE": 11.422749651106974,
+        "HMSTR/MEGA": 9.28767039709999,
+        "BOME/HMSTR": 8.970951228886912,
+        "HMSTR/MANTA": 8.388563677932911,
+        "HMSTR/JTO": 7.683023755149333,
+        "HMSTR/PROVE": 7.469580117877397,
+        "CAKE/FOGO": 7.389943245885549
+      },
+      "bottom10_pairs": {
+        "ACE/HMSTR": -2.2718864827384055,
+        "TST/XMR": -2.4871932809476154,
+        "POL/ZRO": -2.6314949555499005,
+        "HYPE/NOT": -2.9065633463954645,
+        "HMSTR/MAVIA": -2.907706624500492,
+        "FOGO/LAYER": -2.921429388240715,
+        "INIT/TAO": -2.942083000394813,
+        "SPX/STX": -3.453732016738456,
+        "TST/W": -5.651141709573137,
+        "TST/USUAL": -5.941778199940872
+      },
+      "top10_coins": {
+        "HMSTR": 169.7419065013702,
+        "YZY": 89.62128356872883,
+        "FOGO": 39.61965869845712,
+        "NOT": 33.75447514737801,
+        "BOME": 29.753700721955852,
+        "MEW": 25.67421097166944,
+        "MEGA": 24.49396621117913,
+        "MAVIA": 14.247744841651894,
+        "JTO": 14.139633167976509,
+        "STABLE": 13.607346907090877
+      },
+      "bottom10_coins": {
+        "SAGA": -7.862915190555396,
+        "SOPH": -8.056643312090765,
+        "ZEC": -8.500942994320983,
+        "BRETT": -8.7271623685739,
+        "ZORA": -8.730194029325293,
+        "FTT": -9.389388405028408,
+        "SPX": -9.6505617738428,
+        "VINE": -9.955150288093973,
+        "HYPE": -12.13683235069927,
+        "TST": -22.555596106861426
+      }
+    },
+    "q0.001_stop1p0_feetaker": {
+      "q": 0.001,
+      "stop": "1p0",
+      "fee": "taker",
+      "n_trades": 3430,
+      "final_equity": 1033.1553516070915,
+      "total_return": 0.03315535160709149,
+      "cagr": 0.060709139576083926,
+      "cagr_n_days": 202,
+      "daily_pnl_mean": 0.1633268552073471,
+      "daily_pnl_median": -0.24231445411328423,
+      "share_positive_days": 0.37438423645320196,
+      "worst_day": -20.33718588615261,
+      "best_day": 92.33316303390268,
+      "max_drawdown": {
+        "max_dd_usd": -100.31006462896448,
+        "max_dd_pct": -0.08849856660123617,
+        "start": "2026-05-04",
+        "bottom": "2026-07-11",
+        "recovery": null,
+        "longest_underwater_days": 119
+      },
+      "sharpe": 0.43769354195887156,
+      "sortino": 0.8977580509484481,
+      "sharpe_sortino_n_days": 203,
+      "monthly": {
+        "1": {
+          "n_days": 30,
+          "total_pnl_usd": -14.69348445489527,
+          "total_pnl_pct": -0.014693484454895267
+        },
+        "2": {
+          "n_days": 30,
+          "total_pnl_usd": -10.08866913579368,
+          "total_pnl_pct": -0.010239117448860302
+        },
+        "3": {
+          "n_days": 30,
+          "total_pnl_usd": 4.779268939600229,
+          "total_pnl_pct": 0.004900719318455149
+        },
+        "4": {
+          "n_days": 30,
+          "total_pnl_usd": -7.988065746356483,
+          "total_pnl_pct": -0.008151111489254181
+        },
+        "5": {
+          "n_days": 30,
+          "total_pnl_usd": 105.02020828695709,
+          "total_pnl_pct": 0.10804447585122667
+        },
+        "6": {
+          "n_days": 30,
+          "total_pnl_usd": -6.170413483884886,
+          "total_pnl_pct": -0.00572910479328681
+        },
+        "7": {
+          "n_days": 23,
+          "total_pnl_usd": -37.703492798535535,
+          "total_pnl_pct": -0.03520864864263473
+        },
+        "outside": {
+          "n_days": 0,
+          "total_pnl_usd": 0.0,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 2,
+      "win_rate": 0.42886297376093296,
+      "stop_share": 0.5653061224489796,
+      "timeout_share": 0.0058309037900874635,
+      "liquidation_share": 0.0,
+      "mean_net": 0.00966628326737453,
+      "median_net": -0.43061579461780775,
+      "mean_return_on_margin": 0.00022012935293113612,
+      "median_return_on_margin": -0.008530737096984833,
+      "mean_win": 1.0383572601036524,
+      "mean_loss": -0.7664560649850601,
+      "profit_factor": 1.0221268509818555,
+      "mean_holding_minutes": 65.28542274052478,
+      "total_fee": 526.0083952030018,
+      "fee_share_of_gross": 0.9377256491369665,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 10.319532481770008,
+      "funding_paid_share_of_gross": 0.018396836216888136,
+      "total_funding_received": 8.54267189021079,
+      "funding_received_share_of_gross": 0.015229191428628202,
+      "total_gross": 560.9406074016556,
+      "peak_margin_used": 1039.3140438103187,
+      "distance_to_liquidation_ratio": {
+        "min": 2.02219978924075,
+        "median": 14.119630463890509,
+        "date_of_min": "2026-03-27"
+      },
+      "mean_open_positions": 2.394194376135999,
+      "max_open_positions": 20,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "min_order": 142,
+        "margin": 38,
+        "book_full": 28
+      },
+      "by_fold": {
+        "1": {
+          "n": 1038,
+          "mean_net": -0.014155572692576708
+        },
+        "2": {
+          "n": 674,
+          "mean_net": -0.016172930176699234
+        },
+        "3": {
+          "n": 168,
+          "mean_net": 0.03328068299346239
+        },
+        "4": {
+          "n": 283,
+          "mean_net": -0.028226380729173536
+        },
+        "5": {
+          "n": 802,
+          "mean_net": 0.13094789063212364
+        },
+        "6": {
+          "n": 129,
+          "mean_net": -0.04783266266579105
+        },
+        "7": {
+          "n": 336,
+          "mean_net": -0.11221277618612244
+        }
+      },
+      "top10_pairs": {
+        "HMSTR/TST": 16.860145484526246,
+        "HMSTR/MEGA": 12.264537070475193,
+        "MAVIA/YZY": 12.04407977113697,
+        "FOGO/STABLE": 10.904450081500135,
+        "FOGO/MAVIA": 10.122478993024846,
+        "HMSTR/MEW": 9.97162998520149,
+        "BOME/HMSTR": 7.878022386611969,
+        "HMSTR/MANTA": 7.148655233153276,
+        "HMSTR/LINEA": 7.101277751420781,
+        "HMSTR/JTO": 6.8171658255176215
+      },
+      "bottom10_pairs": {
+        "FOGO/MON": -3.285099170477588,
+        "INIT/TAO": -3.3096396112230995,
+        "FOGO/LAYER": -3.492102367067611,
+        "VIRTUAL/ZEC": -3.5751814815606653,
+        "HMSTR/TON": -3.7044695131656598,
+        "FARTCOIN/HYPE": -3.9385333185621914,
+        "SPX/STX": -4.413673453365166,
+        "POL/ZRO": -4.63525024945021,
+        "TST/W": -5.1247148736683465,
+        "TST/USUAL": -5.47578774595561
+      },
+      "top10_coins": {
+        "HMSTR": 192.2104686795112,
+        "YZY": 76.040743120806,
+        "FOGO": 44.08884979562884,
+        "NOT": 31.95293444745235,
+        "MEW": 27.44048513183749,
+        "MEGA": 16.61127454011446,
+        "ASTER": 16.390459790878747,
+        "JTO": 15.696330865976504,
+        "BOME": 14.423768856854275,
+        "MANTA": 14.286409870225054
+      },
+      "bottom10_coins": {
+        "SOPH": -12.554520185051288,
+        "WLFI": -12.885029290352772,
+        "INIT": -13.047922138549545,
+        "ZEC": -13.10762142811415,
+        "VINE": -13.124787873488712,
+        "ACE": -13.408403203222683,
+        "JUP": -14.113721828268206,
+        "CHILLGUY": -14.135276126546001,
+        "TST": -15.988255887798001,
+        "FTT": -16.40877896009087
+      }
+    },
+    "q0.001_stop1p0_feemaker": {
+      "q": 0.001,
+      "stop": "1p0",
+      "fee": "maker",
+      "n_trades": 3465,
+      "final_equity": 1459.650734568498,
+      "total_return": 0.4596507345684979,
+      "cagr": 0.9805530030285305,
+      "cagr_n_days": 202,
+      "daily_pnl_mean": 2.2642893328497435,
+      "daily_pnl_median": 0.1943202571915208,
+      "share_positive_days": 0.5221674876847291,
+      "worst_day": -25.161473271587283,
+      "best_day": 132.21792538096702,
+      "max_drawdown": {
+        "max_dd_usd": -44.25989117309746,
+        "max_dd_pct": -0.02965221855992082,
+        "start": "2026-05-08",
+        "bottom": "2026-05-18",
+        "recovery": "2026-06-25",
+        "longest_underwater_days": 47
+      },
+      "sharpe": 3.9558970996609095,
+      "sortino": 11.954893300801968,
+      "sharpe_sortino_n_days": 203,
+      "monthly": {
+        "1": {
+          "n_days": 30,
+          "total_pnl_usd": 91.83860329253775,
+          "total_pnl_pct": 0.09183860329253779
+        },
+        "2": {
+          "n_days": 30,
+          "total_pnl_usd": 65.40302212435017,
+          "total_pnl_pct": 0.059901730830107525
+        },
+        "3": {
+          "n_days": 30,
+          "total_pnl_usd": 26.68944723663185,
+          "total_pnl_pct": 0.023062985853984586
+        },
+        "4": {
+          "n_days": 30,
+          "total_pnl_usd": 24.490887701671227,
+          "total_pnl_pct": 0.02068607562328806
+        },
+        "5": {
+          "n_days": 30,
+          "total_pnl_usd": 243.86033748188606,
+          "total_pnl_pct": 0.201800650337576
+        },
+        "6": {
+          "n_days": 30,
+          "total_pnl_usd": 10.12947511374341,
+          "total_pnl_pct": 0.006974866476600061
+        },
+        "7": {
+          "n_days": 23,
+          "total_pnl_usd": -2.7610383823225675,
+          "total_pnl_pct": -0.0018880033882326952
+        },
+        "outside": {
+          "n_days": 0,
+          "total_pnl_usd": 0.0,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 6,
+      "win_rate": 0.42914862914862917,
+      "stop_share": 0.5650793650793651,
+      "timeout_share": 0.005772005772005772,
+      "liquidation_share": 0.0,
+      "mean_net": 0.1326553346518028,
+      "median_net": -0.38887657541376003,
+      "mean_return_on_margin": 0.0022134390028904303,
+      "median_return_on_margin": -0.006678034363949295,
+      "mean_win": 1.344668161512108,
+      "mean_loss": -0.7892873491946796,
+      "profit_factor": 1.2959155057591831,
+      "mean_holding_minutes": 65.51948051948052,
+      "total_fee": 211.99844860542095,
+      "fee_share_of_gross": 0.31456047973663886,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 12.621376910204877,
+      "funding_paid_share_of_gross": 0.01872743127097328,
+      "total_funding_received": 10.319246228950501,
+      "funding_received_share_of_gross": 0.015311560370617578,
+      "total_gross": 673.951313855172,
+      "peak_margin_used": 1321.1001252935384,
+      "distance_to_liquidation_ratio": {
+        "min": 2.023569958854697,
+        "median": 14.121812953236184,
+        "date_of_min": "2026-03-27"
+      },
+      "mean_open_positions": 2.4208253358925145,
+      "max_open_positions": 20,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "min_order": 107,
+        "margin": 33,
+        "book_full": 33
+      },
+      "by_fold": {
+        "1": {
+          "n": 1042,
+          "mean_net": 0.08813685536711663
+        },
+        "2": {
+          "n": 676,
+          "mean_net": 0.09547901409376344
+        },
+        "3": {
+          "n": 175,
+          "mean_net": 0.15742089047770544
+        },
+        "4": {
+          "n": 293,
+          "mean_net": 0.08358664744598492
+        },
+        "5": {
+          "n": 805,
+          "mean_net": 0.30293209625078293
+        },
+        "6": {
+          "n": 130,
+          "mean_net": 0.07791903933649474
+        },
+        "7": {
+          "n": 344,
+          "mean_net": -0.008026274367207842
+        }
+      },
+      "top10_pairs": {
+        "HMSTR/TST": 21.50101302432848,
+        "MAVIA/YZY": 16.76702138897675,
+        "HMSTR/MEGA": 13.177921136655302,
+        "FOGO/STABLE": 11.677492357720453,
+        "HMSTR/MEW": 11.59388151247001,
+        "FOGO/MAVIA": 11.120893684895641,
+        "BOME/HMSTR": 10.457517596997015,
+        "HMSTR/MANTA": 9.771636770378642,
+        "HMSTR/LINEA": 9.433196939448319,
+        "HMSTR/JTO": 8.998140079461864
+      },
+      "bottom10_pairs": {
+        "FARTCOIN/HYPE": -3.5459247356594945,
+        "TST/VINE": -3.5859685146952325,
+        "ONDO/STRK": -3.6527712267441896,
+        "ETHFI/XLM": -3.7619579621953747,
+        "HMSTR/TON": -4.095999716740084,
+        "INIT/TAO": -4.111899613593471,
+        "POL/ZRO": -4.55998284523338,
+        "SPX/STX": -4.695177027535986,
+        "TST/W": -6.6875670052021725,
+        "TST/USUAL": -6.954177706624363
+      },
+      "top10_coins": {
+        "HMSTR": 281.8616639577133,
+        "YZY": 133.14486963697317,
+        "FOGO": 55.602486824416836,
+        "NOT": 52.65811096171232,
+        "MEW": 41.47919004050682,
+        "BOME": 33.420044989280704,
+        "MEGA": 24.68149097253382,
+        "ASTER": 22.202804291182275,
+        "JTO": 21.508009025525368,
+        "WIF": 19.19656980513769
+      },
+      "bottom10_coins": {
+        "CHILLGUY": -10.435654033745367,
+        "ETHFI": -10.868246988959307,
+        "ZEC": -10.879146734381496,
+        "SKY": -10.95659821779072,
+        "SOPH": -11.186674148736733,
+        "SAGA": -11.3053651823376,
+        "WLFI": -11.8595570369329,
+        "ACE": -12.212991409815121,
+        "INIT": -13.479692058341575,
+        "TST": -16.362829060088067
+      }
+    },
+    "q0.001_stop2p0_feetaker": {
+      "q": 0.001,
+      "stop": "2p0",
+      "fee": "taker",
+      "n_trades": 3369,
+      "final_equity": 1200.269635926988,
+      "total_return": 0.200269635926988,
+      "cagr": 0.39075724943088974,
+      "cagr_n_days": 202,
+      "daily_pnl_mean": 0.9865499306748179,
+      "daily_pnl_median": 0.0,
+      "share_positive_days": 0.43349753694581283,
+      "worst_day": -36.04248643849064,
+      "best_day": 108.15974121101772,
+      "max_drawdown": {
+        "max_dd_usd": -97.47763834815419,
+        "max_dd_pct": -0.07511295941854348,
+        "start": "2026-05-04",
+        "bottom": "2026-07-11",
+        "recovery": null,
+        "longest_underwater_days": 68
+      },
+      "sharpe": 1.7757148228617197,
+      "sortino": 3.0100405986075476,
+      "sharpe_sortino_n_days": 203,
+      "monthly": {
+        "1": {
+          "n_days": 30,
+          "total_pnl_usd": 0.37285903264819353,
+          "total_pnl_pct": 0.0003728590326481651
+        },
+        "2": {
+          "n_days": 30,
+          "total_pnl_usd": 38.85785591625586,
+          "total_pnl_pct": 0.03884337281384376
+        },
+        "3": {
+          "n_days": 30,
+          "total_pnl_usd": 11.131969105676035,
+          "total_pnl_pct": 0.01071173989139007
+        },
+        "4": {
+          "n_days": 30,
+          "total_pnl_usd": -8.317774801405221,
+          "total_pnl_pct": -0.007918954974006853
+        },
+        "5": {
+          "n_days": 30,
+          "total_pnl_usd": 205.85312645276258,
+          "total_pnl_pct": 0.1975472694361089
+        },
+        "6": {
+          "n_days": 30,
+          "total_pnl_usd": 14.517713315856327,
+          "total_pnl_pct": 0.011633733606803531
+        },
+        "7": {
+          "n_days": 23,
+          "total_pnl_usd": -62.14611309480574,
+          "total_pnl_pct": -0.04922792918494623
+        },
+        "outside": {
+          "n_days": 0,
+          "total_pnl_usd": 0.0,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 5,
+      "win_rate": 0.576728999703176,
+      "stop_share": 0.404571089344019,
+      "timeout_share": 0.018699910952804988,
+      "liquidation_share": 0.0,
+      "mean_net": 0.059444831085484026,
+      "median_net": 0.4110177385650015,
+      "mean_return_on_margin": 0.001129864540084648,
+      "median_return_on_margin": 0.007603364287379464,
+      "mean_win": 1.0744267135829142,
+      "mean_loss": -1.340456028037031,
+      "profit_factor": 1.1055113750449694,
+      "mean_holding_minutes": 111.0308696942713,
+      "total_fee": 553.7245400572391,
+      "fee_share_of_gross": 0.7298675404084568,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 20.9608323892812,
+      "funding_paid_share_of_gross": 0.02762859522046314,
+      "total_funding_received": 16.290580376954484,
+      "funding_received_share_of_gross": 0.021472708849647446,
+      "total_gross": 758.6644279965615,
+      "peak_margin_used": 1208.5226182037973,
+      "distance_to_liquidation_ratio": {
+        "min": 2.0222379695341965,
+        "median": 11.967327570294469,
+        "date_of_min": "2026-03-27"
+      },
+      "mean_open_positions": 2.970357018073246,
+      "max_open_positions": 20,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "min_order": 129,
+        "margin": 94,
+        "book_full": 46
+      },
+      "by_fold": {
+        "1": {
+          "n": 1000,
+          "mean_net": 0.0003728590326453869
+        },
+        "2": {
+          "n": 667,
+          "mean_net": 0.056438749764281926
+        },
+        "3": {
+          "n": 158,
+          "mean_net": 0.07813404385545161
+        },
+        "4": {
+          "n": 284,
+          "mean_net": -0.029287939441568895
+        },
+        "5": {
+          "n": 790,
+          "mean_net": 0.2605735777883099
+        },
+        "6": {
+          "n": 130,
+          "mean_net": 0.11167471781429561
+        },
+        "7": {
+          "n": 340,
+          "mean_net": -0.1827826855729553
+        }
+      },
+      "top10_pairs": {
+        "HMSTR/TST": 18.59604174138334,
+        "MAVIA/YZY": 14.388159804329051,
+        "HMSTR/MEGA": 12.313243945521327,
+        "FOGO/STABLE": 10.768945123876158,
+        "ARK/HMSTR": 10.338856905484004,
+        "HMSTR/MEW": 9.954947820734265,
+        "BOME/HMSTR": 8.699153248961519,
+        "DOGE/HMSTR": 8.391226091464931,
+        "HMSTR/MOODENG": 8.219266832736123,
+        "HMSTR/ZEN": 8.13543016216152
+      },
+      "bottom10_pairs": {
+        "FOGO/XPL": -5.258248870740794,
+        "TST/VINE": -5.3967083442298875,
+        "JUP/TST": -5.833433159219021,
+        "TST/W": -5.890756270007023,
+        "TST/XPL": -5.982223969406428,
+        "MELANIA/TST": -6.019729606218046,
+        "ETHFI/XLM": -6.450391412223778,
+        "POL/ZRO": -6.699538536529504,
+        "FARTCOIN/HYPE": -7.020519070730235,
+        "SPX/STX": -7.785498737590194
+      },
+      "top10_coins": {
+        "HMSTR": 250.76074774014987,
+        "YZY": 85.38192373556275,
+        "NOT": 45.34863234507935,
+        "MEW": 44.17284877405433,
+        "FOGO": 43.23054088523123,
+        "BOME": 31.130191263816602,
+        "MEGA": 30.004964050273447,
+        "ASTER": 22.369536594831665,
+        "WIF": 21.73942166812402,
+        "STABLE": 21.318833990694777
+      },
+      "bottom10_coins": {
+        "HYPE": -15.37544054207087,
+        "ACE": -16.28577158891597,
+        "ZEC": -16.744498385307267,
+        "XLM": -17.235955781218223,
+        "EIGEN": -17.26904539223827,
+        "BRETT": -19.312529982936844,
+        "ETHFI": -20.093668544115758,
+        "VINE": -21.279572401450803,
+        "TST": -27.597608641222696,
+        "FTT": -30.18976648657684
+      }
+    },
+    "q0.001_stop2p0_feemaker": {
+      "q": 0.001,
+      "stop": "2p0",
+      "fee": "maker",
+      "n_trades": 3404,
+      "final_equity": 1686.80481436421,
+      "total_return": 0.68680481436421,
+      "cagr": 1.5721151890508334,
+      "cagr_n_days": 202,
+      "daily_pnl_mean": 3.3832749476069455,
+      "daily_pnl_median": 0.6392392282598394,
+      "share_positive_days": 0.5517241379310345,
+      "worst_day": -41.63152378052564,
+      "best_day": 155.55807692924918,
+      "max_drawdown": {
+        "max_dd_usd": -79.34679201227368,
+        "max_dd_pct": -0.044926376493275764,
+        "start": "2026-06-28",
+        "bottom": "2026-07-11",
+        "recovery": null,
+        "longest_underwater_days": 27
+      },
+      "sharpe": 4.60905908006657,
+      "sortino": 9.291800202968666,
+      "sharpe_sortino_n_days": 203,
+      "monthly": {
+        "1": {
+          "n_days": 30,
+          "total_pnl_usd": 102.05768017176865,
+          "total_pnl_pct": 0.10205768017176875
+        },
+        "2": {
+          "n_days": 30,
+          "total_pnl_usd": 120.93173721562448,
+          "total_pnl_pct": 0.1097326749692229
+        },
+        "3": {
+          "n_days": 30,
+          "total_pnl_usd": 35.45009983234695,
+          "total_pnl_pct": 0.028986432203213175
+        },
+        "4": {
+          "n_days": 30,
+          "total_pnl_usd": 26.248706994136455,
+          "total_pnl_pct": 0.020858139493368455
+        },
+        "5": {
+          "n_days": 30,
+          "total_pnl_usd": 386.7562059864033,
+          "total_pnl_pct": 0.30105063524114284
+        },
+        "6": {
+          "n_days": 30,
+          "total_pnl_usd": 40.71759139885853,
+          "total_pnl_pct": 0.024360720980702633
+        },
+        "7": {
+          "n_days": 23,
+          "total_pnl_usd": -25.35720723492841,
+          "total_pnl_pct": -0.014810051218894005
+        },
+        "outside": {
+          "n_days": 0,
+          "total_pnl_usd": 0.0,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 6,
+      "win_rate": 0.5763807285546416,
+      "stop_share": 0.40481786133960046,
+      "timeout_share": 0.01880141010575793,
+      "liquidation_share": 0.0,
+      "mean_net": 0.20176404652297603,
+      "median_net": 0.5837958228693869,
+      "mean_return_on_margin": 0.003117850197193898,
+      "median_return_on_margin": 0.009468693130666455,
+      "mean_win": 1.3953369454640916,
+      "mean_loss": -1.4699113958585863,
+      "profit_factor": 1.3295079847869575,
+      "mean_holding_minutes": 111.08490011750881,
+      "total_fee": 223.9501946909995,
+      "fee_share_of_gross": 0.24438042299950288,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 25.370811436790028,
+      "funding_paid_share_of_gross": 0.027685305830245633,
+      "total_funding_received": 19.725922569509436,
+      "funding_received_share_of_gross": 0.02152545260451116,
+      "total_gross": 916.3998979224905,
+      "peak_margin_used": 1597.5421851803987,
+      "distance_to_liquidation_ratio": {
+        "min": 2.019271101382314,
+        "median": 11.970372988708696,
+        "date_of_min": "2026-04-22"
+      },
+      "mean_open_positions": 2.990020954414265,
+      "max_open_positions": 20,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "min_order": 94,
+        "margin": 74,
+        "book_full": 66
+      },
+      "by_fold": {
+        "1": {
+          "n": 1005,
+          "mean_net": 0.10154993051917537
+        },
+        "2": {
+          "n": 669,
+          "mean_net": 0.17879515560141454
+        },
+        "3": {
+          "n": 166,
+          "mean_net": 0.22149324066639858
+        },
+        "4": {
+          "n": 290,
+          "mean_net": 0.0905127827384004
+        },
+        "5": {
+          "n": 796,
+          "mean_net": 0.48587463063619063
+        },
+        "6": {
+          "n": 130,
+          "mean_net": 0.313212241529653
+        },
+        "7": {
+          "n": 348,
+          "mean_net": -0.07286553803140217
+        }
+      },
+      "top10_pairs": {
+        "HMSTR/TST": 23.540259415336358,
+        "MAVIA/YZY": 19.690087720160577,
+        "ARK/HMSTR": 13.793620561136425,
+        "HMSTR/MEGA": 13.221930579117867,
+        "HMSTR/MEW": 11.582772800184031,
+        "DOGE/HMSTR": 11.517977672827907,
+        "BOME/HMSTR": 11.496591496806209,
+        "FOGO/STABLE": 11.464595974093708,
+        "HMSTR/ZEN": 10.614085962095768,
+        "HMSTR/LINEA": 10.317941838006067
+      },
+      "bottom10_pairs": {
+        "BCH/FARTCOIN": -6.549298350075867,
+        "YZY/ZEN": -6.599606785774851,
+        "FARTCOIN/HYPE": -6.748514081730538,
+        "JUP/TST": -7.043731610030777,
+        "TST/XPL": -7.228027046431373,
+        "POL/ZRO": -7.2700120104335175,
+        "MELANIA/TST": -7.271273741577303,
+        "TST/W": -7.644663106473658,
+        "ETHFI/XLM": -8.437579139413636,
+        "SPX/STX": -8.560256858387978
+      },
+      "top10_coins": {
+        "HMSTR": 357.8211408808335,
+        "YZY": 150.89692226296197,
+        "NOT": 66.37968276844738,
+        "MEW": 62.580679077847016,
+        "FOGO": 53.44187948991574,
+        "BOME": 49.653864819098416,
+        "MEGA": 41.87662593443528,
+        "WIF": 32.94021560188381,
+        "ASTER": 29.596442103165987,
+        "TRB": 29.402473904606858
+      },
+      "bottom10_coins": {
+        "ZEC": -13.964445726412777,
+        "VINE": -15.178478902804397,
+        "ACE": -15.788775943717988,
+        "CFX": -15.997705023760812,
+        "EIGEN": -18.195497001064666,
+        "XLM": -18.87005191499004,
+        "BRETT": -19.07918565544838,
+        "ETHFI": -19.914538387382546,
+        "FTT": -25.394022830777487,
+        "TST": -28.904136035274327
+      }
+    },
+    "q0.001_stopnone_feetaker": {
+      "q": 0.001,
+      "stop": "none",
+      "fee": "taker",
+      "n_trades": 3144,
+      "final_equity": 1586.603976293576,
+      "total_return": 0.586603976293576,
+      "cagr": 1.2932339211253416,
+      "cagr_n_days": 203,
+      "daily_pnl_mean": 2.8755096877136075,
+      "daily_pnl_median": 1.2254830199657363,
+      "share_positive_days": 0.6078431372549019,
+      "worst_day": -83.45522884183765,
+      "best_day": 103.41363638172425,
+      "max_drawdown": {
+        "max_dd_usd": -133.46486010281865,
+        "max_dd_pct": -0.11402035995029101,
+        "start": "2026-06-28",
+        "bottom": "2026-07-11",
+        "recovery": null,
+        "longest_underwater_days": 47
+      },
+      "sharpe": 3.1683047122137378,
+      "sortino": 3.568219336320304,
+      "sharpe_sortino_n_days": 204,
+      "monthly": {
+        "1": {
+          "n_days": 30,
+          "total_pnl_usd": 99.04169838247003,
+          "total_pnl_pct": 0.09904169838247001
+        },
+        "2": {
+          "n_days": 30,
+          "total_pnl_usd": 120.29647133084313,
+          "total_pnl_pct": 0.10945578453291738
+        },
+        "3": {
+          "n_days": 30,
+          "total_pnl_usd": -6.292125988110229,
+          "total_pnl_pct": -0.0051602796864709255
+        },
+        "4": {
+          "n_days": 30,
+          "total_pnl_usd": 126.11194854329301,
+          "total_pnl_pct": 0.10396303520022165
+        },
+        "5": {
+          "n_days": 30,
+          "total_pnl_usd": 264.9641385842365,
+          "total_pnl_pct": 0.1978587590963743
+        },
+        "6": {
+          "n_days": 30,
+          "total_pnl_usd": 53.48640761871479,
+          "total_pnl_pct": 0.033343101868610336
+        },
+        "7": {
+          "n_days": 23,
+          "total_pnl_usd": -72.74462721421196,
+          "total_pnl_pct": -0.04388528746436893
+        },
+        "outside": {
+          "n_days": 1,
+          "total_pnl_usd": 1.7400650363406385,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 5,
+      "win_rate": 0.7375954198473282,
+      "stop_share": 0.0,
+      "timeout_share": 0.26240458015267176,
+      "liquidation_share": 0.0,
+      "mean_net": 0.186578872866919,
+      "median_net": 0.7283934914427048,
+      "mean_return_on_margin": 0.003074556970028968,
+      "median_return_on_margin": 0.011535984419676822,
+      "mean_win": 1.2439705391524862,
+      "mean_loss": -3.090370267629553,
+      "profit_factor": 1.2474794383628955,
+      "mean_holding_minutes": 260.51812977099235,
+      "total_fee": 615.1966377450307,
+      "fee_share_of_gross": 0.5046515877053045,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 61.21232374104234,
+      "funding_paid_share_of_gross": 0.05021304485063019,
+      "total_funding_received": 43.96071891638186,
+      "funding_received_share_of_gross": 0.03606139116614168,
+      "total_gross": 1219.0522188632842,
+      "peak_margin_used": 1697.9513760078817,
+      "distance_to_liquidation_ratio": {
+        "min": 2.017906434470504,
+        "median": 8.940272294686356,
+        "date_of_min": "2026-03-27"
+      },
+      "mean_open_positions": 4.5754466131140585,
+      "max_open_positions": 20,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "margin": 292,
+        "book_full": 105,
+        "min_order": 97
+      },
+      "by_fold": {
+        "1": {
+          "n": 889,
+          "mean_net": 0.10947561154113944
+        },
+        "2": {
+          "n": 611,
+          "mean_net": 0.19787891498617566
+        },
+        "3": {
+          "n": 150,
+          "mean_net": -0.034545279942747156
+        },
+        "4": {
+          "n": 279,
+          "mean_net": 0.45100169712711213
+        },
+        "5": {
+          "n": 738,
+          "mean_net": 0.35693518518226
+        },
+        "6": {
+          "n": 130,
+          "mean_net": 0.4214827272885348
+        },
+        "7": {
+          "n": 347,
+          "mean_net": -0.2031194874412178
+        }
+      },
+      "top10_pairs": {
+        "HMSTR/TST": 22.451656726198152,
+        "FOGO/MAVIA": 22.062441794326936,
+        "MAVIA/YZY": 17.894282888840152,
+        "MELANIA/TST": 13.936903391753534,
+        "HMSTR/MANTA": 13.199875287740138,
+        "HMSTR/MEGA": 12.908645863227106,
+        "JUP/TST": 12.233371156450694,
+        "HMSTR/NEO": 12.081915564723815,
+        "HMSTR/MOODENG": 11.909340768923467,
+        "FOGO/STABLE": 11.041971086734103
+      },
+      "bottom10_pairs": {
+        "DOOD/INIT": -19.59317652619995,
+        "AVNT/FOGO": -19.683994070443738,
+        "GRASS/PEOPLE": -19.953738934789623,
+        "CFX/KAITO": -20.7449057236324,
+        "TRB/XLM": -20.92744163823018,
+        "FOGO/TST": -21.24475594674884,
+        "MORPHO/S": -24.809914362949844,
+        "FARTCOIN/HYPE": -28.761122379460662,
+        "ORDI/ZK": -32.13659612015942,
+        "ETHFI/XLM": -33.85262255526632
+      },
+      "top10_coins": {
+        "HMSTR": 377.5775982908611,
+        "YZY": 160.03053655739046,
+        "MEGA": 86.52016654148568,
+        "NOT": 74.75143473599107,
+        "FOGO": 69.8878493544808,
+        "BOME": 67.39026959813387,
+        "MAVIA": 59.33301999590619,
+        "TST": 41.86218772149582,
+        "MEW": 34.08677112832996,
+        "ARK": 33.0929456594843
+      },
+      "bottom10_coins": {
+        "FARTCOIN": -28.68790044023433,
+        "LTC": -31.8555386977708,
+        "ZK": -32.33365418259544,
+        "GRASS": -32.67940594386385,
+        "DYM": -33.39734341789101,
+        "INIT": -37.337207903638095,
+        "MORPHO": -40.514953780659866,
+        "VINE": -51.061937768584286,
+        "HYPE": -57.97841901753949,
+        "XLM": -62.44142182716347
+      }
+    },
+    "q0.001_stopnone_feemaker": {
+      "q": 0.001,
+      "stop": "none",
+      "fee": "maker",
+      "n_trades": 3164,
+      "final_equity": 2078.8953941038,
+      "total_return": 1.0788953941038,
+      "cagr": 2.7279705722387892,
+      "cagr_n_days": 203,
+      "daily_pnl_mean": 5.2887029122735285,
+      "daily_pnl_median": 2.399695351911305,
+      "share_positive_days": 0.6666666666666666,
+      "worst_day": -103.82153010050206,
+      "best_day": 139.08996190379025,
+      "max_drawdown": {
+        "max_dd_usd": -132.06125343797203,
+        "max_dd_pct": -0.10979916197160618,
+        "start": "2026-06-28",
+        "bottom": "2026-07-11",
+        "recovery": null,
+        "longest_underwater_days": 40
+      },
+      "sharpe": 4.654417972749692,
+      "sortino": 5.131947107403037,
+      "sharpe_sortino_n_days": 204,
+      "monthly": {
+        "1": {
+          "n_days": 30,
+          "total_pnl_usd": 181.7782718600115,
+          "total_pnl_pct": 0.1817782718600116
+        },
+        "2": {
+          "n_days": 30,
+          "total_pnl_usd": 166.61642285252742,
+          "total_pnl_pct": 0.14098788818505548
+        },
+        "3": {
+          "n_days": 30,
+          "total_pnl_usd": 16.989009608736296,
+          "total_pnl_pct": 0.012599433738025967
+        },
+        "4": {
+          "n_days": 30,
+          "total_pnl_usd": 184.38615374994674,
+          "total_pnl_pct": 0.1350434703200183
+        },
+        "5": {
+          "n_days": 30,
+          "total_pnl_usd": 450.76513037465907,
+          "total_pnl_pct": 0.2908593995599207
+        },
+        "6": {
+          "n_days": 30,
+          "total_pnl_usd": 92.79814437349069,
+          "total_pnl_pct": 0.04638666402209801
+        },
+        "7": {
+          "n_days": 23,
+          "total_pnl_usd": -16.902394677037137,
+          "total_pnl_pct": -0.008074393135063196
+        },
+        "outside": {
+          "n_days": 1,
+          "total_pnl_usd": 2.4646559614652688,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 6,
+      "win_rate": 0.7383059418457648,
+      "stop_share": 0.0,
+      "timeout_share": 0.26169405815423513,
+      "liquidation_share": 0.0,
+      "mean_net": 0.3409909589455737,
+      "median_net": 0.9456579663255369,
+      "mean_return_on_margin": 0.004777661133942839,
+      "median_return_on_margin": 0.013434190706597623,
+      "mean_win": 1.548783496415376,
+      "mean_loss": -3.5875815419642674,
+      "profit_factor": 1.404207737418415,
+      "mean_holding_minutes": 260.24399494311,
+      "total_fee": 238.21380505989453,
+      "fee_share_of_gross": 0.17796225510014857,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 72.2549498096024,
+      "funding_paid_share_of_gross": 0.05397946524145324,
+      "total_funding_received": 50.800502845975494,
+      "funding_received_share_of_gross": 0.037951503458912586,
+      "total_gross": 1338.5636461273166,
+      "peak_margin_used": 2175.39334375836,
+      "distance_to_liquidation_ratio": {
+        "min": 2.01974447161502,
+        "median": 8.942758772965517,
+        "date_of_min": "2026-03-27"
+      },
+      "mean_open_positions": 4.558556164535238,
+      "max_open_positions": 20,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "book_full": 202,
+        "margin": 199,
+        "min_order": 73
+      },
+      "by_fold": {
+        "1": {
+          "n": 893,
+          "mean_net": 0.20158867753324852
+        },
+        "2": {
+          "n": 612,
+          "mean_net": 0.27341291078008945
+        },
+        "3": {
+          "n": 154,
+          "mean_net": 0.1171189213419873
+        },
+        "4": {
+          "n": 288,
+          "mean_net": 0.6394925394164235
+        },
+        "5": {
+          "n": 740,
+          "mean_net": 0.6065918186721753
+        },
+        "6": {
+          "n": 130,
+          "mean_net": 0.7256418873073672
+        },
+        "7": {
+          "n": 347,
+          "mean_net": -0.0399814199907033
+        }
+      },
+      "top10_pairs": {
+        "HMSTR/TST": 26.710070074723852,
+        "FOGO/MAVIA": 23.167303761843513,
+        "MAVIA/YZY": 22.969210345451213,
+        "HMSTR/MANTA": 16.533737663273584,
+        "MELANIA/TST": 16.227947048281692,
+        "HMSTR/NEO": 15.203189273825455,
+        "JUP/TST": 14.263242541791461,
+        "HMSTR/MEGA": 13.720943300087487,
+        "HMSTR/MOODENG": 13.560483108689127,
+        "DOGE/HMSTR": 13.555027899068135
+      },
+      "bottom10_pairs": {
+        "BOME/INIT": -22.41063340277731,
+        "GRASS/PEOPLE": -23.20820781466594,
+        "DOOD/INIT": -23.52316373748304,
+        "CFX/KAITO": -25.49825217732509,
+        "TRB/XLM": -26.693768141849255,
+        "MORPHO/S": -30.043274130517595,
+        "0G/HMSTR": -37.46451017648216,
+        "ORDI/ZK": -40.989117754777155,
+        "ETHFI/XLM": -43.166127002023,
+        "FARTCOIN/HYPE": -61.17555094152301
+      },
+      "top10_coins": {
+        "HMSTR": 441.37969843788875,
+        "YZY": 228.6720157153265,
+        "NOT": 102.87690406476082,
+        "MEGA": 99.01503272466377,
+        "BOME": 86.547480574079,
+        "FOGO": 84.3639133031965,
+        "MAVIA": 75.19209316228631,
+        "TST": 58.0930507661017,
+        "MEW": 50.1109381405969,
+        "ARK": 44.47292932773785
+      },
+      "bottom10_coins": {
+        "DYM": -33.95653448678862,
+        "LTC": -34.90339990484142,
+        "VINE": -37.5481438857588,
+        "MORPHO": -39.33105836464873,
+        "ZK": -40.982657918089586,
+        "INIT": -41.44318924486881,
+        "0G": -43.39759289460325,
+        "FARTCOIN": -54.768927299825634,
+        "HYPE": -74.09793756417574,
+        "XLM": -78.98289073479981
+      }
+    }
+  },
+  "ev_check": {
+    "q0.01_feetaker": {
+      "n_scored": 11307,
+      "fold_1_scored": false,
+      "quintiles": {
+        "0": {
+          "n": 2498,
+          "mean_ev": -0.0975881454776514,
+          "mean_realised_net": 0.33632584539633825
+        },
+        "1": {
+          "n": 2029,
+          "mean_ev": -0.0002475550857156257,
+          "mean_realised_net": 0.20344178713622232
+        },
+        "2": {
+          "n": 2503,
+          "mean_ev": 0.12269034469558748,
+          "mean_realised_net": 0.18842313985169126
+        },
+        "3": {
+          "n": 2280,
+          "mean_ev": 0.20091669396382544,
+          "mean_realised_net": 0.20483926566129873
+        },
+        "4": {
+          "n": 1997,
+          "mean_ev": 0.39998577152565495,
+          "mean_realised_net": 0.3077916118155007
+        }
+      }
+    },
+    "q0.01_feemaker": {
+      "n_scored": 11341,
+      "fold_1_scored": false,
+      "quintiles": {
+        "0": {
+          "n": 2382,
+          "mean_ev": 0.10885685553116652,
+          "mean_realised_net": 1.4377460355044767
+        },
+        "1": {
+          "n": 2694,
+          "mean_ev": 0.31364143185746346,
+          "mean_realised_net": 1.4951652248375387
+        },
+        "2": {
+          "n": 1876,
+          "mean_ev": 0.43389328079674105,
+          "mean_realised_net": 0.3127059768427255
+        },
+        "3": {
+          "n": 2282,
+          "mean_ev": 0.5627087926155822,
+          "mean_realised_net": 1.7776905111216095
+        },
+        "4": {
+          "n": 2107,
+          "mean_ev": 0.9420648417858564,
+          "mean_realised_net": 1.50129700930161
+        }
+      }
+    },
+    "q0.005_feetaker": {
+      "n_scored": 7981,
+      "fold_1_scored": false,
+      "quintiles": {
+        "0": {
+          "n": 1756,
+          "mean_ev": -0.0044420684027985016,
+          "mean_realised_net": 0.41555200692812494
+        },
+        "1": {
+          "n": 1515,
+          "mean_ev": 0.10843359758612664,
+          "mean_realised_net": 0.19290441987031004
+        },
+        "2": {
+          "n": 1575,
+          "mean_ev": 0.1627196999679621,
+          "mean_realised_net": 0.10607053466327138
+        },
+        "3": {
+          "n": 1649,
+          "mean_ev": 0.23279982139967745,
+          "mean_realised_net": 0.21937265266795988
+        },
+        "4": {
+          "n": 1486,
+          "mean_ev": 0.44423801327082935,
+          "mean_realised_net": 0.3723118071720463
+        }
+      }
+    },
+    "q0.005_feemaker": {
+      "n_scored": 8014,
+      "fold_1_scored": false,
+      "quintiles": {
+        "0": {
+          "n": 1924,
+          "mean_ev": 0.24033805146074094,
+          "mean_realised_net": 1.2263481725335095
+        },
+        "1": {
+          "n": 1366,
+          "mean_ev": 0.35036987232834116,
+          "mean_realised_net": 0.5509986485098305
+        },
+        "2": {
+          "n": 1558,
+          "mean_ev": 0.40063169535365045,
+          "mean_realised_net": 1.13840021497548
+        },
+        "3": {
+          "n": 1589,
+          "mean_ev": 0.5284740072174735,
+          "mean_realised_net": 1.1967259428686587
+        },
+        "4": {
+          "n": 1577,
+          "mean_ev": 0.771016673303974,
+          "mean_realised_net": 0.8976637880517223
+        }
+      }
+    },
+    "q0.001_feetaker": {
+      "n_scored": 2255,
+      "fold_1_scored": false,
+      "quintiles": {
+        "0": {
+          "n": 479,
+          "mean_ev": 0.11013138028700856,
+          "mean_realised_net": -0.07577262892814712
+        },
+        "1": {
+          "n": 459,
+          "mean_ev": 0.15692643189775934,
+          "mean_realised_net": 0.25146879840818553
+        },
+        "2": {
+          "n": 427,
+          "mean_ev": 0.2244008967844797,
+          "mean_realised_net": 0.4652411911563083
+        },
+        "3": {
+          "n": 794,
+          "mean_ev": 0.3537949879542725,
+          "mean_realised_net": 0.22894294623312292
+        },
+        "4": {
+          "n": 96,
+          "mean_ev": 0.6127766464660095,
+          "mean_realised_net": 0.3095039634156503
+        }
+      }
+    },
+    "q0.001_feemaker": {
+      "n_scored": 2271,
+      "fold_1_scored": false,
+      "quintiles": {
+        "0": {
+          "n": 483,
+          "mean_ev": 0.21838361258333158,
+          "mean_realised_net": 0.09303302595827051
+        },
+        "1": {
+          "n": 591,
+          "mean_ev": 0.2775266695687882,
+          "mean_realised_net": 0.7420959854596854
+        },
+        "2": {
+          "n": 299,
+          "mean_ev": 0.3570162863910981,
+          "mean_realised_net": 0.28982090453937887
+        },
+        "3": {
+          "n": 761,
+          "mean_ev": 0.46250229633950585,
+          "mean_realised_net": 0.3157005694840448
+        },
+        "4": {
+          "n": 137,
+          "mean_ev": 0.6783073873490538,
+          "mean_realised_net": 0.6456820604923582
+        }
+      }
+    }
+  },
+  "n_runs_above_start": 19,
+  "n_runs_total": 24,
+  "pooled_cost_share_diagnostic": {
+    "label": "cost-share diagnostic (OVERLAPPING accounts across the 24 runs, not a combined P&L)",
+    "n_trades": 303425,
+    "gross": 94314.47924211147,
+    "fee": 44948.161823928356,
+    "funding_net": 309.5363133720048,
+    "net": 49056.7811048111,
+    "fee_share_of_gross": 0.4765775327937025
+  },
+  "known_gaps": [
+    "slippage excluded by the user's choice (legs are small); costs are a lower bound and results an upper bound (optimistic).",
+    "max_leverage is today's snapshot (hindsight); limits were different in the past.",
+    "liquidation is checked on 1-minute closes; a move inside a minute can liquidate earlier.",
+    "maker fills are assumed to fill; in practice they may not.",
+    "the test months were already used for the cut-off, the deep dive and the calibration: results are optimistic until the vault or paper-trading check."
+  ],
+  "equity_png_paths": [
+    "/Users/elvisobondo/Pair_Trading/research/dislocation_model/logs/s1_profit1_equity_q0.01_feetaker_open20.png",
+    "/Users/elvisobondo/Pair_Trading/research/dislocation_model/logs/s1_profit1_equity_q0.01_feemaker_open20.png",
+    "/Users/elvisobondo/Pair_Trading/research/dislocation_model/logs/s1_profit1_equity_q0.005_feetaker_open20.png",
+    "/Users/elvisobondo/Pair_Trading/research/dislocation_model/logs/s1_profit1_equity_q0.005_feemaker_open20.png",
+    "/Users/elvisobondo/Pair_Trading/research/dislocation_model/logs/s1_profit1_equity_q0.001_feetaker_open20.png",
+    "/Users/elvisobondo/Pair_Trading/research/dislocation_model/logs/s1_profit1_equity_q0.001_feemaker_open20.png"
+  ]
+}

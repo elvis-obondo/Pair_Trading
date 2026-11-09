@@ -1,0 +1,26 @@
+q0.01_stop0p5_feetaker: engine_final_equity=130.73 numgen_final_equity=130.73 match=True
+q0.01_stop0p5_feemaker: engine_final_equity=1207.36 numgen_final_equity=1207.36 match=True
+q0.01_stop1p0_feetaker: engine_final_equity=270.90 numgen_final_equity=270.90 match=True
+q0.01_stop1p0_feemaker: engine_final_equity=3525.20 numgen_final_equity=3525.20 match=True
+q0.01_stop2p0_feetaker: engine_final_equity=1132.54 numgen_final_equity=1132.54 match=True
+q0.01_stop2p0_feemaker: engine_final_equity=9270.44 numgen_final_equity=9270.44 match=True
+q0.01_stopnone_feetaker: engine_final_equity=4036.05 numgen_final_equity=4036.05 match=True
+q0.01_stopnone_feemaker: engine_final_equity=16935.92 numgen_final_equity=16935.92 match=True
+q0.005_stop0p5_feetaker: engine_final_equity=282.29 numgen_final_equity=282.29 match=True
+q0.005_stop0p5_feemaker: engine_final_equity=1379.20 numgen_final_equity=1379.20 match=True
+q0.005_stop1p0_feetaker: engine_final_equity=616.25 numgen_final_equity=616.25 match=True
+q0.005_stop1p0_feemaker: engine_final_equity=2768.95 numgen_final_equity=2768.95 match=True
+q0.005_stop2p0_feetaker: engine_final_equity=1509.28 numgen_final_equity=1509.28 match=True
+q0.005_stop2p0_feemaker: engine_final_equity=5736.34 numgen_final_equity=5736.34 match=True
+q0.005_stopnone_feetaker: engine_final_equity=3369.67 numgen_final_equity=3369.67 match=True
+q0.005_stopnone_feemaker: engine_final_equity=9749.47 numgen_final_equity=9749.47 match=True
+q0.001_stop0p5_feetaker: engine_final_equity=865.11 numgen_final_equity=865.11 match=True
+q0.001_stop0p5_feemaker: engine_final_equity=1225.71 numgen_final_equity=1225.71 match=True
+q0.001_stop1p0_feetaker: engine_final_equity=1033.16 numgen_final_equity=1033.16 match=True
+q0.001_stop1p0_feemaker: engine_final_equity=1459.65 numgen_final_equity=1459.65 match=True
+q0.001_stop2p0_feetaker: engine_final_equity=1200.27 numgen_final_equity=1200.27 match=True
+q0.001_stop2p0_feemaker: engine_final_equity=1686.80 numgen_final_equity=1686.80 match=True
+q0.001_stopnone_feetaker: engine_final_equity=1586.60 numgen_final_equity=1586.60 match=True
+q0.001_stopnone_feemaker: engine_final_equity=2078.90 numgen_final_equity=2078.90 match=True
+
+24 runs checked, 0 mismatches

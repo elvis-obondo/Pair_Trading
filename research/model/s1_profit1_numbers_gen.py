@@ -70,6 +70,12 @@ import harness as H  # noqa: E402
 PROFIT_DIR = os.path.join(HERE, "logs", "profit1")
 LOG_DIR = os.path.join(HERE, "logs", "s1")
 NUMBERS_DIR = os.path.join(ROOT, "research", "dislocation_model", "logs")
+
+# checker's requirement before running this on a tagged run (e.g. task A's max_open=20): the same
+# PROFIT1_RUN_TAG that drove s1_profit1.py's output names must drive every input and output name here
+# too, so a tagged run never reads/overwrites the baseline's (or another tag's) files.
+RUN_TAG = os.environ.get("PROFIT1_RUN_TAG", "")
+TAG_SUFFIX = f"_{RUN_TAG}" if RUN_TAG else ""
 QS = (0.01, 0.005, 0.001)
 STOPS = ("0p5", "1p0", "2p0", "none")
 FEES = ("taker", "maker")
@@ -89,10 +95,10 @@ def run_key(q, stop, fee):
 
 def load_run(q, stop, fee):
     key = run_key(q, stop, fee)
-    trades = pd.read_parquet(os.path.join(PROFIT_DIR, f"trades_{key}.parquet"))
-    me = pd.read_parquet(os.path.join(PROFIT_DIR, f"minute_equity_{key}.parquet")).sort_values("time")
-    sk = pd.read_parquet(os.path.join(PROFIT_DIR, f"skips_{key}.parquet"))
-    liq = pd.read_parquet(os.path.join(PROFIT_DIR, f"liquidations_{key}.parquet"))
+    trades = pd.read_parquet(os.path.join(PROFIT_DIR, f"trades_{key}{TAG_SUFFIX}.parquet"))
+    me = pd.read_parquet(os.path.join(PROFIT_DIR, f"minute_equity_{key}{TAG_SUFFIX}.parquet")).sort_values("time")
+    sk = pd.read_parquet(os.path.join(PROFIT_DIR, f"skips_{key}{TAG_SUFFIX}.parquet"))
+    liq = pd.read_parquet(os.path.join(PROFIT_DIR, f"liquidations_{key}{TAG_SUFFIX}.parquet"))
     return trades, me, sk, liq
 
 
@@ -371,7 +377,7 @@ def plot_equity_curves():
             ax.set_ylabel("account value (USD)")
             ax.legend()
             fig.tight_layout()
-            out_path = os.path.join(NUMBERS_DIR, f"s1_profit1_equity_q{q}_fee{fee}.png")
+            out_path = os.path.join(NUMBERS_DIR, f"s1_profit1_equity_q{q}_fee{fee}{TAG_SUFFIX}.png")
             fig.savefig(out_path, dpi=120)
             plt.close(fig)
             paths.append(out_path)
@@ -379,14 +385,22 @@ def plot_equity_curves():
     return paths
 
 
-def _numbers_md_lines(report, splits_filter=None):
+def numbers_md_marker(run_tag):
+    """Checker's requirement for a tagged run (e.g. open20): the NUMBERS.md heading/marker carries the
+    tag, so the append guard below is keyed on the tagged marker and never collides with, or silently
+    skips because of, the baseline's untagged "## [HL-PROFIT1]" section."""
+    return f"## [HL-PROFIT1 {run_tag}]" if run_tag else "## [HL-PROFIT1]"
+
+
+def _numbers_md_lines(report, run_tag, max_open, splits_filter=None):
     """splits_filter: if given, an iterable of run keys -- only those runs get a coin/pair split table
     (used for the NUMBERS.md excerpt, one run per q, per the planner's instruction; None means all 24,
     the default, used for the full section file). Returns the list of markdown lines (no trailing join
     or file write -- callers decide how to assemble/write, so the excerpt and the NUMBERS.md append can
-    share the exact same text, checker E2)."""
-    lines = ["## [HL-PROFIT1] Portfolio backtest, S1's live picks, build2 d3/asm price, "
-             "slippage_spread_share=0.0", ""]
+    share the exact same text, checker E2). run_tag/max_open: checker's requirement that the heading
+    states which run this is (the baseline's max_open=10, or a tagged run's own max_open)."""
+    lines = [f"{numbers_md_marker(run_tag)} Portfolio backtest, S1's live picks, build2 d3/asm price, "
+             f"slippage_spread_share=0.0, max_open={max_open}", ""]
     lines.append(f"Runs ending above the ${START_EQUITY:.0f} start: "
                  f"{report['n_runs_above_start']}/{report['n_runs_total']}.")
     lines.append("")
@@ -569,16 +583,17 @@ def _numbers_md_lines(report, splits_filter=None):
     return lines
 
 
-def write_numbers_md(report, out_path, splits_filter=None):
-    lines = _numbers_md_lines(report, splits_filter=splits_filter)
+def write_numbers_md(report, out_path, run_tag, max_open, splits_filter=None):
+    lines = _numbers_md_lines(report, run_tag, max_open, splits_filter=splits_filter)
     open(out_path, "w").write("\n".join(lines))
     log(f"[NUMGEN] NUMBERS.md section written: {out_path}")
 
 
 def main():
     t0 = pd.Timestamp.now()
-    log(f"[NUMGEN] start {t0.isoformat()}")
-    engine_report = json.load(open(os.path.join(LOG_DIR, "s1_profit1_report.json")))
+    log(f"[NUMGEN] start {t0.isoformat()} RUN_TAG={RUN_TAG!r}")
+    engine_report = json.load(open(os.path.join(LOG_DIR, f"s1_profit1_report{TAG_SUFFIX}.json")))
+    max_open = engine_report["config"]["max_open"]
     report = {"runs": {}, "ev_check": {}}
     for q in QS:
         for stop in STOPS:
@@ -644,12 +659,12 @@ def main():
 
     report["equity_png_paths"] = plot_equity_curves()
 
-    out_path = os.path.join(LOG_DIR, "s1_profit1_numbers_report.json")
+    out_path = os.path.join(LOG_DIR, f"s1_profit1_numbers_report{TAG_SUFFIX}.json")
     json.dump(report, open(out_path, "w"), indent=2, default=str)
     log(f"[NUMGEN] report written: {out_path}")
 
-    md_path = os.path.join(NUMBERS_DIR, "s1_profit1_numbers_section.md")
-    write_numbers_md(report, md_path)
+    md_path = os.path.join(NUMBERS_DIR, f"s1_profit1_numbers_section{TAG_SUFFIX}.md")
+    write_numbers_md(report, md_path, RUN_TAG, max_open)
     log(f"[NUMGEN] NUMBERS.md section (full, 24-run splits) written: {md_path}")
 
     # Planner's instruction (2026-11-09): paste every per-run table + splits for one run per q
@@ -657,10 +672,10 @@ def main():
     # checker E2: build ONE canonical string (leading blank line + the footer link line both baked in)
     # and write that EXACT string to both the excerpt file and the NUMBERS.md append -- byte-identical,
     # not reconstructed differently in each place.
-    excerpt_path = os.path.join(NUMBERS_DIR, "s1_profit1_numbers_excerpt.md")
+    excerpt_path = os.path.join(NUMBERS_DIR, f"s1_profit1_numbers_excerpt{TAG_SUFFIX}.md")
     one_per_q = [run_key(q, "none", "maker") for q in QS]
     full_rel = os.path.relpath(md_path, ROOT)
-    excerpt_lines = _numbers_md_lines(report, splits_filter=one_per_q)
+    excerpt_lines = _numbers_md_lines(report, RUN_TAG, max_open, splits_filter=one_per_q)
     excerpt_lines.append(f"Full section (all 24 runs' splits, identical per-run tables): {full_rel}")
     canonical_text = "\n" + "\n".join(excerpt_lines) + "\n"
     open(excerpt_path, "w").write(canonical_text)
@@ -668,7 +683,7 @@ def main():
 
     numbers_md_path = os.path.join(ROOT, "research", "dislocation_model", "NUMBERS.md")
     existing = open(numbers_md_path).read()
-    marker = "## [HL-PROFIT1]"
+    marker = numbers_md_marker(RUN_TAG)
     if marker in existing:
         log(f"[NUMGEN] NUMBERS.md already has a {marker} section -- not appending again")
     else:

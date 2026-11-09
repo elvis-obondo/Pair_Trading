@@ -147,6 +147,14 @@ BUILD2_PREFIX = f"{BUCKET}/build2/d3/asm/futures"  # confirmed 2026-11-09: 206/2
                                                      # history already named d3/asm the promoted variant
 AWS = os.path.expanduser("~/.local/bin/aws") if os.path.exists(os.path.expanduser("~/.local/bin/aws")) else "aws"
 SEED = 20261108
+# Task A (2026-11-09, max_open=20 alongside the committed max_open=10 baseline): RUN_TAG, read from
+# PROFIT1_RUN_TAG, suffixes every per-run output filename (trades/minute_equity/skips/liquidations
+# parquets, report.json, the mismatch parquet) so a tagged run can never overwrite the baseline's files
+# -- default "" reproduces the exact baseline filenames unchanged. The ctxs/fundinghist/build2_1m
+# caches and the cleaned-series directory are NOT tagged: price/funding/impact data does not depend on
+# max_open, so they are correctly shared and reused, not rebuilt.
+RUN_TAG = os.environ.get("PROFIT1_RUN_TAG", "")
+TAG_SUFFIX = f"_{RUN_TAG}" if RUN_TAG else ""
 MST_BUCKETS = [("0", lambda m: m == 0), ("1-5", lambda m: (m >= 1) & (m <= 5)),
                ("6-30", lambda m: (m >= 6) & (m <= 30)), (">30", lambda m: m > 30)]
 
@@ -157,7 +165,11 @@ CONFIG = dict(
     start_equity=1000.0,
     margin_frac=0.05,
     leverage_cap=10.0,
-    max_open=10,
+    # Task A (2026-11-09): max_open read from PROFIT1_MAX_OPEN, default 10 (the committed baseline).
+    # At PROFIT1_MAX_OPEN=20 and margin_frac=0.05, a full 20-slot book uses 100% of equity as margin
+    # (20 x 0.05 = 1.0) -- margin skips, never seen at max_open=10 (0 margin skips in every run), may
+    # now appear; this is expected and reported, not a bug.
+    max_open=int(os.environ.get("PROFIT1_MAX_OPEN", 10)),
     fee_taker=0.00045,
     fee_maker=0.00015,
     slippage_on=True,
@@ -1001,7 +1013,7 @@ def main():
         if os.path.exists(p):
             log(f"[PROFIT1] sha256 {name}: {MF.sha(p)}")
     log(f"[PROFIT1] start {time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())} UTC; pid {os.getpid()}; "
-        f"seed={SEED}; CONFIG={json.dumps(CONFIG)}")
+        f"seed={SEED}; RUN_TAG={RUN_TAG!r}; CONFIG={json.dumps(CONFIG)}")
 
     picks = load_picks_and_pcal()
     top1 = picks[picks["pick_0.01"]].copy()
@@ -1031,7 +1043,7 @@ def main():
 
     if mismatches:
         mdf = pd.DataFrame(mismatches)
-        mpath = os.path.join(LOG_DIR, "s1_profit1_crosscheck_mismatches.parquet")
+        mpath = os.path.join(LOG_DIR, f"s1_profit1_crosscheck_mismatches{TAG_SUFFIX}.parquet")
         mdf.to_parquet(mpath, index=False)
         log(f"[PROFIT1] {len(mismatches):,} cross-check mismatches written to {mpath}")
     assert not mismatches, (
@@ -1054,7 +1066,7 @@ def main():
                 res = run_one(q, stop, fee, picks, geo, lev, paths, impact_series, funding_series, rng)
                 for name, df_ in (("trades", res["trade_log"]), ("minute_equity", res["minute_equity"]),
                                    ("skips", res["skip_log"]), ("liquidations", res["liquidations"])):
-                    out_path = os.path.join(PROFIT_DIR, f"{name}_q{q}_stop{stop}_fee{fee}.parquet")
+                    out_path = os.path.join(PROFIT_DIR, f"{name}_q{q}_stop{stop}_fee{fee}{TAG_SUFFIX}.parquet")
                     df_.to_parquet(out_path, index=False)
                 report["runs"][key] = dict(
                     final_equity=res["final_equity"], n_trades=len(res["trade_log"]), skips=res["skips"],
@@ -1067,7 +1079,7 @@ def main():
                     f"skips={res['skips']} liquidations={len(res['liquidations'])} "
                     f"funding_events={res['n_funding_events']} slip={res['slip_stats']}")
 
-    report_path = os.path.join(LOG_DIR, "s1_profit1_report.json")
+    report_path = os.path.join(LOG_DIR, f"s1_profit1_report{TAG_SUFFIX}.json")
     json.dump(report, open(report_path, "w"), indent=2, default=str)
     log(f"[PROFIT1] report written: {report_path}  [{time.time()-t0:.0f}s]")
 
