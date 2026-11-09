@@ -96,6 +96,11 @@ Full history: the decisions log in docs/HYPERLIQUID_HANDOFF.md. Numbers: researc
   taker $2,206; tight stops lose under taker. 0 liquidations. Fees = 58% of gross pooled. Book cap (10 open) is the
   binding limit: q1% no stop skips 27,488 picks as book_full. Mean leverage used 3.4x (coin caps). EV quintiles do
   NOT rank realised net. Full: research/dislocation_model/logs/s1_profit1_numbers_section.md.
+- Follow-ups (user, 2026-11-09), all checker PASS: open20 (fadf4d4) q1% no-stop maker $16,936, max DD -17.5%, min
+  liq-distance ratio ~2.0; Task B |z| x p_cal grid (0cf9579), descriptive, top p_cal and top |z| quintiles have the
+  highest mean return 6/6; Task C |z|>=3 filter (7e4d7d1, IN-SAMPLE) earns less than all picks (q1% no-stop maker
+  $2,242 at 10, $2,335 at 20; DD at 20 worse). Word report ~/Downloads/HL-PROFIT1_backtest_24_runs.docx (7694fa2).
+  HL-PROFIT1 task list closed. Next step is the user's call (vault / paper trading / sizing / real slippage).
 - Price source: v1 used build2 d3/asm trade-price 1m bars (not build1 mid_px); in S3 build2/d3/asm/futures/.
 
 ### Parked
