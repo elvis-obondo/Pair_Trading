@@ -82,7 +82,26 @@ Full history: the decisions log in docs/HYPERLIQUID_HANDOFF.md. Numbers: researc
 - **Every number is printed by a script** (CLAUDE.md). Write-ups are produced by generator scripts. The builder broke
   this twice (S1-G G8 counts, S1-H prose).
 
+### Decided 2026-11-08 (user)
+- **HL-PROFIT1 rewritten as a portfolio backtest** (docs/prompts/HL_PROFIT1_LIVE_PICKS.md): $1,000 cross-margin
+  account, 5% margin per trade, leverage min(10, coin A max, coin B max), max 10 open, no per-coin cap, equal size,
+  ties by highest p_cal, HL fees 0.045% taker / 0.015% maker per fill, funding + half impact spread, 24 runs
+  (q x stop x fee). No no-model baseline. All values in a config block. On HOLD: builder and checker paused;
+  not sent yet (user: don't interrupt the builder).
+- 2026-11-09: slippage = 0 for HL-PROFIT1 (user: small legs). First run charged the FULL impact spread (bug B14); pooled over 24 runs slip $22,217 vs fees $1,811 vs gross +$2,208.
+- The 0.099% round-trip fee in v1 net_* columns was the OKX trading result, not Hyperliquid (user).
+
+### HL-PROFIT1 result (2026-11-09, checker PASS; slippage 0, build2 d3/asm trade prices)
+- 18/24 runs above $1,000 over 2025-12-21..2026-07-11 (203 days). Best: q1% no stop maker $5,034; q1% no stop
+  taker $2,206; tight stops lose under taker. 0 liquidations. Fees = 58% of gross pooled. Book cap (10 open) is the
+  binding limit: q1% no stop skips 27,488 picks as book_full. Mean leverage used 3.4x (coin caps). EV quintiles do
+  NOT rank realised net. Full: research/dislocation_model/logs/s1_profit1_numbers_section.md.
+- Price source: v1 used build2 d3/asm trade-price 1m bars (not build1 mid_px); in S3 build2/d3/asm/futures/.
+
 ### Parked
+- **Before live/paper trading:** S1 saved only the weights (fold*_coefs.csv) and settings (fold*_done.json), NOT
+  the 20 step intercepts or the preprocessing statistics. Rebuild = deterministic refit of one fold (~70 GB RAM)
+  matched to the saved coefs and predictions; save the full model then and time a live prediction.
 - **S2 boosted trees**: Step 1 done (col-wise fits r7i.16xlarge; 11.17 s/tree; worst case about 308 machine-h, about
   $923). No credits; the user is looking at a compute cluster. Planner option: lr 0.1 + 1,000 trees + incremental
   predict.
