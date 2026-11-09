@@ -1,0 +1,52 @@
+z3_open10 q0.01_stop0p5_feetaker: engine_final_equity=737.87 numgen_final_equity=737.87 match=True
+z3_open10 q0.01_stop0p5_feemaker: engine_final_equity=1061.80 numgen_final_equity=1061.80 match=True
+z3_open10 q0.01_stop1p0_feetaker: engine_final_equity=850.88 numgen_final_equity=850.88 match=True
+z3_open10 q0.01_stop1p0_feemaker: engine_final_equity=1213.24 numgen_final_equity=1213.24 match=True
+z3_open10 q0.01_stop2p0_feetaker: engine_final_equity=927.76 numgen_final_equity=927.76 match=True
+z3_open10 q0.01_stop2p0_feemaker: engine_final_equity=1308.40 numgen_final_equity=1308.40 match=True
+z3_open10 q0.01_stopnone_feetaker: engine_final_equity=1630.90 numgen_final_equity=1630.90 match=True
+z3_open10 q0.01_stopnone_feemaker: engine_final_equity=2241.61 numgen_final_equity=2241.61 match=True
+z3_open10 q0.005_stop0p5_feetaker: engine_final_equity=941.85 numgen_final_equity=941.85 match=True
+z3_open10 q0.005_stop0p5_feemaker: engine_final_equity=1129.26 numgen_final_equity=1129.26 match=True
+z3_open10 q0.005_stop1p0_feetaker: engine_final_equity=1066.38 numgen_final_equity=1066.38 match=True
+z3_open10 q0.005_stop1p0_feemaker: engine_final_equity=1299.70 numgen_final_equity=1299.70 match=True
+z3_open10 q0.005_stop2p0_feetaker: engine_final_equity=1139.55 numgen_final_equity=1139.55 match=True
+z3_open10 q0.005_stop2p0_feemaker: engine_final_equity=1394.95 numgen_final_equity=1394.95 match=True
+z3_open10 q0.005_stopnone_feetaker: engine_final_equity=1456.85 numgen_final_equity=1456.85 match=True
+z3_open10 q0.005_stopnone_feemaker: engine_final_equity=1765.32 numgen_final_equity=1765.32 match=True
+z3_open10 q0.001_stop0p5_feetaker: engine_final_equity=990.65 numgen_final_equity=990.65 match=True
+z3_open10 q0.001_stop0p5_feemaker: engine_final_equity=1031.69 numgen_final_equity=1031.69 match=True
+z3_open10 q0.001_stop1p0_feetaker: engine_final_equity=1035.71 numgen_final_equity=1035.71 match=True
+z3_open10 q0.001_stop1p0_feemaker: engine_final_equity=1077.18 numgen_final_equity=1077.18 match=True
+z3_open10 q0.001_stop2p0_feetaker: engine_final_equity=1043.95 numgen_final_equity=1043.95 match=True
+z3_open10 q0.001_stop2p0_feemaker: engine_final_equity=1082.77 numgen_final_equity=1082.77 match=True
+z3_open10 q0.001_stopnone_feetaker: engine_final_equity=1153.89 numgen_final_equity=1153.89 match=True
+z3_open10 q0.001_stopnone_feemaker: engine_final_equity=1194.58 numgen_final_equity=1194.58 match=True
+-- z3_open10: 24 runs checked, 0 mismatches --
+z3_open20 q0.01_stop0p5_feetaker: engine_final_equity=706.84 numgen_final_equity=706.84 match=True
+z3_open20 q0.01_stop0p5_feemaker: engine_final_equity=1019.44 numgen_final_equity=1019.44 match=True
+z3_open20 q0.01_stop1p0_feetaker: engine_final_equity=781.15 numgen_final_equity=781.15 match=True
+z3_open20 q0.01_stop1p0_feemaker: engine_final_equity=1146.15 numgen_final_equity=1146.15 match=True
+z3_open20 q0.01_stop2p0_feetaker: engine_final_equity=917.35 numgen_final_equity=917.35 match=True
+z3_open20 q0.01_stop2p0_feemaker: engine_final_equity=1355.72 numgen_final_equity=1355.72 match=True
+z3_open20 q0.01_stopnone_feetaker: engine_final_equity=1590.97 numgen_final_equity=1590.97 match=True
+z3_open20 q0.01_stopnone_feemaker: engine_final_equity=2334.71 numgen_final_equity=2334.71 match=True
+z3_open20 q0.005_stop0p5_feetaker: engine_final_equity=902.08 numgen_final_equity=902.08 match=True
+z3_open20 q0.005_stop0p5_feemaker: engine_final_equity=1093.07 numgen_final_equity=1093.07 match=True
+z3_open20 q0.005_stop1p0_feetaker: engine_final_equity=1016.13 numgen_final_equity=1016.13 match=True
+z3_open20 q0.005_stop1p0_feemaker: engine_final_equity=1232.16 numgen_final_equity=1232.16 match=True
+z3_open20 q0.005_stop2p0_feetaker: engine_final_equity=1088.05 numgen_final_equity=1088.05 match=True
+z3_open20 q0.005_stop2p0_feemaker: engine_final_equity=1335.78 numgen_final_equity=1335.78 match=True
+z3_open20 q0.005_stopnone_feetaker: engine_final_equity=1678.67 numgen_final_equity=1678.67 match=True
+z3_open20 q0.005_stopnone_feemaker: engine_final_equity=2035.80 numgen_final_equity=2035.80 match=True
+z3_open20 q0.001_stop0p5_feetaker: engine_final_equity=989.99 numgen_final_equity=989.99 match=True
+z3_open20 q0.001_stop0p5_feemaker: engine_final_equity=1030.63 numgen_final_equity=1030.63 match=True
+z3_open20 q0.001_stop1p0_feetaker: engine_final_equity=1034.60 numgen_final_equity=1034.60 match=True
+z3_open20 q0.001_stop1p0_feemaker: engine_final_equity=1077.07 numgen_final_equity=1077.07 match=True
+z3_open20 q0.001_stop2p0_feetaker: engine_final_equity=1042.08 numgen_final_equity=1042.08 match=True
+z3_open20 q0.001_stop2p0_feemaker: engine_final_equity=1084.86 numgen_final_equity=1084.86 match=True
+z3_open20 q0.001_stopnone_feetaker: engine_final_equity=1164.30 numgen_final_equity=1164.30 match=True
+z3_open20 q0.001_stopnone_feemaker: engine_final_equity=1211.79 numgen_final_equity=1211.79 match=True
+-- z3_open20: 24 runs checked, 0 mismatches --
+
+TOTAL: 48 runs checked across both tags, 0 mismatches

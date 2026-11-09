@@ -187,6 +187,11 @@ CONFIG = dict(
                                     # small). Kept as a setting, not removed, so it can be turned back
                                     # on; 0.5 (checker B14: half the impact spread, per the brief) ran
                                     # as run6, reference only, not the reported result
+    # Task C (2026-11-09): min_abs_z, default 0.0 = off. Applied AFTER Rule A's own picks, using the
+    # event's own z (a geometry input, fixed at pick time -- known at entry, no look-ahead): a pick is
+    # kept only if |z| >= min_abs_z. Read from PROFIT1_MIN_ABS_Z so the committed baseline (0.0) is
+    # untouched and the z3_open10/z3_open20 variants set it via env var, same convention as max_open.
+    min_abs_z=float(os.environ.get("PROFIT1_MIN_ABS_Z", 0.0)),
 )
 STOP_SIGMA = {"0p5": 0.5, "1p0": 1.0, "2p0": 2.0, "none": np.inf}
 
@@ -693,6 +698,13 @@ def run_one(q, stop_name, fee_mode, picks, geo, lev, paths, impact_series, fundi
     taker_rate = CONFIG["fee_taker"]
     picks = picks[picks[f"pick_{q}"]].copy()
     picks = picks[picks["event_id"].isin(paths.keys())]
+    # Task C: min_abs_z filter, applied AFTER Rule A's own pick_{q} selection, using geo's own z
+    # (known at entry -- a geometry input fixed at pick time, not a backtest output, so no look-ahead).
+    if CONFIG["min_abs_z"] > 0:
+        n_before = len(picks)
+        z_abs = geo.loc[picks["event_id"].to_numpy(), "z"].abs().to_numpy()
+        picks = picks[z_abs >= CONFIG["min_abs_z"]]
+        log(f"[PROFIT1] min_abs_z={CONFIG['min_abs_z']}: q={q} picks {n_before} -> {len(picks)}")
     picks = picks.sort_values("t0", kind="stable")
 
     tie = rng.random(len(picks))
@@ -1020,6 +1032,23 @@ def main():
     event_ids = top1["event_id"].to_numpy()
     geo = load_geometry_and_labels(event_ids)
     lev = load_leverage(event_ids)
+
+    # Task C: pre-skip pick counts after the min_abs_z filter (before any margin/book/min_order skip
+    # in the simulation loop) -- one check per q, independent of run_one's own per-run application of
+    # the same filter, so a wiring mistake in run_one can't hide behind a passing simulation.
+    if CONFIG["min_abs_z"] > 0:
+        z_by_eid = geo["z"]
+        expected_pre_skip = {0.01: 4063, 0.005: 2046, 0.001: 434}
+        for q in CONFIG["qs"]:
+            q_eids = picks.loc[picks[f"pick_{q}"], "event_id"]
+            n_before = len(q_eids)
+            n_after = int((z_by_eid.loc[q_eids].abs() >= CONFIG["min_abs_z"]).sum())
+            log(f"[PROFIT1] min_abs_z={CONFIG['min_abs_z']} pre-skip check: q={q} picks "
+                f"{n_before} -> {n_after}")
+            if CONFIG["min_abs_z"] == 3.0 and q in expected_pre_skip:
+                assert n_after == expected_pre_skip[q], (
+                    f"q={q}: pre-skip pick count after min_abs_z=3.0 is {n_after}, expected "
+                    f"{expected_pre_skip[q]}")
 
     coins = sorted(set(geo["ticker_a"]) | set(geo["ticker_b"]))
     log(f"[PROFIT1] {len(coins)} distinct coins across q=1% picks")

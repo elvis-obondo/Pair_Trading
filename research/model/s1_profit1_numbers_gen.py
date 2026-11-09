@@ -392,15 +392,17 @@ def numbers_md_marker(run_tag):
     return f"## [HL-PROFIT1 {run_tag}]" if run_tag else "## [HL-PROFIT1]"
 
 
-def _numbers_md_lines(report, run_tag, max_open, splits_filter=None):
+def _numbers_md_lines(report, run_tag, max_open, min_abs_z=0.0, splits_filter=None):
     """splits_filter: if given, an iterable of run keys -- only those runs get a coin/pair split table
     (used for the NUMBERS.md excerpt, one run per q, per the planner's instruction; None means all 24,
     the default, used for the full section file). Returns the list of markdown lines (no trailing join
     or file write -- callers decide how to assemble/write, so the excerpt and the NUMBERS.md append can
-    share the exact same text, checker E2). run_tag/max_open: checker's requirement that the heading
-    states which run this is (the baseline's max_open=10, or a tagged run's own max_open)."""
+    share the exact same text, checker E2). run_tag/max_open/min_abs_z: checker's requirement that the
+    heading states which run this is (the baseline's max_open=10 min_abs_z=0.0, or a tagged run's own
+    values), all read from the tagged report.json's own CONFIG, never typed."""
+    z_part = f" min_abs_z={min_abs_z}" if min_abs_z > 0 else ""
     lines = [f"{numbers_md_marker(run_tag)} Portfolio backtest, S1's live picks, build2 d3/asm price, "
-             f"slippage_spread_share=0.0, max_open={max_open}", ""]
+             f"slippage_spread_share=0.0, max_open={max_open}{z_part}", ""]
     lines.append(f"Runs ending above the ${START_EQUITY:.0f} start: "
                  f"{report['n_runs_above_start']}/{report['n_runs_total']}.")
     lines.append("")
@@ -583,8 +585,8 @@ def _numbers_md_lines(report, run_tag, max_open, splits_filter=None):
     return lines
 
 
-def write_numbers_md(report, out_path, run_tag, max_open, splits_filter=None):
-    lines = _numbers_md_lines(report, run_tag, max_open, splits_filter=splits_filter)
+def write_numbers_md(report, out_path, run_tag, max_open, min_abs_z=0.0, splits_filter=None):
+    lines = _numbers_md_lines(report, run_tag, max_open, min_abs_z=min_abs_z, splits_filter=splits_filter)
     open(out_path, "w").write("\n".join(lines))
     log(f"[NUMGEN] NUMBERS.md section written: {out_path}")
 
@@ -594,6 +596,7 @@ def main():
     log(f"[NUMGEN] start {t0.isoformat()} RUN_TAG={RUN_TAG!r}")
     engine_report = json.load(open(os.path.join(LOG_DIR, f"s1_profit1_report{TAG_SUFFIX}.json")))
     max_open = engine_report["config"]["max_open"]
+    min_abs_z = engine_report["config"].get("min_abs_z", 0.0)
     report = {"runs": {}, "ev_check": {}}
     for q in QS:
         for stop in STOPS:
@@ -656,6 +659,13 @@ def main():
         "the test months were already used for the cut-off, the deep dive and the calibration: "
         "results are optimistic until the vault or paper-trading check.",
     ]
+    # checker's requirement for Task C (z3_open10/z3_open20): an extra known-gaps line, printed only
+    # when min_abs_z > 0, since it doesn't apply to the base/open20 runs.
+    if min_abs_z > 0:
+        report["known_gaps"].append(
+            f"in-sample: the |z| >= {min_abs_z} threshold was chosen after seeing these test months' "
+            f"results; these numbers are not evidence for the rule until the vault or paper-trading "
+            f"check.")
 
     report["equity_png_paths"] = plot_equity_curves()
 
@@ -664,7 +674,7 @@ def main():
     log(f"[NUMGEN] report written: {out_path}")
 
     md_path = os.path.join(NUMBERS_DIR, f"s1_profit1_numbers_section{TAG_SUFFIX}.md")
-    write_numbers_md(report, md_path, RUN_TAG, max_open)
+    write_numbers_md(report, md_path, RUN_TAG, max_open, min_abs_z=min_abs_z)
     log(f"[NUMGEN] NUMBERS.md section (full, 24-run splits) written: {md_path}")
 
     # Planner's instruction (2026-11-09): paste every per-run table + splits for one run per q
@@ -675,7 +685,7 @@ def main():
     excerpt_path = os.path.join(NUMBERS_DIR, f"s1_profit1_numbers_excerpt{TAG_SUFFIX}.md")
     one_per_q = [run_key(q, "none", "maker") for q in QS]
     full_rel = os.path.relpath(md_path, ROOT)
-    excerpt_lines = _numbers_md_lines(report, RUN_TAG, max_open, splits_filter=one_per_q)
+    excerpt_lines = _numbers_md_lines(report, RUN_TAG, max_open, min_abs_z=min_abs_z, splits_filter=one_per_q)
     excerpt_lines.append(f"Full section (all 24 runs' splits, identical per-run tables): {full_rel}")
     canonical_text = "\n" + "\n".join(excerpt_lines) + "\n"
     open(excerpt_path, "w").write(canonical_text)
