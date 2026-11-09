@@ -1,0 +1,6673 @@
+HL-PROFIT1: Portfolio Backtest of S1's Live Picks on Hyperliquid
+A $1,000 cross-margin account backtest, 24 configurations (3 pick thresholds x 4 stop rules x 2 fee modes), built from Hyperliquid build2 d3/asm 1-minute trade-price bars.
+1. Summary
+Configuration
+field
+value
+start_equity
+1000
+margin_frac
+0.05
+leverage_cap
+10
+max_open
+10
+fee_taker
+0.00045
+fee_maker
+0.00015
+slippage_on
+true
+funding_on
+true
+min_order_usd
+10
+qs
+[0.01,0.005,0.001]
+stops
+["0p5","1p0","2p0","none"]
+fee_modes
+["taker","maker"]
+min_run_equity_usd
+50
+bootstrap_n
+2000
+bootstrap_level
+0.9875
+ev_quintiles
+5
+slippage_fallback_window_days
+30
+slippage_spread_share
+0
+Test period (7 folds)
+fold
+start
+end
+1
+2025-12-21
+2026-01-20
+2
+2026-01-20
+2026-02-19
+3
+2026-02-19
+2026-03-21
+4
+2026-03-21
+2026-04-20
+5
+2026-04-20
+2026-05-20
+6
+2026-05-20
+2026-06-19
+7
+2026-06-19
+2026-07-12
+All 24 base configurations (max_open=10)
+q
+stop
+fee
+final_equity
+total_return
+n_trades
+win_rate
+profit_factor
+sharpe
+sortino
+max_dd_pct
+0.01
+0p5
+taker
+$155.63
+-84.44%
+19,901
+28.08%
+0.759
+-11.94
+-14.96
+-84.44%
+0.01
+0p5
+maker
+$1,203.04
+20.30%
+21,952
+28.01%
+1.026
+1.34
+2.60
+-16.64%
+0.01
+1p0
+taker
+$351.90
+-64.81%
+17,742
+40.31%
+0.886
+-6.23
+-9.81
+-64.81%
+0.01
+1p0
+maker
+$2,417.34
+141.73%
+17,982
+40.60%
+1.108
+5.47
+13.44
+-8.70%
+0.01
+2p0
+taker
+$929.58
+-7.04%
+13,531
+55.36%
+0.991
+-0.26
+-0.50
+-33.52%
+0.01
+2p0
+maker
+$3,613.17
+261.32%
+13,538
+55.21%
+1.163
+7.46
+18.31
+-6.69%
+0.01
+none
+taker
+$2,205.99
+120.60%
+8,078
+70.65%
+1.169
+3.90
+5.65
+-12.93%
+0.01
+none
+maker
+$5,034.35
+403.44%
+8,069
+70.81%
+1.368
+7.71
+11.27
+-9.82%
+0.005
+0p5
+taker
+$353.37
+-64.66%
+13,201
+28.38%
+0.790
+-7.34
+-9.80
+-64.66%
+0.005
+0p5
+maker
+$1,332.97
+33.30%
+13,703
+28.51%
+1.071
+2.22
+4.66
+-9.55%
+0.005
+1p0
+taker
+$701.18
+-29.88%
+11,920
+41.43%
+0.936
+-2.36
+-3.82
+-29.88%
+0.005
+1p0
+maker
+$2,374.42
+137.44%
+12,055
+41.58%
+1.176
+6.17
+13.72
+-6.30%
+0.005
+2p0
+taker
+$1,250.74
+25.07%
+9,834
+56.17%
+1.039
+1.58
+2.99
+-22.84%
+0.005
+2p0
+maker
+$3,315.02
+231.50%
+9,879
+56.18%
+1.228
+7.61
+18.92
+-4.88%
+0.005
+none
+taker
+$1,960.18
+96.02%
+6,587
+71.64%
+1.173
+3.73
+5.72
+-12.54%
+0.005
+none
+maker
+$4,138.00
+313.80%
+6,595
+71.96%
+1.395
+6.98
+10.16
+-10.93%
+0.001
+0p5
+taker
+$858.01
+-14.20%
+3,326
+29.71%
+0.872
+-2.45
+-3.90
+-14.20%
+0.001
+0p5
+maker
+$1,189.94
+18.99%
+3,361
+29.81%
+1.181
+2.78
+6.79
+-3.40%
+0.001
+1p0
+taker
+$1,009.06
+0.91%
+3,259
+42.77%
+1.006
+0.19
+0.34
+-8.51%
+0.001
+1p0
+maker
+$1,417.70
+41.77%
+3,285
+42.86%
+1.282
+4.31
+11.13
+-2.80%
+0.001
+2p0
+taker
+$1,199.47
+19.95%
+3,085
+58.02%
+1.113
+2.03
+3.21
+-7.15%
+0.001
+2p0
+maker
+$1,638.86
+63.89%
+3,112
+57.94%
+1.335
+5.07
+9.22
+-4.49%
+0.001
+none
+taker
+$1,511.91
+51.19%
+2,573
+74.39%
+1.267
+3.65
+4.25
+-7.20%
+0.001
+none
+maker
+$2,012.22
+101.22%
+2,583
+74.49%
+1.469
+6.06
+7.88
+-5.97%
+Runs ending above the $1,000 start: 18/24.
+Key findings
+Of the 24 base (max_open=10) configurations, 18/24 end the 7 test blocks (2025-12-21 to 2026-07-12) above the $1,000 start.
+The best base config is q=0.01, stop=none, fee=maker (total_return=4.0344); the worst is q=0.01, stop=0p5, fee=taker (total_return=-0.8444).
+EV quintiles (stop=none only) rank realised net monotonically (quintile 0 to 4 non-decreasing) in 0/6 of the base q x fee combinations -- EV here is descriptive only and does not rank realised net in these tables.
+Raising max_open from 10 to 20 (Task A) moves the count of runs ending above start from 18/24 (max_open=10) to 19/24 (max_open=20). margin skips are 0 in 24/24 base (max_open=10) runs, and range from 30 to 10,140 across the 24 open20 (max_open=20) runs: at max_open=10 the open positions can need at most 50% of account value as margin (10 x 5%), so margin cannot bind; at max_open=20 that rises to 100% (20 x 5%), so it can.
+Task B's descriptive |z| x p_cal grid on the 6 stop=none runs finds the top p_cal quintile has the highest mean return in 6/6 runs, but win_rate is monotonic in only 2/6 runs for |z| and 2/6 for p_cal, and mean return is monotonic in 0/6 runs for |z| and 0/6 for p_cal.
+Task C's |z| >= 3.0 filter (in-sample -- chosen after seeing these test months) cuts the q=0.01 pick count from 35,629 to 4,063, q=0.005 from 17,699 to 2,046, and q=0.001 from 3,638 to 434, before any skip is applied (identical in both z3_open10 and z3_open20).
+Known gaps
+slippage excluded by the user's choice (legs are small); costs are a lower bound and results an upper bound (optimistic).
+max_leverage is today's snapshot (hindsight); limits were different in the past.
+liquidation is checked on 1-minute closes; a move inside a minute can liquidate earlier.
+maker fills are assumed to fill; in practice they may not.
+the test months were already used for the cut-off, the deep dive and the calibration: results are optimistic until the vault or paper-trading check.
+2. Glossary
+term
+meaning
+q
+pick threshold -- the fraction of events taken as a trade (1% is the loosest, 0.1% the tightest).
+stop
+a stop-loss in standard deviations (sigma) of the pair spread; 'none' means no stop, hold to timeout.
+z
+the spread's distance from its mean at entry, in sigma units -- the signal S1 scores.
+p_cal_10h
+S1-H's calibrated probability the spread reverts to mean within 10 hours.
+final_equity
+account value in USD at the end of the 7-month test period, starting from $1,000.
+total_return
+final_equity / 1000 - 1.
+max_open
+the maximum number of concurrent open positions allowed.
+margin skip
+a pick that was not taken because taking it would exceed the account's margin.
+profit_factor
+sum of winning trades' net $ divided by the absolute sum of losing trades' net $.
+distance to liquidation (ratio)
+account_value / maintenance margin; 1.0 would mean liquidation.
+in-sample
+a result where the rule or threshold was chosen after seeing these same test months -- not yet validated out of sample.
+3. Comparisons by stop, fee and q (base, max_open=10)
+q = 0.01
+stop
+fee
+final_equity
+total_return
+win_rate
+profit_factor
+sharpe
+0p5
+taker
+$155.63
+-84.44%
+28.08%
+0.759
+-11.94
+0p5
+maker
+$1,203.04
+20.30%
+28.01%
+1.026
+1.34
+1p0
+taker
+$351.90
+-64.81%
+40.31%
+0.886
+-6.23
+1p0
+maker
+$2,417.34
+141.73%
+40.60%
+1.108
+5.47
+2p0
+taker
+$929.58
+-7.04%
+55.36%
+0.991
+-0.26
+2p0
+maker
+$3,613.17
+261.32%
+55.21%
+1.163
+7.46
+none
+taker
+$2,205.99
+120.60%
+70.65%
+1.169
+3.90
+none
+maker
+$5,034.35
+403.44%
+70.81%
+1.368
+7.71
+q = 0.005
+stop
+fee
+final_equity
+total_return
+win_rate
+profit_factor
+sharpe
+0p5
+taker
+$353.37
+-64.66%
+28.38%
+0.790
+-7.34
+0p5
+maker
+$1,332.97
+33.30%
+28.51%
+1.071
+2.22
+1p0
+taker
+$701.18
+-29.88%
+41.43%
+0.936
+-2.36
+1p0
+maker
+$2,374.42
+137.44%
+41.58%
+1.176
+6.17
+2p0
+taker
+$1,250.74
+25.07%
+56.17%
+1.039
+1.58
+2p0
+maker
+$3,315.02
+231.50%
+56.18%
+1.228
+7.61
+none
+taker
+$1,960.18
+96.02%
+71.64%
+1.173
+3.73
+none
+maker
+$4,138.00
+313.80%
+71.96%
+1.395
+6.98
+q = 0.001
+stop
+fee
+final_equity
+total_return
+win_rate
+profit_factor
+sharpe
+0p5
+taker
+$858.01
+-14.20%
+29.71%
+0.872
+-2.45
+0p5
+maker
+$1,189.94
+18.99%
+29.81%
+1.181
+2.78
+1p0
+taker
+$1,009.06
+0.91%
+42.77%
+1.006
+0.19
+1p0
+maker
+$1,417.70
+41.77%
+42.86%
+1.282
+4.31
+2p0
+taker
+$1,199.47
+19.95%
+58.02%
+1.113
+2.03
+2p0
+maker
+$1,638.86
+63.89%
+57.94%
+1.335
+5.07
+none
+taker
+$1,511.91
+51.19%
+74.39%
+1.267
+3.65
+none
+maker
+$2,012.22
+101.22%
+74.49%
+1.469
+6.06
+4. Per-run detail (24 base configurations, max_open=10)
+q0.01_stop0p5_feetaker  (q=0.01, stop=0p5, fee=taker)
+Results
+field
+value
+final_equity
+$155.63
+total_return
+-84.44%
+cagr
+-96.53% (n_days=202)
+n_trades
+19,901
+win_rate
+28.08%
+stop_share
+71.75%
+timeout_share
+0.17%
+profit_factor
+0.759
+sharpe
+-11.94 (sortino -14.96, n_days=203)
+mean_net
+-0.0424 / median -0.1319
+mean_win_loss
+0.4744 / -0.2458
+mean_holding_minutes
+45.0
+Drawdown and distance to liquidation
+field
+value
+max_dd_usd
+$-844.37
+max_dd_pct
+-84.44%
+dd_start
+2025-12-20
+dd_bottom
+2026-07-11
+dd_recovery
+not recovered
+longest_underwater_days
+203
+min_distance_ratio
+4.044
+median_distance_ratio
+4.708
+date_of_min
+2026-01-19
+Costs
+field
+value
+total_gross
+$526.03
+fee
+$1,370.44 (260.53% of gross)
+slippage
+$0.00 (0.00% of gross)
+funding_paid
+$12.91 (2.45% of gross)
+funding_received
+$12.96 (2.46% of gross)
+Skips and liquidations
+field
+value
+book_full
+11788
+min_order
+3940
+n_liquidations
+0
+Leverage and risk
+field
+value
+peak_margin_used
+$496.72
+mean_open_positions
+4.04
+max_open_positions
+10
+Monthly P&L (n_months_positive=0/7)
+fold
+n_days
+total_pnl_usd
+total_pnl_pct
+1
+30
+$-356.33
+-35.63%
+2
+30
+$-207.34
+-32.21%
+3
+30
+$-48.15
+-11.04%
+4
+30
+$-86.47
+-22.28%
+5
+30
+$-59.85
+-19.84%
+6
+30
+$-48.98
+-20.25%
+7
+23
+$-37.25
+-19.31%
+outside
+0
+$0.00
+n/a
+Top / bottom 5 coins (net $, each trade counted for both coins)
+top coin
+net
+HMSTR
+$67.05
+MEGA
+$51.72
+NOT
+$26.12
+MEW
+$17.00
+STABLE
+$11.20
+bottom coin
+net
+VIRTUAL
+$3.51
+RENDER
+$4.40
+ZETA
+$5.70
+BOME
+$6.16
+POLYX
+$6.62
+Top / bottom 5 pairs (net $)
+top pair
+net
+HMSTR/MEGA
+$10.75
+FXS/MEGA
+$9.56
+MEGA/SYRUP
+$8.53
+FOGO/MAVIA
+$8.18
+USUAL/ZEREBRO
+$6.98
+bottom pair
+net
+HMSTR/MEW
+$6.33
+FOGO/RENDER
+$6.42
+ACE/MEGA
+$6.47
+BOME/HMSTR
+$6.66
+FOGO/STABLE
+$6.79
+Equity curve (all 4 stops for this q/fee, shared PNG)
+q0.01_stop0p5_feemaker  (q=0.01, stop=0p5, fee=maker)
+Results
+field
+value
+final_equity
+$1,203.04
+total_return
+20.30%
+cagr
+39.43% (n_days=203)
+n_trades
+21,952
+win_rate
+28.01%
+stop_share
+71.84%
+timeout_share
+0.15%
+profit_factor
+1.026
+sharpe
+1.34 (sortino 2.60, n_days=204)
+mean_net
+0.0092 / median -0.3251
+mean_win_loss
+1.2747 / -0.4866
+mean_holding_minutes
+45.8
+Drawdown and distance to liquidation
+field
+value
+max_dd_usd
+$-240.21
+max_dd_pct
+-16.64%
+dd_start
+2026-05-07
+dd_bottom
+2026-07-12
+dd_recovery
+not recovered
+longest_underwater_days
+66
+min_distance_ratio
+3.997
+median_distance_ratio
+4.478
+date_of_min
+2026-04-23
+Costs
+field
+value
+total_gross
+$1,495.80
+fee
+$1,294.28 (86.53% of gross)
+slippage
+$0.00 (0.00% of gross)
+funding_paid
+$35.61 (2.38% of gross)
+funding_received
+$37.12 (2.48% of gross)
+Skips and liquidations
+field
+value
+book_full
+13402
+min_order
+275
+n_liquidations
+0
+Leverage and risk
+field
+value
+peak_margin_used
+$719.95
+mean_open_positions
+4.32
+max_open_positions
+10
+Monthly P&L (n_months_positive=5/7)
+fold
+n_days
+total_pnl_usd
+total_pnl_pct
+1
+30
+$18.62
+1.86%
+2
+30
+$55.19
+5.42%
+3
+30
+$13.66
+1.27%
+4
+30
+$9.07
+0.83%
+5
+30
+$308.70
+28.15%
+6
+30
+$-92.94
+-6.61%
+7
+23
+$-108.04
+-8.23%
+outside
+1
+$-1.23
+n/a
+Top / bottom 5 coins (net $, each trade counted for both coins)
+top coin
+net
+HMSTR
+$377.59
+YZY
+$165.56
+NOT
+$115.43
+MEW
+$104.19
+MEGA
+$72.84
+bottom coin
+net
+LIT
+$38.77
+POLYX
+$44.53
+ZETA
+$49.88
+FTT
+$66.09
+BOME
+$72.76
+Top / bottom 5 pairs (net $)
+top pair
+net
+YZY/ZETA
+$19.14
+GRASS/YZY
+$19.13
+HMSTR/MEW
+$18.02
+MAVIA/YZY
+$17.68
+CRV/HMSTR
+$17.11
+bottom pair
+net
+YZY/kSHIB
+$13.31
+LIT/YZY
+$13.61
+MAV/ZEREBRO
+$13.88
+APT/WLD
+$14.23
+BOME/HMSTR
+$16.43
+Equity curve (all 4 stops for this q/fee, shared PNG)
+q0.01_stop1p0_feetaker  (q=0.01, stop=1p0, fee=taker)
+Results
+field
+value
+final_equity
+$351.90
+total_return
+-64.81%
+cagr
+-84.71% (n_days=203)
+n_trades
+17,742
+win_rate
+40.31%
+stop_share
+59.07%
+timeout_share
+0.63%
+profit_factor
+0.886
+sharpe
+-6.23 (sortino -9.81, n_days=204)
+mean_net
+-0.0365 / median -0.2867
+mean_win_loss
+0.7007 / -0.5426
+mean_holding_minutes
+77.8
+Drawdown and distance to liquidation
+field
+value
+max_dd_usd
+$-648.10
+max_dd_pct
+-64.81%
+dd_start
+2025-12-20
+dd_bottom
+2026-07-12
+dd_recovery
+not recovered
+longest_underwater_days
+204
+min_distance_ratio
+3.985
+median_distance_ratio
+4.437
+date_of_min
+2026-05-08
+Costs
+field
+value
+total_gross
+$1,198.63
+fee
+$1,843.69 (153.82% of gross)
+slippage
+$0.00 (0.00% of gross)
+funding_paid
+$33.60 (2.80% of gross)
+funding_received
+$30.55 (2.55% of gross)
+Skips and liquidations
+field
+value
+book_full
+16941
+min_order
+946
+n_liquidations
+0
+Leverage and risk
+field
+value
+peak_margin_used
+$500.11
+mean_open_positions
+5.42
+max_open_positions
+10
+Monthly P&L (n_months_positive=0/7)
+fold
+n_days
+total_pnl_usd
+total_pnl_pct
+1
+30
+$-114.28
+-11.43%
+2
+30
+$-151.69
+-17.13%
+3
+30
+$-35.43
+-4.83%
+4
+30
+$-129.23
+-18.50%
+5
+30
+$-22.46
+-3.94%
+6
+30
+$-96.47
+-17.64%
+7
+23
+$-97.52
+-21.65%
+outside
+1
+$-1.02
+n/a
+Top / bottom 5 coins (net $, each trade counted for both coins)
+top coin
+net
+HMSTR
+$166.32
+MEGA
+$78.95
+BOME
+$51.77
+NOT
+$48.86
+YZY
+$45.55
+bottom coin
+net
+LIT
+$19.27
+ZEREBRO
+$21.31
+FTT
+$23.55
+FOGO
+$27.34
+MEW
+$43.57
+Top / bottom 5 pairs (net $)
+top pair
+net
+AR/ZK
+$15.36
+FOGO/GRIFFAIN
+$14.25
+HMSTR/MEGA
+$12.45
+FOGO/SAGA
+$12.13
+FXS/MEGA
+$10.83
+bottom pair
+net
+BOME/HMSTR
+$8.72
+YZY/ZETA
+$8.84
+GRASS/YZY
+$9.20
+USUAL/ZEREBRO
+$9.34
+FOGO/NEAR
+$10.37
+Equity curve (all 4 stops for this q/fee, shared PNG)
+q0.01_stop1p0_feemaker  (q=0.01, stop=1p0, fee=maker)
+Results
+field
+value
+final_equity
+$2,417.34
+total_return
+141.73%
+cagr
+388.94% (n_days=203)
+n_trades
+17,982
+win_rate
+40.60%
+stop_share
+58.75%
+timeout_share
+0.65%
+profit_factor
+1.108
+sharpe
+5.47 (sortino 13.44, n_days=204)
+mean_net
+0.0788 / median -0.6194
+mean_win_loss
+1.9655 / -1.2363
+mean_holding_minutes
+78.7
+Drawdown and distance to liquidation
+field
+value
+max_dd_usd
+$-230.48
+max_dd_pct
+-8.70%
+dd_start
+2026-06-29
+dd_bottom
+2026-07-12
+dd_recovery
+not recovered
+longest_underwater_days
+48
+min_distance_ratio
+3.985
+median_distance_ratio
+4.444
+date_of_min
+2025-12-23
+Costs
+field
+value
+total_gross
+$3,108.35
+fee
+$1,686.49 (54.26% of gross)
+slippage
+$0.00 (0.00% of gross)
+funding_paid
+$88.87 (2.86% of gross)
+funding_received
+$84.34 (2.71% of gross)
+Skips and liquidations
+field
+value
+book_full
+17549
+min_order
+98
+n_liquidations
+0
+Leverage and risk
+field
+value
+peak_margin_used
+$1,320.88
+mean_open_positions
+5.52
+max_open_positions
+10
+Monthly P&L (n_months_positive=5/7)
+fold
+n_days
+total_pnl_usd
+total_pnl_pct
+1
+30
+$279.49
+27.95%
+2
+30
+$262.78
+20.54%
+3
+30
+$112.92
+7.32%
+4
+30
+$134.80
+8.14%
+5
+30
+$675.01
+37.71%
+6
+30
+$-14.92
+-0.61%
+7
+23
+$-27.59
+-1.13%
+outside
+1
+$-5.14
+n/a
+Top / bottom 5 coins (net $, each trade counted for both coins)
+top coin
+net
+HMSTR
+$698.06
+YZY
+$340.60
+BOME
+$225.09
+MEW
+$187.86
+NOT
+$186.86
+bottom coin
+net
+RSR
+$92.77
+BLAST
+$97.43
+MAVIA
+$100.76
+MEGA
+$104.29
+FTT
+$112.53
+Top / bottom 5 pairs (net $)
+top pair
+net
+GRASS/YZY
+$34.78
+YZY/ZETA
+$34.33
+MAVIA/YZY
+$30.53
+APT/WLD
+$27.20
+HMSTR/TST
+$26.80
+bottom pair
+net
+AR/ZK
+$21.06
+HMSTR/NIL
+$21.51
+YZY/kSHIB
+$22.91
+CRV/HMSTR
+$24.28
+BOME/HMSTR
+$24.99
+Equity curve (all 4 stops for this q/fee, shared PNG)
+q0.01_stop2p0_feetaker  (q=0.01, stop=2p0, fee=taker)
+Results
+field
+value
+final_equity
+$929.58
+total_return
+-7.04%
+cagr
+-12.30% (n_days=203)
+n_trades
+13,531
+win_rate
+55.36%
+stop_share
+41.85%
+timeout_share
+2.79%
+profit_factor
+0.991
+sharpe
+-0.26 (sortino -0.50, n_days=204)
+mean_net
+-0.0052 / median 0.4073
+mean_win_loss
+1.0425 / -1.3730
+mean_holding_minutes
+133.1
+Drawdown and distance to liquidation
+field
+value
+max_dd_usd
+$-468.76
+max_dd_pct
+-33.52%
+dd_start
+2026-05-04
+dd_bottom
+2026-07-12
+dd_recovery
+not recovered
+longest_underwater_days
+69
+min_distance_ratio
+3.978
+median_distance_ratio
+4.350
+date_of_min
+2025-12-24
+Costs
+field
+value
+total_gross
+$2,182.91
+fee
+$2,248.24 (102.99% of gross)
+slippage
+$0.00 (0.00% of gross)
+funding_paid
+$71.84 (3.29% of gross)
+funding_received
+$66.75 (3.06% of gross)
+Skips and liquidations
+field
+value
+book_full
+21891
+min_order
+207
+n_liquidations
+0
+Leverage and risk
+field
+value
+peak_margin_used
+$696.86
+mean_open_positions
+6.62
+max_open_positions
+10
+Monthly P&L (n_months_positive=4/7)
+fold
+n_days
+total_pnl_usd
+total_pnl_pct
+1
+30
+$17.87
+1.79%
+2
+30
+$51.48
+5.06%
+3
+30
+$1.93
+0.18%
+4
+30
+$-57.15
+-5.33%
+5
+30
+$257.38
+25.38%
+6
+30
+$-152.54
+-12.00%
+7
+23
+$-185.18
+-16.55%
+outside
+1
+$-4.20
+n/a
+Top / bottom 5 coins (net $, each trade counted for both coins)
+top coin
+net
+HMSTR
+$283.90
+MEW
+$130.25
+YZY
+$111.93
+MAVIA
+$111.41
+BOME
+$110.41
+bottom coin
+net
+RSR
+$44.55
+PNUT
+$47.98
+FTT
+$53.63
+FOGO
+$69.18
+NOT
+$100.40
+Top / bottom 5 pairs (net $)
+top pair
+net
+AR/ZK
+$20.40
+GRASS/YZY
+$20.27
+YZY/ZETA
+$18.49
+MAVIA/YZY
+$15.97
+MAV/ZEREBRO
+$14.55
+bottom pair
+net
+APEX/MAVIA
+$10.72
+MEGA/TNSR
+$11.98
+CRV/HMSTR
+$12.60
+FOGO/SAGA
+$13.29
+HMSTR/SUSHI
+$13.46
+Equity curve (all 4 stops for this q/fee, shared PNG)
+q0.01_stop2p0_feemaker  (q=0.01, stop=2p0, fee=maker)
+Results
+field
+value
+final_equity
+$3,613.17
+total_return
+261.32%
+cagr
+907.16% (n_days=203)
+n_trades
+13,538
+win_rate
+55.21%
+stop_share
+42.05%
+timeout_share
+2.73%
+profit_factor
+1.163
+sharpe
+7.46 (sortino 18.31, n_days=204)
+mean_net
+0.1930 / median 0.8274
+mean_win_loss
+2.4290 / -2.7279
+mean_holding_minutes
+133.3
+Drawdown and distance to liquidation
+field
+value
+max_dd_usd
+$-258.77
+max_dd_pct
+-6.69%
+dd_start
+2026-06-30
+dd_bottom
+2026-07-08
+dd_recovery
+not recovered
+longest_underwater_days
+14
+min_distance_ratio
+3.977
+median_distance_ratio
+4.357
+date_of_min
+2025-12-24
+Costs
+field
+value
+total_gross
+$4,258.85
+fee
+$1,641.65 (38.55% of gross)
+slippage
+$0.00 (0.00% of gross)
+funding_paid
+$148.07 (3.48% of gross)
+funding_received
+$144.05 (3.38% of gross)
+Skips and liquidations
+field
+value
+book_full
+22029
+min_order
+62
+n_liquidations
+0
+Leverage and risk
+field
+value
+peak_margin_used
+$1,944.53
+mean_open_positions
+6.63
+max_open_positions
+10
+Monthly P&L (n_months_positive=6/7)
+fold
+n_days
+total_pnl_usd
+total_pnl_pct
+1
+30
+$301.39
+30.14%
+2
+30
+$398.43
+30.62%
+3
+30
+$191.32
+11.26%
+4
+30
+$346.47
+18.32%
+5
+30
+$1,398.39
+62.49%
+6
+30
+$129.18
+3.55%
+7
+23
+$-136.35
+-3.62%
+outside
+1
+$-15.67
+n/a
+Top / bottom 5 coins (net $, each trade counted for both coins)
+top coin
+net
+HMSTR
+$763.14
+YZY
+$358.79
+MEW
+$310.62
+MAVIA
+$294.67
+BOME
+$250.95
+bottom coin
+net
+PNUT
+$155.38
+RSR
+$172.47
+FTT
+$184.94
+NOT
+$207.46
+TNSR
+$217.62
+Top / bottom 5 pairs (net $)
+top pair
+net
+MAVIA/YZY
+$42.23
+MAV/ZEREBRO
+$36.70
+HMSTR/SUSHI
+$33.25
+UNI/WLD
+$32.48
+GRASS/YZY
+$31.95
+bottom pair
+net
+LDO/LIT
+$24.45
+FARTCOIN/HMSTR
+$26.11
+YZY/ZETA
+$26.17
+AR/ZK
+$26.19
+YZY/kSHIB
+$31.74
+Equity curve (all 4 stops for this q/fee, shared PNG)
+q0.01_stopnone_feetaker  (q=0.01, stop=none, fee=taker)
+Results
+field
+value
+final_equity
+$2,205.99
+total_return
+120.60%
+cagr
+314.77% (n_days=203)
+n_trades
+8,078
+win_rate
+70.65%
+stop_share
+0.00%
+timeout_share
+29.35%
+profit_factor
+1.169
+sharpe
+3.90 (sortino 5.65, n_days=204)
+mean_net
+0.1493 / median 0.8188
+mean_win_loss
+1.3947 / -3.3891
+mean_holding_minutes
+285.5
+Drawdown and distance to liquidation
+field
+value
+max_dd_usd
+$-182.50
+max_dd_pct
+-12.93%
+dd_start
+2026-05-04
+dd_bottom
+2026-05-09
+dd_recovery
+2026-05-24
+longest_underwater_days
+29
+min_distance_ratio
+3.580
+median_distance_ratio
+4.364
+date_of_min
+2026-04-18
+Costs
+field
+value
+total_gross
+$3,135.27
+fee
+$1,892.56 (60.36% of gross)
+slippage
+$0.00 (0.00% of gross)
+funding_paid
+$166.61 (5.31% of gross)
+funding_received
+$129.89 (4.14% of gross)
+Skips and liquidations
+field
+value
+book_full
+27488
+min_order
+63
+n_liquidations
+0
+Leverage and risk
+field
+value
+peak_margin_used
+$1,202.38
+mean_open_positions
+8.11
+max_open_positions
+10
+Monthly P&L (n_months_positive=7/7)
+fold
+n_days
+total_pnl_usd
+total_pnl_pct
+1
+30
+$78.32
+7.83%
+2
+30
+$229.80
+21.31%
+3
+30
+$40.97
+3.13%
+4
+30
+$180.18
+13.36%
+5
+30
+$329.15
+21.52%
+6
+30
+$205.90
+11.08%
+7
+23
+$144.58
+7.00%
+outside
+1
+$-2.90
+n/a
+Top / bottom 5 coins (net $, each trade counted for both coins)
+top coin
+net
+HMSTR
+$393.52
+YZY
+$212.18
+FTT
+$146.48
+MEW
+$131.96
+BOME
+$125.92
+bottom coin
+net
+TNSR
+$89.03
+RSR
+$90.81
+NOT
+$104.31
+BLAST
+$107.58
+MAVIA
+$111.24
+Top / bottom 5 pairs (net $)
+top pair
+net
+MAVIA/YZY
+$16.22
+ACE/HMSTR
+$16.09
+HMSTR/MINA
+$14.78
+HMSTR/POLYX
+$13.97
+CC/WLD
+$13.45
+bottom pair
+net
+DYDX/WCT
+$12.31
+TST/XMR
+$12.85
+JUP/ZEC
+$12.86
+STABLE/STBL
+$13.09
+BLAST/GOAT
+$13.42
+Equity curve (all 4 stops for this q/fee, shared PNG)
+q0.01_stopnone_feemaker  (q=0.01, stop=none, fee=maker)
+Results
+field
+value
+final_equity
+$5,034.35
+total_return
+403.44%
+cagr
+1728.58% (n_days=203)
+n_trades
+8,069
+win_rate
+70.81%
+stop_share
+0.00%
+timeout_share
+29.19%
+profit_factor
+1.368
+sharpe
+7.71 (sortino 11.27, n_days=204)
+mean_net
+0.5000 / median 1.3273
+mean_win_loss
+2.4824 / -5.3857
+mean_holding_minutes
+286.0
+Drawdown and distance to liquidation
+field
+value
+max_dd_usd
+$-234.56
+max_dd_pct
+-9.82%
+dd_start
+2026-07-03
+dd_bottom
+2026-07-12
+dd_recovery
+not recovered
+longest_underwater_days
+15
+min_distance_ratio
+3.581
+median_distance_ratio
+4.349
+date_of_min
+2026-04-18
+Costs
+field
+value
+total_gross
+$5,122.67
+fee
+$1,031.67 (20.14% of gross)
+slippage
+$0.00 (0.00% of gross)
+funding_paid
+$262.47 (5.12% of gross)
+funding_received
+$205.82 (4.02% of gross)
+Skips and liquidations
+field
+value
+book_full
+27520
+min_order
+40
+n_liquidations
+0
+Leverage and risk
+field
+value
+peak_margin_used
+$2,661.84
+mean_open_positions
+8.11
+max_open_positions
+10
+Monthly P&L (n_months_positive=7/7)
+fold
+n_days
+total_pnl_usd
+total_pnl_pct
+1
+30
+$199.85
+19.99%
+2
+30
+$476.48
+39.71%
+3
+30
+$189.09
+11.28%
+4
+30
+$514.44
+27.58%
+5
+30
+$1,106.35
+46.49%
+6
+30
+$780.84
+22.40%
+7
+23
+$786.25
+18.43%
+outside
+1
+$-18.94
+n/a
+Top / bottom 5 coins (net $, each trade counted for both coins)
+top coin
+net
+HMSTR
+$648.67
+YZY
+$400.22
+FTT
+$263.89
+NOT
+$250.39
+MEW
+$231.19
+bottom coin
+net
+MAVIA
+$170.91
+RSR
+$187.62
+TNSR
+$224.14
+BLAST
+$228.56
+BOME
+$230.27
+Top / bottom 5 pairs (net $)
+top pair
+net
+ACE/HMSTR
+$34.19
+JUP/ZEC
+$30.24
+MAVIA/YZY
+$27.86
+CC/WLD
+$27.53
+DYDX/WCT
+$26.69
+bottom pair
+net
+NOT/ORDI
+$24.48
+HMSTR/POLYX
+$24.82
+INJ/STRK
+$25.13
+HMSTR/MINA
+$25.47
+STABLE/STBL
+$25.56
+Equity curve (all 4 stops for this q/fee, shared PNG)
+q0.005_stop0p5_feetaker  (q=0.005, stop=0p5, fee=taker)
+Results
+field
+value
+final_equity
+$353.37
+total_return
+-64.66%
+cagr
+-84.59% (n_days=203)
+n_trades
+13,201
+win_rate
+28.38%
+stop_share
+71.49%
+timeout_share
+0.12%
+profit_factor
+0.790
+sharpe
+-7.34 (sortino -9.80, n_days=204)
+mean_net
+-0.0490 / median -0.2124
+mean_win_loss
+0.6468 / -0.3261
+mean_holding_minutes
+43.0
+Drawdown and distance to liquidation
+field
+value
+max_dd_usd
+$-646.63
+max_dd_pct
+-64.66%
+dd_start
+2025-12-20
+dd_bottom
+2026-07-12
+dd_recovery
+not recovered
+longest_underwater_days
+204
+min_distance_ratio
+4.074
+median_distance_ratio
+5.879
+date_of_min
+2026-04-29
+Costs
+field
+value
+total_gross
+$584.30
+fee
+$1,230.12 (210.53% of gross)
+slippage
+$0.00 (0.00% of gross)
+funding_paid
+$11.62 (1.99% of gross)
+funding_received
+$10.81 (1.85% of gross)
+Skips and liquidations
+field
+value
+book_full
+3481
+min_order
+1017
+n_liquidations
+0
+Leverage and risk
+field
+value
+peak_margin_used
+$498.72
+mean_open_positions
+3.15
+max_open_positions
+10
+Monthly P&L (n_months_positive=0/7)
+fold
+n_days
+total_pnl_usd
+total_pnl_pct
+1
+30
+$-248.32
+-24.83%
+2
+30
+$-147.58
+-19.63%
+3
+30
+$-31.87
+-5.27%
+4
+30
+$-83.52
+-14.59%
+5
+30
+$-34.19
+-7.00%
+6
+30
+$-45.66
+-10.05%
+7
+23
+$-55.36
+-13.54%
+outside
+1
+$-0.14
+n/a
+Top / bottom 5 coins (net $, each trade counted for both coins)
+top coin
+net
+HMSTR
+$117.56
+MEGA
+$28.59
+YZY
+$27.78
+NOT
+$21.04
+ZEREBRO
+$17.98
+bottom coin
+net
+RENDER
+$6.96
+MANTA
+$9.46
+ZETA
+$11.04
+STABLE
+$11.40
+MEW
+$15.56
+Top / bottom 5 pairs (net $)
+top pair
+net
+HMSTR/MEGA
+$11.10
+FOGO/STABLE
+$8.72
+FOGO/MAVIA
+$8.45
+HMSTR/MEW
+$8.44
+NOT/OP
+$8.22
+bottom pair
+net
+FOGO/RENDER
+$6.62
+MEGA/SYRUP
+$6.66
+MAVIA/YZY
+$6.86
+GRASS/YZY
+$7.15
+USUAL/ZEREBRO
+$7.80
+Equity curve (all 4 stops for this q/fee, shared PNG)
+q0.005_stop0p5_feemaker  (q=0.005, stop=0p5, fee=maker)
+Results
+field
+value
+final_equity
+$1,332.97
+total_return
+33.30%
+cagr
+67.66% (n_days=203)
+n_trades
+13,703
+win_rate
+28.51%
+stop_share
+71.39%
+timeout_share
+0.10%
+profit_factor
+1.071
+sharpe
+2.22 (sortino 4.66, n_days=204)
+mean_net
+0.0243 / median -0.3174
+mean_win_loss
+1.2823 / -0.4798
+mean_holding_minutes
+43.2
+Drawdown and distance to liquidation
+field
+value
+max_dd_usd
+$-139.28
+max_dd_pct
+-9.55%
+dd_start
+2026-05-04
+dd_bottom
+2026-07-12
+dd_recovery
+not recovered
+longest_underwater_days
+69
+min_distance_ratio
+4.013
+median_distance_ratio
+5.766
+date_of_min
+2026-02-22
+Costs
+field
+value
+total_gross
+$1,134.53
+fee
+$801.90 (70.68% of gross)
+slippage
+$0.00 (0.00% of gross)
+funding_paid
+$21.40 (1.89% of gross)
+funding_received
+$21.74 (1.92% of gross)
+Skips and liquidations
+field
+value
+book_full
+3767
+min_order
+229
+n_liquidations
+0
+Leverage and risk
+field
+value
+peak_margin_used
+$730.02
+mean_open_positions
+3.22
+max_open_positions
+10
+Monthly P&L (n_months_positive=4/7)
+fold
+n_days
+total_pnl_usd
+total_pnl_pct
+1
+30
+$28.70
+2.87%
+2
+30
+$39.97
+3.89%
+3
+30
+$6.17
+0.58%
+4
+30
+$-7.80
+-0.73%
+5
+30
+$298.08
+27.94%
+6
+30
+$-13.53
+-0.99%
+7
+23
+$-18.14
+-1.34%
+outside
+1
+$-0.48
+n/a
+Top / bottom 5 coins (net $, each trade counted for both coins)
+top coin
+net
+HMSTR
+$372.26
+YZY
+$166.72
+NOT
+$73.43
+BOME
+$72.36
+MEW
+$63.45
+bottom coin
+net
+MANTA
+$29.93
+ZEREBRO
+$31.04
+MEGA
+$35.51
+MAVIA
+$39.63
+ZETA
+$46.64
+Top / bottom 5 pairs (net $)
+top pair
+net
+GRASS/YZY
+$18.93
+MAVIA/YZY
+$17.73
+YZY/ZETA
+$17.05
+BOME/HMSTR
+$13.96
+LIT/YZY
+$13.60
+bottom pair
+net
+CRV/HMSTR
+$10.80
+YZY/kSHIB
+$11.26
+HMSTR/NEO
+$11.38
+HMSTR/MEGA
+$12.79
+HMSTR/MEW
+$13.31
+Equity curve (all 4 stops for this q/fee, shared PNG)
+q0.005_stop1p0_feetaker  (q=0.005, stop=1p0, fee=taker)
+Results
+field
+value
+final_equity
+$701.18
+total_return
+-29.88%
+cagr
+-47.18% (n_days=203)
+n_trades
+11,920
+win_rate
+41.43%
+stop_share
+57.98%
+timeout_share
+0.60%
+profit_factor
+0.936
+sharpe
+-2.36 (sortino -3.82, n_days=204)
+mean_net
+-0.0251 / median -0.3907
+mean_win_loss
+0.8822 / -0.6752
+mean_holding_minutes
+74.5
+Drawdown and distance to liquidation
+field
+value
+max_dd_usd
+$-298.82
+max_dd_pct
+-29.88%
+dd_start
+2025-12-20
+dd_bottom
+2026-07-12
+dd_recovery
+not recovered
+longest_underwater_days
+204
+min_distance_ratio
+3.984
+median_distance_ratio
+4.973
+date_of_min
+2026-05-08
+Costs
+field
+value
+total_gross
+$1,267.62
+fee
+$1,562.27 (123.24% of gross)
+slippage
+$0.00 (0.00% of gross)
+funding_paid
+$28.02 (2.21% of gross)
+funding_received
+$23.85 (1.88% of gross)
+Skips and liquidations
+field
+value
+book_full
+5392
+min_order
+387
+n_liquidations
+0
+Leverage and risk
+field
+value
+peak_margin_used
+$498.39
+mean_open_positions
+4.12
+max_open_positions
+10
+Monthly P&L (n_months_positive=1/7)
+fold
+n_days
+total_pnl_usd
+total_pnl_pct
+1
+30
+$-95.71
+-9.57%
+2
+30
+$-52.12
+-5.76%
+3
+30
+$-13.86
+-1.63%
+4
+30
+$-54.27
+-6.47%
+5
+30
+$54.73
+6.98%
+6
+30
+$-71.98
+-8.58%
+7
+23
+$-64.72
+-8.44%
+outside
+1
+$-0.88
+n/a
+Top / bottom 5 coins (net $, each trade counted for both coins)
+top coin
+net
+HMSTR
+$237.75
+YZY
+$84.67
+NOT
+$58.58
+BOME
+$58.19
+FOGO
+$37.67
+bottom coin
+net
+ZETA
+$27.86
+ZEREBRO
+$30.24
+MEGA
+$35.02
+MAVIA
+$35.27
+MEW
+$36.02
+Top / bottom 5 pairs (net $)
+top pair
+net
+FOGO/GRIFFAIN
+$16.25
+HMSTR/MEGA
+$14.60
+GRASS/YZY
+$13.51
+FOGO/SAGA
+$12.18
+MAVIA/YZY
+$11.79
+bottom pair
+net
+USUAL/ZEREBRO
+$9.17
+FOGO/STABLE
+$10.02
+YZY/ZETA
+$11.20
+BOME/HMSTR
+$11.24
+HMSTR/TST
+$11.28
+Equity curve (all 4 stops for this q/fee, shared PNG)
+q0.005_stop1p0_feemaker  (q=0.005, stop=1p0, fee=maker)
+Results
+field
+value
+final_equity
+$2,374.42
+total_return
+137.44%
+cagr
+373.44% (n_days=203)
+n_trades
+12,055
+win_rate
+41.58%
+stop_share
+57.83%
+timeout_share
+0.58%
+profit_factor
+1.176
+sharpe
+6.17 (sortino 13.72, n_days=204)
+mean_net
+0.1140 / median -0.5356
+mean_win_loss
+1.8114 / -1.1138
+mean_holding_minutes
+75.0
+Drawdown and distance to liquidation
+field
+value
+max_dd_usd
+$-151.25
+max_dd_pct
+-6.30%
+dd_start
+2026-05-04
+dd_bottom
+2026-06-03
+dd_recovery
+2026-06-21
+longest_underwater_days
+47
+min_distance_ratio
+3.986
+median_distance_ratio
+5.057
+date_of_min
+2026-04-22
+Costs
+field
+value
+total_gross
+$2,407.20
+fee
+$1,029.44 (42.76% of gross)
+slippage
+$0.00 (0.00% of gross)
+funding_paid
+$53.19 (2.21% of gross)
+funding_received
+$49.85 (2.07% of gross)
+Skips and liquidations
+field
+value
+book_full
+5540
+min_order
+104
+n_liquidations
+0
+Leverage and risk
+field
+value
+peak_margin_used
+$1,249.12
+mean_open_positions
+4.17
+max_open_positions
+10
+Monthly P&L (n_months_positive=7/7)
+fold
+n_days
+total_pnl_usd
+total_pnl_pct
+1
+30
+$198.31
+19.83%
+2
+30
+$274.78
+22.93%
+3
+30
+$56.34
+3.82%
+4
+30
+$121.74
+7.96%
+5
+30
+$629.62
+38.13%
+6
+30
+$22.72
+1.00%
+7
+23
+$73.67
+3.20%
+outside
+1
+$-2.77
+n/a
+Top / bottom 5 coins (net $, each trade counted for both coins)
+top coin
+net
+HMSTR
+$617.09
+YZY
+$289.71
+BOME
+$159.10
+NOT
+$131.09
+MEW
+$115.90
+bottom coin
+net
+LIT
+$58.50
+FOGO
+$64.79
+FTT
+$68.85
+ZETA
+$81.06
+MAVIA
+$112.94
+Top / bottom 5 pairs (net $)
+top pair
+net
+GRASS/YZY
+$32.44
+MAVIA/YZY
+$28.96
+YZY/ZETA
+$27.48
+HMSTR/TST
+$26.79
+BOME/HMSTR
+$23.27
+bottom pair
+net
+YZY/kSHIB
+$17.16
+HMSTR/PROVE
+$17.38
+MAVIA/SKR
+$17.56
+HMSTR/NEO
+$17.76
+LIT/YZY
+$21.24
+Equity curve (all 4 stops for this q/fee, shared PNG)
+q0.005_stop2p0_feetaker  (q=0.005, stop=2p0, fee=taker)
+Results
+field
+value
+final_equity
+$1,250.74
+total_return
+25.07%
+cagr
+49.52% (n_days=203)
+n_trades
+9,834
+win_rate
+56.17%
+stop_share
+41.32%
+timeout_share
+2.51%
+profit_factor
+1.039
+sharpe
+1.58 (sortino 2.99, n_days=204)
+mean_net
+0.0255 / median 0.4523
+mean_win_loss
+1.1892 / -1.5298
+mean_holding_minutes
+128.2
+Drawdown and distance to liquidation
+field
+value
+max_dd_usd
+$-370.32
+max_dd_pct
+-22.84%
+dd_start
+2026-05-04
+dd_bottom
+2026-07-12
+dd_recovery
+not recovered
+longest_underwater_days
+69
+min_distance_ratio
+3.996
+median_distance_ratio
+4.606
+date_of_min
+2026-01-11
+Costs
+field
+value
+total_gross
+$2,102.00
+fee
+$1,842.92 (87.67% of gross)
+slippage
+$0.00 (0.00% of gross)
+funding_paid
+$59.17 (2.82% of gross)
+funding_received
+$50.84 (2.42% of gross)
+Skips and liquidations
+field
+value
+book_full
+7734
+min_order
+131
+n_liquidations
+0
+Leverage and risk
+field
+value
+peak_margin_used
+$808.95
+mean_open_positions
+5.23
+max_open_positions
+10
+Monthly P&L (n_months_positive=4/7)
+fold
+n_days
+total_pnl_usd
+total_pnl_pct
+1
+30
+$79.83
+7.98%
+2
+30
+$109.18
+10.11%
+3
+30
+$12.30
+1.03%
+4
+30
+$-20.07
+-1.67%
+5
+30
+$263.01
+22.27%
+6
+30
+$-84.67
+-5.86%
+7
+23
+$-105.26
+-7.74%
+outside
+1
+$-3.58
+n/a
+Top / bottom 5 coins (net $, each trade counted for both coins)
+top coin
+net
+HMSTR
+$378.46
+YZY
+$161.60
+FOGO
+$119.54
+BOME
+$111.85
+MEW
+$101.98
+bottom coin
+net
+PNUT
+$37.41
+kSHIB
+$40.02
+TRB
+$41.66
+MAVIA
+$61.86
+NOT
+$91.69
+Top / bottom 5 pairs (net $)
+top pair
+net
+GRASS/YZY
+$23.31
+FOGO/GRIFFAIN
+$19.54
+YZY/ZETA
+$18.42
+HMSTR/TST
+$17.48
+MAVIA/YZY
+$17.36
+bottom pair
+net
+FOGO/RENDER
+$12.08
+FOGO/SAGA
+$13.52
+BOME/HMSTR
+$13.86
+HMSTR/NEO
+$14.01
+YZY/kSHIB
+$14.70
+Equity curve (all 4 stops for this q/fee, shared PNG)
+q0.005_stop2p0_feemaker  (q=0.005, stop=2p0, fee=maker)
+Results
+field
+value
+final_equity
+$3,315.02
+total_return
+231.50%
+cagr
+762.68% (n_days=203)
+n_trades
+9,879
+win_rate
+56.18%
+stop_share
+41.30%
+timeout_share
+2.52%
+profit_factor
+1.228
+sharpe
+7.61 (sortino 18.92, n_days=204)
+mean_net
+0.2343 / median 0.8114
+mean_win_loss
+2.1984 / -2.4235
+mean_holding_minutes
+127.8
+Drawdown and distance to liquidation
+field
+value
+max_dd_usd
+$-154.97
+max_dd_pct
+-4.88%
+dd_start
+2026-05-04
+dd_bottom
+2026-05-17
+dd_recovery
+2026-06-09
+longest_underwater_days
+35
+min_distance_ratio
+4.010
+median_distance_ratio
+4.649
+date_of_min
+2026-02-22
+Costs
+field
+value
+total_gross
+$3,399.17
+fee
+$1,068.82 (31.44% of gross)
+slippage
+$0.00 (0.00% of gross)
+funding_paid
+$99.37 (2.92% of gross)
+funding_received
+$84.04 (2.47% of gross)
+Skips and liquidations
+field
+value
+book_full
+7754
+min_order
+66
+n_liquidations
+0
+Leverage and risk
+field
+value
+peak_margin_used
+$1,717.26
+mean_open_positions
+5.24
+max_open_positions
+10
+Monthly P&L (n_months_positive=7/7)
+fold
+n_days
+total_pnl_usd
+total_pnl_pct
+1
+30
+$278.83
+27.88%
+2
+30
+$444.56
+34.76%
+3
+30
+$111.24
+6.45%
+4
+30
+$222.50
+12.13%
+5
+30
+$1,044.32
+50.77%
+6
+30
+$112.92
+3.64%
+7
+23
+$109.69
+3.41%
+outside
+1
+$-9.04
+n/a
+Top / bottom 5 coins (net $, each trade counted for both coins)
+top coin
+net
+HMSTR
+$789.42
+YZY
+$401.99
+MEW
+$216.98
+BOME
+$212.65
+NOT
+$176.71
+bottom coin
+net
+FTT
+$104.60
+kSHIB
+$110.69
+TNSR
+$122.97
+MAVIA
+$168.39
+FOGO
+$173.74
+Top / bottom 5 pairs (net $)
+top pair
+net
+GRASS/YZY
+$45.37
+YZY/ZETA
+$36.30
+MAVIA/YZY
+$34.84
+HMSTR/TST
+$33.77
+HMSTR/NEO
+$29.98
+bottom pair
+net
+FOGO/GRIFFAIN
+$23.49
+HYPE/ONDO
+$25.55
+BOME/HMSTR
+$28.71
+YZY/kSHIB
+$29.54
+UNI/WLD
+$29.93
+Equity curve (all 4 stops for this q/fee, shared PNG)
+q0.005_stopnone_feetaker  (q=0.005, stop=none, fee=taker)
+Results
+field
+value
+final_equity
+$1,960.18
+total_return
+96.02%
+cagr
+235.39% (n_days=203)
+n_trades
+6,587
+win_rate
+71.64%
+stop_share
+0.00%
+timeout_share
+28.36%
+profit_factor
+1.173
+sharpe
+3.73 (sortino 5.72, n_days=204)
+mean_net
+0.1458 / median 0.7904
+mean_win_loss
+1.3216 / -3.3106
+mean_holding_minutes
+279.2
+Drawdown and distance to liquidation
+field
+value
+max_dd_usd
+$-167.22
+max_dd_pct
+-12.54%
+dd_start
+2026-05-04
+dd_bottom
+2026-05-09
+dd_recovery
+2026-06-05
+longest_underwater_days
+31
+min_distance_ratio
+3.661
+median_distance_ratio
+4.415
+date_of_min
+2026-04-18
+Costs
+field
+value
+total_gross
+$2,447.87
+fee
+$1,470.35 (60.07% of gross)
+slippage
+$0.00 (0.00% of gross)
+funding_paid
+$123.71 (5.05% of gross)
+funding_received
+$106.37 (4.35% of gross)
+Skips and liquidations
+field
+value
+book_full
+11049
+min_order
+63
+n_liquidations
+0
+Leverage and risk
+field
+value
+peak_margin_used
+$1,059.35
+mean_open_positions
+6.87
+max_open_positions
+10
+Monthly P&L (n_months_positive=7/7)
+fold
+n_days
+total_pnl_usd
+total_pnl_pct
+1
+30
+$71.67
+7.17%
+2
+30
+$231.26
+21.58%
+3
+30
+$13.36
+1.03%
+4
+30
+$149.09
+11.33%
+5
+30
+$314.78
+21.48%
+6
+30
+$153.61
+8.63%
+7
+23
+$32.40
+1.68%
+outside
+1
+$-5.98
+n/a
+Top / bottom 5 coins (net $, each trade counted for both coins)
+top coin
+net
+HMSTR
+$409.16
+YZY
+$238.96
+BOME
+$142.07
+FTT
+$120.67
+NOT
+$111.92
+bottom coin
+net
+LIT
+$68.71
+MEGA
+$73.37
+MAVIA
+$76.08
+FOGO
+$79.72
+MEW
+$86.78
+Top / bottom 5 pairs (net $)
+top pair
+net
+MAVIA/YZY
+$25.27
+YZY/ZETA
+$21.39
+YZY/kSHIB
+$17.01
+HMSTR/NEO
+$14.26
+YZY/ZRO
+$14.17
+bottom pair
+net
+LDO/LIT
+$12.22
+ACE/HMSTR
+$12.52
+BOME/HMSTR
+$12.70
+CFX/SEI
+$12.73
+NOT/ORDI
+$12.93
+Equity curve (all 4 stops for this q/fee, shared PNG)
+q0.005_stopnone_feemaker  (q=0.005, stop=none, fee=maker)
+Results
+field
+value
+final_equity
+$4,138.00
+total_return
+313.80%
+cagr
+1185.31% (n_days=203)
+n_trades
+6,595
+win_rate
+71.96%
+stop_share
+0.00%
+timeout_share
+28.04%
+profit_factor
+1.395
+sharpe
+6.98 (sortino 10.16, n_days=204)
+mean_net
+0.4758 / median 1.2726
+mean_win_loss
+2.2230 / -4.9208
+mean_holding_minutes
+278.3
+Drawdown and distance to liquidation
+field
+value
+max_dd_usd
+$-230.44
+max_dd_pct
+-10.93%
+dd_start
+2026-05-04
+dd_bottom
+2026-05-09
+dd_recovery
+2026-05-13
+longest_underwater_days
+13
+min_distance_ratio
+3.663
+median_distance_ratio
+4.414
+date_of_min
+2026-04-18
+Costs
+field
+value
+total_gross
+$3,920.39
+fee
+$756.67 (19.30% of gross)
+slippage
+$0.00 (0.00% of gross)
+funding_paid
+$188.78 (4.82% of gross)
+funding_received
+$163.05 (4.16% of gross)
+Skips and liquidations
+field
+value
+book_full
+11060
+min_order
+44
+n_liquidations
+0
+Leverage and risk
+field
+value
+peak_margin_used
+$2,151.71
+mean_open_positions
+6.85
+max_open_positions
+10
+Monthly P&L (n_months_positive=7/7)
+fold
+n_days
+total_pnl_usd
+total_pnl_pct
+1
+30
+$219.26
+21.93%
+2
+30
+$482.39
+39.56%
+3
+30
+$106.09
+6.23%
+4
+30
+$452.32
+25.02%
+5
+30
+$863.42
+38.20%
+6
+30
+$569.06
+18.22%
+7
+23
+$444.24
+12.03%
+outside
+1
+$1.23
+n/a
+Top / bottom 5 coins (net $, each trade counted for both coins)
+top coin
+net
+HMSTR
+$639.96
+YZY
+$458.14
+BOME
+$269.40
+NOT
+$231.22
+FTT
+$219.53
+bottom coin
+net
+kSHIB
+$122.34
+FOGO
+$133.36
+MEW
+$162.69
+MAVIA
+$171.63
+TNSR
+$185.39
+Top / bottom 5 pairs (net $)
+top pair
+net
+MAVIA/YZY
+$41.09
+YZY/ZRO
+$36.59
+YZY/kSHIB
+$28.35
+NOT/ORDI
+$27.75
+CFX/SEI
+$27.69
+bottom pair
+net
+APT/HMSTR
+$21.26
+PEOPLE/POLYX
+$21.84
+ACE/HMSTR
+$23.25
+JTO/POL
+$23.48
+HMSTR/NEO
+$26.71
+Equity curve (all 4 stops for this q/fee, shared PNG)
+q0.001_stop0p5_feetaker  (q=0.001, stop=0p5, fee=taker)
+Results
+field
+value
+final_equity
+$858.01
+total_return
+-14.20%
+cagr
+-24.17% (n_days=202)
+n_trades
+3,326
+win_rate
+29.71%
+stop_share
+70.17%
+timeout_share
+0.12%
+profit_factor
+0.872
+sharpe
+-2.45 (sortino -3.90, n_days=203)
+mean_net
+-0.0427 / median -0.3293
+mean_win_loss
+0.9758 / -0.4737
+mean_holding_minutes
+37.6
+Drawdown and distance to liquidation
+field
+value
+max_dd_usd
+$-141.99
+max_dd_pct
+-14.20%
+dd_start
+2025-12-20
+dd_bottom
+2026-07-11
+dd_recovery
+not recovered
+longest_underwater_days
+203
+min_distance_ratio
+3.993
+median_distance_ratio
+16.810
+date_of_min
+2026-04-22
+Costs
+field
+value
+total_gross
+$326.73
+fee
+$467.66 (143.13% of gross)
+slippage
+$0.00 (0.00% of gross)
+funding_paid
+$4.86 (1.49% of gross)
+funding_received
+$3.80 (1.16% of gross)
+Skips and liquidations
+field
+value
+min_order
+159
+book_full
+153
+n_liquidations
+0
+Leverage and risk
+field
+value
+peak_margin_used
+$497.34
+mean_open_positions
+1.89
+max_open_positions
+10
+Monthly P&L (n_months_positive=1/7)
+fold
+n_days
+total_pnl_usd
+total_pnl_pct
+1
+30
+$-28.55
+-2.86%
+2
+30
+$-53.46
+-5.50%
+3
+30
+$-5.83
+-0.63%
+4
+30
+$-37.81
+-4.14%
+5
+30
+$20.92
+2.39%
+6
+30
+$-4.71
+-0.53%
+7
+23
+$-32.56
+-3.66%
+outside
+0
+$0.00
+n/a
+Top / bottom 5 coins (net $, each trade counted for both coins)
+top coin
+net
+HMSTR
+$88.30
+YZY
+$41.83
+FOGO
+$31.65
+NOT
+$16.38
+MEW
+$12.68
+bottom coin
+net
+MAVIA
+$7.36
+JTO
+$9.49
+BOME
+$10.63
+STABLE
+$11.56
+MEGA
+$11.96
+Top / bottom 5 pairs (net $)
+top pair
+net
+FOGO/MAVIA
+$11.77
+MAVIA/YZY
+$11.41
+FOGO/STABLE
+$10.77
+HMSTR/MEW
+$10.47
+HMSTR/MEGA
+$8.46
+bottom pair
+net
+HMSTR/JTO
+$5.86
+HMSTR/MANTA
+$6.19
+FOGO/TON
+$6.38
+CAKE/FOGO
+$6.54
+BOME/HMSTR
+$6.71
+Equity curve (all 4 stops for this q/fee, shared PNG)
+q0.001_stop0p5_feemaker  (q=0.001, stop=0p5, fee=maker)
+Results
+field
+value
+final_equity
+$1,189.94
+total_return
+18.99%
+cagr
+36.92% (n_days=202)
+n_trades
+3,361
+win_rate
+29.81%
+stop_share
+70.07%
+timeout_share
+0.12%
+profit_factor
+1.181
+sharpe
+2.78 (sortino 6.79, n_days=203)
+mean_net
+0.0565 / median -0.2853
+mean_win_loss
+1.2310 / -0.4445
+mean_holding_minutes
+37.7
+Drawdown and distance to liquidation
+field
+value
+max_dd_usd
+$-41.45
+max_dd_pct
+-3.40%
+dd_start
+2026-05-08
+dd_bottom
+2026-05-18
+dd_recovery
+not recovered
+longest_underwater_days
+69
+min_distance_ratio
+3.995
+median_distance_ratio
+16.811
+date_of_min
+2026-04-22
+Costs
+field
+value
+total_gross
+$376.98
+fee
+$185.51 (49.21% of gross)
+slippage
+$0.00 (0.00% of gross)
+funding_paid
+$6.00 (1.59% of gross)
+funding_received
+$4.47 (1.19% of gross)
+Skips and liquidations
+field
+value
+book_full
+157
+min_order
+120
+n_liquidations
+0
+Leverage and risk
+field
+value
+peak_margin_used
+$599.47
+mean_open_positions
+1.90
+max_open_positions
+10
+Monthly P&L (n_months_positive=5/7)
+fold
+n_days
+total_pnl_usd
+total_pnl_pct
+1
+30
+$69.22
+6.92%
+2
+30
+$8.47
+0.79%
+3
+30
+$7.21
+0.67%
+4
+30
+$-15.20
+-1.40%
+5
+30
+$114.06
+10.66%
+6
+30
+$8.82
+0.74%
+7
+23
+$-2.64
+-0.22%
+outside
+0
+$0.00
+n/a
+Top / bottom 5 coins (net $, each trade counted for both coins)
+top coin
+net
+HMSTR
+$142.74
+YZY
+$80.04
+FOGO
+$40.21
+NOT
+$31.89
+BOME
+$27.20
+bottom coin
+net
+STABLE
+$13.88
+JTO
+$13.96
+MAVIA
+$15.50
+MEW
+$21.45
+MEGA
+$22.36
+Top / bottom 5 pairs (net $)
+top pair
+net
+MAVIA/YZY
+$15.34
+FOGO/MAVIA
+$12.80
+HMSTR/MEW
+$12.08
+FOGO/STABLE
+$11.48
+HMSTR/MEGA
+$9.30
+bottom pair
+net
+HMSTR/PROVE
+$7.40
+CAKE/FOGO
+$7.42
+HMSTR/JTO
+$7.61
+HMSTR/MANTA
+$8.32
+BOME/HMSTR
+$8.76
+Equity curve (all 4 stops for this q/fee, shared PNG)
+q0.001_stop1p0_feetaker  (q=0.001, stop=1p0, fee=taker)
+Results
+field
+value
+final_equity
+$1,009.06
+total_return
+0.91%
+cagr
+1.64% (n_days=202)
+n_trades
+3,259
+win_rate
+42.77%
+stop_share
+56.70%
+timeout_share
+0.52%
+profit_factor
+1.006
+sharpe
+0.19 (sortino 0.34, n_days=203)
+mean_net
+0.0028 / median -0.4352
+mean_win_loss
+1.0316 / -0.7691
+mean_holding_minutes
+64.9
+Drawdown and distance to liquidation
+field
+value
+max_dd_usd
+$-93.89
+max_dd_pct
+-8.51%
+dd_start
+2026-05-04
+dd_bottom
+2026-07-11
+dd_recovery
+not recovered
+longest_underwater_days
+77
+min_distance_ratio
+3.994
+median_distance_ratio
+14.120
+date_of_min
+2026-04-22
+Costs
+field
+value
+total_gross
+$507.23
+fee
+$496.47 (97.88% of gross)
+slippage
+$0.00 (0.00% of gross)
+funding_paid
+$9.23 (1.82% of gross)
+funding_received
+$7.53 (1.48% of gross)
+Skips and liquidations
+field
+value
+book_full
+248
+min_order
+131
+n_liquidations
+0
+Leverage and risk
+field
+value
+peak_margin_used
+$538.31
+mean_open_positions
+2.27
+max_open_positions
+10
+Monthly P&L (n_months_positive=2/7)
+fold
+n_days
+total_pnl_usd
+total_pnl_pct
+1
+30
+$-6.60
+-0.66%
+2
+30
+$-20.53
+-2.07%
+3
+30
+$4.29
+0.44%
+4
+30
+$-6.85
+-0.70%
+5
+30
+$82.17
+8.47%
+6
+30
+$-6.03
+-0.57%
+7
+23
+$-37.40
+-3.57%
+outside
+0
+$0.00
+n/a
+Top / bottom 5 coins (net $, each trade counted for both coins)
+top coin
+net
+HMSTR
+$168.28
+YZY
+$70.82
+FOGO
+$42.12
+NOT
+$29.40
+MEW
+$25.42
+bottom coin
+net
+BOME
+$12.61
+MANTA
+$12.63
+STABLE
+$13.34
+JTO
+$15.55
+ASTER
+$16.57
+Top / bottom 5 pairs (net $)
+top pair
+net
+HMSTR/TST
+$16.76
+MAVIA/YZY
+$12.31
+HMSTR/MEGA
+$12.28
+FOGO/STABLE
+$11.00
+FOGO/MAVIA
+$10.21
+bottom pair
+net
+CAKE/FOGO
+$6.37
+FOGO/TON
+$6.51
+HMSTR/JTO
+$6.76
+BOME/HMSTR
+$7.73
+HMSTR/MEW
+$10.04
+Equity curve (all 4 stops for this q/fee, shared PNG)
+q0.001_stop1p0_feemaker  (q=0.001, stop=1p0, fee=maker)
+Results
+field
+value
+final_equity
+$1,417.70
+total_return
+41.77%
+cagr
+87.89% (n_days=202)
+n_trades
+3,285
+win_rate
+42.86%
+stop_share
+56.59%
+timeout_share
+0.55%
+profit_factor
+1.282
+sharpe
+4.31 (sortino 11.13, n_days=203)
+mean_net
+0.1272 / median -0.3965
+mean_win_loss
+1.3401 / -0.7930
+mean_holding_minutes
+65.2
+Drawdown and distance to liquidation
+field
+value
+max_dd_usd
+$-40.54
+max_dd_pct
+-2.80%
+dd_start
+2026-05-08
+dd_bottom
+2026-05-18
+dd_recovery
+2026-06-23
+longest_underwater_days
+45
+min_distance_ratio
+3.997
+median_distance_ratio
+14.122
+date_of_min
+2026-04-22
+Costs
+field
+value
+total_gross
+$619.70
+fee
+$199.84 (32.25% of gross)
+slippage
+$0.00 (0.00% of gross)
+funding_paid
+$11.18 (1.80% of gross)
+funding_received
+$9.02 (1.46% of gross)
+Skips and liquidations
+field
+value
+book_full
+256
+min_order
+97
+n_liquidations
+0
+Leverage and risk
+field
+value
+peak_margin_used
+$724.09
+mean_open_positions
+2.29
+max_open_positions
+10
+Monthly P&L (n_months_positive=6/7)
+fold
+n_days
+total_pnl_usd
+total_pnl_pct
+1
+30
+$101.88
+10.19%
+2
+30
+$57.06
+5.18%
+3
+30
+$20.93
+1.81%
+4
+30
+$24.51
+2.08%
+5
+30
+$207.18
+17.20%
+6
+30
+$9.85
+0.70%
+7
+23
+$-3.71
+-0.26%
+outside
+0
+$0.00
+n/a
+Top / bottom 5 coins (net $, each trade counted for both coins)
+top coin
+net
+HMSTR
+$249.00
+YZY
+$117.71
+FOGO
+$56.88
+NOT
+$49.31
+MEW
+$38.21
+bottom coin
+net
+WIF
+$19.03
+JTO
+$21.24
+MEGA
+$21.97
+ASTER
+$22.40
+BOME
+$32.88
+Top / bottom 5 pairs (net $)
+top pair
+net
+HMSTR/TST
+$21.31
+MAVIA/YZY
+$16.92
+HMSTR/MEGA
+$13.19
+FOGO/STABLE
+$11.76
+HMSTR/MEW
+$11.64
+bottom pair
+net
+DOGE/HMSTR
+$7.94
+HMSTR/PROVE
+$8.25
+HMSTR/JTO
+$8.90
+BOME/HMSTR
+$10.23
+FOGO/MAVIA
+$11.19
+Equity curve (all 4 stops for this q/fee, shared PNG)
+q0.001_stop2p0_feetaker  (q=0.001, stop=2p0, fee=taker)
+Results
+field
+value
+final_equity
+$1,199.47
+total_return
+19.95%
+cagr
+38.91% (n_days=202)
+n_trades
+3,085
+win_rate
+58.02%
+stop_share
+40.16%
+timeout_share
+1.82%
+profit_factor
+1.113
+sharpe
+2.03 (sortino 3.21, n_days=203)
+mean_net
+0.0647 / median 0.4202
+mean_win_loss
+1.0896 / -1.3730
+mean_holding_minutes
+110.5
+Drawdown and distance to liquidation
+field
+value
+max_dd_usd
+$-92.39
+max_dd_pct
+-7.15%
+dd_start
+2026-05-04
+dd_bottom
+2026-07-11
+dd_recovery
+not recovered
+longest_underwater_days
+68
+min_distance_ratio
+3.980
+median_distance_ratio
+11.967
+date_of_min
+2026-02-18
+Costs
+field
+value
+total_gross
+$720.56
+fee
+$515.55 (71.55% of gross)
+slippage
+$0.00 (0.00% of gross)
+funding_paid
+$18.91 (2.62% of gross)
+funding_received
+$13.38 (1.86% of gross)
+Skips and liquidations
+field
+value
+book_full
+447
+min_order
+106
+n_liquidations
+0
+Leverage and risk
+field
+value
+peak_margin_used
+$644.85
+mean_open_positions
+2.71
+max_open_positions
+10
+Monthly P&L (n_months_positive=5/7)
+fold
+n_days
+total_pnl_usd
+total_pnl_pct
+1
+30
+$30.24
+3.02%
+2
+30
+$39.95
+3.88%
+3
+30
+$10.37
+0.97%
+4
+30
+$-8.00
+-0.74%
+5
+30
+$174.93
+16.31%
+6
+30
+$14.51
+1.16%
+7
+23
+$-62.53
+-4.95%
+outside
+0
+$0.00
+n/a
+Top / bottom 5 coins (net $, each trade counted for both coins)
+top coin
+net
+HMSTR
+$222.94
+YZY
+$76.33
+FOGO
+$54.70
+MEW
+$41.77
+NOT
+$34.45
+bottom coin
+net
+STABLE
+$20.48
+ALGO
+$21.61
+MEGA
+$22.90
+ASTER
+$25.74
+BOME
+$30.89
+Top / bottom 5 pairs (net $)
+top pair
+net
+HMSTR/TST
+$19.04
+MAVIA/YZY
+$14.61
+HMSTR/MEGA
+$12.43
+FOGO/STABLE
+$10.97
+HMSTR/MEW
+$10.23
+bottom pair
+net
+FOGO/MAVIA
+$7.73
+HMSTR/SUSHI
+$7.77
+HMSTR/ZEN
+$8.22
+ARK/HMSTR
+$8.58
+BOME/HMSTR
+$8.71
+Equity curve (all 4 stops for this q/fee, shared PNG)
+q0.001_stop2p0_feemaker  (q=0.001, stop=2p0, fee=maker)
+Results
+field
+value
+final_equity
+$1,638.86
+total_return
+63.89%
+cagr
+144.15% (n_days=202)
+n_trades
+3,112
+win_rate
+57.94%
+stop_share
+40.33%
+timeout_share
+1.74%
+profit_factor
+1.335
+sharpe
+5.07 (sortino 9.22, n_days=203)
+mean_net
+0.2053 / median 0.5985
+mean_win_loss
+1.3941 / -1.4849
+mean_holding_minutes
+109.9
+Drawdown and distance to liquidation
+field
+value
+max_dd_usd
+$-77.09
+max_dd_pct
+-4.49%
+dd_start
+2026-06-28
+dd_bottom
+2026-07-11
+dd_recovery
+not recovered
+longest_underwater_days
+26
+min_distance_ratio
+3.981
+median_distance_ratio
+11.970
+date_of_min
+2026-02-18
+Costs
+field
+value
+total_gross
+$851.07
+fee
+$204.80 (24.06% of gross)
+slippage
+$0.00 (0.00% of gross)
+funding_paid
+$22.91 (2.69% of gross)
+funding_received
+$15.50 (1.82% of gross)
+Skips and liquidations
+field
+value
+book_full
+443
+min_order
+83
+n_liquidations
+0
+Leverage and risk
+field
+value
+peak_margin_used
+$854.81
+mean_open_positions
+2.71
+max_open_positions
+10
+Monthly P&L (n_months_positive=6/7)
+fold
+n_days
+total_pnl_usd
+total_pnl_pct
+1
+30
+$124.86
+12.49%
+2
+30
+$114.42
+10.17%
+3
+30
+$26.78
+2.16%
+4
+30
+$26.22
+2.07%
+5
+30
+$333.87
+25.84%
+6
+30
+$39.61
+2.44%
+7
+23
+$-26.91
+-1.62%
+outside
+0
+$0.00
+n/a
+Top / bottom 5 coins (net $, each trade counted for both coins)
+top coin
+net
+HMSTR
+$309.74
+YZY
+$135.72
+FOGO
+$66.31
+NOT
+$58.68
+MEW
+$57.55
+bottom coin
+net
+WIF
+$29.37
+ALGO
+$30.02
+ASTER
+$32.72
+MEGA
+$39.83
+BOME
+$47.03
+Top / bottom 5 pairs (net $)
+top pair
+net
+HMSTR/TST
+$23.53
+MAVIA/YZY
+$19.23
+HMSTR/MEGA
+$13.27
+HMSTR/MEW
+$11.71
+FOGO/STABLE
+$11.55
+bottom pair
+net
+HMSTR/JTO
+$9.79
+DOGE/HMSTR
+$10.01
+HMSTR/NEO
+$10.21
+BOME/HMSTR
+$11.19
+ARK/HMSTR
+$11.20
+Equity curve (all 4 stops for this q/fee, shared PNG)
+q0.001_stopnone_feetaker  (q=0.001, stop=none, fee=taker)
+Results
+field
+value
+final_equity
+$1,511.91
+total_return
+51.19%
+cagr
+110.28% (n_days=203)
+n_trades
+2,573
+win_rate
+74.39%
+stop_share
+0.00%
+timeout_share
+25.61%
+profit_factor
+1.267
+sharpe
+3.65 (sortino 4.25, n_days=204)
+mean_net
+0.1990 / median 0.7389
+mean_win_loss
+1.2369 / -3.1339
+mean_holding_minutes
+257.4
+Drawdown and distance to liquidation
+field
+value
+max_dd_usd
+$-110.46
+max_dd_pct
+-7.20%
+dd_start
+2026-06-28
+dd_bottom
+2026-07-11
+dd_recovery
+not recovered
+longest_underwater_days
+58
+min_distance_ratio
+3.964
+median_distance_ratio
+9.135
+date_of_min
+2026-02-18
+Costs
+field
+value
+total_gross
+$1,020.55
+fee
+$500.19 (49.01% of gross)
+slippage
+$0.00 (0.00% of gross)
+funding_paid
+$44.40 (4.35% of gross)
+funding_received
+$35.95 (3.52% of gross)
+Skips and liquidations
+field
+value
+book_full
+996
+min_order
+69
+n_liquidations
+0
+Leverage and risk
+field
+value
+peak_margin_used
+$814.76
+mean_open_positions
+3.72
+max_open_positions
+10
+Monthly P&L (n_months_positive=6/7)
+fold
+n_days
+total_pnl_usd
+total_pnl_pct
+1
+30
+$134.81
+13.48%
+2
+30
+$77.16
+6.80%
+3
+30
+$3.65
+0.30%
+4
+30
+$126.34
+10.39%
+5
+30
+$175.11
+13.05%
+6
+30
+$50.58
+3.33%
+7
+23
+$-57.41
+-3.66%
+outside
+1
+$1.66
+n/a
+Top / bottom 5 coins (net $, each trade counted for both coins)
+top coin
+net
+HMSTR
+$290.74
+YZY
+$148.46
+FOGO
+$83.49
+MEGA
+$63.17
+MAVIA
+$59.91
+bottom coin
+net
+MEW
+$30.06
+STABLE
+$31.59
+TST
+$43.56
+NOT
+$45.08
+BOME
+$50.29
+Top / bottom 5 pairs (net $)
+top pair
+net
+FOGO/MAVIA
+$23.19
+HMSTR/TST
+$22.27
+MAVIA/YZY
+$17.24
+MELANIA/TST
+$14.01
+JUP/TST
+$12.30
+bottom pair
+net
+HMSTR/JTO
+$9.20
+BOME/HMSTR
+$10.00
+HMSTR/NEO
+$10.30
+HMSTR/MEGA
+$11.23
+FOGO/STABLE
+$11.60
+Equity curve (all 4 stops for this q/fee, shared PNG)
+q0.001_stopnone_feemaker  (q=0.001, stop=none, fee=maker)
+Results
+field
+value
+final_equity
+$2,012.22
+total_return
+101.22%
+cagr
+251.57% (n_days=203)
+n_trades
+2,583
+win_rate
+74.49%
+stop_share
+0.00%
+timeout_share
+25.51%
+profit_factor
+1.469
+sharpe
+6.06 (sortino 7.88, n_days=204)
+mean_net
+0.3919 / median 0.9907
+mean_win_loss
+1.5916 / -3.6519
+mean_holding_minutes
+257.2
+Drawdown and distance to liquidation
+field
+value
+max_dd_usd
+$-127.69
+max_dd_pct
+-5.97%
+dd_start
+2026-06-28
+dd_bottom
+2026-07-11
+dd_recovery
+not recovered
+longest_underwater_days
+31
+min_distance_ratio
+3.972
+median_distance_ratio
+9.138
+date_of_min
+2026-02-18
+Costs
+field
+value
+total_gross
+$1,222.67
+fee
+$199.71 (16.33% of gross)
+slippage
+$0.00 (0.00% of gross)
+funding_paid
+$53.44 (4.37% of gross)
+funding_received
+$42.70 (3.49% of gross)
+Skips and liquidations
+field
+value
+book_full
+1003
+min_order
+52
+n_liquidations
+0
+Leverage and risk
+field
+value
+peak_margin_used
+$1,071.54
+mean_open_positions
+3.70
+max_open_positions
+10
+Monthly P&L (n_months_positive=6/7)
+fold
+n_days
+total_pnl_usd
+total_pnl_pct
+1
+30
+$247.85
+24.78%
+2
+30
+$168.75
+13.52%
+3
+30
+$21.58
+1.52%
+4
+30
+$188.27
+13.09%
+5
+30
+$325.78
+20.03%
+6
+30
+$90.56
+4.64%
+7
+23
+$-32.94
+-1.61%
+outside
+1
+$2.39
+n/a
+Top / bottom 5 coins (net $, each trade counted for both coins)
+top coin
+net
+HMSTR
+$373.31
+YZY
+$218.16
+FOGO
+$94.28
+MAVIA
+$74.91
+NOT
+$72.60
+bottom coin
+net
+ARK
+$39.26
+STABLE
+$39.67
+TST
+$63.48
+MEGA
+$67.30
+BOME
+$68.81
+Top / bottom 5 pairs (net $)
+top pair
+net
+HMSTR/TST
+$27.63
+FOGO/MAVIA
+$24.24
+MAVIA/YZY
+$22.79
+MELANIA/TST
+$17.09
+JUP/TST
+$15.02
+bottom pair
+net
+HMSTR/JTO
+$11.75
+FOGO/STABLE
+$12.07
+BOME/HMSTR
+$12.81
+HMSTR/NEO
+$13.45
+HMSTR/MANTA
+$13.51
+Equity curve (all 4 stops for this q/fee, shared PNG)
+5. EV check (base, stop=none only; fold 1 not scored)
+EV here is descriptive only -- it does not reliably rank realised net in this data, and no claim that it predicts profit should be drawn from these tables.
+q0.01_feetaker (n_scored=6,790)
+quintile
+n
+mean_ev
+mean_realised_net
+0
+1,511
+-0.1074
+0.1773
+1
+1,231
+-0.0240
+0.3055
+2
+1,558
+0.0821
+0.0689
+3
+1,375
+0.1452
+0.1016
+4
+1,115
+0.3383
+0.2211
+q0.01_feemaker (n_scored=6,797)
+quintile
+n
+mean_ev
+mean_realised_net
+0
+1,422
+0.0141
+0.6115
+1
+1,303
+0.1227
+0.8662
+2
+1,466
+0.2345
+0.3563
+3
+1,308
+0.3080
+0.5505
+4
+1,298
+0.5207
+0.4662
+q0.005_feetaker (n_scored=5,420)
+quintile
+n
+mean_ev
+mean_realised_net
+0
+1,152
+-0.0613
+0.2425
+1
+1,077
+0.0301
+0.1386
+2
+1,052
+0.0839
+-0.0013
+3
+1,122
+0.1513
+0.1744
+4
+1,017
+0.3386
+0.2665
+q0.005_feemaker (n_scored=5,439)
+quintile
+n
+mean_ev
+mean_realised_net
+0
+1,144
+0.1009
+0.6043
+1
+1,117
+0.2115
+0.5158
+2
+1,303
+0.2701
+0.4779
+3
+870
+0.3344
+0.4848
+4
+1,005
+0.5481
+0.6097
+q0.001_feetaker (n_scored=1,917)
+quintile
+n
+mean_ev
+mean_realised_net
+0
+404
+0.1075
+-0.1615
+1
+398
+0.1563
+0.2495
+2
+376
+0.2296
+0.4893
+3
+653
+0.3947
+0.2140
+4
+86
+0.6538
+0.2455
+q0.001_feemaker (n_scored=1,920)
+quintile
+n
+mean_ev
+mean_realised_net
+0
+409
+0.2747
+-0.0634
+1
+396
+0.3302
+0.4774
+2
+378
+0.4057
+0.7742
+3
+652
+0.5522
+0.4111
+4
+85
+0.8223
+0.4993
+6. Comparison: base vs open20 vs z3_open10 vs z3_open20
+open20 = max_open raised from 10 to 20, all else unchanged. z3_open10/z3_open20 = a |z| >= 3.0 filter applied on top of the base picks (in-sample -- chosen after seeing these test months), at max_open=10 and max_open=20 respectively.
+q0.01_stop0p5_feetaker
+variant
+final_equity
+total_return
+n_trades
+win_rate
+profit_factor
+sharpe
+max_dd_pct
+min_dist_ratio
+skips
+liq
+base (max_open=10)
+$155.63
+-84.44%
+19,901
+28.08%
+0.759
+-11.94
+-84.44%
+4.044
+15,728
+0
+open20 (max_open=20)
+$130.73
+-86.93%
+22,681
+28.05%
+0.760
+-9.82
+-86.93%
+2.109
+12,948
+0
+z3_open10 (|z|>=3, max_open=10)
+$737.87
+-26.21%
+3,518
+19.70%
+0.816
+-3.82
+-26.21%
+4.014
+545
+0
+z3_open20 (|z|>=3, max_open=20)
+$706.84
+-29.32%
+3,744
+19.60%
+0.805
+-3.85
+-29.32%
+2.123
+319
+0
+q0.01_stop0p5_feemaker
+variant
+final_equity
+total_return
+n_trades
+win_rate
+profit_factor
+sharpe
+max_dd_pct
+min_dist_ratio
+skips
+liq
+base (max_open=10)
+$1,203.04
+20.30%
+21,952
+28.01%
+1.026
+1.34
+-16.64%
+3.997
+13,677
+0
+open20 (max_open=20)
+$1,207.36
+20.74%
+28,556
+27.66%
+1.021
+1.08
+-16.83%
+2.028
+7,073
+0
+z3_open10 (|z|>=3, max_open=10)
+$1,061.80
+6.18%
+3,586
+19.60%
+1.043
+0.85
+-8.89%
+4.042
+477
+0
+z3_open20 (|z|>=3, max_open=20)
+$1,019.44
+1.94%
+3,819
+19.40%
+1.013
+0.30
+-11.01%
+2.121
+244
+0
+q0.01_stop1p0_feetaker
+variant
+final_equity
+total_return
+n_trades
+win_rate
+profit_factor
+sharpe
+max_dd_pct
+min_dist_ratio
+skips
+liq
+base (max_open=10)
+$351.90
+-64.81%
+17,742
+40.31%
+0.886
+-6.23
+-64.81%
+3.985
+17,887
+0
+open20 (max_open=20)
+$270.90
+-72.91%
+24,169
+40.35%
+0.892
+-5.19
+-72.91%
+2.044
+11,460
+0
+z3_open10 (|z|>=3, max_open=10)
+$850.88
+-14.91%
+3,463
+28.44%
+0.923
+-1.68
+-16.26%
+4.034
+600
+0
+z3_open20 (|z|>=3, max_open=20)
+$781.15
+-21.88%
+3,754
+27.89%
+0.894
+-2.21
+-21.88%
+2.098
+309
+0
+q0.01_stop1p0_feemaker
+variant
+final_equity
+total_return
+n_trades
+win_rate
+profit_factor
+sharpe
+max_dd_pct
+min_dist_ratio
+skips
+liq
+base (max_open=10)
+$2,417.34
+141.73%
+17,982
+40.60%
+1.108
+5.47
+-8.70%
+3.985
+17,647
+0
+open20 (max_open=20)
+$3,525.20
+252.52%
+25,127
+40.52%
+1.112
+5.27
+-12.75%
+2.031
+10,502
+0
+z3_open10 (|z|>=3, max_open=10)
+$1,213.24
+21.32%
+3,521
+28.46%
+1.104
+2.17
+-7.48%
+4.013
+542
+0
+z3_open20 (|z|>=3, max_open=20)
+$1,146.15
+14.61%
+3,822
+28.02%
+1.066
+1.40
+-11.81%
+2.097
+241
+0
+q0.01_stop2p0_feetaker
+variant
+final_equity
+total_return
+n_trades
+win_rate
+profit_factor
+sharpe
+max_dd_pct
+min_dist_ratio
+skips
+liq
+base (max_open=10)
+$929.58
+-7.04%
+13,531
+55.36%
+0.991
+-0.26
+-33.52%
+3.978
+22,098
+0
+open20 (max_open=20)
+$1,132.54
+13.25%
+20,432
+55.19%
+1.009
+0.69
+-39.69%
+2.018
+15,197
+0
+z3_open10 (|z|>=3, max_open=10)
+$927.76
+-7.22%
+3,276
+39.10%
+0.972
+-0.54
+-13.69%
+4.033
+787
+0
+z3_open20 (|z|>=3, max_open=20)
+$917.35
+-8.26%
+3,718
+38.89%
+0.973
+-0.40
+-19.00%
+2.098
+345
+0
+q0.01_stop2p0_feemaker
+variant
+final_equity
+total_return
+n_trades
+win_rate
+profit_factor
+sharpe
+max_dd_pct
+min_dist_ratio
+skips
+liq
+base (max_open=10)
+$3,613.17
+261.32%
+13,538
+55.21%
+1.163
+7.46
+-6.69%
+3.977
+22,091
+0
+open20 (max_open=20)
+$9,270.44
+827.04%
+20,508
+55.17%
+1.169
+8.04
+-9.68%
+2.021
+15,121
+0
+z3_open10 (|z|>=3, max_open=10)
+$1,308.40
+30.84%
+3,294
+39.31%
+1.110
+2.37
+-7.75%
+4.006
+769
+0
+z3_open20 (|z|>=3, max_open=20)
+$1,355.72
+35.57%
+3,767
+39.13%
+1.105
+2.04
+-10.52%
+2.104
+296
+0
+q0.01_stopnone_feetaker
+variant
+final_equity
+total_return
+n_trades
+win_rate
+profit_factor
+sharpe
+max_dd_pct
+min_dist_ratio
+skips
+liq
+base (max_open=10)
+$2,205.99
+120.60%
+8,078
+70.65%
+1.169
+3.90
+-12.93%
+3.580
+27,551
+0
+open20 (max_open=20)
+$4,036.05
+303.60%
+13,699
+69.96%
+1.158
+4.64
+-16.27%
+1.977
+21,930
+0
+z3_open10 (|z|>=3, max_open=10)
+$1,630.90
+63.09%
+2,569
+55.78%
+1.216
+3.08
+-9.36%
+2.659
+1,494
+0
+z3_open20 (|z|>=3, max_open=20)
+$1,590.97
+59.10%
+3,280
+54.60%
+1.158
+2.02
+-21.54%
+2.074
+783
+0
+q0.01_stopnone_feemaker
+variant
+final_equity
+total_return
+n_trades
+win_rate
+profit_factor
+sharpe
+max_dd_pct
+min_dist_ratio
+skips
+liq
+base (max_open=10)
+$5,034.35
+403.44%
+8,069
+70.81%
+1.368
+7.71
+-9.82%
+3.581
+27,560
+0
+open20 (max_open=20)
+$16,935.92
+1593.59%
+13,735
+70.04%
+1.318
+8.68
+-17.49%
+1.976
+21,894
+0
+z3_open10 (|z|>=3, max_open=10)
+$2,241.61
+124.16%
+2,585
+56.17%
+1.375
+4.84
+-7.44%
+2.660
+1,478
+0
+z3_open20 (|z|>=3, max_open=20)
+$2,334.71
+133.47%
+3,314
+54.80%
+1.305
+3.40
+-19.87%
+2.075
+749
+0
+q0.005_stop0p5_feetaker
+variant
+final_equity
+total_return
+n_trades
+win_rate
+profit_factor
+sharpe
+max_dd_pct
+min_dist_ratio
+skips
+liq
+base (max_open=10)
+$353.37
+-64.66%
+13,201
+28.38%
+0.790
+-7.34
+-64.66%
+4.074
+4,498
+0
+open20 (max_open=20)
+$282.29
+-71.77%
+15,108
+27.99%
+0.774
+-7.07
+-71.77%
+2.134
+2,591
+0
+z3_open10 (|z|>=3, max_open=10)
+$941.85
+-5.81%
+1,829
+21.32%
+0.926
+-1.07
+-8.97%
+4.014
+217
+0
+z3_open20 (|z|>=3, max_open=20)
+$902.08
+-9.79%
+1,908
+20.70%
+0.880
+-1.69
+-12.59%
+2.138
+138
+0
+q0.005_stop0p5_feemaker
+variant
+final_equity
+total_return
+n_trades
+win_rate
+profit_factor
+sharpe
+max_dd_pct
+min_dist_ratio
+skips
+liq
+base (max_open=10)
+$1,332.97
+33.30%
+13,703
+28.51%
+1.071
+2.22
+-9.55%
+4.013
+3,996
+0
+open20 (max_open=20)
+$1,379.20
+37.92%
+16,106
+28.12%
+1.068
+2.07
+-12.11%
+2.030
+1,593
+0
+z3_open10 (|z|>=3, max_open=10)
+$1,129.26
+12.93%
+1,847
+21.28%
+1.182
+2.34
+-3.82%
+4.068
+199
+0
+z3_open20 (|z|>=3, max_open=20)
+$1,093.07
+9.31%
+1,928
+20.64%
+1.126
+1.60
+-6.09%
+2.139
+118
+0
+q0.005_stop1p0_feetaker
+variant
+final_equity
+total_return
+n_trades
+win_rate
+profit_factor
+sharpe
+max_dd_pct
+min_dist_ratio
+skips
+liq
+base (max_open=10)
+$701.18
+-29.88%
+11,920
+41.43%
+0.936
+-2.36
+-29.88%
+3.984
+5,779
+0
+open20 (max_open=20)
+$616.25
+-38.38%
+14,755
+41.15%
+0.927
+-2.37
+-38.38%
+2.053
+2,944
+0
+z3_open10 (|z|>=3, max_open=10)
+$1,066.38
+6.64%
+1,834
+30.86%
+1.062
+1.09
+-5.75%
+4.042
+212
+0
+z3_open20 (|z|>=3, max_open=20)
+$1,016.13
+1.61%
+1,917
+30.26%
+1.015
+0.29
+-8.75%
+2.134
+129
+0
+q0.005_stop1p0_feemaker
+variant
+final_equity
+total_return
+n_trades
+win_rate
+profit_factor
+sharpe
+max_dd_pct
+min_dist_ratio
+skips
+liq
+base (max_open=10)
+$2,374.42
+137.44%
+12,055
+41.58%
+1.176
+6.17
+-6.30%
+3.986
+5,644
+0
+open20 (max_open=20)
+$2,768.95
+176.89%
+15,139
+41.15%
+1.172
+5.36
+-7.23%
+2.018
+2,560
+0
+z3_open10 (|z|>=3, max_open=10)
+$1,299.70
+29.97%
+1,852
+31.10%
+1.290
+4.25
+-2.86%
+4.043
+194
+0
+z3_open20 (|z|>=3, max_open=20)
+$1,232.16
+23.22%
+1,935
+30.34%
+1.215
+3.01
+-4.61%
+2.135
+111
+0
+q0.005_stop2p0_feetaker
+variant
+final_equity
+total_return
+n_trades
+win_rate
+profit_factor
+sharpe
+max_dd_pct
+min_dist_ratio
+skips
+liq
+base (max_open=10)
+$1,250.74
+25.07%
+9,834
+56.17%
+1.039
+1.58
+-22.84%
+3.996
+7,865
+0
+open20 (max_open=20)
+$1,509.28
+50.93%
+13,241
+56.09%
+1.055
+2.01
+-19.26%
+2.032
+4,458
+0
+z3_open10 (|z|>=3, max_open=10)
+$1,139.55
+13.96%
+1,798
+41.71%
+1.099
+1.57
+-5.47%
+4.039
+248
+0
+z3_open20 (|z|>=3, max_open=20)
+$1,088.05
+8.81%
+1,918
+40.93%
+1.058
+0.83
+-10.20%
+2.132
+128
+0
+q0.005_stop2p0_feemaker
+variant
+final_equity
+total_return
+n_trades
+win_rate
+profit_factor
+sharpe
+max_dd_pct
+min_dist_ratio
+skips
+liq
+base (max_open=10)
+$3,315.02
+231.50%
+9,879
+56.18%
+1.228
+7.61
+-4.88%
+4.010
+7,820
+0
+open20 (max_open=20)
+$5,736.34
+473.63%
+13,340
+56.11%
+1.251
+7.54
+-8.05%
+2.038
+4,359
+0
+z3_open10 (|z|>=3, max_open=10)
+$1,394.95
+39.50%
+1,816
+41.85%
+1.276
+3.89
+-4.17%
+4.043
+230
+0
+z3_open20 (|z|>=3, max_open=20)
+$1,335.78
+33.58%
+1,935
+41.09%
+1.218
+2.64
+-9.46%
+2.133
+111
+0
+q0.005_stopnone_feetaker
+variant
+final_equity
+total_return
+n_trades
+win_rate
+profit_factor
+sharpe
+max_dd_pct
+min_dist_ratio
+skips
+liq
+base (max_open=10)
+$1,960.18
+96.02%
+6,587
+71.64%
+1.173
+3.73
+-12.54%
+3.661
+11,112
+0
+open20 (max_open=20)
+$3,369.67
+236.97%
+9,965
+71.21%
+1.193
+4.26
+-16.18%
+2.033
+7,734
+0
+z3_open10 (|z|>=3, max_open=10)
+$1,456.85
+45.69%
+1,554
+56.56%
+1.295
+2.98
+-12.06%
+3.979
+492
+0
+z3_open20 (|z|>=3, max_open=20)
+$1,678.67
+67.87%
+1,847
+56.96%
+1.345
+3.12
+-13.98%
+2.097
+199
+0
+q0.005_stopnone_feemaker
+variant
+final_equity
+total_return
+n_trades
+win_rate
+profit_factor
+sharpe
+max_dd_pct
+min_dist_ratio
+skips
+liq
+base (max_open=10)
+$4,138.00
+313.80%
+6,595
+71.96%
+1.395
+6.98
+-10.93%
+3.663
+11,104
+0
+open20 (max_open=20)
+$9,749.47
+874.95%
+9,992
+71.37%
+1.380
+7.38
+-13.70%
+2.035
+7,707
+0
+z3_open10 (|z|>=3, max_open=10)
+$1,765.32
+76.53%
+1,568
+57.02%
+1.469
+4.30
+-10.62%
+3.980
+478
+0
+z3_open20 (|z|>=3, max_open=20)
+$2,035.80
+103.58%
+1,861
+57.07%
+1.498
+4.18
+-12.40%
+2.098
+185
+0
+q0.001_stop0p5_feetaker
+variant
+final_equity
+total_return
+n_trades
+win_rate
+profit_factor
+sharpe
+max_dd_pct
+min_dist_ratio
+skips
+liq
+base (max_open=10)
+$858.01
+-14.20%
+3,326
+29.71%
+0.872
+-2.45
+-14.20%
+3.993
+312
+0
+open20 (max_open=20)
+$865.11
+-13.49%
+3,427
+29.71%
+0.881
+-1.89
+-13.87%
+2.132
+211
+0
+z3_open10 (|z|>=3, max_open=10)
+$990.65
+-0.93%
+397
+21.16%
+0.945
+-0.35
+-3.68%
+4.068
+37
+0
+z3_open20 (|z|>=3, max_open=20)
+$989.99
+-1.00%
+399
+21.05%
+0.942
+-0.38
+-3.72%
+3.693
+35
+0
+q0.001_stop0p5_feemaker
+variant
+final_equity
+total_return
+n_trades
+win_rate
+profit_factor
+sharpe
+max_dd_pct
+min_dist_ratio
+skips
+liq
+base (max_open=10)
+$1,189.94
+18.99%
+3,361
+29.81%
+1.181
+2.78
+-3.40%
+3.995
+277
+0
+open20 (max_open=20)
+$1,225.71
+22.57%
+3,469
+29.98%
+1.209
+2.67
+-3.63%
+2.020
+169
+0
+z3_open10 (|z|>=3, max_open=10)
+$1,031.69
+3.17%
+397
+21.16%
+1.223
+1.28
+-2.18%
+4.069
+37
+0
+z3_open20 (|z|>=3, max_open=20)
+$1,030.63
+3.06%
+399
+21.05%
+1.214
+1.23
+-2.21%
+3.694
+35
+0
+q0.001_stop1p0_feetaker
+variant
+final_equity
+total_return
+n_trades
+win_rate
+profit_factor
+sharpe
+max_dd_pct
+min_dist_ratio
+skips
+liq
+base (max_open=10)
+$1,009.06
+0.91%
+3,259
+42.77%
+1.006
+0.19
+-8.51%
+3.994
+379
+0
+open20 (max_open=20)
+$1,033.16
+3.32%
+3,430
+42.89%
+1.022
+0.44
+-8.85%
+2.022
+208
+0
+z3_open10 (|z|>=3, max_open=10)
+$1,035.71
+3.57%
+395
+31.39%
+1.166
+1.07
+-2.03%
+4.066
+39
+0
+z3_open20 (|z|>=3, max_open=20)
+$1,034.60
+3.46%
+399
+31.33%
+1.160
+1.04
+-2.08%
+3.690
+35
+0
+q0.001_stop1p0_feemaker
+variant
+final_equity
+total_return
+n_trades
+win_rate
+profit_factor
+sharpe
+max_dd_pct
+min_dist_ratio
+skips
+liq
+base (max_open=10)
+$1,417.70
+41.77%
+3,285
+42.86%
+1.282
+4.31
+-2.80%
+3.997
+353
+0
+open20 (max_open=20)
+$1,459.65
+45.97%
+3,465
+42.91%
+1.296
+3.96
+-2.97%
+2.024
+173
+0
+z3_open10 (|z|>=3, max_open=10)
+$1,077.18
+7.72%
+395
+31.39%
+1.402
+2.23
+-1.61%
+4.045
+39
+0
+z3_open20 (|z|>=3, max_open=20)
+$1,077.07
+7.71%
+399
+31.33%
+1.400
+2.23
+-1.61%
+3.691
+35
+0
+q0.001_stop2p0_feetaker
+variant
+final_equity
+total_return
+n_trades
+win_rate
+profit_factor
+sharpe
+max_dd_pct
+min_dist_ratio
+skips
+liq
+base (max_open=10)
+$1,199.47
+19.95%
+3,085
+58.02%
+1.113
+2.03
+-7.15%
+3.980
+553
+0
+open20 (max_open=20)
+$1,200.27
+20.03%
+3,369
+57.67%
+1.106
+1.78
+-7.51%
+2.022
+269
+0
+z3_open10 (|z|>=3, max_open=10)
+$1,043.95
+4.39%
+394
+42.13%
+1.156
+1.00
+-3.76%
+4.064
+40
+0
+z3_open20 (|z|>=3, max_open=20)
+$1,042.08
+4.21%
+399
+41.85%
+1.149
+0.95
+-3.76%
+3.687
+35
+0
+q0.001_stop2p0_feemaker
+variant
+final_equity
+total_return
+n_trades
+win_rate
+profit_factor
+sharpe
+max_dd_pct
+min_dist_ratio
+skips
+liq
+base (max_open=10)
+$1,638.86
+63.89%
+3,112
+57.94%
+1.335
+5.07
+-4.49%
+3.981
+526
+0
+open20 (max_open=20)
+$1,686.80
+68.68%
+3,404
+57.64%
+1.330
+4.61
+-4.49%
+2.019
+234
+0
+z3_open10 (|z|>=3, max_open=10)
+$1,082.77
+8.28%
+395
+41.77%
+1.314
+1.80
+-3.66%
+4.043
+39
+0
+z3_open20 (|z|>=3, max_open=20)
+$1,084.86
+8.49%
+399
+41.85%
+1.320
+1.85
+-3.66%
+3.688
+35
+0
+q0.001_stopnone_feetaker
+variant
+final_equity
+total_return
+n_trades
+win_rate
+profit_factor
+sharpe
+max_dd_pct
+min_dist_ratio
+skips
+liq
+base (max_open=10)
+$1,511.91
+51.19%
+2,573
+74.39%
+1.267
+3.65
+-7.20%
+3.964
+1,065
+0
+open20 (max_open=20)
+$1,586.60
+58.66%
+3,144
+73.76%
+1.247
+3.17
+-11.40%
+2.018
+494
+0
+z3_open10 (|z|>=3, max_open=10)
+$1,153.89
+15.39%
+383
+60.57%
+1.453
+2.76
+-4.50%
+4.042
+51
+0
+z3_open20 (|z|>=3, max_open=20)
+$1,164.30
+16.43%
+397
+61.21%
+1.476
+2.96
+-4.62%
+2.559
+37
+0
+q0.001_stopnone_feemaker
+variant
+final_equity
+total_return
+n_trades
+win_rate
+profit_factor
+sharpe
+max_dd_pct
+min_dist_ratio
+skips
+liq
+base (max_open=10)
+$2,012.22
+101.22%
+2,583
+74.49%
+1.469
+6.06
+-5.97%
+3.972
+1,055
+0
+open20 (max_open=20)
+$2,078.90
+107.89%
+3,164
+73.83%
+1.404
+4.65
+-10.98%
+2.020
+474
+0
+z3_open10 (|z|>=3, max_open=10)
+$1,194.58
+19.46%
+384
+60.16%
+1.582
+3.35
+-3.96%
+4.043
+50
+0
+z3_open20 (|z|>=3, max_open=20)
+$1,211.79
+21.18%
+398
+61.31%
+1.626
+3.69
+-3.99%
+2.561
+36
+0
+7. Task B: |z| x p_cal descriptive grid (max_open=10, stop=none runs)
+Descriptive only -- no filter or rule is chosen here. Any threshold read off these tables needs the vault or paper-trading check before it means anything.
+Monotonicity across the 6 runs (script-counted)
+measure
+direction
+monotone q0->q4
+top quintile highest
+abs_z_win_rate
+decreasing q0->q4
+2/6
+n/a
+abs_z_mean_return
+increasing q0->q4
+0/6
+6/6
+abs_z_median_return
+increasing q0->q4
+4/6
+6/6
+p_cal_win_rate
+increasing q0->q4
+2/6
+n/a
+p_cal_mean_return
+increasing q0->q4
+0/6
+6/6
+p_cal_median_return
+increasing q0->q4
+0/6
+0/6
+q0.01_stopnone_feetaker (n_trades=8,078)
+|z| quintiles:
+q
+range
+n
+win_rate
+mean_return
+median_return
+profit_factor
+0
+[0.519, 1.518]
+1,616
+77.72%
+0.0003
+0.0026
+1.090
+1
+[1.518, 1.829]
+1,615
+73.19%
+0.0006
+0.0032
+1.130
+2
+[1.829, 2.131]
+1,616
+71.47%
+0.0009
+0.0037
+1.275
+3
+[2.131, 2.563]
+1,615
+69.16%
+0.0006
+0.0040
+1.101
+4
+[2.563, 8.108]
+1,616
+61.70%
+0.0013
+0.0050
+1.229
+p_cal_10h quintiles:
+q
+range
+n
+win_rate
+mean_return
+median_return
+profit_factor
+0
+[0.6250, 0.6559]
+1,785
+67.06%
+0.0007
+0.0034
+1.159
+1
+[0.6559, 0.6832]
+1,636
+69.93%
+0.0007
+0.0035
+1.209
+2
+[0.6832, 0.6953]
+1,474
+71.30%
+0.0008
+0.0035
+1.191
+3
+[0.6953, 0.7177]
+1,655
+70.57%
+0.0006
+0.0034
+1.118
+4
+[0.7177, 0.8966]
+1,528
+75.07%
+0.0010
+0.0035
+1.177
+q0.01_stopnone_feemaker (n_trades=8,069)
+|z| quintiles:
+q
+range
+n
+win_rate
+mean_return
+median_return
+profit_factor
+0
+[0.519, 1.513]
+1,614
+78.44%
+0.0010
+0.0032
+1.360
+1
+[1.513, 1.822]
+1,614
+72.74%
+0.0013
+0.0038
+1.401
+2
+[1.822, 2.126]
+1,613
+72.41%
+0.0016
+0.0043
+1.521
+3
+[2.126, 2.547]
+1,614
+69.52%
+0.0012
+0.0046
+1.269
+4
+[2.547, 8.108]
+1,614
+60.97%
+0.0017
+0.0055
+1.342
+p_cal_10h quintiles:
+q
+range
+n
+win_rate
+mean_return
+median_return
+profit_factor
+0
+[0.6250, 0.6559]
+1,795
+68.13%
+0.0014
+0.0041
+1.394
+1
+[0.6559, 0.6832]
+1,640
+70.24%
+0.0013
+0.0041
+1.424
+2
+[0.6832, 0.6953]
+1,474
+70.56%
+0.0012
+0.0040
+1.353
+3
+[0.6953, 0.7177]
+1,646
+70.47%
+0.0013
+0.0040
+1.320
+4
+[0.7177, 1.0000]
+1,514
+75.23%
+0.0015
+0.0040
+1.323
+q0.005_stopnone_feetaker (n_trades=6,587)
+|z| quintiles:
+q
+range
+n
+win_rate
+mean_return
+median_return
+profit_factor
+0
+[0.519, 1.528]
+1,318
+79.14%
+0.0006
+0.0026
+1.202
+1
+[1.528, 1.837]
+1,317
+73.04%
+0.0005
+0.0032
+1.078
+2
+[1.837, 2.138]
+1,317
+73.65%
+0.0011
+0.0038
+1.348
+3
+[2.138, 2.578]
+1,317
+69.40%
+0.0001
+0.0039
+1.006
+4
+[2.578, 7.511]
+1,318
+62.97%
+0.0016
+0.0050
+1.265
+p_cal_10h quintiles:
+q
+range
+n
+win_rate
+mean_return
+median_return
+profit_factor
+0
+[0.6487, 0.6806]
+1,333
+69.99%
+0.0007
+0.0034
+1.190
+1
+[0.6806, 0.6953]
+1,533
+70.32%
+0.0006
+0.0034
+1.139
+2
+[0.6953, 0.7026]
+1,281
+70.34%
+0.0007
+0.0036
+1.139
+3
+[0.7026, 0.7350]
+1,147
+72.45%
+0.0006
+0.0033
+1.107
+4
+[0.7350, 0.8966]
+1,293
+75.48%
+0.0013
+0.0036
+1.323
+q0.005_stopnone_feemaker (n_trades=6,595)
+|z| quintiles:
+q
+range
+n
+win_rate
+mean_return
+median_return
+profit_factor
+0
+[0.519, 1.534]
+1,319
+78.70%
+0.0012
+0.0032
+1.419
+1
+[1.534, 1.842]
+1,319
+73.16%
+0.0009
+0.0037
+1.217
+2
+[1.842, 2.142]
+1,319
+74.07%
+0.0019
+0.0044
+1.759
+3
+[2.142, 2.581]
+1,319
+70.66%
+0.0009
+0.0046
+1.177
+4
+[2.581, 7.511]
+1,319
+63.23%
+0.0024
+0.0056
+1.504
+p_cal_10h quintiles:
+q
+range
+n
+win_rate
+mean_return
+median_return
+profit_factor
+0
+[0.6487, 0.6806]
+1,335
+69.81%
+0.0011
+0.0040
+1.346
+1
+[0.6806, 0.6953]
+1,535
+70.49%
+0.0013
+0.0041
+1.407
+2
+[0.6953, 0.7026]
+1,272
+70.52%
+0.0015
+0.0042
+1.430
+3
+[0.7026, 0.7350]
+1,150
+73.04%
+0.0013
+0.0039
+1.300
+4
+[0.7350, 1.0000]
+1,303
+76.36%
+0.0020
+0.0042
+1.596
+q0.001_stopnone_feetaker (n_trades=2,573)
+|z| quintiles:
+q
+range
+n
+win_rate
+mean_return
+median_return
+profit_factor
+0
+[0.519, 1.554]
+515
+80.78%
+0.0009
+0.0025
+1.224
+1
+[1.554, 1.862]
+514
+76.07%
+0.0013
+0.0033
+1.326
+2
+[1.862, 2.150]
+515
+78.45%
+0.0017
+0.0041
+1.532
+3
+[2.150, 2.589]
+514
+71.60%
+0.0003
+0.0039
+1.021
+4
+[2.589, 7.473]
+515
+65.05%
+0.0018
+0.0053
+1.327
+p_cal_10h quintiles:
+q
+range
+n
+win_rate
+mean_return
+median_return
+profit_factor
+0
+[0.6962, 0.7193]
+615
+72.68%
+0.0006
+0.0033
+1.074
+1
+[0.7193, 0.7398]
+435
+77.47%
+0.0014
+0.0035
+1.354
+2
+[0.7398, 0.7685]
+730
+72.47%
+0.0014
+0.0035
+1.361
+3
+[0.7685, 0.7743]
+468
+74.79%
+0.0007
+0.0042
+1.239
+4
+[0.7743, 0.8966]
+325
+77.23%
+0.0023
+0.0037
+1.458
+q0.001_stopnone_feemaker (n_trades=2,583)
+|z| quintiles:
+q
+range
+n
+win_rate
+mean_return
+median_return
+profit_factor
+0
+[0.519, 1.557]
+517
+80.85%
+0.0016
+0.0032
+1.481
+1
+[1.557, 1.863]
+516
+77.13%
+0.0020
+0.0039
+1.611
+2
+[1.863, 2.152]
+517
+77.56%
+0.0021
+0.0046
+1.712
+3
+[2.152, 2.583]
+516
+70.93%
+0.0009
+0.0045
+1.158
+4
+[2.583, 7.473]
+517
+65.96%
+0.0027
+0.0060
+1.521
+p_cal_10h quintiles:
+q
+range
+n
+win_rate
+mean_return
+median_return
+profit_factor
+0
+[0.6962, 0.7193]
+620
+72.58%
+0.0011
+0.0039
+1.205
+1
+[0.7193, 0.7398]
+434
+77.42%
+0.0020
+0.0041
+1.535
+2
+[0.7398, 0.7685]
+733
+73.12%
+0.0022
+0.0041
+1.651
+3
+[0.7685, 0.7743]
+463
+74.73%
+0.0015
+0.0048
+1.499
+4
+[0.7743, 0.8966]
+333
+76.88%
+0.0029
+0.0042
+1.722
+8. Method and data
+Price data
+Prices come from Hyperliquid build2's d3/asm 1-minute trade-price bars, not asset_ctxs mid-price. This was confirmed by an exact sha256 match on 206/206 locally-held files and an exact match on 4,283,987/4,283,987 derived 30-minute values against the archive.
+Cross-check against v1's own labels
+base (max_open=10): 0 mismatched out of 35,629 distinct picked events (sum of the per-fold lines; q=0.005/0.001 are subsets of q=0.01, so summing by_q would over-count).
+open20 (max_open=20): 0 mismatched out of 35,629 distinct picked events (sum of the per-fold lines; q=0.005/0.001 are subsets of q=0.01, so summing by_q would over-count).
+z3_open10 (|z|>=3, max_open=10): 0 mismatched out of 35,629 distinct picked events (sum of the per-fold lines; q=0.005/0.001 are subsets of q=0.01, so summing by_q would over-count).
+z3_open20 (|z|>=3, max_open=20): 0 mismatched out of 35,629 distinct picked events (sum of the per-fold lines; q=0.005/0.001 are subsets of q=0.01, so summing by_q would over-count).
+p_cal (calibrated probability)
+p_cal_10h is S1-H's isotonic correction, refit here by calling the same function S1-H used, and the pooled top-1% mean p_cal is asserted against S1-H's own reported value.
+Costs model
+slippage_spread_share = 0 for this reported run (slippage excluded by the user's choice -- the legs are small). Fees and funding are applied as described in the per-run cost tables above.
+cost-share diagnostic (OVERLAPPING accounts across the 24 runs, not a combined P&L): n_trades=229,151, gross=$43,937.08, fee=$25,541.23, funding_net=$221.80, net=$18,174.04, fee_share_of_gross=58.13%.
+Account rules

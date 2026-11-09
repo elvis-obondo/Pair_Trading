@@ -9,6 +9,9 @@ __pycache__/
 venv/
 env/
 
+# Node (research/model/s1_profit1_docx_render.js's dependency)
+node_modules/
+
 # Secrets / local config
 user_data/config.json
 *.env
