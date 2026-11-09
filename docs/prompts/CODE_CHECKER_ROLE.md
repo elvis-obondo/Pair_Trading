@@ -40,7 +40,7 @@ WHAT TO CHECK, in order:
   1,000 events/group, independent 2,000 rows/group, re-walk 2,000 labels; any shortfall must be an
   explicit user waiver in NUMBERS [HL-WAIVERS], never silent.
 
-STATE AS OF 2026-10-29 (previous checker "Code Checker").
+STATE AS OF 2026-11-08 (refreshed by the planner).
 - HL-MASTER1 v1 FROZEN (s3://pair-trading-hl-289869684922/master/versions/v1/). B1-B4 PASS (955469b).
 - B5 CLOSED: verify-once (keyed to MANIFEST.json sha, re-checked every call), threaded/chunked
   load_features, fixed coin codes from coins.csv, input list 1,093 -> 1,091 (a_/b_coin_code dropped as
@@ -50,7 +50,18 @@ STATE AS OF 2026-10-29 (previous checker "Code Checker").
   8/8 folds positive. Per-fold report lifts equal each fold's training-time test_lift exactly.
 - S1-D (top 1%, descriptive) DONE, verified: d179a79. Top1% lift 0.0841, 8/8 positive; 87% of top-1%
   picks are top-decile vol_48 (removed-set lift 0.0831, remainder n=4,730 lift 0.0906, CI 0.066-0.113).
-- Next steps (trees, vault, follow-ups) are the user's call via the planner.
+- S2 trees: Step 1 sizing PASS (col-wise; row-wise OOM'd). PARKED for compute (no credits).
+- S1-F fixed cut-off PASS (41a5f2f). Rule A = previous block's (1-q) p_10h quantile; top-1% lift 0.078 vs 0.083
+  in-block.
+- S1-G top-1% deep dive PASS (9465498). The G3 proof is rank-based, because the step intercepts b were never saved:
+  pick/rest separation plus Spearman 1. Only the picks-minus-rest differences are proven, not absolute levels.
+  vol_48 = the spread's own recent movement in sigma (master_events.py:17), NOT market activity.
+- S1-H recalibration PASS (3826fb3). Isotonic top-1% at 10 h: 67.9% vs 67.7% actual. Look-ahead guard: a fit
+  event counts only if t0 + h <= the test block start.
+- Repo cleanup PASS (3fe05f5): attic/ (OKX data) and the freqtrade scaffold deleted. user_data/data and
+  user_data/normalized are LIVE Hyperliquid data and are never deleted. Ruling: cited items are listed with a
+  cited_by column, not excluded.
+- NEXT: HL-PROFIT1 (docs/prompts/HL_PROFIT1_LIVE_PICKS.md), profit on the live picks. User-approved despite the S1 FAIL.
 
 STANDING RULINGS TO HOLD THE BUILDER TO
 - Existing code changes: outputs BITWISE identical before/after (fold ids, hazard rows, feature matrix
@@ -75,6 +86,12 @@ STANDING RULINGS TO HOLD THE BUILDER TO
   hard shutdown net, Gram speed tripwire. Spend and launches need the user's own yes. Delete S3 temp
   objects after. Poll S3 / get-console-output --latest.
 - Logs come to the checker BEFORE commit (builder slipped several times).
+- EVERY figure in NUMBERS or a write-up is printed by a script from a log or output file. NUMBERS prose is
+  produced by a generator script (e.g. research/model/s1h_numbers_gen.py). Reject any typed figure (the builder
+  typed figures in S1-G and S1-H), and any direction word that contradicts its table.
+- Anything fitted on past months: only outcomes resolved before the time of use (t0 + horizon <= use time).
+- Review BEFORE any run or deletion. Local destructive deletes and AWS launches need the user's own yes in the
+  builder's session. Every AWS launch has a background watcher.
 
 CHECKS (still apply)
 - Column identity is (file, column), never the bare name (beta, beta_stab are IN in events.parquet
