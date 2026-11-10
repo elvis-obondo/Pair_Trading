@@ -103,6 +103,17 @@ Full history: the decisions log in docs/HYPERLIQUID_HANDOFF.md. Numbers: researc
   HL-PROFIT1 task list closed. Next step is the user's call (vault / paper trading / sizing / real slippage).
 - Price source: v1 used build2 d3/asm trade-price 1m bars (not build1 mid_px); in S3 build2/d3/asm/futures/.
 
+### Decided 2026-11-09 (user), after HL-PROFIT1
+- **Flat-10x task D DROPPED.** 85.7% of base q1% trades are on 3x-capped pairs, 2.1% could use 10x. One run
+  (lev10_open10, hypothetical) finished, never reviewed or committed. Uncommitted leverage_mode code in s1_profit1.py
+  and numbers_gen, the lev10 logs/report and diagnostics/compare_config_lev10.py are to be reverted/removed by the
+  builder, with the user's own yes in its session (discarding uncommitted work and deleting untracked files).
+- **HL-VAULT1 approved** (brief docs/prompts/HL_VAULT1_RUN.md): open the vault once, NO pass/fail rule, settings
+  frozen first; fold 0 reproduction check, then the pre-vault refit with fold 7's settings saved COMPLETE (AWS);
+  base 24 configs at max_open 10 and 20, real caps, slippage 0. The paper-trading refit (vault included) only if
+  the user likes the result. vault_loader.py does not exist yet. Not started: builder/checker sessions were closed.
+- Fees are the user's main concern; levers: maker-only orders, HYPE staking discount, fewer bigger-edge trades.
+
 ### Parked
 - **Before live/paper trading:** S1 saved only the weights (fold*_coefs.csv) and settings (fold*_done.json), NOT
   the 20 step intercepts or the preprocessing statistics. Rebuild = deterministic refit of one fold (~70 GB RAM)
@@ -113,6 +124,8 @@ Full history: the decisions log in docs/HYPERLIQUID_HANDOFF.md. Numbers: researc
 - Open S1 checks: the time-step interaction logistic run (tests model form against inputs); a |z|-aware correction.
 
 ### Infra and how to work
+- Word reports: run the docx skill's OOXML validator (validate.py) before handing over; a text-only number check missed a
+  schema bug that made Word refuse the HL-PROFIT1 report (fixed 04fd91b).
 - GCP VM trial ends about 2026-11-08; nothing S1-family is VM-only (builder check, 2026-11-07). A GCP-side STOP is scheduled for
   2026-11-07T23:30:00Z (scheduling.terminationTime, action STOP; user's time).
 - Every AWS launch gets a background watcher (memory watch-every-aws-launch).
