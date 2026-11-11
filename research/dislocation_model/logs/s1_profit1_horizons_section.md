@@ -1,0 +1,583 @@
+
+## [HL-PROFIT1 horizons] Do the 2 h and 5 h predictions show which picks revert fast? (DESCRIPTIVE ONLY)
+
+Descriptive only; the test months were already used for the cut-off and the calibration; no exit rule or filter chosen; any lead needs fresh data.
+
+Test months only (folds 1-7). Picks: Rule A on raw p_10h. Probabilities: isotonic-corrected (S1-H). Quintiles from average rank over all picks of that q (ties share a bin). Trades: base HL-PROFIT1 logs, stop none, open cap 10, net / notional per traded pick. traded_* columns: traded picks only (subset set by the account's capacity -- the $1,000 account skipped picks when its book was full); n_traded is printed per bin. Script research/model/s1_profit1_horizons.py; log research/model/logs/s1/s1_profit1_horizons.log.
+
+Receipts (script shas, trade counts, cross-checks), copied from the log:
+```
+[HORIZONS] sha256 s1_profit1_horizons.py: 028b58c55d8eafdb022162e84bd2eaa5a8d3506c54399d85be3807afe37b3f84
+[HORIZONS] sha256 s1h_recalibration.py: 6e6a5ae53bfd517ccb37646ab70b8d1e949d99cc0f09edcaf44a126a2d844db5
+[HORIZONS] sha256 harness.py: 423328afc950252fe37d5fbc7fb4c25d97475b36abe3860542357e5481ce56c7
+[HORIZONS] start 2026-11-11T05:34:31Z UTC; test months only (folds 1-7); no vault row read
+[HORIZONS] frame built: 3,097,060 test-month events (folds 1-7) [38s]
+[HORIZONS] trades q=0.01 fee=maker: 8,069 trades from trades_q0.01_stopnone_feemaker.parquet; exit_reason counts {'mu': 5714, 'timeout': 2355}
+[HORIZONS] trades q=0.01 fee=taker: 8,078 trades from trades_q0.01_stopnone_feetaker.parquet; exit_reason counts {'mu': 5707, 'timeout': 2371}
+[HORIZONS] trades q=0.005 fee=maker: 6,595 trades from trades_q0.005_stopnone_feemaker.parquet; exit_reason counts {'mu': 4746, 'timeout': 1849}
+[HORIZONS] trades q=0.005 fee=taker: 6,587 trades from trades_q0.005_stopnone_feetaker.parquet; exit_reason counts {'mu': 4719, 'timeout': 1868}
+[HORIZONS] trades q=0.001 fee=maker: 2,583 trades from trades_q0.001_stopnone_feemaker.parquet; exit_reason counts {'mu': 1924, 'timeout': 659}
+[HORIZONS] trades q=0.001 fee=taker: 2,573 trades from trades_q0.001_stopnone_feetaker.parquet; exit_reason counts {'mu': 1914, 'timeout': 659}
+[HORIZONS] cross-check q=0.01 fee=maker: 8,069 traded picks, max |iso_10h - p_cal_10h| = 0.000e+00
+[HORIZONS] cross-check q=0.01 fee=taker: 8,078 traded picks, max |iso_10h - p_cal_10h| = 0.000e+00
+[HORIZONS] cross-check q=0.005 fee=maker: 6,595 traded picks, max |iso_10h - p_cal_10h| = 0.000e+00
+[HORIZONS] cross-check q=0.005 fee=taker: 6,587 traded picks, max |iso_10h - p_cal_10h| = 0.000e+00
+[HORIZONS] cross-check q=0.001 fee=maker: 2,583 traded picks, max |iso_10h - p_cal_10h| = 0.000e+00
+[HORIZONS] cross-check q=0.001 fee=taker: 2,573 traded picks, max |iso_10h - p_cal_10h| = 0.000e+00
+```
+
+### q = 0.01: 35,629 picks; distinct corrected levels p_2h/p_5h/p_10h = 188/187/137
+
+#### Q1 (q=0.01): does each horizon rank its own outcome? (quintiles of corrected p_h; actual reach_h)
+h = 2 h
+```
+              n  actual_reach  mean_corrected_p
+quintile                                       
+1          7028        0.3028            0.2896
+2          5786        0.3406            0.3123
+3         10006        0.3301            0.3341
+4          5771        0.3724            0.3646
+5          7038        0.3983            0.4129
+```
+h = 5 h
+```
+             n  actual_reach  mean_corrected_p
+quintile                                      
+1         7064        0.5068            0.4941
+2         7450        0.5188            0.5112
+3         8298        0.5499            0.5358
+4         5345        0.5676            0.5595
+5         7472        0.5946            0.6140
+```
+h = 10 h
+```
+             n  actual_reach  mean_corrected_p
+quintile                                      
+1         6607        0.6602            0.6366
+2         7094        0.6525            0.6511
+3         7432        0.6773            0.6734
+4         8511        0.6738            0.6924
+5         5985        0.7285            0.7446
+```
+
+#### Q2 (q=0.01): speed by corrected p_2h quintile, fee=maker (mtm = minutes_to_mu among those reaching within 10 h; traded_* = traded picks only, subset set by the account's capacity)
+```
+              n  reach_2h  reach_5h  reach_10h  n_reach  mtm_median  mtm_mean  n_traded  traded_hold_min  traded_net_over_notional
+quintile                                                                                                                          
+1          7028    0.3028    0.5053     0.6414     4508    130.0000  178.4565       828         322.0628                    0.0012
+2          5786    0.3406    0.5460     0.6782     3924    120.0000  170.3626      1182         298.1599                    0.0017
+3         10006    0.3301    0.5328     0.6701     6705    122.0000  172.1908      1662         297.1071                    0.0015
+4          5771    0.3724    0.5670     0.6845     3950    103.0000  157.3516      1917         282.5216                    0.0010
+5          7038    0.3983    0.5928     0.7151     5033     97.0000  153.3100      2480         263.5597                    0.0014
+```
+#### Q2 (q=0.01): speed by corrected p_2h quintile, fee=taker (mtm = minutes_to_mu among those reaching within 10 h; traded_* = traded picks only, subset set by the account's capacity)
+```
+              n  reach_2h  reach_5h  reach_10h  n_reach  mtm_median  mtm_mean  n_traded  traded_hold_min  traded_net_over_notional
+quintile                                                                                                                          
+1          7028    0.3028    0.5053     0.6414     4508    130.0000  178.4565       827         327.1040                    0.0002
+2          5786    0.3406    0.5460     0.6782     3924    120.0000  170.3626      1171         301.2989                    0.0011
+3         10006    0.3301    0.5328     0.6701     6705    122.0000  172.1908      1644         295.2001                    0.0010
+4          5771    0.3724    0.5670     0.6845     3950    103.0000  157.3516      1928         277.9829                    0.0005
+5          7038    0.3983    0.5928     0.7151     5033     97.0000  153.3100      2508         263.7440                    0.0007
+```
+#### Q2 (q=0.01): speed by corrected p_5h quintile, fee=maker (mtm = minutes_to_mu among those reaching within 10 h; traded_* = traded picks only, subset set by the account's capacity)
+```
+             n  reach_2h  reach_5h  reach_10h  n_reach  mtm_median  mtm_mean  n_traded  traded_hold_min  traded_net_over_notional
+quintile                                                                                                                         
+1         7064    0.3041    0.5068     0.6457     4561    131.0000  179.1640       746         324.6247                    0.0013
+2         7450    0.3110    0.5188     0.6526     4862    128.0000  177.4947      1151         300.6308                    0.0016
+3         8298    0.3491    0.5499     0.6861     5693    116.0000  167.3311      1706         294.3869                    0.0016
+4         5345    0.3717    0.5676     0.6829     3650    103.0000  156.8085      1816         286.0452                    0.0010
+5         7472    0.4022    0.5946     0.7165     5354     96.0000  152.3270      2650         263.4826                    0.0014
+```
+#### Q2 (q=0.01): speed by corrected p_5h quintile, fee=taker (mtm = minutes_to_mu among those reaching within 10 h; traded_* = traded picks only, subset set by the account's capacity)
+```
+             n  reach_2h  reach_5h  reach_10h  n_reach  mtm_median  mtm_mean  n_traded  traded_hold_min  traded_net_over_notional
+quintile                                                                                                                         
+1         7064    0.3041    0.5068     0.6457     4561    131.0000  179.1640       754         329.1512                    0.0002
+2         7450    0.3110    0.5188     0.6526     4862    128.0000  177.4947      1142         304.6918                    0.0010
+3         8298    0.3491    0.5499     0.6861     5693    116.0000  167.3311      1688         292.9028                    0.0011
+4         5345    0.3717    0.5676     0.6829     3650    103.0000  156.8085      1821         281.0977                    0.0005
+5         7472    0.4022    0.5946     0.7165     5354     96.0000  152.3270      2673         263.2357                    0.0007
+```
+
+#### Q3 (q=0.01): inside each corrected-p_10h quintile, split by corrected p_2h vs the median of that quintile's own p_2h (above = strictly greater), fee=maker; traded_* = traded picks only, subset set by the account's capacity
+```
+                          median_p     n  reach_2h  reach_5h  reach_10h  n_reach  mtm_median  mtm_mean  n_traded  traded_hold_min  traded_net_over_notional
+p10_quintile split                                                                                                                                         
+1            p_2h > med     0.2950  2932    0.3291    0.5372     0.6760     1982    125.0000  174.0247       479         283.5491                    0.0024
+             p_2h <= med    0.2950  3675    0.3042    0.5118     0.6476     2380    130.0000  178.1672       430         337.0907                    0.0006
+2            p_2h > med     0.3106  3248    0.3156    0.5252     0.6641     2157    128.0000  178.3403       695         297.6532                    0.0010
+             p_2h <= med    0.3106  3846    0.3151    0.5138     0.6427     2472    124.0000  173.8981       523         305.4073                    0.0021
+3            p_2h > med     0.3297  3296    0.3635    0.5604     0.6969     2297    111.0000  163.2051       687         296.0073                    0.0005
+             p_2h <= med    0.3297  4136    0.3199    0.5237     0.6618     2737    126.0000  175.8301       621         307.9775                    0.0019
+4            p_2h > med     0.3665  4141    0.3485    0.5491     0.6817     2823    114.0000  167.0461      1064         292.0865                    0.0014
+             p_2h <= med    0.3665  4370    0.3469    0.5455     0.6664     2912    111.0000  164.1497      1121         292.4621                    0.0010
+5            p_2h > med     0.4035  2987    0.4479    0.6394     0.7436     2221     84.0000  138.3363      1340         237.4381                    0.0016
+             p_2h <= med    0.4035  2998    0.4056    0.5891     0.7135     2139     96.0000  151.5718      1109         278.9297                    0.0013
+```
+#### Q3 (q=0.01): inside each corrected-p_10h quintile, split by corrected p_2h vs the median of that quintile's own p_2h (above = strictly greater), fee=taker; traded_* = traded picks only, subset set by the account's capacity
+```
+                          median_p     n  reach_2h  reach_5h  reach_10h  n_reach  mtm_median  mtm_mean  n_traded  traded_hold_min  traded_net_over_notional
+p10_quintile split                                                                                                                                         
+1            p_2h > med     0.2950  2932    0.3291    0.5372     0.6760     1982    125.0000  174.0247       482         291.0207                    0.0013
+             p_2h <= med    0.2950  3675    0.3042    0.5118     0.6476     2380    130.0000  178.1672       430         340.6953                   -0.0003
+2            p_2h > med     0.3106  3248    0.3156    0.5252     0.6641     2157    128.0000  178.3403       683         298.0146                    0.0007
+             p_2h <= med    0.3106  3846    0.3151    0.5138     0.6427     2472    124.0000  173.8981       513         311.6257                    0.0014
+3            p_2h > med     0.3297  3296    0.3635    0.5604     0.6969     2297    111.0000  163.2051       691         291.2431                   -0.0000
+             p_2h <= med    0.3297  4136    0.3199    0.5237     0.6618     2737    126.0000  175.8301       622         310.0000                    0.0012
+4            p_2h > med     0.3665  4141    0.3485    0.5491     0.6817     2823    114.0000  167.0461      1072         284.8694                    0.0008
+             p_2h <= med    0.3665  4370    0.3469    0.5455     0.6664     2912    111.0000  164.1497      1117         289.6321                    0.0005
+5            p_2h > med     0.4035  2987    0.4479    0.6394     0.7436     2221     84.0000  138.3363      1346         238.6501                    0.0011
+             p_2h <= med    0.4035  2998    0.4056    0.5891     0.7135     2139     96.0000  151.5718      1122         277.8039                    0.0006
+```
+#### Q3 (q=0.01): inside each corrected-p_10h quintile, split by corrected p_5h vs the median of that quintile's own p_5h (above = strictly greater), fee=maker; traded_* = traded picks only, subset set by the account's capacity
+```
+                          median_p     n  reach_2h  reach_5h  reach_10h  n_reach  mtm_median  mtm_mean  n_traded  traded_hold_min  traded_net_over_notional
+p10_quintile split                                                                                                                                         
+1            p_5h > med     0.4964  2897    0.3214    0.5312     0.6710     1944    126.0000  175.1379       468         296.5321                    0.0021
+             p_5h <= med    0.4964  3710    0.3105    0.5167     0.6518     2418    127.0000  177.2072       441         321.9773                    0.0009
+2            p_5h > med     0.5090  2657    0.3444    0.5529     0.6835     1816    118.0000  167.9185       795         295.1132                    0.0012
+             p_5h <= med    0.5090  4437    0.2979    0.4988     0.6340     2813    131.0000  181.1646       423         312.0142                    0.0018
+3            p_5h > med     0.5331  3429    0.3605    0.5634     0.6976     2392    113.0000  163.8541       603         297.0597                    0.0004
+             p_5h <= med    0.5331  4003    0.3210    0.5199     0.6600     2642    125.0000  175.6964       705         305.6511                    0.0018
+4            p_5h > med     0.5575  3925    0.3689    0.5699     0.6966     2734    107.0000  160.6668      1129         284.9619                    0.0014
+             p_5h <= med    0.5575  4586    0.3295    0.5279     0.6544     3001    119.0000  170.0473      1056         300.1023                    0.0010
+5            p_5h > med     0.6172  2919    0.4262    0.6218     0.7314     2135     91.0000  144.7855      1248         247.8886                    0.0015
+             p_5h <= med    0.6172  3066    0.4273    0.6070     0.7257     2225     91.0000  144.8719      1201         264.8918                    0.0014
+```
+#### Q3 (q=0.01): inside each corrected-p_10h quintile, split by corrected p_5h vs the median of that quintile's own p_5h (above = strictly greater), fee=taker; traded_* = traded picks only, subset set by the account's capacity
+```
+                          median_p     n  reach_2h  reach_5h  reach_10h  n_reach  mtm_median  mtm_mean  n_traded  traded_hold_min  traded_net_over_notional
+p10_quintile split                                                                                                                                         
+1            p_5h > med     0.4964  2897    0.3214    0.5312     0.6710     1944    126.0000  175.1379       471         302.1550                    0.0010
+             p_5h <= med    0.4964  3710    0.3105    0.5167     0.6518     2418    127.0000  177.2072       441         327.5646                   -0.0000
+2            p_5h > med     0.5090  2657    0.3444    0.5529     0.6835     1816    118.0000  167.9185       784         295.3699                    0.0007
+             p_5h <= med    0.5090  4437    0.2979    0.4988     0.6340     2813    131.0000  181.1646       412         319.9951                    0.0014
+3            p_5h > med     0.5331  3429    0.3605    0.5634     0.6976     2392    113.0000  163.8541       594         295.8182                   -0.0002
+             p_5h <= med    0.5331  4003    0.3210    0.5199     0.6600     2642    125.0000  175.6964       719         303.6898                    0.0012
+4            p_5h > med     0.5575  3925    0.3689    0.5699     0.6966     2734    107.0000  160.6668      1125         281.7084                    0.0008
+             p_5h <= med    0.5575  4586    0.3295    0.5279     0.6544     3001    119.0000  170.0473      1064         293.2115                    0.0005
+5            p_5h > med     0.6172  2919    0.4262    0.6218     0.7314     2135     91.0000  144.7855      1255         248.1347                    0.0010
+             p_5h <= med    0.6172  3066    0.4273    0.6070     0.7257     2225     91.0000  144.8719      1213         265.0536                    0.0008
+```
+
+#### Q4 (q=0.01, fee=maker): traded picks still open at 2 h (holding > 120 min): 4,964 of 8,069 = 0.6152 (traded picks only, subset set by the account's capacity)
+split by corrected p_2h quintile
+```
+          n_traded  share_open  open_n  open_exit_mu  open_hold_min  open_net_over_notional  gone_n  gone_net_over_notional
+quintile                                                                                                                   
+1              828      0.6932     574        0.4983       439.9355                 -0.0011     254                  0.0064
+2             1182      0.6734     796        0.5716       416.5892                 -0.0002     386                  0.0058
+3             1662      0.6420    1067        0.5295       433.8847                 -0.0013     595                  0.0064
+4             1917      0.5968    1144        0.5044       439.0122                 -0.0022     773                  0.0058
+5             2480      0.5577    1383        0.5249       434.6703                 -0.0025    1097                  0.0063
+```
+exit reasons of the still-open ones: {'mu': 2609, 'timeout': 2355}
+#### Q4 (q=0.01, fee=maker): traded picks still open at 5 h (holding > 300 min): 3,338 of 8,069 = 0.4137 (traded picks only, subset set by the account's capacity)
+split by corrected p_5h quintile
+```
+          n_traded  share_open  open_n  open_exit_mu  open_hold_min  open_net_over_notional  gone_n  gone_net_over_notional
+quintile                                                                                                                   
+1              746      0.4866     363        0.2700       551.2507                 -0.0047     383                  0.0069
+2             1151      0.4240     488        0.3094       548.8648                 -0.0050     663                  0.0064
+3             1706      0.4385     748        0.3249       539.1444                 -0.0044     958                  0.0063
+4             1816      0.4097     744        0.2728       554.2876                 -0.0063    1072                  0.0061
+5             2650      0.3755     995        0.2894       551.7839                 -0.0069    1655                  0.0064
+```
+exit reasons of the still-open ones: {'timeout': 2355, 'mu': 983}
+#### Q4 (q=0.01, fee=taker): traded picks still open at 2 h (holding > 120 min): 4,930 of 8,078 = 0.6103 (traded picks only, subset set by the account's capacity)
+split by corrected p_2h quintile
+```
+          n_traded  share_open  open_n  open_exit_mu  open_hold_min  open_net_over_notional  gone_n  gone_net_over_notional
+quintile                                                                                                                   
+1              827      0.6953     575        0.4817       446.1461                 -0.0023     252                  0.0059
+2             1171      0.6746     790        0.5544       420.7013                 -0.0008     381                  0.0052
+3             1644      0.6350    1044        0.5287       435.0699                 -0.0018     600                  0.0060
+4             1928      0.5871    1132        0.5062       437.8242                 -0.0028     796                  0.0053
+5             2508      0.5538    1389        0.5176       437.9777                 -0.0032    1119                  0.0055
+```
+exit reasons of the still-open ones: {'mu': 2559, 'timeout': 2371}
+#### Q4 (q=0.01, fee=taker): traded picks still open at 5 h (holding > 300 min): 3,353 of 8,078 = 0.4151 (traded picks only, subset set by the account's capacity)
+split by corrected p_5h quintile
+```
+          n_traded  share_open  open_n  open_exit_mu  open_hold_min  open_net_over_notional  gone_n  gone_net_over_notional
+quintile                                                                                                                   
+1              754      0.4973     375        0.2587       552.8080                 -0.0060     379                  0.0064
+2             1142      0.4361     498        0.2992       550.6948                 -0.0052     644                  0.0058
+3             1688      0.4348     734        0.3243       540.0995                 -0.0050     954                  0.0058
+4             1821      0.4009     730        0.2712       554.7767                 -0.0069    1091                  0.0054
+5             2673      0.3801    1016        0.2953       549.6909                 -0.0073    1657                  0.0056
+```
+exit reasons of the still-open ones: {'timeout': 2371, 'mu': 982}
+
+### q = 0.005: 17,699 picks; distinct corrected levels p_2h/p_5h/p_10h = 152/139/107
+
+#### Q1 (q=0.005): does each horizon rank its own outcome? (quintiles of corrected p_h; actual reach_h)
+h = 2 h
+```
+             n  actual_reach  mean_corrected_p
+quintile                                      
+1         3352        0.3580            0.3259
+2         3624        0.3466            0.3482
+3         3685        0.3818            0.3707
+4         3549        0.3567            0.3867
+5         3489        0.4405            0.4395
+```
+h = 5 h
+```
+             n  actual_reach  mean_corrected_p
+quintile                                      
+1         3446        0.5563            0.5261
+2         3700        0.5330            0.5498
+3         3081        0.5949            0.5632
+4         3933        0.5660            0.5815
+5         3539        0.6264            0.6501
+```
+h = 10 h
+```
+             n  actual_reach  mean_corrected_p
+quintile                                      
+1         3520        0.6955            0.6647
+2         3866        0.6831            0.6869
+3         4328        0.6754            0.6961
+4         2559        0.7229            0.7071
+5         3426        0.7326            0.7726
+```
+
+#### Q2 (q=0.005): speed by corrected p_2h quintile, fee=maker (mtm = minutes_to_mu among those reaching within 10 h; traded_* = traded picks only, subset set by the account's capacity)
+```
+             n  reach_2h  reach_5h  reach_10h  n_reach  mtm_median  mtm_mean  n_traded  traded_hold_min  traded_net_over_notional
+quintile                                                                                                                         
+1         3352    0.3580    0.5656     0.6948     2329    113.0000  164.8523      1227         300.5395                    0.0016
+2         3624    0.3466    0.5436     0.6807     2467    116.0000  168.0657       814         294.4029                    0.0015
+3         3685    0.3818    0.5772     0.6901     2543    100.0000  153.1860      1672         278.7584                    0.0010
+4         3549    0.3567    0.5517     0.6901     2449    112.0000  167.3320      1128         293.1613                    0.0012
+5         3489    0.4405    0.6346     0.7406     2584     86.0000  140.0205      1754         245.3655                    0.0019
+```
+#### Q2 (q=0.005): speed by corrected p_2h quintile, fee=taker (mtm = minutes_to_mu among those reaching within 10 h; traded_* = traded picks only, subset set by the account's capacity)
+```
+             n  reach_2h  reach_5h  reach_10h  n_reach  mtm_median  mtm_mean  n_traded  traded_hold_min  traded_net_over_notional
+quintile                                                                                                                         
+1         3352    0.3580    0.5656     0.6948     2329    113.0000  164.8523      1226         300.4005                    0.0009
+2         3624    0.3466    0.5436     0.6807     2467    116.0000  168.0657       809         294.3412                    0.0005
+3         3685    0.3818    0.5772     0.6901     2543    100.0000  153.1860      1667         277.5291                    0.0006
+4         3549    0.3567    0.5517     0.6901     2449    112.0000  167.3320      1144         294.3199                    0.0004
+5         3489    0.4405    0.6346     0.7406     2584     86.0000  140.0205      1741         248.7542                    0.0013
+```
+#### Q2 (q=0.005): speed by corrected p_5h quintile, fee=maker (mtm = minutes_to_mu among those reaching within 10 h; traded_* = traded picks only, subset set by the account's capacity)
+```
+             n  reach_2h  reach_5h  reach_10h  n_reach  mtm_median  mtm_mean  n_traded  traded_hold_min  traded_net_over_notional
+quintile                                                                                                                         
+1         3446    0.3485    0.5563     0.6904     2379    117.0000  168.4409      1187         299.8627                    0.0017
+2         3700    0.3381    0.5330     0.6686     2474    118.0000  169.7090       806         305.2320                    0.0012
+3         3081    0.3924    0.5949     0.7027     2165     98.0000  149.4596      1506         275.6042                    0.0011
+4         3933    0.3740    0.5660     0.7005     2755    105.0000  162.1071      1361         286.4166                    0.0012
+5         3539    0.4335    0.6264     0.7344     2599     87.0000  141.9600      1735         247.1009                    0.0019
+```
+#### Q2 (q=0.005): speed by corrected p_5h quintile, fee=taker (mtm = minutes_to_mu among those reaching within 10 h; traded_* = traded picks only, subset set by the account's capacity)
+```
+             n  reach_2h  reach_5h  reach_10h  n_reach  mtm_median  mtm_mean  n_traded  traded_hold_min  traded_net_over_notional
+quintile                                                                                                                         
+1         3446    0.3485    0.5563     0.6904     2379    117.0000  168.4409      1181         299.6892                    0.0009
+2         3700    0.3381    0.5330     0.6686     2474    118.0000  169.7090       796         305.0063                    0.0005
+3         3081    0.3924    0.5949     0.7027     2165     98.0000  149.4596      1513         275.2075                    0.0006
+4         3933    0.3740    0.5660     0.7005     2755    105.0000  162.1071      1372         286.9716                    0.0005
+5         3539    0.4335    0.6264     0.7344     2599     87.0000  141.9600      1725         250.4377                    0.0012
+```
+
+#### Q3 (q=0.005): inside each corrected-p_10h quintile, split by corrected p_2h vs the median of that quintile's own p_2h (above = strictly greater), fee=maker; traded_* = traded picks only, subset set by the account's capacity
+```
+                          median_p     n  reach_2h  reach_5h  reach_10h  n_reach  mtm_median  mtm_mean  n_traded  traded_hold_min  traded_net_over_notional
+p10_quintile split                                                                                                                                         
+1            p_2h > med     0.3289  1564    0.3683    0.5767     0.7014     1097    111.0000  161.4184       621         303.4412                    0.0010
+             p_2h <= med    0.3289  1956    0.3522    0.5588     0.6907     1351    114.0000  166.3612       714         296.8095                    0.0013
+2            p_2h > med     0.3494  1589    0.4003    0.6086     0.7074     1124     96.0000  144.9786       665         266.3398                    0.0014
+             p_2h <= med    0.3494  2277    0.3259    0.5222     0.6662     1517    123.0000  174.6559       413         306.7240                    0.0012
+3            p_2h > med     0.3767  2150    0.3367    0.5349     0.6800     1462    122.0000  174.4398       529         296.1796                    0.0015
+             p_2h <= med    0.3767  2178    0.3421    0.5455     0.6708     1461    116.0000  166.6619       825         300.0642                    0.0013
+4            p_2h > med     0.3799  1129    0.4269    0.6138     0.7272      821     85.0000  143.4007       589         276.6452                    0.0010
+             p_2h <= med    0.3799  1430    0.4196    0.5916     0.7196     1029     94.0000  149.2828       544         262.5055                    0.0019
+5            p_2h > med     0.4236  1628    0.4386    0.6314     0.7365     1199     85.0000  140.1943       789         250.8847                    0.0018
+             p_2h <= med    0.4236  1798    0.4216    0.6168     0.7291     1311     94.0000  146.4683       906         246.6534                    0.0020
+```
+#### Q3 (q=0.005): inside each corrected-p_10h quintile, split by corrected p_2h vs the median of that quintile's own p_2h (above = strictly greater), fee=taker; traded_* = traded picks only, subset set by the account's capacity
+```
+                          median_p     n  reach_2h  reach_5h  reach_10h  n_reach  mtm_median  mtm_mean  n_traded  traded_hold_min  traded_net_over_notional
+p10_quintile split                                                                                                                                         
+1            p_2h > med     0.3289  1564    0.3683    0.5767     0.7014     1097    111.0000  161.4184       628         302.6369                    0.0007
+             p_2h <= med    0.3289  1956    0.3522    0.5588     0.6907     1351    114.0000  166.3612       705         295.9035                    0.0007
+2            p_2h > med     0.3494  1589    0.4003    0.6086     0.7074     1124     96.0000  144.9786       668         266.9222                    0.0006
+             p_2h <= med    0.3494  2277    0.3259    0.5222     0.6662     1517    123.0000  174.6559       407         310.0614                    0.0002
+3            p_2h > med     0.3767  2150    0.3367    0.5349     0.6800     1462    122.0000  174.4398       539         295.8590                    0.0007
+             p_2h <= med    0.3767  2178    0.3421    0.5455     0.6708     1461    116.0000  166.6619       820         296.1476                    0.0008
+4            p_2h > med     0.3799  1129    0.4269    0.6138     0.7272      821     85.0000  143.4007       588         280.3810                    0.0002
+             p_2h <= med    0.3799  1430    0.4196    0.5916     0.7196     1029     94.0000  149.2828       546         263.6648                    0.0009
+5            p_2h > med     0.4236  1628    0.4386    0.6314     0.7365     1199     85.0000  140.1943       782         256.6228                    0.0011
+             p_2h <= med    0.4236  1798    0.4216    0.6168     0.7291     1311     94.0000  146.4683       904         247.6294                    0.0014
+```
+#### Q3 (q=0.005): inside each corrected-p_10h quintile, split by corrected p_5h vs the median of that quintile's own p_5h (above = strictly greater), fee=maker; traded_* = traded picks only, subset set by the account's capacity
+```
+                          median_p     n  reach_2h  reach_5h  reach_10h  n_reach  mtm_median  mtm_mean  n_traded  traded_hold_min  traded_net_over_notional
+p10_quintile split                                                                                                                                         
+1            p_5h > med     0.5265  1181    0.3531    0.5605     0.6799      803    111.0000  161.6824       575         314.1600                    0.0002
+             p_5h <= med    0.5265  2339    0.3625    0.5699     0.7033     1645    113.0000  165.3489       760         289.1013                    0.0019
+2            p_5h > med     0.5559  1577    0.4020    0.6088     0.7077     1116     96.0000  144.9122       670         266.1284                    0.0015
+             p_5h <= med    0.5559  2289    0.3250    0.5225     0.6662     1525    123.0000  174.5489       408         307.5662                    0.0011
+3            p_5h > med     0.5684  2085    0.3381    0.5362     0.6820     1422    122.0000  174.3319       498         296.0863                    0.0015
+             p_5h <= med    0.5684  2243    0.3406    0.5439     0.6692     1501    116.0000  166.9714       856         299.9778                    0.0013
+4            p_5h > med     0.5863  1234    0.4271    0.6232     0.7407      914     91.0000  144.0547       483         255.7950                    0.0016
+             p_5h <= med    0.5863  1325    0.4189    0.5811     0.7064      936     92.0000  149.2286       650         280.3046                    0.0013
+5            p_5h > med     0.6358  1450    0.4614    0.6559     0.7538     1093     82.0000  136.8637       737         227.5834                    0.0022
+             p_5h <= med    0.6358  1976    0.4064    0.6002     0.7171     1417     96.0000  148.5681       958         264.8090                    0.0017
+```
+#### Q3 (q=0.005): inside each corrected-p_10h quintile, split by corrected p_5h vs the median of that quintile's own p_5h (above = strictly greater), fee=taker; traded_* = traded picks only, subset set by the account's capacity
+```
+                          median_p     n  reach_2h  reach_5h  reach_10h  n_reach  mtm_median  mtm_mean  n_traded  traded_hold_min  traded_net_over_notional
+p10_quintile split                                                                                                                                         
+1            p_5h > med     0.5265  1181    0.3531    0.5605     0.6799      803    111.0000  161.6824       579         311.2073                    0.0001
+             p_5h <= med    0.5265  2339    0.3625    0.5699     0.7033     1645    113.0000  165.3489       754         289.7599                    0.0012
+2            p_5h > med     0.5559  1577    0.4020    0.6088     0.7077     1116     96.0000  144.9122       673         266.7073                    0.0007
+             p_5h <= med    0.5559  2289    0.3250    0.5225     0.6662     1525    123.0000  174.5489       402         310.9577                    0.0000
+3            p_5h > med     0.5684  2085    0.3381    0.5362     0.6820     1422    122.0000  174.3319       508         295.1988                    0.0006
+             p_5h <= med    0.5684  2243    0.3406    0.5439     0.6692     1501    116.0000  166.9714       851         296.5311                    0.0008
+4            p_5h > med     0.5863  1234    0.4271    0.6232     0.7407      914     91.0000  144.0547       482         255.4772                    0.0011
+             p_5h <= med    0.5863  1325    0.4189    0.5811     0.7064      936     92.0000  149.2286       652         284.7929                    0.0002
+5            p_5h > med     0.6358  1450    0.4614    0.6559     0.7538     1093     82.0000  136.8637       732         231.8634                    0.0015
+             p_5h <= med    0.6358  1976    0.4064    0.6002     0.7171     1417     96.0000  148.5681       954         267.0985                    0.0010
+```
+
+#### Q4 (q=0.005, fee=maker): traded picks still open at 2 h (holding > 120 min): 3,921 of 6,595 = 0.5945 (traded picks only, subset set by the account's capacity)
+split by corrected p_2h quintile
+```
+          n_traded  share_open  open_n  open_exit_mu  open_hold_min  open_net_over_notional  gone_n  gone_net_over_notional
+quintile                                                                                                                   
+1             1227      0.6561     805        0.5478       429.7081                 -0.0008     422                  0.0063
+2              814      0.6192     504        0.4940       444.2341                 -0.0017     310                  0.0066
+3             1672      0.5945     994        0.5161       433.9648                 -0.0024     678                  0.0061
+4             1128      0.6197     699        0.5207       443.5508                 -0.0020     429                  0.0065
+5             1754      0.5239     919        0.5495       425.2709                 -0.0019     835                  0.0061
+```
+exit reasons of the still-open ones: {'mu': 2072, 'timeout': 1849}
+#### Q4 (q=0.005, fee=maker): traded picks still open at 5 h (holding > 300 min): 2,676 of 6,595 = 0.4058 (traded picks only, subset set by the account's capacity)
+split by corrected p_5h quintile
+```
+          n_traded  share_open  open_n  open_exit_mu  open_hold_min  open_net_over_notional  gone_n  gone_net_over_notional
+quintile                                                                                                                   
+1             1187      0.4457     529        0.3384       540.4537                 -0.0041     658                  0.0063
+2              806      0.4578     369        0.2846       550.3821                 -0.0057     437                  0.0071
+3             1506      0.3904     588        0.2823       551.3673                 -0.0064     918                  0.0059
+4             1361      0.4298     585        0.3179       542.6991                 -0.0056     776                  0.0063
+5             1735      0.3487     605        0.3157       546.0380                 -0.0063    1130                  0.0063
+```
+exit reasons of the still-open ones: {'timeout': 1849, 'mu': 827}
+#### Q4 (q=0.005, fee=taker): traded picks still open at 2 h (holding > 120 min): 3,909 of 6,587 = 0.5934 (traded picks only, subset set by the account's capacity)
+split by corrected p_2h quintile
+```
+          n_traded  share_open  open_n  open_exit_mu  open_hold_min  open_net_over_notional  gone_n  gone_net_over_notional
+quintile                                                                                                                   
+1             1226      0.6550     803        0.5479       429.9614                 -0.0015     423                  0.0056
+2              809      0.6156     498        0.4880       446.3072                 -0.0029     311                  0.0058
+3             1667      0.5909     985        0.5107       434.2924                 -0.0028     682                  0.0054
+4             1144      0.6189     708        0.5127       445.4534                 -0.0031     436                  0.0060
+5             1741      0.5256     915        0.5377       430.0273                 -0.0026     826                  0.0056
+```
+exit reasons of the still-open ones: {'mu': 2041, 'timeout': 1868}
+#### Q4 (q=0.005, fee=taker): traded picks still open at 5 h (holding > 300 min): 2,679 of 6,587 = 0.4067 (traded picks only, subset set by the account's capacity)
+split by corrected p_5h quintile
+```
+          n_traded  share_open  open_n  open_exit_mu  open_hold_min  open_net_over_notional  gone_n  gone_net_over_notional
+quintile                                                                                                                   
+1             1181      0.4437     524        0.3359       541.1412                 -0.0051     657                  0.0057
+2              796      0.4573     364        0.2885       549.8736                 -0.0064     432                  0.0062
+3             1513      0.3900     590        0.2729       552.9000                 -0.0069     923                  0.0053
+4             1372      0.4300     590        0.3085       545.2898                 -0.0066     782                  0.0058
+5             1725      0.3542     611        0.3061       548.0180                 -0.0070    1114                  0.0058
+```
+exit reasons of the still-open ones: {'timeout': 1868, 'mu': 811}
+
+### q = 0.001: 3,638 picks; distinct corrected levels p_2h/p_5h/p_10h = 79/68/50
+
+#### Q1 (q=0.001): does each horizon rank its own outcome? (quintiles of corrected p_h; actual reach_h)
+h = 2 h
+```
+            n  actual_reach  mean_corrected_p
+quintile                                     
+1         674        0.4125            0.3858
+2         661        0.4523            0.4119
+3         884        0.4548            0.4242
+4         713        0.4250            0.4453
+5         706        0.4561            0.5030
+```
+h = 5 h
+```
+            n  actual_reach  mean_corrected_p
+quintile                                     
+1         714        0.6190            0.5915
+2         750        0.6227            0.6207
+3         754        0.5836            0.6358
+4         722        0.6510            0.6533
+5         698        0.6691            0.7214
+```
+h = 10 h
+```
+             n  actual_reach  mean_corrected_p
+quintile                                      
+1          675        0.7378            0.7103
+2          760        0.7289            0.7332
+3         1022        0.7202            0.7675
+4          651        0.7542            0.7743
+5          530        0.7679            0.8524
+```
+
+#### Q2 (q=0.001): speed by corrected p_2h quintile, fee=maker (mtm = minutes_to_mu among those reaching within 10 h; traded_* = traded picks only, subset set by the account's capacity)
+```
+            n  reach_2h  reach_5h  reach_10h  n_reach  mtm_median  mtm_mean  n_traded  traded_hold_min  traded_net_over_notional
+quintile                                                                                                                        
+1         674    0.4125    0.5846     0.7151      482     91.5000  151.1867       506         281.6838                    0.0008
+2         661    0.4523    0.6369     0.7443      492     84.5000  133.7805       502         244.9661                    0.0023
+3         884    0.4548    0.6425     0.7443      658     79.0000  139.2143       658         254.5456                    0.0013
+4         713    0.4250    0.6171     0.7055      503     87.0000  133.0278       472         262.4555                    0.0016
+5         706    0.4561    0.6558     0.7805      551     84.0000  146.6407       445         241.2494                    0.0037
+```
+#### Q2 (q=0.001): speed by corrected p_2h quintile, fee=taker (mtm = minutes_to_mu among those reaching within 10 h; traded_* = traded picks only, subset set by the account's capacity)
+```
+            n  reach_2h  reach_5h  reach_10h  n_reach  mtm_median  mtm_mean  n_traded  traded_hold_min  traded_net_over_notional
+quintile                                                                                                                        
+1         674    0.4125    0.5846     0.7151      482     91.5000  151.1867       501         280.8922                    0.0002
+2         661    0.4523    0.6369     0.7443      492     84.5000  133.7805       500         244.7840                    0.0017
+3         884    0.4548    0.6425     0.7443      658     79.0000  139.2143       665         254.7774                    0.0006
+4         713    0.4250    0.6171     0.7055      503     87.0000  133.0278       471         266.7686                    0.0008
+5         706    0.4561    0.6558     0.7805      551     84.0000  146.6407       436         238.5252                    0.0032
+```
+#### Q2 (q=0.001): speed by corrected p_5h quintile, fee=maker (mtm = minutes_to_mu among those reaching within 10 h; traded_* = traded picks only, subset set by the account's capacity)
+```
+            n  reach_2h  reach_5h  reach_10h  n_reach  mtm_median  mtm_mean  n_traded  traded_hold_min  traded_net_over_notional
+quintile                                                                                                                        
+1         714    0.4426    0.6190     0.7353      525     79.0000  140.8248       533         269.4015                    0.0010
+2         750    0.4627    0.6227     0.7413      556     75.5000  136.3399       626         244.7396                    0.0020
+3         754    0.3687    0.5836     0.7016      529    109.0000  154.8204       437         286.0137                    0.0019
+4         722    0.4654    0.6510     0.7355      531     82.0000  131.1469       509         254.6523                    0.0012
+5         698    0.4685    0.6691     0.7808      545     81.0000  140.7890       478         236.0397                    0.0033
+```
+#### Q2 (q=0.001): speed by corrected p_5h quintile, fee=taker (mtm = minutes_to_mu among those reaching within 10 h; traded_* = traded picks only, subset set by the account's capacity)
+```
+            n  reach_2h  reach_5h  reach_10h  n_reach  mtm_median  mtm_mean  n_traded  traded_hold_min  traded_net_over_notional
+quintile                                                                                                                        
+1         714    0.4426    0.6190     0.7353      525     79.0000  140.8248       533         268.5779                    0.0005
+2         750    0.4627    0.6227     0.7413      556     75.5000  136.3399       625         244.5376                    0.0014
+3         754    0.3687    0.5836     0.7016      529    109.0000  154.8204       439         290.6173                    0.0011
+4         722    0.4654    0.6510     0.7355      531     82.0000  131.1469       509         253.8743                    0.0005
+5         698    0.4685    0.6691     0.7808      545     81.0000  140.7890       467         234.2612                    0.0027
+```
+
+#### Q3 (q=0.001): inside each corrected-p_10h quintile, split by corrected p_2h vs the median of that quintile's own p_2h (above = strictly greater), fee=maker; traded_* = traded picks only, subset set by the account's capacity
+```
+                          median_p    n  reach_2h  reach_5h  reach_10h  n_reach  mtm_median  mtm_mean  n_traded  traded_hold_min  traded_net_over_notional
+p10_quintile split                                                                                                                                        
+1            p_2h > med     0.3834  244    0.4467    0.6475     0.7582      185     83.0000  139.8865       190         251.9947                    0.0018
+             p_2h <= med    0.3834  431    0.4339    0.6009     0.7262      313     80.0000  144.5974       311         278.8489                    0.0006
+2            p_2h > med     0.4217  336    0.4464    0.6101     0.7143      240     91.5000  137.6458       275         258.7091                    0.0010
+             p_2h <= med    0.4217  424    0.4717    0.6274     0.7406      314     70.5000  128.0892       363         242.8347                    0.0022
+3            p_2h > med     0.4474  281    0.5018    0.6940     0.8114      228     75.0000  137.1667       200         218.8300                    0.0042
+             p_2h <= med    0.4474  741    0.3752    0.5830     0.6856      508    101.5000  149.6358       448         282.1540                    0.0016
+4            p_2h > med     0.4228   14    0.6429    0.7857     0.9286       13     56.0000  122.6154        14         156.7143                    0.0036
+             p_2h <= med    0.4228  637    0.4568    0.6499     0.7504      478     79.0000  138.6862       449         258.8508                    0.0014
+5            p_2h > med     0.4727  192    0.5052    0.6875     0.7969      153     79.0000  129.0654       108         202.9259                    0.0040
+             p_2h <= med    0.4727  338    0.4201    0.6331     0.7515      254     92.0000  152.3307       225         265.9156                    0.0024
+```
+#### Q3 (q=0.001): inside each corrected-p_10h quintile, split by corrected p_2h vs the median of that quintile's own p_2h (above = strictly greater), fee=taker; traded_* = traded picks only, subset set by the account's capacity
+```
+                          median_p    n  reach_2h  reach_5h  reach_10h  n_reach  mtm_median  mtm_mean  n_traded  traded_hold_min  traded_net_over_notional
+p10_quintile split                                                                                                                                        
+1            p_2h > med     0.3834  244    0.4467    0.6475     0.7582      185     83.0000  139.8865       189         250.2011                    0.0014
+             p_2h <= med    0.3834  431    0.4339    0.6009     0.7262      313     80.0000  144.5974       310         280.0516                    0.0000
+2            p_2h > med     0.4217  336    0.4464    0.6101     0.7143      240     91.5000  137.6458       276         258.8877                    0.0004
+             p_2h <= med    0.4217  424    0.4717    0.6274     0.7406      314     70.5000  128.0892       360         241.2389                    0.0016
+3            p_2h > med     0.4474  281    0.5018    0.6940     0.8114      228     75.0000  137.1667       200         221.0950                    0.0036
+             p_2h <= med    0.4474  741    0.3752    0.5830     0.6856      508    101.5000  149.6358       445         286.6989                    0.0007
+4            p_2h > med     0.4228   14    0.6429    0.7857     0.9286       13     56.0000  122.6154        14         156.7143                    0.0030
+             p_2h <= med    0.4228  637    0.4568    0.6499     0.7504      478     79.0000  138.6862       454         258.2643                    0.0007
+5            p_2h > med     0.4727  192    0.5052    0.6875     0.7969      153     79.0000  129.0654       107         202.7850                    0.0035
+             p_2h <= med    0.4727  338    0.4201    0.6331     0.7515      254     92.0000  152.3307       218         260.7523                    0.0017
+```
+#### Q3 (q=0.001): inside each corrected-p_10h quintile, split by corrected p_5h vs the median of that quintile's own p_5h (above = strictly greater), fee=maker; traded_* = traded picks only, subset set by the account's capacity
+```
+                          median_p    n  reach_2h  reach_5h  reach_10h  n_reach  mtm_median  mtm_mean  n_traded  traded_hold_min  traded_net_over_notional
+p10_quintile split                                                                                                                                        
+1            p_5h > med     0.5844  296    0.4899    0.6757     0.7838      232     71.0000  129.7500       217         229.4240                    0.0028
+             p_5h <= med    0.5844  379    0.3984    0.5726     0.7018      266     96.0000  154.2707       284         298.6479                   -0.0003
+2            p_5h > med     0.6196  322    0.4876    0.6211     0.7422      239     73.0000  133.8033       255         234.5333                    0.0028
+             p_5h <= med    0.6196  438    0.4406    0.6187     0.7192      315     77.0000  131.0349       383         259.7598                    0.0009
+3            p_5h > med     0.6358  275    0.5236    0.7018     0.7782      214     74.5000  123.1682       217         212.4839                    0.0035
+             p_5h <= med    0.6358  747    0.3681    0.5810     0.6988      522    108.5000  155.0402       431         287.8469                    0.0018
+4            p_5h > med     0.6534   14    0.6429    0.7857     0.9286       13     56.0000  122.6154        14         156.7143                    0.0036
+             p_5h <= med    0.6534  637    0.4568    0.6499     0.7504      478     79.0000  138.6862       449         258.8508                    0.0014
+5            p_5h > med     0.7590   12    0.4167    0.4167     0.4167        5     64.0000   61.6000         5         381.8000                    0.0030
+             p_5h <= med    0.7590  518    0.4517    0.6583     0.7761      402     84.5000  144.6045       328         243.4085                    0.0029
+```
+#### Q3 (q=0.001): inside each corrected-p_10h quintile, split by corrected p_5h vs the median of that quintile's own p_5h (above = strictly greater), fee=taker; traded_* = traded picks only, subset set by the account's capacity
+```
+                          median_p    n  reach_2h  reach_5h  reach_10h  n_reach  mtm_median  mtm_mean  n_traded  traded_hold_min  traded_net_over_notional
+p10_quintile split                                                                                                                                        
+1            p_5h > med     0.5844  296    0.4899    0.6757     0.7838      232     71.0000  129.7500       217         230.4101                    0.0022
+             p_5h <= med    0.5844  379    0.3984    0.5726     0.7018      266     96.0000  154.2707       282         298.2447                   -0.0007
+2            p_5h > med     0.6196  322    0.4876    0.6211     0.7422      239     73.0000  133.8033       258         234.9961                    0.0022
+             p_5h <= med    0.6196  438    0.4406    0.6187     0.7192      315     77.0000  131.0349       378         258.3862                    0.0003
+3            p_5h > med     0.6358  275    0.5236    0.7018     0.7782      214     74.5000  123.1682       213         212.1502                    0.0030
+             p_5h <= med    0.6358  747    0.3681    0.5810     0.6988      522    108.5000  155.0402       432         293.0833                    0.0010
+4            p_5h > med     0.6534   14    0.6429    0.7857     0.9286       13     56.0000  122.6154        14         156.7143                    0.0030
+             p_5h <= med    0.6534  637    0.4568    0.6499     0.7504      478     79.0000  138.6862       454         258.2643                    0.0007
+5            p_5h > med     0.7590   12    0.4167    0.4167     0.4167        5     64.0000   61.6000         5         381.8000                    0.0022
+             p_5h <= med    0.7590  518    0.4517    0.6583     0.7761      402     84.5000  144.6045       320         239.4781                    0.0023
+```
+
+#### Q4 (q=0.001, fee=maker): traded picks still open at 2 h (holding > 120 min): 1,426 of 2,583 = 0.5521 (traded picks only, subset set by the account's capacity)
+split by corrected p_2h quintile
+```
+          n_traded  share_open  open_n  open_exit_mu  open_hold_min  open_net_over_notional  gone_n  gone_net_over_notional
+quintile                                                                                                                   
+1              506      0.6008     304        0.5197       438.0033                 -0.0028     202                  0.0061
+2              502      0.5339     268        0.5485       418.9776                 -0.0018     234                  0.0069
+3              658      0.5304     349        0.5272       435.8109                 -0.0027     309                  0.0059
+4              472      0.5614     265        0.4981       431.7245                 -0.0023     207                  0.0067
+5              445      0.5393     240        0.6083       409.9250                  0.0007     205                  0.0071
+```
+exit reasons of the still-open ones: {'mu': 767, 'timeout': 659}
+#### Q4 (q=0.001, fee=maker): traded picks still open at 5 h (holding > 300 min): 943 of 2,583 = 0.3651 (traded picks only, subset set by the account's capacity)
+split by corrected p_5h quintile
+```
+          n_traded  share_open  open_n  open_exit_mu  open_hold_min  open_net_over_notional  gone_n  gone_net_over_notional
+quintile                                                                                                                   
+1              533      0.3846     205        0.2927       547.2000                 -0.0075     328                  0.0063
+2              626      0.3514     220        0.3136       543.9455                 -0.0055     406                  0.0060
+3              437      0.4256     186        0.3118       540.0376                 -0.0064     251                  0.0080
+4              509      0.3517     179        0.2626       562.7542                 -0.0071     330                  0.0058
+5              478      0.3201     153        0.3268       545.9869                 -0.0050     325                  0.0072
+```
+exit reasons of the still-open ones: {'timeout': 659, 'mu': 284}
+#### Q4 (q=0.001, fee=taker): traded picks still open at 2 h (holding > 120 min): 1,416 of 2,573 = 0.5503 (traded picks only, subset set by the account's capacity)
+split by corrected p_2h quintile
+```
+          n_traded  share_open  open_n  open_exit_mu  open_hold_min  open_net_over_notional  gone_n  gone_net_over_notional
+quintile                                                                                                                   
+1              501      0.5988     300        0.5167       438.0533                 -0.0033     201                  0.0055
+2              500      0.5320     266        0.5451       419.3271                 -0.0023     234                  0.0062
+3              665      0.5293     352        0.5256       437.1790                 -0.0036     313                  0.0053
+4              471      0.5690     268        0.4963       434.3396                 -0.0031     203                  0.0061
+5              436      0.5275     230        0.6043       412.0739                 -0.0000     206                  0.0067
+```
+exit reasons of the still-open ones: {'mu': 757, 'timeout': 659}
+#### Q4 (q=0.001, fee=taker): traded picks still open at 5 h (holding > 300 min): 942 of 2,573 = 0.3661 (traded picks only, subset set by the account's capacity)
+split by corrected p_5h quintile
+```
+          n_traded  share_open  open_n  open_exit_mu  open_hold_min  open_net_over_notional  gone_n  gone_net_over_notional
+quintile                                                                                                                   
+1              533      0.3827     204        0.2941       547.7353                 -0.0079     329                  0.0057
+2              625      0.3520     220        0.3182       541.8364                 -0.0060     405                  0.0054
+3              439      0.4328     190        0.3000       543.7316                 -0.0073     249                  0.0075
+4              509      0.3517     179        0.2626       562.7542                 -0.0082     330                  0.0052
+5              467      0.3191     149        0.3289       545.5101                 -0.0059     318                  0.0067
+```
+exit reasons of the still-open ones: {'timeout': 659, 'mu': 283}
+
