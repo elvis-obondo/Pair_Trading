@@ -40,7 +40,7 @@ WHAT TO CHECK, in order:
   1,000 events/group, independent 2,000 rows/group, re-walk 2,000 labels; any shortfall must be an
   explicit user waiver in NUMBERS [HL-WAIVERS], never silent.
 
-STATE AS OF 2026-11-08 (refreshed by the planner).
+STATE AS OF 2026-11-12 (refreshed by the planner from the checker's own handoff).
 - HL-MASTER1 v1 FROZEN (s3://pair-trading-hl-289869684922/master/versions/v1/). B1-B4 PASS (955469b).
 - B5 CLOSED: verify-once (keyed to MANIFEST.json sha, re-checked every call), threaded/chunked
   load_features, fixed coin codes from coins.csv, input list 1,093 -> 1,091 (a_/b_coin_code dropped as
@@ -61,7 +61,20 @@ STATE AS OF 2026-11-08 (refreshed by the planner).
 - Repo cleanup PASS (3fe05f5): attic/ (OKX data) and the freqtrade scaffold deleted. user_data/data and
   user_data/normalized are LIVE Hyperliquid data and are never deleted. Ruling: cited items are listed with a
   cited_by column, not excluded.
-- NEXT: HL-PROFIT1 (docs/prompts/HL_PROFIT1_LIVE_PICKS.md), profit on the live picks. User-approved despite the S1 FAIL.
+- HL-PROFIT1 DONE, committed through 7e4d7d1; Word fix 04fd91b; horizons 98c74c9. Task D (flat 10x) dropped; its
+  files deleted on the user's yes.
+- HL-VAULT1 (docs/prompts/HL_VAULT1_RUN.md), vault OPENED 2026-11-12. PASSED: 2b pre-vault model (c30bbfa6 /
+  8af9ee74; lam 14187.2, l1 0.5, n 5,378,429, KKT 2.23e-08, CD cap hit 7/7, reload bit-identical); step 3 scoring
+  (predictions ede424aa, 1,280,088 events; 3 unseen coins CASHCAT/PONS/USELESS in 24,094 events); step 4 picks
+  (stage A b8aa5faf, usable 15b4f56c; one re-index bug fixed, stage-A sha unchanged; vault label_gap 0 for all,
+  verified by diagnostics/vault_labelgap_check); step 5 setup (PROFIT1_VAULT=1, picks asserted by sha, cleaned
+  series in cleaned_vault/).
+  2a (fold 0 refit-only reproduction) FAILED its 6.557e-05 tolerance: max |dp| p_2h 0.001748, p_5h 0.002003,
+  p_10h 0.001832 (diagnostics/vault_2a_maxdiff.py); ACCEPTED on the user's explicit yes to those figures, recorded
+  as a known gap in the model JSON.
+- PENDING: post-run review of vault_open10 and vault_open20 (cross-check, move[0], the cleaned_vault cross-run sha
+  gate, manifest 578/579); then the step-6 generator, NUMBERS sections, the side-by-side table, and vault
+  lift/calibration at top 1%.
 
 STANDING RULINGS TO HOLD THE BUILDER TO
 - Existing code changes: outputs BITWISE identical before/after (fold ids, hazard rows, feature matrix
@@ -118,6 +131,21 @@ CHECKS (still apply)
 - Circuit breakers: shell `timeout`, not signal.alarm; flock on every launcher; confirm one process.
 - Categorical encoding (ticker) fitted on train, applied to val/test with an "unseen" level.
   load_features factorises per call: fine for B4, NOT for scoring.
+- AWS payloads (2026-11 lessons): from a clean extract, a preflight asserts every file each step OPENS (data
+  files like coins.csv, not just imports), every s3:// input and the import closure (vault_preflight.py). Launch
+  flags (AMI, IAM profile, SG, subnet, shutdown-behavior terminate) come from a recorded launch file, never a fresh
+  lookup. OS guard, apt/pip retry loops, early-failure log upload with a console-output fallback. The watcher
+  retries failed describe calls (5x) and saves the console output on any terminal state.
+- Tolerances are read at runtime from source files, never quoted in a docstring. KKT/rel_change do NOT bound
+  coefficient or prediction distance on a flat objective (lasso l1=1.0, capped inner CD); check l1_ratio before a
+  "strictly convex" premise. A failed gate is widened only on the user's explicit yes to the exact figures,
+  recorded as a known gap.
+- Cost/time estimates put to the user are recomputed whenever the plan changes.
+- Rebuilt shared data (cleaned prices) is gated by sha against a verified copy or an identical rebuild (the lev10
+  in-memory PUMP/PROMPT log_close=0 corruption, cause unexplained, caught by move[0]).
+- Binary deliverables (Word): validate the format (OOXML validator), not just the extracted text.
+- Generators append to NUMBERS.md under a tagged marker with a guard and byte-identical excerpt/append, nothing
+  before the marker; prose counts (monotonicity etc.) are script-printed; ranges quoted per run tag.
 
 
 USER PREFERENCES: plain PM language, lead with the answer, short sentences, no jargon, stats out of the
