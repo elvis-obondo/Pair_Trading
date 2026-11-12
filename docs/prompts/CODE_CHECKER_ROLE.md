@@ -72,8 +72,10 @@ STATE AS OF 2026-11-12 (refreshed by the planner from the checker's own handoff)
   2a (fold 0 refit-only reproduction) FAILED its 6.557e-05 tolerance: max |dp| p_2h 0.001748, p_5h 0.002003,
   p_10h 0.001832 (diagnostics/vault_2a_maxdiff.py); ACCEPTED on the user's explicit yes to those figures, recorded
   as a known gap in the model JSON.
-- PENDING: post-run review of vault_open10 and vault_open20 (cross-check, move[0], the cleaned_vault cross-run sha
-  gate, manifest 578/579); then the step-6 generator, NUMBERS sections, the side-by-side table, and vault
+- Step 5 PASSED 2026-11-12: vault_open10 + open20, 0/13,947 mismatches, move[0] 7.06e-14, 0 liquidations in 48 runs,
+  cleaned_vault 354/354 identical across runs, test-month outputs 578/579. Commit pending the staged-list check (gate
+  outputs saved as logs; picks parquets backed up to S3).
+- PENDING: the step-6 generator, NUMBERS sections, the side-by-side table, and vault
   lift/calibration at top 1%.
 
 STANDING RULINGS TO HOLD THE BUILDER TO

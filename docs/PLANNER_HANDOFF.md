@@ -87,7 +87,8 @@ Full history: the decisions log in docs/HYPERLIQUID_HANDOFF.md. Numbers: researc
   0.8779), picks 13,947 / 7,188 / 1,480; p_cal isotonic on folds 0-7, guard <= (planner ruling = S1-H literally).
 - Step 5: vault_open10 done (0/13,947 cross-check mismatches, 0 liquidations); PROVISIONAL, not checker-reviewed:
   q1% no stop maker $2,068, taker $1,264; q0.5% none $1,777/$1,269; q0.1% none $1,230/$1,083; taker+stops lose.
-  vault_open20 was running 2026-11-12. NEXT: checker post-run review of both, step 6 report (side-by-side with the
+  vault_open20: q-range $265-$3,357. Step 5 checker PASS 2026-11-12 (0 mismatches, 0 liquidations in 48 runs). NEXT:
+  commit after the staged check, step 6 report (side-by-side with the
   test months, vault calibration at 2/5/10 h), commit. See BUILDER_HANDOFF.md for files and what is uncommitted.
 
 ### Parked (user's order: after the vault, analysis only)
