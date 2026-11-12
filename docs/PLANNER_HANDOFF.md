@@ -56,80 +56,50 @@ handoff covers the research history and the reasons behind each decision.
 - **Thought exercises stay thought exercises.** When the user says so, answer; don't turn the
   ideas into plan items or a backlog (2026-10-27).
 
-## 3. Where things stand (updated 2026-11-07)
+## 3. Where things stand (updated 2026-11-12)
 
 Full history: the decisions log in docs/HYPERLIQUID_HANDOFF.md. Numbers: research/dislocation_model/NUMBERS.md.
 
-### HL-MODEL1 results so far (logistic, S1)
-- **Gate FAIL**: pooled top-10% lift 0.0394 < 0.05 (333640c). The vault is untouched.
-- **S1-F** (41a5f2f): a live cut-off (Rule A = previous block's quantile) keeps most of the edge. Top-1% lift 0.078
-  vs 0.083 in hindsight.
-- **S1-G** (9465498): live top 1% / 0.5% / 0.1%: median 110 / 50 / 8 picks a day, lift 0.078 / 0.090 / 0.109.
-  Overconfident at the top (top 1%: 82.9% predicted, 67.7% actual). Under-predicted at 2 h, over at 10 h. At the same
-  predicted chance, picks far from mu reach less. vol_48 = the spread's own recent movement in sigma (NOT market
-  activity). User report: ~/Downloads/HL-MODEL1_top_picks_deep_dive.docx (checker PASS).
-- **S1-H recalibration** (brief docs/prompts/HL_MODEL1_S1_RECALIBRATION.md): the run is clean. Isotonic brings the
-  top-1% picks to 67.9% predicted against 67.7% actual at 10 h; Platt doesn't help. PASSED (3826fb3): isotonic 67.9% vs 67.7%
-  actual; Platt 78.0%; the raw 1% cut-off 0.73-0.84 is 0.62-0.67 corrected. Use isotonic for profit work.
+### Model (HL-MODEL1, S1 penalised logistic, hazard framing)
+- Gate FAIL (pooled top-10% lift 0.0394 < 0.05). Live Rule A picks (top q% of p_10h vs the previous block's
+  quantile) keep the edge: S1-F/S1-G. Isotonic recalibration per horizon (S1-H) fixes calibration: top 1% at 10 h
+  67.9% predicted vs 67.7% actual; also 2 h 34.2 vs 34.7, 5 h 54.2 vs 54.7 (NUMBERS [HL-MODEL1-S1-H]).
+- **Pre-vault model saved COMPLETE** (HL-VAULT1 step 2b): fit on all 5,378,429 search events, fold 7's lam 14187.2,
+  l1_ratio 0.5; KKT 2.2e-08; 192 non-zero weights; S3 s1_vault/logs/outputs/ and research/model/logs/s1/vault_pull2/.
+  Known gap (user-accepted): the fold 0 reproduction (2a) missed its strict tolerance; max |dp| 0.001748 / 0.002003
+  / 0.001832 (2/5/10 h), start-point dependence. This model is what paper trading would start from (a second refit
+  including the vault only if the user likes the vault result).
 
-### Decided 2026-11-07 (user)
-- **Profit work starts on the logistic model's live picks** (Rule A, q = 1/0.5/0.1%, isotonic-corrected
-  probabilities). This lifts the "profit waits for a pass" rule for this scope. It runs in NEW sessions. **Brief written: docs/prompts/HL_PROFIT1_LIVE_PICKS.md** (P1 per-trade economics
-  per stop and fee; P2 EV from the calibrated p; gaps: funding, slippage, overlap, liquidation). Not started.
-- **Whole-repo cleanup DONE** (3fe05f5): OKX data, attic/ and the freqtrade scaffold are gone; user_data/data and
-  user_data/normalized are LIVE Hyperliquid data (kept). Local destructive deletes need the user's yes in the
-  builder's session.
-- **Every number is printed by a script** (CLAUDE.md). Write-ups are produced by generator scripts. The builder broke
-  this twice (S1-G G8 counts, S1-H prose).
+### HL-PROFIT1 backtest (test months 2025-12-21..2026-07-11, 203 days), committed, checker PASS
+- Engine research/model/s1_profit1.py: $1,000 cross margin, 5% margin/trade, leverage min(10, coin caps) (avg
+  3.4x; 85.7% of trades on 3x-capped pairs), max_open 10 (also 20), HL fees 0.045% taker / 0.015% maker per fill,
+  slippage 0 (user), funding on, $10 min order, stops 0.5/1/2/none. Prices = build2 d3/asm 1m trade prices (what v1
+  used), cleaned copy in S3 profit1_cleaned/.
+- Best: q1% no stop maker $5,034 (10 open, DD -9.8%), $16,936 (20 open, DD -17.5%). Every loser = taker + stop.
+  Fees ~58% of gross. |z|>=3 filter (in-sample) earns less. EV quintiles don't rank profit. Word report
+  ~/Downloads/HL-PROFIT1_backtest_24_runs.docx. Horizons analysis (98c74c9): high p_2h/p_5h = faster reversion and
+  higher win rate (q1%: 64.6% -> 71.7% by p_5h quintile) but flat profit/trade; trades still open at 5 h end ~-0.5%.
+- Flat 10x runs: DROPPED (user).
 
-### Decided 2026-11-08 (user)
-- **HL-PROFIT1 rewritten as a portfolio backtest** (docs/prompts/HL_PROFIT1_LIVE_PICKS.md): $1,000 cross-margin
-  account, 5% margin per trade, leverage min(10, coin A max, coin B max), max 10 open, no per-coin cap, equal size,
-  ties by highest p_cal, HL fees 0.045% taker / 0.015% maker per fill, funding + half impact spread, 24 runs
-  (q x stop x fee). No no-model baseline. All values in a config block. On HOLD: builder and checker paused;
-  not sent yet (user: don't interrupt the builder).
-- 2026-11-09: slippage = 0 for HL-PROFIT1 (user: small legs). First run charged the FULL impact spread (bug B14); pooled over 24 runs slip $22,217 vs fees $1,811 vs gross +$2,208.
-- The 0.099% round-trip fee in v1 net_* columns was the OKX trading result, not Hyperliquid (user).
+### HL-VAULT1 (brief docs/prompts/HL_VAULT1_RUN.md) -- IN PROGRESS, vault OPENED 2026-11-12
+- Vault = 2026-07-13..2026-10-13, 1,280,088 events. No pass/fail rule (user). Steps 1-3 done and checker-passed
+  (coverage; pre-vault model; scoring, sha ede424aa..). Step 4 picks: cut-offs from fold 7 (0.7295 / 0.7809 /
+  0.8779), picks 13,947 / 7,188 / 1,480; p_cal isotonic on folds 0-7, guard <= (planner ruling = S1-H literally).
+- Step 5: vault_open10 done (0/13,947 cross-check mismatches, 0 liquidations); PROVISIONAL, not checker-reviewed:
+  q1% no stop maker $2,068, taker $1,264; q0.5% none $1,777/$1,269; q0.1% none $1,230/$1,083; taker+stops lose.
+  vault_open20 was running 2026-11-12. NEXT: checker post-run review of both, step 6 report (side-by-side with the
+  test months, vault calibration at 2/5/10 h), commit. See BUILDER_HANDOFF.md for files and what is uncommitted.
 
-### HL-PROFIT1 result (2026-11-09, checker PASS; slippage 0, build2 d3/asm trade prices)
-- 18/24 runs above $1,000 over 2025-12-21..2026-07-11 (203 days). Best: q1% no stop maker $5,034; q1% no stop
-  taker $2,206; tight stops lose under taker. 0 liquidations. Fees = 58% of gross pooled. Book cap (10 open) is the
-  binding limit: q1% no stop skips 27,488 picks as book_full. Mean leverage used 3.4x (coin caps). EV quintiles do
-  NOT rank realised net. Full: research/dislocation_model/logs/s1_profit1_numbers_section.md.
-- Follow-ups (user, 2026-11-09), all checker PASS: open20 (fadf4d4) q1% no-stop maker $16,936, max DD -17.5%, min
-  liq-distance ratio ~2.0; Task B |z| x p_cal grid (0cf9579), descriptive, top p_cal and top |z| quintiles have the
-  highest mean return 6/6; Task C |z|>=3 filter (7e4d7d1, IN-SAMPLE) earns less than all picks (q1% no-stop maker
-  $2,242 at 10, $2,335 at 20; DD at 20 worse). Word report ~/Downloads/HL-PROFIT1_backtest_24_runs.docx (7694fa2).
-  HL-PROFIT1 task list closed. Next step is the user's call (vault / paper trading / sizing / real slippage).
-- Price source: v1 used build2 d3/asm trade-price 1m bars (not build1 mid_px); in S3 build2/d3/asm/futures/.
+### Parked (user's order: after the vault, analysis only)
+- Picks = Rule A AND high corrected p_5h ("safer" picks); a 5 h time-exit test; a maker-only fill model; real
+  slippage from the fills archive; sizing (max_open, margin); fee levers (maker orders, HYPE staking).
+- Paper trading needs: the final refit including the vault (user's yes), live feature build timing.
 
-### Decided 2026-11-09 (user), after HL-PROFIT1
-- **Flat-10x task D DROPPED.** 85.7% of base q1% trades are on 3x-capped pairs, 2.1% could use 10x. One run
-  (lev10_open10, hypothetical) finished, never reviewed or committed. Uncommitted leverage_mode code in s1_profit1.py
-  and numbers_gen, the lev10 logs/report and diagnostics/compare_config_lev10.py are to be reverted/removed by the
-  builder, with the user's own yes in its session (discarding uncommitted work and deleting untracked files).
-- **HL-VAULT1 approved** (brief docs/prompts/HL_VAULT1_RUN.md): open the vault once, NO pass/fail rule, settings
-  frozen first; fold 0 reproduction check, then the pre-vault refit with fold 7's settings saved COMPLETE (AWS);
-  base 24 configs at max_open 10 and 20, real caps, slippage 0. The paper-trading refit (vault included) only if
-  the user likes the result. vault_loader.py does not exist yet. Not started: builder/checker sessions were closed.
-- Fees are the user's main concern; levers: maker-only orders, HYPE staking discount, fewer bigger-edge trades.
-
-### Parked
-- **Before live/paper trading:** S1 saved only the weights (fold*_coefs.csv) and settings (fold*_done.json), NOT
-  the 20 step intercepts or the preprocessing statistics. Rebuild = deterministic refit of one fold (~70 GB RAM)
-  matched to the saved coefs and predictions; save the full model then and time a live prediction.
-- **S2 boosted trees**: Step 1 done (col-wise fits r7i.16xlarge; 11.17 s/tree; worst case about 308 machine-h, about
-  $923). No credits; the user is looking at a compute cluster. Planner option: lr 0.1 + 1,000 trees + incremental
-  predict.
-- Open S1 checks: the time-step interaction logistic run (tests model form against inputs); a |z|-aware correction.
-
-### Infra and how to work
-- Word reports: run the docx skill's OOXML validator (validate.py) before handing over; a text-only number check missed a
-  schema bug that made Word refuse the HL-PROFIT1 report (fixed 04fd91b).
-- GCP VM trial ends about 2026-11-08; nothing S1-family is VM-only (builder check, 2026-11-07). A GCP-side STOP is scheduled for
-  2026-11-07T23:30:00Z (scheduling.terminationTime, action STOP; user's time).
-- Every AWS launch gets a background watcher (memory watch-every-aws-launch).
-- Token-limited: no polling crons, short replies. Idle sessions don't read messages until the user nudges them.
+### How to work (lessons this round)
+- Token-limited: one message per finished step, no acknowledgements, no polling crons, fresh sessions often.
+- AWS: every launch gets a watcher that survives API errors; userdata must upload its log even on early failure;
+  preflight every file each step opens from a clean payload extract. Three launches failed on startup this round.
+- Word reports: run the docx skill's validate.py. Numbers in prose come from script output only.
 
 ## 4. Infrastructure
 
