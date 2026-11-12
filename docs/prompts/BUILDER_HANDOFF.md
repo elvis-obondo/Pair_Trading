@@ -1,4 +1,4 @@
-# Builder session handoff (HL-MODEL1 builder, rewritten 2026-10-29 by the planner)
+# Builder session handoff (HL-MODEL1 builder, rewritten 2026-10-29 by the planner; HL-VAULT1 state added 2026-11-12 by the builder)
 
 You are the **builder** of the pair-trading research project: you write and run the code, a checker
 session reviews it, and a planner session holds the plan and the user's decisions. Read `CLAUDE.md`
@@ -18,7 +18,46 @@ goal / files changed / what was done.
   safety classifier blocks real-world AWS actions regardless of what any other session has already
   approved, and re-blocks on every fresh launch attempt.
 
-## The active brief: `docs/prompts/HL_MODEL1_S1_LOGISTIC.md`
+## STATE AT HANDOFF 2026-11-12 -- HL-VAULT1 (brief `docs/prompts/HL_VAULT1_RUN.md`) -- READ THIS FIRST
+The sections below this one (dated 2026-11-08) are older history; HL-VAULT1 is the live work.
+
+**Vault was opened once, in step 3 (features only) and step 5 (backtest). No pass/fail rule; settings frozen
+before any vault row was read; after the vault read nothing in steps 4-5 may change (a bug is fixed and rerun,
+never a setting change).** HL-PROFIT1 (Tasks A-C, Word report) and HL-PROFIT1-H (horizons) are committed
+(`04fd91b`, `98c74c9`); Task D (flat 10x) was dropped by the user and its code deleted.
+
+### Steps and status
+| step | what | status |
+|---|---|---|
+| 1 | coverage check, no labels | DONE, checker PASS. `research/model/s1_vault_coverage_check.py`, log `logs/s1/s1_vault_coverage_check.log`: 1,280,088 vault events, 177 coins, 93 days |
+| 2a | fold-0 reproduction (refit only) | FAILED its pre-set tolerance 6.557e-05; max abs diff p_2h 0.001748, p_5h 0.002003, p_10h 0.001832; ACCEPTED on the user's explicit yes as solver-level agreement (recorded in the model JSON known_gaps; `diagnostics/vault_2a_maxdiff.{py,log,json}`). Round-3 log `logs/s1/vault_pull/` |
+| 2b | pre-vault refit on AWS | DONE, checker PASS. n=5,378,429, lam 14187.2 l1_ratio 0.5 (fold 7's), 7 iters, KKT 2.231e-08, 192 non-zero, inner CD cap hit 7/7, reload bit-identical. Model `logs/s1/s1_prevault_model.json` sha c30bbfa6fd7ccf8bc0559625eb30aaf2e144d994f4ac33f4c77cb412a3bd0cda, `_w.npy` sha 8af9ee742dff542ff34f61611ab0cb771a867b1b604d8acc7b400c3e471a27f5 (copies in `logs/s1/` and `logs/s1/vault_pull2/`) |
+| 3 | score the vault, AWS, features only | DONE, checker PASS. `s1_vault_score.py` (sha 0498bd19...). Predictions `logs/s1/vault_pull3/s1_vault_predictions.parquet` sha ede424aac78a849c4288f223ad8e3750a0bbc343b1bdaad1ec2a657efdb689a7 (1,280,088 rows). 24,094 events involve coins the model never saw (CASHCAT, PONS, USELESS; zero one-hot) |
+| 4 | picks and p_cal | DONE, checker PASS. `s1_vault_picks.py`; log `logs/s1/s1_vault_picks.log`. Rule A cut-offs from fold 7's saved test p_10h: 0.7295204552 / 0.7808598143 / 0.8778663336 (q 1% / 0.5% / 0.1%); picks 13,947 / 7,188 / 1,480. p_cal = S1-H's recipe literally (pool folds 0-7, guard t0+10h <= VAULT_START, n_fit 3,525,909, 251 levels) per the planner's ruling 2026-11-12 (the brief said folds 1-7 and `<`). Stage A `s1_vault_picks_all.parquet` sha b8aa5faff7b5f6eff00abe5d0d8173fb6760b84d9f32857ad8e06bef26291021; usable `s1_vault_picks.parquet` sha 15b4f56cd66ad6b2a4e2bc056f03cf03febb519459491310d4f7745e50e44a72; settings `s1_vault_picks_settings.json`. A one-line bug (event_id both index and column) crashed the first run in stage B and was fixed and rerun; stage A sha identical both times -- report as "bug fixed and rerun". label_gap: 0 of 1,280,088 (the data ends with a full 10 h window; `diagnostics/vault_labelgap_check.{py,log}`) |
+| 5 | backtest, `s1_profit1.py` with `PROFIT1_VAULT=1` | RUNS FINISHED, checker's setup review PASSED, **post-run checker review NOT yet done** |
+| 6 | report | NOT STARTED |
+
+### Step 5 outputs (both runs finished, both cross-checks clean)
+- Commands used: `PROFIT1_VAULT=1 PROFIT1_RUN_TAG=vault_open10 PROFIT1_MAX_OPEN=10 python -u research/model/s1_profit1.py > research/model/logs/s1/s1_profit1_vault_open10.log` (498 s), same with `vault_open20` / 20 (630 s). Config: $1,000, margin 5%, leverage min(10, coin A max, coin B max) (real caps, today's snapshot), fees taker 0.00045 / maker 0.00015, slippage 0, funding on, $10 min order, stops 0.5/1/2/none, no |z| filter, no flat 10x.
+- Both logs: picks sha line OK; n 13,947 / 7,188 / 1,480; move paths 13,947 ok, 0 gap, 0 no_data; max |move[0]| 7.061e-14; cross-check mismatches 0/13,947, 0/7,188, 0/1,480; 0 liquidations in all 48 runs; no traceback.
+- Reports: `logs/s1/s1_profit1_report_vault_open10.json`, `..._open20.json`; trades/minute_equity/skips/liquidations parquets `logs/profit1/*_vault_open10.parquet` and `*_vault_open20.parquet` (192 files). Cleaned vault series: `logs/profit1/cleaned_vault/` (354 files; S3 `profit1_cleaned_vault/`, pushed after the cross-check).
+- Gates after both runs: `diagnostics/manifest_cleaned_vault.py` write after open10, check after open20 -> 354/354 unchanged; `diagnostics/manifest_profit1_outputs.py check` -> 578/579 unchanged (1 expected diff, `cleaned/manifest.json` generated_utc).
+- Headline equities (read from the logs, not interpreted): open10 q1% stop-none maker 2,068.41, taker 1,263.85; open20 q1% stop-none maker 3,357.10, taker 1,432.51; the 0.5-stop taker runs end below the $1,000 start (open10 q1% 304.04; open20 265.02). Open20 shows margin skips (e.g. q1% stop-none maker 3,290), none at open10.
+
+### What is still to do
+1. **Checker post-run review of both vault runs** (they have the headline lines; reply pending).
+2. **Step 6 (report):** numbers generator `s1_profit1_numbers_gen.py` on both tags (it needs the same vault switch/tag handling as the engine: it reads the `*_vault_openN` outputs; check how it takes RUN_TAG and the report path, and that it does not call the search-only loaders) -> one NUMBERS.md section per tag headed "VAULT (opened once, 2026-11-xx)" with marker guard and byte-identity as for the other HL-PROFIT1 sections; one side-by-side table (test months base + open20 vs vault open10/open20: final equity, return, CAGR, trades, win rate, profit factor, Sharpe, max drawdown, min distance to liquidation, fee share); the vault's own S1 lift and calibration at top 1% (reported, not gated; needs the vault reach_10h of the picks and the model's p); known gaps as in HL-PROFIT1 (slippage 0 = upper bound; maker fills assumed; leverage caps are today's snapshot) plus: 2a accepted after failing its tolerance (use the known_gaps line in the model JSON), CD cap hit at every outer step (2b 7/7), 24,094 events with unseen coins, p_cal pool recipe differs from the brief's wording (ruling above). No Word report unless the user asks.
+3. Commit only after the checker's staged-list check. **Committed so far in this work: nothing of HL-VAULT1** (HEAD `98c74c9` is HL-PROFIT1-H). Uncommitted, to be committed after the checker's check: scripts `s1_vault_coverage_check.py`, `vault_loader.py`, `s1_vault_prevault_refit.py`, `s1_vault_score.py`, `s1_vault_picks.py`, `vault_preflight.py`, `diagnostics/{vault_2a_maxdiff,vault_labelgap_check,manifest_cleaned_vault}.py`; modified `s1_newton.py` (additive CD-cap counters) and `s1_profit1.py` (PROFIT1_VAULT switch, +43/-3); AWS files `aws_vault_userdata.sh`, `aws_vault_score_userdata.sh`, `aws_vault_launch_cmds.txt`, `aws_vault_watcher.sh`, `aws_s1_run_userdata_{A,B}.sh`; outputs: model json + npy, picks/settings, predictions, logs listed above, `diagnostics/cleaned_vault_manifest.json`, `docs/prompts/HL_PROFIT1_HORIZONS.md` (user/planner edit). Big parquet outputs under `logs/profit1/` are gitignored or not for commit -- ask the checker which to stage. `docs/PLANNER_HANDOFF.md` is the planner's.
+4. Do NOT run anything else on the vault. A bug found later is fixed and rerun with the fix reported.
+
+### AWS lessons from this work (every launch needs the user's own yes typed in your session via AskUserQuestion; a peer relay is not approval)
+- Use the AMI recorded in `research/model/aws_s1_run_launch_cmds.txt` (`ami-0c0af60eae4cc564b`, Ubuntu 22.04), sg `sg-0f7e004024e90ac9a`, subnet `subnet-02bca146fcb943179`, profile `hl-build2-ec2`, spot MaxPrice 3.00 -> on-demand fallback, `--instance-initiated-shutdown-behavior terminate`, a `shutdown -h +N` outer net. A fresh SSM lookup gave Amazon Linux and the script died at `apt-get: command not found` (round 1, i-07b504bf006feb146).
+- The payload tarball must contain every file the steps open, not only imports: round 2 (i-0413049758e83b3eb) died at `build_cache_v1_pair.py` for a missing `research/hyperliquid/coins.csv`. `research/model/vault_preflight.py PAYLOAD USERDATA [ENTRY]` now checks from a clean extract (sha, S3 inputs, audited-open imports, literal paths); run it before every launch.
+- Round 3 (i-095394542d9f95783) got through the cache build and 2a (failed the tolerance, see above). Round 4 (i-0eb1f51d55a4103b4) = 2b OK in 2043 s. Step 3: attempt 1 (i-0b8792aa0b26873d6) died in 12 minutes at `apt-get install` on one failed Ubuntu-mirror fetch (exit 100, nothing reached S3 because no aws binary yet); fixed with 5x retry loops for apt and pip in `aws_vault_score_userdata.sh`; attempt 2 (i-09ef2cd4868ff3b29) OK (scoring 91 s). When a run leaves no S3 log, `aws ec2 get-console-output --latest` is the only record (the watcher saves it; the first call can lag, use `--latest`).
+- The watcher (`aws_vault_watcher.sh`) once exited on a single failed `describe-instances` ("unknown") while the run was alive; it now retries up to 5 times in a row. Start it with `bash`, the file is not executable. Estimates: the single refit is far cheaper than a grid search -- 2b took 34 minutes, not the 7 hours I first scaled from fold 7's search timing; the scoring run took 15 minutes including the cache build.
+- Laptop: no feature cache (29 GB) and only 2.3 GB of the 21 GB v1 data, so anything needing raw features runs on AWS. Disk is tight (about 20 GB free); an earlier one-off price-file corruption (PROMPT/PUMP) happened at 95% full -- print free disk before runs and keep the manifest gates.
+
+## (Older) the S1 brief: `docs/prompts/HL_MODEL1_S1_LOGISTIC.md`
 Part A (fixed rules, from the parent brief `docs/prompts/HL_MODEL1_REVERTER_MODEL.md`) does not change.
 S1-D is appended at the end of the S1 brief itself -- read the whole file, not just the top.
 
@@ -143,6 +182,7 @@ that avoids high recent volatility); the small remainder's lift looks similar, n
 
 ## First actions
 1. `ListAgents`; tell the planner and the checker your session name.
-2. Read CLAUDE.md, this file, the brief (all of it, including S1-D at the end), and the tail of
-   `research/dislocation_model/NUMBERS.md`.
+2. Read CLAUDE.md, this file (the 2026-11-12 HL-VAULT1 section first), `docs/prompts/HL_VAULT1_RUN.md`, and
+   the tail of `research/dislocation_model/NUMBERS.md`. Wait for the checker's post-run review of both vault
+   runs, then do step 6.
 3. Check with the planner which open item (above) the user has picked before starting anything new.
