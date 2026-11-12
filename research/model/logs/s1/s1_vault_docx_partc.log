@@ -1,0 +1,100 @@
+[PARTC] sha256 s1_vault_docx_partc.py f854f950b26a7193b64c3d218adb65041b4d52f51c5a5a64b993e3ad3df81797; start 2026-11-12T05:20:36Z UTC
+[VDOC] picks sha 15b4f56cd66ad6b2a4e2bc056f03cf03febb519459491310d4f7745e50e44a72; iso 2h/5h file sha 1c01f26356267238d0b18f822ff07635976e6058283cf89e1aa46e06b0d07980 (matches its settings JSON)
+[VAULT_LOADER] load_vault_events: 6,697,756 merged rows -> 1,280,088 with t0 >= VAULT_START -> 1,280,088 usable (label_gap=0), 0 label_gap=1
+[VDOC] vault frame: 1,280,088 events, t0 2026-07-13 00:00:00+00:00 .. 2026-10-13 13:30:00+00:00
+[HARNESS] load_search_events: 6,697,756 merged rows -> 5,405,478 after the date/gap-day filter -> 5,378,429 after dropping 27,049 label_gap=1 rows
+[S1H] picks cross-checked against S1-G's saved per-fold n, every (fold,q): OK
+[S1H] q=0.01: n=35,629
+[S1H] q=0.005: n=17,699
+[S1H] q=0.001: n=3,638
+[S1H] fold 1 h=2h: n_fit_pool=428,849 n_dropped(guard)=872 n_fit_used=427,977 platt_intercept=0.672160 platt_slope=1.213372 platt_valid=True iso_tied_groups=103
+[S1H] fold 1 h=2h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.1262, 0.2:0.2741, 0.3:0.3897, 0.4:0.4474, 0.5:0.4727, 0.6:0.6667, 0.7:0.6667, 0.8:0.6667, 0.9:0.6667
+[S1H] fold 1 h=2h: iso saturated (0 or 1) on test=183, of which contradicted by the label=1; distinct iso levels on this test block=229
+[S1H] fold 1 h=5h: n_fit_pool=428,849 n_dropped(guard)=2,398 n_fit_used=426,451 platt_intercept=0.137143 platt_slope=0.986245 platt_valid=True iso_tied_groups=120
+[S1H] fold 1 h=5h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.1094, 0.2:0.2337, 0.3:0.3502, 0.4:0.4276, 0.5:0.4941, 0.6:0.5565, 0.7:0.6358, 0.8:0.7321, 0.9:0.7590
+[S1H] fold 1 h=5h: iso saturated (0 or 1) on test=28, of which contradicted by the label=0; distinct iso levels on this test block=282
+[S1H] fold 1 h=10h: n_fit_pool=428,849 n_dropped(guard)=5,448 n_fit_used=423,401 platt_intercept=0.039595 platt_slope=0.821220 platt_valid=True iso_tied_groups=130
+[S1H] fold 1 h=10h: Spearman(raw p_10h, platt p_10h)=1.000000000000
+[S1H] fold 1 h=10h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.1244, 0.2:0.2508, 0.3:0.3516, 0.4:0.4411, 0.5:0.5201, 0.6:0.5835, 0.7:0.6062, 0.8:0.6842, 0.9:0.7685
+[S1H] fold 1 h=10h: iso saturated (0 or 1) on test=18, of which contradicted by the label=0; distinct iso levels on this test block=281
+[S1H] fold 2 h=2h: n_fit_pool=892,052 n_dropped(guard)=492 n_fit_used=891,560 platt_intercept=0.560216 platt_slope=1.266256 platt_valid=True iso_tied_groups=136
+[S1H] fold 2 h=2h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.1021, 0.2:0.2500, 0.3:0.3462, 0.4:0.3882, 0.5:0.4228, 0.6:0.5690, 0.7:0.5690, 0.8:0.6012, 0.9:0.7500
+[S1H] fold 2 h=2h: iso saturated (0 or 1) on test=89, of which contradicted by the label=0; distinct iso levels on this test block=228
+[S1H] fold 2 h=5h: n_fit_pool=892,052 n_dropped(guard)=1,502 n_fit_used=890,550 platt_intercept=-0.008834 platt_slope=1.001981 platt_valid=True iso_tied_groups=178
+[S1H] fold 2 h=5h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.0924, 0.2:0.2025, 0.3:0.3185, 0.4:0.3951, 0.5:0.4658, 0.6:0.5000, 0.7:0.5458, 0.8:0.6534, 0.9:0.7143
+[S1H] fold 2 h=5h: iso saturated (0 or 1) on test=2, of which contradicted by the label=0; distinct iso levels on this test block=291
+[S1H] fold 2 h=10h: n_fit_pool=892,052 n_dropped(guard)=3,760 n_fit_used=888,292 platt_intercept=-0.108148 platt_slope=0.812738 platt_valid=True iso_tied_groups=174
+[S1H] fold 2 h=10h: Spearman(raw p_10h, platt p_10h)=1.000000000000
+[S1H] fold 2 h=10h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.1118, 0.2:0.2162, 0.3:0.3142, 0.4:0.4045, 0.5:0.4821, 0.6:0.5523, 0.7:0.5987, 0.8:0.6400, 0.9:0.7026
+[S1H] fold 2 h=10h: iso saturated (0 or 1) on test=3, of which contradicted by the label=1; distinct iso levels on this test block=264
+[S1H] fold 3 h=2h: n_fit_pool=1,373,471 n_dropped(guard)=1,126 n_fit_used=1,372,345 platt_intercept=0.566078 platt_slope=1.286989 platt_valid=True iso_tied_groups=154
+[S1H] fold 3 h=2h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.0969, 0.2:0.2454, 0.3:0.3563, 0.4:0.4123, 0.5:0.4383, 0.6:0.5918, 0.7:0.5918, 0.8:0.6200, 0.9:0.7500
+[S1H] fold 3 h=2h: iso saturated (0 or 1) on test=51, of which contradicted by the label=0; distinct iso levels on this test block=201
+[S1H] fold 3 h=5h: n_fit_pool=1,373,471 n_dropped(guard)=3,785 n_fit_used=1,369,686 platt_intercept=-0.062509 platt_slope=1.003520 platt_valid=True iso_tied_groups=192
+[S1H] fold 3 h=5h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.0882, 0.2:0.1922, 0.3:0.3043, 0.4:0.3923, 0.5:0.4631, 0.6:0.5181, 0.7:0.5699, 0.8:0.6461, 0.9:0.6774
+[S1H] fold 3 h=5h: iso saturated (0 or 1) on test=2, of which contradicted by the label=2; distinct iso levels on this test block=237
+[S1H] fold 3 h=10h: n_fit_pool=1,373,471 n_dropped(guard)=9,444 n_fit_used=1,364,027 platt_intercept=-0.167524 platt_slope=0.807720 platt_valid=True iso_tied_groups=209
+[S1H] fold 3 h=10h: Spearman(raw p_10h, platt p_10h)=1.000000000000
+[S1H] fold 3 h=10h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.1070, 0.2:0.2030, 0.3:0.3005, 0.4:0.3937, 0.5:0.4732, 0.6:0.5396, 0.7:0.5950, 0.8:0.6436, 0.9:0.7100
+[S1H] fold 3 h=10h: iso saturated (0 or 1) on test=2, of which contradicted by the label=2; distinct iso levels on this test block=269
+[S1H] fold 4 h=2h: n_fit_pool=1,850,239 n_dropped(guard)=948 n_fit_used=1,849,291 platt_intercept=0.730179 platt_slope=1.348595 platt_valid=True iso_tied_groups=178
+[S1H] fold 4 h=2h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.1018, 0.2:0.2527, 0.3:0.3664, 0.4:0.4125, 0.5:0.4532, 0.6:0.6029, 0.7:0.6029, 0.8:0.6029, 0.9:0.6029
+[S1H] fold 4 h=2h: iso saturated (0 or 1) on test=32, of which contradicted by the label=0; distinct iso levels on this test block=227
+[S1H] fold 4 h=5h: n_fit_pool=1,850,239 n_dropped(guard)=3,251 n_fit_used=1,846,988 platt_intercept=0.017463 platt_slope=1.042076 platt_valid=True iso_tied_groups=204
+[S1H] fold 4 h=5h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.0848, 0.2:0.2018, 0.3:0.3137, 0.4:0.4039, 0.5:0.4749, 0.6:0.5245, 0.7:0.5807, 0.8:0.6333, 0.9:0.6933
+[S1H] fold 4 h=5h: iso saturated (0 or 1) on test=0, of which contradicted by the label=0; distinct iso levels on this test block=260
+[S1H] fold 4 h=10h: n_fit_pool=1,850,239 n_dropped(guard)=8,418 n_fit_used=1,841,821 platt_intercept=-0.133563 platt_slope=0.833762 platt_valid=True iso_tied_groups=219
+[S1H] fold 4 h=10h: Spearman(raw p_10h, platt p_10h)=1.000000000000
+[S1H] fold 4 h=10h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.1040, 0.2:0.2018, 0.3:0.3091, 0.4:0.4002, 0.5:0.4812, 0.6:0.5437, 0.7:0.5985, 0.8:0.6461, 0.9:0.7102
+[S1H] fold 4 h=10h: iso saturated (0 or 1) on test=0, of which contradicted by the label=0; distinct iso levels on this test block=257
+[S1H] fold 5 h=2h: n_fit_pool=2,327,376 n_dropped(guard)=1,475 n_fit_used=2,325,901 platt_intercept=0.811562 platt_slope=1.380150 platt_valid=True iso_tied_groups=177
+[S1H] fold 5 h=2h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.1034, 0.2:0.2528, 0.3:0.3665, 0.4:0.4195, 0.5:0.4507, 0.6:0.5844, 0.7:0.5844, 0.8:0.5844, 0.9:0.5844
+[S1H] fold 5 h=2h: iso saturated (0 or 1) on test=2, of which contradicted by the label=0; distinct iso levels on this test block=219
+[S1H] fold 5 h=5h: n_fit_pool=2,327,376 n_dropped(guard)=3,127 n_fit_used=2,324,249 platt_intercept=0.066424 platt_slope=1.075942 platt_valid=True iso_tied_groups=225
+[S1H] fold 5 h=5h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.0808, 0.2:0.2045, 0.3:0.3223, 0.4:0.4116, 0.5:0.4810, 0.6:0.5265, 0.7:0.5789, 0.8:0.6255, 0.9:0.6835
+[S1H] fold 5 h=5h: iso saturated (0 or 1) on test=0, of which contradicted by the label=0; distinct iso levels on this test block=258
+[S1H] fold 5 h=10h: n_fit_pool=2,327,376 n_dropped(guard)=7,110 n_fit_used=2,320,266 platt_intercept=-0.108903 platt_slope=0.859223 platt_valid=True iso_tied_groups=235
+[S1H] fold 5 h=10h: Spearman(raw p_10h, platt p_10h)=1.000000000000
+[S1H] fold 5 h=10h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.1015, 0.2:0.1992, 0.3:0.3129, 0.4:0.4070, 0.5:0.4869, 0.6:0.5491, 0.7:0.6057, 0.8:0.6487, 0.9:0.7143
+[S1H] fold 5 h=10h: iso saturated (0 or 1) on test=0, of which contradicted by the label=0; distinct iso levels on this test block=260
+[S1H] fold 6 h=2h: n_fit_pool=2,792,577 n_dropped(guard)=627 n_fit_used=2,791,950 platt_intercept=0.890837 platt_slope=1.420327 platt_valid=True iso_tied_groups=190
+[S1H] fold 6 h=2h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.1027, 0.2:0.2586, 0.3:0.3715, 0.4:0.4337, 0.5:0.4709, 0.6:0.5761, 0.7:0.5761, 0.8:0.5761, 0.9:0.5761
+[S1H] fold 6 h=2h: iso saturated (0 or 1) on test=1, of which contradicted by the label=0; distinct iso levels on this test block=216
+[S1H] fold 6 h=5h: n_fit_pool=2,792,577 n_dropped(guard)=1,648 n_fit_used=2,790,929 platt_intercept=0.085091 platt_slope=1.100050 platt_valid=True iso_tied_groups=252
+[S1H] fold 6 h=5h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.0786, 0.2:0.2011, 0.3:0.3207, 0.4:0.4141, 0.5:0.4830, 0.6:0.5331, 0.7:0.5863, 0.8:0.6274, 0.9:0.7192
+[S1H] fold 6 h=5h: iso saturated (0 or 1) on test=0, of which contradicted by the label=0; distinct iso levels on this test block=275
+[S1H] fold 6 h=10h: n_fit_pool=2,792,577 n_dropped(guard)=4,211 n_fit_used=2,788,366 platt_intercept=-0.113332 platt_slope=0.866983 platt_valid=True iso_tied_groups=236
+[S1H] fold 6 h=10h: Spearman(raw p_10h, platt p_10h)=1.000000000000
+[S1H] fold 6 h=10h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.1012, 0.2:0.1973, 0.3:0.3070, 0.4:0.4021, 0.5:0.4857, 0.6:0.5500, 0.7:0.6080, 0.8:0.6535, 0.9:0.7090
+[S1H] fold 6 h=10h: iso saturated (0 or 1) on test=0, of which contradicted by the label=0; distinct iso levels on this test block=256
+[S1H] fold 7 h=2h: n_fit_pool=3,214,255 n_dropped(guard)=716 n_fit_used=3,213,539 platt_intercept=0.938721 platt_slope=1.443715 platt_valid=True iso_tied_groups=211
+[S1H] fold 7 h=2h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.1027, 0.2:0.2618, 0.3:0.3701, 0.4:0.4329, 0.5:0.4724, 0.6:0.5761, 0.7:0.5761, 0.8:0.5761, 0.9:0.5761
+[S1H] fold 7 h=2h: iso saturated (0 or 1) on test=2, of which contradicted by the label=0; distinct iso levels on this test block=227
+[S1H] fold 7 h=5h: n_fit_pool=3,214,255 n_dropped(guard)=2,165 n_fit_used=3,212,090 platt_intercept=0.106263 platt_slope=1.117314 platt_valid=True iso_tied_groups=257
+[S1H] fold 7 h=5h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.0774, 0.2:0.2008, 0.3:0.3212, 0.4:0.4155, 0.5:0.4854, 0.6:0.5353, 0.7:0.5844, 0.8:0.6320, 0.9:0.7192
+[S1H] fold 7 h=5h: iso saturated (0 or 1) on test=0, of which contradicted by the label=0; distinct iso levels on this test block=272
+[S1H] fold 7 h=10h: n_fit_pool=3,214,255 n_dropped(guard)=6,598 n_fit_used=3,207,657 platt_intercept=-0.104422 platt_slope=0.882790 platt_valid=True iso_tied_groups=257
+[S1H] fold 7 h=10h: Spearman(raw p_10h, platt p_10h)=1.000000000000
+[S1H] fold 7 h=10h: iso_at_grid (raw p=0.1..0.9) = 0.1:0.0987, 0.2:0.1956, 0.3:0.3077, 0.4:0.4025, 0.5:0.4883, 0.6:0.5518, 0.7:0.6122, 0.8:0.6559, 0.9:0.7073
+[S1H] fold 7 h=10h: iso saturated (0 or 1) on test=0, of which contradicted by the label=0; distinct iso levels on this test block=278
+[HORIZONS] frame built: 3,097,060 test-month events (folds 1-7) [40s]
+[HARNESS] load_search_events: 6,697,756 merged rows -> 5,405,478 after the date/gap-day filter -> 5,378,429 after dropping 27,049 label_gap=1 rows
+[VDOC] test frame: 3,097,060 events, folds [np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7)]
+[PARTC] EV coefficients from test trades, fee maker: mu-exit mean net 2.5615, timeout mean net -4.5020
+[PARTC] EV coefficients from test trades, fee taker: mu-exit mean net 1.4292, timeout mean net -2.9315
+[PARTC] RECEIPT gain curve top 1% lift: vault 0.0621 vs s1_vault_report.json 0.0621; test (folds 1-7) 0.0830 vs s1d_report.json per-fold lifts folds 1-7, n-weighted 0.0830 (tolerance 5e-4). For reference s1d_report.json pooled over folds 0-7 = 0.0841; the test months of this report are folds 1-7.
+[PARTC] C1 done [74s]
+[PARTC] C2 done [79s]
+[PARTC] market proxies vault: BTC (93 days present) and 177 saved coins [87s]
+[PARTC] market proxies test: BTC (203 days present) and 192 saved coins [96s]
+[PARTC] C3 done [96s]
+[PARTC] C4 receipt: daily-equity final value equals the report's final equity (1e-6) for 96 runs
+[PARTC] C4 done [99s]
+[VAULT_LOADER] load_vault_events: 6,697,756 merged rows -> 1,280,088 with t0 >= VAULT_START -> 1,280,088 usable (label_gap=0), 0 label_gap=1
+[HARNESS] load_search_events: 6,697,756 merged rows -> 5,405,478 after the date/gap-day filter -> 5,378,429 after dropping 27,049 label_gap=1 rows
+[PARTC] C5 vault: paths for 13,947 events, build2 notional for 177 coins [118s]
+[PARTC] C5 test: paths for 35,629 events, build2 notional for 192 coins [135s]
+[PARTC] C5 done [148s]
+[PARTC] C6 done [149s]
+[PARTC] FINDING: Capacity (q 1% / no stop / maker fees, max_open 10): the share of trades whose larger leg exceeded 10% of that coin's traded notional in the entry minute was 89.6% in the vault (3,698 of 3,832 trades with a measurable entry minute) and 88.3% in the test months (7,309 of 8,069).
+[PARTC] 7 sections, 144 tables; wrote /Users/elvisobondo/Pair_Trading/research/model/logs/s1/s1_vault_docx_partc.json (sha256 56ad801f946240cb75975df138af604b1be1d8ae577f9c64cdfc40c2c75c33f3)  [173s]
