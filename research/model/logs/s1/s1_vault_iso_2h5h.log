@@ -1,0 +1,65 @@
+[VISO] sha256 s1_vault_iso_2h5h.py 90038d0af13c7e7efa3f1cc39dfd9cc86a139ac80ca2be93d8533b6a7ca46b54; start 2026-11-12T04:35:59Z UTC
+[VISO] picks file sha256 15b4f56cd66ad6b2a4e2bc056f03cf03febb519459491310d4f7745e50e44a72 (expected 15b4f56cd66ad6b2a4e2bc056f03cf03febb519459491310d4f7745e50e44a72)
+[HARNESS] load_search_events: 6,697,756 merged rows -> 5,405,478 after the date/gap-day filter -> 5,378,429 after dropping 27,049 label_gap=1 rows
+[VISO] pooled test-fold predictions: 3,525,909 rows, folds [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7)]
+[VISO] h=2h fit: n_pool=3,525,909 n_dropped(guard t0+2h <= VAULT_START)=0 n_fit=3,525,909 (10 h guard would keep 3,525,909) tied_groups=207 distinct_levels=207
+[VISO] h=2h iso_at_grid (raw p=0.1..0.9): 0.1:0.1050, 0.2:0.2621, 0.3:0.3729, 0.4:0.4306, 0.5:0.4802, 0.6:0.5761, 0.7:0.5761, 0.8:0.5761, 0.9:0.5761
+[VISO] h=5h fit: n_pool=3,525,909 n_dropped(guard t0+5h <= VAULT_START)=0 n_fit=3,525,909 (10 h guard would keep 3,525,909) tied_groups=267 distinct_levels=267
+[VISO] h=5h iso_at_grid (raw p=0.1..0.9): 0.1:0.0763, 0.2:0.2030, 0.3:0.3219, 0.4:0.4167, 0.5:0.4863, 0.6:0.5377, 0.7:0.5830, 0.8:0.6302, 0.9:0.7192
+[VISO] stage A h=2h: 1,280,088 vault events calibrated; saturated at 0 or 1: 84; mean p_cal 0.0681
+[VISO] stage A h=5h: 1,280,088 vault events calibrated; saturated at 0 or 1: 1; mean p_cal 0.1846
+[VISO] stage A saved /Users/elvisobondo/Pair_Trading/research/model/logs/s1/s1_vault_iso_2h5h.parquet: 1,280,088 rows sha256 1c01f26356267238d0b18f822ff07635976e6058283cf89e1aa46e06b0d07980; settings written BEFORE stage B: /Users/elvisobondo/Pair_Trading/research/model/logs/s1/s1_vault_iso_2h5h_settings.json
+[VREP] picks file sha256 15b4f56cd66ad6b2a4e2bc056f03cf03febb519459491310d4f7745e50e44a72 (expected 15b4f56cd66ad6b2a4e2bc056f03cf03febb519459491310d4f7745e50e44a72)
+[VAULT_LOADER] load_vault_events: 6,697,756 merged rows -> 1,280,088 with t0 >= VAULT_START -> 1,280,088 usable (label_gap=0), 0 label_gap=1
+[VREP] vault table: 1,280,088 events, t0 2026-07-13 00:00:00+00:00 .. 2026-10-13 13:30:00+00:00
+[VISO] h=2h all vault events: logloss raw 0.2328 cal 0.2291; brier raw 0.0623 cal 0.0617; calibrated at 0 or 1: 84 (label-contradicted 1); S1-H pooled test: logloss raw 0.2411 iso 0.2387, brier raw 0.0651 iso 0.0648
+[VISO] calib h=2 decile 0: n=128,009 raw 0.0242 cal 0.0131 actual 0.0125
+[VISO] calib h=2 decile 1: n=128,009 raw 0.0362 cal 0.0197 actual 0.0171
+[VISO] calib h=2 decile 2: n=128,009 raw 0.0445 cal 0.0258 actual 0.0235
+[VISO] calib h=2 decile 3: n=128,008 raw 0.0523 cal 0.0336 actual 0.0318
+[VISO] calib h=2 decile 4: n=128,009 raw 0.0603 cal 0.0425 actual 0.0418
+[VISO] calib h=2 decile 5: n=128,009 raw 0.0690 cal 0.0538 actual 0.0557
+[VISO] calib h=2 decile 6: n=128,008 raw 0.0793 cal 0.0692 actual 0.0725
+[VISO] calib h=2 decile 7: n=128,009 raw 0.0926 cal 0.0911 actual 0.0970
+[VISO] calib h=2 decile 8: n=128,009 raw 0.1124 cal 0.1238 actual 0.1365
+[VISO] calib h=2 decile 9: n=128,009 raw 0.1677 cal 0.2084 actual 0.2207
+[VISO] calib h=2 all vault events: n=1,280,088 raw 0.0739 cal 0.0681 actual 0.0709
+[VISO] calib h=2 own top 1% by p_2h: n=12,801 raw 0.2696 cal 0.3261 actual 0.3429
+[VISO] calib h=2 Rule A picks q=0.01: n=13,947 raw 0.2655 cal 0.3218 actual 0.3387
+[VISO] calib h=2 Rule A picks q=0.005: n=7,188 raw 0.2975 cal 0.3540 actual 0.3670
+[VISO] calib h=2 Rule A picks q=0.001: n=1,480 raw 0.3763 cal 0.4114 actual 0.4230
+[VISO] h=5h all vault events: logloss raw 0.4501 cal 0.4484; brier raw 0.1430 cal 0.1425; calibrated at 0 or 1: 1 (label-contradicted 0); S1-H pooled test: logloss raw 0.4504 iso 0.4501, brier raw 0.1431 iso 0.1431
+[VISO] calib h=5 decile 0: n=128,009 raw 0.0667 cal 0.0496 actual 0.0478
+[VISO] calib h=5 decile 1: n=128,009 raw 0.0987 cal 0.0756 actual 0.0738
+[VISO] calib h=5 decile 2: n=128,009 raw 0.1205 cal 0.0979 actual 0.0986
+[VISO] calib h=5 decile 3: n=128,008 raw 0.1406 cal 0.1231 actual 0.1239
+[VISO] calib h=5 decile 4: n=128,009 raw 0.1608 cal 0.1485 actual 0.1529
+[VISO] calib h=5 decile 5: n=128,009 raw 0.1827 cal 0.1762 actual 0.1863
+[VISO] calib h=5 decile 6: n=128,008 raw 0.2080 cal 0.2107 actual 0.2244
+[VISO] calib h=5 decile 7: n=128,009 raw 0.2397 cal 0.2499 actual 0.2679
+[VISO] calib h=5 decile 8: n=128,009 raw 0.2855 cal 0.3050 actual 0.3290
+[VISO] calib h=5 decile 9: n=128,009 raw 0.3998 cal 0.4090 actual 0.4281
+[VISO] calib h=5 all vault events: n=1,280,088 raw 0.1903 cal 0.1846 actual 0.1933
+[VISO] calib h=5 own top 1% by p_5h: n=12,801 raw 0.5821 cal 0.5303 actual 0.5543
+[VISO] calib h=5 Rule A picks q=0.01: n=13,947 raw 0.5756 cal 0.5267 actual 0.5499
+[VISO] calib h=5 Rule A picks q=0.005: n=7,188 raw 0.6250 cal 0.5545 actual 0.5769
+[VISO] calib h=5 Rule A picks q=0.001: n=1,480 raw 0.7303 cal 0.6093 actual 0.6324
+[VISO] h=10h all vault events: logloss raw 0.5848 cal 0.5838; brier raw 0.2000 cal 0.1996; calibrated at 0 or 1: 1 (label-contradicted 0); S1-H pooled test: logloss raw 0.5879 iso 0.5876, brier raw 0.2011 iso 0.2011
+[VISO] calib h=10 decile 0: n=128,009 raw 0.1218 cal 0.1186 actual 0.1086
+[VISO] calib h=10 decile 1: n=128,009 raw 0.1779 cal 0.1725 actual 0.1656
+[VISO] calib h=10 decile 2: n=128,009 raw 0.2150 cal 0.2123 actual 0.2126
+[VISO] calib h=10 decile 3: n=128,008 raw 0.2483 cal 0.2502 actual 0.2522
+[VISO] calib h=10 decile 4: n=128,009 raw 0.2814 cal 0.2890 actual 0.2965
+[VISO] calib h=10 decile 5: n=128,009 raw 0.3162 cal 0.3261 actual 0.3376
+[VISO] calib h=10 decile 6: n=128,008 raw 0.3556 cal 0.3666 actual 0.3842
+[VISO] calib h=10 decile 7: n=128,009 raw 0.4034 cal 0.4110 actual 0.4312
+[VISO] calib h=10 decile 8: n=128,009 raw 0.4692 cal 0.4688 actual 0.4928
+[VISO] calib h=10 decile 9: n=128,009 raw 0.6127 cal 0.5625 actual 0.5820
+[VISO] calib h=10 all vault events: n=1,280,088 raw 0.3202 cal 0.3178 actual 0.3263
+[VISO] calib h=10 own top 1% by p_10h: n=12,801 raw 0.8031 cal 0.6647 actual 0.6873
+[VISO] calib h=10 Rule A picks q=0.01: n=13,947 raw 0.7973 cal 0.6617 actual 0.6836
+[VISO] calib h=10 Rule A picks q=0.005: n=7,188 raw 0.8392 cal 0.6848 actual 0.7003
+[VISO] calib h=10 Rule A picks q=0.001: n=1,480 raw 0.9135 cal 0.7263 actual 0.7547
+[VISO] section written: /Users/elvisobondo/Pair_Trading/research/dislocation_model/logs/s1_vault_iso_2h5h_section.md (sha256 4a63ae9a31375e8844a52840dfb888990474ce7165ee786877a774a094c1b2d3)
+[VISO] NUMBERS.md appended: /Users/elvisobondo/Pair_Trading/research/dislocation_model/NUMBERS.md
+[VISO] done  [20s]
