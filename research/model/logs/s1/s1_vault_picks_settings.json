@@ -1,0 +1,27 @@
+{
+ "vault_predictions_sha256": "ede424aac78a849c4288f223ad8e3750a0bbc343b1bdaad1ec2a657efdb689a7",
+ "pool_folds": [
+  0,
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7
+ ],
+ "guard_inclusive": true,
+ "n_pool": 3525909,
+ "n_dropped": 0,
+ "n_fit": 3525909,
+ "cutoffs": {
+  "0.01": 0.7295204552102527,
+  "0.005": 0.780859814341661,
+  "0.001": 0.8778663335989012
+ },
+ "cutoff_source": "fold 7 saved test raw p_10h",
+ "n_fold7_test": 311654,
+ "tied_groups": 251,
+ "stage_a_sha256": "b8aa5faff7b5f6eff00abe5d0d8173fb6760b84d9f32857ad8e06bef26291021",
+ "script_sha256": "fcc4b776e88899a2c1db9a2011009cdde8fb87f2079ef4e83059e91cb757bf1c"
+}

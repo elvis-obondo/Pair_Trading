@@ -1,0 +1,12 @@
+[VAULT_LOADER] load_vault_event_dates: 6,697,756 total pair events -> 1,280,088 with t0 >= VAULT_START (2026-07-13 00:00:00+00:00)
+[LGCHECK] vault events 1,280,088; label_gap value counts (vault): {0: 1280088}; label_nan_minutes value counts (vault): {0: 1280088}
+[LGCHECK] whole v1 labels.parquet: 6,697,756 rows; label_gap value counts: {0: 6670707, 1: 27049}
+[LGCHECK] 177 vault coins; last 1-minute bar over all of them: 2026-10-13 23:59:00+00:00; earliest per-coin last bar: 2026-08-26 10:33:00+00:00 (VINE)
+[LGCHECK] latest vault event: entry_time 2026-10-13 13:00:00+00:00, t0 2026-10-13 13:30:00+00:00, its label window ends 2026-10-13 23:29:00+00:00
+[LGCHECK] (a) vault events whose 601-minute window ends after the last bar of the global series: 0; after the last bar of either of their own two legs: 0; t0 + 10 h > last global bar: 0
+[LGCHECK] (a) picks q=0.01: 13,947; of them with a window past either leg's last bar: 0
+[LGCHECK] (a) picks q=0.005: 7,188; of them with a window past either leg's last bar: 0
+[LGCHECK] (a) picks q=0.001: 1,480; of them with a window past either leg's last bar: 0
+[LGCHECK] margin (minutes between the window end and the nearer leg's last bar): min 4, q01 1410, median 65250
+[LGCHECK] events by entry month: 2026-07: 261,903, 2026-08: 426,640, 2026-09: 416,051, 2026-10: 175,494
+[LGCHECK] last day of events.parquet in the vault: 2026-10-13; events on the last 3 UTC days: 2026-10-11: 15,255, 2026-10-12: 16,636, 2026-10-13: 6,204

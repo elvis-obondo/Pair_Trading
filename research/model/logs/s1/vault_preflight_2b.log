@@ -1,0 +1,59 @@
+[PREFLIGHT 1] tarball sha256 a82e2d901189dec5654cff56371f07efc5d34275690434f56634f9058aee0660 userdata PAYLOAD_SHA256 a82e2d901189dec5654cff56371f07efc5d34275690434f56634f9058aee0660 -> OK
+[PREFLIGHT 1] clean extract: /var/folders/nz/3vp0qyd13tg8j_y1nmld6_1c0000gn/T/vault_preflight_vscq1ltb
+[PREFLIGHT 1] OK      research/model/harness.py
+[PREFLIGHT 1] OK      research/model/inputs_v1_pair.csv
+[PREFLIGHT 1] OK      research/model/hazard_logistic.py
+[PREFLIGHT 1] OK      research/model/s1_preprocess.py
+[PREFLIGHT 1] OK      research/model/s1_model.py
+[PREFLIGHT 1] OK      research/model/s1_newton.py
+[PREFLIGHT 1] OK      research/model/s1_run.py
+[PREFLIGHT 1] OK      research/model/s1_vault_prevault_refit.py
+[PREFLIGHT 1] OK      research/model/build_cache_v1_pair.py
+[PREFLIGHT 1] OK      research/model/b5_profile.py
+[PREFLIGHT 1] OK      research/dataset/master_manifest.py
+[PREFLIGHT 1] OK      research/dislocation_model/paths.py
+[PREFLIGHT 1] OK      research/hyperliquid/coins.csv
+[PREFLIGHT 1] OK      research/model/diagnostics/vault_2a_maxdiff.json
+[PREFLIGHT 1] OK      research/model/logs/s1/fold7_done.json
+[PREFLIGHT 2] OK      s3://pair-trading-hl-289869684922/master/versions/v1/CHANGELOG.md
+[PREFLIGHT 2] OK      s3://pair-trading-hl-289869684922/master/versions/v1/MANIFEST.json
+[PREFLIGHT 2] OK      s3://pair-trading-hl-289869684922/master/versions/v1/pair/
+[PREFLIGHT 2] OK      s3://pair-trading-hl-289869684922/s1_vault/
+[PREFLIGHT 2] OK      s3://pair-trading-hl-289869684922/s1_vault/a82e2d901189dec5654cff56371f07efc5d34275690434f56634f9058aee0660.tar.gz
+[PREFLIGHT 3] OK      /private<extract>/research/dataset/master_manifest.py
+[PREFLIGHT 3] OK      /private<extract>/research/dislocation_model/paths.py
+[PREFLIGHT 3] OK      /private<extract>/research/hyperliquid/coins.csv
+[PREFLIGHT 3] OK      /private<extract>/research/model/b5_profile.py
+[PREFLIGHT 3] OK      /private<extract>/research/model/build_cache_v1_pair.py
+[PREFLIGHT 3] OK      /private<extract>/research/model/harness.py
+[PREFLIGHT 3] OK      /private<extract>/research/model/hazard_logistic.py
+[PREFLIGHT 3] OK      /private<extract>/research/model/inputs_v1_pair.csv
+[PREFLIGHT 3] OK      /private<extract>/research/model/logs/s1/fold7_done.json
+[PREFLIGHT 3] OK      /private<extract>/research/model/s1_model.py
+[PREFLIGHT 3] OK      /private<extract>/research/model/s1_newton.py
+[PREFLIGHT 3] OK      /private<extract>/research/model/s1_preprocess.py
+[PREFLIGHT 3] OK      /private<extract>/research/model/s1_run.py
+[PREFLIGHT 3] OK      /private<extract>/research/model/s1_vault_prevault_refit.py
+[PREFLIGHT 3] OK      output dir: /private<extract>/research/model/logs/s1
+[PREFLIGHT 4] BUILT AT RUNTIME / OUTPUT  .manifest.json   (research/model/harness.py)
+[PREFLIGHT 4] BUILT AT RUNTIME / OUTPUT  .npy   (research/model/harness.py)
+[PREFLIGHT 4] BUILT AT RUNTIME / OUTPUT  MANIFEST.json   (research/model/harness.py)
+[PREFLIGHT 4] IN PAYLOAD                 coins.csv   (research/model/harness.py)
+[PREFLIGHT 4] IN S3 v1 pair/ SYNC        events.parquet   (research/model/harness.py)
+[PREFLIGHT 4] IN PAYLOAD                 inputs_v1_pair.csv   (research/model/harness.py)
+[PREFLIGHT 4] IN S3 v1 pair/ SYNC        labels.parquet   (research/model/harness.py)
+[PREFLIGHT 4] BUILT AT RUNTIME / OUTPUT  .manifest.json   (research/model/build_cache_v1_pair.py)
+[PREFLIGHT 4] BUILT AT RUNTIME / OUTPUT  .npy   (research/model/build_cache_v1_pair.py)
+[PREFLIGHT 4] BUILT AT RUNTIME / OUTPUT  GIT_STATE.json   (research/model/build_cache_v1_pair.py)
+[PREFLIGHT 4] IN PAYLOAD                 inputs_v1_pair.csv   (research/model/build_cache_v1_pair.py)
+[PREFLIGHT 4] BUILT AT RUNTIME / OUTPUT  GIT_STATE.json   (research/model/s1_run.py)
+[PREFLIGHT 4] BUILT AT RUNTIME / OUTPUT  _coefs.csv   (research/model/s1_run.py)
+[PREFLIGHT 4] BUILT AT RUNTIME / OUTPUT  _done.json   (research/model/s1_run.py)
+[PREFLIGHT 4] BUILT AT RUNTIME / OUTPUT  _grid.json   (research/model/s1_run.py)
+[PREFLIGHT 4] BUILT AT RUNTIME / OUTPUT  _test_predictions.csv   (research/model/s1_run.py)
+[PREFLIGHT 4] BUILT AT RUNTIME / OUTPUT  _val_permutation_importance.csv   (research/model/s1_run.py)
+[PREFLIGHT 4] IN PAYLOAD                 fold7_done.json   (research/model/s1_vault_prevault_refit.py)
+[PREFLIGHT 4] BUILT AT RUNTIME / OUTPUT  s1_prevault_model.json   (research/model/s1_vault_prevault_refit.py)
+[PREFLIGHT 4] BUILT AT RUNTIME / OUTPUT  s1_prevault_model_w.npy   (research/model/s1_vault_prevault_refit.py)
+[PREFLIGHT 4] IN PAYLOAD                 vault_2a_maxdiff.json   (research/model/s1_vault_prevault_refit.py)
+[PREFLIGHT] PASSED: 0 problem(s)

@@ -1,0 +1,53 @@
+# HL-VAULT1 step 2b ONLY (round 4; 2a accepted per the 2026-11-11 decision), one-machine run. Checker review, then the user's own direct approval in-session,
+# same as every prior AWS step.
+#
+# AMI/security-group/subnet taken from the ACTUAL S1 run's own launch record
+# (research/model/aws_s1_run_launch_cmds.txt), not a fresh lookup -- round 1 of this launch used a
+# freshly-looked-up Amazon Linux AMI against a script written for Ubuntu (apt-get), and died in the
+# first second (instance i-07b504bf006feb146, "apt-get: command not found", exit_code=127, confirmed via
+# aws ec2 get-console-output). ami-0c0af60eae4cc564b is Ubuntu 22.04 jammy (verified via describe-images).
+#
+# Payload: s3://pair-trading-hl-289869684922/s1_vault/a82e2d901189dec5654cff56371f07efc5d34275690434f56634f9058aee0660.tar.gz
+# (17 files -- round 2's launch died on apt-get (wrong AMI). Round 3 relaunch's attempt reached
+# build_cache_v1_pair.py and crashed on a missing research/hyperliquid/coins.csv -- harness.COINS_CSV,
+# needed for the coin-code list and its own sha in the cache manifest; not caught by the import-closure
+# smoke test since it's a runtime data read, not an import. Added coins.csv; re-verified with a broader
+# smoke test that also resolves harness.COINS_CSV, every REQUIRED_FILES path, and inputs_v1_pair.csv from
+# an empty extract, not just the bare imports.)
+
+# Try spot first (same MaxPrice as the S1 run):
+aws ec2 run-instances \
+  --region ap-northeast-1 \
+  --image-id ami-0c0af60eae4cc564b \
+  --instance-type r7i.16xlarge \
+  --instance-market-options '{"MarketType":"spot","SpotOptions":{"MaxPrice":"3.00","SpotInstanceType":"one-time","InstanceInterruptionBehavior":"terminate"}}' \
+  --iam-instance-profile Name=hl-build2-ec2 \
+  --security-group-ids sg-0f7e004024e90ac9a \
+  --subnet-id subnet-02bca146fcb943179 \
+  --instance-initiated-shutdown-behavior terminate \
+  --block-device-mappings '[{"DeviceName":"/dev/sda1","Ebs":{"DeleteOnTermination":true,"VolumeSize":100,"VolumeType":"gp3","Throughput":1000,"Iops":16000}}]' \
+  --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=hl-vault-prevault-refit},{Key=Project,Value=pair-trading},{Key=Purpose,Value=HL-VAULT1-step2-2a-2b}]' \
+  --user-data file://research/model/aws_vault_userdata.sh \
+  --count 1
+
+# If spot has no capacity (round 1's actual failure mode, separate from the AMI bug -- InsufficientInstanceCapacity
+# for r7i.16xlarge in this AZ), fall back to on-demand: drop --instance-market-options entirely, keep
+# everything else identical.
+aws ec2 run-instances \
+  --region ap-northeast-1 \
+  --image-id ami-0c0af60eae4cc564b \
+  --instance-type r7i.16xlarge \
+  --iam-instance-profile Name=hl-build2-ec2 \
+  --security-group-ids sg-0f7e004024e90ac9a \
+  --subnet-id subnet-02bca146fcb943179 \
+  --instance-initiated-shutdown-behavior terminate \
+  --block-device-mappings '[{"DeviceName":"/dev/sda1","Ebs":{"DeleteOnTermination":true,"VolumeSize":100,"VolumeType":"gp3","Throughput":1000,"Iops":16000}}]' \
+  --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=hl-vault-prevault-refit},{Key=Project,Value=pair-trading},{Key=Purpose,Value=HL-VAULT1-step2-2a-2b}]' \
+  --user-data file://research/model/aws_vault_userdata.sh \
+  --count 1
+
+# Cost note (for the user, before approval): r7i.16xlarge, ap-northeast-1. Expected ~7.4h total (2b only; former 2a
+# ~0.3h refit-only reproduction + 2b ~7.4h pre-vault refit, scaled from fold 7's own measured timing).
+# Spot MaxPrice $3.00/hr -> worst case ~$23/7.7h if it runs at the cap the whole time, more realistically
+# well under that (spot often prices under the cap); on-demand ~$5.107/hr x 7.7h ~= ~$40. The 12h (720
+# min) outer safety net in the userdata caps the absolute worst case at ~$36 (spot cap) / ~$61 (on-demand).

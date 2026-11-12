@@ -155,6 +155,15 @@ SEED = 20261108
 # max_open, so they are correctly shared and reused, not rebuilt.
 RUN_TAG = os.environ.get("PROFIT1_RUN_TAG", "")
 TAG_SUFFIX = f"_{RUN_TAG}" if RUN_TAG else ""
+# HL-VAULT1 step 5 (2026-11-12, brief docs/prompts/HL_VAULT1_RUN.md): PROFIT1_VAULT=1 runs this same engine on the
+# vault. ONLY the data entry points differ (picks, geometry/labels, day range, where the cleaned series are
+# saved); every simulation rule, fee, margin, leverage and cross-check is the same code. Default (unset) leaves
+# every existing run reproducible byte for byte.
+VAULT = os.environ.get("PROFIT1_VAULT", "") == "1"
+VAULT_PICKS = os.path.join(HERE, "logs", "s1", "s1_vault_picks.parquet")
+# sha256 of the step-4 usable picks table, as logged by s1_vault_picks.py and passed by the checker
+EXPECTED_VAULT_PICKS_SHA = "15b4f56cd66ad6b2a4e2bc056f03cf03febb519459491310d4f7745e50e44a72"
+VAULT_FOLD = 8     # the vault is one block after the 8 test folds (0-7); used only for the per-block coverage print
 MST_BUCKETS = [("0", lambda m: m == 0), ("1-5", lambda m: (m >= 1) & (m <= 5)),
                ("6-30", lambda m: (m >= 6) & (m <= 30)), (">30", lambda m: m > 30)]
 
@@ -203,7 +212,28 @@ def log(msg):
 # ---------------------------------------------------------------------------
 # 1. Picks and p_cal (no refit of S1; reuses S1-H's own functions)
 # ---------------------------------------------------------------------------
+def load_vault_picks():
+    """VAULT mode: the step-4 picks table (Rule A cut-offs from fold 7, isotonic p_cal from folds 0-7), checked by
+    sha256 against the reviewed file. Columns used downstream: event_id, t0, p_cal_10h, pick_{q}, fold."""
+    import hashlib
+    h = hashlib.sha256()
+    with open(VAULT_PICKS, "rb") as f:
+        for blk in iter(lambda: f.read(1 << 20), b""):
+            h.update(blk)
+    log(f"[PROFIT1] VAULT picks file sha256 {h.hexdigest()} (expected {EXPECTED_VAULT_PICKS_SHA})")
+    assert h.hexdigest() == EXPECTED_VAULT_PICKS_SHA, "vault picks file != the reviewed step-4 output"
+    df = pd.read_parquet(VAULT_PICKS)
+    df["fold"] = VAULT_FOLD
+    assert (df["t0"] >= H.VAULT_START).all() and df["p_cal_10h"].notna().all()
+    log(f"[PROFIT1] VAULT: {len(df):,} usable vault events, t0 {df['t0'].min()} .. {df['t0'].max()}")
+    for q in CONFIG["qs"]:
+        log(f"[PROFIT1] q={q}: n={int(df[f'pick_{q}'].sum()):,}")
+    return df
+
+
 def load_picks_and_pcal():
+    if VAULT:
+        return load_vault_picks()
     df, events = S1H.load_data()
     s1g_report = json.load(open(os.path.join(LOG_DIR, "s1g_report.json")))
     block_df, _ = S1H.compute_picks(df, s1g_report)
@@ -242,7 +272,11 @@ def load_geometry_and_labels(event_ids):
     for s in CONFIG["stops"]:
         cols += [f"outcome_{s}", f"gross_{s}", f"net_{s}_taker", f"net_{s}_maker"]
     cols += ["fee_sigma_taker", "fee_sigma_maker"]
-    ev = H.load_search_events(columns=cols)
+    if VAULT:
+        import vault_loader as VL        # the only module allowed to read vault rows
+        ev = VL.load_vault_events(columns=cols)
+    else:
+        ev = H.load_search_events(columns=cols)
     geo = ev.loc[event_ids, cols].copy()
     return geo
 
@@ -275,6 +309,12 @@ def load_leverage(event_ids):
 # 3. ctxs (price/funding/impact) -- S3 read-only, cached locally
 # ---------------------------------------------------------------------------
 def day_range():
+    if VAULT:
+        # same convention as the test months (one day before the first event day .. one day after the last
+        # event day); the vault's first t0 is VAULT_START and its last is read from the picks table
+        last = pd.read_parquet(VAULT_PICKS, columns=["t0"])["t0"].max()
+        return pd.date_range((H.VAULT_START - pd.Timedelta(days=1)).strftime("%Y%m%d"),
+                             (last + pd.Timedelta(days=1)).strftime("%Y%m%d"), freq="D").strftime("%Y%m%d").tolist()
     start = (H.TEST_BLOCK_STARTS[1] - pd.Timedelta(days=1)).strftime("%Y%m%d")
     end = (H.TEST_BLOCK_ENDS[7] + pd.Timedelta(days=1)).strftime("%Y%m%d")
     return pd.date_range(start, end, freq="D").strftime("%Y%m%d").tolist()
@@ -919,7 +959,7 @@ def run_one(q, stop_name, fee_mode, picks, geo, lev, paths, impact_series, fundi
 # ---------------------------------------------------------------------------
 # 7. Persist the cleaned series (user decision 2026-11-08: "always keep the processed copy")
 # ---------------------------------------------------------------------------
-CLEANED_S3_PREFIX = f"{BUCKET}/profit1_cleaned"
+CLEANED_S3_PREFIX = f"{BUCKET}/profit1_cleaned_vault" if VAULT else f"{BUCKET}/profit1_cleaned"
 
 
 def save_cleaned_series_local(dense_price, price_diag, impact_series, impact_offminute, days, coins):
@@ -931,7 +971,7 @@ def save_cleaned_series_local(dense_price, price_diag, impact_series, impact_off
     the simulation unseen). The engine runs on this reloaded copy. The S3 push happens separately, in
     sync_cleaned_series_to_s3(), AFTER the v1 cross-check passes (checker M10): a reconstruction that
     disagrees with the archive must never sit in profit1_cleaned/ looking like a good processed copy."""
-    out_dir = os.path.join(PROFIT_DIR, "cleaned")
+    out_dir = os.path.join(PROFIT_DIR, "cleaned_vault" if VAULT else "cleaned")
     price_dir, impact_dir = os.path.join(out_dir, "price"), os.path.join(out_dir, "impact")
     os.makedirs(price_dir, exist_ok=True)
     os.makedirs(impact_dir, exist_ok=True)

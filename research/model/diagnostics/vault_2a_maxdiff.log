@@ -1,0 +1,24 @@
+{
+ "log": "research/model/logs/s1/vault_pull/vault-refit_i-095394542d9f95783.log",
+ "pred_abs_tol": 6.557e-05,
+ "distinct_events_listed": 40771,
+ "counts": {
+  "p_2h": {
+   "compared": 428849,
+   "outside": 637
+  },
+  "p_5h": {
+   "compared": 428849,
+   "outside": 9765
+  },
+  "p_10h": {
+   "compared": 428849,
+   "outside": 40238
+  }
+ },
+ "max_abs_diff": {
+  "p_2h": 0.0017479999999999718,
+  "p_5h": 0.002002999999999977,
+  "p_10h": 0.0018320000000000003
+ }
+}

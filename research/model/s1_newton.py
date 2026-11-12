@@ -164,6 +164,7 @@ def fit_hazard_elastic_net_newton(X, row_event_pos, row_step, row_label, n_event
     obj_prev = full_obj(w, b)
     converged = False
     n_outer = 0
+    n_cd_capped = 0
     for it in range(1, max_outer + 1):
         nll, grad_w, grad_b, H_ww, H_wb, H_bb = build_hessian_blocks(
             X, w, b, row_event_pos, row_step, row_label, n_events, n_steps, chunk_size,
@@ -203,6 +204,7 @@ def fit_hazard_elastic_net_newton(X, row_event_pos, row_step, row_label, n_event
         n_outer = it
         rel_change = abs(obj_prev - obj_cand) / max(abs(obj_prev), 1e-12)
         cd_capped = n_sweeps >= cd_max_sweeps
+        n_cd_capped += int(cd_capped)
         # Checker's ruling, S1 review round 6: CD's sweep count and whether it hit the cap are logged for
         # EVERY outer iteration (not just every `log_every`) -- a capped sweep means the step may not be
         # a true Newton step, and that must always be visible, not only on the periodic detail line.
@@ -216,4 +218,5 @@ def fit_hazard_elastic_net_newton(X, row_event_pos, row_step, row_label, n_event
             converged = True
             break
     return {"w": w, "b": b, "n_iter": n_outer, "n_calls": n_outer, "converged": converged,
-            "obj_final": obj_prev, "rel_change": rel_change}
+            "obj_final": obj_prev, "rel_change": rel_change,
+            "n_cd_capped": n_cd_capped, "n_cd_calls": n_outer}

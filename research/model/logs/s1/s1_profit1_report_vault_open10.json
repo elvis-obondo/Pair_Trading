@@ -1,0 +1,3417 @@
+{
+  "config": {
+    "start_equity": 1000.0,
+    "margin_frac": 0.05,
+    "leverage_cap": 10.0,
+    "max_open": 10,
+    "fee_taker": 0.00045,
+    "fee_maker": 0.00015,
+    "slippage_on": true,
+    "funding_on": true,
+    "min_order_usd": 10.0,
+    "qs": [
+      0.01,
+      0.005,
+      0.001
+    ],
+    "stops": [
+      "0p5",
+      "1p0",
+      "2p0",
+      "none"
+    ],
+    "fee_modes": [
+      "taker",
+      "maker"
+    ],
+    "min_run_equity_usd": 50.0,
+    "bootstrap_n": 2000,
+    "bootstrap_level": 0.9875,
+    "ev_quintiles": 5,
+    "slippage_fallback_window_days": 30,
+    "slippage_spread_share": 0.0,
+    "min_abs_z": 0.0
+  },
+  "runs": {
+    "q0.01_stop0p5_feetaker": {
+      "final_equity": 304.03644733055216,
+      "n_trades": 10187,
+      "skips": {
+        "book_full": 2574,
+        "margin": 0,
+        "min_order": 1186,
+        "below_floor": 0,
+        "liquidated_minute": 0
+      },
+      "n_liquidations": 0,
+      "stopped_at": null,
+      "slip_stats": {
+        "direct": 32562,
+        "fallback_median": 0,
+        "fallback_none": 8186
+      },
+      "n_funding_events": 11888,
+      "n_filled_held_minutes": 188241,
+      "n_exits_on_filled": 2623
+    },
+    "q0.01_stop0p5_feemaker": {
+      "final_equity": 942.9602439912541,
+      "n_trades": 10433,
+      "skips": {
+        "book_full": 3064,
+        "margin": 0,
+        "min_order": 450,
+        "below_floor": 0,
+        "liquidated_minute": 0
+      },
+      "n_liquidations": 0,
+      "stopped_at": null,
+      "slip_stats": {
+        "direct": 33133,
+        "fallback_median": 0,
+        "fallback_none": 8599
+      },
+      "n_funding_events": 12298,
+      "n_filled_held_minutes": 191012,
+      "n_exits_on_filled": 2629
+    },
+    "q0.01_stop1p0_feetaker": {
+      "final_equity": 442.26987089529354,
+      "n_trades": 8742,
+      "skips": {
+        "book_full": 4486,
+        "margin": 0,
+        "min_order": 719,
+        "below_floor": 0,
+        "liquidated_minute": 0
+      },
+      "n_liquidations": 0,
+      "stopped_at": null,
+      "slip_stats": {
+        "direct": 27737,
+        "fallback_median": 0,
+        "fallback_none": 7231
+      },
+      "n_funding_events": 19354,
+      "n_filled_held_minutes": 271862,
+      "n_exits_on_filled": 2238
+    },
+    "q0.01_stop1p0_feemaker": {
+      "final_equity": 1162.0034991830144,
+      "n_trades": 8864,
+      "skips": {
+        "book_full": 4741,
+        "margin": 0,
+        "min_order": 342,
+        "below_floor": 0,
+        "liquidated_minute": 0
+      },
+      "n_liquidations": 0,
+      "stopped_at": null,
+      "slip_stats": {
+        "direct": 28033,
+        "fallback_median": 0,
+        "fallback_none": 7423
+      },
+      "n_funding_events": 19436,
+      "n_filled_held_minutes": 270107,
+      "n_exits_on_filled": 2218
+    },
+    "q0.01_stop2p0_feetaker": {
+      "final_equity": 762.6137463121195,
+      "n_trades": 6618,
+      "skips": {
+        "book_full": 6962,
+        "margin": 0,
+        "min_order": 367,
+        "below_floor": 0,
+        "liquidated_minute": 0
+      },
+      "n_liquidations": 0,
+      "stopped_at": null,
+      "slip_stats": {
+        "direct": 21016,
+        "fallback_median": 0,
+        "fallback_none": 5456
+      },
+      "n_funding_events": 27022,
+      "n_filled_held_minutes": 348998,
+      "n_exits_on_filled": 1698
+    },
+    "q0.01_stop2p0_feemaker": {
+      "final_equity": 1465.6134011658403,
+      "n_trades": 6662,
+      "skips": {
+        "book_full": 7060,
+        "margin": 0,
+        "min_order": 225,
+        "below_floor": 0,
+        "liquidated_minute": 0
+      },
+      "n_liquidations": 0,
+      "stopped_at": null,
+      "slip_stats": {
+        "direct": 21104,
+        "fallback_median": 0,
+        "fallback_none": 5544
+      },
+      "n_funding_events": 27098,
+      "n_filled_held_minutes": 349121,
+      "n_exits_on_filled": 1699
+    },
+    "q0.01_stopnone_feetaker": {
+      "final_equity": 1263.8546356863467,
+      "n_trades": 3789,
+      "skips": {
+        "book_full": 10010,
+        "margin": 0,
+        "min_order": 148,
+        "below_floor": 0,
+        "liquidated_minute": 0
+      },
+      "n_liquidations": 0,
+      "stopped_at": null,
+      "slip_stats": {
+        "direct": 12140,
+        "fallback_median": 0,
+        "fallback_none": 3016
+      },
+      "n_funding_events": 36002,
+      "n_filled_held_minutes": 403238,
+      "n_exits_on_filled": 1083
+    },
+    "q0.01_stopnone_feemaker": {
+      "final_equity": 2068.4094948969487,
+      "n_trades": 3832,
+      "skips": {
+        "book_full": 10018,
+        "margin": 0,
+        "min_order": 97,
+        "below_floor": 0,
+        "liquidated_minute": 0
+      },
+      "n_liquidations": 0,
+      "stopped_at": null,
+      "slip_stats": {
+        "direct": 12246,
+        "fallback_median": 0,
+        "fallback_none": 3082
+      },
+      "n_funding_events": 36050,
+      "n_filled_held_minutes": 404432,
+      "n_exits_on_filled": 1085
+    },
+    "q0.005_stop0p5_feetaker": {
+      "final_equity": 515.8930293771759,
+      "n_trades": 6050,
+      "skips": {
+        "book_full": 544,
+        "margin": 0,
+        "min_order": 594,
+        "below_floor": 0,
+        "liquidated_minute": 0
+      },
+      "n_liquidations": 0,
+      "stopped_at": null,
+      "slip_stats": {
+        "direct": 19000,
+        "fallback_median": 0,
+        "fallback_none": 5200
+      },
+      "n_funding_events": 6326,
+      "n_filled_held_minutes": 101014,
+      "n_exits_on_filled": 1550
+    },
+    "q0.005_stop0p5_feemaker": {
+      "final_equity": 974.0470225552785,
+      "n_trades": 6183,
+      "skips": {
+        "book_full": 641,
+        "margin": 0,
+        "min_order": 364,
+        "below_floor": 0,
+        "liquidated_minute": 0
+      },
+      "n_liquidations": 0,
+      "stopped_at": null,
+      "slip_stats": {
+        "direct": 19356,
+        "fallback_median": 0,
+        "fallback_none": 5376
+      },
+      "n_funding_events": 6552,
+      "n_filled_held_minutes": 102945,
+      "n_exits_on_filled": 1575
+    },
+    "q0.005_stop1p0_feetaker": {
+      "final_equity": 592.4384891333948,
+      "n_trades": 5659,
+      "skips": {
+        "book_full": 1033,
+        "margin": 0,
+        "min_order": 496,
+        "below_floor": 0,
+        "liquidated_minute": 0
+      },
+      "n_liquidations": 0,
+      "stopped_at": null,
+      "slip_stats": {
+        "direct": 17881,
+        "fallback_median": 0,
+        "fallback_none": 4755
+      },
+      "n_funding_events": 11034,
+      "n_filled_held_minutes": 156610,
+      "n_exits_on_filled": 1427
+    },
+    "q0.005_stop1p0_feemaker": {
+      "final_equity": 1074.1755418467048,
+      "n_trades": 5752,
+      "skips": {
+        "book_full": 1118,
+        "margin": 0,
+        "min_order": 318,
+        "below_floor": 0,
+        "liquidated_minute": 0
+      },
+      "n_liquidations": 0,
+      "stopped_at": null,
+      "slip_stats": {
+        "direct": 18089,
+        "fallback_median": 0,
+        "fallback_none": 4919
+      },
+      "n_funding_events": 11270,
+      "n_filled_held_minutes": 159398,
+      "n_exits_on_filled": 1430
+    },
+    "q0.005_stop2p0_feetaker": {
+      "final_equity": 731.4615570741607,
+      "n_trades": 4827,
+      "skips": {
+        "book_full": 2006,
+        "margin": 0,
+        "min_order": 355,
+        "below_floor": 0,
+        "liquidated_minute": 0
+      },
+      "n_liquidations": 0,
+      "stopped_at": null,
+      "slip_stats": {
+        "direct": 15232,
+        "fallback_median": 0,
+        "fallback_none": 4076
+      },
+      "n_funding_events": 18030,
+      "n_filled_held_minutes": 234956,
+      "n_exits_on_filled": 1224
+    },
+    "q0.005_stop2p0_feemaker": {
+      "final_equity": 1216.8312256402724,
+      "n_trades": 4878,
+      "skips": {
+        "book_full": 2078,
+        "margin": 0,
+        "min_order": 232,
+        "below_floor": 0,
+        "liquidated_minute": 0
+      },
+      "n_liquidations": 0,
+      "stopped_at": null,
+      "slip_stats": {
+        "direct": 15356,
+        "fallback_median": 0,
+        "fallback_none": 4156
+      },
+      "n_funding_events": 18126,
+      "n_filled_held_minutes": 233960,
+      "n_exits_on_filled": 1219
+    },
+    "q0.005_stopnone_feetaker": {
+      "final_equity": 1268.652736990167,
+      "n_trades": 3150,
+      "skips": {
+        "book_full": 3881,
+        "margin": 0,
+        "min_order": 157,
+        "below_floor": 0,
+        "liquidated_minute": 0
+      },
+      "n_liquidations": 0,
+      "stopped_at": null,
+      "slip_stats": {
+        "direct": 9977,
+        "fallback_median": 0,
+        "fallback_none": 2623
+      },
+      "n_funding_events": 29314,
+      "n_filled_held_minutes": 327428,
+      "n_exits_on_filled": 887
+    },
+    "q0.005_stopnone_feemaker": {
+      "final_equity": 1777.0431307007807,
+      "n_trades": 3156,
+      "skips": {
+        "book_full": 3909,
+        "margin": 0,
+        "min_order": 123,
+        "below_floor": 0,
+        "liquidated_minute": 0
+      },
+      "n_liquidations": 0,
+      "stopped_at": null,
+      "slip_stats": {
+        "direct": 10010,
+        "fallback_median": 0,
+        "fallback_none": 2614
+      },
+      "n_funding_events": 29382,
+      "n_filled_held_minutes": 327036,
+      "n_exits_on_filled": 881
+    },
+    "q0.001_stop0p5_feetaker": {
+      "final_equity": 888.733792963367,
+      "n_trades": 1300,
+      "skips": {
+        "book_full": 22,
+        "margin": 0,
+        "min_order": 158,
+        "below_floor": 0,
+        "liquidated_minute": 0
+      },
+      "n_liquidations": 0,
+      "stopped_at": null,
+      "slip_stats": {
+        "direct": 4021,
+        "fallback_median": 0,
+        "fallback_none": 1179
+      },
+      "n_funding_events": 1080,
+      "n_filled_held_minutes": 17974,
+      "n_exits_on_filled": 309
+    },
+    "q0.001_stop0p5_feemaker": {
+      "final_equity": 1025.8632645549806,
+      "n_trades": 1312,
+      "skips": {
+        "book_full": 23,
+        "margin": 0,
+        "min_order": 145,
+        "below_floor": 0,
+        "liquidated_minute": 0
+      },
+      "n_liquidations": 0,
+      "stopped_at": null,
+      "slip_stats": {
+        "direct": 4057,
+        "fallback_median": 0,
+        "fallback_none": 1191
+      },
+      "n_funding_events": 1090,
+      "n_filled_held_minutes": 18125,
+      "n_exits_on_filled": 310
+    },
+    "q0.001_stop1p0_feetaker": {
+      "final_equity": 883.1331482535554,
+      "n_trades": 1290,
+      "skips": {
+        "book_full": 31,
+        "margin": 0,
+        "min_order": 159,
+        "below_floor": 0,
+        "liquidated_minute": 0
+      },
+      "n_liquidations": 0,
+      "stopped_at": null,
+      "slip_stats": {
+        "direct": 3983,
+        "fallback_median": 0,
+        "fallback_none": 1177
+      },
+      "n_funding_events": 1962,
+      "n_filled_held_minutes": 28915,
+      "n_exits_on_filled": 308
+    },
+    "q0.001_stop1p0_feemaker": {
+      "final_equity": 1016.5413608886076,
+      "n_trades": 1303,
+      "skips": {
+        "book_full": 32,
+        "margin": 0,
+        "min_order": 145,
+        "below_floor": 0,
+        "liquidated_minute": 0
+      },
+      "n_liquidations": 0,
+      "stopped_at": null,
+      "slip_stats": {
+        "direct": 4019,
+        "fallback_median": 0,
+        "fallback_none": 1193
+      },
+      "n_funding_events": 1984,
+      "n_filled_held_minutes": 29251,
+      "n_exits_on_filled": 310
+    },
+    "q0.001_stop2p0_feetaker": {
+      "final_equity": 860.317305814984,
+      "n_trades": 1272,
+      "skips": {
+        "book_full": 47,
+        "margin": 0,
+        "min_order": 161,
+        "below_floor": 0,
+        "liquidated_minute": 0
+      },
+      "n_liquidations": 0,
+      "stopped_at": null,
+      "slip_stats": {
+        "direct": 3929,
+        "fallback_median": 0,
+        "fallback_none": 1159
+      },
+      "n_funding_events": 3734,
+      "n_filled_held_minutes": 50829,
+      "n_exits_on_filled": 288
+    },
+    "q0.001_stop2p0_feemaker": {
+      "final_equity": 979.527782985878,
+      "n_trades": 1284,
+      "skips": {
+        "book_full": 50,
+        "margin": 0,
+        "min_order": 146,
+        "below_floor": 0,
+        "liquidated_minute": 0
+      },
+      "n_liquidations": 0,
+      "stopped_at": null,
+      "slip_stats": {
+        "direct": 3961,
+        "fallback_median": 0,
+        "fallback_none": 1175
+      },
+      "n_funding_events": 3766,
+      "n_filled_held_minutes": 51163,
+      "n_exits_on_filled": 288
+    },
+    "q0.001_stopnone_feetaker": {
+      "final_equity": 1083.2284087079495,
+      "n_trades": 1149,
+      "skips": {
+        "book_full": 201,
+        "margin": 0,
+        "min_order": 130,
+        "below_floor": 0,
+        "liquidated_minute": 0
+      },
+      "n_liquidations": 0,
+      "stopped_at": null,
+      "slip_stats": {
+        "direct": 3645,
+        "fallback_median": 0,
+        "fallback_none": 951
+      },
+      "n_funding_events": 9800,
+      "n_filled_held_minutes": 109265,
+      "n_exits_on_filled": 318
+    },
+    "q0.001_stopnone_feemaker": {
+      "final_equity": 1229.953290104195,
+      "n_trades": 1158,
+      "skips": {
+        "book_full": 201,
+        "margin": 0,
+        "min_order": 121,
+        "below_floor": 0,
+        "liquidated_minute": 0
+      },
+      "n_liquidations": 0,
+      "stopped_at": null,
+      "slip_stats": {
+        "direct": 3658,
+        "fallback_median": 0,
+        "fallback_none": 974
+      },
+      "n_funding_events": 9780,
+      "n_filled_held_minutes": 109111,
+      "n_exits_on_filled": 321
+    }
+  },
+  "coverage_by_fold": {
+    "8": {
+      "covered": 16764294,
+      "total": 16764294,
+      "n0": 13477285,
+      "n1_5": 2434053,
+      "n6_30": 645749,
+      "n_gt30": 207207,
+      "share": 1.0
+    }
+  },
+  "cleaned_series_manifest": {
+    "generated_utc": "2026-11-12T03:30:17Z",
+    "coins": [
+      "0G",
+      "2Z",
+      "AAVE",
+      "ACE",
+      "ADA",
+      "AERO",
+      "AIXBT",
+      "ALGO",
+      "ALT",
+      "ANIME",
+      "APE",
+      "APEX",
+      "APT",
+      "AR",
+      "ARB",
+      "ASTER",
+      "ATOM",
+      "AVAX",
+      "AVNT",
+      "AXS",
+      "AZTEC",
+      "BABY",
+      "BANANA",
+      "BCH",
+      "BERA",
+      "BIGTIME",
+      "BIO",
+      "BLUR",
+      "BNB",
+      "BOME",
+      "BRETT",
+      "BSV",
+      "CAKE",
+      "CASHCAT",
+      "CC",
+      "CELO",
+      "CFX",
+      "CHIP",
+      "COMP",
+      "CRV",
+      "DASH",
+      "DOGE",
+      "DOT",
+      "DYDX",
+      "DYM",
+      "EIGEN",
+      "ENA",
+      "ENS",
+      "ETC",
+      "ETHFI",
+      "FARTCOIN",
+      "FET",
+      "FIL",
+      "FOGO",
+      "GALA",
+      "GAS",
+      "GMT",
+      "GMX",
+      "GOAT",
+      "GRAM",
+      "GRASS",
+      "GRIFFAIN",
+      "HBAR",
+      "HEMI",
+      "HMSTR",
+      "HYPE",
+      "HYPER",
+      "ICP",
+      "IMX",
+      "INIT",
+      "INJ",
+      "IO",
+      "IOTA",
+      "JTO",
+      "JUP",
+      "KAITO",
+      "KAS",
+      "LAYER",
+      "LDO",
+      "LINEA",
+      "LINK",
+      "LIT",
+      "LTC",
+      "MANTA",
+      "ME",
+      "MEGA",
+      "MELANIA",
+      "MEME",
+      "MERL",
+      "MET",
+      "MINA",
+      "MNT",
+      "MON",
+      "MOODENG",
+      "MORPHO",
+      "MOVE",
+      "NEAR",
+      "NEO",
+      "NIL",
+      "NOT",
+      "NXPC",
+      "ONDO",
+      "OP",
+      "ORDI",
+      "PAXG",
+      "PENDLE",
+      "PENGU",
+      "PEOPLE",
+      "PNUT",
+      "POL",
+      "POLYX",
+      "PONS",
+      "POPCAT",
+      "PROVE",
+      "PUMP",
+      "PURR",
+      "PYTH",
+      "RENDER",
+      "RESOLV",
+      "REZ",
+      "RSR",
+      "RUNE",
+      "S",
+      "SAGA",
+      "SAND",
+      "SEI",
+      "SKR",
+      "SKY",
+      "SNX",
+      "SOL",
+      "SOPH",
+      "SPX",
+      "STABLE",
+      "STBL",
+      "STRK",
+      "STX",
+      "SUI",
+      "SUPER",
+      "SUSHI",
+      "SYRUP",
+      "TAO",
+      "TIA",
+      "TNSR",
+      "TRB",
+      "TRUMP",
+      "TRX",
+      "TURBO",
+      "UMA",
+      "UNI",
+      "USELESS",
+      "USUAL",
+      "VINE",
+      "VIRTUAL",
+      "VVV",
+      "W",
+      "WCT",
+      "WIF",
+      "WLD",
+      "WLFI",
+      "XAI",
+      "XLM",
+      "XMR",
+      "XPL",
+      "XRP",
+      "YGG",
+      "ZEC",
+      "ZEN",
+      "ZETA",
+      "ZK",
+      "ZORA",
+      "ZRO",
+      "kBONK",
+      "kFLOKI",
+      "kLUNC",
+      "kNEIRO",
+      "kPEPE",
+      "kSHIB"
+    ],
+    "day_range": [
+      "20260712",
+      "20261014"
+    ],
+    "n_days": 95,
+    "price_source": {
+      "variant": "build2 d3/asm (confirmed 2026-11-09: 206/206 sha256 match vs the committed 30m feathers)",
+      "s3_prefix": "s3://pair-trading-hl-289869684922/build2/d3/asm/futures",
+      "rule": "read exactly as envelope.load_1m_series: duplicate minutes resolve to the LAST occurrence; gaps (minute absent, gap_in_bar, or NaN close) stay NaN/flagged; nothing forward-filled beyond what build2's own pipeline already decided",
+      "source_file_sha256": {
+        "0G": "225aaaf5821335151b113f71c4548d0228ef1f7934e85dab8c20d92a2a41058b",
+        "2Z": "d35ef0d48f68f831421ff3f1adca58701940e93dc11a651b396c55e844e2f58b",
+        "AAVE": "cc77c131d62b59cd2d26fabfa6e3387e8b87e2b8cf8427a74b91bfa894580168",
+        "ACE": "655f1c69bc97a887bc807e49705361410120ea65f56180e907c2ada926ac6897",
+        "ADA": "270bcce45e5536aa7ee0e98fdd87efc36963ce42388429fbb2d80b9334de660d",
+        "AERO": "bb044cccd8c4e3cf0cdca9f9c070413ce290068761f75bd368475a2d8dd4b226",
+        "AIXBT": "ae3c6a35659f1f9b64ccc2baf9e68679a282e33d7a84e43ded188c26e54a0aee",
+        "ALGO": "731432bbe1ffd21bb550575172ab6ab7961e6436a39a38972d0a86358a612d31",
+        "ALT": "a6ba308bc1794228e87f1cc8ebb5e87b223af28b412c96f17997e4b3ee88f66a",
+        "ANIME": "cc522bfa46907f8297fcf807de16813b2af95dc1a214f3a6615fc7ceba653fb2",
+        "APE": "497f06673ea1bf6050d7d26843d74422c502cf3b08b7df72c757e97b68c493e8",
+        "APEX": "30a65ead8e2d330ccc3fcaa0c7e6bc1cf1ef727520c2b192f834a3fc2005f07a",
+        "APT": "523afd4ee3c286d5526db35325c534f24b2f2515898e690b6f97b9d3b112767c",
+        "AR": "3765f15c8df91347b3ddb81d642541658b08ea9d5a977863becfbdb4d05dcd7e",
+        "ARB": "384456857759734d7f1273d1440f67906c7bab38f57a77f63cc1b5201ba6571c",
+        "ASTER": "7ee84835378e5153f6b1683f2c74261e984efa5a7edff5aaf5ae259d4d79636b",
+        "ATOM": "f3b5e5384b66ec9ac87a05348bbe0b77113845108d213da1410a5acf9f056a40",
+        "AVAX": "249811589a719252b235839ce7c68781f8f35052983d0b33d9191145893fdfbf",
+        "AVNT": "1f30c469f3a3bb146cfdf7d290a90a22431d64359fe33c9e52c7d1059587214f",
+        "AXS": "69ab9cf608605f1e46b2d3b9cb5deb1d33ca5679378ddc9f5cd537762d497a95",
+        "AZTEC": "038a0f065bc25b640eaa23a741f596b4d7c8beb34661fd369340303abdcef838",
+        "BABY": "d35c3f10ff70f7b7f8d88f93b0e9d84b9aa21c79a2da8a62522fbcdc1ce32602",
+        "BANANA": "3d14acce0cb2315084703fe00676c6c1236e508f53a3b095fbc0ecfdf71fd15c",
+        "BCH": "4de9671c9daeb00d0d9e4af2ba91428f9a9a168686b91ca89acf7cb2ee54bd92",
+        "BERA": "034f9424ba4e4a5d24843e703051ac83c39f07bb77c1a3093cc632bedac0650f",
+        "BIGTIME": "0121083fc752edf204000a2239f76d0f7c56641450a1b0f2e313f021c54cab52",
+        "BIO": "7aa71be108a9f4c62837dd3a048e6e1f7e7f924fe2cc838919e308b617c946a4",
+        "BLUR": "a55c2e6c8f030e342e3d47709c0709d793e1c1ba849c16fcd853d15c7311b829",
+        "BNB": "41ee21cafe7609d63d033bdf6bb7aedbc0c3947f7001a75d7ac5c9fa34af2fe1",
+        "BOME": "6e195d520ee77fffc28eb4e32ee237dd9d976f5eddc773564561244755916c01",
+        "BRETT": "0b29cacc20b1da419fbcdc4e4d2500a9bf96a7ec4a3dcf65b931498f492ec0f2",
+        "BSV": "771d28375c8a9a9d9acf5a94b42a887abe17f778fe82f0df6bf7333d6e1d0a9a",
+        "CAKE": "d80e36bfe6ac0108280a1c612b21d713ccbb8f5361a85d7f133673e776f7933d",
+        "CASHCAT": "e7006014126803773c5d57b0b952bf532fb8a72a7bc0885a4d6661ac17defdea",
+        "CC": "9cb268193c3dc8e21710cd9b1708e75fdb026275b4b8aa9990afa2bb9d8e6ab1",
+        "CELO": "f73976293aecc0e198e9f64f4fc5de96f4ba115a5d8c37864213a68a9bc87da8",
+        "CFX": "ce0eae62345cae87d3020f67eae1cee3361feb1fd629a66d9c5e1c8c55b35333",
+        "CHIP": "2103d58301b1c9b03962ee951b8a04f9d9bea4f3c2d8ab7d00d09d7f0f69bf22",
+        "COMP": "005b6a922ae2c35b524d9dc546c80ab3db9cdbd32bfd930986cb9b8e206a6b74",
+        "CRV": "626ebd97133e1dbdc2a624e98dd50f0f2725730f23f7a5304ca6820544b8443a",
+        "DASH": "add3e3dc0b1abe2bc2be550e10ac212253fa21e0cb4f6a94fa4d54eb5a8f34f9",
+        "DOGE": "7e29de6be7dfd63f3abe601fea4e7c173b240064100395585306c3a6a99f722e",
+        "DOT": "173bcc863f1b32158e364a253368b51f97045b5a6fb49cabad55668158ca0b41",
+        "DYDX": "d023e600121521afc66b01cb8f94d6adaf2c0f8f08a103258e26b7fab69c79bc",
+        "DYM": "6adcf69fa2b83268ea8509dfc7ac0048849cdd7e7d0e51b097d8dae15ca2bc73",
+        "EIGEN": "715b0a4f8ed6e1e27d1e474e302194983a6700f2c25c36ffc4572ae4099dc34a",
+        "ENA": "bb64bb388949a75269c3064ca36b9d12e91a2cf1bcec2b95ed5793c37b1662b2",
+        "ENS": "56ed6f2e4e0524c772669a3a014028a1f63b3882f80bb4b8f8228163e245cbd9",
+        "ETC": "496fb15f923f0b8ec46a87716468f606e6203b86f34265ef54fab96485093506",
+        "ETHFI": "0f4792c629c8d9f1989db364148375afd008d29e47ddac6babd19e76f1058d42",
+        "FARTCOIN": "8a8cd8168deb5acc378eb9608f82fcc3089439159a02cc3fb6431653c6d2cbf5",
+        "FET": "2462a05ef649b8aadbd1856a4c134e998669013c278031d88efe8a9d7a275291",
+        "FIL": "0fb66149fd063268826094062a370c3260a6a09b39ec17edef4e8d93c32629df",
+        "FOGO": "f4192277dffbf496ddd33201a99eab7ad44b8e35b163cd6bd36b850137bc2c01",
+        "GALA": "e069f46fff432f2351b7c3bf01f863c5dc282087e02e35778564ae0a0d6f4634",
+        "GAS": "a43ad5ff08d680ccf5d9bdff0c271186e58e819ae82105de01b3d08dc438c18b",
+        "GMT": "cdabdca4e9c5f12c44e71a663a2f11dcedb8335351340ca66652167ce2efc361",
+        "GMX": "c57434ff732ba1760fe69b88ac74e9d37f375b6de1470df3f37582d8ac276387",
+        "GOAT": "c1dfa91e6aa6ffaf443efbd311c740903050daf3fdb4bc9d8e806ebbde59b410",
+        "GRAM": "b7025328e5b19476914cfcb7e126449c10196588d1e2075f27b85f34de9fb1c0",
+        "GRASS": "81d1a0a2c5b642598097b6e6bfe205a0f1669aa76154821056054cdb6e5d6963",
+        "GRIFFAIN": "3e78f42a7d1454bca541403d7367268493467de519f1811ec92f88137aef0ca9",
+        "HBAR": "9f8ecd28d96b4a10414eb05c3453636e1795f8a962640b850c7972a2cd19ad04",
+        "HEMI": "f2c8c682cadbfec953984dcdaf7c127d539ec82518ec8400163fd5356677a3de",
+        "HMSTR": "ec4c75d599e8945ce0cb566e6ebea1980e5de6d155096c629a98506415bf28b4",
+        "HYPE": "a4f7e6b209dbfbb6b7426b6eaf72bc7871f445ac010d0ef4cd15a71d6a39a2b4",
+        "HYPER": "0d7de1c7f4116036443465be38c869e7150d1c322f37f90124ee9e8f51c89a2f",
+        "ICP": "6b58c3469f73f6f776cc6fce81233e710f265807163c6e1357897b963bda4703",
+        "IMX": "ffe8c8391b5f4188669af3bb6077946b49b32a32d139592ec3074a853d33f74f",
+        "INIT": "46a962ca386727483fd837d53080534d34adf3f4cfd33564395d7cb42d895f2b",
+        "INJ": "e6d2fbb80bafc0b1d8f9cadffe72b02b2a3fc1cbc662476196ea74019a590a6c",
+        "IO": "2ebf14c58dc2a3160c8db50661a34b5e37cd17059f224da2f1ace6f7a3ef9071",
+        "IOTA": "b37558688af7bcd20e4e3b96131b9ba38f29434976ec88bb723e746e1c69cac3",
+        "JTO": "b0fb727429be0d1299871c7ab1b588d9741265b328dcdf751f28ca25b9dd31aa",
+        "JUP": "af53da1008b21da19686a0694e1acfd4047ee84f2af15454fe83954fc3c535ad",
+        "KAITO": "7f16584d93d5c97ac141fa7c8b452bcbdfbf81caa722398e647406e95dc6ce3f",
+        "KAS": "fcca3a9a7a1cc13cd8e5d80b9bf5514aeab36018f9873802237d3f2030020b45",
+        "LAYER": "768aae32362ee40fdd33eb51544570eced31f4b18950b4f11bfe2f6072617e83",
+        "LDO": "785498db3d0f43cf3e2d00808e665b09fa81df4064aa5a6953ebec3bbd5abe11",
+        "LINEA": "3399b8b98b0bbb78188bf3a2fffe9ec18148c3a6065f48795cd16b1f10badd52",
+        "LINK": "63b747fd8a4943cb43906ce393aa025cda4045369623ebbb56c563d9d5839e2c",
+        "LIT": "07a06e2944666e8af7729608ce4d02d2278954d97bdef3feb721e9cfbed405d5",
+        "LTC": "b034c081929dcf94c3238e2391103fab19c392e7b2d635fc7e3cde9f40af1917",
+        "MANTA": "06ac7e4a55249ebc937898eb1cffe6ff8228184aa854e616ffdf1c0561b54e5b",
+        "ME": "aa5ced10a6a2ca2ab7b6cd93b24eaf75d152a769b81144d850f88bc24531afea",
+        "MEGA": "e186b7cf4402b35b736e8b2fb0337b88a0c3e28bf49489f50c686ca8c4fe1720",
+        "MELANIA": "5817a5432888bb1ea47bec7999143707acb484c53a82859859d6ac15d4898e75",
+        "MEME": "f884c1aeac687d3f2e3ac883cabee6b98d1697736817c24ad55358f3ed7019ab",
+        "MERL": "3ba8f1104265bcb14300e9fec25d48ded8b1435ac1355ca54b06a39e071519f0",
+        "MET": "c5dfe26e64c8806228d15b4468fc834c8bee960931d2b01247dcd52c8c87462f",
+        "MINA": "aff60c8ce69e53c616e05073db1227061be4953219cd9ae16669075a3d6013a3",
+        "MNT": "69446ec46f08eff0c9bbc9b85a6ba8990c3fb5bf387b9145e1503dbc3fde18c4",
+        "MON": "b10c431b6663782d13b195c9e1307d9e07ef070ce454c1e20c10dd7532769f97",
+        "MOODENG": "e60dc0ef89d483bc125352929cc81f469830641ed6f9070af43cf8caf79ccd9d",
+        "MORPHO": "a3798b3c4bc3e5d7ba9ee64b176785344945f103d1ffbaeab83a85e7e4c09f16",
+        "MOVE": "35a3330dd0a24c8acb4872f8794cbce2398ddaa641c8054d32fbcf72737348a7",
+        "NEAR": "881d21da7a67306958dd46e69c1a7cc022f6f5c56a16b89d3d7f972201c7507a",
+        "NEO": "6ad391abb199b70612997d2a2ffb43369ca4170eb2658d9d4df151c543bf5610",
+        "NIL": "c58443eb6153a5462cac0bd91603e4a62917b57fa32447c2d115ddf667a23060",
+        "NOT": "340965b8891e7aed895770ea0561a3c2c9f3a36433b3c1d6defebcdb87d08280",
+        "NXPC": "e8fb91b5818bffcaf7afe0b49f251640a4cc4dded868d60a29bbd915b18a63e1",
+        "ONDO": "e221cbee18098c9dc755f57b79551e5e335a26c01b77b94c8c98cf78e26839cc",
+        "OP": "13d188c27baa4a603f851ce1f9340bd0804fe9e2824ce8aaab83437a1360c59d",
+        "ORDI": "8483c07912218084ec40eb2c48ee19cb3d6aae21a27c5822d17055058cf8dceb",
+        "PAXG": "716befc293acf20d4280f303696d4c8746203abec5b88a22affa44bd5bb14b5c",
+        "PENDLE": "eb98d25dd4803ad2b8ce0b59855b75c9d67285944035b0cb2d85ffb899ce4dec",
+        "PENGU": "7e005300255c7153ff5467c650b00800216886e8f1b731e1b7ebe82ec21d5034",
+        "PEOPLE": "a6af17f26dcb2a828830f0443a28dc6ba6abe62653d05361292916e295dba537",
+        "PNUT": "733eba1eb867db5ab33d59d2e11607e7ceccb0ad6fb183bde65808b417c7b93f",
+        "POL": "981eb2b042715df816d5eb3e698f77cd2252e06adf36bdca1847d364fdffe65b",
+        "POLYX": "ee0d441dff131de8c296d7d39b0836d2032c0d4ee7e3d6e4cff172896a48fd3a",
+        "PONS": "cb100efa1842366ce7d8fc825b695ac86b8b26fef84ddfe2c9a0cbd0a3abf4cd",
+        "POPCAT": "6cd0b40f0daaf30a314ca1267fb38cbd16b9bd696936c85293af712f694c7e57",
+        "PROVE": "83b7b2ae1f435951e3a566fe5dc581eb191d679c2688e3a5c325eb2204fabfc0",
+        "PUMP": "fcc840ba8c0cdc04a9d1ac32e4a24f9807066ab910e6b88bc99dcf24859ff179",
+        "PURR": "5ade80d3ccd9f4f47fcb7ab038ca3f931d4cf013e02f7adb6f828ea6df92ed45",
+        "PYTH": "7f3d9a158d2159cbae3b389042470ea52a858befe7a80a0e8044e93cbb727486",
+        "RENDER": "1bd6a3647703ad7f1b1d2270e561f4100139d3102b03f56e8c7f7f639a5e3117",
+        "RESOLV": "88a1cf52b993b09fc556ef353188aab3abc3e353d4288aee6e7b65fcbfaa07fe",
+        "REZ": "f3af40c8b669d9b72e36e15805a6af299087bbeddd9704660f774cc42d3db595",
+        "RSR": "7e70de7585e0f9ffd0cbf221d252de5a08b0de2325f6e07e1dee4d2ff89efc9d",
+        "RUNE": "671d6658dc9b3c1c2bf27d7aa9dea7c36436aea576fea54aac90077e83fbe3bc",
+        "S": "6f7b4cfee6ddc64ca2470962e8e4de307dcb006f87eeb110bedadfac5c7049e7",
+        "SAGA": "3fd0638567ac5a06ceaa7e31c7d1a8e1dc682664675c714da41a8f46b1b7ff51",
+        "SAND": "f51cfc4faeecc9285687b9378421e9eb097ca6b8cf2a04e4a1e5736ffc169714",
+        "SEI": "899a0f1b77081cb0db62fb0c39d5557703608294107dd349a8dfea8ded31eadf",
+        "SKR": "d35c41788788e10b1dc28adc5b6a5889682b19d657cac1e011e9b214821fa7b5",
+        "SKY": "3679631a394266d2c0283f94c5e118b3bcf3bc89e3de2ae775adc01d01b2153a",
+        "SNX": "c76203066b6fff3794eb145add4b1e708662885bc983f6b87165b52f61fb1550",
+        "SOL": "0c9f4a2db4a966bd31ad993450131b32876a20b1facc5efe1b83eb5fb0d75ab5",
+        "SOPH": "ec7cdd85f3bf98930b8301964a1ebe276894254e794679acd35dee92fbcef021",
+        "SPX": "b12e63cf4c52fcde68d3bc22cd727fca18c599097dd648fff0b58d76b20230ed",
+        "STABLE": "0f06a5bf57e96c1d0e45d78f9d47179a58c526661c6019e91d56af1a8d37fc0d",
+        "STBL": "400da93964d6bffa8481b3099c91aa602e6c09af96964984745ac3b5a4a54263",
+        "STRK": "3195412977dba423a83b7ccec64117518d32faeec3278bfb91c629a00cd4d025",
+        "STX": "b8ed4e834b7eebe6e6260d24e24a91a98e4446588153c10e2619cddb8b9a79e6",
+        "SUI": "86c73ea42a844f4965251a7c7516e772f2c7c5c078966c4e3e4f68c925c40f07",
+        "SUPER": "b6157fe84b99448dad28f0a688103a1d412825228896bb3220219e83223832e9",
+        "SUSHI": "05b9c67468210208280ee1ddd4d6458e3c2449d90c39425896c5ab363fd923f5",
+        "SYRUP": "aac7498ff8afacbb535aabea429c961c185934330c562a8f1802c27538e47100",
+        "TAO": "bff0520562e20139d15472635619b2d663c612a4ff3e9fa28349e4cf32abbcd7",
+        "TIA": "51589d2d4c549327942687b1055f52d96f27d7575d4ce2d7ea2d963916cda0e8",
+        "TNSR": "4b333c262281d4ba3e301d8b76ee6052e696239b30ca677c64dc47cf1621c24e",
+        "TRB": "147c4045dd9d9d1d89c7a65226ea63de77fa4f3754a7ee93c2fb5ef3d06e313d",
+        "TRUMP": "8d3f302eeea3d1eab5f3bb046a618d034005c5fba445469943b59057516c7270",
+        "TRX": "e809c0be1457d9d1eb3c7558f87a44c7d72d44d5d0d7b1ee91b50f0481d786be",
+        "TURBO": "d2a9561af4b2ee0e1af79948c4557eaf62bf9fc6017b234f1fc88d42212b63df",
+        "UMA": "31d8b4438bf4809d15b1495e9d12009ffbd1144340ebac540c85e738916c997a",
+        "UNI": "01b04929343db62fe9fd987150504005cf04ff628998d65365513df552c8866f",
+        "USELESS": "391cf8f548ae014ba2005f7918e1f57081c0d4fa70ab654079ca0b5d8111ea00",
+        "USUAL": "c389c9cd01e2f27a1201efda05f17dd8b93f2217d0f94628916ae82d2eb36f7c",
+        "VINE": "c4f020f27b54446d47dfc9b5e14c2f243860aac8658b55445a8a9ccd42cfcb6d",
+        "VIRTUAL": "78734e2599235977dd624203cdd97c5c32c6b2afd294bf33b79366ed3f4e0697",
+        "VVV": "6a6ce548c9862ebe694d190bc2dd29833f8bddb9631246de8209de9a85804988",
+        "W": "64bc39ee3ffbd4785ad0c133e80539a11ff70aeacfab74ed4147ae98a8f96a1a",
+        "WCT": "c39311385ec68e26502a4329c3ae6121802c1f3989e1a8184140e6556508ed16",
+        "WIF": "f9de2f71c665c07de3c56149680921dce04b181a34059bce7ca25cd753329613",
+        "WLD": "007ce87b1f8a4adc8a22a6b3716a6a4c7691bff787c2d274899c278128606435",
+        "WLFI": "f5369b53acedf65bb0529bbdfc6f5a18067c3e6422c9b6d04427541517fb2f6e",
+        "XAI": "1615d22a55205494a2fe47415971140f1f83419219ccd6af77df82565532b633",
+        "XLM": "3db03fb3212748c4be30e0fbc448707b1835598e66977802b0cdecb759b6674b",
+        "XMR": "1e8e83147b7d239a7a3e7e679102c2504b235a67dd11bd4f5b67bd89fa592824",
+        "XPL": "90ca9ea686968b31e02e52d0eb182e71a0bd73ba6fbe3abd0cc933d25fedd9f6",
+        "XRP": "20886a254ccf52e0dfafc6e971d05cc393e872a83e141188a8080573429f65a5",
+        "YGG": "ea84376ca6f90084649dd83f7635d477a4ab4e197749ebb529951033d948f4da",
+        "ZEC": "91233926ea6591cbcb14756ba3fe77756c1ac171db58aef8281185e61fa2bc69",
+        "ZEN": "b6603249977691959dcaca19a17bccc8a06dd86f7bc789e538a4f4b1b0698cd2",
+        "ZETA": "2f3594367ca4a586d6624bf01b9b21564160bf5ddc4b5bb2eb5eba64a267f679",
+        "ZK": "4ceb94c07f1fa301bc8545e2050b2c1a789bfb5fc0f5494df42c96e1f69454c7",
+        "ZORA": "71ff94790e1991e1e596fccb51433e1554f7017178795df355c2f71bbbe5c46e",
+        "ZRO": "c38789ff83f1d23446b92b11fb15341882e9723ec790ab8dafce852d7472f1b1",
+        "kBONK": "715b2e176b1d3f703b52ed8d3cfb162bb956eee650faa0f011e16c11cdfce499",
+        "kFLOKI": "8a5ce90cf5d96226fec1be20262d61fcf8d273c8fc602eee3b56ed6d11d17e11",
+        "kLUNC": "87f1cf5bef34380af097b8a3d5e8826f3aed9ebeee6ae19f9b1928bbd578dbf4",
+        "kNEIRO": "9c6c6e06e6daaba5696ca83ac89a42c3196b1fcc1f5d25b67a5a3c60b5d2f134",
+        "kPEPE": "df192f70f664e7aa148b28abf0b989fee863e149a8ad2a9b9e6cc386c5882ed2",
+        "kSHIB": "8b398e65d0494b28ef200de2f10e0654939d11bb662f4607bc71e5c54a144628"
+      }
+    },
+    "funding_source": "s3://pair-trading-hl-289869684922/fundinghist/{coin}.parquet (unmodified, already existing, research/dataset/master_g7.py's source)",
+    "files": {
+      "price": {
+        "0G": {
+          "n_rows": 556678,
+          "sha256": "8a9e74148e1b6db811990d9461af699eded8d354ff2c194d5e2076acf1dcf3ef"
+        },
+        "2Z": {
+          "n_rows": 542095,
+          "sha256": "dd9a2d08ec3c94e86462bb3c38856694c59036092a1d1814d9dd30009569691f"
+        },
+        "AAVE": {
+          "n_rows": 729205,
+          "sha256": "cb5dd5eae3e2ef3a0f961a33a0c383f33ee544e1381b826009dc4b63adfeca52"
+        },
+        "ACE": {
+          "n_rows": 729193,
+          "sha256": "6cf1506199b1e32d379a4f20698613a13c534b5f0173a4e217015b2eafb73043"
+        },
+        "ADA": {
+          "n_rows": 729205,
+          "sha256": "eac4c0b9549a1f39f5483e0774c07657036537dcbc8735b0f1a8cb8cae206bdf"
+        },
+        "AERO": {
+          "n_rows": 484875,
+          "sha256": "e759bc06b1b8b68a9d9c732f3898335f74241366bf8de27a513530df066e80ce"
+        },
+        "AIXBT": {
+          "n_rows": 729205,
+          "sha256": "f89513a4260eab601560b981879b64e81d57de9c2036cd199e301fa5d0cb372a"
+        },
+        "ALGO": {
+          "n_rows": 729205,
+          "sha256": "bc1d57eab3690bb066ef086122e209b6e80c185d11999738cdfa8412ef5d05ab"
+        },
+        "ALT": {
+          "n_rows": 729205,
+          "sha256": "437705ac1a4ff15f63df3b1aba8878be924994e2a903b14155931a06de802036"
+        },
+        "ANIME": {
+          "n_rows": 729205,
+          "sha256": "8cf711e4311c76b761afb3b5b3eb7a2f275cffc609d5b96252c94505483c3f28"
+        },
+        "APE": {
+          "n_rows": 729205,
+          "sha256": "07ec017982474fde2fdda0e7e895213c1c6de7e13f76be49293abcec75092218"
+        },
+        "APEX": {
+          "n_rows": 549692,
+          "sha256": "383b7ad0456581936ebfcf950117a6e23f6e1c26e745c5244d97ff18fa4a516c"
+        },
+        "APT": {
+          "n_rows": 729205,
+          "sha256": "dc32ff2ffaa7b9599b1c7dce18daea17fa38a25de3de4f363572ce5040bbc4fc"
+        },
+        "AR": {
+          "n_rows": 729205,
+          "sha256": "079dd92739befaea1543a124a7cf47bf9d63c09753ef01ae2453aa3abb5419dc"
+        },
+        "ARB": {
+          "n_rows": 729205,
+          "sha256": "e6841525236764dbdde6cf17e296b7d77597def3c83aed81166b78d99ddabd4c"
+        },
+        "ASTER": {
+          "n_rows": 560968,
+          "sha256": "068cc7af6b11139b868d9e998d9deedfb87907f08548bca421bb4bf8735ab59f"
+        },
+        "ATOM": {
+          "n_rows": 729205,
+          "sha256": "99bc1d020373a0826fed25afdf01e414be837e1c3e227a51cdb086fd1bcbf014"
+        },
+        "AVAX": {
+          "n_rows": 729205,
+          "sha256": "e1cb1940fea50a00c64e9303d8131e02cd7a5c5630a010740b0a8fffb55f924b"
+        },
+        "AVNT": {
+          "n_rows": 558294,
+          "sha256": "90c6b2d713e1012a5e81f06ebe2beed317cf24f7b422c1bf7d4bc00157723f11"
+        },
+        "AXS": {
+          "n_rows": 387133,
+          "sha256": "ab7ab351fff67f197c1568a8896e0a0b5288264743e48916725b4f09af5e739c"
+        },
+        "AZTEC": {
+          "n_rows": 350858,
+          "sha256": "1f05e0f83a9a4ec5cc4061facce8876d7b7c2171ec3a94d1035d14e5aac63ce7"
+        },
+        "BABY": {
+          "n_rows": 729205,
+          "sha256": "4350fab3755704982a1cf33740ff2d0374341286516a177a1f11b2c8a3a3667e"
+        },
+        "BANANA": {
+          "n_rows": 729204,
+          "sha256": "5722557d7e210982f18b0fbbadafc12697c14f6b8fad589590d7386ebd3ccab9"
+        },
+        "BCH": {
+          "n_rows": 729205,
+          "sha256": "16206eab14bfb97472e48ae22f56b2db5e33fd0dbb56438f299d677b94a0bf1d"
+        },
+        "BERA": {
+          "n_rows": 729205,
+          "sha256": "d64fc9e9d12393b64e5cd198997ad362abb5957873e1ac9b71acd8bd5f67e400"
+        },
+        "BIGTIME": {
+          "n_rows": 729205,
+          "sha256": "a1cdc82b4ff9f5d1165c4ee850caa78d426d6fcbedfa36e5adc078d557f9e702"
+        },
+        "BIO": {
+          "n_rows": 729205,
+          "sha256": "61fc083de89ec59aece6b6c16576cf2e1529217467a4e833c3ec660068e8a41c"
+        },
+        "BLUR": {
+          "n_rows": 729205,
+          "sha256": "1a532d2c4be5b37bdc46eb9167091c50ab4443fbbc251cc00ee12296e295c39b"
+        },
+        "BNB": {
+          "n_rows": 729205,
+          "sha256": "192d2770da095e7f4216bfa0836e4a6a6d1bd9fdc6ba1ddb1e792cc4157eb2c7"
+        },
+        "BOME": {
+          "n_rows": 729205,
+          "sha256": "8f62a84fcc6779fa14dee2d8a4d2875a254c2205f0a7178c9137fcd79a8a708d"
+        },
+        "BRETT": {
+          "n_rows": 729205,
+          "sha256": "e082964d2a02c0985ed0d2a42506a173d3c33952d194371c70eec494632f50cb"
+        },
+        "BSV": {
+          "n_rows": 729205,
+          "sha256": "0cf181279b30fa6d3d3a71e0c6b1190fd252d62dd156973ce3986694f747705a"
+        },
+        "CAKE": {
+          "n_rows": 729203,
+          "sha256": "5782e8972dfb6e68bc63cd4dfd88d85bff96b20cdfc2cfac63fa5c37d0840798"
+        },
+        "CASHCAT": {
+          "n_rows": 136514,
+          "sha256": "fee1a898e44f36045504b964e017887a33e430219a0a50e466bc6b64e651ea69"
+        },
+        "CC": {
+          "n_rows": 500396,
+          "sha256": "b998dc743851bda85e76fe7d5780b5302baff2e7c3933cfb196ef8781805dee5"
+        },
+        "CELO": {
+          "n_rows": 729202,
+          "sha256": "45768fc74231d220bde617002443b1a230b6265785a33f993a8c7b1b77bebcce"
+        },
+        "CFX": {
+          "n_rows": 729205,
+          "sha256": "17fae359a9eab138305fd37a11f67b861e10927a8346171914acf5f18ebef8a0"
+        },
+        "CHIP": {
+          "n_rows": 251849,
+          "sha256": "8ee0e5ce71b03b865090d07596bc004e96337e3258c9d885363b375382faec27"
+        },
+        "COMP": {
+          "n_rows": 729205,
+          "sha256": "830799b97080565d857b990b908b76d79f72c5dc730ff34f6320c75b1a53cac0"
+        },
+        "CRV": {
+          "n_rows": 729204,
+          "sha256": "e1fe2689cb883af09050170655131d9d36a2cde9ea16fe5603fd63e6ccc934cb"
+        },
+        "DASH": {
+          "n_rows": 387127,
+          "sha256": "7aa08b078613cda9fa6fe60c7dce6420b1cfe72a60a025c240ca66029cf4e531"
+        },
+        "DOGE": {
+          "n_rows": 729205,
+          "sha256": "769c0d06dc6c68daf98c717a3fbee3ece009805b055491a1053a7592d4ab8de9"
+        },
+        "DOT": {
+          "n_rows": 729205,
+          "sha256": "7490a8771cfc49eb442bd62ee405a889cffae3b156fba1221af0375b898e1ce0"
+        },
+        "DYDX": {
+          "n_rows": 729204,
+          "sha256": "32bdcca1b0c155c02b1fcb5cb203ee76f2d2953ba30d8d84f9b06158350f47e8"
+        },
+        "DYM": {
+          "n_rows": 729205,
+          "sha256": "8fe38d19177fd8dfed0412f6a39ead44b6f39e511c114a04dd11eff57277d796"
+        },
+        "EIGEN": {
+          "n_rows": 729205,
+          "sha256": "a40e077cb5d35cf6992b2eb25dd89d34ae4027daf676365701f325ff8e806a3d"
+        },
+        "ENA": {
+          "n_rows": 729205,
+          "sha256": "2685aef23b52d5b976df566f443b1be54101257bf61641b4bf44656b938219ed"
+        },
+        "ENS": {
+          "n_rows": 729203,
+          "sha256": "dea9713805178f94eff5f581efc8243a0d178d8d82a5e8b577cd5671aa15403e"
+        },
+        "ETC": {
+          "n_rows": 729205,
+          "sha256": "4a85f433b91a73043ebf5d0505c30a679788c6ad808f61db2287d0c3fd0dacd4"
+        },
+        "ETHFI": {
+          "n_rows": 729205,
+          "sha256": "9b52955d7f2433d4250c48098f1f148ddffd40b4fb06316402357f522ea05b2f"
+        },
+        "FARTCOIN": {
+          "n_rows": 729205,
+          "sha256": "c71c8f639cd313500aeb9967d2000130d395ea109bce9e79a0b84143d8e6eccf"
+        },
+        "FET": {
+          "n_rows": 729205,
+          "sha256": "983f1f93f5043eeed0d843c75e17f566515009c3af162825d48750be08e7192d"
+        },
+        "FIL": {
+          "n_rows": 729205,
+          "sha256": "70bb9d980cb8606c300aea46020e84fa49e65e20d065dd2a99b690779228b386"
+        },
+        "FOGO": {
+          "n_rows": 441924,
+          "sha256": "2ff6c5c7fa4fafe49cc4a79b0f4d3cb7edbde3493aa8c5dabe265773bf821ad6"
+        },
+        "GALA": {
+          "n_rows": 729204,
+          "sha256": "6e5f6dcea0ba9b8d5796e9487bd6989832d336be229810e147ab77c849331789"
+        },
+        "GAS": {
+          "n_rows": 729204,
+          "sha256": "0150763ed3f435b35eb179116e631ce56d1faf7e8936cc0eeda4ea2627fb7335"
+        },
+        "GMT": {
+          "n_rows": 729205,
+          "sha256": "da1db9583b1112642a96cc5f2003c2f10ee55719f4e54d64e4f7917b81244205"
+        },
+        "GMX": {
+          "n_rows": 729204,
+          "sha256": "d813868596ea46377b25e692e041ec7065142dd9082b849dabe2c501382bf5ed"
+        },
+        "GOAT": {
+          "n_rows": 729204,
+          "sha256": "f6d3b0cc004ad81f582daff9b2e01aecf0f5474d9c629fad0c92dba76e54bb80"
+        },
+        "GRAM": {
+          "n_rows": 149194,
+          "sha256": "7bf3408cb6ca179782f125460806286b07fdd96db9f149af9d2bd1f2358b398a"
+        },
+        "GRASS": {
+          "n_rows": 729205,
+          "sha256": "f437359284b650583aaeaa950bf4180b8098a9ee1a1e3e2b014c27e9eb9b2a82"
+        },
+        "GRIFFAIN": {
+          "n_rows": 729199,
+          "sha256": "0a9528f0a9b1abe9b35be3d5b161f30729f93f6d135dc0714cf2ae113d34bb49"
+        },
+        "HBAR": {
+          "n_rows": 729205,
+          "sha256": "43526fbcf556edf403c2c5836d7f9a45886fddd8f680bb8a6d13048f7339d64f"
+        },
+        "HEMI": {
+          "n_rows": 553957,
+          "sha256": "14fbc89cfeb5fee0be116fea381105c150e6f12573ee0ced781c51bbdb883d2d"
+        },
+        "HMSTR": {
+          "n_rows": 729196,
+          "sha256": "2301a34603e083a151ffbc57646ab7add5ddfd17398f22dab949073cbb790125"
+        },
+        "HYPE": {
+          "n_rows": 729205,
+          "sha256": "c4cb0de73cabf253674048dca87976273a66c1de0ebf0726bc26ebd63e9ae2ba"
+        },
+        "HYPER": {
+          "n_rows": 729205,
+          "sha256": "62b9aeabd2fc47806e69c53153af4682f8561c232e38f00e03ffe87f0be4c2a7"
+        },
+        "ICP": {
+          "n_rows": 489386,
+          "sha256": "0a93b3fabe73d32f0ab251c82410ec9a957baae58e7851dec89b72d019a0c399"
+        },
+        "IMX": {
+          "n_rows": 729205,
+          "sha256": "46342ec3ac0161b668dcf26187022d3c8e94b55161db9011a73c50b78f6cbd45"
+        },
+        "INIT": {
+          "n_rows": 729205,
+          "sha256": "a0f5f8c13d6a23afb19465b17e6afb739e3c4551562883a942835d5caa5af677"
+        },
+        "INJ": {
+          "n_rows": 729205,
+          "sha256": "7221721b69b677afa267f777c14c0b32f56cabfc9d234fc3f5f9e614f9b54917"
+        },
+        "IO": {
+          "n_rows": 729205,
+          "sha256": "9c318319a01a6e0b91b46e15d45969a603343df00215cb392bda8c38f379c67d"
+        },
+        "IOTA": {
+          "n_rows": 729204,
+          "sha256": "3e3767e16dd7797807cbb4ac28878ceb2860807785cc0ac46681c5e0a60961db"
+        },
+        "JTO": {
+          "n_rows": 729205,
+          "sha256": "7edbe02c55c310e6ec3b6cff528cd75a118b644e043280f6a3e3f5b52a28aa09"
+        },
+        "JUP": {
+          "n_rows": 729205,
+          "sha256": "0497c1a4c351259d937150e9377730c810bffcd884ff6d2d6f2ebb92a3d862b0"
+        },
+        "KAITO": {
+          "n_rows": 729205,
+          "sha256": "fe926903d0259a737fa51098442565e7303540a6da1fd3c3469c1a2e1b9d55cd"
+        },
+        "KAS": {
+          "n_rows": 729205,
+          "sha256": "7799e1f886f3d30295bff2b7e956f2b5fc655c47fd42f2c125226315cbdbf7cc"
+        },
+        "LAYER": {
+          "n_rows": 729204,
+          "sha256": "93d82492456d20b7825c9763a6a978293f98a8a1996c0bb4c7fa5f9f7042fe66"
+        },
+        "LDO": {
+          "n_rows": 729205,
+          "sha256": "3a750adc613658075da8f80e8d3b6a68806de71080eb360c99fd25470b8c2f95"
+        },
+        "LINEA": {
+          "n_rows": 586950,
+          "sha256": "71548682d9716cd46ec86986e8cfa35c10b3bd4ee95d43ae632f082d93670144"
+        },
+        "LINK": {
+          "n_rows": 729205,
+          "sha256": "2dafa81ed5d6a19cd5820893d95b896caa122ebd7ed0019be59c332b77efb73e"
+        },
+        "LIT": {
+          "n_rows": 425294,
+          "sha256": "7b5da6dff7444a86395819812a749c2f342a53462a6909f88551017d1a0ca173"
+        },
+        "LTC": {
+          "n_rows": 729205,
+          "sha256": "e24c6345fbde8dc50f60e58fe98be65b6e17b073ba672fb6ef15e3d8caeabe2d"
+        },
+        "MANTA": {
+          "n_rows": 729205,
+          "sha256": "5b1488d0dc1a78efee73ebc481ffb16ae8feed683aa607250ab4cbde3839ddd3"
+        },
+        "ME": {
+          "n_rows": 729205,
+          "sha256": "e6f5397fd2c3851f3c95b141378748513cd7f3f3a224f7cd70407017a4a4d848"
+        },
+        "MEGA": {
+          "n_rows": 513153,
+          "sha256": "dd267612a175413260114f6050577f15ff70ebde69254f8e28d9e407477c810f"
+        },
+        "MELANIA": {
+          "n_rows": 729204,
+          "sha256": "f7d9bdba7bb070f6b831fd945d431e7b251d4cea3fcbdfa4eb38dd2a7a1826d7"
+        },
+        "MEME": {
+          "n_rows": 729187,
+          "sha256": "46298ac66bedeb21d0d4a03ebbad685ed16cf6ccc384c0ea9660d04b98f21ff3"
+        },
+        "MERL": {
+          "n_rows": 729203,
+          "sha256": "31d6c344ed808203df0f6ae33f9917ee46d49f5015fc01f0cd12fbe93f94fc5a"
+        },
+        "MET": {
+          "n_rows": 530710,
+          "sha256": "eaa0fbbadb24b07008aa5e08c6be735215064eb46a2a88b7eb47e6af1ab883f9"
+        },
+        "MINA": {
+          "n_rows": 729199,
+          "sha256": "f4c94fcf2bcc365036ada24a091ba1837ebecd8f10225aeec4685b13b08ecf6c"
+        },
+        "MNT": {
+          "n_rows": 729202,
+          "sha256": "ee9f7262131929e97aeccd53911cd543d726bfa39f4cf9de8e80938f76679709"
+        },
+        "MON": {
+          "n_rows": 533975,
+          "sha256": "026d3093411e7fe42e8f45ae9ca36300ed8bb2c7de6dff7c6f3ffc6ee2390c24"
+        },
+        "MOODENG": {
+          "n_rows": 729202,
+          "sha256": "975f4117defdbfb387317ab36457dbace4821e061b1b44fe85af662d4e6ea49f"
+        },
+        "MORPHO": {
+          "n_rows": 729205,
+          "sha256": "985915768ddbd9b9dd05761134f3059df48daf371d41b55587077f3319335d49"
+        },
+        "MOVE": {
+          "n_rows": 729205,
+          "sha256": "18c88e7171ebe309a87f07c0081606bb8952c65ff8cfdd91e2ea9db865ef2cad"
+        },
+        "NEAR": {
+          "n_rows": 729205,
+          "sha256": "c0e40f6d08f5e1bf8f08b0abaa6d6b32eeda7930c1af6c8012dbe2ac43e54fcc"
+        },
+        "NEO": {
+          "n_rows": 729205,
+          "sha256": "8274081d51ea180d5d6a314a53968137a2896ee7532611b0475cca56a932fc44"
+        },
+        "NIL": {
+          "n_rows": 729205,
+          "sha256": "5bf4a3ebba7a03e2d675cb9ec82c4dce051134d79c32f786b34f4509bc88febe"
+        },
+        "NOT": {
+          "n_rows": 729162,
+          "sha256": "38d11536ac75ceb89d7a70f6623cca06e5b488dfa015e0ea331ec3d4a4c74a44"
+        },
+        "NXPC": {
+          "n_rows": 729205,
+          "sha256": "1afd118e82925345c29809de382c777ac891f21f634f5a9c22e861cdcc8677e8"
+        },
+        "ONDO": {
+          "n_rows": 729205,
+          "sha256": "b1cdc17bb50d9cc312539eb97135cebfbb480176c74dbb75be3255b9c325dec7"
+        },
+        "OP": {
+          "n_rows": 729205,
+          "sha256": "07e040e7fd6196321174a6033d923a13398dbb8e7bb9b44ba0483ab515ef8a8d"
+        },
+        "ORDI": {
+          "n_rows": 729205,
+          "sha256": "0cc1da2bd52b14f2050796727588bed4a66cc0ff59fad7e2f1ea1232b23379e8"
+        },
+        "PAXG": {
+          "n_rows": 729205,
+          "sha256": "010ca367422a0d87dc4db740a079fde327480f878c2d74c064d617fdb061caf7"
+        },
+        "PENDLE": {
+          "n_rows": 729205,
+          "sha256": "bdc74e5203010bed69effedb8a1055118caa03dcf9d2af0c0f9260049f3b1fea"
+        },
+        "PENGU": {
+          "n_rows": 729205,
+          "sha256": "f1a30d3fcfd42d55db578c68b9026782decc2055f9c8608a1b9c242292cd13d1"
+        },
+        "PEOPLE": {
+          "n_rows": 729204,
+          "sha256": "209ce7656a758610bf04fa66566097849d5b66424ecbfd0e0303ce3d0ca6fcde"
+        },
+        "PNUT": {
+          "n_rows": 729205,
+          "sha256": "cd69121ebcb034ac76c3adcb070723cf6ace8f8fee403aa2661f0b87c6f4fc28"
+        },
+        "POL": {
+          "n_rows": 729205,
+          "sha256": "5acfeffa214e6c58c3d881c810a2527083710830a8b1e18d4517756622dfb941"
+        },
+        "POLYX": {
+          "n_rows": 729202,
+          "sha256": "7ef3cbcdcac9842a5081ea7c68f7c137d77ffc20b8e8be3f76431d4ff3454a97"
+        },
+        "PONS": {
+          "n_rows": 63130,
+          "sha256": "4d1066d3cafe165cfaffe838b1602de30861f2843c9f37cac5e6a23321bd6b04"
+        },
+        "POPCAT": {
+          "n_rows": 729205,
+          "sha256": "be7a3246c69e013ba788f2c4953786faac05fe55c28e7bb55a33afe50bde5863"
+        },
+        "PROVE": {
+          "n_rows": 624765,
+          "sha256": "cb673d95111f23218f36a4a05c133af90830c8d9226c9464bd58ad592d107fcd"
+        },
+        "PUMP": {
+          "n_rows": 663628,
+          "sha256": "c4ce6b05101cc74d67c3e711bb2c21f19dfd57a03e2a378995b990a5983c59b1"
+        },
+        "PURR": {
+          "n_rows": 729205,
+          "sha256": "c96e48b7fa6c8ded22fce6c0bfcb4bcaef860bc361e22e6ffeca9d4e1c2ddfd7"
+        },
+        "PYTH": {
+          "n_rows": 729205,
+          "sha256": "a13ace16e5084994b226e7ab5d0f341d27df40d940b71e255240c8ba9e40573c"
+        },
+        "RENDER": {
+          "n_rows": 729205,
+          "sha256": "bedf438256635dfb895f9695706fd770c057b044137ff5726df739d1b4b61341"
+        },
+        "RESOLV": {
+          "n_rows": 706186,
+          "sha256": "a05f08ad27743e065199c1ba8db345f6d85b969ad4227d19bd0ef1c4e4dffcd0"
+        },
+        "REZ": {
+          "n_rows": 729203,
+          "sha256": "b11539b117ed0f0cbfa1dc117e4f83db8aef97f808e5178367faa1781424c0a8"
+        },
+        "RSR": {
+          "n_rows": 729205,
+          "sha256": "36f8be2ce452f914ef8e3cf57d5ae07ea50f9ea59a192bad2276705866621ed1"
+        },
+        "RUNE": {
+          "n_rows": 729204,
+          "sha256": "796e1379c8f49eb33206f4333471d069dea17998e9c18b0280fefb12b4373bc7"
+        },
+        "S": {
+          "n_rows": 729205,
+          "sha256": "35bfa67628998845a3f88d582bbd57521509e50d6d96222824612449c9f397da"
+        },
+        "SAGA": {
+          "n_rows": 729196,
+          "sha256": "7e13736a4101817c9de2259d4a781d7f385c7c435b39d3f044a772c1e42a16e5"
+        },
+        "SAND": {
+          "n_rows": 729205,
+          "sha256": "dafe2988ec56326ad304d3588450bb2d4c7d010975782f32ec05ded5177c64a7"
+        },
+        "SEI": {
+          "n_rows": 729204,
+          "sha256": "1b9d02efc06423332ba3d14c68b6439230beabceb8a428b3c143d226277b229b"
+        },
+        "SKR": {
+          "n_rows": 381427,
+          "sha256": "daf5eece6d4b9cd92eba3bd42367758fe2369a76f09f916f5edbdf26dade53ec"
+        },
+        "SKY": {
+          "n_rows": 564129,
+          "sha256": "8d2cf5abf5bdbd80d938c2a07ecf35a0a6a01e501e269592414788e882d7ac3d"
+        },
+        "SNX": {
+          "n_rows": 729205,
+          "sha256": "d67caa4176f689850c9ae085bf106ba4fd5a9cc6922f3461a55b9c52e3084a7a"
+        },
+        "SOL": {
+          "n_rows": 729205,
+          "sha256": "bf7889e57be9662543cc4e2218e8a9ff605c4cbf7b0ad7b1398dae56773ac3c2"
+        },
+        "SOPH": {
+          "n_rows": 724843,
+          "sha256": "35d926d9f061f106e58c4207e07c3434ee4b489c237ddf436ecb407c1cbb36d2"
+        },
+        "SPX": {
+          "n_rows": 729205,
+          "sha256": "93f5155755333db144a1f4b128066691730fe9b9a21f69497e4012086f9a54f9"
+        },
+        "STABLE": {
+          "n_rows": 445603,
+          "sha256": "8b1aee4c6911fcb401bd291977b70ea97163d038fbfbbd435ac8b7ec602e589d"
+        },
+        "STBL": {
+          "n_rows": 557077,
+          "sha256": "f9ce7b0f6f2b5c71fd2452336169d57e8a7599575c32634cc317f206b8da43c3"
+        },
+        "STRK": {
+          "n_rows": 729205,
+          "sha256": "21799384045970442b206911413c1a8ff7b85f0c2f8212d7ea151433e83c6b2a"
+        },
+        "STX": {
+          "n_rows": 729205,
+          "sha256": "dedd3304a41977f0d5ae4ec50ee052a90cb00c825e06323c0bbbade2ae7d5910"
+        },
+        "SUI": {
+          "n_rows": 729205,
+          "sha256": "6f7002dbf256e629dd87f55c5b3bf718b4f4c08c528e67e57d2cb053b69f8b2d"
+        },
+        "SUPER": {
+          "n_rows": 729205,
+          "sha256": "47f92abc622ff4014769d47737f93ec114d67ca0c03df543e2d56f2e8ce9d6cb"
+        },
+        "SUSHI": {
+          "n_rows": 729205,
+          "sha256": "19b58817d55bda5569438d7eac346afb9a1c5fce7ae42122263407ff4f5f3fe6"
+        },
+        "SYRUP": {
+          "n_rows": 683673,
+          "sha256": "0ea14f9219be55ee9c2f0af443eacb3667d65d00709b84c05ae6cc865bf05752"
+        },
+        "TAO": {
+          "n_rows": 729205,
+          "sha256": "263112423b38c4efc8f4f2887d4ccc8884ca0379dd642e3ac9abfa157dd6ceef"
+        },
+        "TIA": {
+          "n_rows": 729205,
+          "sha256": "7bd68d6fe53872f877ca37b795d0eb322595192953df62e966dc93c1ea7d0959"
+        },
+        "TNSR": {
+          "n_rows": 729173,
+          "sha256": "a228cf9906538bac33674b83ca7ad12750c600ce4e285edcf34ddf3a2c7c7cb1"
+        },
+        "TRB": {
+          "n_rows": 729205,
+          "sha256": "5a1dff369c664995d7417c60f7e337c2a8d0a8192527657050dd7c73c2b63638"
+        },
+        "TRUMP": {
+          "n_rows": 729205,
+          "sha256": "4bb5137a3bb003f37fb42133fbec532cae7d9972b9702c22f9c034ac5825217c"
+        },
+        "TRX": {
+          "n_rows": 729205,
+          "sha256": "d4e272d5967864d75a8c44342d05836bf1700760560f726530fbf3faee15c146"
+        },
+        "TURBO": {
+          "n_rows": 729205,
+          "sha256": "7b490fadc3c467d283108c0508c8bb96b89a9a76c3885e9fea3f550d1997fb92"
+        },
+        "UMA": {
+          "n_rows": 729200,
+          "sha256": "d35e016d3e6628dfa15bb4030dd74a2ddc9fc2e2eb937bfcf780ddd707b922cc"
+        },
+        "UNI": {
+          "n_rows": 729205,
+          "sha256": "77b6a3ed4e68dd45847a9c8958d7b958420431f7b5202fe7bc54efdce30ed03f"
+        },
+        "USELESS": {
+          "n_rows": 50878,
+          "sha256": "42f169cc9807642f6450f7e2fdafdabd3f233108b2ef1d23d317517de2b5c9d9"
+        },
+        "USUAL": {
+          "n_rows": 729204,
+          "sha256": "e0c7be3125396b830a4883dba8a57ab63a800807a9cf1d4d561fac39cfd4302a"
+        },
+        "VINE": {
+          "n_rows": 659279,
+          "sha256": "bd3348a7fe6948cffba8acfb7c9ddc6ceb836f4a0f6bd41205f8f6b6652f2fee"
+        },
+        "VIRTUAL": {
+          "n_rows": 729205,
+          "sha256": "bd60966d1c39415d061bff0a4624213acd97a5411698ffeec4b6b8447b19e9be"
+        },
+        "VVV": {
+          "n_rows": 729204,
+          "sha256": "477f8ed75977ba6a049b7ce4f275819a4d8e695c5da6e05df6445e7d7a0b9138"
+        },
+        "W": {
+          "n_rows": 729204,
+          "sha256": "ba4a21b0d9be21200905e316c01ed067db3d29767e63cf19b22a289b05df5e3d"
+        },
+        "WCT": {
+          "n_rows": 729205,
+          "sha256": "3ae7e16ae59d018b3283d87281be52d8c2327b497a48e998073675143aa19cef"
+        },
+        "WIF": {
+          "n_rows": 729205,
+          "sha256": "98dac9a72dab906f40dabf456c27197cfa8d7c272317c2a9a9c7c48accf355d5"
+        },
+        "WLD": {
+          "n_rows": 729205,
+          "sha256": "d95a1a8f7b9235627e36f1290308865e67697c54749adc027b13c0758a23c6cc"
+        },
+        "WLFI": {
+          "n_rows": 599848,
+          "sha256": "2c6519198d02941b4c4944e20d2b1a496e22a7966bec53343750bc586e83e9d7"
+        },
+        "XAI": {
+          "n_rows": 729205,
+          "sha256": "835fa20a7790e1ab96dda2a9298a53d3d16d88322ce2084f1b1d97b099abde99"
+        },
+        "XLM": {
+          "n_rows": 729205,
+          "sha256": "2ace954eeebea3e83f1ed5c8e1e6113cb39ac0f7495e71b42510d92fb5fa46e7"
+        },
+        "XMR": {
+          "n_rows": 391160,
+          "sha256": "1078162f4395d1e8b56887d7afb5f11b18c9e2205c0d9a4d4b75d61515d31374"
+        },
+        "XPL": {
+          "n_rows": 601365,
+          "sha256": "1dcf0a187576b6c68407c332a1deda7e3042c772445fe8e9b56b5d6a32325b71"
+        },
+        "XRP": {
+          "n_rows": 729205,
+          "sha256": "15079d5b0a1c7bf2562803e4af404f42995cc6410f74651d4a353f4d5b5a934c"
+        },
+        "YGG": {
+          "n_rows": 729205,
+          "sha256": "c594e278c1e076518e4b01f75e8658536f5621abdb7b23f40ee46622ec9489e7"
+        },
+        "ZEC": {
+          "n_rows": 542079,
+          "sha256": "771d65203c8cf6fb6c86b82bbcd3debafa03e0dbc4be076d31f5ececc4d16d51"
+        },
+        "ZEN": {
+          "n_rows": 729205,
+          "sha256": "49faed2a3fbb114d6308050b11611f713b27683cd23820c8742bdc2626d492a0"
+        },
+        "ZETA": {
+          "n_rows": 729205,
+          "sha256": "787c75dcb7fb3b3c753c53ae58fa99431d2d3e2815bd97153994cf67febe1bc6"
+        },
+        "ZK": {
+          "n_rows": 729205,
+          "sha256": "f85c1d8674553e1c45a36c640067edce9109a0092088e192a20e4576839ee4e0"
+        },
+        "ZORA": {
+          "n_rows": 729205,
+          "sha256": "2f2450fc5db5beb1fe72da22f57f5c7ae770c51813ca168a3ebc753c9f3129c9"
+        },
+        "ZRO": {
+          "n_rows": 729205,
+          "sha256": "ab3c545865e768d26248743300e56b9af16e7adf917677dea9339316c6f8b7c9"
+        },
+        "kBONK": {
+          "n_rows": 729205,
+          "sha256": "a579250eed49ab35e7754091f71ec56f6a1d49c12d2f834caec8d71fa5a5884f"
+        },
+        "kFLOKI": {
+          "n_rows": 729205,
+          "sha256": "6e6a9b26040e5ba4c46ae913723ac300c84002f098c65dce6176db0a102c69a4"
+        },
+        "kLUNC": {
+          "n_rows": 729205,
+          "sha256": "c51cfe5a665971dcb576828595f83a295cadbbec2105ff49ef5a0463a558f787"
+        },
+        "kNEIRO": {
+          "n_rows": 729205,
+          "sha256": "50fe30176a3b39364bfca073e7f1b373ce05a5c099510e97a8a999a69cadb698"
+        },
+        "kPEPE": {
+          "n_rows": 729205,
+          "sha256": "a933bb23810d38a4fe4ac12495cc012ca1b033099be8ef13b8f8cf17ff53b5d8"
+        },
+        "kSHIB": {
+          "n_rows": 729205,
+          "sha256": "136c6e4ece78608c1f400b816d85782c0535a3b2d9b069251aaf383270fcc214"
+        }
+      },
+      "impact": {
+        "0G": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "2Z": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "AAVE": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "ACE": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "ADA": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "AERO": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "AIXBT": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "ALGO": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "ALT": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "ANIME": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "APE": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "APEX": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "APT": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "AR": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "ARB": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "ASTER": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "ATOM": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "AVAX": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "AVNT": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "AXS": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "AZTEC": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "BABY": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "BANANA": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "BCH": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "BERA": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "BIGTIME": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "BIO": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "BLUR": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "BNB": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "BOME": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "BRETT": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "BSV": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "CAKE": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "CASHCAT": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "CC": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "CELO": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "CFX": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "CHIP": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "COMP": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "CRV": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "DASH": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "DOGE": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "DOT": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "DYDX": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "DYM": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "EIGEN": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "ENA": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "ENS": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "ETC": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "ETHFI": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "FARTCOIN": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "FET": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "FIL": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "FOGO": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "GALA": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "GAS": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "GMT": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "GMX": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "GOAT": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "GRAM": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "GRASS": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "GRIFFAIN": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "HBAR": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "HEMI": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "HMSTR": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "HYPE": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "HYPER": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "ICP": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "IMX": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "INIT": {
+          "n_rows": 108086,
+          "sha256": "703a53bdf86cabe8889b638697caf4cd0f8aaf7ab2a5952c1a669211267d97cc"
+        },
+        "INJ": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "IO": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "IOTA": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "JTO": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "JUP": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "KAITO": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "KAS": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "LAYER": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "LDO": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "LINEA": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "LINK": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "LIT": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "LTC": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "MANTA": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "ME": {
+          "n_rows": 108086,
+          "sha256": "703a53bdf86cabe8889b638697caf4cd0f8aaf7ab2a5952c1a669211267d97cc"
+        },
+        "MEGA": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "MELANIA": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "MEME": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "MERL": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "MET": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "MINA": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "MNT": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "MON": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "MOODENG": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "MORPHO": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "MOVE": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "NEAR": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "NEO": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "NIL": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "NOT": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "NXPC": {
+          "n_rows": 108086,
+          "sha256": "23e3e107573d2e16573f089168ad0bfd0d8e237f3c55fc73a4085beb69d2d54b"
+        },
+        "ONDO": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "OP": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "ORDI": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "PAXG": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "PENDLE": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "PENGU": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "PEOPLE": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "PNUT": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "POL": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "POLYX": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "POPCAT": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "PROVE": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "PUMP": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "PURR": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "PYTH": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "RENDER": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "RESOLV": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "REZ": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "RSR": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "RUNE": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "S": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "SAGA": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "SAND": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "SEI": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "SKR": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "SKY": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "SNX": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "SOL": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "SOPH": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "SPX": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "STABLE": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "STBL": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "STRK": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "STX": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "SUI": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "SUPER": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "SUSHI": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "SYRUP": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "TAO": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "TIA": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "TNSR": {
+          "n_rows": 108086,
+          "sha256": "8d82c8c8bc08d1be4532ecf77f7571236d168e704e2457d650dd22addbf64157"
+        },
+        "TRB": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "TRUMP": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "TRX": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "TURBO": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "UMA": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "UNI": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "USUAL": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "VINE": {
+          "n_rows": 108086,
+          "sha256": "8efd35de8d959e1da76ba5ca9094e1735ac750e1a7426e15e32d00c1ad2b13a8"
+        },
+        "VIRTUAL": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "VVV": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "W": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "WCT": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "WIF": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "WLD": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "WLFI": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "XAI": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "XLM": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "XMR": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "XPL": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "XRP": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "YGG": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "ZEC": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "ZEN": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "ZETA": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "ZK": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "ZORA": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "ZRO": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "kBONK": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "kFLOKI": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "kLUNC": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "kNEIRO": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "kPEPE": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "kSHIB": {
+          "n_rows": 108086,
+          "sha256": "845f5f66e0401b4c00da648cc48d4703687a1437b49db8a66d714d4db7b95da3"
+        },
+        "PONS": {
+          "n_rows": 38713,
+          "sha256": "ecbd36c8aa3b79b2f433dbed04b377cbe3ca63d872cd2a73b829bc75496c6135"
+        },
+        "USELESS": {
+          "n_rows": 26462,
+          "sha256": "f58c765bb2f72e1e4853d1a981ea0bd7b8698cc3afbf3f24266742a4e5d90bde"
+        }
+      }
+    },
+    "crosscheck_passed": true,
+    "crosscheck_mismatch_count": 0
+  },
+  "cleaned_series_s3_sync_ok": true,
+  "failed_ctxs_days": [],
+  "coins_without_fundinghist": [],
+  "coins_without_build2_1m": [],
+  "build2_price_diag": {
+    "0G": {
+      "n_minutes": 556678,
+      "n_true_gap": 3,
+      "n_filled": 142122,
+      "n_traded": 414553
+    },
+    "2Z": {
+      "n_minutes": 542095,
+      "n_true_gap": 0,
+      "n_filled": 107836,
+      "n_traded": 434259
+    },
+    "AAVE": {
+      "n_minutes": 729205,
+      "n_true_gap": 133,
+      "n_filled": 26558,
+      "n_traded": 702514
+    },
+    "ACE": {
+      "n_minutes": 729193,
+      "n_true_gap": 152,
+      "n_filled": 233873,
+      "n_traded": 495168
+    },
+    "ADA": {
+      "n_minutes": 729205,
+      "n_true_gap": 134,
+      "n_filled": 31837,
+      "n_traded": 697234
+    },
+    "AERO": {
+      "n_minutes": 484875,
+      "n_true_gap": 0,
+      "n_filled": 62824,
+      "n_traded": 422051
+    },
+    "AIXBT": {
+      "n_minutes": 729205,
+      "n_true_gap": 137,
+      "n_filled": 134807,
+      "n_traded": 594261
+    },
+    "ALGO": {
+      "n_minutes": 729205,
+      "n_true_gap": 136,
+      "n_filled": 119199,
+      "n_traded": 609870
+    },
+    "ALT": {
+      "n_minutes": 729205,
+      "n_true_gap": 132,
+      "n_filled": 173923,
+      "n_traded": 555150
+    },
+    "ANIME": {
+      "n_minutes": 729205,
+      "n_true_gap": 139,
+      "n_filled": 140027,
+      "n_traded": 589039
+    },
+    "APE": {
+      "n_minutes": 729205,
+      "n_true_gap": 136,
+      "n_filled": 163507,
+      "n_traded": 565562
+    },
+    "APEX": {
+      "n_minutes": 549692,
+      "n_true_gap": 3,
+      "n_filled": 126633,
+      "n_traded": 423056
+    },
+    "APT": {
+      "n_minutes": 729205,
+      "n_true_gap": 135,
+      "n_filled": 53626,
+      "n_traded": 675444
+    },
+    "AR": {
+      "n_minutes": 729205,
+      "n_true_gap": 138,
+      "n_filled": 141242,
+      "n_traded": 587825
+    },
+    "ARB": {
+      "n_minutes": 729205,
+      "n_true_gap": 134,
+      "n_filled": 37819,
+      "n_traded": 691252
+    },
+    "ASTER": {
+      "n_minutes": 560968,
+      "n_true_gap": 6,
+      "n_filled": 31524,
+      "n_traded": 529438
+    },
+    "ATOM": {
+      "n_minutes": 729205,
+      "n_true_gap": 137,
+      "n_filled": 97315,
+      "n_traded": 631753
+    },
+    "AVAX": {
+      "n_minutes": 729205,
+      "n_true_gap": 132,
+      "n_filled": 31123,
+      "n_traded": 697950
+    },
+    "AVNT": {
+      "n_minutes": 558294,
+      "n_true_gap": 3,
+      "n_filled": 60760,
+      "n_traded": 497531
+    },
+    "AXS": {
+      "n_minutes": 387133,
+      "n_true_gap": 0,
+      "n_filled": 48826,
+      "n_traded": 338307
+    },
+    "AZTEC": {
+      "n_minutes": 350858,
+      "n_true_gap": 0,
+      "n_filled": 81608,
+      "n_traded": 269250
+    },
+    "BABY": {
+      "n_minutes": 729205,
+      "n_true_gap": 142,
+      "n_filled": 155309,
+      "n_traded": 573754
+    },
+    "BANANA": {
+      "n_minutes": 729204,
+      "n_true_gap": 136,
+      "n_filled": 270117,
+      "n_traded": 458951
+    },
+    "BCH": {
+      "n_minutes": 729205,
+      "n_true_gap": 133,
+      "n_filled": 76594,
+      "n_traded": 652478
+    },
+    "BERA": {
+      "n_minutes": 729205,
+      "n_true_gap": 133,
+      "n_filled": 71078,
+      "n_traded": 657994
+    },
+    "BIGTIME": {
+      "n_minutes": 729205,
+      "n_true_gap": 148,
+      "n_filled": 201273,
+      "n_traded": 527784
+    },
+    "BIO": {
+      "n_minutes": 729205,
+      "n_true_gap": 132,
+      "n_filled": 156641,
+      "n_traded": 572432
+    },
+    "BLUR": {
+      "n_minutes": 729205,
+      "n_true_gap": 139,
+      "n_filled": 184197,
+      "n_traded": 544869
+    },
+    "BNB": {
+      "n_minutes": 729205,
+      "n_true_gap": 135,
+      "n_filled": 27390,
+      "n_traded": 701680
+    },
+    "BOME": {
+      "n_minutes": 729205,
+      "n_true_gap": 141,
+      "n_filled": 348522,
+      "n_traded": 380542
+    },
+    "BRETT": {
+      "n_minutes": 729205,
+      "n_true_gap": 138,
+      "n_filled": 146565,
+      "n_traded": 582502
+    },
+    "BSV": {
+      "n_minutes": 729205,
+      "n_true_gap": 154,
+      "n_filled": 164387,
+      "n_traded": 564664
+    },
+    "CAKE": {
+      "n_minutes": 729203,
+      "n_true_gap": 140,
+      "n_filled": 173069,
+      "n_traded": 555994
+    },
+    "CASHCAT": {
+      "n_minutes": 136514,
+      "n_true_gap": 0,
+      "n_filled": 1800,
+      "n_traded": 134714
+    },
+    "CC": {
+      "n_minutes": 500396,
+      "n_true_gap": 0,
+      "n_filled": 79705,
+      "n_traded": 420691
+    },
+    "CELO": {
+      "n_minutes": 729202,
+      "n_true_gap": 188,
+      "n_filled": 279400,
+      "n_traded": 449614
+    },
+    "CFX": {
+      "n_minutes": 729205,
+      "n_true_gap": 137,
+      "n_filled": 180697,
+      "n_traded": 548371
+    },
+    "CHIP": {
+      "n_minutes": 251849,
+      "n_true_gap": 0,
+      "n_filled": 19056,
+      "n_traded": 232793
+    },
+    "COMP": {
+      "n_minutes": 729205,
+      "n_true_gap": 138,
+      "n_filled": 168594,
+      "n_traded": 560473
+    },
+    "CRV": {
+      "n_minutes": 729204,
+      "n_true_gap": 135,
+      "n_filled": 45029,
+      "n_traded": 684040
+    },
+    "DASH": {
+      "n_minutes": 387127,
+      "n_true_gap": 0,
+      "n_filled": 73321,
+      "n_traded": 313806
+    },
+    "DOGE": {
+      "n_minutes": 729205,
+      "n_true_gap": 133,
+      "n_filled": 14874,
+      "n_traded": 714198
+    },
+    "DOT": {
+      "n_minutes": 729205,
+      "n_true_gap": 138,
+      "n_filled": 73071,
+      "n_traded": 655996
+    },
+    "DYDX": {
+      "n_minutes": 729204,
+      "n_true_gap": 142,
+      "n_filled": 135704,
+      "n_traded": 593358
+    },
+    "DYM": {
+      "n_minutes": 729205,
+      "n_true_gap": 141,
+      "n_filled": 198759,
+      "n_traded": 530305
+    },
+    "EIGEN": {
+      "n_minutes": 729205,
+      "n_true_gap": 135,
+      "n_filled": 84753,
+      "n_traded": 644317
+    },
+    "ENA": {
+      "n_minutes": 729205,
+      "n_true_gap": 131,
+      "n_filled": 18503,
+      "n_traded": 710571
+    },
+    "ENS": {
+      "n_minutes": 729203,
+      "n_true_gap": 137,
+      "n_filled": 209694,
+      "n_traded": 519372
+    },
+    "ETC": {
+      "n_minutes": 729205,
+      "n_true_gap": 135,
+      "n_filled": 183714,
+      "n_traded": 545356
+    },
+    "ETHFI": {
+      "n_minutes": 729205,
+      "n_true_gap": 134,
+      "n_filled": 98948,
+      "n_traded": 630123
+    },
+    "FARTCOIN": {
+      "n_minutes": 729205,
+      "n_true_gap": 127,
+      "n_filled": 6872,
+      "n_traded": 722206
+    },
+    "FET": {
+      "n_minutes": 729205,
+      "n_true_gap": 134,
+      "n_filled": 101052,
+      "n_traded": 628019
+    },
+    "FIL": {
+      "n_minutes": 729205,
+      "n_true_gap": 137,
+      "n_filled": 112136,
+      "n_traded": 616932
+    },
+    "FOGO": {
+      "n_minutes": 441924,
+      "n_true_gap": 0,
+      "n_filled": 138438,
+      "n_traded": 303486
+    },
+    "GALA": {
+      "n_minutes": 729204,
+      "n_true_gap": 138,
+      "n_filled": 151456,
+      "n_traded": 577610
+    },
+    "GAS": {
+      "n_minutes": 729204,
+      "n_true_gap": 139,
+      "n_filled": 176573,
+      "n_traded": 552492
+    },
+    "GMT": {
+      "n_minutes": 729205,
+      "n_true_gap": 144,
+      "n_filled": 182999,
+      "n_traded": 546062
+    },
+    "GMX": {
+      "n_minutes": 729204,
+      "n_true_gap": 139,
+      "n_filled": 198130,
+      "n_traded": 530935
+    },
+    "GOAT": {
+      "n_minutes": 729204,
+      "n_true_gap": 139,
+      "n_filled": 191975,
+      "n_traded": 537090
+    },
+    "GRAM": {
+      "n_minutes": 149194,
+      "n_true_gap": 0,
+      "n_filled": 12537,
+      "n_traded": 136657
+    },
+    "GRASS": {
+      "n_minutes": 729205,
+      "n_true_gap": 132,
+      "n_filled": 109498,
+      "n_traded": 619575
+    },
+    "GRIFFAIN": {
+      "n_minutes": 729199,
+      "n_true_gap": 140,
+      "n_filled": 192783,
+      "n_traded": 536276
+    },
+    "HBAR": {
+      "n_minutes": 729205,
+      "n_true_gap": 133,
+      "n_filled": 105104,
+      "n_traded": 623968
+    },
+    "HEMI": {
+      "n_minutes": 553957,
+      "n_true_gap": 3,
+      "n_filled": 96604,
+      "n_traded": 457350
+    },
+    "HMSTR": {
+      "n_minutes": 729196,
+      "n_true_gap": 144,
+      "n_filled": 515746,
+      "n_traded": 213306
+    },
+    "HYPE": {
+      "n_minutes": 729205,
+      "n_true_gap": 132,
+      "n_filled": 218,
+      "n_traded": 728855
+    },
+    "HYPER": {
+      "n_minutes": 729205,
+      "n_true_gap": 138,
+      "n_filled": 172407,
+      "n_traded": 556660
+    },
+    "ICP": {
+      "n_minutes": 489386,
+      "n_true_gap": 0,
+      "n_filled": 63405,
+      "n_traded": 425981
+    },
+    "IMX": {
+      "n_minutes": 729205,
+      "n_true_gap": 142,
+      "n_filled": 162319,
+      "n_traded": 566744
+    },
+    "INIT": {
+      "n_minutes": 729205,
+      "n_true_gap": 135,
+      "n_filled": 160588,
+      "n_traded": 568482
+    },
+    "INJ": {
+      "n_minutes": 729205,
+      "n_true_gap": 135,
+      "n_filled": 92676,
+      "n_traded": 636394
+    },
+    "IO": {
+      "n_minutes": 729205,
+      "n_true_gap": 138,
+      "n_filled": 146827,
+      "n_traded": 582240
+    },
+    "IOTA": {
+      "n_minutes": 729204,
+      "n_true_gap": 150,
+      "n_filled": 292042,
+      "n_traded": 437012
+    },
+    "JTO": {
+      "n_minutes": 729205,
+      "n_true_gap": 135,
+      "n_filled": 114849,
+      "n_traded": 614221
+    },
+    "JUP": {
+      "n_minutes": 729205,
+      "n_true_gap": 134,
+      "n_filled": 56117,
+      "n_traded": 672954
+    },
+    "KAITO": {
+      "n_minutes": 729205,
+      "n_true_gap": 136,
+      "n_filled": 119311,
+      "n_traded": 609758
+    },
+    "KAS": {
+      "n_minutes": 729205,
+      "n_true_gap": 136,
+      "n_filled": 181000,
+      "n_traded": 548069
+    },
+    "LAYER": {
+      "n_minutes": 729204,
+      "n_true_gap": 143,
+      "n_filled": 201089,
+      "n_traded": 527972
+    },
+    "LDO": {
+      "n_minutes": 729205,
+      "n_true_gap": 134,
+      "n_filled": 73548,
+      "n_traded": 655523
+    },
+    "LINEA": {
+      "n_minutes": 586950,
+      "n_true_gap": 14,
+      "n_filled": 99255,
+      "n_traded": 487681
+    },
+    "LINK": {
+      "n_minutes": 729205,
+      "n_true_gap": 133,
+      "n_filled": 31535,
+      "n_traded": 697537
+    },
+    "LIT": {
+      "n_minutes": 425294,
+      "n_true_gap": 0,
+      "n_filled": 4558,
+      "n_traded": 420736
+    },
+    "LTC": {
+      "n_minutes": 729205,
+      "n_true_gap": 136,
+      "n_filled": 53534,
+      "n_traded": 675535
+    },
+    "MANTA": {
+      "n_minutes": 729205,
+      "n_true_gap": 139,
+      "n_filled": 235757,
+      "n_traded": 493309
+    },
+    "ME": {
+      "n_minutes": 729205,
+      "n_true_gap": 152,
+      "n_filled": 176936,
+      "n_traded": 552117
+    },
+    "MEGA": {
+      "n_minutes": 513153,
+      "n_true_gap": 0,
+      "n_filled": 178204,
+      "n_traded": 334949
+    },
+    "MELANIA": {
+      "n_minutes": 729204,
+      "n_true_gap": 137,
+      "n_filled": 111913,
+      "n_traded": 617154
+    },
+    "MEME": {
+      "n_minutes": 729187,
+      "n_true_gap": 136,
+      "n_filled": 348175,
+      "n_traded": 380876
+    },
+    "MERL": {
+      "n_minutes": 729203,
+      "n_true_gap": 139,
+      "n_filled": 164575,
+      "n_traded": 564489
+    },
+    "MET": {
+      "n_minutes": 530710,
+      "n_true_gap": 0,
+      "n_filled": 80793,
+      "n_traded": 449917
+    },
+    "MINA": {
+      "n_minutes": 729199,
+      "n_true_gap": 152,
+      "n_filled": 245609,
+      "n_traded": 483438
+    },
+    "MNT": {
+      "n_minutes": 729202,
+      "n_true_gap": 153,
+      "n_filled": 176112,
+      "n_traded": 552937
+    },
+    "MON": {
+      "n_minutes": 533975,
+      "n_true_gap": 0,
+      "n_filled": 38055,
+      "n_traded": 495920
+    },
+    "MOODENG": {
+      "n_minutes": 729202,
+      "n_true_gap": 132,
+      "n_filled": 129615,
+      "n_traded": 599455
+    },
+    "MORPHO": {
+      "n_minutes": 729205,
+      "n_true_gap": 135,
+      "n_filled": 113305,
+      "n_traded": 615765
+    },
+    "MOVE": {
+      "n_minutes": 729205,
+      "n_true_gap": 139,
+      "n_filled": 115735,
+      "n_traded": 613331
+    },
+    "NEAR": {
+      "n_minutes": 729205,
+      "n_true_gap": 136,
+      "n_filled": 46314,
+      "n_traded": 682755
+    },
+    "NEO": {
+      "n_minutes": 729205,
+      "n_true_gap": 140,
+      "n_filled": 192245,
+      "n_traded": 536820
+    },
+    "NIL": {
+      "n_minutes": 729205,
+      "n_true_gap": 143,
+      "n_filled": 180934,
+      "n_traded": 548128
+    },
+    "NOT": {
+      "n_minutes": 729162,
+      "n_true_gap": 145,
+      "n_filled": 479627,
+      "n_traded": 249390
+    },
+    "NXPC": {
+      "n_minutes": 729205,
+      "n_true_gap": 144,
+      "n_filled": 215795,
+      "n_traded": 513266
+    },
+    "ONDO": {
+      "n_minutes": 729205,
+      "n_true_gap": 136,
+      "n_filled": 70865,
+      "n_traded": 658204
+    },
+    "OP": {
+      "n_minutes": 729205,
+      "n_true_gap": 133,
+      "n_filled": 78310,
+      "n_traded": 650762
+    },
+    "ORDI": {
+      "n_minutes": 729205,
+      "n_true_gap": 138,
+      "n_filled": 198473,
+      "n_traded": 530594
+    },
+    "PAXG": {
+      "n_minutes": 729205,
+      "n_true_gap": 136,
+      "n_filled": 59617,
+      "n_traded": 669452
+    },
+    "PENDLE": {
+      "n_minutes": 729205,
+      "n_true_gap": 135,
+      "n_filled": 108926,
+      "n_traded": 620144
+    },
+    "PENGU": {
+      "n_minutes": 729205,
+      "n_true_gap": 131,
+      "n_filled": 42909,
+      "n_traded": 686165
+    },
+    "PEOPLE": {
+      "n_minutes": 729204,
+      "n_true_gap": 138,
+      "n_filled": 183560,
+      "n_traded": 545506
+    },
+    "PNUT": {
+      "n_minutes": 729205,
+      "n_true_gap": 134,
+      "n_filled": 155477,
+      "n_traded": 573594
+    },
+    "POL": {
+      "n_minutes": 729205,
+      "n_true_gap": 136,
+      "n_filled": 123927,
+      "n_traded": 605142
+    },
+    "POLYX": {
+      "n_minutes": 729202,
+      "n_true_gap": 146,
+      "n_filled": 283139,
+      "n_traded": 445917
+    },
+    "PONS": {
+      "n_minutes": 63130,
+      "n_true_gap": 0,
+      "n_filled": 109,
+      "n_traded": 63021
+    },
+    "POPCAT": {
+      "n_minutes": 729205,
+      "n_true_gap": 135,
+      "n_filled": 92287,
+      "n_traded": 636783
+    },
+    "PROVE": {
+      "n_minutes": 624765,
+      "n_true_gap": 37,
+      "n_filled": 153654,
+      "n_traded": 471074
+    },
+    "PUMP": {
+      "n_minutes": 663628,
+      "n_true_gap": 82,
+      "n_filled": 9014,
+      "n_traded": 654532
+    },
+    "PURR": {
+      "n_minutes": 729205,
+      "n_true_gap": 137,
+      "n_filled": 244817,
+      "n_traded": 484251
+    },
+    "PYTH": {
+      "n_minutes": 729205,
+      "n_true_gap": 135,
+      "n_filled": 142098,
+      "n_traded": 586972
+    },
+    "RENDER": {
+      "n_minutes": 729205,
+      "n_true_gap": 136,
+      "n_filled": 116230,
+      "n_traded": 612839
+    },
+    "RESOLV": {
+      "n_minutes": 706186,
+      "n_true_gap": 87,
+      "n_filled": 121360,
+      "n_traded": 584739
+    },
+    "REZ": {
+      "n_minutes": 729203,
+      "n_true_gap": 142,
+      "n_filled": 206390,
+      "n_traded": 522671
+    },
+    "RSR": {
+      "n_minutes": 729205,
+      "n_true_gap": 143,
+      "n_filled": 359916,
+      "n_traded": 369146
+    },
+    "RUNE": {
+      "n_minutes": 729204,
+      "n_true_gap": 138,
+      "n_filled": 182293,
+      "n_traded": 546773
+    },
+    "S": {
+      "n_minutes": 729205,
+      "n_true_gap": 136,
+      "n_filled": 124990,
+      "n_traded": 604079
+    },
+    "SAGA": {
+      "n_minutes": 729196,
+      "n_true_gap": 137,
+      "n_filled": 236700,
+      "n_traded": 492359
+    },
+    "SAND": {
+      "n_minutes": 729205,
+      "n_true_gap": 136,
+      "n_filled": 223823,
+      "n_traded": 505246
+    },
+    "SEI": {
+      "n_minutes": 729204,
+      "n_true_gap": 137,
+      "n_filled": 69474,
+      "n_traded": 659593
+    },
+    "SKR": {
+      "n_minutes": 381427,
+      "n_true_gap": 0,
+      "n_filled": 123114,
+      "n_traded": 258313
+    },
+    "SKY": {
+      "n_minutes": 564129,
+      "n_true_gap": 9,
+      "n_filled": 115173,
+      "n_traded": 448947
+    },
+    "SNX": {
+      "n_minutes": 729205,
+      "n_true_gap": 142,
+      "n_filled": 152373,
+      "n_traded": 576690
+    },
+    "SOL": {
+      "n_minutes": 729205,
+      "n_true_gap": 132,
+      "n_filled": 250,
+      "n_traded": 728823
+    },
+    "SOPH": {
+      "n_minutes": 724843,
+      "n_true_gap": 140,
+      "n_filled": 242901,
+      "n_traded": 481802
+    },
+    "SPX": {
+      "n_minutes": 729205,
+      "n_true_gap": 134,
+      "n_filled": 59564,
+      "n_traded": 669507
+    },
+    "STABLE": {
+      "n_minutes": 445603,
+      "n_true_gap": 0,
+      "n_filled": 64194,
+      "n_traded": 381409
+    },
+    "STBL": {
+      "n_minutes": 557077,
+      "n_true_gap": 3,
+      "n_filled": 93507,
+      "n_traded": 463567
+    },
+    "STRK": {
+      "n_minutes": 729205,
+      "n_true_gap": 136,
+      "n_filled": 90370,
+      "n_traded": 638699
+    },
+    "STX": {
+      "n_minutes": 729205,
+      "n_true_gap": 133,
+      "n_filled": 134240,
+      "n_traded": 594832
+    },
+    "SUI": {
+      "n_minutes": 729205,
+      "n_true_gap": 134,
+      "n_filled": 14292,
+      "n_traded": 714779
+    },
+    "SUPER": {
+      "n_minutes": 729205,
+      "n_true_gap": 149,
+      "n_filled": 181885,
+      "n_traded": 547171
+    },
+    "SUSHI": {
+      "n_minutes": 729205,
+      "n_true_gap": 135,
+      "n_filled": 210466,
+      "n_traded": 518604
+    },
+    "SYRUP": {
+      "n_minutes": 683673,
+      "n_true_gap": 86,
+      "n_filled": 148912,
+      "n_traded": 534675
+    },
+    "TAO": {
+      "n_minutes": 729205,
+      "n_true_gap": 135,
+      "n_filled": 35740,
+      "n_traded": 693330
+    },
+    "TIA": {
+      "n_minutes": 729205,
+      "n_true_gap": 134,
+      "n_filled": 71450,
+      "n_traded": 657621
+    },
+    "TNSR": {
+      "n_minutes": 729173,
+      "n_true_gap": 138,
+      "n_filled": 448646,
+      "n_traded": 280389
+    },
+    "TRB": {
+      "n_minutes": 729205,
+      "n_true_gap": 137,
+      "n_filled": 256059,
+      "n_traded": 473009
+    },
+    "TRUMP": {
+      "n_minutes": 729205,
+      "n_true_gap": 135,
+      "n_filled": 46825,
+      "n_traded": 682245
+    },
+    "TRX": {
+      "n_minutes": 729205,
+      "n_true_gap": 136,
+      "n_filled": 71056,
+      "n_traded": 658013
+    },
+    "TURBO": {
+      "n_minutes": 729205,
+      "n_true_gap": 139,
+      "n_filled": 168853,
+      "n_traded": 560213
+    },
+    "UMA": {
+      "n_minutes": 729200,
+      "n_true_gap": 150,
+      "n_filled": 268136,
+      "n_traded": 460914
+    },
+    "UNI": {
+      "n_minutes": 729205,
+      "n_true_gap": 135,
+      "n_filled": 40461,
+      "n_traded": 688609
+    },
+    "USELESS": {
+      "n_minutes": 50878,
+      "n_true_gap": 0,
+      "n_filled": 1483,
+      "n_traded": 49395
+    },
+    "USUAL": {
+      "n_minutes": 729204,
+      "n_true_gap": 137,
+      "n_filled": 261643,
+      "n_traded": 467424
+    },
+    "VINE": {
+      "n_minutes": 659279,
+      "n_true_gap": 135,
+      "n_filled": 227096,
+      "n_traded": 432048
+    },
+    "VIRTUAL": {
+      "n_minutes": 729205,
+      "n_true_gap": 137,
+      "n_filled": 58088,
+      "n_traded": 670980
+    },
+    "VVV": {
+      "n_minutes": 729204,
+      "n_true_gap": 760,
+      "n_filled": 160325,
+      "n_traded": 568119
+    },
+    "W": {
+      "n_minutes": 729204,
+      "n_true_gap": 134,
+      "n_filled": 144111,
+      "n_traded": 584959
+    },
+    "WCT": {
+      "n_minutes": 729205,
+      "n_true_gap": 137,
+      "n_filled": 246289,
+      "n_traded": 482779
+    },
+    "WIF": {
+      "n_minutes": 729205,
+      "n_true_gap": 134,
+      "n_filled": 54878,
+      "n_traded": 674193
+    },
+    "WLD": {
+      "n_minutes": 729205,
+      "n_true_gap": 133,
+      "n_filled": 39668,
+      "n_traded": 689404
+    },
+    "WLFI": {
+      "n_minutes": 599848,
+      "n_true_gap": 17,
+      "n_filled": 37248,
+      "n_traded": 562583
+    },
+    "XAI": {
+      "n_minutes": 729205,
+      "n_true_gap": 136,
+      "n_filled": 273111,
+      "n_traded": 455958
+    },
+    "XLM": {
+      "n_minutes": 729205,
+      "n_true_gap": 137,
+      "n_filled": 98149,
+      "n_traded": 630919
+    },
+    "XMR": {
+      "n_minutes": 391160,
+      "n_true_gap": 0,
+      "n_filled": 14271,
+      "n_traded": 376889
+    },
+    "XPL": {
+      "n_minutes": 601365,
+      "n_true_gap": 28,
+      "n_filled": 12157,
+      "n_traded": 589180
+    },
+    "XRP": {
+      "n_minutes": 729205,
+      "n_true_gap": 131,
+      "n_filled": 5235,
+      "n_traded": 723839
+    },
+    "YGG": {
+      "n_minutes": 729205,
+      "n_true_gap": 156,
+      "n_filled": 196339,
+      "n_traded": 532710
+    },
+    "ZEC": {
+      "n_minutes": 542079,
+      "n_true_gap": 0,
+      "n_filled": 1605,
+      "n_traded": 540474
+    },
+    "ZEN": {
+      "n_minutes": 729205,
+      "n_true_gap": 138,
+      "n_filled": 234052,
+      "n_traded": 495015
+    },
+    "ZETA": {
+      "n_minutes": 729205,
+      "n_true_gap": 147,
+      "n_filled": 193511,
+      "n_traded": 535547
+    },
+    "ZK": {
+      "n_minutes": 729205,
+      "n_true_gap": 136,
+      "n_filled": 136667,
+      "n_traded": 592402
+    },
+    "ZORA": {
+      "n_minutes": 729205,
+      "n_true_gap": 136,
+      "n_filled": 128868,
+      "n_traded": 600201
+    },
+    "ZRO": {
+      "n_minutes": 729205,
+      "n_true_gap": 133,
+      "n_filled": 77245,
+      "n_traded": 651827
+    },
+    "kBONK": {
+      "n_minutes": 729205,
+      "n_true_gap": 132,
+      "n_filled": 61542,
+      "n_traded": 667531
+    },
+    "kFLOKI": {
+      "n_minutes": 729205,
+      "n_true_gap": 138,
+      "n_filled": 140786,
+      "n_traded": 588281
+    },
+    "kLUNC": {
+      "n_minutes": 729205,
+      "n_true_gap": 140,
+      "n_filled": 208186,
+      "n_traded": 520879
+    },
+    "kNEIRO": {
+      "n_minutes": 729205,
+      "n_true_gap": 136,
+      "n_filled": 207764,
+      "n_traded": 521305
+    },
+    "kPEPE": {
+      "n_minutes": 729205,
+      "n_true_gap": 135,
+      "n_filled": 26440,
+      "n_traded": 702630
+    },
+    "kSHIB": {
+      "n_minutes": 729205,
+      "n_true_gap": 138,
+      "n_filled": 88685,
+      "n_traded": 640382
+    }
+  },
+  "impact_offminute_dropped": 2284
+}

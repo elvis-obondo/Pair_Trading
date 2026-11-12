@@ -1,0 +1,5 @@
+[VAULT-WATCHER] watching i-0eb1f51d55a4103b4 in ap-northeast-1, polling every 60s
+[VAULT-WATCHER] 2026-11-11T05:30:24Z state change: <none> -> running
+[VAULT-WATCHER] 2026-11-11T06:02:06Z state change: running -> unknown
+[VAULT-WATCHER] instance reached terminal state 'unknown' -- pull logs from s3://pair-trading-hl-289869684922/s1_vault/logs/ and check vault-refit_i-0eb1f51d55a4103b4.log's exit_code line
+[VAULT-WATCHER] WARNING: could not fetch console output (may not be available yet/anymore)

@@ -1,0 +1,27 @@
+[VAULTPICKS] sha256 s1_vault_picks.py: fcc4b776e88899a2c1db9a2011009cdde8fb87f2079ef4e83059e91cb757bf1c
+[VAULTPICKS] sha256 s1h_recalibration.py: 6e6a5ae53bfd517ccb37646ab70b8d1e949d99cc0f09edcaf44a126a2d844db5
+[VAULTPICKS] sha256 harness.py: 423328afc950252fe37d5fbc7fb4c25d97475b36abe3860542357e5481ce56c7
+[VAULTPICKS] sha256 vault_loader.py: a80e4caf6097880ffec7bbe1f4ffc045b563f5e16ea18595394f7a3821b1ec0b
+[VAULTPICKS] start 2026-11-12T03:26:08Z UTC; POOL_FOLDS=(0, 1, 2, 3, 4, 5, 6, 7) guard=<=
+[VAULTPICKS] vault predictions sha256 ede424aac78a849c4288f223ad8e3750a0bbc343b1bdaad1ec2a657efdb689a7 (expected ede424aac78a849c4288f223ad8e3750a0bbc343b1bdaad1ec2a657efdb689a7)
+[VAULTPICKS] stage A input: 1,280,088 vault predictions (event_id unique: True)
+[HARNESS] load_search_events: 6,697,756 merged rows -> 5,405,478 after the date/gap-day filter -> 5,378,429 after dropping 27,049 label_gap=1 rows
+[VAULTPICKS] Rule A: previous block = fold 7 (311,654 saved test events); cut-offs q=0.01: 0.7295204552, q=0.005: 0.7808598143, q=0.001: 0.8778663336
+[VAULTPICKS] method check q=0.01: fold 7 picks from fold 6's cut-off = 3,032, S1-G saved n = 3,032
+[VAULTPICKS] method check q=0.005: fold 7 picks from fold 6's cut-off = 1,550, S1-G saved n = 1,550
+[VAULTPICKS] method check q=0.001: fold 7 picks from fold 6's cut-off = 353, S1-G saved n = 353
+[VAULTPICKS] p_cal fit: pool folds (0, 1, 2, 3, 4, 5, 6, 7): n_pool=3,525,909 n_dropped(guard)=0 n_fit=3,525,909 tied_groups=251 distinct_levels=251
+[VAULTPICKS] iso_at_grid (raw p=0.1..0.9): 0.1:0.0960, 0.2:0.1974, 0.3:0.3103, 0.4:0.4057, 0.5:0.4915, 0.6:0.5544, 0.7:0.6109, 0.8:0.6591, 0.9:0.7097
+[VAULTPICKS] stage A: 1,280,088 vault events scored; p_cal_10h saturated at 0 or 1 for 1; picks q=0.01: 13,947, q=0.005: 7,188, q=0.001: 1,480
+[VAULTPICKS] stage A: p_10h mean 0.3202; mean p_cal_10h of picks q=0.01: 0.6617, q=0.005: 0.6848, q=0.001: 0.7263
+[VAULTPICKS] stage A saved /Users/elvisobondo/Pair_Trading/research/model/logs/s1/s1_vault_picks_all.parquet: 1,280,088 rows sha256 b8aa5faff7b5f6eff00abe5d0d8173fb6760b84d9f32857ad8e06bef26291021
+[VAULTPICKS] settings written BEFORE stage B: /Users/elvisobondo/Pair_Trading/research/model/logs/s1/s1_vault_picks_settings.json
+[VAULT_LOADER] load_vault_events: 6,697,756 merged rows -> 1,280,088 with t0 >= VAULT_START -> 1,280,088 usable (label_gap=0), 0 label_gap=1
+[VAULTPICKS] stage B (harness rules on vault rows): 1,280,088 merged vault rows -> 1,280,088 after the date/gap-day filter -> 1,280,088 after dropping 0 label_gap=1 rows
+[VAULTPICKS] stage B: q=0.01: picks 13,947 of 1,280,088 usable (stage A had 13,947 of 1,280,088); mean p_cal_10h of picks 0.6617
+[VAULTPICKS] stage B: q=0.005: picks 7,188 of 1,280,088 usable (stage A had 7,188 of 1,280,088); mean p_cal_10h of picks 0.6848
+[VAULTPICKS] stage B: q=0.001: picks 1,480 of 1,280,088 usable (stage A had 1,480 of 1,280,088); mean p_cal_10h of picks 0.7263
+[VAULTPICKS] picks per UTC month q=0.01: 2026-07: 3,089, 2026-08: 4,592, 2026-09: 4,557, 2026-10: 1,709
+[VAULTPICKS] picks per UTC month q=0.005: 2026-07: 1,613, 2026-08: 2,308, 2026-09: 2,328, 2026-10: 939
+[VAULTPICKS] picks per UTC month q=0.001: 2026-07: 310, 2026-08: 478, 2026-09: 498, 2026-10: 194
+[VAULTPICKS] stage B saved /Users/elvisobondo/Pair_Trading/research/model/logs/s1/s1_vault_picks.parquet: 1,280,088 rows sha256 15b4f56cd66ad6b2a4e2bc056f03cf03febb519459491310d4f7745e50e44a72  [19s]
