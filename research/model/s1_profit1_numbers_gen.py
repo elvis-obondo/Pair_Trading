@@ -80,9 +80,22 @@ QS = (0.01, 0.005, 0.001)
 STOPS = ("0p5", "1p0", "2p0", "none")
 FEES = ("taker", "maker")
 START_EQUITY = 1000.0
-DAY0 = H.TEST_BLOCK_STARTS[1].normalize()
+# HL-VAULT1 step 6 (brief docs/prompts/HL_VAULT1_RUN.md): PROFIT1_VAULT=1 points this generator at the vault runs
+# (tags vault_open10 / vault_open20). ONLY the day range, the block list, fold_of, the EV check and the known-gaps
+# text differ; every metric is the same code. Unset: every existing tag reproduces byte for byte.
+VAULT = os.environ.get("PROFIT1_VAULT", "") == "1"
+VAULT_OPENED = "2026-11-12"      # date label only: the step-3 scoring run (score log "Shutdown scheduled ... 2026-11-12 UTC")
+VAULT_PICKS = os.path.join(LOG_DIR, "s1_vault_picks.parquet")
+if VAULT:
+    _last_t0 = pd.read_parquet(VAULT_PICKS, columns=["t0"])["t0"].max()
+    DAY0 = H.VAULT_START.normalize()
+    DAY_END_NOMINAL = _last_t0.normalize() + pd.Timedelta(days=1)    # exclusive end: the day after the last vault event
+    BLOCKS = [(8, H.VAULT_START, DAY_END_NOMINAL)]                    # one block, "fold 8" as in the engine
+else:
+    DAY0 = H.TEST_BLOCK_STARTS[1].normalize()
+    DAY_END_NOMINAL = H.TEST_BLOCK_ENDS[7].normalize()
+    BLOCKS = [(k, H.TEST_BLOCK_STARTS[k], H.TEST_BLOCK_ENDS[k]) for k in range(1, 8)]
 ANCHOR_DAY = DAY0 - pd.Timedelta(days=1)
-DAY_END_NOMINAL = H.TEST_BLOCK_ENDS[7].normalize()
 
 
 def log(msg):
@@ -169,8 +182,8 @@ def sharpe_sortino(daily_eq):
 
 def fold_of(ts):
     ts = pd.Timestamp(ts)
-    for k in range(1, 8):
-        if H.TEST_BLOCK_STARTS[k] <= ts < H.TEST_BLOCK_ENDS[k]:
+    for k, b_start, b_end in BLOCKS:
+        if b_start <= ts < b_end:
             return k
     return None
 
@@ -204,13 +217,13 @@ def per_run_report(q, stop, fee, engine_report):
     # checker N4: each fold's TOTAL equity change (USD and %), not the mean daily change. All 7
     # TEST_BLOCK_STARTS/ENDS fall exactly at 00:00:00 UTC (not mid-day).
     monthly = {}
-    for k in range(1, 8):
-        mask = (daily_eq.index >= H.TEST_BLOCK_STARTS[k]) & (daily_eq.index < H.TEST_BLOCK_ENDS[k])
+    for k, b_start, b_end in BLOCKS:
+        mask = (daily_eq.index >= b_start) & (daily_eq.index < b_end)
         sub = daily_eq[mask]
         if len(sub) < 1:
             monthly[k] = dict(n_days=0, total_pnl_usd=None, total_pnl_pct=None)
             continue
-        start_eq = daily_eq[daily_eq.index < H.TEST_BLOCK_STARTS[k]].iloc[-1] if (daily_eq.index < H.TEST_BLOCK_STARTS[k]).any() else sub.iloc[0]
+        start_eq = daily_eq[daily_eq.index < b_start].iloc[-1] if (daily_eq.index < b_start).any() else sub.iloc[0]
         end_eq = sub.iloc[-1]
         monthly[k] = dict(n_days=int(mask.sum()), total_pnl_usd=float(end_eq - start_eq),
                            total_pnl_pct=float(end_eq / start_eq - 1) if start_eq else None)
@@ -221,7 +234,8 @@ def per_run_report(q, stop, fee, engine_report):
     # sum(folds) alone does not reconcile with final_equity - START_EQUITY. Computed independently (not
     # just defined as the residual) so the assert below is a real check that every day is accounted for
     # exactly once across anchor + 7 folds + outside, with no gap or double count.
-    fold7_end_eq = float(daily_eq[daily_eq.index < H.TEST_BLOCK_ENDS[7]].iloc[-1])
+    last_block_end = BLOCKS[-1][2]
+    fold7_end_eq = float(daily_eq[daily_eq.index < last_block_end].iloc[-1])
     outside_pnl = float(final_equity - fold7_end_eq)
     fold_sum = sum(v["total_pnl_usd"] for v in monthly.values() if v["total_pnl_usd"] is not None)
     reconciled_total = fold_sum + outside_pnl
@@ -229,7 +243,7 @@ def per_run_report(q, stop, fee, engine_report):
     assert abs(reconciled_total - expected_total) < 1e-6, (
         f"{run_key(q, stop, fee)}: sum(fold totals)={fold_sum:.6f} + outside={outside_pnl:.6f} = "
         f"{reconciled_total:.6f} != final_equity - START_EQUITY = {expected_total:.6f}")
-    monthly["outside"] = dict(n_days=int((daily_eq.index >= H.TEST_BLOCK_ENDS[7]).sum()),
+    monthly["outside"] = dict(n_days=int((daily_eq.index >= last_block_end).sum()),
                                total_pnl_usd=outside_pnl, total_pnl_pct=None,
                                note="exit spill / boundary days at or after fold 7's nominal end")
 
@@ -331,6 +345,8 @@ def ev_check(q, fee):
     guard -- correct because the maximum hold is 600 minutes = 10h, so a fit-pool event is only used
     once its own 10h outcome is known before the scored fold starts). Fold 1 is never scored: there is
     no earlier test month to fit on. 5 EV quintiles pooled over folds 2-7: mean EV vs realised mean net."""
+    if VAULT:
+        return None      # the expanding-window fit needs earlier test months' trades of the same tag; not part of step 6
     trades, _, _, _ = load_run(q, "none", fee)
     if len(trades) == 0:
         return None
@@ -389,6 +405,8 @@ def numbers_md_marker(run_tag):
     """Checker's requirement for a tagged run (e.g. open20): the NUMBERS.md heading/marker carries the
     tag, so the append guard below is keyed on the tagged marker and never collides with, or silently
     skips because of, the baseline's untagged "## [HL-PROFIT1]" section."""
+    if VAULT:
+        return f"## [HL-VAULT1 {run_tag}]"
     return f"## [HL-PROFIT1 {run_tag}]" if run_tag else "## [HL-PROFIT1]"
 
 
@@ -401,7 +419,8 @@ def _numbers_md_lines(report, run_tag, max_open, min_abs_z=0.0, splits_filter=No
     heading states which run this is (the baseline's max_open=10 min_abs_z=0.0, or a tagged run's own
     values), all read from the tagged report.json's own CONFIG, never typed."""
     z_part = f" min_abs_z={min_abs_z}" if min_abs_z > 0 else ""
-    lines = [f"{numbers_md_marker(run_tag)} Portfolio backtest, S1's live picks, build2 d3/asm price, "
+    vault_part = f" VAULT (opened once, {VAULT_OPENED})" if VAULT else ""
+    lines = [f"{numbers_md_marker(run_tag)}{vault_part} Portfolio backtest, S1's live picks, build2 d3/asm price, "
              f"slippage_spread_share=0.0, max_open={max_open}{z_part}", ""]
     lines.append(f"Runs ending above the ${START_EQUITY:.0f} start: "
                  f"{report['n_runs_above_start']}/{report['n_runs_total']}.")
@@ -519,13 +538,16 @@ def _numbers_md_lines(report, run_tag, max_open, min_abs_z=0.0, splits_filter=No
                      f"{dd['longest_underwater_days']} | "
                      f"{dist['min']:.4f} | {dist['median']:.4f} | {dist['date_of_min']} |")
     lines.append("")
-    lines.append("### Monthly (fold) total P&L, per run")
+    lines.append("### Monthly (fold) total P&L, per run" if not VAULT else "### Vault block total P&L, per run")
     lines.append("All 7 test blocks start/end exactly at 00:00:00 UTC (not mid-day). \"outside\" is the "
                  "exit spill after fold 7's nominal end; sum(fold totals) + outside reconciles to "
+                 "final_equity - start to 1e-6 (asserted in the generator)." if not VAULT else
+                 "One block (fold 8): from the vault start to the day after the last vault event, 00:00:00 UTC. "
+                 "\"outside\" is the exit spill after that end; block + outside reconciles to "
                  "final_equity - start to 1e-6 (asserted in the generator).")
     lines.append("")
     for key, r in report["runs"].items():
-        lines.append(f"**{key}** (n_months_positive={r['n_months_positive']}/7):")
+        lines.append(f"**{key}** (n_months_positive={r['n_months_positive']}/{len(BLOCKS)}):")
         lines.append("| fold | n_days | total_pnl_usd | total_pnl_pct |")
         lines.append("|---|---|---|---|")
         fold_keys = sorted((k for k in r["monthly"] if k != "outside"), key=int)
@@ -537,7 +559,11 @@ def _numbers_md_lines(report, run_tag, max_open, min_abs_z=0.0, splits_filter=No
         out = r["monthly"]["outside"]
         lines.append(f"| outside | {out['n_days']} | {out['total_pnl_usd']:.2f} | n/a |")
         lines.append("")
-    lines.append("### EV check (stop=none only; fold 1 not scored, no earlier test month to fit on)")
+    if VAULT:
+        lines.append("### EV check: not run on the vault (the expanding-window fit needs earlier test months' trades of "
+                     "the same tag; not part of the HL-VAULT1 brief)")
+    else:
+        lines.append("### EV check (stop=none only; fold 1 not scored, no earlier test month to fit on)")
     # checker E1: built from the ev_check results, not typed in -- counts how many of the (up to 6)
     # tables have mean_realised_net non-decreasing quintile 0->4, and quotes one real violation from
     # the data (the first break found) rather than a fixed example.
@@ -556,10 +582,11 @@ def _numbers_md_lines(report, run_tag, max_open, min_abs_z=0.0, splits_filter=No
                     break
     ex_txt = (f"e.g. {example[0]}: quintile {example[1]} mean_realised_net={example[2]:.4f} is above "
               f"quintile {example[3]}'s {example[4]:.4f}" if example else "")
-    lines.append(f"EV quintiles rank realised net monotonically (quintile 0 to 4 non-decreasing) in "
-                 f"{n_monotonic}/{len(ev_tables)} tables ({ex_txt}). EV here is descriptive only -- it "
-                 f"does not rank realised net in these tables, and no claim that it predicts profit "
-                 f"should be drawn from this table.")
+    if not VAULT:
+        lines.append(f"EV quintiles rank realised net monotonically (quintile 0 to 4 non-decreasing) in "
+                     f"{n_monotonic}/{len(ev_tables)} tables ({ex_txt}). EV here is descriptive only -- it "
+                     f"does not rank realised net in these tables, and no claim that it predicts profit "
+                     f"should be drawn from this table.")
     lines.append("")
     for key, ev in ev_tables:
         lines.append(f"**{key}** (n_scored={ev['n_scored']}):")
@@ -659,6 +686,10 @@ def main():
         "the test months were already used for the cut-off, the deep dive and the calibration: "
         "results are optimistic until the vault or paper-trading check.",
     ]
+    if VAULT:
+        report["known_gaps"][-1] = (
+            "the vault was opened once; no pass/fail rule; settings were frozen before any vault row was read. "
+            "The model, pick and calibration caveats of this vault run are in the [HL-VAULT1] summary section.")
     # checker's requirement for Task C (z3_open10/z3_open20): an extra known-gaps line, printed only
     # when min_abs_z > 0, since it doesn't apply to the base/open20 runs.
     if min_abs_z > 0:
@@ -696,6 +727,8 @@ def main():
     marker = numbers_md_marker(RUN_TAG)
     if marker in existing:
         log(f"[NUMGEN] NUMBERS.md already has a {marker} section -- not appending again")
+    elif VAULT and os.environ.get("NUMGEN_APPEND", "") != "1":
+        log(f"[NUMGEN] vault mode, NUMGEN_APPEND not set: NUMBERS.md NOT appended (checker reviews the log first)")
     else:
         with open(numbers_md_path, "a") as f:
             f.write(canonical_text)

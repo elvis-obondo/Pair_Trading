@@ -1,0 +1,7 @@
+HEAD NUMBERS.md 738,287 bytes sha 62aad924a6dd531a3b742768253d301903ef45336248d66bce47af9b9cdcbb94
+now  NUMBERS.md 814,540 bytes sha 771d6d97d1158448d1e506b511c595ec534769fb85a594540464ce71226ae059
+appended 76,253 bytes, sha 585deeb8be703d3b9e69a0cf4d0c0edb818315fa464bf70d32570a9a6a863bab
+  research/dislocation_model/logs/s1_profit1_numbers_excerpt_vault_open10.md: 26,072 bytes sha 3a00cb1ae16d70363b87d51d034e9407c31a67f89fdd90a2af14ab9b93931a30
+  research/dislocation_model/logs/s1_profit1_numbers_excerpt_vault_open20.md: 26,275 bytes sha 7da5b57a62bb7ed34535c1d33967f999892158fd7b97f9033a29a704da5f01d7
+  research/dislocation_model/logs/s1_vault_report_section.md: 23,906 bytes sha d05f9ef5325f843b212f8e1ab99c2904bafdd6dba32581b058bfcee0bd404005
+OK: additions only; appended text == excerpt_vault_open10 + excerpt_vault_open20 + s1_vault_report_section, byte for byte

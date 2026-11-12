@@ -1,0 +1,13 @@
+outputs/s1_vault_picks.parquet
+  local 15b4f56cd66ad6b2a4e2bc056f03cf03febb519459491310d4f7745e50e44a72
+  s3    15b4f56cd66ad6b2a4e2bc056f03cf03febb519459491310d4f7745e50e44a72
+  MATCH  bytes local 41,688,079 s3 41,688,079
+outputs/s1_vault_picks_all.parquet
+  local b8aa5faff7b5f6eff00abe5d0d8173fb6760b84d9f32857ad8e06bef26291021
+  s3    b8aa5faff7b5f6eff00abe5d0d8173fb6760b84d9f32857ad8e06bef26291021
+  MATCH  bytes local 39,533,126 s3 39,533,126
+score_logs/outputs/s1_vault_predictions.parquet
+  local ede424aac78a849c4288f223ad8e3750a0bbc343b1bdaad1ec2a657efdb689a7
+  s3    ede424aac78a849c4288f223ad8e3750a0bbc343b1bdaad1ec2a657efdb689a7
+  MATCH  bytes local 38,054,649 s3 38,054,649
+ALL MATCH

@@ -1,0 +1,3134 @@
+{
+  "runs": {
+    "q0.01_stop0p5_feetaker": {
+      "q": 0.01,
+      "stop": "0p5",
+      "fee": "taker",
+      "n_trades": 10187,
+      "final_equity": 304.03644733055216,
+      "total_return": -0.6959635526694479,
+      "cagr": -0.9911169170664982,
+      "cagr_n_days": 92,
+      "daily_pnl_mean": -7.483479060961804,
+      "daily_pnl_median": -7.044324732689688,
+      "share_positive_days": 0.17204301075268819,
+      "worst_day": -47.138623651441094,
+      "best_day": 11.802261912442304,
+      "max_drawdown": {
+        "max_dd_usd": -695.9635526694478,
+        "max_dd_pct": -0.6959635526694479,
+        "start": "2026-07-12",
+        "bottom": "2026-10-13",
+        "recovery": null,
+        "longest_underwater_days": 93
+      },
+      "sharpe": -18.03205085552367,
+      "sortino": -22.806709553199504,
+      "sharpe_sortino_n_days": 93,
+      "monthly": {
+        "8": {
+          "n_days": 93,
+          "total_pnl_usd": -695.9635526694478,
+          "total_pnl_pct": -0.6959635526694479
+        },
+        "outside": {
+          "n_days": 0,
+          "total_pnl_usd": 0.0,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 0,
+      "win_rate": 0.2754491017964072,
+      "stop_share": 0.7241582408952587,
+      "timeout_share": 0.0003926573083341514,
+      "liquidation_share": 0.0,
+      "mean_net": -0.06831879382246402,
+      "median_net": -0.2079546800358449,
+      "mean_return_on_margin": -0.002325486340906821,
+      "median_return_on_margin": -0.007740158728743463,
+      "mean_win": 0.5454820516073327,
+      "mean_loss": -0.3014350840276855,
+      "profit_factor": 0.6872769958193321,
+      "mean_holding_minutes": 45.33945224305487,
+      "total_fee": 933.5121262358211,
+      "fee_share_of_gross": 3.938863384168134,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 5.499934337988112,
+      "funding_paid_share_of_gross": 0.023206436606863973,
+      "total_funding_received": 6.048126020604872,
+      "funding_received_share_of_gross": 0.025519477954137497,
+      "total_gross": 237.00038188376357,
+      "peak_margin_used": 499.3573110197796,
+      "distance_to_liquidation_ratio": {
+        "min": 4.078085043044879,
+        "median": 4.431012512972422,
+        "date_of_min": "2026-09-09"
+      },
+      "mean_open_positions": 4.0573900821364255,
+      "max_open_positions": 10,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "book_full": 2574,
+        "min_order": 1186
+      },
+      "by_fold": {
+        "8": {
+          "n": 10187,
+          "mean_net": -0.06831879382246402
+        }
+      },
+      "top10_pairs": {
+        "CFX/XPL": 4.863032241025648,
+        "ONDO/ORDI": 4.624242681810882,
+        "PUMP/UNI": 4.313582300154366,
+        "ALGO/KAITO": 3.8766334316805944,
+        "BLUR/GRIFFAIN": 3.8495983460845418,
+        "FOGO/HMSTR": 3.5562807227022177,
+        "JTO/ONDO": 3.538260947166603,
+        "HMSTR/NIL": 3.4974195417504594,
+        "ENS/HMSTR": 3.4525626558550457,
+        "AIXBT/HMSTR": 3.4371747048387604
+      },
+      "bottom10_pairs": {
+        "APE/MEME": -2.224467402757069,
+        "GRAM/SUPER": -2.255911149848125,
+        "MNT/POL": -2.339085841294808,
+        "KAITO/SAND": -2.3565117527760764,
+        "DOT/ENA": -2.7956284825727478,
+        "ENA/NEAR": -3.107448009706581,
+        "CC/TNSR": -3.14315174594888,
+        "HMSTR/MERL": -3.593998577649739,
+        "DOT/GRASS": -3.931634735517616,
+        "AAVE/AVAX": -4.286447118484476
+      },
+      "top10_coins": {
+        "HMSTR": 32.75648426375366,
+        "GRIFFAIN": 8.661597918137081,
+        "ORDI": 7.398207072027323,
+        "CASHCAT": 6.782923509973418,
+        "FET": 4.6783395242520145,
+        "VINE": 4.139683216537619,
+        "XMR": 2.24741489955059,
+        "TNSR": 1.8031964848493405,
+        "USELESS": 0.7804488071277124,
+        "BERA": 0.5987743178844904
+      },
+      "bottom10_coins": {
+        "SUSHI": -18.808719013171594,
+        "NOT": -19.73673711220331,
+        "APT": -19.7905577532079,
+        "DOGE": -20.610098955552925,
+        "NEO": -21.25014194267987,
+        "OP": -22.400287180399758,
+        "DOT": -23.147930348734377,
+        "PAXG": -25.291053310944854,
+        "W": -25.766870186867223,
+        "POL": -30.690882882627925
+      }
+    },
+    "q0.01_stop0p5_feemaker": {
+      "q": 0.01,
+      "stop": "0p5",
+      "fee": "maker",
+      "n_trades": 10433,
+      "final_equity": 942.9602439912541,
+      "total_return": -0.05703975600874589,
+      "cagr": -0.20785393514689865,
+      "cagr_n_days": 92,
+      "daily_pnl_mean": -0.6133307097714618,
+      "daily_pnl_median": -2.3239516908358837,
+      "share_positive_days": 0.3978494623655914,
+      "worst_day": -25.474833975973525,
+      "best_day": 55.02354615209572,
+      "max_drawdown": {
+        "max_dd_usd": -118.08426551496154,
+        "max_dd_pct": -0.11808426551496154,
+        "start": "2026-07-12",
+        "bottom": "2026-08-11",
+        "recovery": "2026-09-08",
+        "longest_underwater_days": 57
+      },
+      "sharpe": -0.8144197058741539,
+      "sortino": -1.8094187649336808,
+      "sharpe_sortino_n_days": 93,
+      "monthly": {
+        "8": {
+          "n_days": 93,
+          "total_pnl_usd": -57.03975600874594,
+          "total_pnl_pct": -0.05703975600874589
+        },
+        "outside": {
+          "n_days": 0,
+          "total_pnl_usd": 0.0,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 0,
+      "win_rate": 0.27556790951787596,
+      "stop_share": 0.7238569922361737,
+      "timeout_share": 0.0005750982459503498,
+      "liquidation_share": 0.0,
+      "mean_net": -0.005467243938344525,
+      "median_net": -0.27421751382512427,
+      "mean_return_on_margin": -0.00010123945340081698,
+      "median_return_on_margin": -0.005770089732519398,
+      "mean_win": 1.037558549698373,
+      "mean_loss": -0.40336943030849587,
+      "profit_factor": 0.981275393656493,
+      "mean_holding_minutes": 45.63308731908368,
+      "total_fee": 529.3740661334291,
+      "fee_share_of_gross": 1.1225239219751364,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 9.302179099562167,
+      "funding_paid_share_of_gross": 0.01972502854554982,
+      "total_funding_received": 10.043807972542542,
+      "funding_received_share_of_gross": 0.021297633258184345,
+      "total_gross": 471.59268125170036,
+      "peak_margin_used": 516.3627015698913,
+      "distance_to_liquidation_ratio": {
+        "min": 4.064554239244298,
+        "median": 4.429755424566393,
+        "date_of_min": "2026-09-07"
+      },
+      "mean_open_positions": 4.1694618382449535,
+      "max_open_positions": 10,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "book_full": 3064,
+        "min_order": 450
+      },
+      "by_fold": {
+        "8": {
+          "n": 10433,
+          "mean_net": -0.005467243938344525
+        }
+      },
+      "top10_pairs": {
+        "AIXBT/HMSTR": 8.386248865430973,
+        "PUMP/UNI": 8.23695937341117,
+        "CASHCAT/MOODENG": 7.307430731694664,
+        "NEAR/WLD": 7.132457095680163,
+        "BLUR/GRIFFAIN": 6.865022746482348,
+        "BERA/IMX": 6.765086372015322,
+        "TNSR/TRUMP": 6.758078183202992,
+        "CRV/NEAR": 6.576004031226079,
+        "FOGO/HMSTR": 6.492533512911022,
+        "TNSR/UNI": 6.391605708547346
+      },
+      "bottom10_pairs": {
+        "CC/TNSR": -3.3368158400178034,
+        "BIGTIME/BIO": -3.3484077578776423,
+        "ANIME/BOME": -3.513496903366439,
+        "ATOM/DOT": -3.579072650329465,
+        "ETHFI/NOT": -3.6059132346402922,
+        "AAVE/IMX": -3.852838346742737,
+        "DOT/GRASS": -4.357697757110911,
+        "AAVE/AVAX": -4.866445744686772,
+        "ENA/NEAR": -5.14615951311539,
+        "HMSTR/MERL": -7.673366782871457
+      },
+      "top10_coins": {
+        "HMSTR": 132.040395471717,
+        "TNSR": 36.271938131062704,
+        "FET": 22.29731336876545,
+        "CRV": 20.762299171593963,
+        "ORDI": 20.457405975753403,
+        "CASHCAT": 18.988180583638215,
+        "MEME": 16.748919468993233,
+        "XMR": 15.524069260088945,
+        "VINE": 15.302053098342876,
+        "GRIFFAIN": 14.176068362461372
+      },
+      "bottom10_coins": {
+        "S": -14.668186500265856,
+        "ZEN": -15.360380221362218,
+        "MORPHO": -15.614417755636856,
+        "W": -16.951188278954664,
+        "MERL": -18.276338456465442,
+        "AAVE": -19.537174382541878,
+        "STRK": -20.470767998116575,
+        "OP": -21.746903977286323,
+        "PAXG": -24.25746406740418,
+        "POL": -29.777858581204978
+      }
+    },
+    "q0.01_stop1p0_feetaker": {
+      "q": 0.01,
+      "stop": "1p0",
+      "fee": "taker",
+      "n_trades": 8742,
+      "final_equity": 442.26987089529354,
+      "total_return": -0.5577301291047065,
+      "cagr": -0.9607080944366059,
+      "cagr_n_days": 92,
+      "daily_pnl_mean": -5.997098162416199,
+      "daily_pnl_median": -5.9035747100374465,
+      "share_positive_days": 0.22580645161290322,
+      "worst_day": -33.81273735434581,
+      "best_day": 27.825935009199043,
+      "max_drawdown": {
+        "max_dd_usd": -557.7301291047065,
+        "max_dd_pct": -0.5577301291047065,
+        "start": "2026-07-12",
+        "bottom": "2026-10-13",
+        "recovery": null,
+        "longest_underwater_days": 93
+      },
+      "sharpe": -11.619246469396707,
+      "sortino": -15.944061344113758,
+      "sharpe_sortino_n_days": 93,
+      "monthly": {
+        "8": {
+          "n_days": 93,
+          "total_pnl_usd": -557.7301291047065,
+          "total_pnl_pct": -0.5577301291047065
+        },
+        "outside": {
+          "n_days": 0,
+          "total_pnl_usd": 0.0,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 0,
+      "win_rate": 0.3976206817661862,
+      "stop_share": 0.5990619995424388,
+      "timeout_share": 0.0033173186913749713,
+      "liquidation_share": 0.0,
+      "mean_net": -0.06379891662144882,
+      "median_net": -0.32222498349391643,
+      "mean_return_on_margin": -0.0018481252908012097,
+      "median_return_on_margin": -0.010115848217320523,
+      "mean_win": 0.6361112437802382,
+      "mean_loss": -0.5277872957349887,
+      "profit_factor": 0.7989855875171126,
+      "mean_holding_minutes": 78.3810340883093,
+      "total_fee": 929.6223091923998,
+      "fee_share_of_gross": 2.5070534076432156,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 10.629536064091631,
+      "funding_paid_share_of_gross": 0.028666281292558774,
+      "total_funding_received": 11.718961667866914,
+      "funding_received_share_of_gross": 0.03160430047014428,
+      "total_gross": 370.802754483919,
+      "peak_margin_used": 500.07519447008013,
+      "distance_to_liquidation_ratio": {
+        "min": 4.071806913302078,
+        "median": 4.363559923096744,
+        "date_of_min": "2026-09-30"
+      },
+      "mean_open_positions": 5.53456645531279,
+      "max_open_positions": 10,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "book_full": 4486,
+        "min_order": 719
+      },
+      "by_fold": {
+        "8": {
+          "n": 8742,
+          "mean_net": -0.06379891662144882
+        }
+      },
+      "top10_pairs": {
+        "NEAR/WLD": 6.720496652217691,
+        "ADA/CRV": 6.2176439827474415,
+        "BLUR/GRIFFAIN": 5.52558535820073,
+        "CFX/XPL": 5.459017503173156,
+        "TNSR/UNI": 5.411489998079134,
+        "CASHCAT/GRIFFAIN": 5.40452571123116,
+        "TNSR/TRUMP": 5.070818272976588,
+        "ONDO/ORDI": 4.622714841695696,
+        "CASHCAT/MOODENG": 4.123060934879357,
+        "kBONK/kPEPE": 4.11448368875573
+      },
+      "bottom10_pairs": {
+        "ANIME/BOME": -3.423755993976706,
+        "ONDO/TRUMP": -3.5653437974008795,
+        "ETHFI/NOT": -3.5753792133651023,
+        "JUP/TRUMP": -3.7190419872425884,
+        "PUMP/ZK": -3.770652684145039,
+        "CC/TNSR": -3.814886619375442,
+        "BCH/WLD": -4.191551118177363,
+        "DOT/GRASS": -4.465144188161432,
+        "KAITO/SAND": -4.501031654909502,
+        "HMSTR/MERL": -4.504982362060283
+      },
+      "top10_coins": {
+        "HMSTR": 62.04198439677867,
+        "CASHCAT": 13.221145363089628,
+        "MOODENG": 12.010288147193199,
+        "XMR": 8.067760817140119,
+        "FET": 7.942272367764853,
+        "VINE": 7.586346181081559,
+        "MET": 4.99517024252944,
+        "LTC": 4.546608159595786,
+        "FARTCOIN": 3.9582061979131,
+        "TNSR": 3.80290890402468
+      },
+      "bottom10_coins": {
+        "PURR": -17.384499976889575,
+        "MON": -18.11500468234597,
+        "ACE": -18.208616948374477,
+        "DOGE": -19.77300783540587,
+        "TRUMP": -19.821357953340822,
+        "AAVE": -20.100600351192554,
+        "STRK": -20.202117239148844,
+        "ZRO": -21.36230207289697,
+        "W": -25.24528497998379,
+        "PAXG": -28.065812486319803
+      }
+    },
+    "q0.01_stop1p0_feemaker": {
+      "q": 0.01,
+      "stop": "1p0",
+      "fee": "maker",
+      "n_trades": 8864,
+      "final_equity": 1162.0034991830144,
+      "total_return": 0.16200349918301438,
+      "cagr": 0.8142762441434173,
+      "cagr_n_days": 92,
+      "daily_pnl_mean": 1.741973109494778,
+      "daily_pnl_median": 0.15947770613388457,
+      "share_positive_days": 0.5161290322580645,
+      "worst_day": -21.92805939629079,
+      "best_day": 63.2737535181584,
+      "max_drawdown": {
+        "max_dd_usd": -75.54138407269488,
+        "max_dd_pct": -0.07467968211590975,
+        "start": "2026-07-25",
+        "bottom": "2026-08-08",
+        "recovery": "2026-08-25",
+        "longest_underwater_days": 30
+      },
+      "sharpe": 2.389592786028366,
+      "sortino": 5.250074522263022,
+      "sharpe_sortino_n_days": 93,
+      "monthly": {
+        "8": {
+          "n_days": 93,
+          "total_pnl_usd": 162.00349918301436,
+          "total_pnl_pct": 0.16200349918301438
+        },
+        "outside": {
+          "n_days": 0,
+          "total_pnl_usd": 0.0,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 1,
+      "win_rate": 0.398014440433213,
+      "stop_share": 0.5983754512635379,
+      "timeout_share": 0.0036101083032490976,
+      "liquidation_share": 0.0,
+      "mean_net": 0.01827656804862655,
+      "median_net": -0.41928834318127894,
+      "mean_return_on_margin": 0.0003562757178036125,
+      "median_return_on_margin": -0.00813035823956144,
+      "mean_win": 1.1416310485468073,
+      "mean_loss": -0.7335881821755796,
+      "profit_factor": 1.0415889109140843,
+      "mean_holding_minutes": 77.74221570397111,
+      "total_fee": 497.74431101176185,
+      "fee_share_of_gross": 0.7561747882094667,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 16.482466935788732,
+      "funding_paid_share_of_gross": 0.025040217775678532,
+      "total_funding_received": 17.990517259234977,
+      "funding_received_share_of_gross": 0.02733125276837026,
+      "total_gross": 658.2397598713414,
+      "peak_margin_used": 609.4039763699802,
+      "distance_to_liquidation_ratio": {
+        "min": 4.073853140491403,
+        "median": 4.351662299186749,
+        "date_of_min": "2026-09-30"
+      },
+      "mean_open_positions": 5.5610817005067945,
+      "max_open_positions": 10,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "book_full": 4741,
+        "min_order": 342
+      },
+      "by_fold": {
+        "8": {
+          "n": 8864,
+          "mean_net": 0.01827656804862655
+        }
+      },
+      "top10_pairs": {
+        "NEAR/WLD": 14.267833899448448,
+        "TNSR/TRUMP": 11.442259111403324,
+        "TNSR/UNI": 11.307107135192577,
+        "ADA/CRV": 9.445634063422585,
+        "AIXBT/HMSTR": 8.981304791855303,
+        "BLUR/GRIFFAIN": 8.9428590524175,
+        "kBONK/kPEPE": 8.664513491380374,
+        "HMSTR/TRUMP": 8.060502194394896,
+        "AVAX/kPEPE": 7.912527530217991,
+        "CASHCAT/GRIFFAIN": 7.831316789869636
+      },
+      "bottom10_pairs": {
+        "POL/TRUMP": -4.379083982630286,
+        "AAVE/IMX": -4.562239516368912,
+        "KAITO/SAND": -4.588020751335581,
+        "BNB/DOT": -4.677790311938804,
+        "HMSTR/PENDLE": -4.884362802108816,
+        "TIA/ZRO": -4.9285677529503324,
+        "ANIME/BOME": -5.257554970584097,
+        "PENGU/SAND": -6.353413185236437,
+        "ETHFI/NOT": -6.5335627727128855,
+        "HMSTR/MERL": -8.412203184930974
+      },
+      "top10_coins": {
+        "HMSTR": 188.48315663323154,
+        "TNSR": 46.29732897234814,
+        "MOODENG": 31.481738122350873,
+        "FET": 25.860073282229106,
+        "ADA": 24.99868860096639,
+        "kPEPE": 23.905223226979636,
+        "XMR": 23.845416701996875,
+        "VINE": 22.491048385055553,
+        "APE": 22.335586057366434,
+        "VIRTUAL": 21.777180371287503
+      },
+      "bottom10_coins": {
+        "PYTH": -15.326889771415425,
+        "MORPHO": -16.612095491223776,
+        "POL": -16.91085327041605,
+        "ZRO": -17.524762374561284,
+        "ACE": -17.88732078734549,
+        "MON": -19.00673847883018,
+        "POLYX": -20.169230959787335,
+        "STRK": -22.157188536005158,
+        "AAVE": -23.514955915700956,
+        "PAXG": -24.78895684868238
+      }
+    },
+    "q0.01_stop2p0_feetaker": {
+      "q": 0.01,
+      "stop": "2p0",
+      "fee": "taker",
+      "n_trades": 6618,
+      "final_equity": 762.6137463121195,
+      "total_return": -0.23738625368788058,
+      "cagr": -0.658762768634239,
+      "cagr_n_days": 92,
+      "daily_pnl_mean": -2.5525403622352743,
+      "daily_pnl_median": -2.657265342296455,
+      "share_positive_days": 0.43010752688172044,
+      "worst_day": -46.04650701147091,
+      "best_day": 33.70999161764939,
+      "max_drawdown": {
+        "max_dd_usd": -237.38625368788053,
+        "max_dd_pct": -0.23738625368788052,
+        "start": "2026-07-12",
+        "bottom": "2026-10-13",
+        "recovery": null,
+        "longest_underwater_days": 93
+      },
+      "sharpe": -3.4883539542623745,
+      "sortino": -4.799137464619437,
+      "sharpe_sortino_n_days": 93,
+      "monthly": {
+        "8": {
+          "n_days": 93,
+          "total_pnl_usd": -237.38625368788053,
+          "total_pnl_pct": -0.23738625368788058
+        },
+        "outside": {
+          "n_days": 0,
+          "total_pnl_usd": 0.0,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 0,
+      "win_rate": 0.5448776065276518,
+      "stop_share": 0.43170142036869147,
+      "timeout_share": 0.023420973103656696,
+      "liquidation_share": 0.0,
+      "mean_net": -0.03586978750194597,
+      "median_net": 0.3115746944989262,
+      "mean_return_on_margin": -0.000788118193600575,
+      "median_return_on_margin": 0.007089022422791991,
+      "mean_win": 0.8343956907899663,
+      "mean_loss": -1.1166263062750321,
+      "profit_factor": 0.9279836081786365,
+      "mean_holding_minutes": 134.61151405258386,
+      "total_fee": 906.598368611343,
+      "fee_share_of_gross": 1.3623609472243583,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 17.869453884802894,
+      "funding_paid_share_of_gross": 0.026852735415982827,
+      "total_funding_received": 21.62035571461206,
+      "funding_received_share_of_gross": 0.03248928004999935,
+      "total_gross": 665.4612130936554,
+      "peak_margin_used": 501.1515777105591,
+      "distance_to_liquidation_ratio": {
+        "min": 3.9963837941609834,
+        "median": 4.309081118280281,
+        "date_of_min": "2026-10-05"
+      },
+      "mean_open_positions": 6.913493923543746,
+      "max_open_positions": 10,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "book_full": 6962,
+        "min_order": 367
+      },
+      "by_fold": {
+        "8": {
+          "n": 6618,
+          "mean_net": -0.03586978750194597
+        }
+      },
+      "top10_pairs": {
+        "APT/UNI": 13.573233793172594,
+        "NEAR/WLD": 9.964351378538034,
+        "SOPH/W": 9.698490268204186,
+        "HMSTR/TAO": 8.644162414973856,
+        "JUP/ONDO": 8.60510772295623,
+        "BLUR/GRIFFAIN": 8.509556592187383,
+        "SPX/ZRO": 8.04101151441163,
+        "FET/TIA": 7.659388376975394,
+        "TNSR/UNI": 7.625534694977624,
+        "BERA/BOME": 7.558113822310395
+      },
+      "bottom10_pairs": {
+        "AVNT/UNI": -5.185654508430401,
+        "BNB/DOT": -5.205639747246717,
+        "PENDLE/kFLOKI": -5.302405206722861,
+        "POL/TRUMP": -5.452882845504293,
+        "BCH/WLD": -5.680970830701498,
+        "LINK/ZRO": -5.693660118636673,
+        "HMSTR/MERL": -6.197298742214108,
+        "TIA/ZRO": -7.088255064771963,
+        "ETHFI/NOT": -8.498999875707709,
+        "KAITO/SAND": -8.545036329678398
+      },
+      "top10_coins": {
+        "HMSTR": 120.96941547680242,
+        "TNSR": 34.729807866120154,
+        "BERA": 24.56984078642259,
+        "CASHCAT": 21.977147661316984,
+        "SAGA": 20.987086733392424,
+        "CRV": 19.812495556968887,
+        "BOME": 18.23943694668753,
+        "CFX": 16.795707140743133,
+        "VINE": 15.447586041260609,
+        "UNI": 15.172105789733015
+      },
+      "bottom10_coins": {
+        "WLD": -18.796900574832105,
+        "kSHIB": -19.046126393827844,
+        "JTO": -19.768798903632096,
+        "ZRO": -20.10469617453137,
+        "POLYX": -20.314685089501268,
+        "kFLOKI": -22.901957080513412,
+        "IOTA": -22.93563773166607,
+        "ETHFI": -26.065868172642706,
+        "POL": -26.606635730331217,
+        "PAXG": -37.71353331112843
+      }
+    },
+    "q0.01_stop2p0_feemaker": {
+      "q": 0.01,
+      "stop": "2p0",
+      "fee": "maker",
+      "n_trades": 6662,
+      "final_equity": 1465.6134011658403,
+      "total_return": 0.4656134011658404,
+      "cagr": 3.5568426523408263,
+      "cagr_n_days": 92,
+      "daily_pnl_mean": 5.0065957114606485,
+      "daily_pnl_median": 2.8762976478351447,
+      "share_positive_days": 0.5913978494623656,
+      "worst_day": -48.42136068556442,
+      "best_day": 65.84553038328272,
+      "max_drawdown": {
+        "max_dd_usd": -91.97854383342064,
+        "max_dd_pct": -0.0748179862735937,
+        "start": "2026-08-28",
+        "bottom": "2026-09-06",
+        "recovery": "2026-09-08",
+        "longest_underwater_days": 12
+      },
+      "sharpe": 5.359640844410207,
+      "sortino": 8.931492801008817,
+      "sharpe_sortino_n_days": 93,
+      "monthly": {
+        "8": {
+          "n_days": 93,
+          "total_pnl_usd": 465.6134011658403,
+          "total_pnl_pct": 0.4656134011658404
+        },
+        "outside": {
+          "n_days": 0,
+          "total_pnl_usd": 0.0,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 1,
+      "win_rate": 0.5415791053737616,
+      "stop_share": 0.43590513359351546,
+      "timeout_share": 0.022515761032722906,
+      "liquidation_share": 0.0,
+      "mean_net": 0.069890933828556,
+      "median_net": 0.48520630336347464,
+      "mean_return_on_margin": 0.001178377413660248,
+      "median_return_on_margin": 0.008717262372866994,
+      "mean_win": 1.2967339441791255,
+      "mean_loss": -1.452417799835504,
+      "profit_factor": 1.1078298496547947,
+      "mean_holding_minutes": 134.20684479135394,
+      "total_fee": 422.7649803735909,
+      "fee_share_of_gross": 0.47831834622143626,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 24.737498628340862,
+      "funding_paid_share_of_gross": 0.02798812575040378,
+      "total_funding_received": 29.258959952813207,
+      "funding_received_share_of_gross": 0.033103728990091834,
+      "total_gross": 883.8569202149586,
+      "peak_margin_used": 764.8097860930632,
+      "distance_to_liquidation_ratio": {
+        "min": 4.006607193252262,
+        "median": 4.302235083312744,
+        "date_of_min": "2026-10-05"
+      },
+      "mean_open_positions": 6.936007137038905,
+      "max_open_positions": 10,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "book_full": 7060,
+        "min_order": 225
+      },
+      "by_fold": {
+        "8": {
+          "n": 6662,
+          "mean_net": 0.069890933828556
+        }
+      },
+      "top10_pairs": {
+        "APT/UNI": 21.912698629842886,
+        "NEAR/WLD": 16.783916821501066,
+        "HMSTR/TAO": 14.286821639670427,
+        "SPX/ZRO": 13.66836703911067,
+        "TNSR/UNI": 12.706977631744948,
+        "SOPH/W": 12.246865951470443,
+        "JUP/ONDO": 11.965129231536043,
+        "BLUR/GRIFFAIN": 11.860328740539781,
+        "TNSR/TRUMP": 11.742336988881775,
+        "HMSTR/MOVE": 10.006822557732244
+      },
+      "bottom10_pairs": {
+        "POL/TRUMP": -7.241035664857693,
+        "EIGEN/ZEN": -7.243855149135426,
+        "NEO/PUMP": -7.344996315682232,
+        "BNB/DOT": -7.699502736886208,
+        "ETHFI/kFLOKI": -7.703905521020595,
+        "GRIFFAIN/XPL": -7.759463647752048,
+        "LINK/ZRO": -7.953805283522577,
+        "HMSTR/MERL": -9.413679294839504,
+        "TIA/ZRO": -10.265957089878004,
+        "ETHFI/NOT": -15.59514842532889
+      },
+      "top10_coins": {
+        "HMSTR": 226.6075078726881,
+        "TNSR": 83.64694946412655,
+        "UNI": 48.33754966905625,
+        "APT": 45.55049053717331,
+        "SAGA": 43.48831593166183,
+        "MEME": 37.6073155826931,
+        "CASHCAT": 36.88396626039377,
+        "BERA": 35.65974866810267,
+        "CRV": 35.581505619153305,
+        "BOME": 30.16945629229641
+      },
+      "bottom10_coins": {
+        "STABLE": -18.6671310175901,
+        "ACE": -19.922966142053983,
+        "POLYX": -20.271145020466008,
+        "WLD": -20.578366737492868,
+        "TRUMP": -21.442097505784808,
+        "PAXG": -22.593598037472272,
+        "kFLOKI": -23.523386571319506,
+        "IOTA": -24.232019084866177,
+        "STRK": -25.37005233521891,
+        "ETHFI": -45.57741651287196
+      }
+    },
+    "q0.01_stopnone_feetaker": {
+      "q": 0.01,
+      "stop": "none",
+      "fee": "taker",
+      "n_trades": 3789,
+      "final_equity": 1263.8546356863467,
+      "total_return": 0.2638546356863467,
+      "cagr": 1.5320500869242042,
+      "cagr_n_days": 92,
+      "daily_pnl_mean": 2.837146620283298,
+      "daily_pnl_median": 3.6332940037924573,
+      "share_positive_days": 0.5591397849462365,
+      "worst_day": -65.4933385410526,
+      "best_day": 64.64491533752062,
+      "max_drawdown": {
+        "max_dd_usd": -97.12163017681644,
+        "max_dd_pct": -0.08972113706136513,
+        "start": "2026-07-23",
+        "bottom": "2026-08-20",
+        "recovery": "2026-08-25",
+        "longest_underwater_days": 32
+      },
+      "sharpe": 2.6707379662502686,
+      "sortino": 4.0774418209759,
+      "sharpe_sortino_n_days": 93,
+      "monthly": {
+        "8": {
+          "n_days": 93,
+          "total_pnl_usd": 263.8546356863467,
+          "total_pnl_pct": 0.2638546356863467
+        },
+        "outside": {
+          "n_days": 0,
+          "total_pnl_usd": 0.0,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 1,
+      "win_rate": 0.7054631828978623,
+      "stop_share": 0.0,
+      "timeout_share": 0.29453681710213775,
+      "liquidation_share": 0.0,
+      "mean_net": 0.069637011265859,
+      "median_net": 0.6392408802176827,
+      "mean_return_on_margin": 0.0013199736112103973,
+      "median_return_on_margin": 0.011703120802853224,
+      "mean_win": 1.0669268382261017,
+      "mean_loss": -2.6706905251293476,
+      "profit_factor": 1.0977214736337197,
+      "mean_holding_minutes": 294.07257851675905,
+      "total_fee": 672.4030240104202,
+      "fee_share_of_gross": 0.7207887806945339,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 32.37359459089318,
+      "funding_paid_share_of_gross": 0.034703180887995885,
+      "total_funding_received": 35.76015248927396,
+      "funding_received_share_of_gross": 0.03833343365480602,
+      "total_gross": 932.8711017983792,
+      "peak_margin_used": 679.1975232080525,
+      "distance_to_liquidation_ratio": {
+        "min": 3.7426366074945947,
+        "median": 4.314101353143918,
+        "date_of_min": "2026-08-22"
+      },
+      "mean_open_positions": 8.45762235851348,
+      "max_open_positions": 10,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "book_full": 10010,
+        "min_order": 148
+      },
+      "by_fold": {
+        "8": {
+          "n": 3789,
+          "mean_net": 0.069637011265859
+        }
+      },
+      "top10_pairs": {
+        "APT/UNI": 19.06003777525617,
+        "SPX/ZRO": 12.021396511747922,
+        "JUP/ONDO": 11.253767958191323,
+        "HMSTR/MELANIA": 10.266790857841112,
+        "HMSTR/TAO": 9.418299098493012,
+        "BLUR/GRIFFAIN": 9.280220677660878,
+        "TNSR/UNI": 8.710257038248566,
+        "PUMP/SKR": 8.079797352567315,
+        "SAGA/WLFI": 7.595174134052854,
+        "MET/REZ": 7.519505267201382
+      },
+      "bottom10_pairs": {
+        "JTO/MINA": -15.56187531246134,
+        "AAVE/KAITO": -17.80001672166167,
+        "ONDO/PAXG": -18.70788959221094,
+        "ADA/FARTCOIN": -21.045646904143265,
+        "PENGU/ZEC": -21.821404587575337,
+        "DOGE/KAITO": -22.105017415577333,
+        "OP/WLD": -24.937348342266056,
+        "ARB/FARTCOIN": -27.820493198350785,
+        "ETHFI/NOT": -29.804065972610974,
+        "LINEA/W": -54.36137104662002
+      },
+      "top10_coins": {
+        "HMSTR": 170.10775681927106,
+        "TNSR": 64.67635875538994,
+        "SAGA": 51.83133668082732,
+        "UNI": 51.74330239811974,
+        "WLFI": 46.78230853884952,
+        "TRUMP": 35.402820095464506,
+        "BOME": 34.82580725571054,
+        "MEME": 32.81872715817933,
+        "USUAL": 31.19873182149477,
+        "GMT": 28.86494847379774
+      },
+      "bottom10_coins": {
+        "NEAR": -29.634933017177158,
+        "XLM": -34.77742067955442,
+        "KAITO": -35.34710777768152,
+        "MERL": -35.46907898991359,
+        "ARB": -39.28526394131512,
+        "ZEC": -46.78916890664075,
+        "W": -50.0447042511494,
+        "ETHFI": -63.43794985055952,
+        "FARTCOIN": -64.28076478847862,
+        "LINEA": -80.40905805658377
+      }
+    },
+    "q0.01_stopnone_feemaker": {
+      "q": 0.01,
+      "stop": "none",
+      "fee": "maker",
+      "n_trades": 3832,
+      "final_equity": 2068.4094948969487,
+      "total_return": 1.0684094948969487,
+      "cagr": 16.87531054680303,
+      "cagr_n_days": 92,
+      "daily_pnl_mean": 11.488274138676868,
+      "daily_pnl_median": 11.69718612286215,
+      "share_positive_days": 0.6989247311827957,
+      "worst_day": -70.34307920618039,
+      "best_day": 94.7133713546757,
+      "max_drawdown": {
+        "max_dd_usd": -102.6515113009425,
+        "max_dd_pct": -0.07227314618231165,
+        "start": "2026-09-29",
+        "bottom": "2026-10-04",
+        "recovery": "2026-10-07",
+        "longest_underwater_days": 10
+      },
+      "sharpe": 8.09924033812141,
+      "sortino": 13.636433426360938,
+      "sharpe_sortino_n_days": 93,
+      "monthly": {
+        "8": {
+          "n_days": 93,
+          "total_pnl_usd": 1068.4094948969487,
+          "total_pnl_pct": 1.0684094948969487
+        },
+        "outside": {
+          "n_days": 0,
+          "total_pnl_usd": 0.0,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 1,
+      "win_rate": 0.7100730688935282,
+      "stop_share": 0.0,
+      "timeout_share": 0.28992693110647183,
+      "liquidation_share": 0.0,
+      "mean_net": 0.27881249866830166,
+      "median_net": 0.9434670824188067,
+      "mean_return_on_margin": 0.0038750553006595043,
+      "median_return_on_margin": 0.013721155712565589,
+      "mean_win": 1.5472327525088991,
+      "mean_loss": -3.479226826309271,
+      "profit_factor": 1.3175619949623443,
+      "mean_holding_minutes": 291.15605427974947,
+      "total_fee": 295.4142697621397,
+      "fee_share_of_gross": 0.21740993123403815,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 42.54395176510785,
+      "funding_paid_share_of_gross": 0.031310192412586514,
+      "total_funding_received": 47.57850157395613,
+      "funding_received_share_of_gross": 0.03501536592575959,
+      "total_gross": 1358.7892148502233,
+      "peak_margin_used": 1097.5496883576366,
+      "distance_to_liquidation_ratio": {
+        "min": 3.8076630952265083,
+        "median": 4.317105405182171,
+        "date_of_min": "2026-08-22"
+      },
+      "mean_open_positions": 8.46491760492853,
+      "max_open_positions": 10,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "book_full": 10018,
+        "min_order": 97
+      },
+      "by_fold": {
+        "8": {
+          "n": 3832,
+          "mean_net": 0.27881249866830166
+        }
+      },
+      "top10_pairs": {
+        "APT/UNI": 28.234956065889122,
+        "SPX/ZRO": 18.484021249727398,
+        "HMSTR/TAO": 17.10312749612224,
+        "SOPH/W": 16.610015055906505,
+        "HMSTR/MELANIA": 15.82590435319569,
+        "PUMP/SKR": 12.670484511783055,
+        "BLUR/GRIFFAIN": 11.847572121003317,
+        "MET/REZ": 11.638919680310556,
+        "HMSTR/MOVE": 11.470803797094174,
+        "HMSTR/NOT": 11.349681919378344
+      },
+      "bottom10_pairs": {
+        "JTO/MINA": -21.127030323029896,
+        "SKR/W": -21.869839272178847,
+        "GRASS/ZRO": -22.126722429096827,
+        "DOGE/KAITO": -25.579291535089414,
+        "PENGU/ZEC": -25.9067212465709,
+        "SKR/WLD": -27.259372103976553,
+        "CHIP/STX": -27.61075036079874,
+        "ETHFI/NOT": -31.4692672291407,
+        "OP/WLD": -39.081771638222456,
+        "LINEA/W": -90.54290064508292
+      },
+      "top10_coins": {
+        "HMSTR": 321.3201620889051,
+        "TNSR": 106.02330469693163,
+        "WLFI": 84.98949504668134,
+        "NOT": 79.33111389485519,
+        "UNI": 77.73696704715665,
+        "SAGA": 73.64112126059145,
+        "APT": 64.47921325658939,
+        "MEME": 56.56876165693269,
+        "ONDO": 54.02574420547168,
+        "BOME": 49.524265730025704
+      },
+      "bottom10_coins": {
+        "BCH": -30.63037292787888,
+        "STX": -31.751856569142568,
+        "PENGU": -31.769106928786528,
+        "WLD": -33.36303128887437,
+        "DASH": -34.6616485948195,
+        "XLM": -47.145679353287036,
+        "ZEC": -53.14681849637379,
+        "W": -71.34248788153884,
+        "ETHFI": -87.87419830298165,
+        "LINEA": -111.71721646566982
+      }
+    },
+    "q0.005_stop0p5_feetaker": {
+      "q": 0.005,
+      "stop": "0p5",
+      "fee": "taker",
+      "n_trades": 6050,
+      "final_equity": 515.8930293771759,
+      "total_return": -0.48410697062282404,
+      "cagr": -0.9276211474327972,
+      "cagr_n_days": 92,
+      "daily_pnl_mean": -5.205451297019613,
+      "daily_pnl_median": -4.595446175707366,
+      "share_positive_days": 0.16129032258064516,
+      "worst_day": -24.77483392736326,
+      "best_day": 19.345393560847697,
+      "max_drawdown": {
+        "max_dd_usd": -484.10697062282406,
+        "max_dd_pct": -0.48410697062282404,
+        "start": "2026-07-12",
+        "bottom": "2026-10-13",
+        "recovery": null,
+        "longest_underwater_days": 93
+      },
+      "sharpe": -13.520461921048934,
+      "sortino": -18.247927114835875,
+      "sharpe_sortino_n_days": 93,
+      "monthly": {
+        "8": {
+          "n_days": 93,
+          "total_pnl_usd": -484.10697062282406,
+          "total_pnl_pct": -0.48410697062282404
+        },
+        "outside": {
+          "n_days": 0,
+          "total_pnl_usd": 0.0,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 0,
+      "win_rate": 0.2737190082644628,
+      "stop_share": 0.7259504132231405,
+      "timeout_share": 0.00033057851239669424,
+      "liquidation_share": 0.0,
+      "mean_net": -0.08001768109468242,
+      "median_net": -0.2654879046415223,
+      "mean_return_on_margin": -0.002176946098010416,
+      "median_return_on_margin": -0.007577347905950412,
+      "mean_win": 0.6761950809244287,
+      "mean_loss": -0.36430690002067534,
+      "profit_factor": 0.6977839858165495,
+      "mean_holding_minutes": 41.45305785123967,
+      "total_fee": 689.488432960015,
+      "fee_share_of_gross": 3.3618630588247442,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 3.5260433093776005,
+      "funding_paid_share_of_gross": 0.01719256506555513,
+      "total_funding_received": 3.8163342051401217,
+      "funding_received_share_of_gross": 0.018607988721884634,
+      "total_gross": 205.09117144142377,
+      "peak_margin_used": 493.69875100445245,
+      "distance_to_liquidation_ratio": {
+        "min": 4.166384489117747,
+        "median": 5.606741912181947,
+        "date_of_min": "2026-08-09"
+      },
+      "mean_open_positions": 2.7894801236847373,
+      "max_open_positions": 10,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "min_order": 594,
+        "book_full": 544
+      },
+      "by_fold": {
+        "8": {
+          "n": 6050,
+          "mean_net": -0.08001768109468242
+        }
+      },
+      "top10_pairs": {
+        "PUMP/UNI": 6.46285015586845,
+        "JUP/ONDO": 4.914410917147,
+        "FET/VINE": 4.782857970243882,
+        "ONDO/ORDI": 4.6891082784321485,
+        "CASHCAT/MOODENG": 4.559428421603593,
+        "HMSTR/NIL": 4.333326362562189,
+        "ZEC/kSHIB": 4.038881556474628,
+        "SAGA/ZETA": 3.9443114999530082,
+        "ADA/ASTER": 3.8640333251376093,
+        "FOGO/HMSTR": 3.7987324734468477
+      },
+      "bottom10_pairs": {
+        "STRK/W": -2.2022026134176134,
+        "KAITO/SAND": -2.211373056020136,
+        "NEO/PUMP": -2.2627412159778055,
+        "ADA/PAXG": -2.5471156636608496,
+        "ORDI/TNSR": -2.621717566126935,
+        "BIGTIME/BIO": -2.666540999455184,
+        "CC/TNSR": -2.969666743587744,
+        "LINK/PAXG": -2.9697419975192414,
+        "DOT/GRASS": -3.5756741317374603,
+        "AAVE/AVAX": -4.271049971191165
+      },
+      "top10_coins": {
+        "HMSTR": 25.591216160334653,
+        "PUMP": 4.6428572641257,
+        "ORDI": 4.560951704609449,
+        "BOME": 3.9955790345455067,
+        "FIL": 3.252306208160703,
+        "GALA": 2.99565854208794,
+        "STBL": 2.590402279536568,
+        "CASHCAT": 2.5122018350464246,
+        "DASH": 2.453396419651623,
+        "AXS": 2.068935522253909
+      },
+      "bottom10_coins": {
+        "SUSHI": -13.8366685454038,
+        "POLYX": -14.150273135735713,
+        "W": -14.391720483263786,
+        "GRAM": -14.965904234764785,
+        "kPEPE": -15.098002580543307,
+        "DOGE": -15.978874652100208,
+        "OP": -16.81006680032508,
+        "AAVE": -16.987446119559507,
+        "POL": -19.10762868751879,
+        "PAXG": -23.475144932256164
+      }
+    },
+    "q0.005_stop0p5_feemaker": {
+      "q": 0.005,
+      "stop": "0p5",
+      "fee": "maker",
+      "n_trades": 6183,
+      "final_equity": 974.0470225552785,
+      "total_return": -0.02595297744472147,
+      "cagr": -0.0990678473397294,
+      "cagr_n_days": 92,
+      "daily_pnl_mean": -0.2790642735991554,
+      "daily_pnl_median": -1.7506565357541604,
+      "share_positive_days": 0.40860215053763443,
+      "worst_day": -17.70140309455485,
+      "best_day": 47.126224808117854,
+      "max_drawdown": {
+        "max_dd_usd": -88.56301072896724,
+        "max_dd_pct": -0.08856301072896725,
+        "start": "2026-07-12",
+        "bottom": "2026-08-08",
+        "recovery": "2026-09-08",
+        "longest_underwater_days": 57
+      },
+      "sharpe": -0.4514016595462891,
+      "sortino": -1.0656786552050654,
+      "sharpe_sortino_n_days": 93,
+      "monthly": {
+        "8": {
+          "n_days": 93,
+          "total_pnl_usd": -25.952977444721455,
+          "total_pnl_pct": -0.02595297744472147
+        },
+        "outside": {
+          "n_days": 0,
+          "total_pnl_usd": 0.0,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 0,
+      "win_rate": 0.2733300986576096,
+      "stop_share": 0.7260229661976387,
+      "timeout_share": 0.0006469351447517387,
+      "liquidation_share": 0.0,
+      "mean_net": -0.004197473304984827,
+      "median_net": -0.2691488172301454,
+      "mean_return_on_margin": -7.424108769365458e-05,
+      "median_return_on_margin": -0.005626018623228887,
+      "mean_win": 1.0198255456658443,
+      "mean_loss": -0.3906298622861799,
+      "profit_factor": 0.9851996446280397,
+      "mean_holding_minutes": 41.857997735727,
+      "total_fee": 316.6268462372051,
+      "fee_share_of_gross": 1.0907925974792225,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 4.824469070968602,
+      "funding_paid_share_of_gross": 0.016620495741026167,
+      "total_funding_received": 5.226065234433124,
+      "funding_received_share_of_gross": 0.018004011155113887,
+      "total_gross": 290.27227262901937,
+      "peak_margin_used": 508.79277837913156,
+      "distance_to_liquidation_ratio": {
+        "min": 4.080467307332325,
+        "median": 5.404804309832035,
+        "date_of_min": "2026-09-09"
+      },
+      "mean_open_positions": 2.859125055236412,
+      "max_open_positions": 10,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "book_full": 641,
+        "min_order": 364
+      },
+      "by_fold": {
+        "8": {
+          "n": 6183,
+          "mean_net": -0.004197473304984827
+        }
+      },
+      "top10_pairs": {
+        "PUMP/UNI": 8.955051108276125,
+        "CASHCAT/MOODENG": 7.241323432543891,
+        "SAGA/ZETA": 6.774807528192861,
+        "ZEC/kSHIB": 6.2673208649355585,
+        "FOGO/HMSTR": 6.166448163463205,
+        "HMSTR/NIL": 5.682863565632861,
+        "JUP/ONDO": 5.644786775660803,
+        "DOT/NOT": 5.507640075279251,
+        "ME/PYTH": 5.041968116829731,
+        "CRV/VIRTUAL": 4.959505098052655
+      },
+      "bottom10_pairs": {
+        "AAVE/IMX": -2.4328209011380006,
+        "DOGE/kPEPE": -2.6680543518757998,
+        "WIF/XAI": -2.718761033850419,
+        "NEO/PUMP": -2.7357815575702102,
+        "LIT/NEAR": -2.892534826327647,
+        "CC/TNSR": -2.9551702538853983,
+        "ORDI/TNSR": -3.003562278333418,
+        "BIGTIME/BIO": -3.329553361917145,
+        "DOT/GRASS": -3.503829567139506,
+        "AAVE/AVAX": -4.0576866115437635
+      },
+      "top10_coins": {
+        "HMSTR": 80.66958709866768,
+        "TNSR": 23.85316737710855,
+        "MEME": 14.756599052560086,
+        "XMR": 13.726116299664815,
+        "PUMP": 12.96212209333474,
+        "ORDI": 11.995607566672325,
+        "DASH": 11.731336115252565,
+        "kSHIB": 11.271563851567509,
+        "MOODENG": 10.550341954677203,
+        "XPL": 10.416022841627548
+      },
+      "bottom10_coins": {
+        "DOGE": -9.650504935652219,
+        "LINK": -10.129868885921528,
+        "LIT": -10.440333527358675,
+        "EIGEN": -11.397028641253378,
+        "S": -11.471529380611853,
+        "POLYX": -12.602511202967214,
+        "POL": -12.918494468093435,
+        "OP": -14.195471704628865,
+        "AAVE": -14.271726799474994,
+        "PAXG": -16.508136242810327
+      }
+    },
+    "q0.005_stop1p0_feetaker": {
+      "q": 0.005,
+      "stop": "1p0",
+      "fee": "taker",
+      "n_trades": 5659,
+      "final_equity": 592.4384891333948,
+      "total_return": -0.4075615108666052,
+      "cagr": -0.8746896712395914,
+      "cagr_n_days": 92,
+      "daily_pnl_mean": -4.382381837275325,
+      "daily_pnl_median": -3.6501038799190155,
+      "share_positive_days": 0.26881720430107525,
+      "worst_day": -25.058972975316692,
+      "best_day": 28.079680712378263,
+      "max_drawdown": {
+        "max_dd_usd": -407.60848158192994,
+        "max_dd_pct": -0.4076084815819299,
+        "start": "2026-07-12",
+        "bottom": "2026-10-12",
+        "recovery": null,
+        "longest_underwater_days": 93
+      },
+      "sharpe": -9.70629494636967,
+      "sortino": -13.527860239836182,
+      "sharpe_sortino_n_days": 93,
+      "monthly": {
+        "8": {
+          "n_days": 93,
+          "total_pnl_usd": -407.5615108666052,
+          "total_pnl_pct": -0.4075615108666052
+        },
+        "outside": {
+          "n_days": 0,
+          "total_pnl_usd": 0.0,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 0,
+      "win_rate": 0.3960063615479767,
+      "stop_share": 0.6008128644636862,
+      "timeout_share": 0.003180773988337162,
+      "liquidation_share": 0.0,
+      "mean_net": -0.07202005846732708,
+      "median_net": -0.3730579010749241,
+      "mean_return_on_margin": -0.0018318971687671848,
+      "median_return_on_margin": -0.009953055250141434,
+      "mean_win": 0.7085188943905903,
+      "mean_loss": -0.5841559473486412,
+      "profit_factor": 0.7958170932734139,
+      "mean_holding_minutes": 70.41014313482947,
+      "total_fee": 688.5438437778548,
+      "fee_share_of_gross": 2.459421156481279,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 6.487210912841726,
+      "funding_paid_share_of_gross": 0.023171776074649892,
+      "total_funding_received": 7.507796742530581,
+      "funding_received_share_of_gross": 0.02681722349854929,
+      "total_gross": 279.9617470815621,
+      "peak_margin_used": 497.1140853649242,
+      "distance_to_liquidation_ratio": {
+        "min": 4.043692001204343,
+        "median": 5.011211174021026,
+        "date_of_min": "2026-09-02"
+      },
+      "mean_open_positions": 3.730430386383425,
+      "max_open_positions": 10,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "book_full": 1033,
+        "min_order": 496
+      },
+      "by_fold": {
+        "8": {
+          "n": 5659,
+          "mean_net": -0.07202005846732708
+        }
+      },
+      "top10_pairs": {
+        "PUMP/UNI": 6.8809483833606775,
+        "GRAM/VIRTUAL": 6.045494198276263,
+        "JUP/ONDO": 5.059503893196898,
+        "ONDO/ORDI": 4.719422503778427,
+        "ADA/ASTER": 4.63815687409791,
+        "HMSTR/NIL": 4.60958286286902,
+        "DOT/NOT": 4.398113978843573,
+        "CASHCAT/MOODENG": 4.368101687076164,
+        "ZEC/kSHIB": 4.302937856272633,
+        "HEMI/MORPHO": 4.119903349997776
+      },
+      "bottom10_pairs": {
+        "ZEN/kPEPE": -2.995154643265042,
+        "CC/TNSR": -3.142755549609576,
+        "KAITO/SAND": -3.442041649024002,
+        "LINK/PAXG": -3.4492630417868533,
+        "DOT/GRASS": -3.590861808084818,
+        "ONDO/TRUMP": -3.709948547355524,
+        "ARB/FARTCOIN": -3.7250619824907094,
+        "HMSTR/PENDLE": -3.740058405859547,
+        "ORDI/TNSR": -3.875620563678255,
+        "AAVE/AVAX": -5.458578841796992
+      },
+      "top10_coins": {
+        "HMSTR": 50.02715060931026,
+        "MOODENG": 10.448589806977909,
+        "VIRTUAL": 10.362560216902052,
+        "CASHCAT": 7.794916856969417,
+        "HEMI": 6.588124915319753,
+        "CHIP": 5.738259081946477,
+        "SOPH": 5.1903915330202555,
+        "ORDI": 4.157032678752264,
+        "DASH": 4.014718649224864,
+        "ADA": 3.825361509665157
+      },
+      "bottom10_coins": {
+        "SYRUP": -12.475814898876067,
+        "NEO": -13.23162797205424,
+        "SUI": -13.684421511171351,
+        "SAND": -14.818972746027056,
+        "MON": -15.828682058615703,
+        "S": -16.77113346831319,
+        "DOGE": -16.948916647181388,
+        "POL": -17.457041832212653,
+        "AAVE": -20.62422954771141,
+        "PAXG": -21.240050954366254
+      }
+    },
+    "q0.005_stop1p0_feemaker": {
+      "q": 0.005,
+      "stop": "1p0",
+      "fee": "maker",
+      "n_trades": 5752,
+      "final_equity": 1074.1755418467048,
+      "total_return": 0.07417554184670494,
+      "cagr": 0.3282741314753985,
+      "cagr_n_days": 92,
+      "daily_pnl_mean": 0.7975864714699445,
+      "daily_pnl_median": -0.3318685924574538,
+      "share_positive_days": 0.4838709677419355,
+      "worst_day": -25.348764661446808,
+      "best_day": 55.3849958524944,
+      "max_drawdown": {
+        "max_dd_usd": -63.84075867105605,
+        "max_dd_pct": -0.06209099436144089,
+        "start": "2026-08-28",
+        "bottom": "2026-09-06",
+        "recovery": "2026-09-08",
+        "longest_underwater_days": 44
+      },
+      "sharpe": 1.3925905073632638,
+      "sortino": 2.8354711367989984,
+      "sharpe_sortino_n_days": 93,
+      "monthly": {
+        "8": {
+          "n_days": 93,
+          "total_pnl_usd": 74.17554184670485,
+          "total_pnl_pct": 0.07417554184670494
+        },
+        "outside": {
+          "n_days": 0,
+          "total_pnl_usd": 0.0,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 1,
+      "win_rate": 0.3949930458970793,
+      "stop_share": 0.6011821974965229,
+      "timeout_share": 0.0038247566063977748,
+      "liquidation_share": 0.0,
+      "mean_net": 0.012895608805060417,
+      "median_net": -0.39911735126762027,
+      "mean_return_on_margin": 0.0002662800103755251,
+      "median_return_on_margin": -0.007946697303801974,
+      "mean_win": 1.0541651292775387,
+      "mean_loss": -0.6743723257751872,
+      "profit_factor": 1.031743714808337,
+      "mean_holding_minutes": 70.71383866481224,
+      "total_fee": 310.59351330114896,
+      "fee_share_of_gross": 0.8097577762499528,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 8.682541072485103,
+      "funding_paid_share_of_gross": 0.022636516379005808,
+      "total_funding_received": 9.88811290372535,
+      "funding_received_share_of_gross": 0.02577959929403163,
+      "total_gross": 383.56348331661616,
+      "peak_margin_used": 552.6376816830632,
+      "distance_to_liquidation_ratio": {
+        "min": 4.010732318863951,
+        "median": 4.9967636882111774,
+        "date_of_min": "2026-09-02"
+      },
+      "mean_open_positions": 3.8050984611066934,
+      "max_open_positions": 10,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "book_full": 1118,
+        "min_order": 318
+      },
+      "by_fold": {
+        "8": {
+          "n": 5752,
+          "mean_net": 0.012895608805060417
+        }
+      },
+      "top10_pairs": {
+        "PUMP/UNI": 9.422826420406173,
+        "GRAM/VIRTUAL": 9.41626035255754,
+        "BRETT/HMSTR": 7.155125313677034,
+        "DOT/kSHIB": 6.814263131506946,
+        "CASHCAT/MOODENG": 6.767801580264334,
+        "ADA/ASTER": 6.702226270655828,
+        "DOT/NOT": 6.618764321362764,
+        "ZEC/kSHIB": 6.558332296065473,
+        "ADA/ZRO": 5.943439308542539,
+        "HMSTR/NIL": 5.931304858984639
+      },
+      "bottom10_pairs": {
+        "DOT/GRASS": -3.517496405542498,
+        "NEO/PUMP": -3.5237338813706147,
+        "SPX/XMR": -3.544602390884164,
+        "ONDO/TRUMP": -3.684604006385001,
+        "INJ/ZEN": -3.6980463670741144,
+        "ETC/MON": -4.079399918698675,
+        "ARB/FARTCOIN": -4.242217024379599,
+        "ORDI/TNSR": -4.470377921258227,
+        "HMSTR/PENDLE": -4.692863022297669,
+        "AAVE/AVAX": -5.310174456420654
+      },
+      "top10_coins": {
+        "HMSTR": 129.43560006218246,
+        "TNSR": 26.710151422752453,
+        "MOODENG": 22.32475392206771,
+        "VIRTUAL": 22.249771661251174,
+        "MEME": 19.015375636809104,
+        "ADA": 17.344158938229253,
+        "kSHIB": 15.374928308222419,
+        "XMR": 15.079348596289428,
+        "DASH": 13.566086911337042,
+        "SAGA": 13.192760006804345
+      },
+      "bottom10_coins": {
+        "MEGA": -11.774312164586988,
+        "MINA": -11.814873712907799,
+        "EIGEN": -11.87225728596627,
+        "DOGE": -12.364893273129958,
+        "ICP": -12.907468015424612,
+        "SYRUP": -13.125708294562479,
+        "STABLE": -13.234558551037983,
+        "MON": -14.943163125351283,
+        "S": -15.96069696484495,
+        "AAVE": -17.36806882735833
+      }
+    },
+    "q0.005_stop2p0_feetaker": {
+      "q": 0.005,
+      "stop": "2p0",
+      "fee": "taker",
+      "n_trades": 4827,
+      "final_equity": 731.4615570741607,
+      "total_return": -0.2685384429258393,
+      "cagr": -0.7108024813006955,
+      "cagr_n_days": 92,
+      "daily_pnl_mean": -2.887510138987519,
+      "daily_pnl_median": -2.0895120037347397,
+      "share_positive_days": 0.3333333333333333,
+      "worst_day": -33.769586957431784,
+      "best_day": 42.93694093422107,
+      "max_drawdown": {
+        "max_dd_usd": -268.53844292583926,
+        "max_dd_pct": -0.2685384429258393,
+        "start": "2026-07-12",
+        "bottom": "2026-10-13",
+        "recovery": null,
+        "longest_underwater_days": 93
+      },
+      "sharpe": -4.6726124299635226,
+      "sortino": -6.4307558868476375,
+      "sharpe_sortino_n_days": 93,
+      "monthly": {
+        "8": {
+          "n_days": 93,
+          "total_pnl_usd": -268.53844292583926,
+          "total_pnl_pct": -0.2685384429258393
+        },
+        "outside": {
+          "n_days": 0,
+          "total_pnl_usd": 0.0,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 0,
+      "win_rate": 0.5402941785788274,
+      "stop_share": 0.44188937228091985,
+      "timeout_share": 0.017816449140252745,
+      "liquidation_share": 0.0,
+      "mean_net": -0.055632575704542817,
+      "median_net": 0.27101875902626726,
+      "mean_return_on_margin": -0.0012656736225516668,
+      "median_return_on_margin": 0.006380213809695111,
+      "mean_win": 0.7872928636038427,
+      "mean_loss": -1.0663750614720469,
+      "profit_factor": 0.8852739709543451,
+      "mean_holding_minutes": 124.49347420758235,
+      "total_fee": 648.8519585726597,
+      "fee_share_of_gross": 1.714990862912781,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 11.478993195250723,
+      "funding_paid_share_of_gross": 0.03034030827093275,
+      "total_funding_received": 13.45115869014374,
+      "funding_received_share_of_gross": 0.0355529700487189,
+      "total_gross": 378.3413501519385,
+      "peak_margin_used": 498.6882108854884,
+      "distance_to_liquidation_ratio": {
+        "min": 4.024893893691473,
+        "median": 4.530733716840306,
+        "date_of_min": "2026-07-17"
+      },
+      "mean_open_positions": 5.1284830381907405,
+      "max_open_positions": 10,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "book_full": 2006,
+        "min_order": 355
+      },
+      "by_fold": {
+        "8": {
+          "n": 4827,
+          "mean_net": -0.055632575704542817
+        }
+      },
+      "top10_pairs": {
+        "GRAM/VIRTUAL": 6.7310859294198035,
+        "ADA/ASTER": 6.274044220013682,
+        "BERA/BOME": 6.179907289151142,
+        "SOPH/W": 6.156728392952566,
+        "FET/VINE": 5.64001792386825,
+        "ENA/PYTH": 5.252259070705867,
+        "AXS/NOT": 5.242219000597672,
+        "JUP/ONDO": 5.18443501289406,
+        "PUMP/SKR": 4.989218133315177,
+        "APE/SPX": 4.942942460435532
+      },
+      "bottom10_pairs": {
+        "STX/XPL": -4.367225402659715,
+        "TAO/UNI": -4.410573567635682,
+        "ETHFI/NOT": -4.666230929981942,
+        "EIGEN/ZEN": -4.870251073195103,
+        "TRX/WLD": -4.941224508967752,
+        "KAITO/SAND": -4.953475778273866,
+        "NEO/PUMP": -5.099789239758057,
+        "CC/TNSR": -6.297470575728697,
+        "ARB/FARTCOIN": -7.267446642711883,
+        "AAVE/AVAX": -7.969985267270532
+      },
+      "top10_coins": {
+        "HMSTR": 54.95589852911149,
+        "MEME": 21.67106107140952,
+        "VIRTUAL": 20.58066401960194,
+        "ASTER": 12.540784528467832,
+        "DYDX": 12.385910512590641,
+        "CRV": 12.286436728033182,
+        "FET": 10.616207561309922,
+        "USUAL": 9.516373063150288,
+        "ORDI": 9.030387411930716,
+        "BERA": 8.48782386105933
+      },
+      "bottom10_coins": {
+        "WLD": -15.933105128281925,
+        "S": -16.795322306530565,
+        "W": -17.039783192094674,
+        "IOTA": -17.150130137711354,
+        "kFLOKI": -17.865689506853137,
+        "LINEA": -17.98457420730299,
+        "ETHFI": -18.061259063840698,
+        "NEAR": -18.624342327743097,
+        "APEX": -23.579017438101857,
+        "PAXG": -25.73151606098103
+      }
+    },
+    "q0.005_stop2p0_feemaker": {
+      "q": 0.005,
+      "stop": "2p0",
+      "fee": "maker",
+      "n_trades": 4878,
+      "final_equity": 1216.8312256402724,
+      "total_return": 0.21683122564027224,
+      "cagr": 1.1784225944622984,
+      "cagr_n_days": 92,
+      "daily_pnl_mean": 2.331518555271746,
+      "daily_pnl_median": 1.5839265633755986,
+      "share_positive_days": 0.5376344086021505,
+      "worst_day": -40.135692103003294,
+      "best_day": 82.7619888474162,
+      "max_drawdown": {
+        "max_dd_usd": -70.58009764275903,
+        "max_dd_pct": -0.06584703636633395,
+        "start": "2026-08-29",
+        "bottom": "2026-09-06",
+        "recovery": "2026-09-08",
+        "longest_underwater_days": 16
+      },
+      "sharpe": 3.0139806549135786,
+      "sortino": 4.593155053398785,
+      "sharpe_sortino_n_days": 93,
+      "monthly": {
+        "8": {
+          "n_days": 93,
+          "total_pnl_usd": 216.83122564027235,
+          "total_pnl_pct": 0.21683122564027224
+        },
+        "outside": {
+          "n_days": 0,
+          "total_pnl_usd": 0.0,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 1,
+      "win_rate": 0.5395653956539566,
+      "stop_share": 0.44280442804428044,
+      "timeout_share": 0.017630176301763018,
+      "liquidation_share": 0.0,
+      "mean_net": 0.044450845764713365,
+      "median_net": 0.42235717844909354,
+      "mean_return_on_margin": 0.0008355356392894602,
+      "median_return_on_margin": 0.008170781248622628,
+      "mean_win": 1.1352983728847266,
+      "mean_loss": -1.2801143539838273,
+      "profit_factor": 1.076887999274806,
+      "mean_holding_minutes": 123.90733907339073,
+      "total_fee": 280.8286044811068,
+      "fee_share_of_gross": 0.5674840121458655,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 14.5045533631334,
+      "funding_paid_share_of_gross": 0.029310056046831616,
+      "total_funding_received": 17.29827541709583,
+      "funding_received_share_of_gross": 0.03495546600402723,
+      "total_gross": 494.8661080674162,
+      "peak_margin_used": 622.9547627083919,
+      "distance_to_liquidation_ratio": {
+        "min": 4.029522226360858,
+        "median": 4.544005772489817,
+        "date_of_min": "2026-07-17"
+      },
+      "mean_open_positions": 5.15694722921377,
+      "max_open_positions": 10,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "book_full": 2078,
+        "min_order": 232
+      },
+      "by_fold": {
+        "8": {
+          "n": 4878,
+          "mean_net": 0.044450845764713365
+        }
+      },
+      "top10_pairs": {
+        "SOPH/W": 15.093785004946351,
+        "GRAM/VIRTUAL": 9.899507309456153,
+        "PUMP/UNI": 9.823615247970475,
+        "ADA/ASTER": 8.482773010906952,
+        "PUMP/SKR": 7.845918091030146,
+        "DOT/kSHIB": 7.8113913753127555,
+        "AXS/NOT": 7.319490001995986,
+        "CASHCAT/MOODENG": 7.015777338943844,
+        "BERA/BOME": 6.988550370663109,
+        "FET/TIA": 6.943469741569103
+      },
+      "bottom10_pairs": {
+        "TAO/UNI": -5.808205422942438,
+        "FARTCOIN/GOAT": -5.852737901720736,
+        "ANIME/BOME": -5.971401839090568,
+        "ETHFI/kFLOKI": -6.29473967173625,
+        "NEO/PUMP": -6.405841439579356,
+        "EIGEN/ZEN": -6.42408979516035,
+        "ETHFI/NOT": -6.86781706059994,
+        "HEMI/MON": -7.722119533547705,
+        "AAVE/AVAX": -8.456141391571899,
+        "ARB/FARTCOIN": -8.519344276133012
+      },
+      "top10_coins": {
+        "HMSTR": 117.66935141971106,
+        "MEME": 41.00268885120587,
+        "TNSR": 34.25670448624402,
+        "VIRTUAL": 31.475752755925534,
+        "PUMP": 31.26033131037124,
+        "NOT": 24.511304796756747,
+        "CRV": 24.180457794548303,
+        "ADA": 22.52895760875539,
+        "SOPH": 21.78954449824949,
+        "ASTER": 19.729774796696358
+      },
+      "bottom10_coins": {
+        "LINEA": -14.678732931009502,
+        "MON": -14.746566225886479,
+        "S": -15.313108906870138,
+        "FARTCOIN": -16.766563564971477,
+        "IOTA": -17.169145274143503,
+        "GMX": -17.492597468892296,
+        "NEAR": -17.843400869137156,
+        "kFLOKI": -18.287332871080608,
+        "APEX": -20.990923556461,
+        "ETHFI": -24.894348004831354
+      }
+    },
+    "q0.005_stopnone_feetaker": {
+      "q": 0.005,
+      "stop": "none",
+      "fee": "taker",
+      "n_trades": 3150,
+      "final_equity": 1268.652736990167,
+      "total_return": 0.268652736990167,
+      "cagr": 1.570402709630553,
+      "cagr_n_days": 92,
+      "daily_pnl_mean": 2.8887391074211517,
+      "daily_pnl_median": 3.763215248733786,
+      "share_positive_days": 0.6021505376344086,
+      "worst_day": -36.616637596711826,
+      "best_day": 66.20884952982806,
+      "max_drawdown": {
+        "max_dd_usd": -82.88096799474886,
+        "max_dd_pct": -0.08104577661693078,
+        "start": "2026-07-22",
+        "bottom": "2026-07-27",
+        "recovery": "2026-09-02",
+        "longest_underwater_days": 41
+      },
+      "sharpe": 3.2305611493092923,
+      "sortino": 5.35771539177477,
+      "sharpe_sortino_n_days": 93,
+      "monthly": {
+        "8": {
+          "n_days": 93,
+          "total_pnl_usd": 268.6527369901671,
+          "total_pnl_pct": 0.268652736990167
+        },
+        "outside": {
+          "n_days": 0,
+          "total_pnl_usd": 0.0,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 1,
+      "win_rate": 0.7101587301587302,
+      "stop_share": 0.0,
+      "timeout_share": 0.28984126984126984,
+      "liquidation_share": 0.0,
+      "mean_net": 0.08528658317148953,
+      "median_net": 0.5921666252450373,
+      "mean_return_on_margin": 0.0015777598510876103,
+      "median_return_on_margin": 0.011308125783946545,
+      "mean_win": 0.9749914360234389,
+      "mean_loss": -2.393482466000168,
+      "profit_factor": 1.1349079965505937,
+      "mean_holding_minutes": 288.12857142857143,
+      "total_fee": 529.6849235408164,
+      "fee_share_of_gross": 0.6645685652845433,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 25.445674547215162,
+      "funding_paid_share_of_gross": 0.03192538559243536,
+      "total_funding_received": 26.747556965508814,
+      "funding_received_share_of_gross": 0.03355879083476507,
+      "total_gross": 797.0357781127146,
+      "peak_margin_used": 633.5755207945657,
+      "distance_to_liquidation_ratio": {
+        "min": 3.9219629014162263,
+        "median": 4.423879934143472,
+        "date_of_min": "2026-09-27"
+      },
+      "mean_open_positions": 7.081701284312042,
+      "max_open_positions": 10,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "book_full": 3881,
+        "min_order": 157
+      },
+      "by_fold": {
+        "8": {
+          "n": 3150,
+          "mean_net": 0.08528658317148953
+        }
+      },
+      "top10_pairs": {
+        "PUMP/SKR": 7.295336247180998,
+        "OP/ZRO": 6.980052653164707,
+        "HMSTR/IO": 6.920131566939997,
+        "FET/STBL": 6.865895049331636,
+        "SAGA/WLFI": 6.600110444479312,
+        "SOPH/kLUNC": 6.5255371783103,
+        "CASHCAT/MOODENG": 6.515589526634779,
+        "AXS/NOT": 6.443826639547121,
+        "BERA/BOME": 6.436073456540063,
+        "FET/TIA": 6.311940592037345
+      },
+      "bottom10_pairs": {
+        "HYPE/NEAR": -11.772728126933952,
+        "GRAM/KAITO": -13.093528313287097,
+        "DASH/POL": -13.367742341708158,
+        "RSR/STRK": -13.416168059572321,
+        "AR/JUP": -16.19152208229491,
+        "CHIP/STX": -16.212585985835975,
+        "JTO/MINA": -17.07645098162716,
+        "AAVE/KAITO": -17.141880593441044,
+        "ETHFI/NOT": -18.61846963688619,
+        "ARB/FARTCOIN": -26.106719497639308
+      },
+      "top10_coins": {
+        "HMSTR": 104.99157164508742,
+        "TNSR": 55.36363146816981,
+        "WLFI": 40.90727049969564,
+        "SAGA": 39.430504553233355,
+        "USUAL": 29.960148014658554,
+        "FET": 28.789076105887997,
+        "UNI": 28.098079442466357,
+        "VIRTUAL": 27.981223462465195,
+        "WIF": 26.601614621524902,
+        "APE": 25.739923565587688
+      },
+      "bottom10_coins": {
+        "BNB": -22.173445444340814,
+        "NEAR": -25.89602270987806,
+        "JTO": -26.60850762374381,
+        "STRK": -27.262822551434148,
+        "KAITO": -28.387238482923618,
+        "kLUNC": -28.63919296432796,
+        "STX": -28.907312789008692,
+        "ARB": -44.025329814173695,
+        "FARTCOIN": -56.792399727709174,
+        "ETHFI": -60.443685861854966
+      }
+    },
+    "q0.005_stopnone_feemaker": {
+      "q": 0.005,
+      "stop": "none",
+      "fee": "maker",
+      "n_trades": 3156,
+      "final_equity": 1777.0431307007807,
+      "total_return": 0.7770431307007808,
+      "cagr": 8.786999131884512,
+      "cagr_n_days": 92,
+      "daily_pnl_mean": 8.355302480653556,
+      "daily_pnl_median": 9.179610282739759,
+      "share_positive_days": 0.6774193548387096,
+      "worst_day": -42.10816556655436,
+      "best_day": 95.51165842094474,
+      "max_drawdown": {
+        "max_dd_usd": -55.36687066815796,
+        "max_dd_pct": -0.05160536620499263,
+        "start": "2026-07-23",
+        "bottom": "2026-07-27",
+        "recovery": "2026-07-31",
+        "longest_underwater_days": 7
+      },
+      "sharpe": 7.741287551273649,
+      "sortino": 14.249539992633332,
+      "sharpe_sortino_n_days": 93,
+      "monthly": {
+        "8": {
+          "n_days": 93,
+          "total_pnl_usd": 777.0431307007807,
+          "total_pnl_pct": 0.7770431307007808
+        },
+        "outside": {
+          "n_days": 0,
+          "total_pnl_usd": 0.0,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 1,
+      "win_rate": 0.7113434727503168,
+      "stop_share": 0.0,
+      "timeout_share": 0.28865652724968316,
+      "liquidation_share": 0.0,
+      "mean_net": 0.24621138488618868,
+      "median_net": 0.8250205107859475,
+      "mean_return_on_margin": 0.0037124865439879403,
+      "median_return_on_margin": 0.013214954038034436,
+      "mean_win": 1.3042951623982284,
+      "mean_loss": -2.9066914729460307,
+      "profit_factor": 1.3371110603363712,
+      "mean_holding_minutes": 288.23415716096326,
+      "total_fee": 213.16122071364236,
+      "fee_share_of_gross": 0.21639503791551212,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 30.559962679242886,
+      "funding_paid_share_of_gross": 0.031023580464268587,
+      "total_funding_received": 35.70835917449179,
+      "funding_received_share_of_gross": 0.03625008203459936,
+      "total_gross": 985.055954919205,
+      "peak_margin_used": 879.6478310295411,
+      "distance_to_liquidation_ratio": {
+        "min": 3.9975569540704035,
+        "median": 4.422822745438824,
+        "date_of_min": "2026-09-27"
+      },
+      "mean_open_positions": 7.102778124804797,
+      "max_open_positions": 10,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "book_full": 3909,
+        "min_order": 123
+      },
+      "by_fold": {
+        "8": {
+          "n": 3156,
+          "mean_net": 0.24621138488618868
+        }
+      },
+      "top10_pairs": {
+        "NEAR/WLFI": 10.547637249031862,
+        "PUMP/SKR": 10.078051929385136,
+        "FET/STBL": 9.713184963704897,
+        "OP/ZRO": 9.384626008934962,
+        "HMSTR/IO": 9.294747872623136,
+        "SOPH/kLUNC": 8.770110970144422,
+        "FET/TIA": 8.606947281235552,
+        "AXS/NOT": 8.42916232586635,
+        "SAGA/WLFI": 8.11796269725106,
+        "APE/SPX": 7.955039007065003
+      },
+      "bottom10_pairs": {
+        "FARTCOIN/GOAT": -14.663141533005478,
+        "ANIME/CASHCAT": -15.853555864693472,
+        "DASH/POL": -16.08691874830264,
+        "AAVE/KAITO": -17.22483887596735,
+        "RSR/STRK": -17.358547859759103,
+        "AR/JUP": -20.86773331985515,
+        "JTO/MINA": -21.461319490286698,
+        "CHIP/STX": -21.615776833451964,
+        "ETHFI/NOT": -25.281369838244558,
+        "ARB/FARTCOIN": -30.55306035037967
+      },
+      "top10_coins": {
+        "HMSTR": 156.84271152863013,
+        "TNSR": 87.55791833962054,
+        "WLFI": 63.71919907484241,
+        "SAGA": 63.52371813938589,
+        "MEME": 46.92211978338935,
+        "WIF": 39.83774391591759,
+        "VIRTUAL": 39.26564653514129,
+        "NOT": 37.93813520541638,
+        "FET": 37.690544319789254,
+        "UNI": 36.63382810151114
+      },
+      "bottom10_coins": {
+        "CASHCAT": -23.403219460756127,
+        "kLUNC": -23.594018099175273,
+        "XLM": -24.440685290128695,
+        "KAITO": -24.810803325907422,
+        "STRK": -27.0192819714005,
+        "JTO": -29.079534540687614,
+        "STX": -33.37063289771202,
+        "ARB": -48.822063782357056,
+        "FARTCOIN": -65.05599681015126,
+        "ETHFI": -77.00228204676412
+      }
+    },
+    "q0.001_stop0p5_feetaker": {
+      "q": 0.001,
+      "stop": "0p5",
+      "fee": "taker",
+      "n_trades": 1300,
+      "final_equity": 888.733792963367,
+      "total_return": -0.11126620703663292,
+      "cagr": -0.3737362644856812,
+      "cagr_n_days": 92,
+      "daily_pnl_mean": -1.1964108283508923,
+      "daily_pnl_median": -1.0216072452989238,
+      "share_positive_days": 0.23655913978494625,
+      "worst_day": -8.722408430610699,
+      "best_day": 12.645361000904245,
+      "max_drawdown": {
+        "max_dd_usd": -111.98994166988302,
+        "max_dd_pct": -0.11198994166988302,
+        "start": "2026-07-12",
+        "bottom": "2026-10-12",
+        "recovery": null,
+        "longest_underwater_days": 93
+      },
+      "sharpe": -6.505884338566451,
+      "sortino": -10.388309704128728,
+      "sharpe_sortino_n_days": 93,
+      "monthly": {
+        "8": {
+          "n_days": 93,
+          "total_pnl_usd": -111.26620703663298,
+          "total_pnl_pct": -0.11126620703663292
+        },
+        "outside": {
+          "n_days": 0,
+          "total_pnl_usd": 0.0,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 0,
+      "win_rate": 0.28384615384615386,
+      "stop_share": 0.7161538461538461,
+      "timeout_share": 0.0,
+      "liquidation_share": 0.0,
+      "mean_net": -0.08558939002817897,
+      "median_net": -0.3353000455937079,
+      "mean_return_on_margin": -0.0018026341122851428,
+      "median_return_on_margin": -0.0071621238842115385,
+      "mean_win": 0.8660929246199528,
+      "mean_loss": -0.4571017374576636,
+      "profit_factor": 0.7396612587601638,
+      "mean_holding_minutes": 34.536153846153844,
+      "total_fee": 196.63277280245546,
+      "fee_share_of_gross": 2.2999244861515806,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 0.8362709684025191,
+      "funding_paid_share_of_gross": 0.009781482760348027,
+      "total_funding_received": 0.7075198286353725,
+      "funding_received_share_of_gross": 0.008275538991412439,
+      "total_gross": 85.49531690558993,
+      "peak_margin_used": 460.3011075429354,
+      "distance_to_liquidation_ratio": {
+        "min": 4.177612677063815,
+        "median": 19.892189022992596,
+        "date_of_min": "2026-08-29"
+      },
+      "mean_open_positions": 1.5479589022203835,
+      "max_open_positions": 10,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "min_order": 158,
+        "book_full": 22
+      },
+      "by_fold": {
+        "8": {
+          "n": 1300,
+          "mean_net": -0.08558939002817897
+        }
+      },
+      "top10_pairs": {
+        "CASHCAT/MOODENG": 6.552763169517989,
+        "ZEC/kSHIB": 5.823647418100507,
+        "ZK/kPEPE": 4.046869339962411,
+        "GRIFFAIN/WLD": 3.728425170598157,
+        "CC/ZORA": 3.6499959232375385,
+        "CFX/XMR": 3.50788955788886,
+        "APT/UNI": 3.368536679059483,
+        "FET/VINE": 3.158806013048682,
+        "APEX/TNSR": 2.9683953255619535,
+        "ADA/ASTER": 2.8092566655346394
+      },
+      "bottom10_pairs": {
+        "BERA/COMP": -1.545888135031607,
+        "SKR/TNSR": -1.6340865909219224,
+        "OP/kPEPE": -1.7305253566049195,
+        "LIT/ZEC": -1.7507652548396582,
+        "IO/NOT": -1.752169125821628,
+        "PUMP/SKR": -2.0275060592682994,
+        "ETHFI/FET": -2.328517670216906,
+        "LINK/PAXG": -2.486498822098474,
+        "AAVE/AVAX": -2.777815284792795,
+        "DOT/GRASS": -3.5989421219739075
+      },
+      "top10_coins": {
+        "kSHIB": 9.995010786247255,
+        "XMR": 9.292924013607,
+        "MOODENG": 4.9118926379902925,
+        "ZORA": 3.9034864423714346,
+        "ZK": 3.5871521319673447,
+        "ADA": 3.5030622866602026,
+        "ZEC": 3.322497484612346,
+        "WLD": 2.8170307720375733,
+        "LDO": 2.809815777014706,
+        "CASHCAT": 2.7543913616252707
+      },
+      "bottom10_coins": {
+        "SAND": -5.192291286178961,
+        "WLFI": -5.241946166490795,
+        "ZEN": -5.335116132125917,
+        "XLM": -5.45466644505831,
+        "GRASS": -5.715814791207029,
+        "LINK": -5.910726491965726,
+        "TURBO": -6.365124246654332,
+        "AAVE": -6.382154948054904,
+        "PURR": -8.238496330463121,
+        "PAXG": -9.580289178337816
+      }
+    },
+    "q0.001_stop0p5_feemaker": {
+      "q": 0.001,
+      "stop": "0p5",
+      "fee": "maker",
+      "n_trades": 1312,
+      "final_equity": 1025.8632645549806,
+      "total_return": 0.02586326455498056,
+      "cagr": 0.10661435563033117,
+      "cagr_n_days": 92,
+      "daily_pnl_mean": 0.27809961887075874,
+      "daily_pnl_median": -0.23898245654083894,
+      "share_positive_days": 0.40860215053763443,
+      "worst_day": -7.695453448949593,
+      "best_day": 21.73416528002997,
+      "max_drawdown": {
+        "max_dd_usd": -37.26430785859259,
+        "max_dd_pct": -0.03726430785859259,
+        "start": "2026-07-12",
+        "bottom": "2026-08-17",
+        "recovery": "2026-09-07",
+        "longest_underwater_days": 56
+      },
+      "sharpe": 1.308283397344664,
+      "sortino": 3.650014080608141,
+      "sharpe_sortino_n_days": 93,
+      "monthly": {
+        "8": {
+          "n_days": 93,
+          "total_pnl_usd": 25.86326455498056,
+          "total_pnl_pct": 0.02586326455498056
+        },
+        "outside": {
+          "n_days": 0,
+          "total_pnl_usd": 0.0,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 1,
+      "win_rate": 0.2850609756097561,
+      "stop_share": 0.7149390243902439,
+      "timeout_share": 0.0,
+      "liquidation_share": 0.0,
+      "mean_net": 0.019712854081541314,
+      "median_net": -0.2580389987844307,
+      "mean_return_on_margin": 0.00040148855978355006,
+      "median_return_on_margin": -0.005148173460633573,
+      "mean_win": 1.0337558178683597,
+      "mean_loss": -0.3846070483238639,
+      "profit_factor": 1.0716907733002605,
+      "mean_holding_minutes": 34.5907012195122,
+      "total_fee": 70.94534175414313,
+      "fee_share_of_gross": 0.7320603870664616,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 0.8818687084023904,
+      "funding_paid_share_of_gross": 0.009099697486158818,
+      "total_funding_received": 0.7786040741513035,
+      "funding_received_share_of_gross": 0.00803414552388763,
+      "total_gross": 96.91187094337644,
+      "peak_margin_used": 513.6741957823135,
+      "distance_to_liquidation_ratio": {
+        "min": 4.248389401799815,
+        "median": 19.89353130492076,
+        "date_of_min": "2026-08-29"
+      },
+      "mean_open_positions": 1.555224289777595,
+      "max_open_positions": 10,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "min_order": 145,
+        "book_full": 23
+      },
+      "by_fold": {
+        "8": {
+          "n": 1312,
+          "mean_net": 0.019712854081541314
+        }
+      },
+      "top10_pairs": {
+        "CASHCAT/MOODENG": 7.622619071553697,
+        "ZEC/kSHIB": 6.651124972231685,
+        "ZK/kPEPE": 4.563013930855225,
+        "CC/ZORA": 4.283751442797234,
+        "GRIFFAIN/WLD": 4.038701858797608,
+        "APT/UNI": 3.8926361296459584,
+        "FET/VINE": 3.438267259517937,
+        "SAGA/ZETA": 3.421178129682006,
+        "HMSTR/SUSHI": 3.4148937653440194,
+        "APEX/TNSR": 3.400421758795805
+      },
+      "bottom10_pairs": {
+        "NIL/WLD": -1.4186346343394458,
+        "BOME/BRETT": -1.4250001768936393,
+        "SKR/TNSR": -1.503192025168377,
+        "LIT/ZEC": -1.5808593482421638,
+        "OP/kPEPE": -1.6323145717320438,
+        "LINK/PAXG": -1.7859044707003904,
+        "PUMP/SKR": -1.9920176691645324,
+        "ETHFI/FET": -2.321676459991096,
+        "AAVE/AVAX": -2.324108284953633,
+        "DOT/GRASS": -3.514633672289601
+      },
+      "top10_coins": {
+        "kSHIB": 16.234675350957975,
+        "XMR": 12.917927188818318,
+        "ZORA": 7.052576491907022,
+        "MOODENG": 6.998060799589428,
+        "TNSR": 6.8737065691333825,
+        "ADA": 6.449940617542146,
+        "HMSTR": 6.006622423606712,
+        "SUSHI": 5.4159011110220066,
+        "ZEC": 5.317303018133987,
+        "APT": 5.196353810082159
+      },
+      "bottom10_coins": {
+        "GMX": -3.837534083032206,
+        "NIL": -3.9257781153404148,
+        "ZEN": -3.9354825344087856,
+        "BERA": -3.975786402461163,
+        "ORDI": -4.074554880059068,
+        "SAND": -4.154627711173228,
+        "TURBO": -4.743592444457038,
+        "GRASS": -4.979649199735565,
+        "AAVE": -5.106608764594278,
+        "PURR": -5.750199075078356
+      }
+    },
+    "q0.001_stop1p0_feetaker": {
+      "q": 0.001,
+      "stop": "1p0",
+      "fee": "taker",
+      "n_trades": 1290,
+      "final_equity": 883.1331482535554,
+      "total_return": -0.11686685174644462,
+      "cagr": -0.38924819291451007,
+      "cagr_n_days": 92,
+      "daily_pnl_mean": -1.2566328144778987,
+      "daily_pnl_median": -0.5770046344683806,
+      "share_positive_days": 0.3118279569892473,
+      "worst_day": -13.323424562377454,
+      "best_day": 10.815777534191739,
+      "max_drawdown": {
+        "max_dd_usd": -117.5860255307914,
+        "max_dd_pct": -0.11758602553079141,
+        "start": "2026-07-12",
+        "bottom": "2026-10-12",
+        "recovery": null,
+        "longest_underwater_days": 93
+      },
+      "sharpe": -6.091366562729827,
+      "sortino": -7.647893491207042,
+      "sharpe_sortino_n_days": 93,
+      "monthly": {
+        "8": {
+          "n_days": 93,
+          "total_pnl_usd": -116.86685174644458,
+          "total_pnl_pct": -0.11686685174644462
+        },
+        "outside": {
+          "n_days": 0,
+          "total_pnl_usd": 0.0,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 0,
+      "win_rate": 0.39147286821705424,
+      "stop_share": 0.6085271317829457,
+      "timeout_share": 0.0,
+      "liquidation_share": 0.0,
+      "mean_net": -0.09059445871817567,
+      "median_net": -0.4380882316487865,
+      "mean_return_on_margin": -0.0019101645676504195,
+      "median_return_on_margin": -0.009376902430095459,
+      "mean_win": 0.8257722469303223,
+      "mean_loss": -0.6724698953847125,
+      "profit_factor": 0.7797370280919909,
+      "mean_holding_minutes": 56.603100775193795,
+      "total_fee": 194.58164787457372,
+      "fee_share_of_gross": 2.4978646204213493,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 1.4907475545374382,
+      "funding_paid_share_of_gross": 0.01913687963450171,
+      "total_funding_received": 1.3063467911408653,
+      "funding_received_share_of_gross": 0.016769708074910985,
+      "total_gross": 77.89919689152367,
+      "peak_margin_used": 460.1731681635172,
+      "distance_to_liquidation_ratio": {
+        "min": 4.275454643864005,
+        "median": 16.197178600232842,
+        "date_of_min": "2026-09-07"
+      },
+      "mean_open_positions": 1.7029642932108122,
+      "max_open_positions": 10,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "min_order": 159,
+        "book_full": 31
+      },
+      "by_fold": {
+        "8": {
+          "n": 1290,
+          "mean_net": -0.09059445871817567
+        }
+      },
+      "top10_pairs": {
+        "CASHCAT/MOODENG": 6.540153076390175,
+        "ZEC/kSHIB": 5.80996412637352,
+        "ZK/kPEPE": 4.0373607811874415,
+        "ALT/GRASS": 3.9071749826319975,
+        "GRIFFAIN/WLD": 3.729690000368507,
+        "CC/ZORA": 3.631003074535597,
+        "LIT/XLM": 3.5361077772137057,
+        "APT/UNI": 3.384800688885964,
+        "FET/VINE": 3.170104433980333,
+        "APE/DOT": 2.986255279785359
+      },
+      "bottom10_pairs": {
+        "AAVE/XPL": -2.4187958497981232,
+        "HEMI/LINEA": -2.454719202231784,
+        "LINK/PAXG": -2.495326009905067,
+        "HMSTR/PENDLE": -2.5422098916905713,
+        "LIT/ZEC": -2.6041302796917822,
+        "ETHFI/FET": -2.7368840586961727,
+        "IO/NOT": -3.007419621685347,
+        "AAVE/AVAX": -3.110147934936676,
+        "ZEC/kPEPE": -3.3917031093042818,
+        "DOT/GRASS": -3.599948214691664
+      },
+      "top10_coins": {
+        "kSHIB": 9.931778769801186,
+        "TNSR": 5.629505896727017,
+        "XMR": 5.612259188669396,
+        "APT": 5.539759219123911,
+        "MERL": 5.1042741952693405,
+        "ZORA": 4.3359091498117746,
+        "CASHCAT": 3.8130434763599936,
+        "MOODENG": 3.8051965661054825,
+        "ADA": 3.7824953848276404,
+        "STX": 3.773754952885549
+      },
+      "bottom10_coins": {
+        "NEAR": -6.02622177766162,
+        "SAND": -6.073907481128312,
+        "ORDI": -6.191589519321305,
+        "POL": -6.371393121363379,
+        "AAVE": -6.7696957793912365,
+        "BERA": -6.803536726254215,
+        "kPEPE": -6.832555961512352,
+        "PAXG": -7.597741738730456,
+        "PURR": -7.694439591182345,
+        "NIL": -9.105272835069098
+      }
+    },
+    "q0.001_stop1p0_feemaker": {
+      "q": 0.001,
+      "stop": "1p0",
+      "fee": "maker",
+      "n_trades": 1303,
+      "final_equity": 1016.5413608886076,
+      "total_return": 0.01654136088860758,
+      "cagr": 0.06725421006307508,
+      "cagr_n_days": 92,
+      "daily_pnl_mean": 0.17786409557642627,
+      "daily_pnl_median": 0.0,
+      "share_positive_days": 0.44086021505376344,
+      "worst_day": -9.823175465200734,
+      "best_day": 20.18973573575238,
+      "max_drawdown": {
+        "max_dd_usd": -41.053467123401674,
+        "max_dd_pct": -0.041040004739225394,
+        "start": "2026-07-16",
+        "bottom": "2026-08-16",
+        "recovery": "2026-09-07",
+        "longest_underwater_days": 52
+      },
+      "sharpe": 0.8241985293142676,
+      "sortino": 1.49091752407228,
+      "sharpe_sortino_n_days": 93,
+      "monthly": {
+        "8": {
+          "n_days": 93,
+          "total_pnl_usd": 16.54136088860764,
+          "total_pnl_pct": 0.01654136088860758
+        },
+        "outside": {
+          "n_days": 0,
+          "total_pnl_usd": 0.0,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 1,
+      "win_rate": 0.3914044512663085,
+      "stop_share": 0.6085955487336915,
+      "timeout_share": 0.0,
+      "liquidation_share": 0.0,
+      "mean_net": 0.01269482800353653,
+      "median_net": -0.3711037830649945,
+      "mean_return_on_margin": 0.000268382786849098,
+      "median_return_on_margin": -0.0074790584522128915,
+      "mean_win": 0.9891005006130928,
+      "mean_loss": -0.61525837884498,
+      "profit_factor": 1.033903186038058,
+      "mean_holding_minutes": 56.72217958557176,
+      "total_fee": 70.11324758175788,
+      "fee_share_of_gross": 0.8072009865147498,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 1.6103627708505919,
+      "funding_paid_share_of_gross": 0.01853981183458159,
+      "total_funding_received": 1.4052563088975467,
+      "funding_received_share_of_gross": 0.016178458678945934,
+      "total_gross": 86.85971493231904,
+      "peak_margin_used": 509.3449431073696,
+      "distance_to_liquidation_ratio": {
+        "min": 4.279156961208363,
+        "median": 16.198886244529838,
+        "date_of_min": "2026-09-07"
+      },
+      "mean_open_positions": 1.7084835876098012,
+      "max_open_positions": 10,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "min_order": 145,
+        "book_full": 32
+      },
+      "by_fold": {
+        "8": {
+          "n": 1303,
+          "mean_net": 0.01269482800353653
+        }
+      },
+      "top10_pairs": {
+        "CASHCAT/MOODENG": 7.591220931506935,
+        "ZEC/kSHIB": 6.621405527446385,
+        "ZK/kPEPE": 4.5425226536097885,
+        "CC/ZORA": 4.250422955440934,
+        "ALT/GRASS": 4.097815461165016,
+        "GRIFFAIN/WLD": 4.0389577608405505,
+        "APT/UNI": 3.909815018824265,
+        "LIT/XLM": 3.89262276632281,
+        "FET/VINE": 3.449614268526238,
+        "APEX/TNSR": 3.402097547962372
+      },
+      "bottom10_pairs": {
+        "HEMI/LINEA": -2.434080641687638,
+        "AAVE/XPL": -2.437295493754194,
+        "BIGTIME/NXPC": -2.4565857939577587,
+        "LIT/ZEC": -2.4949144369058427,
+        "HMSTR/PENDLE": -2.5370943496918987,
+        "IO/NOT": -2.6520475623061803,
+        "AAVE/AVAX": -2.6638294667914924,
+        "ETHFI/FET": -2.7770436632476794,
+        "ZEC/kPEPE": -3.3874297481323987,
+        "DOT/GRASS": -3.5156173143213274
+      },
+      "top10_coins": {
+        "kSHIB": 16.01932308646533,
+        "TNSR": 13.240168848321773,
+        "HMSTR": 10.93933784718828,
+        "APT": 9.318657293561214,
+        "XMR": 9.239074778628842,
+        "ZORA": 7.641165558078746,
+        "MERL": 6.799153413158931,
+        "ADA": 6.712192967458139,
+        "ALT": 6.067772640716519,
+        "MOODENG": 5.785480433775195
+      },
+      "bottom10_coins": {
+        "HEMI": -4.496958818638362,
+        "GALA": -4.7847054502499375,
+        "SAND": -5.041047647066944,
+        "PURR": -5.0633163487129424,
+        "kPEPE": -5.131742758224437,
+        "ME": -5.447926145052967,
+        "AAVE": -5.571289847301733,
+        "ORDI": -5.751664112451532,
+        "BERA": -6.152642627870272,
+        "NIL": -8.547069499398923
+      }
+    },
+    "q0.001_stop2p0_feetaker": {
+      "q": 0.001,
+      "stop": "2p0",
+      "fee": "taker",
+      "n_trades": 1272,
+      "final_equity": 860.317305814984,
+      "total_return": -0.139682694185016,
+      "cagr": -0.44948984797082914,
+      "cagr_n_days": 92,
+      "daily_pnl_mean": -1.5019644536023222,
+      "daily_pnl_median": -0.3594209224285123,
+      "share_positive_days": 0.3870967741935484,
+      "worst_day": -20.094032179281385,
+      "best_day": 13.037665944784408,
+      "max_drawdown": {
+        "max_dd_usd": -140.3832880352022,
+        "max_dd_pct": -0.14038328803520222,
+        "start": "2026-07-12",
+        "bottom": "2026-10-12",
+        "recovery": null,
+        "longest_underwater_days": 93
+      },
+      "sharpe": -5.632572517829322,
+      "sortino": -6.135614527482474,
+      "sharpe_sortino_n_days": 93,
+      "monthly": {
+        "8": {
+          "n_days": 93,
+          "total_pnl_usd": -139.68269418501598,
+          "total_pnl_pct": -0.139682694185016
+        },
+        "outside": {
+          "n_days": 0,
+          "total_pnl_usd": 0.0,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 0,
+      "win_rate": 0.5251572327044025,
+      "stop_share": 0.46776729559748426,
+      "timeout_share": 0.007075471698113208,
+      "liquidation_share": 0.0,
+      "mean_net": -0.10981343882469599,
+      "median_net": 0.18600832218565586,
+      "mean_return_on_margin": -0.002338674533310985,
+      "median_return_on_margin": 0.003933527420429171,
+      "mean_win": 0.7977177811196304,
+      "mean_loss": -1.104060986210161,
+      "profit_factor": 0.791569702532888,
+      "mean_holding_minutes": 100.78144654088051,
+      "total_fee": 189.51921537058993,
+      "fee_share_of_gross": 3.794156912724348,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 2.81058181413961,
+      "funding_paid_share_of_gross": 0.0562675842554695,
+      "total_funding_received": 2.696818989319867,
+      "funding_received_share_of_gross": 0.05399006317478726,
+      "total_gross": 49.95028401039639,
+      "peak_margin_used": 469.8847158600542,
+      "distance_to_liquidation_ratio": {
+        "min": 4.152762787338351,
+        "median": 12.088908432281638,
+        "date_of_min": "2026-09-07"
+      },
+      "mean_open_positions": 2.092109343125255,
+      "max_open_positions": 10,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "min_order": 161,
+        "book_full": 47
+      },
+      "by_fold": {
+        "8": {
+          "n": 1272,
+          "mean_net": -0.10981343882469599
+        }
+      },
+      "top10_pairs": {
+        "CASHCAT/MOODENG": 6.408292222307931,
+        "ZEC/kSHIB": 5.652092769362629,
+        "ENA/PYTH": 4.220918343577611,
+        "PUMP/SKR": 4.011756359693495,
+        "ZK/kPEPE": 3.9276555211540294,
+        "ALT/GRASS": 3.914569052493947,
+        "GRIFFAIN/WLD": 3.729795050725518,
+        "CC/ZORA": 3.5823246883139483,
+        "LIT/XLM": 3.5364460852493234,
+        "APT/UNI": 3.3716136808414108
+      },
+      "bottom10_pairs": {
+        "CC/FOGO": -3.3780184481227558,
+        "APEX/GALA": -3.436681747134754,
+        "DOT/GRASS": -3.6178964809797267,
+        "AAVE/XPL": -3.685186007354115,
+        "ETHFI/FET": -3.8022158099730614,
+        "APEX/AVAX": -3.9169164732670896,
+        "DASH/POL": -3.988310416976684,
+        "WIF/ZEN": -4.142349516709658,
+        "LIT/ZEC": -4.561216386396482,
+        "AAVE/AVAX": -5.433195921931716
+      },
+      "top10_coins": {
+        "NEO": 8.792602440532196,
+        "ADA": 8.702342636407641,
+        "kSHIB": 7.541772713538553,
+        "APT": 7.409835113243261,
+        "HMSTR": 6.750357977566686,
+        "RESOLV": 6.0025509497200735,
+        "SKR": 5.979790869260913,
+        "PUMP": 5.839406195168918,
+        "ALT": 5.786824159448571,
+        "ENA": 5.417126631187234
+      },
+      "bottom10_coins": {
+        "BNB": -9.166192838553005,
+        "STABLE": -9.4104413847378,
+        "APEX": -9.575120327666138,
+        "kLUNC": -9.575474648927356,
+        "FET": -9.753799631892345,
+        "W": -9.771715682611042,
+        "PURR": -10.310337278943754,
+        "POL": -10.870084177258136,
+        "AAVE": -12.237904407829381,
+        "NEAR": -12.29067094915077
+      }
+    },
+    "q0.001_stop2p0_feemaker": {
+      "q": 0.001,
+      "stop": "2p0",
+      "fee": "maker",
+      "n_trades": 1284,
+      "final_equity": 979.527782985878,
+      "total_return": -0.02047221701412194,
+      "cagr": -0.07878719410708934,
+      "cagr_n_days": 92,
+      "daily_pnl_mean": -0.2201313657432468,
+      "daily_pnl_median": 0.2795930827317079,
+      "share_positive_days": 0.5161290322580645,
+      "worst_day": -16.697715473088238,
+      "best_day": 19.56196638120275,
+      "max_drawdown": {
+        "max_dd_usd": -47.70308298133216,
+        "max_dd_pct": -0.04757403609312895,
+        "start": "2026-07-16",
+        "bottom": "2026-08-15",
+        "recovery": null,
+        "longest_underwater_days": 89
+      },
+      "sharpe": -0.7783359359070787,
+      "sortino": -0.9930392085423101,
+      "sharpe_sortino_n_days": 93,
+      "monthly": {
+        "8": {
+          "n_days": 93,
+          "total_pnl_usd": -20.472217014121952,
+          "total_pnl_pct": -0.02047221701412194
+        },
+        "outside": {
+          "n_days": 0,
+          "total_pnl_usd": 0.0,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 0,
+      "win_rate": 0.5241433021806854,
+      "stop_share": 0.4680685358255452,
+      "timeout_share": 0.00778816199376947,
+      "liquidation_share": 0.0,
+      "mean_net": -0.01594409424775606,
+      "median_net": 0.28485326352505574,
+      "mean_return_on_margin": -0.0002975397045918161,
+      "median_return_on_margin": 0.005882521894712087,
+      "mean_win": 0.9414481094953867,
+      "mean_loss": -1.0804130576200661,
+      "profit_factor": 0.9688346884321569,
+      "mean_holding_minutes": 100.70794392523365,
+      "total_fee": 67.9221925232215,
+      "fee_share_of_gross": 1.427093801517819,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 3.019575588148868,
+      "funding_paid_share_of_gross": 0.06344344086932295,
+      "total_funding_received": 2.8747872134891588,
+      "funding_received_share_of_gross": 0.06040133365321581,
+      "total_gross": 47.59476388376241,
+      "peak_margin_used": 496.1211930023676,
+      "distance_to_liquidation_ratio": {
+        "min": 4.1971946825836,
+        "median": 12.090880643497401,
+        "date_of_min": "2026-09-07"
+      },
+      "mean_open_positions": 2.1045359113324547,
+      "max_open_positions": 10,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "min_order": 146,
+        "book_full": 50
+      },
+      "by_fold": {
+        "8": {
+          "n": 1284,
+          "mean_net": -0.01594409424775606
+        }
+      },
+      "top10_pairs": {
+        "CASHCAT/MOODENG": 7.370755843129291,
+        "PUMP/SKR": 4.693045058908555,
+        "ENA/PYTH": 4.522951594611386,
+        "ZK/kPEPE": 4.415520342746438,
+        "CC/ZORA": 4.15457970893263,
+        "ALT/GRASS": 4.10556429706063,
+        "GRIFFAIN/WLD": 4.037463031990645,
+        "ALT/HMSTR": 3.9538366116158463,
+        "APT/UNI": 3.8928804413261338,
+        "LIT/XLM": 3.891182192814704
+      },
+      "bottom10_pairs": {
+        "CC/FOGO": -3.368282028930936,
+        "APEX/GALA": -3.4617998467845252,
+        "DOT/GRASS": -3.533136640073176,
+        "AAVE/XPL": -3.8412137962410617,
+        "ETHFI/FET": -3.945966948821665,
+        "DASH/POL": -4.1162785854320285,
+        "WIF/ZEN": -4.143992755039813,
+        "APEX/AVAX": -4.295257574237905,
+        "LIT/ZEC": -4.594059455840943,
+        "AAVE/AVAX": -5.0955386671674034
+      },
+      "top10_coins": {
+        "HMSTR": 17.915353828238725,
+        "TNSR": 11.9986015243165,
+        "ADA": 11.926496258238384,
+        "NEO": 11.68731350851807,
+        "APT": 11.371397085148663,
+        "ALT": 8.339842138188658,
+        "SKR": 8.187675129649408,
+        "ENA": 7.588234592722555,
+        "PUMP": 7.554630511638596,
+        "RESOLV": 7.00451781170943
+      },
+      "bottom10_coins": {
+        "FET": -8.315462365459087,
+        "FOGO": -8.345983984973477,
+        "kLUNC": -8.395232993878919,
+        "ME": -8.461882355647507,
+        "POL": -8.811210557208721,
+        "STABLE": -8.861157108601772,
+        "ZEC": -8.862695308001253,
+        "NEAR": -9.092212101067808,
+        "MON": -9.647817766253766,
+        "AAVE": -11.396509800698926
+      }
+    },
+    "q0.001_stopnone_feetaker": {
+      "q": 0.001,
+      "stop": "none",
+      "fee": "taker",
+      "n_trades": 1149,
+      "final_equity": 1083.2284087079495,
+      "total_return": 0.08322840870794956,
+      "cagr": 0.37324488439962744,
+      "cagr_n_days": 92,
+      "daily_pnl_mean": 0.89492912589193,
+      "daily_pnl_median": 0.7902255873441391,
+      "share_positive_days": 0.5698924731182796,
+      "worst_day": -34.22040452114584,
+      "best_day": 36.21660151494143,
+      "max_drawdown": {
+        "max_dd_usd": -57.2404146226703,
+        "max_dd_pct": -0.05588002618356742,
+        "start": "2026-07-22",
+        "bottom": "2026-07-26",
+        "recovery": "2026-09-07",
+        "longest_underwater_days": 46
+      },
+      "sharpe": 1.9282573928722953,
+      "sortino": 2.1707080446595226,
+      "sharpe_sortino_n_days": 93,
+      "monthly": {
+        "8": {
+          "n_days": 93,
+          "total_pnl_usd": 83.22840870794948,
+          "total_pnl_pct": 0.08322840870794956
+        },
+        "outside": {
+          "n_days": 0,
+          "total_pnl_usd": 0.0,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 1,
+      "win_rate": 0.7432550043516101,
+      "stop_share": 0.0,
+      "timeout_share": 0.25674499564838993,
+      "liquidation_share": 0.0,
+      "mean_net": 0.07243551671709585,
+      "median_net": 0.5201799442295609,
+      "mean_return_on_margin": 0.0014499863955599343,
+      "median_return_on_margin": 0.010125094274952786,
+      "mean_win": 0.858377035886895,
+      "mean_loss": -2.366790126706316,
+      "profit_factor": 1.1255896386671747,
+      "mean_holding_minutes": 265.4751958224543,
+      "total_fee": 190.02164471430004,
+      "fee_share_of_gross": 0.6930266322445344,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 8.989242137949137,
+      "funding_paid_share_of_gross": 0.0327846031153983,
+      "total_funding_received": 8.048325295645707,
+      "funding_received_share_of_gross": 0.02935299177752087,
+      "total_gross": 274.19097026454665,
+      "peak_margin_used": 546.2592402717812,
+      "distance_to_liquidation_ratio": {
+        "min": 4.2416194187723235,
+        "median": 8.809811786351357,
+        "date_of_min": "2026-09-08"
+      },
+      "mean_open_positions": 3.3357866188403578,
+      "max_open_positions": 10,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "book_full": 201,
+        "min_order": 130
+      },
+      "by_fold": {
+        "8": {
+          "n": 1149,
+          "mean_net": 0.07243551671709585
+        }
+      },
+      "top10_pairs": {
+        "CASHCAT/MOODENG": 7.282718910004167,
+        "MINA/kPEPE": 5.37537821864437,
+        "AAVE/XPL": 5.356836932816424,
+        "FET/STBL": 4.945987562256266,
+        "ALT/HMSTR": 4.818136163146531,
+        "PUMP/SKR": 4.738349516116587,
+        "APT/LIT": 4.658978021452507,
+        "HMSTR/SUSHI": 4.572459331719884,
+        "MET/REZ": 4.528053685959053,
+        "IO/NOT": 4.500588881619525
+      },
+      "bottom10_pairs": {
+        "ME/ORDI": -7.750808450036976,
+        "ME/SUI": -7.971209955010623,
+        "0G/kLUNC": -8.017058776267513,
+        "LIT/NEAR": -8.555744573884269,
+        "DOT/W": -8.663936689178591,
+        "DOT/GRASS": -9.425392846632992,
+        "ACE/SUSHI": -9.792152574403962,
+        "DASH/POL": -13.493836838055422,
+        "ACE/HEMI": -16.650060187610574,
+        "MET/W": -18.93459574427429
+      },
+      "top10_coins": {
+        "TNSR": 27.761049029440116,
+        "HMSTR": 22.031478485625815,
+        "CC": 18.813682836696525,
+        "SKR": 17.433509425056684,
+        "APT": 17.117900285150498,
+        "CASHCAT": 15.970553071611008,
+        "ADA": 13.161207018282216,
+        "REZ": 13.120677426555101,
+        "WIF": 12.779818140712226,
+        "MOODENG": 11.751821471857665
+      },
+      "bottom10_coins": {
+        "ETHFI": -15.500542162841569,
+        "LINEA": -16.484688706019753,
+        "APEX": -16.741786535975578,
+        "ME": -17.121213035396163,
+        "NEAR": -18.597185583877003,
+        "0G": -18.6189779296975,
+        "MET": -20.830739940584106,
+        "ACE": -21.637371526739834,
+        "HEMI": -24.06630508434786,
+        "kLUNC": -35.972490057571775
+      }
+    },
+    "q0.001_stopnone_feemaker": {
+      "q": 0.001,
+      "stop": "none",
+      "fee": "maker",
+      "n_trades": 1158,
+      "final_equity": 1229.953290104195,
+      "total_return": 0.22995329010419496,
+      "cagr": 1.2731250275147374,
+      "cagr_n_days": 92,
+      "daily_pnl_mean": 2.472616022625753,
+      "daily_pnl_median": 2.159403681506774,
+      "share_positive_days": 0.6344086021505376,
+      "worst_day": -35.45793147463655,
+      "best_day": 42.94132461667027,
+      "max_drawdown": {
+        "max_dd_usd": -53.07216559584981,
+        "max_dd_pct": -0.05119972654925195,
+        "start": "2026-07-22",
+        "bottom": "2026-07-26",
+        "recovery": "2026-08-07",
+        "longest_underwater_days": 16
+      },
+      "sharpe": 4.547621398277848,
+      "sortino": 5.053442066101221,
+      "sharpe_sortino_n_days": 93,
+      "monthly": {
+        "8": {
+          "n_days": 93,
+          "total_pnl_usd": 229.95329010419505,
+          "total_pnl_pct": 0.22995329010419496
+        },
+        "outside": {
+          "n_days": 0,
+          "total_pnl_usd": 0.0,
+          "total_pnl_pct": null,
+          "note": "exit spill / boundary days at or after fold 7's nominal end"
+        }
+      },
+      "n_months_positive": 1,
+      "win_rate": 0.7469775474956822,
+      "stop_share": 0.0,
+      "timeout_share": 0.25302245250431776,
+      "liquidation_share": 0.0,
+      "mean_net": 0.1985779707290003,
+      "median_net": 0.6651093433914602,
+      "mean_return_on_margin": 0.0036384223939649957,
+      "median_return_on_margin": 0.012224032662350105,
+      "mean_win": 1.016532110332509,
+      "mean_loss": -2.5577731487650874,
+      "profit_factor": 1.3392592751874963,
+      "mean_holding_minutes": 262.9041450777202,
+      "total_fee": 67.88917679500663,
+      "fee_share_of_gross": 0.22743705800060868,
+      "total_slippage": 0.0,
+      "slippage_share_of_gross": 0.0,
+      "total_funding_paid": 9.224291989134585,
+      "funding_paid_share_of_gross": 0.03090250804604925,
+      "total_funding_received": 8.570210472607798,
+      "funding_received_share_of_gross": 0.02871125484731595,
+      "total_gross": 298.4965484157157,
+      "peak_margin_used": 613.949970069153,
+      "distance_to_liquidation_ratio": {
+        "min": 4.242981264829959,
+        "median": 8.812600428629684,
+        "date_of_min": "2026-09-08"
+      },
+      "mean_open_positions": 3.329319904202618,
+      "max_open_positions": 10,
+      "n_liquidations": 0,
+      "liquidation_table": [],
+      "skip_counts": {
+        "book_full": 201,
+        "min_order": 121
+      },
+      "by_fold": {
+        "8": {
+          "n": 1158,
+          "mean_net": 0.1985779707290003
+        }
+      },
+      "top10_pairs": {
+        "CASHCAT/MOODENG": 8.331071286996103,
+        "AAVE/XPL": 6.338732805942087,
+        "MINA/kPEPE": 6.270410849953915,
+        "FET/STBL": 5.936361186803844,
+        "PUMP/SKR": 5.521191847657978,
+        "HMSTR/SUSHI": 5.432026403262297,
+        "APT/LIT": 5.221612891296577,
+        "MET/REZ": 5.191145354748927,
+        "IO/NOT": 5.155485545569305,
+        "WIF/ZEN": 5.008814336604212
+      },
+      "bottom10_pairs": {
+        "ME/ORDI": -8.421525425671271,
+        "LIT/NEAR": -8.531643130692736,
+        "0G/kLUNC": -8.559897013675132,
+        "ME/SUI": -8.661979736580221,
+        "DOT/W": -8.783137104059367,
+        "DOT/GRASS": -9.348221919735344,
+        "DASH/POL": -14.061964272987083,
+        "ACE/HEMI": -17.220157603658397,
+        "ACE/SUSHI": -17.550380692720942,
+        "MET/W": -20.61488160133886
+      },
+      "top10_coins": {
+        "TNSR": 38.122841448118024,
+        "HMSTR": 33.0403373684284,
+        "APT": 23.151884412920854,
+        "SKR": 20.72587723148102,
+        "WLFI": 20.392564987383256,
+        "CASHCAT": 18.89357709396286,
+        "WIF": 17.952221905410365,
+        "REZ": 16.879521358377538,
+        "CC": 16.74909080947103,
+        "ADA": 16.64602225756356
+      },
+      "bottom10_coins": {
+        "LINEA": -14.870921876629932,
+        "ETHFI": -15.30804437477396,
+        "GMT": -15.67994572479762,
+        "ME": -17.941518929118512,
+        "0G": -18.836698008916947,
+        "MET": -21.03650052491698,
+        "NEAR": -23.141790366980572,
+        "HEMI": -23.522385244734387,
+        "ACE": -29.020378759840575,
+        "kLUNC": -37.7436100244811
+      }
+    }
+  },
+  "ev_check": {
+    "q0.01_feetaker": null,
+    "q0.01_feemaker": null,
+    "q0.005_feetaker": null,
+    "q0.005_feemaker": null,
+    "q0.001_feetaker": null,
+    "q0.001_feemaker": null
+  },
+  "n_runs_above_start": 12,
+  "n_runs_total": 24,
+  "pooled_cost_share_diagnostic": {
+    "label": "cost-share diagnostic (OVERLAPPING accounts across the 24 runs, not a combined P&L)",
+    "n_trades": 108850,
+    "gross": 10410.200559415067,
+    "fee": 9912.838038331403,
+    "funding_net": -32.23990596920587,
+    "net": 529.6024270528694,
+    "fee_share_of_gross": 0.9522235409159485
+  },
+  "known_gaps": [
+    "slippage excluded by the user's choice (legs are small); costs are a lower bound and results an upper bound (optimistic).",
+    "max_leverage is today's snapshot (hindsight); limits were different in the past.",
+    "liquidation is checked on 1-minute closes; a move inside a minute can liquidate earlier.",
+    "maker fills are assumed to fill; in practice they may not.",
+    "the vault was opened once; no pass/fail rule; settings were frozen before any vault row was read. The model, pick and calibration caveats of this vault run are in the [HL-VAULT1] summary section."
+  ],
+  "equity_png_paths": [
+    "/Users/elvisobondo/Pair_Trading/research/dislocation_model/logs/s1_profit1_equity_q0.01_feetaker_vault_open10.png",
+    "/Users/elvisobondo/Pair_Trading/research/dislocation_model/logs/s1_profit1_equity_q0.01_feemaker_vault_open10.png",
+    "/Users/elvisobondo/Pair_Trading/research/dislocation_model/logs/s1_profit1_equity_q0.005_feetaker_vault_open10.png",
+    "/Users/elvisobondo/Pair_Trading/research/dislocation_model/logs/s1_profit1_equity_q0.005_feemaker_vault_open10.png",
+    "/Users/elvisobondo/Pair_Trading/research/dislocation_model/logs/s1_profit1_equity_q0.001_feetaker_vault_open10.png",
+    "/Users/elvisobondo/Pair_Trading/research/dislocation_model/logs/s1_profit1_equity_q0.001_feemaker_vault_open10.png"
+  ]
+}

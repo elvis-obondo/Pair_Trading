@@ -1,0 +1,72 @@
+[VREP] sha256 s1_vault_report.py 3f223f21d89e825417b8e3fed8a6d31a4b77e5a070a23fafc7dbcd19b4af405e
+[VREP] test_open10: cagr_n_days [202, 203], runs above the $1,000 start 18/24
+[VREP] test_open20: cagr_n_days [202, 203], runs above the $1,000 start 19/24
+[VREP] vault_open10: cagr_n_days [92], runs above the $1,000 start 12/24
+[VREP] vault_open20: cagr_n_days [92], runs above the $1,000 start 12/24
+[VREP] side-by-side table 'final equity ($)': 24 rows
+[VREP] side-by-side table 'return': 24 rows
+[VREP] side-by-side table 'CAGR (annualised from the window)': 24 rows
+[VREP] side-by-side table 'trades': 24 rows
+[VREP] side-by-side table 'win rate (exit at mu)': 24 rows
+[VREP] side-by-side table 'profit factor': 24 rows
+[VREP] side-by-side table 'Sharpe (daily, sqrt 365)': 24 rows
+[VREP] side-by-side table 'max drawdown': 24 rows
+[VREP] side-by-side table 'min distance to liquidation (account / maintenance)': 24 rows
+[VREP] side-by-side table 'fee share of gross': 24 rows
+[VREP] picks file sha256 15b4f56cd66ad6b2a4e2bc056f03cf03febb519459491310d4f7745e50e44a72 (expected 15b4f56cd66ad6b2a4e2bc056f03cf03febb519459491310d4f7745e50e44a72)
+[VAULT_LOADER] load_vault_events: 6,697,756 merged rows -> 1,280,088 with t0 >= VAULT_START -> 1,280,088 usable (label_gap=0), 0 label_gap=1
+[VREP] vault table: 1,280,088 events, t0 2026-07-13 00:00:00+00:00 .. 2026-10-13 13:30:00+00:00
+[VREP] all vault events: n=1,280,088 reach_10h 0.3263 chance_10h 0.4055 gap -0.0792
+[VREP] lift own top 1% by p_10h: n=12,801 (1.0000%) reach 0.6873 chance 0.7043 lift 0.0621 [0.0358, 0.0870]
+[VREP] lift Rule A picks q=0.01: n=13,947 (1.0895%) reach 0.6836 chance 0.7024 lift 0.0604 [0.0353, 0.0858]
+[VREP] lift Rule A picks q=0.005: n=7,188 (0.5615%) reach 0.7003 chance 0.7171 lift 0.0624 [0.0330, 0.0916]
+[VREP] lift Rule A picks q=0.001: n=1,480 (0.1156%) reach 0.7547 chance 0.7477 lift 0.0862 [0.0371, 0.1267]
+[VREP] test-month reference (s1d_report.json item1, top 1%): lift 0.0841 [0.0710, 0.0976], 8/8 folds positive
+[VREP] calib h=2 decile 0: n=128,009 pred 0.0242 actual 0.0125
+[VREP] calib h=2 decile 1: n=128,009 pred 0.0362 actual 0.0171
+[VREP] calib h=2 decile 2: n=128,009 pred 0.0445 actual 0.0235
+[VREP] calib h=2 decile 3: n=128,008 pred 0.0523 actual 0.0318
+[VREP] calib h=2 decile 4: n=128,009 pred 0.0603 actual 0.0418
+[VREP] calib h=2 decile 5: n=128,009 pred 0.0690 actual 0.0557
+[VREP] calib h=2 decile 6: n=128,008 pred 0.0793 actual 0.0725
+[VREP] calib h=2 decile 7: n=128,009 pred 0.0926 actual 0.0970
+[VREP] calib h=2 decile 8: n=128,009 pred 0.1124 actual 0.1365
+[VREP] calib h=2 decile 9: n=128,009 pred 0.1677 actual 0.2207
+[VREP] calib h=2 all vault events: n=1,280,088 pred 0.0739 actual 0.0709
+[VREP] calib h=2 own top 1% by p_2h: n=12,801 pred 0.2696 actual 0.3429
+[VREP] calib h=2 Rule A picks q=0.01: n=13,947 pred 0.2655 actual 0.3387
+[VREP] calib h=2 Rule A picks q=0.005: n=7,188 pred 0.2975 actual 0.3670
+[VREP] calib h=2 Rule A picks q=0.001: n=1,480 pred 0.3763 actual 0.4230
+[VREP] calib h=5 decile 0: n=128,009 pred 0.0667 actual 0.0478
+[VREP] calib h=5 decile 1: n=128,009 pred 0.0987 actual 0.0738
+[VREP] calib h=5 decile 2: n=128,009 pred 0.1205 actual 0.0986
+[VREP] calib h=5 decile 3: n=128,008 pred 0.1406 actual 0.1239
+[VREP] calib h=5 decile 4: n=128,009 pred 0.1608 actual 0.1529
+[VREP] calib h=5 decile 5: n=128,009 pred 0.1827 actual 0.1863
+[VREP] calib h=5 decile 6: n=128,008 pred 0.2080 actual 0.2244
+[VREP] calib h=5 decile 7: n=128,009 pred 0.2397 actual 0.2679
+[VREP] calib h=5 decile 8: n=128,009 pred 0.2855 actual 0.3290
+[VREP] calib h=5 decile 9: n=128,009 pred 0.3998 actual 0.4281
+[VREP] calib h=5 all vault events: n=1,280,088 pred 0.1903 actual 0.1933
+[VREP] calib h=5 own top 1% by p_5h: n=12,801 pred 0.5821 actual 0.5543
+[VREP] calib h=5 Rule A picks q=0.01: n=13,947 pred 0.5756 actual 0.5499
+[VREP] calib h=5 Rule A picks q=0.005: n=7,188 pred 0.6250 actual 0.5769
+[VREP] calib h=5 Rule A picks q=0.001: n=1,480 pred 0.7303 actual 0.6324
+[VREP] calib h=10 decile 0: n=128,009 pred 0.1218 actual 0.1086 p_cal 0.1186
+[VREP] calib h=10 decile 1: n=128,009 pred 0.1779 actual 0.1656 p_cal 0.1725
+[VREP] calib h=10 decile 2: n=128,009 pred 0.2150 actual 0.2126 p_cal 0.2123
+[VREP] calib h=10 decile 3: n=128,008 pred 0.2483 actual 0.2522 p_cal 0.2502
+[VREP] calib h=10 decile 4: n=128,009 pred 0.2814 actual 0.2965 p_cal 0.2890
+[VREP] calib h=10 decile 5: n=128,009 pred 0.3162 actual 0.3376 p_cal 0.3261
+[VREP] calib h=10 decile 6: n=128,008 pred 0.3556 actual 0.3842 p_cal 0.3666
+[VREP] calib h=10 decile 7: n=128,009 pred 0.4034 actual 0.4312 p_cal 0.4110
+[VREP] calib h=10 decile 8: n=128,009 pred 0.4692 actual 0.4928 p_cal 0.4688
+[VREP] calib h=10 decile 9: n=128,009 pred 0.6127 actual 0.5820 p_cal 0.5625
+[VREP] calib h=10 all vault events: n=1,280,088 pred 0.3202 actual 0.3263 p_cal 0.3178
+[VREP] calib h=10 own top 1% by p_10h: n=12,801 pred 0.8031 actual 0.6873 p_cal 0.6647
+[VREP] calib h=10 Rule A picks q=0.01: n=13,947 pred 0.7973 actual 0.6836 p_cal 0.6617
+[VREP] calib h=10 Rule A picks q=0.005: n=7,188 pred 0.8392 actual 0.7003 p_cal 0.6848
+[VREP] calib h=10 Rule A picks q=0.001: n=1,480 pred 0.9135 actual 0.7547 p_cal 0.7263
+[VREP] section written: /Users/elvisobondo/Pair_Trading/research/dislocation_model/logs/s1_vault_report_section.md (sha256 d05f9ef5325f843b212f8e1ab99c2904bafdd6dba32581b058bfcee0bd404005)
+[VREP] NUMBERS.md appended: /Users/elvisobondo/Pair_Trading/research/dislocation_model/NUMBERS.md
+[VREP] done

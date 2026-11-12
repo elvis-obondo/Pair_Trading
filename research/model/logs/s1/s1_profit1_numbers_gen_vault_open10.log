@@ -1,0 +1,39 @@
+[NUMGEN] start 2026-11-11T23:08:46.233140 RUN_TAG='vault_open10'
+[NUMGEN] q0.01_stop0p5_feetaker: final_equity=304.04 (engine-matched) total_return=-0.6960 n_trades=10187 win_rate=0.2754 profit_factor=0.6873 sharpe=-18.032 (n_days=93) max_dd_pct=-0.6960
+[NUMGEN] q0.01_stop0p5_feemaker: final_equity=942.96 (engine-matched) total_return=-0.0570 n_trades=10433 win_rate=0.2756 profit_factor=0.9813 sharpe=-0.814 (n_days=93) max_dd_pct=-0.1181
+[NUMGEN] q0.01_stop1p0_feetaker: final_equity=442.27 (engine-matched) total_return=-0.5577 n_trades=8742 win_rate=0.3976 profit_factor=0.7990 sharpe=-11.619 (n_days=93) max_dd_pct=-0.5577
+[NUMGEN] q0.01_stop1p0_feemaker: final_equity=1162.00 (engine-matched) total_return=0.1620 n_trades=8864 win_rate=0.3980 profit_factor=1.0416 sharpe=2.390 (n_days=93) max_dd_pct=-0.0747
+[NUMGEN] q0.01_stop2p0_feetaker: final_equity=762.61 (engine-matched) total_return=-0.2374 n_trades=6618 win_rate=0.5449 profit_factor=0.9280 sharpe=-3.488 (n_days=93) max_dd_pct=-0.2374
+[NUMGEN] q0.01_stop2p0_feemaker: final_equity=1465.61 (engine-matched) total_return=0.4656 n_trades=6662 win_rate=0.5416 profit_factor=1.1078 sharpe=5.360 (n_days=93) max_dd_pct=-0.0748
+[NUMGEN] q0.01_stopnone_feetaker: final_equity=1263.85 (engine-matched) total_return=0.2639 n_trades=3789 win_rate=0.7055 profit_factor=1.0977 sharpe=2.671 (n_days=93) max_dd_pct=-0.0897
+[NUMGEN] q0.01_stopnone_feemaker: final_equity=2068.41 (engine-matched) total_return=1.0684 n_trades=3832 win_rate=0.7101 profit_factor=1.3176 sharpe=8.099 (n_days=93) max_dd_pct=-0.0723
+[NUMGEN] q0.005_stop0p5_feetaker: final_equity=515.89 (engine-matched) total_return=-0.4841 n_trades=6050 win_rate=0.2737 profit_factor=0.6978 sharpe=-13.520 (n_days=93) max_dd_pct=-0.4841
+[NUMGEN] q0.005_stop0p5_feemaker: final_equity=974.05 (engine-matched) total_return=-0.0260 n_trades=6183 win_rate=0.2733 profit_factor=0.9852 sharpe=-0.451 (n_days=93) max_dd_pct=-0.0886
+[NUMGEN] q0.005_stop1p0_feetaker: final_equity=592.44 (engine-matched) total_return=-0.4076 n_trades=5659 win_rate=0.3960 profit_factor=0.7958 sharpe=-9.706 (n_days=93) max_dd_pct=-0.4076
+[NUMGEN] q0.005_stop1p0_feemaker: final_equity=1074.18 (engine-matched) total_return=0.0742 n_trades=5752 win_rate=0.3950 profit_factor=1.0317 sharpe=1.393 (n_days=93) max_dd_pct=-0.0621
+[NUMGEN] q0.005_stop2p0_feetaker: final_equity=731.46 (engine-matched) total_return=-0.2685 n_trades=4827 win_rate=0.5403 profit_factor=0.8853 sharpe=-4.673 (n_days=93) max_dd_pct=-0.2685
+[NUMGEN] q0.005_stop2p0_feemaker: final_equity=1216.83 (engine-matched) total_return=0.2168 n_trades=4878 win_rate=0.5396 profit_factor=1.0769 sharpe=3.014 (n_days=93) max_dd_pct=-0.0658
+[NUMGEN] q0.005_stopnone_feetaker: final_equity=1268.65 (engine-matched) total_return=0.2687 n_trades=3150 win_rate=0.7102 profit_factor=1.1349 sharpe=3.231 (n_days=93) max_dd_pct=-0.0810
+[NUMGEN] q0.005_stopnone_feemaker: final_equity=1777.04 (engine-matched) total_return=0.7770 n_trades=3156 win_rate=0.7113 profit_factor=1.3371 sharpe=7.741 (n_days=93) max_dd_pct=-0.0516
+[NUMGEN] q0.001_stop0p5_feetaker: final_equity=888.73 (engine-matched) total_return=-0.1113 n_trades=1300 win_rate=0.2838 profit_factor=0.7397 sharpe=-6.506 (n_days=93) max_dd_pct=-0.1120
+[NUMGEN] q0.001_stop0p5_feemaker: final_equity=1025.86 (engine-matched) total_return=0.0259 n_trades=1312 win_rate=0.2851 profit_factor=1.0717 sharpe=1.308 (n_days=93) max_dd_pct=-0.0373
+[NUMGEN] q0.001_stop1p0_feetaker: final_equity=883.13 (engine-matched) total_return=-0.1169 n_trades=1290 win_rate=0.3915 profit_factor=0.7797 sharpe=-6.091 (n_days=93) max_dd_pct=-0.1176
+[NUMGEN] q0.001_stop1p0_feemaker: final_equity=1016.54 (engine-matched) total_return=0.0165 n_trades=1303 win_rate=0.3914 profit_factor=1.0339 sharpe=0.824 (n_days=93) max_dd_pct=-0.0410
+[NUMGEN] q0.001_stop2p0_feetaker: final_equity=860.32 (engine-matched) total_return=-0.1397 n_trades=1272 win_rate=0.5252 profit_factor=0.7916 sharpe=-5.633 (n_days=93) max_dd_pct=-0.1404
+[NUMGEN] q0.001_stop2p0_feemaker: final_equity=979.53 (engine-matched) total_return=-0.0205 n_trades=1284 win_rate=0.5241 profit_factor=0.9688 sharpe=-0.778 (n_days=93) max_dd_pct=-0.0476
+[NUMGEN] q0.001_stopnone_feetaker: final_equity=1083.23 (engine-matched) total_return=0.0832 n_trades=1149 win_rate=0.7433 profit_factor=1.1256 sharpe=1.928 (n_days=93) max_dd_pct=-0.0559
+[NUMGEN] q0.001_stopnone_feemaker: final_equity=1229.95 (engine-matched) total_return=0.2300 n_trades=1158 win_rate=0.7470 profit_factor=1.3393 sharpe=4.548 (n_days=93) max_dd_pct=-0.0512
+[NUMGEN] runs ending above the $1000 start: 12/24
+[NUMGEN] pooled cost-share diagnostic (NOT a combined P&L): n_trades=108,850 gross=10,410.20 fee=9,912.84 funding_net=-32.24 net=529.60 fee_share_of_gross=0.9522
+[NUMGEN] equity PNG written: /Users/elvisobondo/Pair_Trading/research/dislocation_model/logs/s1_profit1_equity_q0.01_feetaker_vault_open10.png
+[NUMGEN] equity PNG written: /Users/elvisobondo/Pair_Trading/research/dislocation_model/logs/s1_profit1_equity_q0.01_feemaker_vault_open10.png
+[NUMGEN] equity PNG written: /Users/elvisobondo/Pair_Trading/research/dislocation_model/logs/s1_profit1_equity_q0.005_feetaker_vault_open10.png
+[NUMGEN] equity PNG written: /Users/elvisobondo/Pair_Trading/research/dislocation_model/logs/s1_profit1_equity_q0.005_feemaker_vault_open10.png
+[NUMGEN] equity PNG written: /Users/elvisobondo/Pair_Trading/research/dislocation_model/logs/s1_profit1_equity_q0.001_feetaker_vault_open10.png
+[NUMGEN] equity PNG written: /Users/elvisobondo/Pair_Trading/research/dislocation_model/logs/s1_profit1_equity_q0.001_feemaker_vault_open10.png
+[NUMGEN] report written: /Users/elvisobondo/Pair_Trading/research/model/logs/s1/s1_profit1_numbers_report_vault_open10.json
+[NUMGEN] NUMBERS.md section written: /Users/elvisobondo/Pair_Trading/research/dislocation_model/logs/s1_profit1_numbers_section_vault_open10.md
+[NUMGEN] NUMBERS.md section (full, 24-run splits) written: /Users/elvisobondo/Pair_Trading/research/dislocation_model/logs/s1_profit1_numbers_section_vault_open10.md
+[NUMGEN] NUMBERS.md excerpt written: /Users/elvisobondo/Pair_Trading/research/dislocation_model/logs/s1_profit1_numbers_excerpt_vault_open10.md
+[NUMGEN] NUMBERS.md appended: /Users/elvisobondo/Pair_Trading/research/dislocation_model/NUMBERS.md
+[NUMGEN] done  [3s]
