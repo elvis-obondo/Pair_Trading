@@ -1,0 +1,4 @@
+[TARGETS] vault: 7,109 distinct trades; wanted (coin, minute) pairs so far 419,807 (+419,807)
+[TARGETS] test: 15,043 distinct trades; wanted (coin, minute) pairs so far 1,291,668 (+871,861)
+[TARGETS] files 88,405; coins 195; days 298; wanted minutes in total 1,352,953; files by period: vault (day >= 20260713) 28,888, test 59,517; wrote /Users/elvisobondo/Pair_Trading/research/model/logs/costs1/l2_targets_priority.parquet
+[TARGETS] sha256 7baca996eb0dfbb5bfbdb1e8f7070859b699873145609a320e70662cb64df029

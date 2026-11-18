@@ -1,0 +1,4 @@
+[COSTS-WATCHER] watching i-09cd6dc2094399936 in us-east-2 every 60s
+[COSTS-WATCHER] 2026-11-14T05:35:34Z state: none -> running
+[COSTS-WATCHER] 2026-11-14T05:37:35Z state: running -> terminated
+[COSTS-WATCHER] terminal state 'terminated': results under s3://pair-trading-hl-289869684922/costs1/l2test/ (ec2.log and the job's outputs)

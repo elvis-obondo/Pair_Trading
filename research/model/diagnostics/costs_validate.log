@@ -1,0 +1,106 @@
+[VALID] raw books 940 coin-minutes; coins ['ADA', 'BOME', 'HMSTR', 'LINEA', 'NOT', 'TNSR', 'W', 'YZY', 'ZRO', 'kPEPE']; days ['20260115', '20260301', '20260320', '20260408', '20260415', '20260422', '20260801', '20260915', '20261005', '20261008', '20261009']
+[VALID] ASKED vs FOUND (unique coin-minutes asked from the 20 files, 960; found 940; the T3 denominator is the found rows):
+[VALID]   ADA 20260115: asked 60, found 60, missing 0
+[VALID]   ADA 20260415: asked 60, found 60, missing 0
+[VALID]   ADA 20260915: asked 60, found 60, missing 0
+[VALID]   BOME 20260320: asked 60, found 54, missing 6 (minutes of hour [15, 16, 17, 18, 19, 20])
+[VALID]   HMSTR 20260422: asked 60, found 60, missing 0
+[VALID]   HMSTR 20261009: asked 60, found 60, missing 0
+[VALID]   LINEA 20260915: asked 60, found 60, missing 0
+[VALID]   NOT 20261008: asked 60, found 60, missing 0
+[VALID]   TNSR 20261005: asked 60, found 60, missing 0
+[VALID]   W 20260801: asked 60, found 60, missing 0
+[VALID]   YZY 20260408: asked 60, found 58, missing 2 (minutes of hour [0, 59])
+[VALID]   ZRO 20260301: asked 60, found 54, missing 6 (minutes of hour [53, 54, 55, 56, 57, 58])
+[VALID]   ZRO 20260415: asked 60, found 60, missing 0
+[VALID]   kPEPE 20260115: asked 60, found 60, missing 0
+[VALID]   kPEPE 20260301: asked 60, found 54, missing 6 (minutes of hour [53, 54, 55, 56, 57, 58])
+[VALID]   kPEPE 20260801: asked 60, found 60, missing 0
+[VALID] folder that supplied the kept row (folder hour - own hour; 0 own hour, 1 next folder, -1 previous): {0: 940}; for the minutes 0 and 1 of hour H+1: {0: 31}
+[VALID (i)] REPRODUCTION: 940 of 940 raw rows equal the G8 row in every table field (1e-6 relative): 100.000%; T3 does not fire (threshold 99.9%)
+[VALID (ii)] legs (row x side x size) 13,160; exact walk beyond the 20 levels (NaN) 0 (0.0%); curve beyond-book 470 (3.6%)
+[VALID (ii)]   S=50: exact beyond 20 levels 0.0%; curve beyond-book 0.0%
+[VALID (ii)]   S=100: exact beyond 20 levels 0.0%; curve beyond-book 0.0%
+[VALID (ii)]   S=250: exact beyond 20 levels 0.0%; curve beyond-book 0.0%
+[VALID (ii)]   S=500: exact beyond 20 levels 0.0%; curve beyond-book 0.0%
+[VALID (ii)]   S=1000: exact beyond 20 levels 0.0%; curve beyond-book 0.0%
+[VALID (ii)]   S=2500: exact beyond 20 levels 0.0%; curve beyond-book 9.2%
+[VALID (ii)]   S=5000: exact beyond 20 levels 0.0%; curve beyond-book 15.8%
+[VALID] TIER MIX of the sample (books = coin-minutes; legs = books x 2 sides x 7 sizes): least liquid third: 412 books, 5768 legs, coins ['BOME', 'HMSTR', 'LINEA', 'NOT', 'TNSR', 'YZY']; middle third: 60 books, 840 legs, coins ['W']; most liquid third: 468 books, 6552 legs, coins ['ADA', 'ZRO', 'kPEPE']
+[VALID (ii)] BEYOND-BOOK LEGS (curve beyond-book; exact walk defined for all of them): 470 legs; sizes {2500: 173, 5000: 297}
+[VALID (ii)]   headline (remainder at last level): curve - exact, bp: mean 13943.671, median 1794.392, p90 57491.923, min 13.362, max 91613.212; curve below exact by > 0.01 bp: 0.0%; mean exact 73.47 bp, mean curve 14017.14 bp
+[VALID (ii)]      S=2500: n 173, mean 16191.410, median 1794.392, below exact 0.0%
+[VALID (ii)]      S=5000: n 297, mean 12634.382, median 328.865, below exact 0.0%
+[VALID (ii)]      tier least liquid third: n 470, mean 13943.671, median 1794.392, below exact 0.0%
+[VALID (ii)]   section 8 as written (whole leg at last level): curve - exact, bp: mean 20109.588, median 2946.709, p90 71922.615, min 81.823, max 114517.136; curve below exact by > 0.01 bp: 0.0%; mean exact 73.47 bp, mean curve 20183.06 bp
+[VALID (ii)]      S=2500: n 173, mean 27118.260, median 2994.467, below exact 0.0%
+[VALID (ii)]      S=5000: n 297, mean 16027.096, median 2590.600, below exact 0.0%
+[VALID (ii)]      tier least liquid third: n 470, mean 20109.588, median 2946.709, below exact 0.0%
+[VALID (ii)] legs where both are defined: 12,690 of 13,160
+[VALID (ii)] OVERSTATEMENT (curve - exact, bp) S=50: n 1,880, mean 0.157, median 0.000, p90 0.862, min -6.781; curve below exact by > 0.01 bp: 3.8%
+[VALID (ii)] OVERSTATEMENT (curve - exact, bp) S=100: n 1,880, mean 0.307, median 0.000, p90 1.457, min -7.228; curve below exact by > 0.01 bp: 4.9%
+[VALID (ii)] OVERSTATEMENT (curve - exact, bp) S=250: n 1,880, mean 0.543, median 0.000, p90 1.961, min -6.426; curve below exact by > 0.01 bp: 7.1%
+[VALID (ii)] OVERSTATEMENT (curve - exact, bp) S=500: n 1,880, mean 0.586, median 0.000, p90 1.513, min -7.186; curve below exact by > 0.01 bp: 9.6%
+[VALID (ii)] OVERSTATEMENT (curve - exact, bp) S=1000: n 1,880, mean 0.243, median 0.000, p90 0.000, min -0.000; curve below exact by > 0.01 bp: 0.0%
+[VALID (ii)] OVERSTATEMENT (curve - exact, bp) S=2500: n 1,707, mean 2.244, median 0.527, p90 7.385, min -3.875; curve below exact by > 0.01 bp: 19.4%
+[VALID (ii)] OVERSTATEMENT (curve - exact, bp) S=5000: n 1,583, mean 3.587, median 0.535, p90 12.882, min -3.910; curve below exact by > 0.01 bp: 28.6%
+[VALID (ii)]   tier least liquid third, S=250: n 824, mean 1.166, median 0.000, p90 5.686, below exact 8.0%
+[VALID (ii)]   tier least liquid third, S=500: n 824, mean 1.358, median 0.000, p90 5.189, below exact 9.8%
+[VALID (ii)]   tier least liquid third, S=1000: n 824, mean 0.538, median 0.000, p90 1.182, below exact 0.0%
+[VALID (ii)]   tier middle third, S=250: n 120, mean 0.482, median 0.000, p90 3.046, below exact 14.2%
+[VALID (ii)]   tier middle third, S=500: n 120, mean -0.266, median 0.000, p90 0.474, below exact 21.7%
+[VALID (ii)]   tier middle third, S=1000: n 120, mean 0.076, median 0.000, p90 0.000, below exact 0.0%
+[VALID (ii)]   tier most liquid third, S=250: n 936, mean 0.002, median 0.000, p90 0.147, below exact 5.3%
+[VALID (ii)]   tier most liquid third, S=500: n 936, mean 0.014, median 0.000, p90 0.145, below exact 7.9%
+[VALID (ii)]   tier most liquid third, S=1000: n 936, mean 0.005, median -0.000, p90 0.000, below exact 0.0%
+[VALID (ii)]   coin ADA (all S): n 2520, mean -0.047, median 0.000, mean exact 1.00 bp, mean curve 0.96 bp
+[VALID (ii)]      coin ADA, S=250: n 360, mean -0.005, median 0.000, p90 0.086, below exact 7.2%
+[VALID (ii)]      coin ADA, S=500: n 360, mean -0.003, median 0.000, p90 0.102, below exact 9.7%
+[VALID (ii)]   coin BOME (all S): n 756, mean 1.534, median 0.000, mean exact 14.85 bp, mean curve 16.39 bp
+[VALID (ii)]      coin BOME, S=250: n 108, mean 0.603, median -0.000, p90 0.000, below exact 0.0%
+[VALID (ii)]      coin BOME, S=500: n 108, mean 0.622, median -0.000, p90 0.000, below exact 0.0%
+[VALID (ii)]   coin HMSTR (all S): n 1378, mean 1.515, median 0.000, mean exact 51.34 bp, mean curve 52.85 bp
+[VALID (ii)]      coin HMSTR, S=250: n 240, mean 1.432, median 0.000, p90 7.422, below exact 0.0%
+[VALID (ii)]      coin HMSTR, S=500: n 240, mean 1.434, median 0.000, p90 9.226, below exact 2.1%
+[VALID (ii)]   coin LINEA (all S): n 840, mean 1.495, median 0.295, mean exact 6.94 bp, mean curve 8.43 bp
+[VALID (ii)]      coin LINEA, S=250: n 120, mean -0.370, median 0.182, p90 1.142, below exact 45.0%
+[VALID (ii)]      coin LINEA, S=500: n 120, mean 0.478, median 0.540, p90 2.309, below exact 33.3%
+[VALID (ii)]   coin NOT (all S): n 839, mean 3.272, median 0.000, mean exact 15.00 bp, mean curve 18.27 bp
+[VALID (ii)]      coin NOT, S=250: n 120, mean 1.342, median 0.000, p90 5.881, below exact 0.0%
+[VALID (ii)]      coin NOT, S=500: n 120, mean 2.128, median 0.000, p90 9.608, below exact 0.8%
+[VALID (ii)]   coin TNSR (all S): n 803, mean 3.952, median 1.836, mean exact 12.31 bp, mean curve 16.27 bp
+[VALID (ii)]      coin TNSR, S=250: n 120, mean 1.504, median 1.441, p90 3.431, below exact 10.0%
+[VALID (ii)]      coin TNSR, S=500: n 120, mean 1.486, median 1.047, p90 3.952, below exact 24.2%
+[VALID (ii)]   coin W (all S): n 840, mean 1.389, median 0.000, mean exact 10.68 bp, mean curve 12.07 bp
+[VALID (ii)]      coin W, S=250: n 120, mean 0.482, median 0.000, p90 3.046, below exact 14.2%
+[VALID (ii)]      coin W, S=500: n 120, mean -0.266, median 0.000, p90 0.474, below exact 21.7%
+[VALID (ii)]   coin YZY (all S): n 682, mean 1.651, median 0.123, mean exact 20.49 bp, mean curve 22.15 bp
+[VALID (ii)]      coin YZY, S=250: n 116, mean 2.198, median 0.123, p90 5.784, below exact 0.0%
+[VALID (ii)]      coin YZY, S=500: n 116, mean 1.872, median 0.247, p90 5.245, below exact 5.2%
+[VALID (ii)]   coin ZRO (all S): n 1596, mean 0.360, median 0.000, mean exact 2.21 bp, mean curve 2.57 bp
+[VALID (ii)]      coin ZRO, S=250: n 228, mean 0.037, median 0.000, p90 0.274, below exact 7.0%
+[VALID (ii)]      coin ZRO, S=500: n 228, mean 0.059, median 0.000, p90 0.307, below exact 12.3%
+[VALID (ii)]   coin kPEPE (all S): n 2436, mean -0.086, median 0.000, mean exact 1.92 bp, mean curve 1.84 bp
+[VALID (ii)]      coin kPEPE, S=250: n 348, mean -0.013, median 0.000, p90 0.069, below exact 2.3%
+[VALID (ii)]      coin kPEPE, S=500: n 348, mean 0.003, median -0.000, p90 0.000, below exact 3.2%
+[VALID T4]   S=50: legs below 71 of 1,880 (3.8%); mean shortfall 1.547 bp, worst 6.781 bp
+[VALID T4]   S=100: legs below 92 of 1,880 (4.9%); mean shortfall 1.870 bp, worst 7.228 bp
+[VALID T4]   S=250: legs below 133 of 1,880 (7.1%); mean shortfall 1.626 bp, worst 6.426 bp
+[VALID T4]   S=500: legs below 181 of 1,880 (9.6%); mean shortfall 1.197 bp, worst 7.186 bp
+[VALID T4]   S=1000: legs below 0 of 1,880 (0.0%); mean shortfall 0.000 bp, worst 0.000 bp
+[VALID T4]   S=2500: legs below 331 of 1,707 (19.4%); mean shortfall 0.545 bp, worst 3.875 bp
+[VALID T4]   S=5000: legs below 453 of 1,583 (28.6%); mean shortfall 0.736 bp, worst 3.910 bp
+[VALID T4]   tier least liquid third, S<=1000: legs below 253 of 4,120 (6.1%); mean shortfall 1.668 bp, worst 7.186 bp
+[VALID T4]   tier least liquid third, all S: legs below 284 of 5,298 (5.4%); mean shortfall 1.667 bp, worst 7.186 bp
+[VALID T4]   tier middle third, S<=1000: legs below 54 of 600 (9.0%); mean shortfall 3.077 bp, worst 7.228 bp
+[VALID T4]   tier middle third, all S: legs below 62 of 840 (7.4%); mean shortfall 2.757 bp, worst 7.228 bp
+[VALID T4]   tier most liquid third, S<=1000: legs below 170 of 4,680 (3.6%); mean shortfall 0.745 bp, worst 4.451 bp
+[VALID T4]   tier most liquid third, all S: legs below 915 of 6,552 (14.0%); mean shortfall 0.639 bp, worst 4.451 bp
+[VALID T1] mean overstatement S=250 0.543 bp, S=500 0.586 bp (limit 1.0); medians S<=1000 50: 0.000, 100: 0.000, 250: 0.000, 500: 0.000, 1000: 0.000  ->  T1 does not fire
+[VALID T3] reproduction 100.000% (limit 99.9%)  ->  T3 does not fire
+[VALID T4] curve below exact by > 0.01 bp: S<=1000 5.1% of 9,400 legs, all S 9.9% of 12,690 legs (limit 5%)  ->  T4 FIRES; the word 'conservative' is withdrawn for the table-based straight-line curve
+[VALID] calibration bucket 0 (S from 0 USD): n 1880, median exact/curve 1.000
+[VALID] calibration bucket 1 (S from 100 USD): n 3760, median exact/curve 1.000
+[VALID] calibration bucket 2 (S from 500 USD): n 1880, median exact/curve 1.000
+[VALID] calibration bucket 3 (S from 1000 USD): n 5170, median exact/curve 0.994
+[VALID] TRIGGERS fired so far: ['T4'] (T2 needs the calibrated costs_analysis run and --t2). A fired trigger means: ask the user for the full 88,405-file raw pull (cost range laptop $1.46-$3.20, EC2 $0.17-$0.36 plus instance time).

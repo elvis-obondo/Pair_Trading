@@ -1,0 +1,11 @@
+[B9] shard 0of1: 3 files in the shard, 3 to do (resume skipped 0), workers 2
+[B9] done 3 files, 0.000 GB compressed downloaded, in 0s
+[B9 MERGE] 1 shard files, 6 rows, 1 duplicate (coin, minute) rows dropped (lowest snap_off_s kept), 5 unique rows
+[B9 MERGE] boundary minutes (minute of hour 0, 1, 58, 59): folders that held each (coin, minute) as sets of (folder hour - own hour): {(0,): 3, (-1, 0): 1}
+[B9 MERGE] boundary minutes, folder that supplied the kept (minimum) snapshot, folder hour - own hour: {0: 3, -1: 1}
+[B9 MERGE] snap_off_s over all kept rows: median 1.00, p90 5.00, max 5.00
+     coin       day  hour  bytes  n_snapshots  n_wanted  n_found  n_nonmonotone   status
+0     TST  20260801     5    401            5         5        4              1       ok
+1     TST  20260801     6    278            2         2        2              0       ok
+2  NOFILE  20260801     5      0            0         1        0              0  missing
+[SELFTEST] PASS: minimum-time snapshot per minute (unsorted file), NaN padding, boundary minute merged to the lowest snap_off_s with its source folder, absent minute counted (4 found of 5 wanted in folder 5), missing file indexed

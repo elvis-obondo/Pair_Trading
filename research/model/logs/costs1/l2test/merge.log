@@ -1,0 +1,4 @@
+[B9 MERGE] 1 shard files, 947 rows, 7 duplicate (coin, minute) rows dropped (lowest snap_off_s kept), 940 unique rows
+[B9 MERGE] boundary minutes (minute of hour 0, 1, 58, 59): folders that held each (coin, minute) as sets of (folder hour - own hour): {(0,): 53, (0, 1): 7}
+[B9 MERGE] boundary minutes, folder that supplied the kept (minimum) snapshot, folder hour - own hour: {0: 60}
+[B9 MERGE] snap_off_s over all kept rows: median 0.45, p90 4.15, max 11.17

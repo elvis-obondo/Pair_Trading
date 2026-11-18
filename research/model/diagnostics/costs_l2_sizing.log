@@ -1,0 +1,22 @@
+[SIZING] file set rule, bytes per file and prices: see the docstring. No AWS call was made.
+[SIZING] pilot 2025-07-15: 2.613 GB / 4,824 files = 0.542 MB per file
+[SIZING] pilot 2025-10-10: 2.642 GB / 5,198 files = 0.508 MB per file
+[SIZING] pilot 2026-03-01: 1.789 GB / 4,632 files = 0.386 MB per file
+[SIZING] pilot 2026-09-15: 0.467 GB / 4,272 files = 0.109 MB per file
+[SIZING] egress $/GB: laptop 0.0905, EC2 us-east-2 cross-region 0.0103; pilot throughput 4.45 files/s per process
+[SIZING] exit window [exit-1, exit+1] priority vault: 20,724 trades, 7,109 distinct events, 27,486 coin-hour files, 177 coins, 94 days; compressed 3.0 to 8.4 GB
+[SIZING] exit window [exit-1, exit+1] priority test: 43,581 trades, 15,043 distinct events, 56,799 coin-hour files, 192 coins, 205 days; compressed 12.4 to 25.4 GB
+[SIZING] exit window +1 priority both sides: 84,285 files, 15.4 to 33.8 GB compressed; egress to laptop $1.40 to $3.06; EC2 us-east-2 cross-region $0.16 to $0.35 (instance time extra); one process at the pilot rate 5.3 h, 16 processes 0.33 h
+[SIZING] exit window [exit-1, exit+1] all48 vault: 247,533 trades, 13,070 distinct events, 46,601 coin-hour files, 177 coins, 94 days; compressed 5.1 to 14.4 GB
+[SIZING] exit window [exit-1, exit+1] all48 test: 532,576 trades, 30,680 distinct events, 101,502 coin-hour files, 192 coins, 205 days; compressed 23.4 to 46.1 GB
+[SIZING] exit window +1 all48 both sides: 148,103 files, 28.5 to 60.5 GB compressed; egress to laptop $2.58 to $5.48; EC2 us-east-2 cross-region $0.29 to $0.62 (instance time extra); one process at the pilot rate 9.2 h, 16 processes 0.58 h
+[SIZING] exit window [exit-1, exit+15] priority vault: 20,724 trades, 7,109 distinct events, 28,717 coin-hour files, 177 coins, 94 days; compressed 3.1 to 8.8 GB
+[SIZING] exit window [exit-1, exit+15] priority test: 43,581 trades, 15,043 distinct events, 59,200 coin-hour files, 192 coins, 205 days; compressed 12.9 to 26.5 GB
+[SIZING] exit window +15 priority both sides: 87,917 files, 16.1 to 35.3 GB compressed; egress to laptop $1.46 to $3.20; EC2 us-east-2 cross-region $0.17 to $0.36 (instance time extra); one process at the pilot rate 5.5 h, 16 processes 0.34 h
+[SIZING] exit window [exit-1, exit+15] all48 vault: 247,533 trades, 13,070 distinct events, 49,889 coin-hour files, 177 coins, 94 days; compressed 5.4 to 15.4 GB
+[SIZING] exit window [exit-1, exit+15] all48 test: 532,576 trades, 30,680 distinct events, 108,169 coin-hour files, 192 coins, 205 days; compressed 24.9 to 49.1 GB
+[SIZING] exit window +15 all48 both sides: 158,058 files, 30.4 to 64.5 GB compressed; egress to laptop $2.75 to $5.84; EC2 us-east-2 cross-region $0.31 to $0.67 (instance time extra); one process at the pilot rate 9.9 h, 16 processes 0.62 h
+[VAULT_LOADER] load_vault_events: 6,697,756 merged rows -> 1,280,088 with t0 >= VAULT_START -> 1,280,088 usable (label_gap=0), 0 label_gap=1
+[HARNESS] load_search_events: 6,697,756 merged rows -> 5,405,478 after the date/gap-day filter -> 5,378,429 after dropping 27,049 label_gap=1 rows
+[SIZING] vault priority runs, larger leg USD: median 134, p90 281, max 1,694; share of trades with a larger leg above $1,000: 0.1%; above $500: 1.7%
+[SIZING] test priority runs, larger leg USD: median 233, p90 910, max 8,419; share of trades with a larger leg above $1,000: 8.3%; above $500: 19.1%

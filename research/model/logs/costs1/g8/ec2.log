@@ -1,0 +1,41 @@
++ OUT=s3://pair-trading-hl-289869684922/costs1/g8
++ trap up EXIT
++ dnf install -y -q python3.11 python3.11-pip
+
+Installed:
+  mpdecimal-2.5.1-3.amzn2023.0.3.aarch64                                        
+  python3.11-3.11.18-1.amzn2023.0.1.aarch64                                     
+  python3.11-libs-3.11.18-1.amzn2023.0.1.aarch64                                
+  python3.11-pip-22.3.1-2.amzn2023.0.15.noarch                                  
+  python3.11-pip-wheel-22.3.1-2.amzn2023.0.15.noarch                            
+  python3.11-setuptools-65.5.1-2.amzn2023.0.7.noarch                            
+  python3.11-setuptools-wheel-65.5.1-2.amzn2023.0.7.noarch                      
+
++ python3.11 -m pip install -q pandas pyarrow numpy
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
++ mkdir -p /w
++ cd /w
++ aws s3 cp s3://pair-trading-hl-289869684922/costs1/code/costs_g8_extract.py . --region ap-northeast-1 --only-show-errors
++ aws s3 cp s3://pair-trading-hl-289869684922/costs1/code/l2_targets_priority.parquet . --region ap-northeast-1 --only-show-errors
++ echo '062ebd2066785e63ac44e14fa599ef2613f49e0fe1f47229fb2d90f55c45f952  costs_g8_extract.py'
++ sha256sum -c -
+costs_g8_extract.py: OK
++ echo '7baca996eb0dfbb5bfbdb1e8f7070859b699873145609a320e70662cb64df029  l2_targets_priority.parquet'
++ sha256sum -c -
+l2_targets_priority.parquet: OK
++ date -u +%FT%TZ
++ timeout 1800 python3.11 -u costs_g8_extract.py l2_targets_priority.parquet g8_rows.parquet --workdir /w/tmp
++ RC=0
++ echo '[G8X] exit status 0 (124 = timeout)'
++ echo 'extract exit 0'
+extract exit 0
++ date -u +%FT%TZ
++ aws s3 cp g8_rows.parquet s3://pair-trading-hl-289869684922/costs1/g8/g8_rows.parquet --region ap-northeast-1 --only-show-errors
++ aws s3 cp extract.log s3://pair-trading-hl-289869684922/costs1/g8/extract.log --region ap-northeast-1 --only-show-errors
++ aws s3 cp start.txt s3://pair-trading-hl-289869684922/costs1/g8/start.txt --region ap-northeast-1 --only-show-errors
++ aws s3 cp end.txt s3://pair-trading-hl-289869684922/costs1/g8/end.txt --region ap-northeast-1 --only-show-errors
++ up
++ aws s3 cp /var/log/g8x.log s3://pair-trading-hl-289869684922/costs1/g8/ec2.log --region ap-northeast-1 --only-show-errors
++ shutdown -h now
++ up
++ aws s3 cp /var/log/g8x.log s3://pair-trading-hl-289869684922/costs1/g8/ec2.log --region ap-northeast-1 --only-show-errors

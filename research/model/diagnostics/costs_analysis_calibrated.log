@@ -1,0 +1,405 @@
+[COSTS] variant: calibrated; scale {'edges': [100, 500, 1000], 'ratio': [0.9999999696731983, 0.9999999699593336, 0.9999999774932979, 0.9935071312419954]}
+[COSTS] EXTRACT RECEIPT: [G8X] done: days with a missing file 7; wanted 1,291,668, found 1,233,079 (95.46%); wrote g8_rows.parquet (91.3 MB) in 215s; logged wanted pairs 1,291,668 = targets' unique pairs 1,291,668; day files missing: 7 ['20260708', '20260712', '20260713', '20260714', '20260715', '20260716', '20260717']
+[COSTS] G8 rows 1,233,079; snap_off_s by period (R5): test months median 0.32s, p90 1.11s; vault median 2.69s, p90 4.84s
+[COSTS] ctxs proxy rows loaded for wanted minutes: 1,203,431 of 1,291,668 wanted (coin, minute) pairs
+[COSTS] timing: load extract, G8 table and ctxs proxy took 126.7s
+[VAULT_LOADER] load_vault_events: 6,697,756 merged rows -> 1,280,088 with t0 >= VAULT_START -> 1,280,088 usable (label_gap=0), 0 label_gap=1
+[HARNESS] load_search_events: 6,697,756 merged rows -> 5,405,478 after the date/gap-day filter -> 5,378,429 after dropping 27,049 label_gap=1 rows
+[COSTS] timing: load geometry, cleaned prices and 1-minute bars took 234.4s
+[COSTS] run vault open10 maker: saved net identity holds (max diff 0.0e+00); entry/exit slippage all 0; exit reasons {'mu': 2721, 'timeout': 1111}
+[COSTS] run vault open10 maker: 3,832 trades; gross reproduced from cleaned prices: max abs diff $0.00e+00, trades off by > $1e-6: 0
+[COSTS] run vault open10 taker: saved net identity holds (max diff 0.0e+00); entry/exit slippage all 0; exit reasons {'mu': 2673, 'timeout': 1116}
+[COSTS] run vault open10 taker: 3,789 trades; gross reproduced from cleaned prices: max abs diff $0.00e+00, trades off by > $1e-6: 0
+[COSTS] run vault open20 maker: saved net identity holds (max diff 0.0e+00); entry/exit slippage all 0; exit reasons {'mu': 4627, 'timeout': 1963}
+[COSTS] run vault open20 maker: 6,590 trades; gross reproduced from cleaned prices: max abs diff $0.00e+00, trades off by > $1e-6: 0
+[COSTS] run vault open20 taker: saved net identity holds (max diff 0.0e+00); entry/exit slippage all 0; exit reasons {'mu': 4548, 'timeout': 1965}
+[COSTS] run vault open20 taker: 6,513 trades; gross reproduced from cleaned prices: max abs diff $0.00e+00, trades off by > $1e-6: 0
+[COSTS] run test open10 maker: saved net identity holds (max diff 0.0e+00); entry/exit slippage all 0; exit reasons {'mu': 5714, 'timeout': 2355}
+[COSTS] run test open10 maker: 8,069 trades; gross reproduced from cleaned prices: max abs diff $0.00e+00, trades off by > $1e-6: 0
+[COSTS] run test open10 taker: saved net identity holds (max diff 0.0e+00); entry/exit slippage all 0; exit reasons {'mu': 5707, 'timeout': 2371}
+[COSTS] run test open10 taker: 8,078 trades; gross reproduced from cleaned prices: max abs diff $0.00e+00, trades off by > $1e-6: 0
+[COSTS] run test open20 maker: saved net identity holds (max diff 0.0e+00); entry/exit slippage all 0; exit reasons {'mu': 9620, 'timeout': 4115}
+[COSTS] run test open20 maker: 13,735 trades; gross reproduced from cleaned prices: max abs diff $0.00e+00, trades off by > $1e-6: 0
+[COSTS] run test open20 taker: saved net identity holds (max diff 0.0e+00); entry/exit slippage all 0; exit reasons {'mu': 9584, 'timeout': 4115}
+[COSTS] run test open20 taker: 13,699 trades; gross reproduced from cleaned prices: max abs diff $0.00e+00, trades off by > $1e-6: 0
+[COSTS] timing: prepare runs (legs, reference prices, gross receipt) took 7.7s
+[COSTS] tiers vault: 177 coins; median daily traded notional by tier: least liquid third $119,327, middle third $394,970, most liquid third $4,293,723
+[COSTS] tiers test: 192 coins; median daily traded notional by tier: least liquid third $117,187, middle third $286,597, most liquid third $2,594,029
+[COSTS] RECEIPT references read from research/model/logs/s1/s1_vault_docx_partc.json (script_sha256 f854f950b26a): break-evens and tier share below; keys printed with each
+[COSTS] RECEIPT (Part C arithmetic, zero-cost saved trades): break-even extra slippage bp per fill = sum(net) / (2 x sum(notional)) x 1e4
+[COSTS]   vault open10 maker: 5.43 bp (Part C 5.43; sections[5] table 'Vault, max_open 10: net PnL with extra slippage per fill (arithmetic on the saved trades)' row q 0.01 / no stop / maker, column 'break-even extra slippage (bp per fill)')  OK
+[COSTS]   vault open10 taker: 1.77 bp (Part C 1.77; sections[5] table 'Vault, max_open 10: net PnL with extra slippage per fill (arithmetic on the saved trades)' row q 0.01 / no stop / taker, column 'break-even extra slippage (bp per fill)')  OK
+[COSTS]   vault open20 maker: 5.31 bp (Part C 5.31; sections[5] table 'Vault, max_open 20: net PnL with extra slippage per fill (arithmetic on the saved trades)' row q 0.01 / no stop / maker, column 'break-even extra slippage (bp per fill)')  OK
+[COSTS]   vault open20 taker: 1.62 bp (Part C 1.62; sections[5] table 'Vault, max_open 20: net PnL with extra slippage per fill (arithmetic on the saved trades)' row q 0.01 / no stop / taker, column 'break-even extra slippage (bp per fill)')  OK
+[COSTS]   test open10 maker: 5.87 bp (Part C 5.87; sections[5] table 'Test months, max_open 10: net PnL with extra slippage per fill (arithmetic on the saved trades)' row q 0.01 / no stop / maker, column 'break-even extra slippage (bp per fill)')  OK
+[COSTS]   test open10 taker: 2.87 bp (Part C 2.87; sections[5] table 'Test months, max_open 10: net PnL with extra slippage per fill (arithmetic on the saved trades)' row q 0.01 / no stop / taker, column 'break-even extra slippage (bp per fill)')  OK
+[COSTS]   test open20 maker: 5.22 bp (Part C 5.22; sections[5] table 'Test months, max_open 20: net PnL with extra slippage per fill (arithmetic on the saved trades)' row q 0.01 / no stop / maker, column 'break-even extra slippage (bp per fill)')  OK
+[COSTS]   test open20 taker: 2.71 bp (Part C 2.71; sections[5] table 'Test months, max_open 20: net PnL with extra slippage per fill (arithmetic on the saved trades)' row q 0.01 / no stop / taker, column 'break-even extra slippage (bp per fill)')  OK
+[COSTS] RECEIPT tier share of zero-cost net, vault maker open10: least liquid 82.9% (Part C 82.9%; table 'Vault, q 1% / no stop / maker fees, open10: by coin liquidity tier (te...' row 'least liquid third' column 'share of run net'), middle 6.7%, most liquid 10.4%
+[COSTS] (a) VOLUME vs DEPTH: legs vs the coin's traded notional in the entry minute, and the walk (curve above half-spread) on sqrt(leg / minute notional) for taker entry legs with an own-minute book
+[COSTS]   vault: legs with a minute notional 6,144; leg / minute notional median 0.80, share of legs above 10% of the minute's notional 74.8%, above 100% 46.8%; fit on 5,750 legs with a book walk: walk_bp = 0.26 + 0.14 x sqrt(leg/notional), R^2 0.012, rank correlation 0.290
+[COSTS]      least liquid third: n 2,066, slope 0.05, R^2 0.001, rank corr 0.103
+[COSTS]      middle third: n 1,844, slope 0.07, R^2 0.002, rank corr 0.158
+[COSTS]      most liquid third: n 1,840, slope 0.02, R^2 0.004, rank corr 0.166
+[COSTS]   test: legs with a minute notional 11,039; leg / minute notional median 1.04, share of legs above 10% of the minute's notional 76.9%, above 100% 50.5%; fit on 10,626 legs with a book walk: walk_bp = 0.30 + 0.01 x sqrt(leg/notional), R^2 0.001, rank correlation 0.132
+[COSTS]      least liquid third: n 3,428, slope 0.01, R^2 0.000, rank corr 0.084
+[COSTS]      middle third: n 3,317, slope 0.01, R^2 0.001, rank corr 0.101
+[COSTS]      most liquid third: n 3,881, slope 0.01, R^2 0.000, rank corr 0.140
+[COSTS] windows prepared for vault open10 maker: legs with tick unknown (strict = lenient): 0
+[COSTS] windows prepared for vault open10 taker: legs with tick unknown (strict = lenient): 0
+[COSTS] windows prepared for vault open20 maker: legs with tick unknown (strict = lenient): 0
+[COSTS] windows prepared for vault open20 taker: legs with tick unknown (strict = lenient): 0
+[COSTS] windows prepared for test open10 maker: legs with tick unknown (strict = lenient): 0
+[COSTS] windows prepared for test open10 taker: legs with tick unknown (strict = lenient): 0
+[COSTS] windows prepared for test open20 maker: legs with tick unknown (strict = lenient): 0
+[COSTS] windows prepared for test open20 taker: legs with tick unknown (strict = lenient): 0
+[COSTS] timing: prepare maker/exit fill windows (all 8 runs) took 18.7s
+[COSTS] RECEIPT S1: share of first-fill bars (W = 5) in which the coin's traded notional is 0 or the bar is missing (a bar with no trades cannot fill an order; the rule is NOT changed), entry and exit windows, by run (= period) and rule
+[COSTS]   vault open10 lenient: 11,047 first-fill bars; notional = 0 in 10.91%, bar notional missing in 0.00%
+[COSTS]   vault open10 strict: 9,685 first-fill bars; notional = 0 in 6.99%, bar notional missing in 0.00%
+[COSTS]   vault open20 lenient: 19,038 first-fill bars; notional = 0 in 10.70%, bar notional missing in 0.00%
+[COSTS]   vault open20 strict: 16,784 first-fill bars; notional = 0 in 6.86%, bar notional missing in 0.00%
+[COSTS]   test open10 lenient: 22,149 first-fill bars; notional = 0 in 21.52%, bar notional missing in 0.00%
+[COSTS]   test open10 strict: 19,702 first-fill bars; notional = 0 in 17.66%, bar notional missing in 0.00%
+[COSTS]   test open20 lenient: 37,680 first-fill bars; notional = 0 in 20.92%, bar notional missing in 0.00%
+[COSTS]   test open20 strict: 33,647 first-fill bars; notional = 0 in 17.04%, bar notional missing in 0.00%
+[COSTS] grid for vault open10 maker: 18 cells done
+[COSTS] grid for vault open10 taker: 3 cells done
+[COSTS] grid for vault open20 maker: 18 cells done
+[COSTS] grid for vault open20 taker: 3 cells done
+[COSTS] grid for test open10 maker: 18 cells done
+[COSTS] grid for test open10 taker: 3 cells done
+[COSTS] grid for test open20 maker: 18 cells done
+[COSTS] grid for test open20 taker: 3 cells done
+[COSTS] timing: evaluate the sensitivity grid (all runs) took 19.1s
+[COSTS] HEADLINE vault open10 maker (strict, W=5, multiplier 1; calibrated): zero-cost net $1,068.41 (PF 1.32, Sharpe 7.12, max drawdown $111.56 = 11.2% of the $1,000 start) -> with costs net $-702.65 (PF 0.80, Sharpe -5.10, max drawdown $763.03 = 76.3% of the $1,000 start; equity = $1,000 + cumulative daily net with sizing held as saved, so it can go below zero and a drawdown above 100% of the start is possible); filled 3,326 of 3,832 (86.8%); net per filled trade $-0.211, per saved-set trade $-0.183; break-even extra slippage: zero-cost arithmetic 5.43 bp, under this model -4.03 bp; implied average cost 9.00 bp per fill; net positive in 0 of 18 sensitivity cells; cell net range $-936.80 to $-183.45
+[COSTS] HEADLINE vault open10 taker (taker, multiplier 1; calibrated): zero-cost net $263.85 (PF 1.10, Sharpe 2.34, max drawdown $99.04 = 9.9% of the $1,000 start) -> with costs net $-874.31 (PF 0.71, Sharpe -7.82, max drawdown $874.31 = 87.4% of the $1,000 start; equity = $1,000 + cumulative daily net with sizing held as saved, so it can go below zero and a drawdown above 100% of the start is possible); filled 3,789 of 3,789 (100.0%); net per filled trade $-0.231, per saved-set trade $-0.231; break-even extra slippage: zero-cost arithmetic 1.77 bp, under this model -5.85 bp; implied average cost 7.62 bp per fill; net positive in 0 of 3 sensitivity cells; cell net range $-1,055.20 to $-783.87
+[COSTS] HEADLINE vault open20 maker (strict, W=5, multiplier 1; calibrated): zero-cost net $2,357.10 (PF 1.30, Sharpe 6.87, max drawdown $209.88 = 21.0% of the $1,000 start) -> with costs net $-1,645.08 (PF 0.80, Sharpe -4.89, max drawdown $1,648.21 = 164.8% of the $1,000 start; equity = $1,000 + cumulative daily net with sizing held as saved, so it can go below zero and a drawdown above 100% of the start is possible); filled 5,743 of 6,590 (87.1%); net per filled trade $-0.286, per saved-set trade $-0.250; break-even extra slippage: zero-cost arithmetic 5.31 bp, under this model -4.16 bp; implied average cost 9.02 bp per fill; net positive in 0 of 18 sensitivity cells; cell net range $-2,109.13 to $-474.94
+[COSTS] HEADLINE vault open20 taker (taker, multiplier 1; calibrated): zero-cost net $432.51 (PF 1.09, Sharpe 2.29, max drawdown $169.92 = 17.0% of the $1,000 start) -> with costs net $-1,568.83 (PF 0.72, Sharpe -8.14, max drawdown $1,568.83 = 156.9% of the $1,000 start; equity = $1,000 + cumulative daily net with sizing held as saved, so it can go below zero and a drawdown above 100% of the start is possible); filled 6,513 of 6,513 (100.0%); net per filled trade $-0.241, per saved-set trade $-0.241; break-even extra slippage: zero-cost arithmetic 1.62 bp, under this model -5.88 bp; implied average cost 7.50 bp per fill; net positive in 0 of 3 sensitivity cells; cell net range $-1,889.17 to $-1,408.66
+[COSTS] HEADLINE test open10 maker (strict, W=5, multiplier 1; calibrated): zero-cost net $4,034.35 (PF 1.37, Sharpe 7.57, max drawdown $318.24 = 31.8% of the $1,000 start) -> with costs net $-4,072.66 (PF 0.66, Sharpe -8.70, max drawdown $4,120.69 = 412.1% of the $1,000 start; equity = $1,000 + cumulative daily net with sizing held as saved, so it can go below zero and a drawdown above 100% of the start is possible); filled 7,004 of 8,069 (86.8%); net per filled trade $-0.581, per saved-set trade $-0.505; break-even extra slippage: zero-cost arithmetic 5.87 bp, under this model -6.71 bp; implied average cost 11.79 bp per fill; net positive in 0 of 18 sensitivity cells; cell net range $-5,043.96 to $-2,164.36
+[COSTS] HEADLINE test open10 taker (taker, multiplier 1; calibrated): zero-cost net $1,205.99 (PF 1.17, Sharpe 3.80, max drawdown $211.77 = 21.2% of the $1,000 start) -> with costs net $-4,405.99 (PF 0.51, Sharpe -13.81, max drawdown $4,423.54 = 442.4% of the $1,000 start; equity = $1,000 + cumulative daily net with sizing held as saved, so it can go below zero and a drawdown above 100% of the start is possible); filled 8,078 of 8,078 (100.0%); net per filled trade $-0.545, per saved-set trade $-0.545; break-even extra slippage: zero-cost arithmetic 2.87 bp, under this model -10.48 bp; implied average cost 13.34 bp per fill; net positive in 0 of 3 sensitivity cells; cell net range $-4,808.83 to $-4,204.57
+[COSTS] HEADLINE test open20 maker (strict, W=5, multiplier 1; calibrated): zero-cost net $15,935.92 (PF 1.32, Sharpe 6.41, max drawdown $1,300.87 = 130.1% of the $1,000 start) -> with costs net $-23,772.88 (PF 0.59, Sharpe -7.23, max drawdown $23,832.10 = 2383.2% of the $1,000 start; equity = $1,000 + cumulative daily net with sizing held as saved, so it can go below zero and a drawdown above 100% of the start is possible); filled 11,949 of 13,735 (87.0%); net per filled trade $-1.990, per saved-set trade $-1.731; break-even extra slippage: zero-cost arithmetic 5.22 bp, under this model -8.78 bp; implied average cost 13.02 bp per fill; net positive in 0 of 18 sensitivity cells; cell net range $-30,476.94 to $-11,032.99
+[COSTS] HEADLINE test open20 taker (taker, multiplier 1; calibrated): zero-cost net $3,036.05 (PF 1.16, Sharpe 3.82, max drawdown $465.81 = 46.6% of the $1,000 start) -> with costs net $-12,129.70 (PF 0.50, Sharpe -13.52, max drawdown $12,130.37 = 1213.0% of the $1,000 start; equity = $1,000 + cumulative daily net with sizing held as saved, so it can go below zero and a drawdown above 100% of the start is possible); filled 13,699 of 13,699 (100.0%); net per filled trade $-0.885, per saved-set trade $-0.885; break-even extra slippage: zero-cost arithmetic 2.71 bp, under this model -10.84 bp; implied average cost 13.55 bp per fill; net positive in 0 of 3 sensitivity cells; cell net range $-13,550.09 to $-11,419.50
+[COSTS] SENSITIVITY vault open10 maker: net $ by cell (zero-cost $1,068.41)
+[COSTS]   W= 1 lenient mult 0.5: net $   -183.45, filled 72.8%
+[COSTS]   W= 1 lenient mult 1.0: net $   -223.02, filled 72.8%
+[COSTS]   W= 1 lenient mult 2.0: net $   -302.17, filled 72.8%
+[COSTS]   W= 1  strict mult 0.5: net $   -364.94, filled 61.5%
+[COSTS]   W= 1  strict mult 1.0: net $   -403.21, filled 61.5%
+[COSTS]   W= 1  strict mult 2.0: net $   -479.75, filled 61.5%
+[COSTS]   W= 5 lenient mult 0.5: net $   -303.48, filled 91.9%
+[COSTS]   W= 5 lenient mult 1.0: net $   -345.09, filled 91.9%
+[COSTS]   W= 5 lenient mult 2.0: net $   -428.32, filled 91.9%
+[COSTS]   W= 5  strict mult 0.5: net $   -659.36, filled 86.8%
+[COSTS]   W= 5  strict mult 1.0: net $   -702.65, filled 86.8%
+[COSTS]   W= 5  strict mult 2.0: net $   -789.23, filled 86.8%
+[COSTS]   W=15 lenient mult 0.5: net $   -336.94, filled 94.5%
+[COSTS]   W=15 lenient mult 1.0: net $   -374.07, filled 94.5%
+[COSTS]   W=15 lenient mult 2.0: net $   -448.32, filled 94.5%
+[COSTS]   W=15  strict mult 0.5: net $   -814.62, filled 91.9%
+[COSTS]   W=15  strict mult 1.0: net $   -855.35, filled 91.9%
+[COSTS]   W=15  strict mult 2.0: net $   -936.80, filled 91.9%
+[COSTS] SENSITIVITY vault open10 taker: net $ by cell (zero-cost $263.85)
+[COSTS]   W= 0   taker mult 0.5: net $   -783.87, filled 100.0%
+[COSTS]   W= 0   taker mult 1.0: net $   -874.31, filled 100.0%
+[COSTS]   W= 0   taker mult 2.0: net $ -1,055.20, filled 100.0%
+[COSTS] SENSITIVITY vault open20 maker: net $ by cell (zero-cost $2,357.10)
+[COSTS]   W= 1 lenient mult 0.5: net $   -474.94, filled 72.9%
+[COSTS]   W= 1 lenient mult 1.0: net $   -574.06, filled 72.9%
+[COSTS]   W= 1 lenient mult 2.0: net $   -772.30, filled 72.9%
+[COSTS]   W= 1  strict mult 0.5: net $   -867.82, filled 61.4%
+[COSTS]   W= 1  strict mult 1.0: net $   -962.79, filled 61.4%
+[COSTS]   W= 1  strict mult 2.0: net $ -1,152.73, filled 61.4%
+[COSTS]   W= 5 lenient mult 0.5: net $   -756.69, filled 92.1%
+[COSTS]   W= 5 lenient mult 1.0: net $   -851.09, filled 92.1%
+[COSTS]   W= 5 lenient mult 2.0: net $ -1,039.87, filled 92.1%
+[COSTS]   W= 5  strict mult 0.5: net $ -1,544.65, filled 87.1%
+[COSTS]   W= 5  strict mult 1.0: net $ -1,645.08, filled 87.1%
+[COSTS]   W= 5  strict mult 2.0: net $ -1,845.95, filled 87.1%
+[COSTS]   W=15 lenient mult 0.5: net $   -847.65, filled 94.7%
+[COSTS]   W=15 lenient mult 1.0: net $   -931.11, filled 94.7%
+[COSTS]   W=15 lenient mult 2.0: net $ -1,098.03, filled 94.7%
+[COSTS]   W=15  strict mult 0.5: net $ -1,836.68, filled 92.0%
+[COSTS]   W=15  strict mult 1.0: net $ -1,927.50, filled 92.0%
+[COSTS]   W=15  strict mult 2.0: net $ -2,109.13, filled 92.0%
+[COSTS] SENSITIVITY vault open20 taker: net $ by cell (zero-cost $432.51)
+[COSTS]   W= 0   taker mult 0.5: net $ -1,408.66, filled 100.0%
+[COSTS]   W= 0   taker mult 1.0: net $ -1,568.83, filled 100.0%
+[COSTS]   W= 0   taker mult 2.0: net $ -1,889.17, filled 100.0%
+[COSTS] SENSITIVITY test open10 maker: net $ by cell (zero-cost $4,034.35)
+[COSTS]   W= 1 lenient mult 0.5: net $ -2,164.36, filled 73.9%
+[COSTS]   W= 1 lenient mult 1.0: net $ -2,326.42, filled 73.9%
+[COSTS]   W= 1 lenient mult 2.0: net $ -2,650.52, filled 73.9%
+[COSTS]   W= 1  strict mult 0.5: net $ -2,529.39, filled 63.8%
+[COSTS]   W= 1  strict mult 1.0: net $ -2,682.43, filled 63.8%
+[COSTS]   W= 1  strict mult 2.0: net $ -2,988.53, filled 63.8%
+[COSTS]   W= 5 lenient mult 0.5: net $ -2,904.23, filled 91.5%
+[COSTS]   W= 5 lenient mult 1.0: net $ -3,077.72, filled 91.5%
+[COSTS]   W= 5 lenient mult 2.0: net $ -3,424.68, filled 91.5%
+[COSTS]   W= 5  strict mult 0.5: net $ -3,862.88, filled 86.8%
+[COSTS]   W= 5  strict mult 1.0: net $ -4,072.66, filled 86.8%
+[COSTS]   W= 5  strict mult 2.0: net $ -4,492.22, filled 86.8%
+[COSTS]   W=15 lenient mult 0.5: net $ -2,977.50, filled 93.7%
+[COSTS]   W=15 lenient mult 1.0: net $ -3,161.25, filled 93.7%
+[COSTS]   W=15 lenient mult 2.0: net $ -3,528.75, filled 93.7%
+[COSTS]   W=15  strict mult 0.5: net $ -4,377.04, filled 91.0%
+[COSTS]   W=15  strict mult 1.0: net $ -4,599.35, filled 91.0%
+[COSTS]   W=15  strict mult 2.0: net $ -5,043.96, filled 91.0%
+[COSTS] SENSITIVITY test open10 taker: net $ by cell (zero-cost $1,205.99)
+[COSTS]   W= 0   taker mult 0.5: net $ -4,204.57, filled 100.0%
+[COSTS]   W= 0   taker mult 1.0: net $ -4,405.99, filled 100.0%
+[COSTS]   W= 0   taker mult 2.0: net $ -4,808.83, filled 100.0%
+[COSTS] SENSITIVITY test open20 maker: net $ by cell (zero-cost $15,935.92)
+[COSTS]   W= 1 lenient mult 0.5: net $-11,032.99, filled 73.8%
+[COSTS]   W= 1 lenient mult 1.0: net $-12,723.30, filled 73.8%
+[COSTS]   W= 1 lenient mult 2.0: net $-16,103.93, filled 73.8%
+[COSTS]   W= 1  strict mult 0.5: net $-14,411.63, filled 63.9%
+[COSTS]   W= 1  strict mult 1.0: net $-17,459.34, filled 63.9%
+[COSTS]   W= 1  strict mult 2.0: net $-23,554.75, filled 63.9%
+[COSTS]   W= 5 lenient mult 0.5: net $-14,560.88, filled 91.4%
+[COSTS]   W= 5 lenient mult 1.0: net $-16,259.21, filled 91.4%
+[COSTS]   W= 5 lenient mult 2.0: net $-19,655.86, filled 91.4%
+[COSTS]   W= 5  strict mult 0.5: net $-20,420.85, filled 87.0%
+[COSTS]   W= 5  strict mult 1.0: net $-23,772.88, filled 87.0%
+[COSTS]   W= 5  strict mult 2.0: net $-30,476.94, filled 87.0%
+[COSTS]   W=15 lenient mult 0.5: net $-14,779.58, filled 93.7%
+[COSTS]   W=15 lenient mult 1.0: net $-16,239.66, filled 93.7%
+[COSTS]   W=15 lenient mult 2.0: net $-19,159.81, filled 93.7%
+[COSTS]   W=15  strict mult 0.5: net $-21,276.51, filled 91.2%
+[COSTS]   W=15  strict mult 1.0: net $-23,329.83, filled 91.2%
+[COSTS]   W=15  strict mult 2.0: net $-27,436.47, filled 91.2%
+[COSTS] SENSITIVITY test open20 taker: net $ by cell (zero-cost $3,036.05)
+[COSTS]   W= 0   taker mult 0.5: net $-11,419.50, filled 100.0%
+[COSTS]   W= 0   taker mult 1.0: net $-12,129.70, filled 100.0%
+[COSTS]   W= 0   taker mult 2.0: net $-13,550.09, filled 100.0%
+[COSTS] ALTERNATIVE for beyond-book legs (rules section 6a, R3; planner ruling 2026-11-13): fitted line walk = intercept + slope x sqrt(leg / minute notional) of the same period, floored at the last-level price. Headline unchanged.
+/Users/elvisobondo/Pair_Trading/research/model/diagnostics/costs_analysis.py:732: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  RES["alt_fit"][f"{k[0]} open{k[1]} {k[2]}"] = dict(net_headline=float(h0["net"].sum()), net_fit=float(alt["net"].sum()), n_beyond_trades=int(h0["beyond"].fillna(False).astype(bool).sum()))
+/Users/elvisobondo/Pair_Trading/research/model/diagnostics/costs_analysis.py:733: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  log(f"[COSTS]   {k[0]} open{k[1]} {k[2]}: trades with a beyond-book leg {int(h0['beyond'].fillna(False).astype(bool).sum()):,} of {int(h0['filled'].sum()):,} filled; headline net ${h0['net'].sum():,.2f} (last-level price) vs ALTERNATIVE (fitted line) ${alt['net'].sum():,.2f}")
+[COSTS]   vault open10 maker: trades with a beyond-book leg 0 of 3,326 filled; headline net $-702.65 (last-level price) vs ALTERNATIVE (fitted line) $-702.65
+[COSTS]   vault open10 taker: trades with a beyond-book leg 0 of 3,789 filled; headline net $-874.31 (last-level price) vs ALTERNATIVE (fitted line) $-874.31
+/Users/elvisobondo/Pair_Trading/research/model/diagnostics/costs_analysis.py:732: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  RES["alt_fit"][f"{k[0]} open{k[1]} {k[2]}"] = dict(net_headline=float(h0["net"].sum()), net_fit=float(alt["net"].sum()), n_beyond_trades=int(h0["beyond"].fillna(False).astype(bool).sum()))
+/Users/elvisobondo/Pair_Trading/research/model/diagnostics/costs_analysis.py:733: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  log(f"[COSTS]   {k[0]} open{k[1]} {k[2]}: trades with a beyond-book leg {int(h0['beyond'].fillna(False).astype(bool).sum()):,} of {int(h0['filled'].sum()):,} filled; headline net ${h0['net'].sum():,.2f} (last-level price) vs ALTERNATIVE (fitted line) ${alt['net'].sum():,.2f}")
+[COSTS]   vault open20 maker: trades with a beyond-book leg 1 of 5,743 filled; headline net $-1,645.08 (last-level price) vs ALTERNATIVE (fitted line) $-1,645.08
+[COSTS]   vault open20 taker: trades with a beyond-book leg 0 of 6,513 filled; headline net $-1,568.83 (last-level price) vs ALTERNATIVE (fitted line) $-1,568.83
+/Users/elvisobondo/Pair_Trading/research/model/diagnostics/costs_analysis.py:732: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  RES["alt_fit"][f"{k[0]} open{k[1]} {k[2]}"] = dict(net_headline=float(h0["net"].sum()), net_fit=float(alt["net"].sum()), n_beyond_trades=int(h0["beyond"].fillna(False).astype(bool).sum()))
+/Users/elvisobondo/Pair_Trading/research/model/diagnostics/costs_analysis.py:733: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  log(f"[COSTS]   {k[0]} open{k[1]} {k[2]}: trades with a beyond-book leg {int(h0['beyond'].fillna(False).astype(bool).sum()):,} of {int(h0['filled'].sum()):,} filled; headline net ${h0['net'].sum():,.2f} (last-level price) vs ALTERNATIVE (fitted line) ${alt['net'].sum():,.2f}")
+[COSTS]   test open10 maker: trades with a beyond-book leg 3 of 7,004 filled; headline net $-4,072.66 (last-level price) vs ALTERNATIVE (fitted line) $-4,072.66
+[COSTS]   test open10 taker: trades with a beyond-book leg 6 of 8,078 filled; headline net $-4,405.99 (last-level price) vs ALTERNATIVE (fitted line) $-4,405.99
+/Users/elvisobondo/Pair_Trading/research/model/diagnostics/costs_analysis.py:732: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  RES["alt_fit"][f"{k[0]} open{k[1]} {k[2]}"] = dict(net_headline=float(h0["net"].sum()), net_fit=float(alt["net"].sum()), n_beyond_trades=int(h0["beyond"].fillna(False).astype(bool).sum()))
+/Users/elvisobondo/Pair_Trading/research/model/diagnostics/costs_analysis.py:733: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  log(f"[COSTS]   {k[0]} open{k[1]} {k[2]}: trades with a beyond-book leg {int(h0['beyond'].fillna(False).astype(bool).sum()):,} of {int(h0['filled'].sum()):,} filled; headline net ${h0['net'].sum():,.2f} (last-level price) vs ALTERNATIVE (fitted line) ${alt['net'].sum():,.2f}")
+[COSTS]   test open20 maker: trades with a beyond-book leg 25 of 11,949 filled; headline net $-23,772.88 (last-level price) vs ALTERNATIVE (fitted line) $-23,772.88
+[COSTS]   test open20 taker: trades with a beyond-book leg 11 of 13,699 filled; headline net $-12,129.70 (last-level price) vs ALTERNATIVE (fitted line) $-12,129.70
+[COSTS] BEYOND-BOOK RULE (planner ruling 2026-11-14; resolves the inconsistency between rules sections 1 and 8): HEADLINE walks the stored levels at their prices and prices only the REMAINDER at the last stored level (an ESTIMATE (not a bound: in-book levels beyond the last curve point are priced too high, depth beyond the 20 levels too low)); section 8 as written prices the WHOLE leg at the last stored level and is printed beside it, together with the net without trades that have a beyond-book leg
+/Users/elvisobondo/Pair_Trading/research/model/diagnostics/costs_analysis.py:745: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  bmask = h0["beyond"].fillna(False).astype(bool).to_numpy() & h0["filled"].to_numpy()
+[COSTS]   vault open10 maker: HEADLINE (remainder at last level) $-702.65; section 8 as written (whole leg at last level) $-702.65; without the 0 trades that have a beyond-book leg $-702.65 (zero-cost net of the same trades $1,068.41)
+[COSTS]   vault open10 taker: HEADLINE (remainder at last level) $-874.31; section 8 as written (whole leg at last level) $-874.31; without the 0 trades that have a beyond-book leg $-874.31 (zero-cost net of the same trades $263.85)
+/Users/elvisobondo/Pair_Trading/research/model/diagnostics/costs_analysis.py:745: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  bmask = h0["beyond"].fillna(False).astype(bool).to_numpy() & h0["filled"].to_numpy()
+[COSTS]   vault open20 maker: HEADLINE (remainder at last level) $-1,645.08; section 8 as written (whole leg at last level) $-1,645.08; without the 1 trades that have a beyond-book leg $-1,642.69 (zero-cost net of the same trades $2,358.09)
+[COSTS]   vault open20 taker: HEADLINE (remainder at last level) $-1,568.83; section 8 as written (whole leg at last level) $-1,568.83; without the 0 trades that have a beyond-book leg $-1,568.83 (zero-cost net of the same trades $432.51)
+/Users/elvisobondo/Pair_Trading/research/model/diagnostics/costs_analysis.py:745: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  bmask = h0["beyond"].fillna(False).astype(bool).to_numpy() & h0["filled"].to_numpy()
+[COSTS]   test open10 maker: HEADLINE (remainder at last level) $-4,072.66; section 8 as written (whole leg at last level) $-4,073.45; without the 3 trades that have a beyond-book leg $-3,976.07 (zero-cost net of the same trades $4,062.77)
+[COSTS]   test open10 taker: HEADLINE (remainder at last level) $-4,405.99; section 8 as written (whole leg at last level) $-4,408.68; without the 6 trades that have a beyond-book leg $-4,344.95 (zero-cost net of the same trades $1,204.13)
+/Users/elvisobondo/Pair_Trading/research/model/diagnostics/costs_analysis.py:745: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  bmask = h0["beyond"].fillna(False).astype(bool).to_numpy() & h0["filled"].to_numpy()
+[COSTS]   test open20 maker: HEADLINE (remainder at last level) $-23,772.88; section 8 as written (whole leg at last level) $-39,236.52; without the 25 trades that have a beyond-book leg $-20,049.42 (zero-cost net of the same trades $15,969.68)
+[COSTS]   test open20 taker: HEADLINE (remainder at last level) $-12,129.70; section 8 as written (whole leg at last level) $-12,134.61; without the 11 trades that have a beyond-book leg $-11,967.56 (zero-cost net of the same trades $3,059.75)
+[COSTS] BOOK SOURCES (headline cells, filled trades): EVERY book lookup a trade rests on counts: maker limits (entry, and exit for mu exits) and every taker / crossing fill. Source = own minute / adjacent minute (+-1, the +1 row is a book from after the fill) / no-book proxy, with the proxy's cause; by run (= period) and tier
+[COSTS]   vault open10 maker: lookups 16,750: own minute 15,781 (94.2%), adjacent minute 14 (0.1%), proxy 955 (5.7%) by cause {'day': 846, 'absent': 109}; trades touching a proxy lookup 5.7%; trades on the 7 missing days 5.7%; trades with a beyond-book leg 0.0%; legs with a NaN/missing bar in a fill window 0
+[COSTS]      tier least liquid third: 2,120 filled trades; lookups own 94.4%, adjacent 0.1%, proxy 5.5%; trades touching a proxy lookup 5.1%
+[COSTS]      tier middle third: 914 filled trades; lookups own 94.1%, adjacent 0.1%, proxy 5.8%; trades touching a proxy lookup 5.9%
+[COSTS]      tier most liquid third: 292 filled trades; lookups own 92.9%, adjacent 0.0%, proxy 7.1%; trades touching a proxy lookup 9.2%
+/Users/elvisobondo/Pair_Trading/research/model/diagnostics/costs_analysis.py:762: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  for nm, mask in (("excluding trades that touch a proxy lookup", (hr["n_proxy"].fillna(0) == 0) | ~hr["filled"]), ("excluding trades with a beyond-book leg", ~hr["beyond"].fillna(False).astype(bool) | ~hr["filled"])):
+[COSTS]      excluding trades that touch a proxy lookup: 3,642 of 3,832 saved trades kept; zero-cost net $1,026.32 -> with costs $-705.08
+[COSTS]      excluding trades with a beyond-book leg: 3,832 of 3,832 saved trades kept; zero-cost net $1,068.41 -> with costs $-702.65
+[COSTS]   vault open10 taker: lookups 15,156: own minute 14,200 (93.7%), adjacent minute 10 (0.1%), proxy 946 (6.2%) by cause {'day': 844, 'absent': 102}; trades touching a proxy lookup 7.0%; trades on the 7 missing days 5.7%; trades with a beyond-book leg 0.0%; legs with a NaN/missing bar in a fill window 0
+[COSTS]      tier least liquid third: 2,510 filled trades; lookups own 93.5%, adjacent 0.0%, proxy 6.4%; trades touching a proxy lookup 7.0%
+[COSTS]      tier middle third: 976 filled trades; lookups own 94.2%, adjacent 0.2%, proxy 5.7%; trades touching a proxy lookup 6.5%
+[COSTS]      tier most liquid third: 303 filled trades; lookups own 93.4%, adjacent 0.0%, proxy 6.6%; trades touching a proxy lookup 9.2%
+[COSTS]      excluding trades that touch a proxy lookup: 3,522 of 3,789 saved trades kept; zero-cost net $248.31 -> with costs $-778.11
+[COSTS]      excluding trades with a beyond-book leg: 3,789 of 3,789 saved trades kept; zero-cost net $263.85 -> with costs $-874.31
+[COSTS]   vault open20 maker: lookups 28,827: own minute 27,317 (94.8%), adjacent minute 22 (0.1%), proxy 1,488 (5.2%) by cause {'day': 1334, 'absent': 154}; trades touching a proxy lookup 5.2%; trades on the 7 missing days 5.5%; trades with a beyond-book leg 0.0%; legs with a NaN/missing bar in a fill window 0
+[COSTS]      tier least liquid third: 3,656 filled trades; lookups own 95.0%, adjacent 0.1%, proxy 5.0%; trades touching a proxy lookup 4.8%
+[COSTS]      tier middle third: 1,598 filled trades; lookups own 94.4%, adjacent 0.1%, proxy 5.5%; trades touching a proxy lookup 5.6%
+[COSTS]      tier most liquid third: 489 filled trades; lookups own 94.1%, adjacent 0.0%, proxy 5.9%; trades touching a proxy lookup 7.4%
+/Users/elvisobondo/Pair_Trading/research/model/diagnostics/costs_analysis.py:762: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  for nm, mask in (("excluding trades that touch a proxy lookup", (hr["n_proxy"].fillna(0) == 0) | ~hr["filled"]), ("excluding trades with a beyond-book leg", ~hr["beyond"].fillna(False).astype(bool) | ~hr["filled"])):
+[COSTS]      excluding trades that touch a proxy lookup: 6,291 of 6,590 saved trades kept; zero-cost net $2,337.01 -> with costs $-1,604.07
+[COSTS]      excluding trades with a beyond-book leg: 6,589 of 6,590 saved trades kept; zero-cost net $2,358.09 -> with costs $-1,642.69
+[COSTS]   vault open20 taker: lookups 26,052: own minute 24,476 (94.0%), adjacent minute 18 (0.1%), proxy 1,558 (6.0%) by cause {'day': 1414, 'absent': 144}; trades touching a proxy lookup 6.7%; trades on the 7 missing days 5.6%; trades with a beyond-book leg 0.0%; legs with a NaN/missing bar in a fill window 0
+[COSTS]      tier least liquid third: 4,329 filled trades; lookups own 93.8%, adjacent 0.1%, proxy 6.1%; trades touching a proxy lookup 6.7%
+[COSTS]      tier middle third: 1,676 filled trades; lookups own 94.3%, adjacent 0.1%, proxy 5.5%; trades touching a proxy lookup 6.2%
+[COSTS]      tier most liquid third: 508 filled trades; lookups own 94.0%, adjacent 0.0%, proxy 6.0%; trades touching a proxy lookup 8.3%
+[COSTS]      excluding trades that touch a proxy lookup: 6,078 of 6,513 saved trades kept; zero-cost net $400.45 -> with costs $-1,419.68
+[COSTS]      excluding trades with a beyond-book leg: 6,513 of 6,513 saved trades kept; zero-cost net $432.51 -> with costs $-1,568.83
+[COSTS]   test open10 maker: lookups 35,917: own minute 34,510 (96.1%), adjacent minute 512 (1.4%), proxy 895 (2.5%) by cause {'absent': 736, 'day': 159}; trades touching a proxy lookup 6.1%; trades on the 7 missing days 0.6%; trades with a beyond-book leg 0.0%; legs with a NaN/missing bar in a fill window 0
+[COSTS]      tier least liquid third: 4,835 filled trades; lookups own 96.3%, adjacent 1.4%, proxy 2.2%; trades touching a proxy lookup 6.0%
+[COSTS]      tier middle third: 1,651 filled trades; lookups own 95.5%, adjacent 1.5%, proxy 3.0%; trades touching a proxy lookup 6.2%
+[COSTS]      tier most liquid third: 518 filled trades; lookups own 95.4%, adjacent 1.3%, proxy 3.3%; trades touching a proxy lookup 7.7%
+/Users/elvisobondo/Pair_Trading/research/model/diagnostics/costs_analysis.py:762: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  for nm, mask in (("excluding trades that touch a proxy lookup", (hr["n_proxy"].fillna(0) == 0) | ~hr["filled"]), ("excluding trades with a beyond-book leg", ~hr["beyond"].fillna(False).astype(bool) | ~hr["filled"])):
+[COSTS]      excluding trades that touch a proxy lookup: 7,639 of 8,069 saved trades kept; zero-cost net $3,681.59 -> with costs $-3,980.85
+[COSTS]      excluding trades with a beyond-book leg: 8,066 of 8,069 saved trades kept; zero-cost net $4,062.77 -> with costs $-3,976.07
+[COSTS]   test open10 taker: lookups 32,312: own minute 31,169 (96.5%), adjacent minute 453 (1.4%), proxy 690 (2.1%) by cause {'absent': 548, 'day': 142}; trades touching a proxy lookup 3.8%; trades on the 7 missing days 0.6%; trades with a beyond-book leg 0.1%; legs with a NaN/missing bar in a fill window 0
+[COSTS]      tier least liquid third: 5,752 filled trades; lookups own 96.7%, adjacent 1.4%, proxy 1.9%; trades touching a proxy lookup 3.4%
+[COSTS]      tier middle third: 1,797 filled trades; lookups own 96.0%, adjacent 1.3%, proxy 2.7%; trades touching a proxy lookup 4.7%
+[COSTS]      tier most liquid third: 529 filled trades; lookups own 96.0%, adjacent 1.3%, proxy 2.6%; trades touching a proxy lookup 4.3%
+[COSTS]      excluding trades that touch a proxy lookup: 7,775 of 8,078 saved trades kept; zero-cost net $1,081.40 -> with costs $-4,329.60
+[COSTS]      excluding trades with a beyond-book leg: 8,072 of 8,078 saved trades kept; zero-cost net $1,204.13 -> with costs $-4,344.95
+[COSTS]   test open20 maker: lookups 61,075: own minute 58,801 (96.3%), adjacent minute 829 (1.4%), proxy 1,445 (2.4%) by cause {'absent': 1201, 'day': 244}; trades touching a proxy lookup 5.9%; trades on the 7 missing days 0.5%; trades with a beyond-book leg 0.2%; legs with a NaN/missing bar in a fill window 0
+[COSTS]      tier least liquid third: 8,174 filled trades; lookups own 96.6%, adjacent 1.3%, proxy 2.1%; trades touching a proxy lookup 5.7%
+[COSTS]      tier middle third: 2,894 filled trades; lookups own 95.5%, adjacent 1.5%, proxy 3.0%; trades touching a proxy lookup 6.3%
+[COSTS]      tier most liquid third: 881 filled trades; lookups own 95.9%, adjacent 1.1%, proxy 3.0%; trades touching a proxy lookup 6.7%
+/Users/elvisobondo/Pair_Trading/research/model/diagnostics/costs_analysis.py:762: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  for nm, mask in (("excluding trades that touch a proxy lookup", (hr["n_proxy"].fillna(0) == 0) | ~hr["filled"]), ("excluding trades with a beyond-book leg", ~hr["beyond"].fillna(False).astype(bool) | ~hr["filled"])):
+[COSTS]      excluding trades that touch a proxy lookup: 13,029 of 13,735 saved trades kept; zero-cost net $14,681.83 -> with costs $-22,896.57
+[COSTS]      excluding trades with a beyond-book leg: 13,710 of 13,735 saved trades kept; zero-cost net $15,969.68 -> with costs $-20,049.42
+[COSTS]   test open20 taker: lookups 54,796: own minute 52,873 (96.5%), adjacent minute 738 (1.3%), proxy 1,185 (2.2%) by cause {'absent': 971, 'day': 214}; trades touching a proxy lookup 3.8%; trades on the 7 missing days 0.5%; trades with a beyond-book leg 0.1%; legs with a NaN/missing bar in a fill window 0
+[COSTS]      tier least liquid third: 9,677 filled trades; lookups own 96.8%, adjacent 1.3%, proxy 1.9%; trades touching a proxy lookup 3.4%
+[COSTS]      tier middle third: 3,123 filled trades; lookups own 95.7%, adjacent 1.5%, proxy 2.8%; trades touching a proxy lookup 4.9%
+[COSTS]      tier most liquid third: 899 filled trades; lookups own 96.2%, adjacent 1.1%, proxy 2.8%; trades touching a proxy lookup 4.8%
+[COSTS]      excluding trades that touch a proxy lookup: 13,172 of 13,699 saved trades kept; zero-cost net $3,036.14 -> with costs $-11,523.13
+[COSTS]      excluding trades with a beyond-book leg: 13,688 of 13,699 saved trades kept; zero-cost net $3,059.75 -> with costs $-11,967.56
+[COSTS] MISSED TRADES and ADVERSE SELECTION (maker runs; headline W=5 and both rules)
+[COSTS]   vault open10 lenient W=5: filled 91.9%; missed {'both_unfilled': 290, 'late_fill': 19}; reach within 10 h: filled 0.707 (n 3523, se 0.008) vs missed 0.748 (n 309, se 0.025); minutes to mu (reached trades): filled 167.082 (n 2490, se 3.021) vs missed 143.182 (n 231, se 9.806); saved gross (sigma, no stop): filled 0.536 (n 3523, se 0.068) vs missed 0.969 (n 309, se 0.178); 
+[COSTS]   vault open10 strict W=5: filled 86.8%; missed {'both_unfilled': 485, 'late_fill': 21}; reach within 10 h: filled 0.708 (n 3326, se 0.008) vs missed 0.725 (n 506, se 0.020); minutes to mu (reached trades): filled 167.457 (n 2354, se 3.116) vs missed 149.638 (n 367, se 7.680); saved gross (sigma, no stop): filled 0.522 (n 3326, se 0.070) vs missed 0.896 (n 506, se 0.141); 
+[COSTS]   vault open20 lenient W=5: filled 92.1%; missed {'both_unfilled': 490, 'late_fill': 29}; reach within 10 h: filled 0.699 (n 6071, se 0.006) vs missed 0.736 (n 519, se 0.019); minutes to mu (reached trades): filled 172.375 (n 4245, se 2.326) vs missed 140.490 (n 382, se 7.687); saved gross (sigma, no stop): filled 0.468 (n 6071, se 0.057) vs missed 0.913 (n 519, se 0.144); 
+[COSTS]   vault open20 strict W=5: filled 87.1%; missed {'both_unfilled': 814, 'late_fill': 33}; reach within 10 h: filled 0.698 (n 5743, se 0.006) vs missed 0.732 (n 847, se 0.015); minutes to mu (reached trades): filled 173.076 (n 4007, se 2.399) vs missed 148.198 (n 620, se 5.968); saved gross (sigma, no stop): filled 0.440 (n 5743, se 0.059) vs missed 0.928 (n 847, se 0.110); 
+[COSTS]   test open10 lenient W=5: filled 91.5%; missed {'both_unfilled': 587, 'late_fill': 102}; reach within 10 h: filled 0.702 (n 7380, se 0.005) vs missed 0.774 (n 689, se 0.016); minutes to mu (reached trades): filled 160.068 (n 5181, se 2.046) vs missed 123.439 (n 533, se 6.213); saved gross (sigma, no stop): filled 0.485 (n 7380, se 0.046) vs missed 1.161 (n 689, se 0.108); 
+[COSTS]   test open10 strict W=5: filled 86.8%; missed {'both_unfilled': 949, 'late_fill': 116}; reach within 10 h: filled 0.701 (n 7004, se 0.005) vs missed 0.754 (n 1065, se 0.013); minutes to mu (reached trades): filled 160.761 (n 4911, se 2.103) vs missed 131.518 (n 803, se 5.098); saved gross (sigma, no stop): filled 0.471 (n 7004, se 0.048) vs missed 1.012 (n 1065, se 0.093); 
+[COSTS]   test open20 lenient W=5: filled 91.4%; missed {'both_unfilled': 1010, 'late_fill': 166}; reach within 10 h: filled 0.694 (n 12559, se 0.004) vs missed 0.764 (n 1176, se 0.012); minutes to mu (reached trades): filled 160.775 (n 8722, se 1.575) vs missed 126.424 (n 898, se 4.874); saved gross (sigma, no stop): filled 0.483 (n 12559, se 0.035) vs missed 1.129 (n 1176, se 0.084); 
+[COSTS]   test open20 strict W=5: filled 87.0%; missed {'both_unfilled': 1610, 'late_fill': 176}; reach within 10 h: filled 0.693 (n 11949, se 0.004) vs missed 0.753 (n 1786, se 0.010); minutes to mu (reached trades): filled 161.704 (n 8275, se 1.619) vs missed 132.127 (n 1345, se 3.964); saved gross (sigma, no stop): filled 0.466 (n 11949, se 0.036) vs missed 1.029 (n 1786, se 0.072); 
+[COSTS] LATE-FILL TRADES (maker runs, headline cell W=5 strict): net stays 0 in the headline (planner ruling). A late-fill trade is one whose later entry fill comes at or after the saved exit minute. COUNTING IT AS 0 FLATTERS THE MAKER SIDE: if a leg had already filled at its limit before the exit minute, a real unwind costs money. LABELLED ARITHMETIC BOUND (does not change the headline): sum over those trades of each already-filled leg's taker unwind at the exit-minute book as this model prices it (curve + 0.045% fee) plus the maker fee already paid on its entry; price drift of the unhedged leg is not included.
+[COSTS]   vault open10 maker: late-fill trades 21 of 3,832 (0.5%); with at least one leg already filled before the exit minute 17; arithmetic bound on the unwind cost $2.58; headline net $-702.65 -> $-705.23 with the bound applied (labelled, not the headline)
+[COSTS]   vault open20 maker: late-fill trades 33 of 6,590 (0.5%); with at least one leg already filled before the exit minute 27; arithmetic bound on the unwind cost $5.07; headline net $-1,645.08 -> $-1,650.16 with the bound applied (labelled, not the headline)
+[COSTS]   test open10 maker: late-fill trades 116 of 8,069 (1.4%); with at least one leg already filled before the exit minute 99; arithmetic bound on the unwind cost $35.18; headline net $-4,072.66 -> $-4,107.83 with the bound applied (labelled, not the headline)
+[COSTS]   test open20 maker: late-fill trades 176 of 13,735 (1.3%); with at least one leg already filled before the exit minute 149; arithmetic bound on the unwind cost $169.97; headline net $-23,772.88 -> $-23,942.85 with the bound applied (labelled, not the headline)
+[COSTS] FILL RATES (leg level, entry, headline W=5, by rule and tier)
+[COSTS]   vault open10 lenient: legs filled within 5 min 72.1% overall; least liquid third 63.3%; middle third 73.4%; most liquid third 85.0%
+[COSTS]   vault open10 strict: legs filled within 5 min 63.5% overall; least liquid third 49.8%; middle third 68.0%; most liquid third 80.8%
+[COSTS]   vault open20 lenient: legs filled within 5 min 72.3% overall; least liquid third 63.8%; middle third 73.5%; most liquid third 84.3%
+[COSTS]   vault open20 strict: legs filled within 5 min 64.0% overall; least liquid third 51.2%; middle third 67.9%; most liquid third 79.9%
+[COSTS]   test open10 lenient: legs filled within 5 min 69.9% overall; least liquid third 61.9%; middle third 72.0%; most liquid third 81.5%
+[COSTS]   test open10 strict: legs filled within 5 min 62.8% overall; least liquid third 51.5%; middle third 67.2%; most liquid third 77.6%
+[COSTS]   test open20 lenient: legs filled within 5 min 69.7% overall; least liquid third 61.9%; middle third 70.7%; most liquid third 81.7%
+[COSTS]   test open20 strict: legs filled within 5 min 62.8% overall; least liquid third 51.9%; middle third 65.9%; most liquid third 78.0%
+[COSTS] TWO-LEG RISK (headline maker cells, filled trades where the legs fill in different minutes): gap and the earlier leg's position-signed move to the later fill (bp)
+[COSTS]   vault open10: 2,704 of 3,326 filled trades (81.3%) have a gap; gap minutes mean 3.44, p50 4, p90 5; move bp mean -6.99, p50 -3.93, p90 17.88, worst -406.51
+[COSTS]   vault open20: 4,659 of 5,743 filled trades (81.1%) have a gap; gap minutes mean 3.41, p50 4, p90 5; move bp mean -6.71, p50 -3.78, p90 17.41, worst -406.51
+[COSTS]   test open10: 5,761 of 7,004 filled trades (82.3%) have a gap; gap minutes mean 3.54, p50 4, p90 5; move bp mean -12.28, p50 -6.47, p90 14.91, worst -962.54
+[COSTS]   test open20: 9,839 of 11,949 filled trades (82.3%) have a gap; gap minutes mean 3.56, p50 4, p90 5; move bp mean -11.82, p50 -6.56, p90 15.32, worst -1269.44
+[COSTS] DECOMPOSITION (headline cells): mean cost bp per filled trade leg-fill, entry and exit; and the (ref - mid) check, position-signed, on own-minute entry rows, by tier
+[COSTS]   vault open10 maker: mean entry cost (two legs summed) 4.55 bp, mean exit cost 6.37 bp; mean gains vs reference: entry $-0.1707, exit $-0.2293; fees entry $0.0606, exit $0.0808 per trade
+[COSTS]   vault open10 taker: mean entry cost (two legs summed) 10.91 bp, mean exit cost 10.69 bp; mean gains vs reference: entry $-0.1379, exit $-0.1625; fees entry $0.0887, exit $0.0887 per trade
+[COSTS]      (mid - ref) signed to position at own-minute entry rows, bp: least liquid third: mean 3.47, se 0.28, n 4,691; most liquid third: mean 0.20, se 0.23, n 564; middle third: mean -0.23, se 0.33, n 1,839
+[COSTS]   vault open20 maker: mean entry cost (two legs summed) 4.36 bp, mean exit cost 6.28 bp; mean gains vs reference: entry $-0.2311, exit $-0.2890; fees entry $0.0791, exit $0.1060 per trade
+[COSTS]   vault open20 taker: mean entry cost (two legs summed) 10.69 bp, mean exit cost 10.42 bp; mean gains vs reference: entry $-0.1430, exit $-0.1643; fees entry $0.0922, exit $0.0922 per trade
+[COSTS]      (mid - ref) signed to position at own-minute entry rows, bp: least liquid third: mean 3.34, se 0.21, n 8,109; most liquid third: mean 0.07, se 0.18, n 953; middle third: mean 0.18, se 0.17, n 3,162
+[COSTS]   test open10 maker: mean entry cost (two legs summed) 7.49 bp, mean exit cost 10.25 bp; mean gains vs reference: entry $-0.4002, exit $-0.5052; fees entry $0.1010, exit $0.1400 per trade
+[COSTS]   test open10 taker: mean entry cost (two legs summed) 17.97 bp, mean exit cost 17.66 bp; mean gains vs reference: entry $-0.3482, exit $-0.3465; fees entry $0.1171, exit $0.1171 per trade
+[COSTS]      (mid - ref) signed to position at own-minute entry rows, bp: least liquid third: mean 9.78, se 0.40, n 11,111; most liquid third: mean 0.59, se 0.17, n 1,012; middle third: mean 1.99, se 0.28, n 3,440
+[COSTS]   test open20 maker: mean entry cost (two legs summed) 8.64 bp, mean exit cost 13.45 bp; mean gains vs reference: entry $-1.0907, exit $-1.5972; fees entry $0.2638, exit $0.3663 per trade
+[COSTS]   test open20 taker: mean entry cost (two legs summed) 18.55 bp, mean exit cost 18.46 bp; mean gains vs reference: entry $-0.5520, exit $-0.5551; fees entry $0.1838, exit $0.1838 per trade
+[COSTS]      (mid - ref) signed to position at own-minute entry rows, bp: least liquid third: mean 9.74, se 0.32, n 18,747; most liquid third: mean 0.70, se 0.14, n 1,724; middle third: mean 1.85, se 0.25, n 5,952
+[COSTS] OUTLIERS (headline cells, filled trades): trades with entry cost + exit cost (two legs each, bp) above 200; net of those and of the rest; how many are beyond-book; the 5 worst trades; trades whose loss exceeds their own notional
+/Users/elvisobondo/Pair_Trading/research/model/diagnostics/costs_analysis.py:858: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  beyond = f["beyond"].fillna(False).astype(bool)
+[COSTS]   vault open10 maker: 1 of 3,326 filled trades above 200 bp, net $-3.56; the other 3,325 net $-699.09; beyond-book among the big ones 0; all trades with a beyond-book leg 0, net $0.00, net without them $-702.65; trades with a loss larger than their own notional 0
+[COSTS]      5 worst: LINEA-W 2026-10-11 net $-90.64 (12.9% of run net), notional $319, larger leg $166, entry cost 0 bp, exit cost 5 bp, beyond-book False; CHIP-STX 2026-09-30 net $-27.79 (4.0% of run net), notional $310, larger leg $159, entry cost 0 bp, exit cost 5 bp, beyond-book False; PENGU-ZEC 2026-08-19 net $-26.17 (3.7% of run net), notional $314, larger leg $193, entry cost 2 bp, exit cost 1 bp, beyond-book False; GRASS-ZRO 2026-10-12 net $-25.79 (3.7% of run net), notional $306, larger leg $238, entry cost 0 bp, exit cost 2 bp, beyond-book False; DOGE-KAITO 2026-08-12 net $-25.63 (3.6% of run net), notional $308, larger leg $209, entry cost 0 bp, exit cost 0 bp, beyond-book False
+[COSTS]   vault open10 taker: 14 of 3,789 filled trades above 200 bp, net $-47.71; the other 3,775 net $-826.60; beyond-book among the big ones 0; all trades with a beyond-book leg 0, net $0.00, net without them $-874.31; trades with a loss larger than their own notional 0
+[COSTS]      5 worst: LINEA-W 2026-10-11 net $-54.46 (6.2% of run net), notional $191, larger leg $99, entry cost 6 bp, exit cost 4 bp, beyond-book False; ARB-FARTCOIN 2026-08-19 net $-27.81 (3.2% of run net), notional $526, larger leg $307, entry cost 1 bp, exit cost 2 bp, beyond-book False; DOGE-KAITO 2026-08-12 net $-22.10 (2.5% of run net), notional $264, larger leg $179, entry cost 1 bp, exit cost 0 bp, beyond-book False; PENGU-ZEC 2026-08-19 net $-21.78 (2.5% of run net), notional $263, larger leg $162, entry cost 2 bp, exit cost 1 bp, beyond-book False; ADA-FARTCOIN 2026-09-28 net $-21.08 (2.4% of run net), notional $659, larger leg $380, entry cost 5 bp, exit cost 3 bp, beyond-book False
+/Users/elvisobondo/Pair_Trading/research/model/diagnostics/costs_analysis.py:858: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  beyond = f["beyond"].fillna(False).astype(bool)
+[COSTS]   vault open20 maker: 1 of 5,743 filled trades above 200 bp, net $-3.48; the other 5,742 net $-1,641.60; beyond-book among the big ones 0; all trades with a beyond-book leg 1, net $-2.39, net without them $-1,642.69; trades with a loss larger than their own notional 0
+[COSTS]      5 worst: S-ZRO 2026-10-12 net $-93.30 (5.7% of run net), notional $864, larger leg $729, entry cost 0 bp, exit cost 3 bp, beyond-book False; MON-ZRO 2026-10-12 net $-76.58 (4.7% of run net), notional $864, larger leg $503, entry cost 0 bp, exit cost 1 bp, beyond-book False; ENA-NEAR 2026-10-07 net $-50.57 (3.1% of run net), notional $1,636, larger leg $996, entry cost 0 bp, exit cost 1 bp, beyond-book False; ADA-FARTCOIN 2026-09-28 net $-50.12 (3.0% of run net), notional $1,599, larger leg $922, entry cost 0 bp, exit cost 4 bp, beyond-book False; JTO-JUP 2026-09-06 net $-44.04 (2.7% of run net), notional $442, larger leg $279, entry cost 1 bp, exit cost 4 bp, beyond-book False
+[COSTS]   vault open20 taker: 21 of 6,513 filled trades above 200 bp, net $-71.72; the other 6,492 net $-1,497.11; beyond-book among the big ones 0; all trades with a beyond-book leg 0, net $0.00, net without them $-1,568.83; trades with a loss larger than their own notional 0
+[COSTS]      5 worst: ARB-FARTCOIN 2026-08-19 net $-46.24 (2.9% of run net), notional $516, larger leg $278, entry cost 2 bp, exit cost 4 bp, beyond-book False; S-ZRO 2026-10-12 net $-40.84 (2.6% of run net), notional $376, larger leg $317, entry cost 5 bp, exit cost 3 bp, beyond-book False; MON-ZRO 2026-10-12 net $-33.54 (2.1% of run net), notional $376, larger leg $219, entry cost 3 bp, exit cost 1 bp, beyond-book False; PUMP-UNI 2026-08-14 net $-31.37 (2.0% of run net), notional $544, larger leg $388, entry cost 3 bp, exit cost 2 bp, beyond-book False; ARB-FARTCOIN 2026-08-19 net $-27.22 (1.7% of run net), notional $515, larger leg $300, entry cost 1 bp, exit cost 2 bp, beyond-book False
+/Users/elvisobondo/Pair_Trading/research/model/diagnostics/costs_analysis.py:858: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  beyond = f["beyond"].fillna(False).astype(bool)
+[COSTS]   test open10 maker: 34 of 7,004 filled trades above 200 bp, net $-216.42; the other 6,970 net $-3,856.23; beyond-book among the big ones 2; all trades with a beyond-book leg 3, net $-96.59, net without them $-3,976.07; trades with a loss larger than their own notional 0
+[COSTS]      5 worst: HYPER-SAGA 2026-04-25 net $-124.10 (3.0% of run net), notional $412, larger leg $227, entry cost 9 bp, exit cost 18 bp, beyond-book False; APE-ZK 2026-05-02 net $-68.30 (1.7% of run net), notional $764, larger leg $696, entry cost 0 bp, exit cost 9 bp, beyond-book False; ADA-VVV 2026-07-03 net $-61.61 (1.5% of run net), notional $799, larger leg $459, entry cost 0 bp, exit cost 4 bp, beyond-book False; REZ-ZEREBRO 2026-05-04 net $-58.47 (1.4% of run net), notional $482, larger leg $310, entry cost 786 bp, exit cost 625 bp, beyond-book True; CFX-KAITO 2026-06-08 net $-53.19 (1.3% of run net), notional $999, larger leg $728, entry cost 0 bp, exit cost 11 bp, beyond-book False
+[COSTS]   test open10 taker: 129 of 8,078 filled trades above 200 bp, net $-422.91; the other 7,949 net $-3,983.08; beyond-book among the big ones 5; all trades with a beyond-book leg 6, net $-61.04, net without them $-4,344.95; trades with a loss larger than their own notional 0
+[COSTS]      5 worst: HYPER-SAGA 2026-04-25 net $-78.05 (1.8% of run net), notional $259, larger leg $143, entry cost 14 bp, exit cost 17 bp, beyond-book False; HMSTR-MEW 2026-05-04 net $-44.65 (1.0% of run net), notional $279, larger leg $159, entry cost 141 bp, exit cost 2,701 bp, beyond-book True; APE-ZK 2026-05-02 net $-40.41 (0.9% of run net), notional $448, larger leg $408, entry cost 8 bp, exit cost 8 bp, beyond-book False; FARTCOIN-HYPE 2026-01-01 net $-31.32 (0.7% of run net), notional $542, larger leg $461, entry cost 1 bp, exit cost 0 bp, beyond-book False; FARTCOIN-HYPE 2026-01-01 net $-29.59 (0.7% of run net), notional $538, larger leg $459, entry cost 0 bp, exit cost 2 bp, beyond-book False
+/Users/elvisobondo/Pair_Trading/research/model/diagnostics/costs_analysis.py:858: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  beyond = f["beyond"].fillna(False).astype(bool)
+[COSTS]   test open20 maker: 92 of 11,949 filled trades above 200 bp, net $-4,531.75; the other 11,857 net $-19,241.12; beyond-book among the big ones 12; all trades with a beyond-book leg 25, net $-3,723.46, net without them $-20,049.42; trades with a loss larger than their own notional 1
+[COSTS]      5 worst: HMSTR-ONDO 2026-05-21 net $-2,668.34 (11.2% of run net), notional $1,537, larger leg $1,234, entry cost 33 bp, exit cost 21,862 bp, beyond-book True; HYPER-SAGA 2026-04-25 net $-335.16 (1.4% of run net), notional $1,113, larger leg $612, entry cost 9 bp, exit cost 20 bp, beyond-book False; ADA-VVV 2026-07-03 net $-209.15 (0.9% of run net), notional $2,709, larger leg $1,558, entry cost 0 bp, exit cost 5 bp, beyond-book False; APE-ZK 2026-05-02 net $-192.31 (0.8% of run net), notional $2,147, larger leg $1,957, entry cost 0 bp, exit cost 11 bp, beyond-book False; ETHFI-XLM 2026-07-03 net $-175.87 (0.7% of run net), notional $4,524, larger leg $3,010, entry cost 0 bp, exit cost 9 bp, beyond-book False
+[COSTS]   test open20 taker: 243 of 13,699 filled trades above 200 bp, net $-1,340.51; the other 13,456 net $-10,789.19; beyond-book among the big ones 10; all trades with a beyond-book leg 11, net $-162.14, net without them $-11,967.56; trades with a loss larger than their own notional 0
+[COSTS]      5 worst: HYPER-SAGA 2026-04-25 net $-134.42 (1.1% of run net), notional $446, larger leg $245, entry cost 14 bp, exit cost 18 bp, beyond-book False; HMSTR-MEW 2026-05-04 net $-83.60 (0.7% of run net), notional $520, larger leg $296, entry cost 153 bp, exit cost 2,701 bp, beyond-book True; APE-ZK 2026-05-02 net $-72.16 (0.6% of run net), notional $797, larger leg $727, entry cost 10 bp, exit cost 9 bp, beyond-book False; REZ-ZEREBRO 2026-05-04 net $-64.43 (0.5% of run net), notional $514, larger leg $330, entry cost 840 bp, exit cost 625 bp, beyond-book True; ADA-VVV 2026-07-03 net $-51.80 (0.4% of run net), notional $666, larger leg $383, entry cost 3 bp, exit cost 4 bp, beyond-book False
+[COSTS] GROUPS (headline cells): rows = group, saved trades, filled trades, zero-cost net $, net with costs $, share of run net with costs
+[COSTS]   vault open10 maker by liquidity tier: least liquid third: n 2,549, filled 2,120, zero $885.80, costed $-511.14 (72.7%); middle third: n 977, filled 914, zero $71.38, costed $-196.35 (27.9%); most liquid third: n 306, filled 292, zero $111.23, costed $4.83 (-0.7%)
+[COSTS]   vault open10 maker by larger-leg size: $100-250: n 3,038, filled 2,648, zero $860.90, costed $-663.79 (94.5%); $250-1,000: n 373, filled 355, zero $114.17, costed $-40.64 (5.8%); < $100: n 420, filled 322, zero $92.70, costed $1.17 (-0.2%); > $1,000: n 1, filled 1, zero $0.63, costed $0.61 (-0.1%)
+[COSTS]   vault open10 maker by leverage: 10.0: n 106, filled 101, zero $90.07, costed $31.48 (-4.5%); 3.0: n 3,119, filled 2,646, zero $939.58, costed $-579.81 (82.5%); 5.0: n 607, filled 579, zero $38.76, costed $-154.31 (22.0%)
+[COSTS]   vault open10 maker by coin: 177 coins, 78 with net > 0 after costs (zero-cost: 130); best 5 WLFI $58.94, UNI $55.20, BOME $40.18, APT $35.16, APE $30.74; worst 5 ZEC $-59.39, ETHFI $-90.13, W $-126.68, LINEA $-140.47, HMSTR $-202.22
+[COSTS]   vault open10 maker by pair: 2665 pairs, 1550 with net > 0 after costs (zero-cost: 1888); best 5 APT-UNI $24.12, SPX-ZRO $16.34, MET-REZ $11.83, PUMP-SKR $11.66, SUI-TRUMP $9.77; worst 5 SKR-WLD $-27.67, CHIP-STX $-27.79, ETHFI-NOT $-34.83, OP-WLD $-39.87, LINEA-W $-90.64
+[COSTS]   vault open10 maker leverage shares: 3x 81.4%, 5x 15.8%, 10x 2.8%
+[COSTS]   vault open10 taker by liquidity tier: least liquid third: n 2,510, filled 2,510, zero $341.19, costed $-632.59 (72.4%); middle third: n 976, filled 976, zero $21.56, costed $-109.64 (12.5%); most liquid third: n 303, filled 303, zero $-98.89, costed $-132.08 (15.1%)
+[COSTS]   vault open10 taker by larger-leg size: $100-250: n 2,484, filled 2,484, zero $184.93, costed $-527.24 (60.3%); $250-1,000: n 159, filled 159, zero $-32.70, costed $-53.61 (6.1%); < $100: n 1,146, filled 1,146, zero $111.62, costed $-293.47 (33.6%)
+[COSTS]   vault open10 taker by leverage: 10.0: n 107, filled 107, zero $-49.14, costed $-66.12 (7.6%); 3.0: n 3,057, filled 3,057, zero $342.22, costed $-701.58 (80.2%); 5.0: n 625, filled 625, zero $-29.22, costed $-106.61 (12.2%)
+[COSTS]   vault open10 taker by coin: 177 coins, 59 with net > 0 after costs (zero-cost: 106); best 5 UNI $45.61, WLFI $36.57, JUP $25.35, BOME $23.69, SAGA $22.90; worst 5 W $-71.58, ETHFI $-73.10, NOT $-93.40, LINEA $-97.80, HMSTR $-236.21
+[COSTS]   vault open10 taker by pair: 2624 pairs, 1636 with net > 0 after costs (zero-cost: 1819); best 5 APT-UNI $18.05, SPX-ZRO $11.42, JUP-ONDO $10.60, BLUR-GRIFFAIN $8.50, PUMP-SKR $7.76; worst 5 DOGE-KAITO $-22.10, OP-WLD $-25.03, ARB-FARTCOIN $-27.81, ETHFI-NOT $-32.43, LINEA-W $-54.46
+[COSTS]   vault open10 taker leverage shares: 3x 80.7%, 5x 16.5%, 10x 2.8%
+[COSTS]   vault open20 maker by liquidity tier: least liquid third: n 4,358, filled 3,656, zero $2,091.15, costed $-1,049.76 (63.8%); middle third: n 1,713, filled 1,598, zero $217.35, costed $-422.92 (25.7%); most liquid third: n 519, filled 489, zero $48.60, costed $-172.40 (10.5%)
+[COSTS]   vault open20 maker by larger-leg size: $100-250: n 3,985, filled 3,477, zero $1,536.69, costed $-519.17 (31.6%); $250-1,000: n 1,981, filled 1,799, zero $645.47, costed $-1,136.90 (69.1%); < $100: n 597, filled 443, zero $98.06, costed $-51.25 (3.1%); > $1,000: n 27, filled 24, zero $76.89, costed $62.23 (-3.8%)
+[COSTS]   vault open20 maker by leverage: 10.0: n 180, filled 170, zero $138.95, costed $29.46 (-1.8%); 3.0: n 5,295, filled 4,513, zero $2,243.61, costed $-1,170.34 (71.1%); 5.0: n 1,115, filled 1,060, zero $-25.46, costed $-504.21 (30.6%)
+[COSTS]   vault open20 maker by coin: 177 coins, 68 with net > 0 after costs (zero-cost: 127); best 5 WLFI $98.34, TRUMP $96.33, UNI $89.03, kPEPE $66.15, SOPH $60.78; worst 5 NOT $-164.62, JTO $-164.68, S $-202.87, ETHFI $-208.33, HMSTR $-435.61
+[COSTS]   vault open20 maker by pair: 4033 pairs, 2380 with net > 0 after costs (zero-cost: 2810); best 5 APT-UNI $34.42, NEAR-WLD $30.97, SEI-UNI $26.80, SPX-ZRO $25.33, SOPH-W $23.19; worst 5 ETHFI-NOT $-55.78, JTO-MINA $-60.54, OP-WLD $-60.69, MON-ZRO $-67.84, S-ZRO $-93.30
+[COSTS]   vault open20 maker leverage shares: 3x 80.3%, 5x 16.9%, 10x 2.7%
+[COSTS]   vault open20 taker by liquidity tier: least liquid third: n 4,329, filled 4,329, zero $619.14, costed $-1,089.22 (69.4%); middle third: n 1,676, filled 1,676, zero $16.73, costed $-222.88 (14.2%); most liquid third: n 508, filled 508, zero $-203.36, costed $-256.74 (16.4%)
+[COSTS]   vault open20 taker by larger-leg size: $100-250: n 4,397, filled 4,397, zero $402.89, costed $-983.36 (62.7%); $250-1,000: n 312, filled 312, zero $-137.89, costed $-178.57 (11.4%); < $100: n 1,804, filled 1,804, zero $167.51, costed $-406.90 (25.9%)
+[COSTS]   vault open20 taker by leverage: 10.0: n 178, filled 178, zero $-117.37, costed $-143.94 (9.2%); 3.0: n 5,250, filled 5,250, zero $694.98, costed $-1,138.90 (72.6%); 5.0: n 1,085, filled 1,085, zero $-145.10, costed $-285.99 (18.2%)
+[COSTS]   vault open20 taker by coin: 177 coins, 60 with net > 0 after costs (zero-cost: 109); best 5 TRUMP $43.95, WLFI $38.35, kPEPE $35.57, UNI $32.29, BOME $26.81; worst 5 S $-106.70, FARTCOIN $-126.60, ETHFI $-131.30, NOT $-163.64, HMSTR $-408.75
+[COSTS]   vault open20 taker by pair: 3995 pairs, 2463 with net > 0 after costs (zero-cost: 2707); best 5 APT-UNI $20.41, SEI-UNI $14.97, NEAR-WLD $14.76, SPX-ZRO $12.69, JUP-ONDO $11.08; worst 5 HMSTR-ZK $-31.46, JTO-MINA $-32.42, ETHFI-NOT $-36.67, S-ZRO $-40.84, ARB-FARTCOIN $-73.46
+[COSTS]   vault open20 taker leverage shares: 3x 80.6%, 5x 16.7%, 10x 2.7%
+[COSTS]   test open10 maker by liquidity tier: least liquid third: n 5,748, filled 4,835, zero $3,488.59, costed $-2,980.57 (73.2%); middle third: n 1,782, filled 1,651, zero $392.41, costed $-796.27 (19.6%); most liquid third: n 539, filled 518, zero $153.36, costed $-295.81 (7.3%)
+[COSTS]   test open10 maker by larger-leg size: $100-250: n 3,851, filled 3,282, zero $1,476.87, costed $-1,496.39 (36.7%); $250-1,000: n 3,637, filled 3,207, zero $2,508.61, costed $-2,268.55 (55.7%); < $100: n 496, filled 434, zero $136.20, costed $-109.79 (2.7%); > $1,000: n 85, filled 81, zero $-87.33, costed $-197.92 (4.9%)
+[COSTS]   test open10 maker by leverage: 10.0: n 171, filled 164, zero $48.48, costed $-151.93 (3.7%); 3.0: n 6,916, filled 5,899, zero $3,828.64, costed $-3,297.80 (81.0%); 5.0: n 982, filled 941, zero $157.24, costed $-622.93 (15.3%)
+[COSTS]   test open10 maker by coin: 191 coins, 51 with net > 0 after costs (zero-cost: 145); best 5 TRB $62.40, ZEC $61.55, XMR $54.33, BLAST $53.73, DYM $46.97; worst 5 HYPE $-191.42, YZY $-191.77, HYPER $-194.66, ORDI $-207.40, HMSTR $-574.10
+[COSTS]   test open10 maker by pair: 5024 pairs, 2711 with net > 0 after costs (zero-cost: 3583); best 5 JUP-ZEC $28.54, CC-WLD $27.46, STABLE-STBL $24.20, APT-HMSTR $23.97, INJ-STRK $23.11; worst 5 2Z-DASH $-58.66, ADA-VVV $-61.61, APE-ZK $-65.19, FARTCOIN-HYPE $-65.85, HYPER-SAGA $-124.10
+[COSTS]   test open10 maker leverage shares: 3x 85.7%, 5x 12.2%, 10x 2.1%
+[COSTS]   test open10 taker by liquidity tier: least liquid third: n 5,752, filled 5,752, zero $1,421.28, costed $-3,479.40 (79.0%); middle third: n 1,797, filled 1,797, zero $-84.55, costed $-680.14 (15.4%); most liquid third: n 529, filled 529, zero $-130.74, costed $-246.45 (5.6%)
+[COSTS]   test open10 taker by larger-leg size: $100-250: n 6,099, filled 6,099, zero $1,045.09, costed $-3,622.73 (82.2%); $250-1,000: n 789, filled 789, zero $-103.71, costed $-365.32 (8.3%); < $100: n 1,187, filled 1,187, zero $265.10, costed $-417.23 (9.5%); > $1,000: n 3, filled 3, zero $-0.49, costed $-0.70 (0.0%)
+[COSTS]   test open10 taker by leverage: 10.0: n 178, filled 178, zero $-60.79, costed $-104.38 (2.4%); 3.0: n 6,929, filled 6,929, zero $1,442.63, costed $-3,808.40 (86.4%); 5.0: n 971, filled 971, zero $-175.85, costed $-493.21 (11.2%)
+[COSTS]   test open10 taker by coin: 191 coins, 22 with net > 0 after costs (zero-cost: 122); best 5 HEMI $45.82, LIT $42.13, CRV $32.43, kSHIB $29.24, XMR $25.03; worst 5 FTT $-189.69, MEW $-196.87, TNSR $-213.39, YZY $-333.34, HMSTR $-679.57
+[COSTS]   test open10 taker by pair: 5028 pairs, 2737 with net > 0 after costs (zero-cost: 3495); best 5 JUP-ZEC $13.28, CC-WLD $12.74, STABLE-STBL $11.99, BLAST-GOAT $11.75, DYDX-WCT $11.48; worst 5 HMSTR-WCT $-33.35, APE-ZK $-37.64, HMSTR-MEW $-45.75, FARTCOIN-HYPE $-60.91, HYPER-SAGA $-78.05
+[COSTS]   test open10 taker leverage shares: 3x 85.8%, 5x 12.0%, 10x 2.2%
+[COSTS]   test open20 maker by liquidity tier: least liquid third: n 9,704, filled 8,174, zero $15,029.52, costed $-17,123.23 (72.0%); middle third: n 3,123, filled 2,894, zero $357.09, costed $-5,149.41 (21.7%); most liquid third: n 908, filled 881, zero $549.32, costed $-1,500.23 (6.3%)
+[COSTS]   test open20 maker by larger-leg size: $100-250: n 3,770, filled 3,281, zero $1,736.22, costed $-1,396.79 (5.9%); $250-1,000: n 6,199, filled 5,246, zero $10,233.99, costed $-9,198.53 (38.7%); < $100: n 335, filled 303, zero $149.87, costed $-27.84 (0.1%); > $1,000: n 3,431, filled 3,119, zero $3,815.84, costed $-13,149.72 (55.3%)
+[COSTS]   test open20 maker by leverage: 10.0: n 291, filled 283, zero $-219.02, costed $-1,161.94 (4.9%); 3.0: n 11,728, filled 10,016, zero $15,314.03, costed $-19,694.29 (82.8%); 5.0: n 1,716, filled 1,650, zero $840.91, costed $-2,916.64 (12.3%)
+[COSTS]   test open20 maker by coin: 192 coins, 35 with net > 0 after costs (zero-cost: 135); best 5 TRB $260.41, ZEC $182.65, CRV $175.90, APT $162.54, CC $135.38; worst 5 YZY $-800.22, MEGA $-828.49, ZK $-847.40, ONDO $-2,438.34, HMSTR $-5,200.07
+[COSTS]   test open20 maker by pair: 7134 pairs, 3813 with net > 0 after costs (zero-cost: 4956); best 5 HYPE-ONDO $128.40, JTO-POL $103.25, NOT-ORDI $97.82, MORPHO-UNI $94.34, APT-WLD $92.40; worst 5 PUMP-TRX $-206.23, ADA-VVV $-209.15, CFX-KAITO $-297.34, HYPER-SAGA $-335.16, HMSTR-ONDO $-2,673.11
+[COSTS]   test open20 maker leverage shares: 3x 85.4%, 5x 12.5%, 10x 2.1%
+[COSTS]   test open20 taker by liquidity tier: least liquid third: n 9,677, filled 9,677, zero $3,760.51, costed $-9,463.04 (78.0%); middle third: n 3,123, filled 3,123, zero $-703.87, costed $-2,314.30 (19.1%); most liquid third: n 899, filled 899, zero $-20.59, costed $-352.36 (2.9%)
+[COSTS]   test open20 taker by larger-leg size: $100-250: n 6,445, filled 6,445, zero $1,420.87, costed $-4,170.34 (34.4%); $250-1,000: n 6,229, filled 6,229, zero $1,574.78, costed $-7,454.65 (61.5%); < $100: n 912, filled 912, zero $207.30, costed $-281.34 (2.3%); > $1,000: n 113, filled 113, zero $-166.91, costed $-223.37 (1.8%)
+[COSTS]   test open20 taker by leverage: 10.0: n 286, filled 286, zero $-108.87, costed $-232.45 (1.9%); 3.0: n 11,724, filled 11,724, zero $3,468.60, costed $-10,697.08 (88.2%); 5.0: n 1,689, filled 1,689, zero $-323.68, costed $-1,200.18 (9.9%)
+[COSTS]   test open20 taker by coin: 192 coins, 12 with net > 0 after costs (zero-cost: 114); best 5 CHIP $38.72, CRV $36.70, ONDO $34.81, LIT $32.89, HEMI $25.45; worst 5 MEW $-442.99, TNSR $-468.87, FTT $-575.35, YZY $-1,042.17, HMSTR $-1,827.00
+[COSTS]   test open20 taker by pair: 7114 pairs, 3799 with net > 0 after costs (zero-cost: 4841); best 5 CFX-SEI $26.41, HYPE-ONDO $26.38, BRETT-PENDLE $25.58, STABLE-STBL $25.00, YGG-ZRO $24.44; worst 5 APE-ZK $-63.05, REZ-ZEREBRO $-63.81, PUMP-TRX $-64.33, HMSTR-MEW $-90.93, HYPER-SAGA $-134.42
+[COSTS]   test open20 taker leverage shares: 3x 85.6%, 5x 12.3%, 10x 2.1%
+[COSTS] MAKER-EXIT FEE FINDING: saved maker runs charged the maker fee on every non-liquidation exit; stops and timeouts cannot rest as a limit order. Effect = exit leg USD x (0.045% - 0.015%) on exits with reason stop or timeout; nothing else changed; no run edited.
+[COSTS]   vault open10 maker: 1,111 of 3,832 exits are stop/timeout; extra fee $85.79; saved net $1,068.41 -> $982.62 (8.0% of the net); break-even 5.43 -> 4.99 bp
+[COSTS]   vault open20 maker: 1,963 of 6,590 exits are stop/timeout; extra fee $197.67; saved net $2,357.10 -> $2,159.43 (8.4% of the net); break-even 5.31 -> 4.86 bp
+[COSTS]   test open10 maker: 2,355 of 8,069 exits are stop/timeout; extra fee $308.71; saved net $4,034.35 -> $3,725.64 (7.7% of the net); break-even 5.87 -> 5.42 bp
+[COSTS]   test open20 maker: 4,115 of 13,735 exits are stop/timeout; extra fee $1,417.37; saved net $15,935.92 -> $14,518.55 (8.9% of the net); break-even 5.22 -> 4.76 bp
+[COSTS] VERDICT LETTER (calibrated; vault, four priority configs): all four headline nets > 0: False; at least 75% of cells > 0 in each: False; none > 0: True  ->  (c). 10 maker: net $-702.65, positive in 0 of 18 cells; 20 maker: net $-1,645.08, positive in 0 of 18 cells; 10 taker: net $-874.31, positive in 0 of 3 cells; 20 taker: net $-1,568.83, positive in 0 of 3 cells
+[COSTS] LABELLED LINE next to the letter, it does not replace it: SAME RULE with every trade that touches a no-book proxy lookup removed (per cell): all four headline nets > 0: False; at least 75% of cells > 0 in each: False; none > 0: True  ->  (c). 10 maker: net $-705.08, positive in 0 of 18 cells; 20 maker: net $-1,604.07, positive in 0 of 18 cells; 10 taker: net $-778.11, positive in 0 of 3 cells; 20 taker: net $-1,419.68, positive in 0 of 3 cells
+[COSTS] ANSWER vault open10 maker: net positive in 0 of 18 sensitivity cells; headline net $-702.65
+[COSTS] ANSWER vault open10 taker: net positive in 0 of 3 sensitivity cells; headline net $-874.31
+[COSTS] ANSWER vault open20 maker: net positive in 0 of 18 sensitivity cells; headline net $-1,645.08
+[COSTS] ANSWER vault open20 taker: net positive in 0 of 3 sensitivity cells; headline net $-1,568.83
+[COSTS] ANSWER test open10 maker: net positive in 0 of 18 sensitivity cells; headline net $-4,072.66
+[COSTS] ANSWER test open10 taker: net positive in 0 of 3 sensitivity cells; headline net $-4,405.99
+[COSTS] ANSWER test open20 maker: net positive in 0 of 18 sensitivity cells; headline net $-23,772.88
+[COSTS] ANSWER test open20 taker: net positive in 0 of 3 sensitivity cells; headline net $-12,129.70
+[COSTS] wrote /Users/elvisobondo/Pair_Trading/research/model/logs/costs1/costs_analysis_calibrated.json and the per-trade headline parquets; proxy fallbacks (ctxs row missing) used 4,868 times
+[COSTS] total run time 423s; timings {'load extract, G8 table and ctxs proxy': 126.7, 'load geometry, cleaned prices and 1-minute bars': 234.4, 'prepare runs (legs, reference prices, gross receipt)': 7.7, 'prepare maker/exit fill windows (all 8 runs)': 18.7, 'evaluate the sensitivity grid (all runs)': 19.1}
