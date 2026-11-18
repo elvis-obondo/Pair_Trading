@@ -1,0 +1,69 @@
+[NOBOUNCE-SRC] script costs_nobounce_sources.py; G8 rows 1,233,079
+[VAULT_LOADER] load_vault_events: 6,697,756 merged rows -> 1,280,088 with t0 >= VAULT_START -> 1,280,088 usable (label_gap=0), 0 label_gap=1
+[NOBOUNCE] events vault: 1,280,088 (picks q 1%: 13,947); t0 2026-07-13 00:00:00+00:00 .. 2026-10-13 13:30:00+00:00
+[NOBOUNCE] arrays vault: 177 coins x 133,894 minutes; ctxs rows used 18,701,142, off-minute rows dropped 3,025; finite mids 18,657,486, finite closes 23,475,471
+[NOBOUNCE-SRC]   vault open10 maker 2026-07: trades 840, matched 840; close gross $194.80, mid gross $133.83, gross ratio 68.7%; all four mids from ctxs 100.0%, at least one stamp from G8 0.0%
+[NOBOUNCE-SRC]   vault open10 maker 2026-08: trades 1,265, matched 1,264; close gross $366.02, mid gross $248.72, gross ratio 68.0%; all four mids from ctxs 90.1%, at least one stamp from G8 9.9%
+[NOBOUNCE-SRC]   vault open10 maker 2026-09: trades 1,243, matched 1,241; close gross $764.56, mid gross $469.58, gross ratio 61.4%; all four mids from ctxs 64.7%, at least one stamp from G8 35.3%
+[NOBOUNCE-SRC]   vault open10 maker 2026-10: trades 484, matched 482; close gross $52.90, mid gross $-107.56, gross ratio -203.4%; all four mids from ctxs 16.2%, at least one stamp from G8 83.8%
+[NOBOUNCE-SRC] vault open10 maker: trades with both mids at all four stamps 2,587 of 3,832 (67.5%); close gross $1,265.11; mid-to-mid gross ctxs $910.41 (ratio 72.0%) vs G8 $911.12 (ratio 72.0%); |ctxs - G8| over the four stamps: median 1.134 bp, p90 9.428 bp
+[NOBOUNCE-SRC]   vault open10 taker 2026-07: trades 831, matched 831; close gross $161.03, mid gross $102.99, gross ratio 64.0%; all four mids from ctxs 100.0%, at least one stamp from G8 0.0%
+[NOBOUNCE-SRC]   vault open10 taker 2026-08: trades 1,261, matched 1,260; close gross $272.38, mid gross $183.04, gross ratio 67.2%; all four mids from ctxs 90.6%, at least one stamp from G8 9.4%
+[NOBOUNCE-SRC]   vault open10 taker 2026-09: trades 1,224, matched 1,222; close gross $471.24, mid gross $275.04, gross ratio 58.4%; all four mids from ctxs 64.2%, at least one stamp from G8 35.8%
+[NOBOUNCE-SRC]   vault open10 taker 2026-10: trades 473, matched 470; close gross $41.04, mid gross $-52.73, gross ratio -128.5%; all four mids from ctxs 17.0%, at least one stamp from G8 83.0%
+[NOBOUNCE-SRC] vault open10 taker: trades with both mids at all four stamps 2,571 of 3,789 (67.9%); close gross $888.38; mid-to-mid gross ctxs $631.57 (ratio 71.1%) vs G8 $629.39 (ratio 70.8%); |ctxs - G8| over the four stamps: median 1.120 bp, p90 9.346 bp
+[NOBOUNCE-SRC]   vault open20 maker 2026-07: trades 1,441, matched 1,441; close gross $252.69, mid gross $148.36, gross ratio 58.7%; all four mids from ctxs 100.0%, at least one stamp from G8 0.0%
+[NOBOUNCE-SRC]   vault open20 maker 2026-08: trades 2,204, matched 2,200; close gross $780.91, mid gross $540.38, gross ratio 69.2%; all four mids from ctxs 90.3%, at least one stamp from G8 9.7%
+[NOBOUNCE-SRC]   vault open20 maker 2026-09: trades 2,129, matched 2,127; close gross $1,672.03, mid gross $997.02, gross ratio 59.6%; all four mids from ctxs 64.4%, at least one stamp from G8 35.6%
+[NOBOUNCE-SRC]   vault open20 maker 2026-10: trades 816, matched 813; close gross $332.82, mid gross $-39.76, gross ratio -11.9%; all four mids from ctxs 15.0%, at least one stamp from G8 85.0%
+[NOBOUNCE-SRC] vault open20 maker: trades with both mids at all four stamps 4,478 of 6,590 (68.0%); close gross $2,992.11; mid-to-mid gross ctxs $2,232.34 (ratio 74.6%) vs G8 $2,226.22 (ratio 74.4%); |ctxs - G8| over the four stamps: median 1.119 bp, p90 9.130 bp
+[NOBOUNCE-SRC]   vault open20 taker 2026-07: trades 1,432, matched 1,432; close gross $230.82, mid gross $135.65, gross ratio 58.8%; all four mids from ctxs 100.0%, at least one stamp from G8 0.0%
+[NOBOUNCE-SRC]   vault open20 taker 2026-08: trades 2,191, matched 2,188; close gross $462.61, mid gross $296.66, gross ratio 64.1%; all four mids from ctxs 90.2%, at least one stamp from G8 9.8%
+[NOBOUNCE-SRC]   vault open20 taker 2026-09: trades 2,089, matched 2,087; close gross $814.95, mid gross $479.29, gross ratio 58.8%; all four mids from ctxs 64.0%, at least one stamp from G8 36.0%
+[NOBOUNCE-SRC]   vault open20 taker 2026-10: trades 801, matched 797; close gross $125.01, mid gross $-35.52, gross ratio -28.4%; all four mids from ctxs 15.8%, at least one stamp from G8 84.2%
+[NOBOUNCE-SRC] vault open20 taker: trades with both mids at all four stamps 4,432 of 6,513 (68.0%); close gross $1,612.98; mid-to-mid gross ctxs $1,168.40 (ratio 72.4%) vs G8 $1,163.06 (ratio 72.1%); |ctxs - G8| over the four stamps: median 1.134 bp, p90 9.064 bp
+[HARNESS] load_search_events: 6,697,756 merged rows -> 5,405,478 after the date/gap-day filter -> 5,378,429 after dropping 27,049 label_gap=1 rows
+[S1H] picks cross-checked against S1-G's saved per-fold n, every (fold,q): OK
+[S1H] q=0.01: n=35,629
+[S1H] q=0.005: n=17,699
+[S1H] q=0.001: n=3,638
+[HARNESS] load_search_events: 6,697,756 merged rows -> 5,405,478 after the date/gap-day filter -> 5,378,429 after dropping 27,049 label_gap=1 rows
+[NOBOUNCE] events test: 3,097,060 (picks q 1%: 35,629); t0 2025-12-21 00:00:00+00:00 .. 2026-07-11 23:30:00+00:00
+[NOBOUNCE] arrays test: 192 coins x 292,894 minutes; ctxs rows used 55,061,058, off-minute rows dropped 6,172; finite mids 53,465,298, finite closes 53,901,725
+[NOBOUNCE-SRC]   test open10 maker 2025-12: trades 499, matched 499; close gross $175.07, mid gross $80.86, gross ratio 46.2%; all four mids from ctxs 100.0%, at least one stamp from G8 0.0%
+[NOBOUNCE-SRC]   test open10 maker 2026-01: trades 1,263, matched 1,263; close gross $269.80, mid gross $9.23, gross ratio 3.4%; all four mids from ctxs 100.0%, at least one stamp from G8 0.0%
+[NOBOUNCE-SRC]   test open10 maker 2026-02: trades 1,134, matched 1,134; close gross $561.78, mid gross $-37.94, gross ratio -6.8%; all four mids from ctxs 100.0%, at least one stamp from G8 0.0%
+[NOBOUNCE-SRC]   test open10 maker 2026-03: trades 947, matched 947; close gross $270.62, mid gross $-48.94, gross ratio -18.1%; all four mids from ctxs 100.0%, at least one stamp from G8 0.0%
+[NOBOUNCE-SRC]   test open10 maker 2026-04: trades 1,356, matched 1,356; close gross $1,199.59, mid gross $460.18, gross ratio 38.4%; all four mids from ctxs 100.0%, at least one stamp from G8 0.0%
+[NOBOUNCE-SRC]   test open10 maker 2026-05: trades 1,257, matched 1,257; close gross $806.15, mid gross $-101.54, gross ratio -12.6%; all four mids from ctxs 98.0%, at least one stamp from G8 2.0%
+[NOBOUNCE-SRC]   test open10 maker 2026-06: trades 1,214, matched 1,214; close gross $1,757.70, mid gross $825.44, gross ratio 47.0%; all four mids from ctxs 100.0%, at least one stamp from G8 0.0%
+[NOBOUNCE-SRC]   test open10 maker 2026-07: trades 399, matched 363; close gross $95.80, mid gross $-29.74, gross ratio -31.0%; all four mids from ctxs 100.0%, at least one stamp from G8 0.0%
+[NOBOUNCE-SRC] test open10 maker: trades with both mids at all four stamps 7,501 of 8,069 (93.0%); close gross $5,100.25; mid-to-mid gross ctxs $1,344.84 (ratio 26.4%) vs G8 $1,348.95 (ratio 26.4%); |ctxs - G8| over the four stamps: median 0.153 bp, p90 6.632 bp
+[NOBOUNCE-SRC]   test open10 taker 2025-12: trades 501, matched 501; close gross $161.95, mid gross $72.75, gross ratio 44.9%; all four mids from ctxs 100.0%, at least one stamp from G8 0.0%
+[NOBOUNCE-SRC]   test open10 taker 2026-01: trades 1,259, matched 1,259; close gross $220.38, mid gross $-1.19, gross ratio -0.5%; all four mids from ctxs 100.0%, at least one stamp from G8 0.0%
+[NOBOUNCE-SRC]   test open10 taker 2026-02: trades 1,151, matched 1,151; close gross $490.53, mid gross $19.71, gross ratio 4.0%; all four mids from ctxs 100.0%, at least one stamp from G8 0.0%
+[NOBOUNCE-SRC]   test open10 taker 2026-03: trades 940, matched 940; close gross $221.62, mid gross $-13.45, gross ratio -6.1%; all four mids from ctxs 100.0%, at least one stamp from G8 0.0%
+[NOBOUNCE-SRC]   test open10 taker 2026-04: trades 1,342, matched 1,342; close gross $703.75, mid gross $218.27, gross ratio 31.0%; all four mids from ctxs 100.0%, at least one stamp from G8 0.0%
+[NOBOUNCE-SRC]   test open10 taker 2026-05: trades 1,253, matched 1,253; close gross $422.87, mid gross $-68.71, gross ratio -16.2%; all four mids from ctxs 98.0%, at least one stamp from G8 2.0%
+[NOBOUNCE-SRC]   test open10 taker 2026-06: trades 1,229, matched 1,229; close gross $877.30, mid gross $418.55, gross ratio 47.7%; all four mids from ctxs 100.0%, at least one stamp from G8 0.0%
+[NOBOUNCE-SRC]   test open10 taker 2026-07: trades 403, matched 367; close gross $40.57, mid gross $-27.36, gross ratio -67.4%; all four mids from ctxs 100.0%, at least one stamp from G8 0.0%
+[NOBOUNCE-SRC] test open10 taker: trades with both mids at all four stamps 7,530 of 8,078 (93.2%); close gross $3,041.66; mid-to-mid gross ctxs $654.24 (ratio 21.5%) vs G8 $660.11 (ratio 21.7%); |ctxs - G8| over the four stamps: median 0.152 bp, p90 6.771 bp
+[NOBOUNCE-SRC]   test open20 maker 2025-12: trades 917, matched 917; close gross $374.57, mid gross $188.56, gross ratio 50.3%; all four mids from ctxs 100.0%, at least one stamp from G8 0.0%
+[NOBOUNCE-SRC]   test open20 maker 2026-01: trades 2,297, matched 2,297; close gross $758.61, mid gross $162.67, gross ratio 21.4%; all four mids from ctxs 100.0%, at least one stamp from G8 0.0%
+[NOBOUNCE-SRC]   test open20 maker 2026-02: trades 1,937, matched 1,937; close gross $1,702.13, mid gross $78.58, gross ratio 4.6%; all four mids from ctxs 100.0%, at least one stamp from G8 0.0%
+[NOBOUNCE-SRC]   test open20 maker 2026-03: trades 1,462, matched 1,462; close gross $1,207.79, mid gross $207.27, gross ratio 17.2%; all four mids from ctxs 100.0%, at least one stamp from G8 0.0%
+[NOBOUNCE-SRC]   test open20 maker 2026-04: trades 2,317, matched 2,317; close gross $4,726.06, mid gross $1,609.17, gross ratio 34.0%; all four mids from ctxs 100.0%, at least one stamp from G8 0.0%
+[NOBOUNCE-SRC]   test open20 maker 2026-05: trades 2,107, matched 2,106; close gross $3,382.29, mid gross $-1,139.41, gross ratio -33.7%; all four mids from ctxs 97.6%, at least one stamp from G8 2.4%
+[NOBOUNCE-SRC]   test open20 maker 2026-06: trades 2,017, matched 2,017; close gross $8,073.59, mid gross $3,398.81, gross ratio 42.1%; all four mids from ctxs 100.0%, at least one stamp from G8 0.0%
+[NOBOUNCE-SRC]   test open20 maker 2026-07: trades 681, matched 629; close gross $283.67, mid gross $-589.35, gross ratio -207.8%; all four mids from ctxs 100.0%, at least one stamp from G8 0.0%
+[NOBOUNCE-SRC] test open20 maker: trades with both mids at all four stamps 12,806 of 13,735 (93.2%); close gross $20,710.59; mid-to-mid gross ctxs $5,038.02 (ratio 24.3%) vs G8 $5,059.37 (ratio 24.4%); |ctxs - G8| over the four stamps: median 0.152 bp, p90 6.183 bp
+[NOBOUNCE-SRC]   test open20 taker 2025-12: trades 929, matched 929; close gross $279.23, mid gross $89.76, gross ratio 32.1%; all four mids from ctxs 100.0%, at least one stamp from G8 0.0%
+[NOBOUNCE-SRC]   test open20 taker 2026-01: trades 2,276, matched 2,276; close gross $560.63, mid gross $112.10, gross ratio 20.0%; all four mids from ctxs 100.0%, at least one stamp from G8 0.0%
+[NOBOUNCE-SRC]   test open20 taker 2026-02: trades 1,919, matched 1,919; close gross $1,031.35, mid gross $63.18, gross ratio 6.1%; all four mids from ctxs 100.0%, at least one stamp from G8 0.0%
+[NOBOUNCE-SRC]   test open20 taker 2026-03: trades 1,470, matched 1,470; close gross $614.12, mid gross $96.43, gross ratio 15.7%; all four mids from ctxs 100.0%, at least one stamp from G8 0.0%
+[NOBOUNCE-SRC]   test open20 taker 2026-04: trades 2,310, matched 2,310; close gross $1,961.10, mid gross $666.80, gross ratio 34.0%; all four mids from ctxs 100.0%, at least one stamp from G8 0.0%
+[NOBOUNCE-SRC]   test open20 taker 2026-05: trades 2,110, matched 2,109; close gross $1,287.88, mid gross $-330.83, gross ratio -25.7%; all four mids from ctxs 97.6%, at least one stamp from G8 2.4%
+[NOBOUNCE-SRC]   test open20 taker 2026-06: trades 2,007, matched 2,007; close gross $2,231.76, mid gross $939.46, gross ratio 42.1%; all four mids from ctxs 100.0%, at least one stamp from G8 0.0%
+[NOBOUNCE-SRC]   test open20 taker 2026-07: trades 678, matched 626; close gross $144.60, mid gross $-49.64, gross ratio -34.3%; all four mids from ctxs 100.0%, at least one stamp from G8 0.0%
+[NOBOUNCE-SRC] test open20 taker: trades with both mids at all four stamps 12,759 of 13,699 (93.1%); close gross $8,094.08; mid-to-mid gross ctxs $1,901.23 (ratio 23.5%) vs G8 $1,903.08 (ratio 23.5%); |ctxs - G8| over the four stamps: median 0.154 bp, p90 6.292 bp
+[NOBOUNCE-SRC] wrote logs/costs1/costs_nobounce_sources.json; total 48s
