@@ -1,5 +1,5 @@
 [VALID] raw books 940 coin-minutes; coins ['ADA', 'BOME', 'HMSTR', 'LINEA', 'NOT', 'TNSR', 'W', 'YZY', 'ZRO', 'kPEPE']; days ['20260115', '20260301', '20260320', '20260408', '20260415', '20260422', '20260801', '20260915', '20261005', '20261008', '20261009']
-[VALID] ASKED vs FOUND (unique coin-minutes asked from the 20 files, 960; found 940; the T3 denominator is the found rows):
+[VALID] ASKED vs FOUND (unique coin-minutes asked from the 32 files, 960; found 940; the T3 denominator is the found rows):
 [VALID]   ADA 20260115: asked 60, found 60, missing 0
 [VALID]   ADA 20260415: asked 60, found 60, missing 0
 [VALID]   ADA 20260915: asked 60, found 60, missing 0

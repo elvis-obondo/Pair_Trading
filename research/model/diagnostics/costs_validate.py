@@ -1,4 +1,4 @@
-"""COSTS1 validation of the G8-table curve against the raw 20-level books of the 20 test files (rules section 8, VALIDATION and ESCALATION). LOCAL: reads files only; no AWS call.
+"""COSTS1 validation of the G8-table curve against the raw 20-level books of the 32 test files (rules section 8, VALIDATION and ESCALATION). LOCAL: reads files only; no AWS call.
 
     python -u research/model/diagnostics/costs_validate.py BOOKS_ALL.parquet G8_DIR > research/model/diagnostics/costs_validate.log
     python -u research/model/diagnostics/costs_validate.py --t2 logs/costs1/costs_analysis_conservative.json logs/costs1/costs_analysis_calibrated.json
@@ -74,7 +74,7 @@ def main():
     asked_df = pd.DataFrame(list(asked.keys()), columns=["coin", "day", "minute"])
     got = set(zip(B["coin"], B["minute"].astype(int)))
     asked_df["found"] = [(c, m) in got for c, m in zip(asked_df["coin"], asked_df["minute"])]
-    log(f"[VALID] ASKED vs FOUND (unique coin-minutes asked from the 20 files, {len(asked_df):,}; found {int(asked_df['found'].sum()):,}; the T3 denominator is the found rows):")
+    log(f"[VALID] ASKED vs FOUND (unique coin-minutes asked from the {len(T20)} files, {len(asked_df):,}; found {int(asked_df['found'].sum()):,}; the T3 denominator is the found rows):")
     for (c, d), g in asked_df.groupby(["coin", "day"]):
         log(f"[VALID]   {c} {d}: asked {len(g)}, found {int(g['found'].sum())}, missing {int((~g['found']).sum())}" + (f" (minutes of hour {sorted(set(int(m) % 60 for m in g.loc[~g['found'], 'minute']))})" if (~g["found"]).any() else ""))
     if "src_rel_hour" in B.columns:

@@ -194,3 +194,9 @@ that avoids high recent volatility); the small remainder's lift looks similar, n
    the tail of `research/dislocation_model/NUMBERS.md`. Wait for the checker's post-run review of both vault
    runs, then do step 6.
 3. Check with the planner which open item (above) the user has picked before starting anything new.
+
+## STATE 2026-11-18 (later): entry-delay write-up and Word report
+- Entry-delay write-up (text only): diagnostics/costs_delay_writeup.py -> logs/costs1/costs_entry_delay_writeup.md. Checker passed it. No engine change, no run.
+- Word report: diagnostics/costs_report_md.py -> logs/costs1/costs_report.md; model/costs_docx_render.js -> ~/Downloads/HL-COSTS1_costs_report.docx (structure validated; page layout never viewed, no renderer on this machine).
+- costs_validate.py: only the file-count label changed (20 -> 32 files); log and json numbers identical.
+- Open: the full 88,405-file raw pull is the user's and planner's call (T4 fired); nothing asked.
