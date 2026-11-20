@@ -1,0 +1,40 @@
+[S1-FAST-PROOF] POST-HOC GATE: this pass/fail rule was set AFTER a local dry run showed max|w diff|=7.7e-3 at an 'innocent' (non-broken) grid point -- the rule below (objective, KKT, predictions) was chosen in response to that finding, not fixed in advance.
+[S1-FAST-PROOF] sha256 s1_hazard_fast_proof.py: 03f857ed69f77bbf63ebdb7feefe5c01a7d22c253a9a76052ec83e26720b8f31
+[S1-FAST-PROOF] sha256 hazard_logistic.py: 6150b022201a1fa6184beac181a29d4bb7010ee6d1485c3ae2ca0c4ccaa2ad78
+[S1-FAST-PROOF] sha256 s1_model.py: afd9ec9c495c07a674f8e7ae4701daedd5d4b28691637ae97ecc2ebd9348222a
+[S1-FAST-PROOF] sha256 s1_preprocess.py: 9e867b5c7bbe8d0a28413a5d69b0a19a1d7880c83c17435354a7d88cb4e9343b
+[S1-FAST-PROOF] sha256 harness.py: 423328afc950252fe37d5fbc7fb4c25d97475b36abe3860542357e5481ce56c7
+[S1-FAST-PROOF] git_head bdddaf15e9da9bed3f8eac623848a436dc1bf76f (86 uncommitted paths); start 2026-10-28T09:48:18Z UTC; pid 51832
+[HARNESS] load_search_events: 6,697,756 merged rows -> 5,405,478 after the date/gap-day filter -> 5,378,429 after dropping 27,049 label_gap=1 rows
+[S1-FAST-PROOF] smoke subset: 20000 events (seed 20261028), 328,460 hazard rows  [45s]
+[S1-FAST-PROOF] label=1 rows per step: [216, 442, 502, 452, 430, 475, 426, 388, 330, 332, 347, 319, 328, 298, 254, 256, 244, 234, 217, 201]
+[HARNESS] check_inputs: 5 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[S1-PREPROCESS] degenerate-on-raw-fit-rows columns dropped: 0 of 5
+[S1-PREPROCESS] SD-0-after-clip columns dropped: 0 of 5
+[HARNESS] check_inputs: 2 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 5 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 2 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[S1-FAST-PROOF] preprocessed: n_features=371  [281s]
+[S1-FAST-PROOF] lambda_max=3755.95 grid=[1877.9745  772.8986  318.0939  130.9147   53.8792   22.1745    9.1261
+    3.7559]
+[S1-FAST-PROOF] MIDDLE penalty idx=4 (lam=53.8792, break_fast=False): fast: n_iter=55/2000 converged=True time=1.65s | exact: n_iter=55/2000 converged=True time=6.23s
+[S1-FAST-PROOF] MIDDLE penalty idx=4: exact-objective(fast solution)=32234.192428 exact-objective(exact solution)=32234.186907 rel|diff|=1.713e-07
+[S1-FAST-PROOF] MIDDLE penalty idx=4: KKT (exact gradient) fast=2.181e-05 exact=1.978e-06 bound=max(10xexact, 1e-4)=1.000e-04
+[S1-FAST-PROOF] MIDDLE penalty idx=4: predictions max|p_10h diff|=2.771e-03 top-10% overlap=0.9990
+[S1-FAST-PROOF] MIDDLE penalty idx=4: max|w diff|=5.914e-03 (REPORTED ONLY, not gated -- flat L1 directions don't identify coefficients)
+[S1-FAST-PROOF] MIDDLE penalty idx=4 (break_fast=False) -- POST-HOC GATE: objective rel|diff|<1e-04 [True], KKT bound [True], predictions (max|p diff|<=1e-3, overlap>=0.99) [False]: FAIL
+[S1-FAST-PROOF] LOWEST penalty idx=7 (lam=3.75595, break_fast=False): fast: n_iter=146/2000 converged=True time=7.74s | exact: n_iter=143/2000 converged=True time=21.20s
+[S1-FAST-PROOF] LOWEST penalty idx=7: exact-objective(fast solution)=32028.063972 exact-objective(exact solution)=32027.754507 rel|diff|=9.662e-06
+[S1-FAST-PROOF] LOWEST penalty idx=7: KKT (exact gradient) fast=4.786e-05 exact=1.798e-05 bound=max(10xexact, 1e-4)=1.798e-04
+[S1-FAST-PROOF] LOWEST penalty idx=7: predictions max|p_10h diff|=4.121e-02 top-10% overlap=0.9760
+[S1-FAST-PROOF] LOWEST penalty idx=7: max|w diff|=9.900e-02 (REPORTED ONLY, not gated -- flat L1 directions don't identify coefficients)
+[S1-FAST-PROOF] LOWEST penalty idx=7 (break_fast=False) -- POST-HOC GATE: objective rel|diff|<1e-04 [True], KKT bound [True], predictions (max|p diff|<=1e-3, overlap>=0.99) [False]: FAIL
+[S1-FAST-PROOF] MIDDLE penalty idx=4 (BROKEN VARIANT) (lam=53.8792, break_fast=True): fast: n_iter=15/2000 converged=True time=1.20s | exact: n_iter=55/2000 converged=True time=5.08s
+[S1-FAST-PROOF] MIDDLE penalty idx=4 (BROKEN VARIANT): exact-objective(fast solution)=145436.910012 exact-objective(exact solution)=32234.186907 rel|diff|=3.512e+00
+[S1-FAST-PROOF] MIDDLE penalty idx=4 (BROKEN VARIANT): KKT (exact gradient) fast=4.618e-03 exact=1.978e-06 bound=max(10xexact, 1e-4)=1.000e-04
+[S1-FAST-PROOF] MIDDLE penalty idx=4 (BROKEN VARIANT): predictions max|p_10h diff|=5.985e-01 top-10% overlap=0.0290
+[S1-FAST-PROOF] MIDDLE penalty idx=4 (BROKEN VARIANT): max|w diff|=2.808e+00 (REPORTED ONLY, not gated -- flat L1 directions don't identify coefficients)
+[S1-FAST-PROOF] MIDDLE penalty idx=4 (BROKEN VARIANT) (break_fast=True) -- POST-HOC GATE: objective rel|diff|<1e-04 [False], KKT bound [False], predictions (max|p diff|<=1e-3, overlap>=0.99) [False]: FAIL
+[S1-FAST-PROOF] BROKEN VARIANT -- fast path with break_intercept=True correctly FAILS the end-to-end check: PASS
+[S1-FAST-PROOF] all done [325s]: 1/4 checks PASS
+exit_code=1

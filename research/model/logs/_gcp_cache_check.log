@@ -1,0 +1,6 @@
+total 28544020
+drwxrwxr-x  2 elvisobondo elvisobondo        4096 Oct 27 22:03 .
+drwxrwxr-x 12 elvisobondo elvisobondo        4096 Oct 27 21:59 ..
+-rw-rw-r--  1 elvisobondo elvisobondo       23916 Oct 27 22:19 ivq_pair_v1_1091.manifest.json
+-rw-rw-r--  1 elvisobondo elvisobondo 29229007312 Oct 27 22:19 ivq_pair_v1_1091.npy
+ls: cannot access 'research/model/logs/s1/': No such file or directory

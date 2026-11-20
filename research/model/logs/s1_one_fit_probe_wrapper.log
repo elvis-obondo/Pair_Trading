@@ -1,0 +1,1 @@
+research/model/run_s1_one_fit_probe.sh: line 43: 35825 Killed                  timeout 14400 python -u research/model/s1_one_fit_probe.py > "$LOG" 2>&1

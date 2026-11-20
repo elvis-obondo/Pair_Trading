@@ -1,0 +1,6 @@
+CONNECTIVITY_CHECK_OK
+-rw-rw-r-- 1 elvisobondo elvisobondo 3123 Oct 27 23:35 /home/elvisobondo/Pair_Trading/research/model/logs/b5_hazard_logistic_proof.log
+-rw-rw-r-- 1 elvisobondo elvisobondo   56 Oct 27 23:35 /home/elvisobondo/Pair_Trading/research/model/logs/b5_hazard_logistic_proof_done.log
+-rw-rw-r-- 1 elvisobondo elvisobondo    0 Oct 27 23:32 /home/elvisobondo/Pair_Trading/research/model/logs/b5_hazard_logistic_proof_launch.log
+-rw-rw-r-- 1 elvisobondo elvisobondo  103 Oct 28 01:16 /home/elvisobondo/Pair_Trading/research/model/logs/b5_hazard_logistic_proof_launch2.log
+research/model/logs/b5_hazard_logistic_proof.log already exists: refusing to overwrite an existing log

@@ -1,0 +1,65 @@
+[HARNESS] load_search_events: 6,697,756 merged rows -> 5,405,478 after the date/gap-day filter -> 5,378,429 after dropping 27,049 label_gap=1 rows
+[DRYRUN] fold0 small subset: n_train=3000 n_val=1000 n_test=1000  [49s]
+[DRYRUN] using 5 real IN columns: ['ticker_a', 'ticker_b', 'z', 'threshold', 'beta']  [87s]
+[S1-RUN] fold 0: n_train=3,000 n_val=1,000 n_test=1,000 [0s]
+[HARNESS] check_inputs: 3 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[S1-PREPROCESS] degenerate-on-raw-fit-rows columns dropped: 0 of 3
+[S1-PREPROCESS] SD-0-after-clip columns dropped: 0 of 3
+[HARNESS] check_inputs: 2 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 3 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 2 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 3 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 2 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[S1-RUN] fold 0: preprocessed train+val, n_features=184 degenerate=0 sd0=0 [0s]
+[S1-RUN] fold 0: VmHWM=1762MB after train+val preprocessing [0s]
+ outer=1 cd_sweeps=2/200
+ outer=2 cd_sweeps=2/200
+ outer=3 cd_sweeps=2/200
+ outer=4 cd_sweeps=2/200
+ outer=5 cd_sweeps=2/200
+ outer=6 cd_sweeps=2/200
+ outer=7 cd_sweeps=2/200
+[S1-RUN] fold 0: l1_ratio=1.0 lam_idx=0 lam=227.685 val_lift=0.1527 n_iter=7 converged=True rel_change=1.14e-10 [1s]
+ outer=1 cd_sweeps=55/200
+ outer=2 cd_sweeps=65/200
+ outer=3 cd_sweeps=55/200
+ outer=4 cd_sweeps=45/200
+ outer=5 cd_sweeps=35/200
+[S1-RUN] fold 0: l1_ratio=1.0 lam_idx=1 lam=0.455371 val_lift=0.0543 n_iter=5 converged=True rel_change=3.10e-08 [1s]
+[S1-RUN] fold 0: SELECTED l1_ratio=1.0 lam_idx=0 lam=227.685 val_lift=0.1527  [1s]
+[S1-RUN] fold 0: SELECTED KKT max_violation=8.042e-12 rel_change=1.14e-10  [1s]
+[S1-RUN] fold 0: permutation importance on 1 non-zero raw columns, base val log-loss=0.553996  [1s]
+[S1-RUN] fold 0: VmHWM=1762MB after freeing selection-phase X [1s]
+[HARNESS] check_inputs: 3 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[S1-PREPROCESS] degenerate-on-raw-fit-rows columns dropped: 0 of 3
+[S1-PREPROCESS] SD-0-after-clip columns dropped: 0 of 3
+[HARNESS] check_inputs: 2 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 3 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 2 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[S1-RUN] fold 0: VmHWM=1762MB after refit preprocessing [1s]
+ outer=1 cd_sweeps=2/200
+ outer=2 cd_sweeps=2/200
+ outer=3 cd_sweeps=2/200
+ outer=4 cd_sweeps=2/200
+[S1-RUN] fold 0: REFIT n_iter=4 converged=True rel_change=8.31e-12 KKT max_violation=8.100e-13 n_nonzero_w=1 VmHWM=1762MB [1s]
+[HARNESS] check_inputs: 3 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 2 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[S1-RUN] fold 0: TEST lift=-0.0891  [2s]
+Traceback (most recent call last):
+  File "/home/elvisobondo/Pair_Trading/research/model/s1_run_dryrun_check.py", line 42, in <module>
+    s1_run.run_one_fold(0, events, small_fold, in_cols, rng)
+  File "/home/elvisobondo/Pair_Trading/research/model/s1_run.py", line 241, in run_one_fold
+    pd.DataFrame({"column": out_cols, "coef": r_refit["w"]}).to_csv(f"{fold_prefix}_coefs.csv", index=False)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/pandas/core/frame.py", line 782, in __init__
+    mgr = dict_to_mgr(data, index, columns, dtype=dtype, copy=copy, typ=manager)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/pandas/core/internals/construction.py", line 503, in dict_to_mgr
+    return arrays_to_mgr(arrays, columns, index, dtype=dtype, typ=typ, consolidate=copy)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/pandas/core/internals/construction.py", line 114, in arrays_to_mgr
+    index = _extract_index(arrays)
+            ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/elvisobondo/Pair_Trading/.venv/lib/python3.12/site-packages/pandas/core/internals/construction.py", line 677, in _extract_index
+    raise ValueError("All arrays must be of the same length")
+ValueError: All arrays must be of the same length

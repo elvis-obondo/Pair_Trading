@@ -1,0 +1,18 @@
+[S1-SIZING] sha256 s1_sizing.py: 8e943d74a8b88f6101794b250bb05d56819e57a2b299027a49b15a6647640f07
+[S1-SIZING] sha256 s1_preprocess.py: 0b1deb938be385d413551d4ef75b54ef12f9e9ec2a2dab88db165b79906e918c
+[S1-SIZING] sha256 s1_model.py: 8a0abf5c5690b522450d14a91a64e3959959434953fa48f2965a27f1e9902424
+[S1-SIZING] sha256 hazard_logistic.py: 303b94aacbfe6c23fb4f70c97c52eb718a9eddd9f8a9c15eaebd7bccdeaee4b3
+[S1-SIZING] sha256 harness.py: 423328afc950252fe37d5fbc7fb4c25d97475b36abe3860542357e5481ce56c7
+[S1-SIZING] cache manifest cache_sha256: bd5dc2549374d0a80c8b042425e34119289b17b753a49213ac28c1831c6ca544 (must be bd5dc2549374d0a80c8b042425e34119289b17b753a49213ac28c1831c6ca544)
+[S1-SIZING] git_head bdddaf15e9da9bed3f8eac623848a436dc1bf76f (83 uncommitted paths); start 2026-10-28T06:06:57Z UTC; pid 14376
+[HARNESS] load_search_events: 6,697,756 merged rows -> 5,405,478 after the date/gap-day filter -> 5,378,429 after dropping 27,049 label_gap=1 rows
+[S1-SIZING] fold 7: n_train=3,979,894 n_val=1,057,348  [215s]
+[HARNESS] check_inputs: 1091 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[S1-SIZING] loaded X_train_raw: shape=(3979894, 1091) nbytes=17.37GB rss=18.45GB VmHWM=36.62GB  [315s]
+[S1-PREPROCESS] degenerate-on-raw-fit-rows columns dropped: 0 of 1089
+[S1-PREPROCESS] SD-0-after-clip columns dropped: 21 of 1089 (['g2_nan_1m', 'b_adl_ratio_30', 'b_adl_share_30', 'a_vault_net_usd', 'a_vault_gross_usd', 'a_vault_share_of_oi', 'a_vault_net_chg_1h', 'a_vault_net_chg_6h', 'a_vault_net_chg_24h', 'b_vault_net_usd', 'b_vault_gross_usd', 'b_vault_share_of_oi', 'b_vault_net_chg_1h', 'b_vault_net_chg_6h', 'b_vault_net_chg_24h', 'd_vault_net_usd', 'd_vault_gross_usd', 'd_vault_share_of_oi', 'd_vault_net_chg_1h', 'd_vault_net_chg_6h', 'd_vault_net_chg_24h'])
+[S1-SIZING] preprocessed TRAIN in 1149.04s: n_features=2368 (ticker_a_levels=198 ticker_b_levels=198) rss=38.20GB VmHWM=55.25GB  [1464s]
+[S1-SIZING] hazard rows: 65,590,431 over 3,979,894 train events; label=1 rows per step: [52835, 79624, 88815, 91209, 89780, 87356, 82430, 75749, 71248, 68191, 65090, 62588, 59096, 55637, 52705, 51140, 48323, 46709, 44773, 42860]  [1479s]
+[S1-SIZING] lambda_max=988998 grid=[494499.0111 203515.8715  83758.9338  34471.8028  14187.2053   5838.8822
+   2403.0487    988.998 ] chain indices (mid->lowest)=[4, 5, 6, 7]  [1561s]
+exit_code=124

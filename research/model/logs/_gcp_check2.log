@@ -1,0 +1,20 @@
+total 237536
+drwxr--r-- 2 elvisobondo elvisobondo     4096 Oct 29 19:05 .
+drwxrwxr-x 3 elvisobondo elvisobondo     4096 Oct 29 19:05 ..
+-rw-r--r-- 1 elvisobondo elvisobondo 29653473 Oct 29 19:04 fold0_test_predictions.csv
+-rw-r--r-- 1 elvisobondo elvisobondo    25953 Oct 29 19:05 fold0_val_permutation_importance.csv
+-rw-r--r-- 1 elvisobondo elvisobondo 31885487 Oct 29 19:04 fold1_test_predictions.csv
+-rw-r--r-- 1 elvisobondo elvisobondo    21117 Oct 29 19:05 fold1_val_permutation_importance.csv
+-rw-r--r-- 1 elvisobondo elvisobondo 33089764 Oct 29 19:04 fold2_test_predictions.csv
+-rw-r--r-- 1 elvisobondo elvisobondo    20270 Oct 29 19:05 fold2_val_permutation_importance.csv
+-rw-r--r-- 1 elvisobondo elvisobondo 32907835 Oct 29 19:04 fold3_test_predictions.csv
+-rw-r--r-- 1 elvisobondo elvisobondo    12619 Oct 29 19:05 fold3_val_permutation_importance.csv
+-rw-r--r-- 1 elvisobondo elvisobondo 32919786 Oct 29 19:05 fold4_test_predictions.csv
+-rw-r--r-- 1 elvisobondo elvisobondo    13178 Oct 29 19:05 fold4_val_permutation_importance.csv
+-rw-r--r-- 1 elvisobondo elvisobondo 32043824 Oct 29 19:05 fold5_test_predictions.csv
+-rw-r--r-- 1 elvisobondo elvisobondo     5558 Oct 29 19:05 fold5_val_permutation_importance.csv
+-rw-r--r-- 1 elvisobondo elvisobondo 29081509 Oct 29 19:05 fold6_test_predictions.csv
+-rw-r--r-- 1 elvisobondo elvisobondo     2306 Oct 29 19:05 fold6_val_permutation_importance.csv
+-rw-r--r-- 1 elvisobondo elvisobondo 21501675 Oct 29 19:05 fold7_test_predictions.csv
+-rw-r--r-- 1 elvisobondo elvisobondo     5598 Oct 29 19:05 fold7_val_permutation_importance.csv
+research/model/s1d_top1pct.py

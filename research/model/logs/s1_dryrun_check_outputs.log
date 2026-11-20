@@ -1,0 +1,33 @@
+{
+ "fold": 0,
+ "selected_l1_ratio": 1.0,
+ "selected_lam": 227.68538684896131,
+ "selected_rel_change": 1.1364976316222461e-10,
+ "selected_kkt": {
+  "b_violation": 8.041749136730573e-12,
+  "w_violation_nonzero": 8.444788133241149e-13,
+  "w_violation_zero": 0.0,
+  "max_violation": 8.041749136730573e-12
+ },
+ "refit_n_iter": 4,
+ "refit_converged": true,
+ "refit_rel_change": 8.308754999280343e-12,
+ "refit_kkt": {
+  "b_violation": 5.336120469958863e-14,
+  "w_violation_nonzero": 8.099507769073882e-13,
+  "w_violation_zero": 0.0,
+  "max_violation": 8.099507769073882e-13
+ },
+ "test_lift": -0.08910000000000007,
+ "finished_utc": "2026-10-28T15:13:23Z"
+}---
+column,coef
+z,0.0
+threshold,-0.3356761265519563
+beta,0.0
+ticker_a__code0,0.0
+---
+  187 research/model/logs/s1_dryrun/fold0_coefs.csv
+ 1001 research/model/logs/s1_dryrun/fold0_test_predictions.csv
+    2 research/model/logs/s1_dryrun/fold0_val_permutation_importance.csv
+ 1190 total

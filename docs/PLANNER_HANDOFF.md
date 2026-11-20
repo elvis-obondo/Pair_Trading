@@ -1,4 +1,4 @@
-# Planner handoff: research partner (updated 2026-10-29, HL-MODEL1 S1 done, the user is examining results)
+# Planner handoff: research partner (updated 2026-11-20, HL-TARGET2 step A)
 
 You are the user's research partner and planner. Read this first, then
 `docs/HYPERLIQUID_HANDOFF.md` (the master plan and decisions log), `CLAUDE.md`, and the
@@ -43,10 +43,7 @@ handoff covers the research history and the reasons behind each decision.
 - **Waivers are fine when the user gives them.** They accepted 400-event poison tests, a
   recovered log, and dropping or deferring work to ship faster. Offer a "what can be cut"
   list when the user asks why steps are needed.
-- **Check in while jobs run.** Set a CronCreate every 30 minutes (minute 7 and 37) that looks
-  at the VM and nudges the builder if the machine is idle or a failure hasn't been acted on.
-  Stay quiet otherwise. Crons die with the session; re-create one at the start.
-  Memory: `check-in-while-runs-are-live`.
+- **No check-in crons by default** (token budget; memory `save-tokens`). Check once when results are due.
 - **Chain overnight steps on the VM itself.** On the night of 2026-10-25/26, about 10 hours
   were lost because the next step waited on the laptop, which was asleep.
 - **Verify before briefing.** Open the code and data a brief rests on. My factor-of-½ error in
@@ -56,51 +53,47 @@ handoff covers the research history and the reasons behind each decision.
 - **Thought exercises stay thought exercises.** When the user says so, answer; don't turn the
   ideas into plan items or a backlog (2026-10-27).
 
-## 3. Where things stand (updated 2026-11-12)
+## 3. Where things stand (updated 2026-11-20, for a fresh planner session)
 
-Full history: the decisions log in docs/HYPERLIQUID_HANDOFF.md. Numbers: research/dislocation_model/NUMBERS.md.
+Full history: decisions log in docs/HYPERLIQUID_HANDOFF.md ("What is closed" holds the COSTS1 entry). Numbers:
+research/dislocation_model/NUMBERS.md and the section files named below. Sessions: Planner, Code Builder, Code
+Checker; names change, find them with ListAgents.
 
-### Model (HL-MODEL1, S1 penalised logistic, hazard framing)
-- Gate FAIL (pooled top-10% lift 0.0394 < 0.05). Live Rule A picks (top q% of p_10h vs the previous block's
-  quantile) keep the edge: S1-F/S1-G. Isotonic recalibration per horizon (S1-H) fixes calibration: top 1% at 10 h
-  67.9% predicted vs 67.7% actual; also 2 h 34.2 vs 34.7, 5 h 54.2 vs 54.7 (NUMBERS [HL-MODEL1-S1-H]).
-- **Pre-vault model saved COMPLETE** (HL-VAULT1 step 2b): fit on all 5,378,429 search events, fold 7's lam 14187.2,
-  l1_ratio 0.5; KKT 2.2e-08; 192 non-zero weights; S3 s1_vault/logs/outputs/ and research/model/logs/s1/vault_pull2/.
-  Known gap (user-accepted): the fold 0 reproduction (2a) missed its strict tolerance; max |dp| 0.001748 / 0.002003
-  / 0.001832 (2/5/10 h), start-point dependence. This model is what paper trading would start from (a second refit
-  including the vault only if the user likes the vault result).
+### ACTIVE: HL-TARGET2 (brief docs/prompts/HL_TARGET2_NET_BP.md), step A in progress
+- Why: S1 ranks real reversion but its dollar edge does not survive costs (COSTS1 below). HL-TARGET2 retrains on a money target.
+- User decisions (2026-11-20): target = net bp per trade at book-midpoint prices; cost = taker (4.5 bp/fill + book
+  half-spread + funding); exit = mid spread reaches mu, else minute 600. Same events and signal as S1 (trigger from closes).
+  The user rules the data fresh for the new target (test months and vault); discipline: design choices justified from
+  test-month evidence and written down before the vault is scored once at the end.
+- Step A COMMITTED (2281687) but NOT checker-passed (checker 2026-11-20: no PASS given; 3 blocking text/receipt fixes with the builder: hard stop on per-leg flag in section 7 too, store exit-mid source, availability stage computes trigger and exit minute only). Rules research/model/s2_target_rules.md, sizing diagnostics/s2_target_sizing.log.
+  Rulings: mid forward-fill per leg up to 5 min; exit price = first real mid at/after trigger; per-leg gap flag (union =
+  sensitivity); stops before labels if >10% of test-month events flagged or >1% dropped by the 60-min exit-mid cap.
+  2025-06..2025-12-19 events (42% of search) are G8-only; sample suggests ~40% flagged there: a step C question.
+- Label build: user go 2026-11-20; checker PASS on code; vault y built now (own file, unread); trial first, then full run.
+  Step B (after the planner's go): ceiling check on TEST MONTHS only (how much y > 0 exists; visible before entry?).
+  Step C: refit on the new target, only if B shows something, and only on the user's yes.
 
-### HL-PROFIT1 backtest (test months 2025-12-21..2026-07-11, 203 days), committed, checker PASS
-- Engine research/model/s1_profit1.py: $1,000 cross margin, 5% margin/trade, leverage min(10, coin caps) (avg
-  3.4x; 85.7% of trades on 3x-capped pairs), max_open 10 (also 20), HL fees 0.045% taker / 0.015% maker per fill,
-  slippage 0 (user), funding on, $10 min order, stops 0.5/1/2/none. Prices = build2 d3/asm 1m trade prices (what v1
-  used), cleaned copy in S3 profit1_cleaned/.
-- Best: q1% no stop maker $5,034 (10 open, DD -9.8%), $16,936 (20 open, DD -17.5%). Every loser = taker + stop.
-  Fees ~58% of gross. |z|>=3 filter (in-sample) earns less. EV quintiles don't rank profit. Word report
-  ~/Downloads/HL-PROFIT1_backtest_24_runs.docx. Horizons analysis (98c74c9): high p_2h/p_5h = faster reversion and
-  higher win rate (q1%: 64.6% -> 71.7% by p_5h quintile) but flat profit/trade; trades still open at 5 h end ~-0.5%.
-- Flat 10x runs: DROPPED (user).
-
-### HL-VAULT1 (brief docs/prompts/HL_VAULT1_RUN.md) -- IN PROGRESS, vault OPENED 2026-11-12
-- Vault = 2026-07-13..2026-10-13, 1,280,088 events. No pass/fail rule (user). Steps 1-3 done and checker-passed
-  (coverage; pre-vault model; scoring, sha ede424aa..). Step 4 picks: cut-offs from fold 7 (0.7295 / 0.7809 /
-  0.8779), picks 13,947 / 7,188 / 1,480; p_cal isotonic on folds 0-7, guard <= (planner ruling = S1-H literally).
-- Step 5: vault_open10 done (0/13,947 cross-check mismatches, 0 liquidations); PROVISIONAL, not checker-reviewed:
-  q1% no stop maker $2,068, taker $1,264; q0.5% none $1,777/$1,269; q0.1% none $1,230/$1,083; taker+stops lose.
-  vault_open20: q-range $265-$3,357. Step 5 checker PASS 2026-11-12 (0 mismatches, 0 liquidations in 48 runs). NEXT:
-  commit after the staged check, step 6 report (side-by-side with the
-  test months, vault calibration at 2/5/10 h), commit. See BUILDER_HANDOFF.md for files and what is uncommitted.
-
-### Parked (user's order: after the vault, analysis only)
-- Picks = Rule A AND high corrected p_5h ("safer" picks); a 5 h time-exit test; a maker-only fill model; real
-  slippage from the fills archive; sizing (max_open, margin); fee levers (maker orders, HYPE staking).
-- Paper trading needs: the final refit including the vault (user's yes), live feature build timing.
+### S1 results that shaped this (all checker PASS, committed)
+- HL-MODEL1 S1: penalised logistic, reach-mu label from closes. Pre-vault model: 192 non-zero weights of 2,377
+  (research/model/logs/s1/vault_pull2/, S3 s1_vault/). Weights (0e305c1): events group 36% of |w| (threshold -0.355,
+  vol_48 +0.275, sigma -0.187); flow groups G6/G7/G8 ~6%; coin one-hots 0. It mostly finds noisy, jumpy spreads.
+- HL-PROFIT1 / HL-VAULT1 (zero slippage, close prices): test months 18-19/24 runs above $1,000, vault 12/24; top-1%
+  lift vault 0.0621 vs 0.0841. Reports ~/Downloads/HL-PROFIT1_backtest_24_runs.docx, HL-VAULT1_vault_report.docx.
+- HL-COSTS1 (0d2fb83..9a36aa1; report ~/Downloads/HL-COSTS1_costs_report.docx): verdict (c), every costed run loses
+  (vault maker -$703/-$1,645, taker -$874/-$1,569). Cause: last-close prices sit favourably vs book mid in thin coins.
+  No-bounce: mid/close gross 53.8% vault, ~20% test; test least-liquid third 16-18%, most liquid 56-81%; ranking holds
+  at mids (top-1% lift ~2.1x). Leg split: no one-coin story; mover label is hero and culprit alike (4f7e59a).
+- Open, user's call, not commissioned: full raw order-book pull (planner: no); entry-delay run (engine change + Tokyo
+  G8 pull + skip rule); limit-order placement study; fee levers (HYPE staking tiers, volume tiers).
+- Trade sizes: median win ~$1.5, loss ~$3.5, average trade +$0.07 to +$0.28 (5-12 bp) at zero cost.
 
 ### How to work (lessons this round)
-- Token-limited: one message per finished step, no acknowledgements, no polling crons, fresh sessions often.
-- AWS: every launch gets a watcher that survives API errors; userdata must upload its log even on early failure;
-  preflight every file each step opens from a clean payload extract. Three launches failed on startup this round.
-- Word reports: run the docx skill's validate.py. Numbers in prose come from script output only.
+- Token-limited: short replies, one message per finished step, no acknowledgements, no polling crons.
+- Rule questions from the checker come to the planner; fix them BEFORE results are seen and say so.
+- Relays can be wrong: check a peer's summary sentence against the table before repeating it (2026-11-20 "every leg
+  group negative" was a relay error, not in the report).
+- AWS: checker reviews launch files first; the user's yes for EACH launch in the builder's session; watcher on every launch.
+- Word reports: docx validate.py; layout unviewed on this machine, the user opens once.
 
 ## 4. Infrastructure
 

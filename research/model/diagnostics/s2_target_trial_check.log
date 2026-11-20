@@ -1,0 +1,3 @@
+[TRIALCHECK] 2026-01-15: ok test events with the whole path in the day 8,554; per-leg longest missing run recomputed from the raw day files equals the label file's max_gap_len_leg on 8,554 (100.00%); events with any missing minute: recount 0, label file 0; flagged (run >= 6): recount 0, label file 0
+[TRIALCHECK] 2026-04-08: ok test events with the whole path in the day 7,781; per-leg longest missing run recomputed from the raw day files equals the label file's max_gap_len_leg on 7,781 (100.00%); events with any missing minute: recount 0, label file 0; flagged (run >= 6): recount 0, label file 0
+[TRIALCHECK] total 16,335 events, equal on 16,335

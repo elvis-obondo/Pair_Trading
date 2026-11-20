@@ -1,0 +1,363 @@
+[IDENT] old s1_newton.py = git 98c74c9, sha256 2129d25e0fa3421b6f686cfa45cba2a4ce86d1d01d633bbd6f87a0f5b8e7b156
+[IDENT] new s1_newton.py = working file, sha256 dc72eaf61097e574e13052e09cac3b6a4679cc59aba7d7e57c758b1d53896a72
+ outer=1 Gram build: 0.05s
+ outer=1 cd_sweeps=140/200
+ outer=2 Gram build: 0.00s
+ outer=2 cd_sweeps=104/200
+ outer=3 Gram build: 0.00s
+ outer=3 cd_sweeps=105/200
+ outer=4 Gram build: 0.00s
+ outer=4 cd_sweeps=92/200
+ outer=5 Gram build: 0.00s
+ outer=5 cd_sweeps=70/200
+ outer=6 Gram build: 0.00s
+ outer=6 cd_sweeps=35/200
+ outer=7 Gram build: 0.00s
+ outer=7 cd_sweeps=6/200
+ outer=1 Gram build: 0.00s
+ outer=1 cd_sweeps=140/200
+ outer=2 Gram build: 0.00s
+ outer=2 cd_sweeps=104/200
+ outer=3 Gram build: 0.00s
+ outer=3 cd_sweeps=105/200
+ outer=4 Gram build: 0.00s
+ outer=4 cd_sweeps=92/200
+ outer=5 Gram build: 0.00s
+ outer=5 cd_sweeps=70/200
+ outer=6 Gram build: 0.00s
+ outer=6 cd_sweeps=35/200
+ outer=7 Gram build: 0.00s
+ outer=7 cd_sweeps=6/200
+[IDENT] seed1 n_ev=600 p=40 lam=5.0 l1=1.0 cold: bitwise identical w,b,obj_final=1487.5565717522,rel_change,n_iter=7,converged=True; new counters n_cd_capped=0 n_cd_calls=7
+ outer=1 Gram build: 0.00s
+ outer=1 cd_sweeps=14/200
+ outer=2 Gram build: 0.00s
+ outer=2 cd_sweeps=14/200
+ outer=3 Gram build: 0.00s
+ outer=3 cd_sweeps=13/200
+ outer=4 Gram build: 0.00s
+ outer=4 cd_sweeps=12/200
+ outer=5 Gram build: 0.00s
+ outer=5 cd_sweeps=10/200
+ outer=6 Gram build: 0.00s
+ outer=6 cd_sweeps=7/200
+ outer=7 Gram build: 0.00s
+ outer=7 cd_sweeps=2/200
+ outer=1 Gram build: 0.00s
+ outer=1 cd_sweeps=14/200
+ outer=2 Gram build: 0.00s
+ outer=2 cd_sweeps=14/200
+ outer=3 Gram build: 0.00s
+ outer=3 cd_sweeps=13/200
+ outer=4 Gram build: 0.00s
+ outer=4 cd_sweeps=12/200
+ outer=5 Gram build: 0.00s
+ outer=5 cd_sweeps=10/200
+ outer=6 Gram build: 0.00s
+ outer=6 cd_sweeps=7/200
+ outer=7 Gram build: 0.00s
+ outer=7 cd_sweeps=2/200
+[IDENT] seed1 n_ev=600 p=40 lam=50.0 l1=0.5 cold: bitwise identical w,b,obj_final=1496.4384222987,rel_change,n_iter=7,converged=True; new counters n_cd_capped=0 n_cd_calls=7
+ outer=1 Gram build: 0.00s
+ outer=1 cd_sweeps=200/200 CD-CAPPED
+ outer=2 Gram build: 0.00s
+ outer=2 cd_sweeps=200/200 CD-CAPPED
+ outer=3 Gram build: 0.00s
+ outer=3 cd_sweeps=200/200 CD-CAPPED
+ outer=4 Gram build: 0.00s
+ outer=4 cd_sweeps=200/200 CD-CAPPED
+ outer=5 Gram build: 0.00s
+ outer=5 cd_sweeps=200/200 CD-CAPPED
+ outer=6 Gram build: 0.00s
+ outer=6 cd_sweeps=200/200 CD-CAPPED
+ outer=7 Gram build: 0.00s
+ outer=7 cd_sweeps=139/200
+ outer=1 Gram build: 0.00s
+ outer=1 cd_sweeps=200/200 CD-CAPPED
+ outer=2 Gram build: 0.00s
+ outer=2 cd_sweeps=200/200 CD-CAPPED
+ outer=3 Gram build: 0.00s
+ outer=3 cd_sweeps=200/200 CD-CAPPED
+ outer=4 Gram build: 0.00s
+ outer=4 cd_sweeps=200/200 CD-CAPPED
+ outer=5 Gram build: 0.00s
+ outer=5 cd_sweeps=200/200 CD-CAPPED
+ outer=6 Gram build: 0.00s
+ outer=6 cd_sweeps=200/200 CD-CAPPED
+ outer=7 Gram build: 0.00s
+ outer=7 cd_sweeps=139/200
+[IDENT] seed1 n_ev=600 p=40 lam=0.5 l1=0.0 cold: bitwise identical w,b,obj_final=1475.5601968271,rel_change,n_iter=7,converged=True; new counters n_cd_capped=6 n_cd_calls=7
+ outer=1 Gram build: 0.00s
+ outer=1 cd_sweeps=15/200
+ outer=2 Gram build: 0.00s
+ outer=2 cd_sweeps=15/200
+ outer=3 Gram build: 0.00s
+ outer=3 cd_sweeps=15/200
+ outer=4 Gram build: 0.00s
+ outer=4 cd_sweeps=14/200
+ outer=5 Gram build: 0.00s
+ outer=5 cd_sweeps=12/200
+ outer=6 Gram build: 0.00s
+ outer=6 cd_sweeps=8/200
+ outer=7 Gram build: 0.00s
+ outer=7 cd_sweeps=3/200
+ outer=1 Gram build: 0.00s
+ outer=1 cd_sweeps=15/200
+ outer=2 Gram build: 0.00s
+ outer=2 cd_sweeps=15/200
+ outer=3 Gram build: 0.00s
+ outer=3 cd_sweeps=15/200
+ outer=4 Gram build: 0.00s
+ outer=4 cd_sweeps=14/200
+ outer=5 Gram build: 0.00s
+ outer=5 cd_sweeps=12/200
+ outer=6 Gram build: 0.00s
+ outer=6 cd_sweeps=8/200
+ outer=7 Gram build: 0.00s
+ outer=7 cd_sweeps=3/200
+[IDENT] seed1 n_ev=600 p=40 lam=20.0 l1=0.9 cold: bitwise identical w,b,obj_final=1495.2623126394,rel_change,n_iter=7,converged=True; new counters n_cd_capped=0 n_cd_calls=7
+ outer=1 Gram build: 0.00s
+ outer=1 cd_sweeps=2/2 CD-CAPPED
+ outer=2 Gram build: 0.00s
+ outer=2 cd_sweeps=2/2 CD-CAPPED
+ outer=3 Gram build: 0.00s
+ outer=3 cd_sweeps=2/2 CD-CAPPED
+ outer=4 Gram build: 0.00s
+ outer=4 cd_sweeps=2/2 CD-CAPPED
+ outer=5 Gram build: 0.00s
+ outer=5 cd_sweeps=2/2 CD-CAPPED
+ outer=6 Gram build: 0.00s
+ outer=6 cd_sweeps=2/2 CD-CAPPED
+ outer=7 Gram build: 0.00s
+ outer=7 cd_sweeps=2/2 CD-CAPPED
+ outer=8 Gram build: 0.00s
+ outer=8 cd_sweeps=2/2 CD-CAPPED
+ outer=9 Gram build: 0.00s
+ outer=9 cd_sweeps=2/2 CD-CAPPED
+ outer=10 Gram build: 0.00s
+ outer=10 cd_sweeps=2/2 CD-CAPPED
+ outer=11 Gram build: 0.00s
+ outer=11 cd_sweeps=2/2 CD-CAPPED
+ outer=12 Gram build: 0.00s
+ outer=12 cd_sweeps=2/2 CD-CAPPED
+ outer=13 Gram build: 0.00s
+ outer=13 cd_sweeps=2/2 CD-CAPPED
+ outer=1 Gram build: 0.00s
+ outer=1 cd_sweeps=2/2 CD-CAPPED
+ outer=2 Gram build: 0.00s
+ outer=2 cd_sweeps=2/2 CD-CAPPED
+ outer=3 Gram build: 0.00s
+ outer=3 cd_sweeps=2/2 CD-CAPPED
+ outer=4 Gram build: 0.00s
+ outer=4 cd_sweeps=2/2 CD-CAPPED
+ outer=5 Gram build: 0.00s
+ outer=5 cd_sweeps=2/2 CD-CAPPED
+ outer=6 Gram build: 0.00s
+ outer=6 cd_sweeps=2/2 CD-CAPPED
+ outer=7 Gram build: 0.00s
+ outer=7 cd_sweeps=2/2 CD-CAPPED
+ outer=8 Gram build: 0.00s
+ outer=8 cd_sweeps=2/2 CD-CAPPED
+ outer=9 Gram build: 0.00s
+ outer=9 cd_sweeps=2/2 CD-CAPPED
+ outer=10 Gram build: 0.00s
+ outer=10 cd_sweeps=2/2 CD-CAPPED
+ outer=11 Gram build: 0.00s
+ outer=11 cd_sweeps=2/2 CD-CAPPED
+ outer=12 Gram build: 0.00s
+ outer=12 cd_sweeps=2/2 CD-CAPPED
+ outer=13 Gram build: 0.00s
+ outer=13 cd_sweeps=2/2 CD-CAPPED
+[IDENT] seed1 cd_max_sweeps=2 (cap hit) lam=5 l1=1.0: bitwise identical w,b,obj_final=1487.5566629367,rel_change,n_iter=13,converged=True; new counters n_cd_capped=13 n_cd_calls=13
+ outer=1 Gram build: 0.00s
+ outer=1 cd_sweeps=20/200
+ outer=2 Gram build: 0.00s
+ outer=2 cd_sweeps=16/200
+ outer=3 Gram build: 0.00s
+ outer=3 cd_sweeps=15/200
+ outer=4 Gram build: 0.00s
+ outer=4 cd_sweeps=12/200
+ outer=5 Gram build: 0.00s
+ outer=5 cd_sweeps=8/200
+ outer=1 Gram build: 0.00s
+ outer=1 cd_sweeps=20/200
+ outer=2 Gram build: 0.00s
+ outer=2 cd_sweeps=16/200
+ outer=3 Gram build: 0.00s
+ outer=3 cd_sweeps=15/200
+ outer=4 Gram build: 0.00s
+ outer=4 cd_sweeps=12/200
+ outer=5 Gram build: 0.00s
+ outer=5 cd_sweeps=8/200
+[IDENT] seed1 warm start lam=20 l1=0.9: bitwise identical w,b,obj_final=1495.2623126394,rel_change,n_iter=5,converged=True; new counters n_cd_capped=0 n_cd_calls=5
+ outer=1 Gram build: 0.00s
+ outer=1 cd_sweeps=70/200
+ outer=2 Gram build: 0.00s
+ outer=2 cd_sweeps=80/200
+ outer=3 Gram build: 0.00s
+ outer=3 cd_sweeps=83/200
+ outer=4 Gram build: 0.00s
+ outer=4 cd_sweeps=67/200
+ outer=5 Gram build: 0.00s
+ outer=5 cd_sweeps=52/200
+ outer=6 Gram build: 0.00s
+ outer=6 cd_sweeps=32/200
+ outer=1 Gram build: 0.00s
+ outer=1 cd_sweeps=70/200
+ outer=2 Gram build: 0.00s
+ outer=2 cd_sweeps=80/200
+ outer=3 Gram build: 0.00s
+ outer=3 cd_sweeps=83/200
+ outer=4 Gram build: 0.00s
+ outer=4 cd_sweeps=67/200
+ outer=5 Gram build: 0.00s
+ outer=5 cd_sweeps=52/200
+ outer=6 Gram build: 0.00s
+ outer=6 cd_sweeps=32/200
+[IDENT] seed2 n_ev=1500 p=80 lam=5.0 l1=1.0 cold: bitwise identical w,b,obj_final=3287.6305925778,rel_change,n_iter=6,converged=True; new counters n_cd_capped=0 n_cd_calls=6
+ outer=1 Gram build: 0.00s
+ outer=1 cd_sweeps=22/200
+ outer=2 Gram build: 0.00s
+ outer=2 cd_sweeps=22/200
+ outer=3 Gram build: 0.00s
+ outer=3 cd_sweeps=21/200
+ outer=4 Gram build: 0.00s
+ outer=4 cd_sweeps=20/200
+ outer=5 Gram build: 0.00s
+ outer=5 cd_sweeps=17/200
+ outer=6 Gram build: 0.00s
+ outer=6 cd_sweeps=11/200
+ outer=1 Gram build: 0.00s
+ outer=1 cd_sweeps=22/200
+ outer=2 Gram build: 0.00s
+ outer=2 cd_sweeps=22/200
+ outer=3 Gram build: 0.00s
+ outer=3 cd_sweeps=21/200
+ outer=4 Gram build: 0.00s
+ outer=4 cd_sweeps=20/200
+ outer=5 Gram build: 0.00s
+ outer=5 cd_sweeps=17/200
+ outer=6 Gram build: 0.00s
+ outer=6 cd_sweeps=11/200
+[IDENT] seed2 n_ev=1500 p=80 lam=50.0 l1=0.5 cold: bitwise identical w,b,obj_final=3305.2261971820,rel_change,n_iter=6,converged=True; new counters n_cd_capped=0 n_cd_calls=6
+ outer=1 Gram build: 0.00s
+ outer=1 cd_sweeps=200/200 CD-CAPPED
+ outer=2 Gram build: 0.00s
+ outer=2 cd_sweeps=200/200 CD-CAPPED
+ outer=3 Gram build: 0.00s
+ outer=3 cd_sweeps=200/200 CD-CAPPED
+ outer=4 Gram build: 0.00s
+ outer=4 cd_sweeps=200/200 CD-CAPPED
+ outer=5 Gram build: 0.00s
+ outer=5 cd_sweeps=200/200 CD-CAPPED
+ outer=6 Gram build: 0.00s
+ outer=6 cd_sweeps=140/200
+ outer=1 Gram build: 0.00s
+ outer=1 cd_sweeps=200/200 CD-CAPPED
+ outer=2 Gram build: 0.00s
+ outer=2 cd_sweeps=200/200 CD-CAPPED
+ outer=3 Gram build: 0.00s
+ outer=3 cd_sweeps=200/200 CD-CAPPED
+ outer=4 Gram build: 0.00s
+ outer=4 cd_sweeps=200/200 CD-CAPPED
+ outer=5 Gram build: 0.00s
+ outer=5 cd_sweeps=200/200 CD-CAPPED
+ outer=6 Gram build: 0.00s
+ outer=6 cd_sweeps=140/200
+[IDENT] seed2 n_ev=1500 p=80 lam=0.5 l1=0.0 cold: bitwise identical w,b,obj_final=3274.0165047825,rel_change,n_iter=6,converged=True; new counters n_cd_capped=5 n_cd_calls=6
+ outer=1 Gram build: 0.00s
+ outer=1 cd_sweeps=29/200
+ outer=2 Gram build: 0.00s
+ outer=2 cd_sweeps=29/200
+ outer=3 Gram build: 0.00s
+ outer=3 cd_sweeps=28/200
+ outer=4 Gram build: 0.00s
+ outer=4 cd_sweeps=30/200
+ outer=5 Gram build: 0.00s
+ outer=5 cd_sweeps=25/200
+ outer=6 Gram build: 0.00s
+ outer=6 cd_sweeps=17/200
+ outer=1 Gram build: 0.00s
+ outer=1 cd_sweeps=29/200
+ outer=2 Gram build: 0.00s
+ outer=2 cd_sweeps=29/200
+ outer=3 Gram build: 0.00s
+ outer=3 cd_sweeps=28/200
+ outer=4 Gram build: 0.00s
+ outer=4 cd_sweeps=30/200
+ outer=5 Gram build: 0.00s
+ outer=5 cd_sweeps=25/200
+ outer=6 Gram build: 0.00s
+ outer=6 cd_sweeps=17/200
+[IDENT] seed2 n_ev=1500 p=80 lam=20.0 l1=0.9 cold: bitwise identical w,b,obj_final=3302.1224367070,rel_change,n_iter=6,converged=True; new counters n_cd_capped=0 n_cd_calls=6
+ outer=1 Gram build: 0.00s
+ outer=1 cd_sweeps=2/2 CD-CAPPED
+ outer=2 Gram build: 0.00s
+ outer=2 cd_sweeps=2/2 CD-CAPPED
+ outer=3 Gram build: 0.00s
+ outer=3 cd_sweeps=2/2 CD-CAPPED
+ outer=4 Gram build: 0.00s
+ outer=4 cd_sweeps=2/2 CD-CAPPED
+ outer=5 Gram build: 0.00s
+ outer=5 cd_sweeps=2/2 CD-CAPPED
+ outer=6 Gram build: 0.00s
+ outer=6 cd_sweeps=2/2 CD-CAPPED
+ outer=7 Gram build: 0.00s
+ outer=7 cd_sweeps=2/2 CD-CAPPED
+ outer=8 Gram build: 0.00s
+ outer=8 cd_sweeps=2/2 CD-CAPPED
+ outer=9 Gram build: 0.00s
+ outer=9 cd_sweeps=2/2 CD-CAPPED
+ outer=10 Gram build: 0.00s
+ outer=10 cd_sweeps=2/2 CD-CAPPED
+ outer=11 Gram build: 0.00s
+ outer=11 cd_sweeps=2/2 CD-CAPPED
+ outer=12 Gram build: 0.00s
+ outer=12 cd_sweeps=2/2 CD-CAPPED
+ outer=1 Gram build: 0.00s
+ outer=1 cd_sweeps=2/2 CD-CAPPED
+ outer=2 Gram build: 0.00s
+ outer=2 cd_sweeps=2/2 CD-CAPPED
+ outer=3 Gram build: 0.00s
+ outer=3 cd_sweeps=2/2 CD-CAPPED
+ outer=4 Gram build: 0.00s
+ outer=4 cd_sweeps=2/2 CD-CAPPED
+ outer=5 Gram build: 0.00s
+ outer=5 cd_sweeps=2/2 CD-CAPPED
+ outer=6 Gram build: 0.00s
+ outer=6 cd_sweeps=2/2 CD-CAPPED
+ outer=7 Gram build: 0.00s
+ outer=7 cd_sweeps=2/2 CD-CAPPED
+ outer=8 Gram build: 0.00s
+ outer=8 cd_sweeps=2/2 CD-CAPPED
+ outer=9 Gram build: 0.00s
+ outer=9 cd_sweeps=2/2 CD-CAPPED
+ outer=10 Gram build: 0.00s
+ outer=10 cd_sweeps=2/2 CD-CAPPED
+ outer=11 Gram build: 0.00s
+ outer=11 cd_sweeps=2/2 CD-CAPPED
+ outer=12 Gram build: 0.00s
+ outer=12 cd_sweeps=2/2 CD-CAPPED
+[IDENT] seed2 cd_max_sweeps=2 (cap hit) lam=5 l1=1.0: bitwise identical w,b,obj_final=3287.6306392490,rel_change,n_iter=12,converged=True; new counters n_cd_capped=12 n_cd_calls=12
+ outer=1 Gram build: 0.00s
+ outer=1 cd_sweeps=36/200
+ outer=2 Gram build: 0.00s
+ outer=2 cd_sweeps=32/200
+ outer=3 Gram build: 0.00s
+ outer=3 cd_sweeps=27/200
+ outer=4 Gram build: 0.00s
+ outer=4 cd_sweeps=21/200
+ outer=5 Gram build: 0.00s
+ outer=5 cd_sweeps=9/200
+ outer=1 Gram build: 0.00s
+ outer=1 cd_sweeps=36/200
+ outer=2 Gram build: 0.00s
+ outer=2 cd_sweeps=32/200
+ outer=3 Gram build: 0.00s
+ outer=3 cd_sweeps=27/200
+ outer=4 Gram build: 0.00s
+ outer=4 cd_sweeps=21/200
+ outer=5 Gram build: 0.00s
+ outer=5 cd_sweeps=9/200
+[IDENT] seed2 warm start lam=20 l1=0.9: bitwise identical w,b,obj_final=3302.1224367069,rel_change,n_iter=5,converged=True; new counters n_cd_capped=0 n_cd_calls=5
+[IDENT] PASSED: 12 cases, all bitwise identical; the capped branch was exercised (total capped outer steps across cases = 36)

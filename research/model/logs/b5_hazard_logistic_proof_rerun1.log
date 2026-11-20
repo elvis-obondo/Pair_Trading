@@ -1,0 +1,32 @@
+[B5-LOGISTIC] sha256 b5_hazard_logistic_proof.py: 77eb6a2813070697caea6da48a4fc61ccc1afb5dc1fc94c6f2c081bffb0dbbd7
+[B5-LOGISTIC] sha256 hazard_logistic.py: 303b94aacbfe6c23fb4f70c97c52eb718a9eddd9f8a9c15eaebd7bccdeaee4b3
+[B5-LOGISTIC] sha256 harness.py: 423328afc950252fe37d5fbc7fb4c25d97475b36abe3860542357e5481ce56c7
+[B5-LOGISTIC] sha256 inputs_v1_pair.csv: 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf (must be 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf)
+[B5-LOGISTIC] sha256 coins.csv: 1f34fce7beb0dcbcae0c306eca34ea69f67dbcc48466ca191a746abb10b6e333
+[B5-LOGISTIC] cache manifest cache_sha256: bd5dc2549374d0a80c8b042425e34119289b17b753a49213ac28c1831c6ca544 (must be bd5dc2549374d0a80c8b042425e34119289b17b753a49213ac28c1831c6ca544)
+[B5-LOGISTIC] git_head bdddaf15e9da9bed3f8eac623848a436dc1bf76f (80 uncommitted paths); start 2026-10-28T05:52:55Z UTC; pid 11302
+[B5-LOGISTIC] smoke subset: 3000 events (seed 20261027), columns ['z', 'threshold', 'beta', 'beta_stab', 'r2'], 20 steps. NOT the S1 scoring build -- proves only the no-row-copy computational trick, unpenalised, no standardisation.
+[HARNESS] load_search_events: 6,697,756 merged rows -> 5,405,478 after the date/gap-day filter -> 5,378,429 after dropping 27,049 label_gap=1 rows
+[HARNESS] check_inputs: 5 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[B5-LOGISTIC] NaN count per smoke column BEFORE fill: {'z': 0, 'threshold': 0, 'beta': 0, 'beta_stab': 1, 'r2': 0}
+[B5-LOGISTIC] loaded 3000 events x 5 cols, 49,462 hazard rows [290s]
+[B5-LOGISTIC]   trial 0: nll naive=27523.113756 shipped=27523.113756 max|grad_w diff|=2.33e-10 max|grad_b diff|=1.14e-12: OK
+[B5-LOGISTIC]   trial 1: nll naive=67767.754106 shipped=67767.754106 max|grad_w diff|=5.82e-11 max|grad_b diff|=6.82e-13: OK
+[B5-LOGISTIC]   trial 2: nll naive=22166.707642 shipped=22166.707642 max|grad_w diff|=1.20e-10 max|grad_b diff|=1.14e-13: OK
+[B5-LOGISTIC]   trial 3: nll naive=23279.367014 shipped=23279.367014 max|grad_w diff|=2.47e-10 max|grad_b diff|=2.27e-13: OK
+[B5-LOGISTIC]   trial 4: nll naive=56540.935254 shipped=56540.935254 max|grad_w diff|=5.09e-11 max|grad_b diff|=6.82e-13: OK
+[B5-LOGISTIC] PROOF 1 -- NLL and both gradients match the naive expanded design EXACTLY at 5 random (w,b): PASS
+[B5-LOGISTIC] BROKEN VARIANT -- hazard_nll_grad's own break_intercept=True (the SHIPPED function, not a reimplementation) makes PROOF 1's exact-match check FAIL: PASS -- nll naive=104357.3706 broken=105660.2910
+[B5-LOGISTIC]   naive: nll=4826.87464104 iters=345/15000 converged=True message='CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH' max|grad|=6.671e-04 time=4.75s
+[B5-LOGISTIC]   shipped: nll=4826.87464104 iters=303/15000 converged=True message='CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH' max|grad|=7.364e-04 time=1.44s
+[B5-LOGISTIC]   cross-check at naive's solution: naive_obj=4826.87464104 shipped_obj=4826.87464104 (diff 0.00e+00)
+[B5-LOGISTIC]   cross-check at shipped's solution: naive_obj=4826.87464104 shipped_obj=4826.87464104 (diff 0.00e+00)
+[B5-LOGISTIC]   max|w diff|=2.051e-06 max|b diff|=9.306e-06
+[B5-LOGISTIC]   naive b:   [-3.8338 -3.116  -3.1386 -3.0676 -3.0567 -2.9402 -3.3553 -2.8773 -3.2629 -2.9956 -3.0188 -3.2517 -3.2075 -3.355  -3.3107 -3.2659 -3.3785 -3.2035 -3.4287 -3.6153]
+[B5-LOGISTIC]   shipped b: [-3.8338 -3.116  -3.1386 -3.0676 -3.0567 -2.9402 -3.3553 -2.8773 -3.2629 -2.9956 -3.0188 -3.2517 -3.2075 -3.355  -3.3107 -3.2659 -3.3784 -3.2035 -3.4287 -3.6153]
+[B5-LOGISTIC]   hazard rows per step:  [3000, 2967, 2901, 2838, 2772, 2707, 2636, 2590, 2518, 2470, 2409, 2351, 2306, 2260, 2221, 2181, 2140, 2104, 2062, 2029]
+[B5-LOGISTIC]   label=1 rows per step: [33, 66, 63, 66, 65, 71, 46, 72, 48, 61, 58, 45, 46, 39, 40, 41, 36, 42, 33, 27]
+[B5-LOGISTIC] PROOF 2 pre-check -- both fits converged below maxiter (not two runs both stopped at the cap): PASS -- naive nit=345/15000 success=True; shipped nit=303/15000 success=True
+[B5-LOGISTIC] PROOF 2 -- optimised NLL and coefficients match within the STATED tolerance (|nll diff|=1.67e-09 < 1e-04, max|coef diff|=9.31e-06 < 1e-04): PASS
+[B5-LOGISTIC] all done [298s]: 4/4 checks PASS
+exit_code=0

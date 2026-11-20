@@ -61,3 +61,12 @@ the decisions log in `docs/HYPERLIQUID_HANDOFF.md`, and
 - Each session may keep its own role handoff (for example
   `docs/prompts/BUILDER_HANDOFF.md`) and the receipts its task requires
   (NUMBERS.md sections, logs, the brief's own outputs).
+
+## Push to GitHub at least every 24 hours
+
+Commit and push the working branch at least once every 24 hours (user,
+2026-11-20). The builder does it after the checker's OK on the staged list; if
+no builder is running, the planner does it. Commit code, docs, rules files and
+text logs. Never commit data files (parquet, large CSVs, label or price
+outputs), live trade records, or secrets. The repo is PUBLIC, so anything
+pushed is published.

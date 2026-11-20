@@ -35,6 +35,17 @@ Every "win" so far has been matched by chance.
 - **Within the top 1%:** first-hour features do not separate the 75% that
   finish from the 25% that don't (AUC 0.556, p=0.14).
 
+- **HL-COSTS1 execution costs (2026-11-18, commits 0d2fb83..9a36aa1, checker PASS):** the S1
+  edge does not survive realistic costs, verdict (c). All eight costed nets negative (vault maker
+  -$703/-$1,645, taker -$874/-$1,569); calibrated curve same letter; 6 of 78 tier/size/leverage
+  cells positive (all vault maker, none chosen). Cause: last-close prices sit favourably vs book
+  mid in thin coins. No-bounce: mid/close gross 53.8% vault (PARTLY), ~20% test; ranking holds
+  in mid terms (lift ~2.1x). One leg: no single-leg fix; per-leg fees + half-spread are mixed (vault open10
+  taker larger leg +$133.52, smaller -$421.68; excludes fill model, depth, funding). Test open20 maker reference -$20,069 (headline -$23,792 hit by the beyond-book curve
+  artefact). BTC from 30-minute feather (no 1-minute BTC in cache). Open, user's call: full raw
+  pull (planner: no), entry-delay run (needs engine change + Tokyo G8 pull + skip rule).
+  Report ~/Downloads/HL-COSTS1_costs_report.docx.
+
 ## What is true and useful
 
 - Top 1% at 60 min: model says ~70%, ~71-81% revert, median 1.07 sigma left,
@@ -51,6 +62,12 @@ Every "win" so far has been matched by chance.
   for the delayed-entry idea.
 
 ## Open, not yet run
+
+- **HL-TARGET2 label build (2026-11-20, user decisions):** money label y (net bp, taker, mid exit) built for all events.
+  Checker PASS on code and rules (build 37d51eb86821, rules 0612678b8ad9). User: vault y built now in its own file (not at
+  end of step C); never printed or read until vault scoring. Trial on a few days first, then the full run. Column-only G8 S3
+  read (~1.5 GB) approved by the user in the builder session. Unlabelled events kept with status; the user has a plan for them.
+  Stored tier column is not point-in-time: never a feature. Step B needs the planner's go; step C needs the user's yes.
 
 1. Payoff measurement for top-5% and top-1% at 60 min: wins, losses, fees,
    under a fixed exit rule (top 5% first).

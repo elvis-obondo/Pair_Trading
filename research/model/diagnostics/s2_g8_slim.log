@@ -1,0 +1,24 @@
+[G8SLIM] script sha256 ce0b83f993f2; s3://pair-trading-hl-289869684922/build8/full/; dry=False
+[G8SLIM] day files in S3: 496 (expected 496); total 11.24 GB; first build8/full/20250525_l2.parquet, last build8/full/20261023_l2.parquet
+[G8SLIM] already slimmed 0; to do 496
+[G8SLIM] 25/496 days, last 20250618 (286,361 rows), 25s
+[G8SLIM] 50/496 days, last 20250713 (289,440 rows), 48s
+[G8SLIM] 75/496 days, last 20250807 (288,892 rows), 72s
+[G8SLIM] 100/496 days, last 20250901 (296,072 rows), 98s
+[G8SLIM] 125/496 days, last 20250926 (305,280 rows), 119s
+[G8SLIM] 150/496 days, last 20251027 (263,520 rows), 142s
+[G8SLIM] 175/496 days, last 20251129 (267,654 rows), 172s
+[G8SLIM] 200/496 days, last 20251224 (269,701 rows), 196s
+[G8SLIM] 225/496 days, last 20260118 (265,918 rows), 221s
+[G8SLIM] 250/496 days, last 20260212 (271,944 rows), 249s
+[G8SLIM] 275/496 days, last 20260309 (270,848 rows), 282s
+[G8SLIM] 300/496 days, last 20260403 (272,119 rows), 307s
+[G8SLIM] 325/496 days, last 20260428 (271,736 rows), 337s
+[G8SLIM] 350/496 days, last 20260523 (272,140 rows), 364s
+[G8SLIM] 375/496 days, last 20260617 (273,031 rows), 400s
+[G8SLIM] 400/496 days, last 20260719 (253,440 rows), 432s
+[G8SLIM] 425/496 days, last 20260813 (253,440 rows), 459s
+[G8SLIM] 450/496 days, last 20260907 (254,880 rows), 491s
+[G8SLIM] 475/496 days, last 20261002 (256,320 rows), 526s
+[G8SLIM] 496/496 days, last 20261023 (256,141 rows), 543s
+[G8SLIM] done: {'days': 496, 'first': '20250525', 'last': '20261023', 'rows': 134679461, 'bytes': 1300884336, 'day_list_sha256': '3400ba0d92a7f95c3f8349478b0e440e2233f3d226a345a35299345b23f66c6a'}; total 543s

@@ -1,0 +1,71 @@
+[HARNESS] load_search_events: 6,697,756 merged rows -> 5,405,478 after the date/gap-day filter -> 5,378,429 after dropping 27,049 label_gap=1 rows
+[DRYRUN] fold0 small subset: n_train=3000 n_val=1000 n_test=1000  [38s]
+[DRYRUN] using 5 real IN columns: ['ticker_a', 'ticker_b', 'z', 'threshold', 'beta']  [110s]
+[S1-RUN] fold 0: n_train=3,000 n_val=1,000 n_test=1,000 [0s]
+[HARNESS] check_inputs: 3 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[S1-PREPROCESS] degenerate-on-raw-fit-rows columns dropped: 0 of 3
+[S1-PREPROCESS] SD-0-after-clip columns dropped: 0 of 3
+[HARNESS] check_inputs: 2 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 3 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 2 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 3 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 2 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[S1-RUN] fold 0: preprocessed train+val, n_features=184 degenerate=0 sd0=0 [0s]
+[S1-RUN] fold 0: VmHWM=1769MB after train+val preprocessing [0s]
+ outer=1 cd_sweeps=2/200
+ outer=2 cd_sweeps=2/200
+ outer=3 cd_sweeps=2/200
+ outer=4 cd_sweeps=2/200
+ outer=5 cd_sweeps=2/200
+ outer=6 cd_sweeps=2/200
+ outer=7 cd_sweeps=2/200
+[S1-RUN] fold 0: l1_ratio=1.0 lam_idx=0 lam=227.685 val_lift=0.1527 n_iter=7 converged=True rel_change=1.14e-10 [0s]
+ outer=1 cd_sweeps=55/200
+ outer=2 cd_sweeps=65/200
+ outer=3 cd_sweeps=55/200
+ outer=4 cd_sweeps=45/200
+ outer=5 cd_sweeps=35/200
+[S1-RUN] fold 0: l1_ratio=1.0 lam_idx=1 lam=0.455371 val_lift=0.0543 n_iter=5 converged=True rel_change=3.10e-08 [1s]
+[S1-RUN] fold 0: SELECTED l1_ratio=1.0 lam_idx=0 lam=227.685 val_lift=0.1527  [1s]
+[S1-RUN] fold 0: SELECTED KKT max_violation=8.042e-12 rel_change=1.14e-10  [1s]
+[S1-RUN] fold 0: permutation importance on 1 non-zero raw columns, base val log-loss=0.553996  [1s]
+[S1-RUN] fold 0: VmHWM=1769MB after freeing selection-phase X [1s]
+[HARNESS] check_inputs: 3 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[S1-PREPROCESS] degenerate-on-raw-fit-rows columns dropped: 0 of 3
+[S1-PREPROCESS] SD-0-after-clip columns dropped: 0 of 3
+[HARNESS] check_inputs: 2 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 3 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 2 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[S1-RUN] fold 0: VmHWM=1769MB after refit preprocessing [1s]
+Traceback (most recent call last):
+  File "/home/elvisobondo/Pair_Trading/research/model/s1_run_dryrun_check.py", line 42, in <module>
+    s1_run.run_one_fold(0, events, small_fold, in_cols, rng)
+  File "/home/elvisobondo/Pair_Trading/research/model/s1_run.py", line 209, in run_one_fold
+    r_refit = fit_hazard_elastic_net_newton(X_refit, row_event_pos_rf, row_step_rf, row_label_rf,
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/elvisobondo/Pair_Trading/research/model/s1_newton.py", line 124, in fit_hazard_elastic_net_newton
+    obj_prev = full_obj(w, b)
+               ^^^^^^^^^^^^^^
+  File "/home/elvisobondo/Pair_Trading/research/model/s1_newton.py", line 121, in full_obj
+    nll, _, _ = hazard_nll_grad(w_, b_, X, row_event_pos, row_step, row_label, n_events)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/elvisobondo/Pair_Trading/research/model/hazard_logistic.py", line 63, in hazard_nll_grad
+    list(pool.map(eta_chunk, chunks))
+  File "/home/elvisobondo/.local/share/uv/python/cpython-3.12.2-linux-x86_64-gnu/lib/python3.12/concurrent/futures/_base.py", line 619, in result_iterator
+    yield _result_or_cancel(fs.pop())
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/elvisobondo/.local/share/uv/python/cpython-3.12.2-linux-x86_64-gnu/lib/python3.12/concurrent/futures/_base.py", line 317, in _result_or_cancel
+    return fut.result(timeout)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/elvisobondo/.local/share/uv/python/cpython-3.12.2-linux-x86_64-gnu/lib/python3.12/concurrent/futures/_base.py", line 456, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/elvisobondo/.local/share/uv/python/cpython-3.12.2-linux-x86_64-gnu/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/home/elvisobondo/.local/share/uv/python/cpython-3.12.2-linux-x86_64-gnu/lib/python3.12/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/elvisobondo/Pair_Trading/research/model/hazard_logistic.py", line 60, in eta_chunk
+    eta[s:e] = X[s:e].astype(np.float64, copy=False) @ w64
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~
+ValueError: matmul: Input operand 1 has a mismatch in its core dimension 0, with gufunc signature (n?,k),(k,m?)->(n?,m?) (size 184 is different from 186)

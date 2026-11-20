@@ -1,0 +1,15 @@
+[S2TESTS] sha256 lib de9890e1a09d build b16c086404f5 tests 39edf4d0a9e4
+PASS fill limit: 5 missing minutes after a real mid are filled, the 6th and 7th are not (broken variant, limit 7, fills them)
+PASS exit price: trigger on the filled path at k=4, exit stamp is the first minute with both REAL mids (k=6); a filled minute never supplies the exit price (broken variant 'exit at the trigger' = 4 differs)
+PASS exit cap: 61 minutes without both real mids after the trigger -> no_exit_mid_cap; exactly 60 -> ok at k=64; entry mid missing -> no_entry_mid
+PASS timeout: no mu in 600 minutes -> trigger 600 (reason timeout); a mid filled at 600 (5th missing minute) still triggers; a 6th missing minute at 600 -> no_exit_mid
+PASS flags: a 1-4 and b 5-8 missing -> per-leg longest 4 (not flagged), union 8 (flagged, sensitivity only); a 6-minute own gap is flagged (broken variant 'flag = union' disagrees on the first event)
+PASS gap scan: a run is counted only up to k_x (run 8..14, k_x = 10 -> 3; k_x = 20 -> 7)
+PASS fuzz (30,000 random windows with gaps; 26,782 ok): every exit stamp has two real mids, exit_k - trigger_k in 0..60, no earlier real minute skipped
+PASS poison receipt on 26,782 windows: with every mid after k_trig overwritten, trigger_k and exit_reason are unchanged
+PASS poison test has teeth: a backward-filled trigger changes on 88 of the same windows when later mids are overwritten
+PASS stops: 1.1% cap drops -> StopBuild; 10.1% per-leg flags -> StopBuild; exactly 1% / 10% pass
+PASS build order: check_stops (per-leg gap_flag, sys.exit(2) on a stop) comes before stage2 (the first y component); no log line prints y_taker or gross_bp
+PASS half-spread lookup: own / earlier neighbour wins a tie / later neighbour / coin-month median with cause crossed and day-absent / none (NaN) for a coin-month without a row
+PASS funding and gross arithmetic: boundaries h1..h2 inclusive, missing hours counted and paid nothing, long leg pays a positive rate, no file -> 0; two-leg gross and exit weights as in rules section 4
+[S2TESTS] all proofs passed

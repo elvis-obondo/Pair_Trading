@@ -1,0 +1,9 @@
+[REGATE] read 239 flagged pairs from dup_audit_v1_pair.csv
+[REGATE] saved the pre-regate file to /home/elvisobondo/Pair_Trading/research/model/dup_audit_v1_pair.csv.orig
+[REGATE] 0 of 239 pairs reclassified under the corrected tolerance
+[REGATE] wrote 239 rows to dup_audit_v1_pair.csv (re-gated)
+[REGATE] 12 columns in exact-hash groups (from /home/elvisobondo/Pair_Trading/research/model/logs/dup_audit_v1_pair.log's EXACT: lines, unaffected by the affine-tolerance fix); 8 of the original keep rows are exact-hash drops and are kept as-is
+[REGATE] skipped 2 correlation edge(s) already fully covered by an exact-hash decision (both endpoints are exact-hash nodes)
+[REGATE] keep rule: 1 connected correlation-based duplicate component(s) after re-gating
+   KEEP events.parquet/r2  DROP ['g2.parquet/r2_2d']
+[REGATE] wrote 9 keep/drop decisions (8 exact-hash, unaffected by the gate; 1 correlation-based, rebuilt) to dup_audit_keep_v1_pair.csv

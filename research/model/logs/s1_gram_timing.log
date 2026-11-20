@@ -1,0 +1,97 @@
+[S1-GRAM] sha256 s1_gram_timing.py: 33ac37d0133bb7a3c1945c63fa0d8886d587f18d41ea7b8d942ebb60626318e2
+[S1-GRAM] sha256 s1_preprocess.py: 9e867b5c7bbe8d0a28413a5d69b0a19a1d7880c83c17435354a7d88cb4e9343b
+[S1-GRAM] sha256 s1_model.py: a788db640277e9f850193a907116dcbc63dd45d8cbd4cc3cf77979e10c744c8a
+[S1-GRAM] sha256 hazard_logistic.py: bd9fe582d5af74cb19f7d25210deef66cfb1bcc0c3a1b221a2934f95eb843a78
+[S1-GRAM] sha256 harness.py: 423328afc950252fe37d5fbc7fb4c25d97475b36abe3860542357e5481ce56c7
+[S1-GRAM] cache manifest cache_sha256: bd5dc2549374d0a80c8b042425e34119289b17b753a49213ac28c1831c6ca544 (must be bd5dc2549374d0a80c8b042425e34119289b17b753a49213ac28c1831c6ca544)
+[S1-GRAM] git_head bdddaf15e9da9bed3f8eac623848a436dc1bf76f (91 uncommitted paths); start 2026-10-28T10:36:44Z UTC; pid 61242
+[HARNESS] load_search_events: 6,697,756 merged rows -> 5,405,478 after the date/gap-day filter -> 5,378,429 after dropping 27,049 label_gap=1 rows
+[S1-GRAM] fold 7: n_train=3,979,894  [310s]
+[HARNESS] check_inputs: 64 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 64 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 64 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 64 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 64 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 64 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 64 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 64 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 64 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 64 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 64 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 64 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 64 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 64 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 64 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 64 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 64 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 1 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[S1-PREPROCESS] degenerate-on-raw-fit-rows columns dropped: 0 of 1089
+[S1-PREPROCESS] SD-0-after-clip columns dropped: 21 of 1089 (['g2_nan_1m', 'b_adl_ratio_30', 'b_adl_share_30', 'a_vault_net_usd', 'a_vault_gross_usd', 'a_vault_share_of_oi', 'a_vault_net_chg_1h', 'a_vault_net_chg_6h', 'a_vault_net_chg_24h', 'b_vault_net_usd', 'b_vault_gross_usd', 'b_vault_share_of_oi', 'b_vault_net_chg_1h', 'b_vault_net_chg_6h', 'b_vault_net_chg_24h', 'd_vault_net_usd', 'd_vault_gross_usd', 'd_vault_share_of_oi', 'd_vault_net_chg_1h', 'd_vault_net_chg_6h', 'd_vault_net_chg_24h'])
+[HARNESS] check_inputs: 2 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 64 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 64 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 64 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 64 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 64 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 64 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 64 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 64 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 64 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 64 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 64 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 64 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 64 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 64 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 64 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 64 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 44 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[HARNESS] check_inputs: 2 columns checked against inputs_v1_pair.csv (sha256 91cb311c74a2970144e9e2656faf71acce75c422dcf0c404512eb0560a2c0bcf); 0 not IN
+[S1-GRAM] preprocessed TRAIN in 1074.48s: n_features=2368 rss=38.27GB VmHWM=58.48GB  [1384s]
+[S1-GRAM] hazard rows: 65,590,431 over 3,979,894 train events [1398s]
+[S1-GRAM] built per-event weights d_i (null model, w=0): min=0.0131 max=0.3893 mean=0.3239  [1402s]
+[S1-GRAM]   chunk 1/40 (0:100000): 34.25s
+[S1-GRAM]   chunk 2/40 (100000:200000): 32.71s
+[S1-GRAM]   chunk 3/40 (200000:300000): 33.66s
+[S1-GRAM]   chunk 4/40 (300000:400000): 34.11s
+[S1-GRAM]   chunk 5/40 (400000:500000): 32.53s
+[S1-GRAM]   chunk 6/40 (500000:600000): 32.49s
+[S1-GRAM]   chunk 7/40 (600000:700000): 49.77s
+[S1-GRAM]   chunk 8/40 (700000:800000): 33.09s
+[S1-GRAM]   chunk 9/40 (800000:900000): 32.63s
+[S1-GRAM]   chunk 10/40 (900000:1000000): 32.67s
+[S1-GRAM]   chunk 11/40 (1000000:1100000): 32.78s
+[S1-GRAM]   chunk 12/40 (1100000:1200000): 32.53s
+[S1-GRAM]   chunk 13/40 (1200000:1300000): 33.04s
+[S1-GRAM]   chunk 14/40 (1300000:1400000): 33.26s
+[S1-GRAM]   chunk 15/40 (1400000:1500000): 32.89s
+[S1-GRAM]   chunk 16/40 (1500000:1600000): 32.47s
+[S1-GRAM]   chunk 17/40 (1600000:1700000): 33.23s
+[S1-GRAM]   chunk 18/40 (1700000:1800000): 36.78s
+[S1-GRAM]   chunk 19/40 (1800000:1900000): 38.16s
+[S1-GRAM]   chunk 20/40 (1900000:2000000): 41.05s
+[S1-GRAM]   chunk 21/40 (2000000:2100000): 39.80s
+[S1-GRAM]   chunk 22/40 (2100000:2200000): 40.08s
+[S1-GRAM]   chunk 23/40 (2200000:2300000): 39.83s
+[S1-GRAM]   chunk 24/40 (2300000:2400000): 37.43s
+[S1-GRAM]   chunk 25/40 (2400000:2500000): 37.58s
+[S1-GRAM]   chunk 26/40 (2500000:2600000): 35.43s
+[S1-GRAM]   chunk 27/40 (2600000:2700000): 36.95s
+[S1-GRAM]   chunk 28/40 (2700000:2800000): 36.59s
+[S1-GRAM]   chunk 29/40 (2800000:2900000): 33.18s
+[S1-GRAM]   chunk 30/40 (2900000:3000000): 33.16s
+[S1-GRAM]   chunk 31/40 (3000000:3100000): 32.77s
+[S1-GRAM]   chunk 32/40 (3100000:3200000): 33.86s
+[S1-GRAM]   chunk 33/40 (3200000:3300000): 33.41s
+[S1-GRAM]   chunk 34/40 (3300000:3400000): 32.91s
+[S1-GRAM]   chunk 35/40 (3400000:3500000): 34.69s
+[S1-GRAM]   chunk 36/40 (3500000:3600000): 34.27s
+[S1-GRAM]   chunk 37/40 (3600000:3700000): 33.46s
+[S1-GRAM]   chunk 38/40 (3700000:3800000): 32.96s
+[S1-GRAM]   chunk 39/40 (3800000:3900000): 33.45s
+[S1-GRAM]   chunk 40/40 (3900000:3979894): 26.93s
+[S1-GRAM] H_ww build: shape=(2368, 2368) wall=1392.87s VmHWM_this_block=44.84GB  [2794s]
+[S1-GRAM] overall peak RSS this run (VmHWM): 44.84GB (rss at process start: 0.15GB)
+[S1-GRAM] PROJECTION (planner's stated range (worst case: 30 cold, 5 warm)): per_fold = prep[1074.5s] + (2 x (30 cold + 7 x 5 warm) + 30 refit) x gram[1392.87s] = 223934s; x 8 folds = 1791470s = 497.63h (Gram builds only -- the inner coordinate descent, line search and H_wb/H_bb blocks are NOT included, not written yet, expected much cheaper than H_ww)
+[S1-GRAM] PROJECTION (planner's stated range (best case: 10 cold, 2 warm)): per_fold = prep[1074.5s] + (2 x (10 cold + 7 x 2 warm) + 10 refit) x gram[1392.87s] = 81861s; x 8 folds = 654888s = 181.91h (Gram builds only -- the inner coordinate descent, line search and H_wb/H_bb blocks are NOT included, not written yet, expected much cheaper than H_ww)
+[S1-GRAM] all done  [2794s]
+exit_code=0
