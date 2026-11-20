@@ -1,0 +1,416 @@
+{
+ "groups": [
+  {
+   "group": "G2",
+   "features": 19,
+   "nonzero": 13,
+   "sum_abs": 0.34611611936876086,
+   "share": 0.13635281408995126,
+   "share_numeric": 0.1403949710799027,
+   "top_pos": [
+    "sandwich",
+    0.11427656587372635
+   ],
+   "top_neg": [
+    "sign_beta",
+    -0.03334652236066609
+   ]
+  },
+  {
+   "group": "G2B",
+   "features": 5,
+   "nonzero": 4,
+   "sum_abs": 0.18802012151436232,
+   "share": 0.07407072724834149,
+   "share_numeric": 0.07626654190677717,
+   "top_pos": [
+    "sigma_sym",
+    0.06818304076344195
+   ],
+   "top_neg": [
+    "trig_sym",
+    -0.05195548726821777
+   ]
+  },
+  {
+   "group": "G3",
+   "features": 21,
+   "nonzero": 7,
+   "sum_abs": 0.032572088955938196,
+   "share": 0.01283180915708386,
+   "share_numeric": 0.013212206051890975,
+   "top_pos": [
+    "days_since_last_trigger",
+    0.013749533519075648
+   ],
+   "top_neg": [
+    "global_reach_asof",
+    -0.011472351574330865
+   ]
+  },
+  {
+   "group": "G4",
+   "features": 47,
+   "nonzero": 17,
+   "sum_abs": 0.15562913145887572,
+   "share": 0.06131026219609218,
+   "share_numeric": 0.06312779494410133,
+   "top_pos": [
+    "sess_europe",
+    0.0281135247755577
+   ],
+   "top_neg": [
+    "weekend",
+    -0.026513662203791515
+   ]
+  },
+  {
+   "group": "G5",
+   "features": 417,
+   "nonzero": 71,
+   "sum_abs": 0.32614734826882247,
+   "share": 0.12848609543391043,
+   "share_numeric": 0.13229504482916918,
+   "top_pos": [
+    "contrib_b",
+    0.023927089338597326
+   ],
+   "top_neg": [
+    "ps_efficiency",
+    -0.060631416281662624
+   ]
+  },
+  {
+   "group": "G6",
+   "features": 302,
+   "nonzero": 17,
+   "sum_abs": 0.03359699209888216,
+   "share": 0.013235570842511615,
+   "share_numeric": 0.013627937186793749,
+   "top_pos": [
+    "net_prior_forced_human_60",
+    0.004341972440206554
+   ],
+   "top_neg": [
+    "a_vault_push_share_60",
+    -0.00623045822951537
+   ]
+  },
+  {
+   "group": "G7",
+   "features": 75,
+   "nonzero": 13,
+   "sum_abs": 0.045989360242688536,
+   "share": 0.01811755747962163,
+   "share_numeric": 0.018654649523492373,
+   "top_pos": [
+    "b_ctx_impact_spread_bp",
+    0.01536610600099355
+   ],
+   "top_neg": [
+    "a_fund_last",
+    -0.004345084717925933
+   ]
+  },
+  {
+   "group": "G8",
+   "features": 110,
+   "nonzero": 20,
+   "sum_abs": 0.06969025357536653,
+   "share": 0.027454549666666495,
+   "share_numeric": 0.028268435324852285,
+   "top_pos": [
+    "a_slip_buy_1k",
+    0.015068900184831832
+   ],
+   "top_neg": [
+    "b_rel_ask_d25",
+    -0.004744524715315227
+   ]
+  },
+  {
+   "group": "G9A",
+   "features": 49,
+   "nonzero": 21,
+   "sum_abs": 0.3694114395207941,
+   "share": 0.1455300302902516,
+   "share_numeric": 0.1498442443613856,
+   "top_pos": [
+    "rank90_idx_abs_ret_7d_seg",
+    0.04514041468705866
+   ],
+   "top_neg": [
+    "rank90_idx_rv_24h_seg",
+    -0.03444582714874696
+   ]
+  },
+  {
+   "group": "events",
+   "features": 13,
+   "nonzero": 6,
+   "sum_abs": 0.8981299739107742,
+   "share": 0.353819260381785,
+   "share_numeric": 0.36430817479163496,
+   "top_pos": [
+    "vol_48",
+    0.2752938234536311
+   ],
+   "top_neg": [
+    "threshold",
+    -0.3547028896368492
+   ]
+  },
+  {
+   "group": "coin one-hots",
+   "features": 400,
+   "nonzero": 0,
+   "sum_abs": 0.0,
+   "share": 0.0,
+   "share_numeric": null,
+   "top_pos": null,
+   "top_neg": null
+  },
+  {
+   "group": "missing indicators",
+   "features": 919,
+   "nonzero": 3,
+   "sum_abs": 0.07308350127392897,
+   "share": 0.028791323213784335,
+   "share_numeric": null,
+   "top_pos": [
+    "d_chg1h_imb_10__isnan",
+    0.006427991114399914
+   ],
+   "top_neg": [
+    "ps_mins_since_big_step__isnan",
+    -0.035985127034253245
+   ]
+  }
+ ],
+ "top25": [
+  {
+   "rank": 1,
+   "name": "threshold",
+   "group": "events",
+   "w": -0.3547028896368492,
+   "sign": "-",
+   "meaning": "higher value: LESS likely to revert (the trigger size: the 99th percentile of the pair's previous 96 |z|, which today's |z| crossed)"
+  },
+  {
+   "rank": 2,
+   "name": "vol_48",
+   "group": "events",
+   "w": 0.2752938234536311,
+   "sign": "+",
+   "meaning": "higher value: MORE likely to revert (mean absolute 30-minute step of the standardised spread over the last 48 bars)"
+  },
+  {
+   "rank": 3,
+   "name": "sigma",
+   "group": "events",
+   "w": -0.18737529425650246,
+   "sign": "-",
+   "meaning": "higher value: LESS likely to revert (the spread's rolling sd (log-price units) at entry)"
+  },
+  {
+   "rank": 4,
+   "name": "sandwich",
+   "group": "G2",
+   "w": 0.11427656587372635,
+   "sign": "+",
+   "meaning": "higher value: MORE likely to revert (how far the spread's within-bar extreme ran past its close, in sigma, averaged over 96 bars)"
+  },
+  {
+   "rank": 5,
+   "name": "sigma_sym",
+   "group": "G2B",
+   "w": 0.06818304076344195,
+   "sign": "+",
+   "meaning": "higher value: MORE likely to revert (spread sd over the 96-bar window using the entry bar's beta (leg-order symmetric))"
+  },
+  {
+   "rank": 6,
+   "name": "ps_efficiency",
+   "group": "G5",
+   "w": -0.060631416281662624,
+   "sign": "-",
+   "meaning": "higher value: LESS likely to revert (net move of the folded 1-minute spread over the last 60 minutes divided by the sum of the absolute 1-minute steps (1 = a straight line, near 0 = choppy))"
+  },
+  {
+   "rank": 7,
+   "name": "trig_sym",
+   "group": "G2B",
+   "w": -0.05195548726821777,
+   "sign": "-",
+   "meaning": "higher value: LESS likely to revert (1 if the leg-order-symmetric |z| is above its own threshold and the previous bar was not above its own threshold)"
+  },
+  {
+   "rank": 8,
+   "name": "abs_beta",
+   "group": "G2",
+   "w": 0.051252588373498734,
+   "sign": "+",
+   "meaning": "higher value: MORE likely to revert (the size of the hedge ratio |beta|)"
+  },
+  {
+   "rank": 9,
+   "name": "rank90_idx_abs_ret_7d_seg",
+   "group": "G9A",
+   "w": 0.04514041468705866,
+   "sign": "+",
+   "meaning": "higher value: MORE likely to revert (where the market index's absolute 7-day return sits against its previous 90 days (share of past samples below it))"
+  },
+  {
+   "rank": 10,
+   "name": "z_ratio",
+   "group": "G2B",
+   "w": 0.039660430793482804,
+   "sign": "+",
+   "meaning": "higher value: MORE likely to revert (|leg-order-symmetric z| divided by |z|)"
+  },
+  {
+   "rank": 11,
+   "name": "ps_mins_since_big_step__isnan",
+   "group": "missing indicator of a G5 column",
+   "w": -0.035985127034253245,
+   "sign": "-",
+   "meaning": "when 1: LESS likely to revert (1 when ps_mins_since_big_step is missing (a sparse column))"
+  },
+  {
+   "rank": 12,
+   "name": "rank90_idx_rv_24h_seg",
+   "group": "G9A",
+   "w": -0.03444582714874696,
+   "sign": "-",
+   "meaning": "higher value: LESS likely to revert (where the market index's 24-hour realised volatility sits against its previous 90 days)"
+  },
+  {
+   "rank": 13,
+   "name": "sign_beta",
+   "group": "G2",
+   "w": -0.03334652236066609,
+   "sign": "-",
+   "meaning": "higher value: LESS likely to revert (the sign of the hedge ratio beta)"
+  },
+  {
+   "rank": 14,
+   "name": "mins_since_trade_a",
+   "group": "events",
+   "w": 0.033043127370192264,
+   "sign": "+",
+   "meaning": "higher value: MORE likely to revert (minutes since leg A last traded)"
+  },
+  {
+   "rank": 15,
+   "name": "n_other_triggers_same_bar",
+   "group": "G9A",
+   "w": -0.032865187462808476,
+   "sign": "-",
+   "meaning": "higher value: LESS likely to revert (number of other triggers of the same unit on the same 30-minute bar)"
+  },
+  {
+   "rank": 16,
+   "name": "n_triggers_prev_24h",
+   "group": "G9A",
+   "w": 0.030993432359316002,
+   "sign": "+",
+   "meaning": "higher value: MORE likely to revert (number of earlier triggers of the same unit in the previous 24 hours)"
+  },
+  {
+   "rank": 17,
+   "name": "ret_idx_7d__isnan",
+   "group": "missing indicator of a G9A column",
+   "w": -0.030670383125275816,
+   "sign": "-",
+   "meaning": "when 1: LESS likely to revert (1 when the market index's 7-day return is missing)"
+  },
+  {
+   "rank": 18,
+   "name": "mins_since_trade_b",
+   "group": "events",
+   "w": 0.029975208457557436,
+   "sign": "+",
+   "meaning": "higher value: MORE likely to revert (minutes since leg B last traded)"
+  },
+  {
+   "rank": 19,
+   "name": "rv_btc_24h",
+   "group": "G9A",
+   "w": -0.028838654327453164,
+   "sign": "-",
+   "meaning": "higher value: LESS likely to revert (BTC 24-hour realised volatility)"
+  },
+  {
+   "rank": 20,
+   "name": "threshold_sym",
+   "group": "G2B",
+   "w": -0.02822116268921978,
+   "sign": "-",
+   "meaning": "higher value: LESS likely to revert (99th percentile of the leg-order-symmetric |z| over the previous 96 bars)"
+  },
+  {
+   "rank": 21,
+   "name": "sess_europe",
+   "group": "G4",
+   "w": 0.0281135247755577,
+   "sign": "+",
+   "meaning": "higher value: MORE likely to revert (1 during the European session (07-16 UTC))"
+  },
+  {
+   "rank": 22,
+   "name": "rv_eth_1h",
+   "group": "G9A",
+   "w": 0.02790848513953477,
+   "sign": "+",
+   "meaning": "higher value: MORE likely to revert (ETH 1-hour realised volatility)"
+  },
+  {
+   "rank": 23,
+   "name": "corr_1m_24h",
+   "group": "G2",
+   "w": -0.026849625839683564,
+   "sign": "-",
+   "meaning": "higher value: LESS likely to revert (correlation of the two legs' 1-minute returns over 24 hours)"
+  },
+  {
+   "rank": 24,
+   "name": "vol_slope",
+   "group": "G2",
+   "w": 0.02682640197155589,
+   "sign": "+",
+   "meaning": "higher value: MORE likely to revert (sd of the last 16 spread steps over the sd of the 32 steps before)"
+  },
+  {
+   "rank": 25,
+   "name": "volratio_idx_seg",
+   "group": "G9A",
+   "w": -0.026808842163347498,
+   "sign": "-",
+   "meaning": "higher value: LESS likely to revert (the market index's 24-hour volatility divided by its 7-day volatility, from 30-minute returns)"
+  }
+ ],
+ "b": [
+  -4.534915816846802,
+  -4.047601212324166,
+  -3.8785531754166196,
+  -3.80866308176296,
+  -3.792220551949743,
+  -3.787021197027606,
+  -3.8070977919394946,
+  -3.846502662280985,
+  -3.8812268028425243,
+  -3.9028667186419086,
+  -3.932856023371742,
+  -3.9371500989240245,
+  -3.9653096763573226,
+  -3.9992749111054913,
+  -4.022737215926252,
+  -4.044586271207963,
+  -4.07715466123199,
+  -4.0942493727777025,
+  -4.12245950502225,
+  -4.1555654891011145
+ ],
+ "total_abs": 2.5383863301891942,
+ "n_nonzero": 192
+}
