@@ -69,4 +69,5 @@ Commit and push the working branch at least once every 24 hours (user,
 no builder is running, the planner does it. Commit code, docs, rules files and
 text logs. Never commit data files (parquet, large CSVs, label or price
 outputs), live trade records, or secrets. The repo is PUBLIC, so anything
-pushed is published.
+pushed is published. A crontab job pushes the current branch daily at 23:00 (commits only,
+never adds files; log ~/Library/Logs/pair_trading_push.log).
